@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% from "_macros.html" import tarjeta_noticia with context %}
-{% macro foto(f, alt, tam, carga='lazy') %}<img src="{{ f[1280] }}" srcset="{{ f[640] }} 640w, {{ f[1280] }} 1280w, {{ f[1920] }} 1920w" sizes="{{ tam }}" alt="{{ alt }}" width="{{ f.w }}" height="{{ f.h }}" loading="{{ carga }}"{% if carga == 'eager' %} fetchpriority="high"{% endif %}>{% endmacro %}
-{% block cabeza %}{% if fotos.portada %}<link rel="preload" as="image" href="{{ fotos.portada[1280] }}" imagesrcset="{{ fotos.portada[640] }} 640w, {{ fotos.portada[1280] }} 1280w, {{ fotos.portada[1920] }} 1920w" imagesizes="100vw">{% endif %}{% endblock %}
+{% macro foto(f, alt, tam, carga='lazy') %}<img src="{{ f[1280] }}" srcset="{{ f[640] }} 640w, {{ f[1280] }} 1280w, {{ f[1920] }} 1920w, {{ f[2560] }} 2560w" sizes="{{ tam }}" alt="{{ alt }}" width="{{ f.w }}" height="{{ f.h }}" loading="{{ carga }}"{% if carga == 'eager' %} fetchpriority="high"{% endif %}>{% endmacro %}
+{% block cabeza %}{% if fotos.portada %}<link rel="preload" as="image" href="{{ fotos.portada[1280] }}" imagesrcset="{{ fotos.portada[640] }} 640w, {{ fotos.portada[1280] }} 1280w, {{ fotos.portada[1920] }} 1920w, {{ fotos.portada[2560] }} 2560w" imagesizes="100vw">{% endif %}{% endblock %}
 {% block contenido %}
 <section class="portada" aria-labelledby="portada-titulo">
   <div class="portada__rejilla">

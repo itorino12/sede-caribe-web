@@ -162,18 +162,21 @@ def imagen(nombre, ancho_max=1600):
         print(f"  ! imagen no encontrada: {nombre}")
         return None
     from PIL import Image, ImageOps
-    base = slug(Path(nombre).stem)
+    # el nombre lleva una huella del archivo: si alguien cambia la foto en el Drive, cambia la dirección
+    # y ni el navegador ni la caché muestran la vieja
+    base = f"{slug(Path(nombre).stem)}-{hashlib.sha1(origen.read_bytes()).hexdigest()[:8]}"
     salida = {}
     with Image.open(origen) as im:
         im = ImageOps.exif_transpose(im).convert("RGB")
-        for ancho in (640, 1280, 1920):
+        # 2560 px para pantallas grandes o de alta densidad (portada a todo lo ancho en PC)
+        for ancho in (640, 1280, 1920, 2560):
             copia = im.copy()
             if copia.width > ancho:
                 copia = copia.resize((ancho, round(copia.height * ancho / copia.width)), Image.LANCZOS)
             destino = DIST / "media" / f"{base}-{ancho}.webp"
             destino.parent.mkdir(parents=True, exist_ok=True)
             if not destino.exists():
-                copia.save(destino, "WEBP", quality=82, method=6)
+                copia.save(destino, "WEBP", quality=86 if ancho >= 1920 else 82, method=6)
             salida[ancho] = f"media/{destino.name}"
         salida["w"], salida["h"] = im.width, im.height
     return salida

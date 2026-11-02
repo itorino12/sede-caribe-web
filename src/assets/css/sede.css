@@ -168,7 +168,7 @@ main:focus { outline: none; }
 .portada__rejilla > * { grid-area: 1 / 1; }
 .portada__foto { position: relative; margin: 0; z-index: 0; }
 .portada__foto img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: 62% 58%; }
-.portada__foto .foto-noche img { object-position: 80% 50%; }
+.portada__foto .foto-noche img { object-position: 85% 62%; }
 .portada__foto::after { content: ""; position: absolute; inset: 0; pointer-events: none;
   background: linear-gradient(90deg, rgb(var(--velo) / .94) 0%, rgb(var(--velo) / .84) 34%, rgb(var(--velo) / .3) 62%, rgb(var(--velo) / 0) 80%); }
 .portada__texto { position: relative; z-index: 1; display: flex; flex-direction: column; justify-content: center; max-width: 720px;
@@ -199,6 +199,7 @@ main:focus { outline: none; }
   .portada__foto { grid-area: 1 / 1; aspect-ratio: 16 / 10; }
   .portada__texto { grid-area: 2 / 1; padding: 0 var(--gutter) 30px; max-width: none; box-sizing: border-box; margin-top: -34px; }
   .portada__foto img { object-position: 74% 62%; }
+  .portada__foto .foto-noche img { object-position: 100% 64%; }
   .portada__foto::after { background: linear-gradient(0deg, rgb(var(--velo)) 0%, rgb(var(--velo) / .5) 20%, rgb(var(--velo) / 0) 45%); }
 }
 
