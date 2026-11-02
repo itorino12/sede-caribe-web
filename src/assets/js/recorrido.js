@@ -11,17 +11,22 @@ const datos = JSON.parse(document.getElementById("datos-campus").textContent);
 const lugares = new Map(datos.lugares.map((l) => [l.id, l]));
 const sinMovimiento = matchMedia("(prefers-reduced-motion: reduce)").matches || document.documentElement.dataset.movimiento === "no";
 
-function hayWebGL() {
-  try { const c = document.createElement("canvas"); return !!(window.WebGLRenderingContext && (c.getContext("webgl2") || c.getContext("webgl"))); }
-  catch (e) { return false; }
-}
-if (!hayWebGL()) {
-  raiz.classList.add("mapa3d--sin-3d");
-  throw new Error("Sin WebGL: queda la lista de lugares");
-}
-
 // ---------- escena
-const renderer = new THREE.WebGLRenderer({ canvas: lienzo, antialias: true, alpha: true });
+// Se intenta con calidad alta y, si el teléfono no lo permite, con opciones más livianas.
+// Si no hay 3D, queda la imagen fija de la maqueta y la lista de lugares.
+function crearRenderer() {
+  for (const opciones of [{ antialias: true, alpha: true }, { antialias: false, alpha: true, powerPreference: "low-power" }, { antialias: false, alpha: false, powerPreference: "low-power", precision: "mediump" }]) {
+    try { return new THREE.WebGLRenderer({ canvas: lienzo, ...opciones }); }
+    catch (e) { console.warn("Maqueta 3D: no se pudo iniciar con", opciones, e); }
+  }
+  return null;
+}
+const renderer = crearRenderer();
+if (!renderer) {
+  raiz.classList.add("mapa3d--sin-3d");
+  throw new Error("Sin WebGL: queda la imagen de la maqueta y la lista de lugares");
+}
+lienzo.addEventListener("webglcontextlost", (e) => { e.preventDefault(); raiz.classList.add("mapa3d--sin-3d"); });
 renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
 renderer.outputColorSpace = THREE.SRGBColorSpace;
 renderer.shadowMap.enabled = true;

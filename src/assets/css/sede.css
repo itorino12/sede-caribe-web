@@ -538,10 +538,13 @@ dialog::backdrop { background: rgba(0,25,45,.6); }
 .mapa3d__ficha-enlace { font-weight: 700; }
 .mapa3d__ficha-cerrar { position: absolute; top: 6px; right: 6px; width: 40px; height: 40px; border: 0; background: none; font-size: 1.6rem; line-height: 1; color: var(--tinta-2); cursor: pointer; border-radius: 4px; }
 .mapa3d__ficha-cerrar:hover { background: var(--niebla); }
-.mapa3d__aviso-sin3d { display: none; }
-.mapa3d--sin-3d .mapa3d__escena { height: auto; min-height: 0; padding: 20px; }
-.mapa3d--sin-3d .mapa3d__aviso-sin3d { display: block; margin: 0; }
-.mapa3d--sin-3d .mapa3d__lienzo, .mapa3d--sin-3d .mapa3d__herramientas { display: none; }
+.mapa3d__sin3d { display: none; }
+.mapa3d__sin3d img { display: block; width: 100%; height: auto; }
+.mapa3d__sin3d p { margin: 0; padding: 10px 14px; font-size: var(--t-sm); background: var(--papel); border-top: 1px solid var(--linea); }
+.mapa3d--sin-3d .mapa3d__escena { height: auto; min-height: 0; }
+.mapa3d--sin-3d .mapa3d__sin3d { display: block; }
+.mapa3d--sin-3d .mapa3d__lienzo, .mapa3d--sin-3d .mapa3d__herramientas, .mapa3d--sin-3d .mapa3d__brujula,
+.mapa3d--sin-3d .mapa3d__marcas, .mapa3d--sin-3d .mapa3d__ficha { display: none; }
 .mapa3d__nota { font-size: var(--t-xs); color: var(--tinta-2); margin: 10px 0 0; }
 .lugares { margin-block: 28px clamp(44px, 6vw, 76px); }
 .lugares__zonas { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 24px; }
