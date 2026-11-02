@@ -333,7 +333,9 @@ def main():
     base = sitio["base_url"].rstrip("/")
     urls = "".join(f"<url><loc>{base}/{s if s != 'index.html' else ''}</loc><lastmod>{HOY}</lastmod></url>" for s, *_ in paginas if s != "404.html")
     (DIST / "sitemap.xml").write_text(f'<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">{urls}</urlset>', encoding="utf-8")
-    (DIST / "robots.txt").write_text(f"User-agent: *\nAllow: /\nSitemap: {base}/sitemap.xml\n", encoding="utf-8")
+    # La vista previa (con ejemplos) no debe aparecer en buscadores: el sitio oficial será sedecaribe.ucr.ac.cr
+    robots = "User-agent: *\nDisallow: /\n" if EJEMPLOS else f"User-agent: *\nAllow: /\nSitemap: {base}/sitemap.xml\n"
+    (DIST / "robots.txt").write_text(robots, encoding="utf-8")
     (DIST / "estado.json").write_text(json.dumps({"compilado": AHORA.isoformat(timespec="seconds"), "origen": origen,
                                                   "noticias": len(c["noticias"]), "eventos": len(c["eventos"]), "avisos": len(c["avisos"])},
                                                  ensure_ascii=False), encoding="utf-8")

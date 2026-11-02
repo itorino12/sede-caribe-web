@@ -1,0 +1,42 @@
+# Publica la vista previa del sitio en GitHub Pages, con contenido de ejemplo marcado.
+# El sitio oficial no sale de aquí: lo compila el servidor de la UCR con el contenido de Drive.
+name: Vista previa en GitHub Pages
+
+on:
+  push:
+    branches: [main]
+  schedule:
+    - cron: "17 12 * * *"   # todos los días a las 6:17 a. m. (Costa Rica), para que «Esta semana» y la agenda avancen
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  publicar:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.despliegue.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+      - run: pip install jinja2 markdown nh3 pillow
+      - run: python build.py --ejemplos
+        env:
+          TZ: America/Costa_Rica
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: dist
+      - id: despliegue
+        uses: actions/deploy-pages@v4
