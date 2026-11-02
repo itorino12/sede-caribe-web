@@ -122,6 +122,18 @@ def leer_tabla(nombre):
     return [], None
 
 
+def lugares_campus():
+    """Lugares de la maqueta 3D (pestaña «lugares»). El número es el del croquis oficial y une cada fila con su edificio."""
+    filas = leer_tabla("lugares")[0] or json.loads((SRC / "data" / "lugares.json").read_text(encoding="utf-8"))
+    salida = []
+    for l in filas:
+        try:
+            salida.append({**l, "id": int(l["id"]), "zona": int(l.get("zona") or 0)})
+        except (KeyError, ValueError):
+            continue
+    return sorted(salida, key=lambda l: l["id"])
+
+
 def leer_pagina(nombre):
     if not nombre:
         return ""
@@ -304,6 +316,9 @@ def main():
         ("directorio.html", "directorio.html", "Directorio", "Extensiones telefónicas y correos de las oficinas de la Sede del Caribe.", {}),
         ("enlaces.html", "enlaces.html", "Enlaces y trámites", "Accesos a los sistemas universitarios para estudiantes y personal.", {}),
         ("contacto.html", "contacto.html", "Contacto", "Cómo comunicarse con la Sede del Caribe.", {}),
+        ("recorrido.html", "recorrido.html", "Recorrido por la Sede", "Maqueta 3D del campus de la Sede del Caribe: edificios, aulas, laboratorios y servicios.",
+         {"lugares": lugares_campus(),
+          "campus3d": json.loads((SRC / "data" / "campus3d.json").read_text(encoding="utf-8"))}),
         ("accesibilidad.html", "accesibilidad.html", "Accesibilidad", "Compromiso de accesibilidad del sitio.", {}),
         ("404.html", "404.html", "Página no encontrada", "La página que busca no existe o cambió de dirección.", {}),
     ]

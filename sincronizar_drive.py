@@ -3,7 +3,7 @@
 
 Qué lee (todo dentro de la carpeta raíz del sitio en Drive):
     «Contenido del sitio»  Hoja de cálculo. Una pestaña por tabla: config, avisos, noticias, eventos,
-                           carreras, unidades, directorio, enlaces, hitos, cifras. La fila 1 son los encabezados.
+                           carreras, unidades, directorio, enlaces, hitos, cifras, lugares. La fila 1 son los encabezados.
     Páginas/               Documentos de Google. Cada uno es el texto largo de una página; su nombre
                            es el identificador que se escribe en la columna «documento» (p. ej. «historia»).
     Imágenes/              Fotos que se citan por nombre de archivo en la columna «imagen».
@@ -32,11 +32,12 @@ RAIZ = Path(__file__).resolve().parent
 DESTINO = RAIZ / "contenido"
 ALCANCES = ["https://www.googleapis.com/auth/drive.readonly", "https://www.googleapis.com/auth/spreadsheets.readonly"]
 HOJA = "Contenido del sitio"
-PESTANAS = ["config", "avisos", "noticias", "eventos", "carreras", "unidades", "directorio", "enlaces", "hitos", "cifras"]
+PESTANAS = ["config", "avisos", "noticias", "eventos", "carreras", "unidades", "directorio", "enlaces", "hitos", "cifras", "lugares"]
 # Columnas mínimas: si una pestaña no las tiene, se conserva la versión anterior y se avisa.
 REQUERIDAS = {"config": {"clave", "valor"}, "noticias": {"publicar", "fecha", "titulo"}, "eventos": {"publicar", "fecha", "titulo"},
               "avisos": {"publicar", "titulo", "texto"}, "carreras": {"publicar", "id", "nombre"}, "unidades": {"publicar", "id", "nombre"},
-              "directorio": {"unidad", "oficina", "extension"}, "enlaces": {"grupo", "titulo", "url"}, "hitos": {"anio", "texto"}}
+              "directorio": {"unidad", "oficina", "extension"}, "enlaces": {"grupo", "titulo", "url"}, "hitos": {"anio", "texto"},
+              "lugares": {"id", "zona", "nombre"}}
 IMAGEN_MAX = 25 * 1024 * 1024
 DOC = "application/vnd.google-apps.document"
 CARPETA = "application/vnd.google-apps.folder"

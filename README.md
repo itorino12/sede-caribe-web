@@ -75,6 +75,14 @@ En todas: buscador interno (tecla `/` o Ctrl+K), panel de accesibilidad (texto, 
 
 **Calidad verificada:** 0 incumplimientos WCAG 2.2 A/AA (axe-core 4.14) en 13 páginas, en modo claro y oscuro. Sin desbordamiento horizontal a 390 px. Sin enlaces internos rotos ni errores de JavaScript.
 
+## Recorrido 3D del campus
+
+`recorrido.html` muestra una maqueta 3D del campus (three.js, servido desde `assets/js/vendor/`, sin depender de otros sitios). Se entra desde el botón «Recorrer la Sede en 3D» de la portada o desde el menú La Sede.
+
+- **Forma del campus:** `src/data/campus3d.json` y la textura `src/assets/img/campus-suelo.webp` salen del croquis oficial «Distribución de Aulas» con `python3 herramientas/campus3d.py croquis.pdf`. El croquis es esquemático: formas y alturas son aproximadas. Si cambia un edificio, se ajusta su línea en `EDIFICIOS` dentro del script y se vuelve a correr.
+- **Nombres y textos:** pestaña «lugares» de la hoja (id = número del croquis). Si la pestaña falta o está vacía, se usa `src/data/lugares.json`.
+- **Fotos 360°:** la columna «foto360» queda lista para cuando existan las fotos.
+
 ## Trabajar localmente
 
 ```bash

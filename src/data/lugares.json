@@ -1,0 +1,119 @@
+[
+ {
+  "id": 1,
+  "zona": 1,
+  "nombre": "Aulas 1 a 7",
+  "texto": "Aulas de la zona 1. El Aula 3 es el Laboratorio de Idiomas y el Aula 5, el Laboratorio de Cómputo 1."
+ },
+ {
+  "id": 2,
+  "zona": 1,
+  "nombre": "Oficinas administrativas",
+  "texto": "Recepción, Registro, Becas, OAF, Acción Social, Vida Estudiantil, Orientación, Psicología y Trabajo Social, Coordinación de Administración y Dirección.",
+  "enlace": "directorio.html"
+ },
+ {
+  "id": 3,
+  "zona": 1,
+  "nombre": "Soda y comedor",
+  "texto": "Soda y comedor estudiantil."
+ },
+ {
+  "id": 4,
+  "zona": 1,
+  "nombre": "Coordinación de Docencia",
+  "texto": "Oficina de la Coordinación de Docencia.",
+  "enlace": "unidades/docencia.html"
+ },
+ {
+  "id": 5,
+  "zona": 2,
+  "nombre": "Miniauditorio",
+  "texto": "Miniauditorio de la Sede."
+ },
+ {
+  "id": 6,
+  "zona": 2,
+  "nombre": "Entrada principal",
+  "texto": "Acceso principal al campus, junto a la ruta 32."
+ },
+ {
+  "id": 7,
+  "zona": 2,
+  "nombre": "Aulas 8 a 12",
+  "texto": "Aulas de la zona 2."
+ },
+ {
+  "id": 8,
+  "zona": 2,
+  "nombre": "Aulas 13 a 17",
+  "texto": "El Aula 14 es el Laboratorio de Química y Física; el Aula 15, el Laboratorio de Cómputo 2, y el Aula 17, el Laboratorio de Cómputo 3.",
+  "enlace": "unidades/laboratorios.html"
+ },
+ {
+  "id": 9,
+  "zona": 2,
+  "nombre": "Consultorios y oficinas",
+  "texto": "Oficinas administrativas, consultorio médico y consultorio odontológico."
+ },
+ {
+  "id": 10,
+  "zona": 2,
+  "nombre": "Piscina",
+  "texto": "Piscina de la Sede.",
+  "enlace": "unidades/piscina.html"
+ },
+ {
+  "id": 11,
+  "zona": 3,
+  "nombre": "Biblioteca",
+  "texto": "Biblioteca de la Sede del Caribe.",
+  "enlace": "unidades/biblioteca.html"
+ },
+ {
+  "id": 12,
+  "zona": 3,
+  "nombre": "Aulas 18 a 23",
+  "texto": "Aulas 18 a 20 en el primer piso y aulas 21 a 23 en el segundo."
+ },
+ {
+  "id": 13,
+  "zona": 3,
+  "nombre": "Edificio de Ingeniería, Laboratorios y Simuladores",
+  "texto": "Primer piso: Laboratorio de Ingeniería Química y Simulador de Navegación. Segundo piso: Aula 24, Laboratorio de Física y otros simuladores."
+ },
+ {
+  "id": 14,
+  "zona": 3,
+  "nombre": "Gimnasio",
+  "texto": "Gimnasio de la Sede.",
+  "enlace": "unidades/gimnasio.html"
+ },
+ {
+  "id": 15,
+  "zona": 3,
+  "nombre": "Etapa Básica de Música",
+  "texto": "Edificio de la Etapa Básica de Música."
+ },
+ {
+  "id": 16,
+  "zona": 4,
+  "nombre": "Residencias Estudiantiles",
+  "texto": "Residencias dentro del campus.",
+  "enlace": "unidades/residencias.html"
+ },
+ {
+  "id": 17,
+  "zona": 4,
+  "nombre": "Centro Infantil Universitario Bilingüe (CIUB)",
+  "texto": "Centro Infantil Universitario Bilingüe de la Sede.",
+  "enlace": "unidades/ciub.html"
+ },
+ {
+  "id": 18,
+  "zona": 4,
+  "nombre": "Laboratorio de Investigación",
+  "texto": "Laboratorio de investigación de la Sede.",
+  "enlace": "unidades/investigacion.html"
+ }
+]

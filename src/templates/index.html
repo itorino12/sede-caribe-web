@@ -19,11 +19,13 @@
     </div>
     {% if fotos.portada %}
     <figure class="portada__foto">
+      <a class="portada__recorrido" href="recorrido.html" tabindex="-1" aria-hidden="true"></a>
       <span class="foto-dia">{{ foto(fotos.portada, "Entrada principal de la Sede del Caribe de día, con las banderas y el rótulo de la Universidad de Costa Rica", "100vw", "eager") }}</span>
       {% if fotos.portada_noche %}<span class="foto-noche">{{ foto(fotos.portada_noche, "Entrada principal de la Sede del Caribe de noche, con el rótulo iluminado", "100vw") }}</span>{% endif %}
     </figure>
     {% endif %}
   </div>
+  <a class="portada__recorrido-boton" href="recorrido.html"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M12 3 3 8l9 5 9-5-9-5Z"/><path d="m3 13 9 5 9-5"/></svg>Recorrer la Sede en 3D</a>
 </section>
 {% include "_avisos.html" %}
 

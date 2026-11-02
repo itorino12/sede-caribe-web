@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+{% from "_macros.html" import encabezado with context %}
+{% block contenido %}
+{{ encabezado("Recorrido por la Sede", [("La Sede", "la-sede.html")], raiz, "Maqueta 3D del campus, hecha a partir del croquis oficial de distribución de aulas. Gire con el dedo o el ratón, acerque con dos dedos o la rueda, y toque un edificio para ver qué hay.") }}
+<div class="ancho">
+  <section class="mapa3d" data-recorrido data-raiz="{{ raiz }}" data-suelo="{{ raiz }}assets/img/campus-suelo.webp" aria-labelledby="mapa3d-titulo">
+    <h2 id="mapa3d-titulo" class="oculto">Maqueta 3D</h2>
+    <div class="mapa3d__escena">
+      <canvas class="mapa3d__lienzo" aria-label="Maqueta 3D del campus de la Sede del Caribe. La misma información está en la lista de lugares." role="img"></canvas>
+      <div class="mapa3d__marcas"></div>
+      <div class="mapa3d__brujula" aria-hidden="true"><span>N</span></div>
+      <div class="mapa3d__herramientas">
+        <button type="button" class="mapa3d__redondo" data-acercar aria-label="Acercar">+</button>
+        <button type="button" class="mapa3d__redondo" data-alejar aria-label="Alejar">−</button>
+        <button type="button" class="boton boton--secundario" data-vista-general>Vista general</button>
+      </div>
+      <div class="mapa3d__ficha" role="region" aria-live="polite" aria-label="Lugar elegido" hidden>
+        <button type="button" class="mapa3d__ficha-cerrar" aria-label="Cerrar">×</button>
+        <p class="mapa3d__ficha-zona"></p>
+        <h3 class="mapa3d__ficha-titulo"></h3>
+        <p class="mapa3d__ficha-texto"></p>
+        <a class="mapa3d__ficha-enlace" href="#" hidden>Más información</a>
+      </div>
+      <p class="mapa3d__aviso-sin3d">Este navegador no puede mostrar la maqueta 3D. Abajo están todos los lugares del campus.</p>
+    </div>
+    <p class="mapa3d__nota">Vista preliminar: el croquis es esquemático, así que la forma y la altura de los edificios son aproximadas. Las fotos 360° de cada lugar se agregarán cuando estén listas.</p>
+  </section>
+
+  <section class="lugares" aria-labelledby="lugares-titulo">
+    <h2 id="lugares-titulo">Lugares del campus</h2>
+    <div class="lugares__zonas">
+      {% for zona, filas in lugares|groupby("zona") %}
+      <div>
+        <h3>Zona {{ zona }}</h3>
+        <ol>
+          {% for l in filas %}
+          <li value="{{ l.id }}"><button type="button" data-lugar="{{ l.id }}" aria-pressed="false"><b>{{ l.id }}</b> {{ l.nombre }}</button></li>
+          {% endfor %}
+        </ol>
+      </div>
+      {% endfor %}
+    </div>
+  </section>
+</div>
+<script type="application/json" id="datos-campus">{{ {"campus": campus3d, "lugares": lugares}|tojson }}</script>
+<script type="module" src="{{ raiz }}assets/js/recorrido.js"></script>
+{% endblock %}

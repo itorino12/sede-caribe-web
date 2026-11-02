@@ -162,7 +162,7 @@ main:focus { outline: none; }
 .portada__foto { position: relative; margin: 0; z-index: 0; }
 .portada__foto img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: 62% 58%; }
 .portada__foto .foto-noche img { object-position: 80% 50%; }
-.portada__foto::after { content: ""; position: absolute; inset: 0;
+.portada__foto::after { content: ""; position: absolute; inset: 0; pointer-events: none;
   background: linear-gradient(90deg, rgb(var(--velo) / .94) 0%, rgb(var(--velo) / .84) 34%, rgb(var(--velo) / .3) 62%, rgb(var(--velo) / 0) 80%); }
 .portada__texto { position: relative; z-index: 1; display: flex; flex-direction: column; justify-content: center; max-width: 720px;
   padding: clamp(36px, 5vw, 64px) var(--gutter) clamp(36px, 5vw, 64px) max(var(--gutter), calc((100vw - var(--ancho)) / 2 + var(--gutter))); box-sizing: content-box; }
@@ -508,3 +508,62 @@ dialog::backdrop { background: rgba(0,25,45,.6); }
   .ident__sigla { font-size: 1rem; } .ident__nombre { font-size: .72rem; } .ident__nombre strong { font-size: .86rem; }
 }
 @media (max-width: 340px) { .menu-boton { order: 3; width: 100%; justify-content: center; margin-left: 0; } }
+
+/* -------- recorrido: maqueta 3D del campus -------- */
+.mapa3d { margin-block: 28px 12px; }
+.mapa3d__escena { position: relative; height: min(72vh, 680px); min-height: 420px; border-radius: 6px; overflow: hidden;
+  background: linear-gradient(#cfe2ef, #eef4f8 70%); border: 1px solid var(--linea); }
+.mapa3d__lienzo { display: block; width: 100%; height: 100%; touch-action: none; cursor: grab; }
+.mapa3d__lienzo:active { cursor: grabbing; }
+.mapa3d__marcas { position: absolute; inset: 0; pointer-events: none; overflow: hidden; }
+.mapa3d__marca { position: absolute; left: 0; top: 0; pointer-events: auto; min-width: 30px; height: 30px; padding: 0 6px; border-radius: 15px;
+  border: 2px solid #fff; background: #005DA4; color: #fff; font: 700 .9375rem/1 var(--f); cursor: pointer; box-shadow: 0 2px 6px rgba(0,30,60,.35); }
+.mapa3d__marca:hover, .mapa3d__marca[aria-pressed="true"] { background: #04203A; transform-origin: center; }
+.mapa3d__marca[aria-pressed="true"] { outline: 3px solid var(--foco); outline-offset: 1px; }
+.mapa3d__marca:focus-visible { outline: 3px solid var(--foco); outline-offset: 2px; }
+.mapa3d__herramientas { position: absolute; top: 12px; right: 12px; display: flex; gap: 8px; align-items: center; }
+.mapa3d__redondo { width: 40px; height: 40px; border-radius: 50%; border: 2px solid var(--azul); background: #fff; color: var(--azul); font: 700 1.4rem/1 var(--f); cursor: pointer; }
+.mapa3d__redondo:hover { background: var(--niebla); }
+:root[data-tema="oscuro"] .mapa3d__redondo, :root[data-tema="oscuro"] .mapa3d__herramientas .boton { background: var(--papel); }
+.mapa3d__brujula { position: absolute; top: 12px; left: 12px; width: 44px; height: 44px; border-radius: 50%; background: rgba(255,255,255,.92);
+  box-shadow: 0 2px 8px rgba(0,30,60,.25); pointer-events: none; }
+.mapa3d__brujula::before { content: ""; position: absolute; left: 50%; top: 6px; margin-left: -6px; border: 6px solid transparent; border-bottom: 14px solid #C0392B; border-top: 0; }
+.mapa3d__brujula span { position: absolute; left: 0; right: 0; bottom: 6px; text-align: center; font: 800 .8rem/1 var(--f); color: #04203A; }
+.mapa3d__herramientas .boton { min-height: 40px; padding: 6px 14px; background: #fff; }
+.mapa3d__ficha { position: absolute; left: 12px; bottom: 12px; width: min(360px, calc(100% - 24px)); background: var(--papel); color: var(--tinta);
+  border-radius: 6px; padding: 16px 18px; box-shadow: 0 10px 30px rgba(0,30,60,.25); border-top: 4px solid #005DA4; }
+.mapa3d__ficha-zona { margin: 0 0 2px; font-size: var(--t-xs); color: var(--tinta-2); font-weight: 600; }
+.mapa3d__ficha-titulo { margin: 0 32px 6px 0; font-size: var(--t-md); line-height: 1.2; }
+.mapa3d__ficha-texto { margin: 0 0 8px; font-size: var(--t-sm); }
+.mapa3d__ficha-enlace { font-weight: 700; }
+.mapa3d__ficha-cerrar { position: absolute; top: 6px; right: 6px; width: 40px; height: 40px; border: 0; background: none; font-size: 1.6rem; line-height: 1; color: var(--tinta-2); cursor: pointer; border-radius: 4px; }
+.mapa3d__ficha-cerrar:hover { background: var(--niebla); }
+.mapa3d__aviso-sin3d { display: none; }
+.mapa3d--sin-3d .mapa3d__escena { height: auto; min-height: 0; padding: 20px; }
+.mapa3d--sin-3d .mapa3d__aviso-sin3d { display: block; margin: 0; }
+.mapa3d--sin-3d .mapa3d__lienzo, .mapa3d--sin-3d .mapa3d__herramientas { display: none; }
+.mapa3d__nota { font-size: var(--t-xs); color: var(--tinta-2); margin: 10px 0 0; }
+.lugares { margin-block: 28px clamp(44px, 6vw, 76px); }
+.lugares__zonas { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 24px; }
+.lugares h3 { font-size: var(--t-base); margin: 0 0 8px; }
+.lugares ol { list-style: none; margin: 0; padding: 0; }
+.lugares button { display: flex; gap: 8px; width: 100%; text-align: left; padding: 8px 6px; background: none; border: 0; border-bottom: 1px solid var(--linea);
+  font: inherit; font-size: var(--t-sm); color: var(--enlace); cursor: pointer; }
+.lugares button b { min-width: 1.6em; color: var(--tinta-2); }
+.lugares button:hover, .lugares button[aria-pressed="true"] { background: var(--niebla); text-decoration: underline; }
+@media (max-width: 900px) { .lugares__zonas { grid-template-columns: 1fr 1fr; } }
+@media (max-width: 560px) {
+  .lugares__zonas { grid-template-columns: 1fr; }
+  .mapa3d__escena { height: 68vh; min-height: 380px; margin-inline: calc(var(--gutter) * -1); border-radius: 0; border-inline: 0; }
+  .mapa3d__ficha { left: 8px; right: 8px; bottom: 8px; width: auto; }
+}
+
+/* Entrada al recorrido desde la foto de la portada */
+.portada__recorrido { position: absolute; inset: 0; z-index: 0; }
+.portada__recorrido-boton { position: absolute; right: max(var(--gutter), calc((100vw - var(--ancho)) / 2 + var(--gutter))); bottom: 24px; z-index: 2;
+  display: inline-flex; align-items: center; gap: 10px; padding: 10px 18px; border-radius: 999px; background: rgba(255,255,255,.94); color: #04203A;
+  font-weight: 700; text-decoration: none; box-shadow: 0 6px 18px rgba(0,0,0,.25); }
+.portada__recorrido-boton svg { width: 22px; height: 22px; flex: none; }
+.portada__recorrido-boton:hover { background: #fff; text-decoration: underline; }
+.portada__recorrido-boton:focus-visible { outline: 3px solid var(--foco); outline-offset: 3px; }
+@media (max-width: 760px) { .portada__recorrido-boton { top: 12px; bottom: auto; right: var(--gutter); padding: 8px 14px; font-size: var(--t-sm); } }
