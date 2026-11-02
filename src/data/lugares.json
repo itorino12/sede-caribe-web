@@ -125,8 +125,10 @@
   "id": 18,
   "zona": 4,
   "nombre": "Laboratorio de Investigación",
-  "texto": "Laboratorio de investigación de la Sede.",
-  "enlace": "unidades/investigacion.html"
+  "texto": "Laboratorio de investigación de la Sede: edificio de un piso sobre un talud, con escalera y rampa de acceso desde la calle.",
+  "enlace": "unidades/investigacion.html",
+  "fotos": "lab-investigacion-1.jpg, lab-investigacion-2.jpg",
+  "fotos_alt": "El Laboratorio de Investigación: edificio gris claro de un piso con ventanas verticales y puerta de vidrio, sobre un talud de zacate, con escalera al frente|La rampa con baranda que sube al Laboratorio de Investigación desde la calle"
  },
  {
   "id": 19,

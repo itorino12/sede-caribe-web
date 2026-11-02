@@ -71,7 +71,10 @@ EDIFICIOS = [
     {"id": 16, "alas": [(1700, 1840, 200, 74, 81), (1742, 1960, 120, 66, 46)], "pisos": 2, "linterna": 0.42,
      "estilo": {"techo": "#66756b"}},
     {"id": 17, "rect": (1816, 1795, 63, 92, -11), "pisos": 1, "estilo": {"techo": "#66756b"}},
-    {"id": 18, "rect": (1552, 1826, 30, 54, 15), "pisos": 1},
+    # Laboratorio de Investigación (fotos): un piso sobre un talud, paredes gris claro con paneles blancos,
+    # ventanas verticales con marco gris, techo casi plano con alero muy ancho, escalera y rampa al frente
+    {"id": 18, "rect": (1552, 1826, 54, 30, 15), "pisos": 1, "alto": 3.6,
+     "estilo": {"forma_techo": "una_agua", "techo": "#9ea5aa", "pared": "#d6d9dc", "ventanas": "vidrio", "talud": 1.8}},
 ]
 
 
@@ -173,7 +176,7 @@ def volumenes(e, alto):
         elif e.get("estilo", {}).get("forma_techo") == "plano":
             cumbre = max(cumbre, alto + 0.6)   # la losa volada la dibuja la maqueta
         elif e.get("estilo", {}).get("forma_techo") == "una_agua":
-            t, c = techo_una_agua(m[0], m[1], L, W, g, alto + 0.6)
+            t, c = techo_una_agua(m[0], m[1], L, W, g, alto + 0.6, alero=2.2, subida=W * 0.05)
             techo += t
             cumbre = max(cumbre, c)
         else:
@@ -294,6 +297,18 @@ def main(pdf, sat=None):
     # calles internas: asfalto con cordón de concreto (fotos); el camino a la pista es de lastre
     # quebrada: cruza bajo el puente, de oeste a este, con un trazo ondulado
     quebrada = np.zeros_like(calles)
+    # el puente se ajusta al eje real de la calle: centro y dirección salen del trazo de la calle en el croquis
+    px0, py0 = PUENTE["centro"]
+    filas, centros = [], []
+    for yy in range(py0 - 45, py0 + 46, 3):
+        xs_f = np.nonzero(calles[yy, px0 - 70:px0 + 70])[0]
+        if len(xs_f):
+            filas.append(yy); centros.append(px0 - 70 + xs_f.mean())
+    # la calle se curva justo en el puente: se ajusta una parábola al eje y el puente sigue la curva
+    coef = np.polyfit(filas, centros, 2)
+    PUENTE["centro"] = (int(round(np.polyval(coef, py0))), py0)
+    mitad = PUENTE["largo"] / 2 + 6
+    PUENTE["eje"] = [(float(np.polyval(coef, yy)), float(yy)) for yy in np.linspace(py0 - mitad, py0 + mitad, 9)]
     qx, qy = PUENTE["centro"]
     puntos = [(int(qx + d), int(qy + 26 * math.sin(d / 90) + 0.12 * d)) for d in range(-420, 430, 12)]
     cv2.polylines(quebrada, [np.array(puntos, np.int32)], False, 255, 13)
@@ -449,8 +464,7 @@ def main(pdf, sat=None):
         "porton_residencias": porton_res,
         "picnic": {"centro": a_metros(*PICNIC["centro"]), "radio": round(PICNIC["radio"] * ESCALA, 2)},
         "planta": {"centro": a_metros(*PLANTA["centro"]), "giro": round(math.radians(PLANTA["giro"]), 3)},
-        "puente": {"centro": a_metros(*PUENTE["centro"]), "largo": round(PUENTE["largo"] * ESCALA, 2),
-                   "angulo": round(math.atan2(1557 - 1533, 1550 - 1450), 3)},
+        "puente": {"centro": a_metros(*PUENTE["centro"]), "eje": [a_metros(x, y) for x, y in PUENTE["eje"]]},
         "pista": {"centro": a_metros(float(cx_pista), float(cy_pista))},
     }
     (RAIZ / "src/data/campus3d.json").write_text(json.dumps(datos, ensure_ascii=False), encoding="utf-8")

@@ -230,7 +230,7 @@ for (const e of datos.campus.edificios) {
   const grupo = new THREE.Group();
   const estilo = e.estilo || {};
   const mat = {
-    pared: new THREE.MeshStandardMaterial({ color: colores.pared, roughness: 0.85 }),
+    pared: new THREE.MeshStandardMaterial({ color: estilo.pared || colores.pared, roughness: 0.85 }),
     techo: new THREE.MeshStandardMaterial({ color: estilo.techo || colores.techo, roughness: 0.75, side: THREE.DoubleSide }),
   };
   if (e.tipo === "piscina") {
@@ -263,6 +263,17 @@ for (const e of datos.campus.edificios) {
     if (estilo.galeria) e.volumenes.forEach((vol) => galeria(grupo, vol, e.alto, Math.max(e.pisos, 1)));
     if (estilo.parasoles) e.volumenes.forEach((vol) => parasoles(grupo, vol, e.alto));
     if (estilo.entrada) entrada(grupo, e);
+    if (estilo.talud) {   // el edificio se para sobre un talud de zacate, con escalera y rampa al frente
+      const t = estilo.talud, c = e.volumenes[0].contorno;
+      grupo.children.forEach((h) => { h.position.y += t; });
+      const tierra = prisma(c, t, 0, new THREE.MeshLambertMaterial({ color: 0x7fae5a }), 4.5);
+      tierra.castShadow = false; grupo.add(tierra);
+      const f = fachadaSur(c), dx = (f.b[0] - f.a[0]) / f.largo, dz = (f.b[1] - f.a[1]) / f.largo;
+      const ang = Math.atan2(-dz, dx), largoEsc = Math.hypot(t, 5);
+      const escalera = new THREE.Mesh(new THREE.BoxGeometry(2.4, 0.3, largoEsc), new THREE.MeshStandardMaterial({ color: 0xbdbdb8 }));
+      const mx = (f.a[0] + f.b[0]) / 2 + f.nx * 6.5, mz = (f.a[1] + f.b[1]) / 2 + f.nz * 6.5;
+      escalera.position.set(mx, t / 2, mz); escalera.rotation.set(0, ang + Math.PI / 2, 0); escalera.rotateX(-Math.atan2(t, 5)); grupo.add(escalera);
+    }
     if (estilo.cupula) {   // torrecita de ventilación sobre la cumbrera
       const torre = new THREE.Mesh(new THREE.BoxGeometry(2.6, 1.6, 2.6), celeste);
       torre.position.set(e.centro[0], e.cumbre + 0.5, e.centro[1]);
@@ -445,31 +456,40 @@ if (datos.campus.picnic) {
 // ---------- puente de la calle interna sobre la quebrada (fotos): calzada asfaltada con defensas amarillas
 // de viga ondulada, acera peatonal con baranda gris y pasamanos amarillo, y paso de cebra al norte
 if (datos.campus.puente) {
-  const { centro: [px, pz], largo, angulo } = datos.campus.puente;
+  // el puente se arma por tramos a lo largo del eje de la calle, así sigue la curva y empata con el asfalto
+  const { centro: [px, pz], eje } = datos.campus.puente;
   const puente = new THREE.Group();
   const concreto = new THREE.MeshStandardMaterial({ color: 0xc9c7c0, roughness: 0.9 });
   const asfalto = new THREE.MeshStandardMaterial({ color: 0x55595f, roughness: 0.95 });
   const amarillo = new THREE.MeshStandardMaterial({ color: 0xf2c200, roughness: 0.5, metalness: 0.2 });
   const gris = new THREE.MeshStandardMaterial({ color: 0xb8bdc2, roughness: 0.4, metalness: 0.5 });
   const blanco = new THREE.MeshLambertMaterial({ color: 0xf2f2f2 });
-  const CALZADA = 5.6, ACERA = 1.8, L = largo + 4;
-  const losa = new THREE.Mesh(new THREE.BoxGeometry(CALZADA + ACERA + 0.6, 0.6, L), concreto); losa.position.set(-ACERA / 2, 0.05, 0); puente.add(losa);
-  const capa = new THREE.Mesh(new THREE.BoxGeometry(CALZADA, 0.06, L), asfalto); capa.position.set(0, 0.38, 0); puente.add(capa);
-  const acera = new THREE.Mesh(new THREE.BoxGeometry(ACERA, 0.25, L), concreto); acera.position.set(-(CALZADA + ACERA) / 2, 0.48, 0); puente.add(acera);
-  // defensas amarillas a ambos lados de la calzada
-  for (const x of [CALZADA / 2 + 0.1, -CALZADA / 2 - 0.1]) {
-    const viga = new THREE.Mesh(new THREE.BoxGeometry(0.12, 0.35, L), amarillo); viga.position.set(x, 0.95, 0); puente.add(viga);
-    for (let z = -L / 2; z <= L / 2; z += 2) { const poste = new THREE.Mesh(new THREE.BoxGeometry(0.15, 0.75, 0.15), amarillo); poste.position.set(x, 0.72, z); puente.add(poste); }
+  const CALZADA = 5.8, ACERA = 1.8;
+  const caja = (w, h, l, mat, x, y, ang, cx, cz) => {
+    const m = new THREE.Mesh(new THREE.BoxGeometry(w, h, l), mat);
+    m.position.set(cx + Math.cos(ang) * x, y, cz - Math.sin(ang) * x); m.rotation.y = ang; puente.add(m); return m;
+  };
+  for (let i = 0; i < eje.length - 1; i++) {
+    const [ax, az] = eje[i], [bx, bz] = eje[i + 1];
+    const L = Math.hypot(bx - ax, bz - az) + 0.08, ang = Math.atan2(bx - ax, bz - az);
+    const cx = (ax + bx) / 2, cz = (az + bz) / 2, borde = i === 0 || i === eje.length - 2;
+    caja(CALZADA, 0.04, L, asfalto, 0, 0.07, ang, cx, cz);                    // calzada a ras de la calle
+    if (borde) continue;                                                       // los extremos solo empatan el asfalto
+    caja(CALZADA + ACERA + 0.6, 0.9, L, concreto, -ACERA / 2, -0.4, ang, cx, cz);   // tablero
+    caja(ACERA, 0.2, L, concreto, -(CALZADA + ACERA) / 2, 0.15, ang, cx, cz);        // acera
+    for (const x of [CALZADA / 2 + 0.1, -CALZADA / 2 - 0.1]) {                 // defensas amarillas
+      caja(0.12, 0.35, L, amarillo, x, 0.65, ang, cx, cz);
+      caja(0.15, 0.75, 0.15, amarillo, x, 0.42, ang, ax, az);
+    }
+    const xb = -CALZADA / 2 - ACERA - 0.1;                                      // baranda de la acera
+    caja(0.07, 0.07, L, amarillo, xb, 0.75, ang, cx, cz);
+    caja(0.07, 0.07, L, gris, xb, 1.2, ang, cx, cz);
+    caja(0.06, 1.5, 0.06, gris, xb, 0.55, ang, ax, az);
   }
-  // baranda de la acera: tubo gris y pasamanos amarillo
-  const xb = -CALZADA / 2 - ACERA - 0.1;
-  for (const y of [1.05, 1.5]) { const t = new THREE.Mesh(new THREE.BoxGeometry(0.07, 0.07, L), y > 1.2 ? gris : amarillo); t.position.set(xb, y, 0); puente.add(t); }
-  for (let z = -L / 2; z <= L / 2; z += 1.6) { const p = new THREE.Mesh(new THREE.BoxGeometry(0.06, 1.5, 0.06), gris); p.position.set(xb, 0.85, z); puente.add(p); }
-  // paso de cebra en el extremo norte
-  for (let k = 0; k < 6; k++) { const raya = new THREE.Mesh(new THREE.BoxGeometry(0.5, 0.04, 2.6), blanco); raya.position.set(-CALZADA / 2 + 0.6 + k * 0.9, 0.42, -L / 2 - 1.6); puente.add(raya); }
+  // paso de cebra al norte del puente
+  const [nx, nz] = eje[1], [mx, mz] = eje[0], angN = Math.atan2(nx - mx, nz - mz);
+  for (let k = 0; k < 6; k++) caja(0.5, 0.04, 2.6, blanco, -CALZADA / 2 + 0.6 + k * 0.9, 0.1, angN, (nx + mx) / 2, (nz + mz) / 2);
   puente.traverse((o) => { if (o.isMesh) { o.castShadow = !liviano; o.receiveShadow = true; } });
-  puente.position.set(px, 0, pz);
-  puente.rotation.y = angulo;   // el largo (z local) sigue la calle
   if (lugares.get(23)) {
     puente.userData = { id: 23, centro: new THREE.Vector3(px, 3, pz), mat: { pared: amarillo, techo: amarillo }, alto: 1 };
     puente.traverse((o) => { o.userData.edificio = puente; });
