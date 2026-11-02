@@ -115,11 +115,11 @@
   function guardar() { try { localStorage.setItem("sc-a11y", JSON.stringify(pref)); } catch (e) {} }
   function marcar() {
     $$("[data-escala]").forEach(function (b) { b.setAttribute("aria-pressed", String(b.dataset.escala === String(pref.escala || "1"))); });
-    $$("[data-tema]").forEach(function (b) { b.setAttribute("aria-pressed", String(b.dataset.tema === (pref.tema || "auto"))); });
+    $$("[data-tema]").forEach(function (b) { b.setAttribute("aria-pressed", String(b.dataset.tema === (pref.tema || "claro"))); });
     $$("[data-opcion]").forEach(function (c) { c.checked = !!pref[c.dataset.opcion]; });
   }
   $$("[data-escala]").forEach(function (b) { b.addEventListener("click", function () { pref.escala = b.dataset.escala; r.style.setProperty("--escala", pref.escala); guardar(); marcar(); }); });
-  $$("[data-tema]").forEach(function (b) { b.addEventListener("click", function () { pref.tema = b.dataset.tema; r.dataset.theme = pref.tema; guardar(); marcar(); }); });
+  $$("[data-tema]").forEach(function (b) { b.addEventListener("click", function () { pref.tema = b.dataset.tema; if (pref.tema === "oscuro") r.dataset.tema = "oscuro"; else delete r.dataset.tema; guardar(); marcar(); }); });
   $$("[data-opcion]").forEach(function (c) { c.addEventListener("change", function () {
     pref[c.dataset.opcion] = c.checked; if (c.checked) r.setAttribute("data-" + c.dataset.opcion, ""); else r.removeAttribute("data-" + c.dataset.opcion); guardar();
   }); });
