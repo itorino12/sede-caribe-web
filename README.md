@@ -82,6 +82,7 @@ En todas: buscador interno (tecla `/` o Ctrl+K), panel de accesibilidad (texto, 
 - **Forma del campus:** `src/data/campus3d.json` y la textura `src/assets/img/campus-suelo.webp` salen del croquis oficial «Distribución de Aulas» con `python3 herramientas/campus3d.py croquis.pdf`. El croquis es esquemático: formas y alturas son aproximadas. Si cambia un edificio, se ajusta su línea en `EDIFICIOS` dentro del script y se vuelve a correr.
 - **Nombres y textos:** pestaña «lugares» de la hoja (id = número del croquis). Si la pestaña falta o está vacía, se usa `src/data/lugares.json`.
 - **Sin 3D:** si el navegador no permite 3D (o pierde el contexto gráfico), se carga una maqueta giratoria: 24 vistas de la maqueta en `src/assets/img/giro/`, generadas con `python3 herramientas/giro.py` después de compilar. Hay que volver a generarlas cuando cambie la maqueta. En teléfonos la maqueta 3D va en modo liviano (menos resolución y sombras más simples).
+- **Fotos por carpeta:** en Drive, `Imágenes/Recorrido/<número> - <nombre>/` (p. ej. «19 - Pista Atlética»). La sincronización las baja a `contenido/imagenes/recorrido/<número>/` y se suman al carrusel del lugar, en orden de nombre.
 - **Fotos:** columna «fotos» (archivos de la carpeta Imágenes, separados por comas) y «fotos_alt» (descripciones separadas por |). Salen en un carrusel en la ficha y se amplían a pantalla completa.
 - **Fotos 360°:** la columna «foto360» queda lista para cuando existan las fotos.
 

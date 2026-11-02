@@ -130,6 +130,11 @@ def lugares_campus():
         try:
             # «fotos»: nombres de archivo separados por comas; «fotos_alt»: descripción de cada una, separadas por «|»
             nombres = [x.strip() for x in (l.get("fotos") or l.get("foto") or "").split(",") if x.strip()]
+            # más las fotos de la carpeta Imágenes/Recorrido/<número> - <nombre> del Drive, en orden de nombre
+            carpeta = CONT / "imagenes" / "recorrido" / str(int(l["id"]))
+            if carpeta.is_dir():
+                nombres += [f"recorrido/{int(l['id'])}/{p.name}" for p in sorted(carpeta.iterdir(), key=lambda p: p.name.lower())
+                            if p.is_file() and not p.name.startswith(".") and f"recorrido/{int(l['id'])}/{p.name}" not in nombres]
             alts = [x.strip() for x in (l.get("fotos_alt") or l.get("foto_alt") or "").split("|")]
             fotos = []
             for i, nombre in enumerate(nombres):

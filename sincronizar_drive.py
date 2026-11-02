@@ -7,9 +7,12 @@ Qué lee (todo dentro de la carpeta raíz del sitio en Drive):
     Páginas/               Documentos de Google. Cada uno es el texto largo de una página; su nombre
                            es el identificador que se escribe en la columna «documento» (p. ej. «historia»).
     Imágenes/              Fotos que se citan por nombre de archivo en la columna «imagen».
+    Imágenes/Recorrido/    Una carpeta por lugar del recorrido 3D, que empieza con su número
+                           («19 - Pista Atlética»). Sus fotos salen en el carrusel de ese lugar.
 
 Escribe:
     contenido/datos/<pestaña>.json, contenido/paginas/<nombre>.md, contenido/imagenes/<archivo>
+    contenido/imagenes/recorrido/<número>/<archivo>
     contenido/.huella   resumen de todo lo descargado; si no cambia, no hace falta recompilar.
 
 Salida: código 0 si no hubo cambios, 10 si hubo cambios, 1 si falló (el sitio en línea no se toca).
@@ -158,22 +161,34 @@ def main():
         descargar(drive, doc, tmp / "paginas" / f"{nombre}.md", exportar="text/markdown")
         huella.update((tmp / "paginas" / f"{nombre}.md").read_bytes())
 
+    def traer_imagenes(archivos, relativa):
+        (tmp / "imagenes" / relativa).mkdir(parents=True, exist_ok=True)
+        for img in archivos:
+            if not img["mimeType"].startswith("image/"):
+                continue
+            if int(img.get("size", 0)) > IMAGEN_MAX:
+                avisos.append(f"La imagen «{img['name']}» pesa más de 25 MB y no se usó.")
+                continue
+            nombre = Path(relativa) / nombre_seguro(img["name"])
+            previa = DESTINO / "imagenes" / nombre
+            marca = DESTINO / "imagenes" / nombre.parent / f".{nombre.name}.md5"
+            if previa.exists() and marca.exists() and marca.read_text() == img.get("md5Checksum"):
+                shutil.copy2(previa, tmp / "imagenes" / nombre)  # sin cambios: no se vuelve a descargar
+            else:
+                descargar(drive, img, tmp / "imagenes" / nombre)
+            (tmp / "imagenes" / nombre.parent / f".{nombre.name}.md5").write_text(img.get("md5Checksum", ""))
+            huella.update(f"{nombre}:{img.get('md5Checksum')}".encode())
+
     carpeta_img = sub.get("imágenes") or sub.get("imagenes")
-    for img in hijos(drive, carpeta_img) if carpeta_img else []:
-        if not img["mimeType"].startswith("image/"):
+    hijos_img = hijos(drive, carpeta_img) if carpeta_img else []
+    traer_imagenes(hijos_img, ".")
+    # Imágenes/Recorrido/<número> - <nombre>/: fotos del carrusel de cada lugar del recorrido 3D
+    recorrido = next((c for c in hijos_img if c["mimeType"] == CARPETA and c["name"].strip().lower() == "recorrido"), None)
+    for lugar in hijos(drive, recorrido["id"]) if recorrido else []:
+        numero = re.match(r"\s*0*(\d+)", lugar["name"])
+        if lugar["mimeType"] != CARPETA or not numero:
             continue
-        if int(img.get("size", 0)) > IMAGEN_MAX:
-            avisos.append(f"La imagen «{img['name']}» pesa más de 25 MB y no se usó.")
-            continue
-        nombre = nombre_seguro(img["name"])
-        previa = DESTINO / "imagenes" / nombre
-        marca = DESTINO / "imagenes" / f".{nombre}.md5"
-        if previa.exists() and marca.exists() and marca.read_text() == img.get("md5Checksum"):
-            shutil.copy2(previa, tmp / "imagenes" / nombre)  # sin cambios: no se vuelve a descargar
-        else:
-            descargar(drive, img, tmp / "imagenes" / nombre)
-        (tmp / "imagenes" / f".{nombre}.md5").write_text(img.get("md5Checksum", ""))
-        huella.update(f"{nombre}:{img.get('md5Checksum')}".encode())
+        traer_imagenes(sorted(hijos(drive, lugar["id"]), key=lambda a: a["name"].lower()), f"recorrido/{numero.group(1)}")
 
     nueva = huella.hexdigest()
     vieja = (DESTINO / ".huella").read_text() if (DESTINO / ".huella").exists() else ""
