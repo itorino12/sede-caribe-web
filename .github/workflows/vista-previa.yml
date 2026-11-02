@@ -1,4 +1,4 @@
-# Publica la vista previa del sitio en GitHub Pages, con contenido de ejemplo marcado.
+# Publica la vista previa del sitio en GitHub Pages, sin contenido de ejemplo y fuera de buscadores.
 # El sitio oficial no sale de aquí: lo compila el servidor de la UCR con el contenido de Drive.
 name: Vista previa en GitHub Pages
 
@@ -31,7 +31,7 @@ jobs:
           python-version: "3.12"
           cache: pip
       - run: pip install jinja2 markdown nh3 pillow
-      - run: python build.py --ejemplos
+      - run: python build.py --vista-previa
         env:
           TZ: America/Costa_Rica
       - uses: actions/configure-pages@v5

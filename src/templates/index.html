@@ -39,6 +39,7 @@
     {% for a in avisos if not a.urgente %}
     <p class="semana__aviso"><strong>{{ a.titulo }}.</strong> {{ a.texto }}{% if a.enlace %} <a href="{{ a.enlace }}">{{ a.enlace_texto or 'Más información' }}</a>{% endif %}{% if a.ejemplo %} <span class="marca-ejemplo">Ejemplo</span>{% endif %}</p>
     {% endfor %}
+    {% if semana|selectattr("eventos")|list %}
     <ol class="dias">
       {% for d in semana %}
       <li class="dia{% if d.hoy %} dia--hoy{% elif d.pasado %} dia--pasado{% endif %}">
@@ -52,6 +53,10 @@
       </li>
       {% endfor %}
     </ol>
+    {% else %}
+    {# Semana sin actividades: una línea en lugar de cinco columnas vacías #}
+    <p class="semana__vacia">Todavía no hay actividades publicadas para {{ "esta" if semana[0].f <= hoy else "la próxima" }} semana ({{ semana[0].f.day }}{% if semana[0].f.month != semana[-1].f.month %} de {{ semana[0].f|mes }}{% endif %} al {{ semana[-1].f.day }} de {{ semana[-1].f|mes }}). <a href="agenda.html">Ver la agenda completa</a></p>
+    {% endif %}
   </div>
 </section>
 

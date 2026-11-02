@@ -5,6 +5,7 @@ Uso:
     python3 build.py              # genera ./dist
     python3 build.py --servir     # genera y sirve en http://localhost:8000
     python3 build.py --ejemplos   # agrega contenido de ejemplo marcado (solo para vistas previas)
+    python3 build.py --vista-previa   # vista previa pública sin ejemplos, fuera de buscadores
 
 De dónde sale el contenido:
     contenido/   lo que trae sincronizar_drive.py desde Google Drive (tiene prioridad)
@@ -31,6 +32,8 @@ CR = timezone(timedelta(hours=-6))  # Costa Rica no usa horario de verano
 HOY = datetime.now(CR).date()
 AHORA = datetime.now(CR)
 EJEMPLOS = "--ejemplos" in sys.argv
+# Vista previa pública (GitHub Pages): fuera de buscadores, con o sin ejemplos
+VISTA_PREVIA = EJEMPLOS or "--vista-previa" in sys.argv
 
 MESES = ["enero", "febrero", "marzo", "abril", "mayo", "junio", "julio", "agosto", "septiembre", "octubre", "noviembre", "diciembre"]
 DIAS = ["lunes", "martes", "miércoles", "jueves", "viernes", "sábado", "domingo"]
@@ -286,7 +289,7 @@ def main():
                       trim_blocks=True, lstrip_blocks=True)
     env.filters.update(fecha_larga=fecha_larga, fecha_corta=fecha_corta, dia_semana=dia_semana, mes=mes,
                        tel=lambda t: "tel:+506" + re.sub(r"\D", "", t or ""))
-    env.globals.update(sitio=sitio, hoy=HOY, ahora=AHORA, ejemplos=EJEMPLOS, origen=origen,
+    env.globals.update(sitio=sitio, hoy=HOY, ahora=AHORA, ejemplos=EJEMPLOS, vista_previa=VISTA_PREVIA, origen=origen,
                        nav_unidades=[u for u in c["unidades"] if u["grupo"] == "Servicios"])
 
     # (archivo de salida, plantilla, título, descripción, variables extra)
@@ -333,8 +336,8 @@ def main():
     base = sitio["base_url"].rstrip("/")
     urls = "".join(f"<url><loc>{base}/{s if s != 'index.html' else ''}</loc><lastmod>{HOY}</lastmod></url>" for s, *_ in paginas if s != "404.html")
     (DIST / "sitemap.xml").write_text(f'<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">{urls}</urlset>', encoding="utf-8")
-    # La vista previa (con ejemplos) no debe aparecer en buscadores: el sitio oficial será sedecaribe.ucr.ac.cr
-    robots = "User-agent: *\nDisallow: /\n" if EJEMPLOS else f"User-agent: *\nAllow: /\nSitemap: {base}/sitemap.xml\n"
+    # La vista previa no debe aparecer en buscadores: el sitio oficial será sedecaribe.ucr.ac.cr
+    robots = "User-agent: *\nDisallow: /\n" if VISTA_PREVIA else f"User-agent: *\nAllow: /\nSitemap: {base}/sitemap.xml\n"
     (DIST / "robots.txt").write_text(robots, encoding="utf-8")
     (DIST / "estado.json").write_text(json.dumps({"compilado": AHORA.isoformat(timespec="seconds"), "origen": origen,
                                                   "noticias": len(c["noticias"]), "eventos": len(c["eventos"]), "avisos": len(c["avisos"])},
