@@ -128,9 +128,15 @@ def lugares_campus():
     salida = []
     for l in filas:
         try:
-            foto = imagen(l.get("foto"))
-            salida.append({**l, "id": int(l["id"]), "zona": int(l.get("zona") or 0),
-                           "foto": foto[640] if foto else "", "foto_alt": l.get("foto_alt") or (f"Foto de {l['nombre']}" if foto else "")})
+            # «fotos»: nombres de archivo separados por comas; «fotos_alt»: descripción de cada una, separadas por «|»
+            nombres = [x.strip() for x in (l.get("fotos") or l.get("foto") or "").split(",") if x.strip()]
+            alts = [x.strip() for x in (l.get("fotos_alt") or l.get("foto_alt") or "").split("|")]
+            fotos = []
+            for i, nombre in enumerate(nombres):
+                f = imagen(nombre)
+                if f:
+                    fotos.append({"s": f[640], "m": f[1280], "g": f[1920], "alt": alts[i] if i < len(alts) and alts[i] else f"{l['nombre']}, foto {i + 1}"})
+            salida.append({**l, "id": int(l["id"]), "zona": int(l.get("zona") or 0), "fotos": fotos})
         except (KeyError, ValueError):
             continue
     return sorted(salida, key=lambda l: l["id"])

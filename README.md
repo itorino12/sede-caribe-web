@@ -81,6 +81,7 @@ En todas: buscador interno (tecla `/` o Ctrl+K), panel de accesibilidad (texto, 
 
 - **Forma del campus:** `src/data/campus3d.json` y la textura `src/assets/img/campus-suelo.webp` salen del croquis oficial «Distribución de Aulas» con `python3 herramientas/campus3d.py croquis.pdf`. El croquis es esquemático: formas y alturas son aproximadas. Si cambia un edificio, se ajusta su línea en `EDIFICIOS` dentro del script y se vuelve a correr.
 - **Nombres y textos:** pestaña «lugares» de la hoja (id = número del croquis). Si la pestaña falta o está vacía, se usa `src/data/lugares.json`.
+- **Fotos:** columna «fotos» (archivos de la carpeta Imágenes, separados por comas) y «fotos_alt» (descripciones separadas por |). Salen en un carrusel en la ficha y se amplían a pantalla completa.
 - **Fotos 360°:** la columna «foto360» queda lista para cuando existan las fotos.
 
 ## Trabajar localmente

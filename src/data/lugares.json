@@ -69,20 +69,24 @@
   "nombre": "Biblioteca",
   "texto": "Biblioteca de la Sede del Caribe.",
   "enlace": "unidades/biblioteca.html",
-  "foto": "biblioteca.jpg",
-  "foto_alt": "La biblioteca: edificio de un piso con techo de lámina verde, ventanales corridos y pared azul claro"
+  "fotos": "biblioteca.jpg, biblioteca-mural.jpg",
+  "fotos_alt": "La biblioteca: edificio de un piso con techo de lámina verde, ventanales corridos y pared azul claro|Costado de la biblioteca con un mural de mosaico de colores, pared naranja y bancas de concreto"
  },
  {
   "id": 12,
   "zona": 3,
   "nombre": "Aulas 18 a 23",
-  "texto": "Aulas 18 a 20 en el primer piso y aulas 21 a 23 en el segundo."
+  "texto": "Aulas 18 a 20 en el primer piso y aulas 21 a 23 en el segundo.",
+  "fotos": "edificio-nuevo.jpg",
+  "fotos_alt": "El edificio nuevo: a la izquierda las aulas, con galerías y escalera exterior; a la derecha los laboratorios, con parasoles curvos blancos"
  },
  {
   "id": 13,
   "zona": 3,
   "nombre": "Edificio de Ingeniería, Laboratorios y Simuladores",
-  "texto": "Primer piso: Laboratorio de Ingeniería Química y Simulador de Navegación. Segundo piso: Aula 24, Laboratorio de Física y otros simuladores."
+  "texto": "Primer piso: Laboratorio de Ingeniería Química y Simulador de Navegación. Segundo piso: Aula 24, Laboratorio de Física y otros simuladores.",
+  "fotos": "laboratorios-parasoles.jpg, edificio-nuevo.jpg",
+  "fotos_alt": "Edificio de laboratorios de dos pisos con ventanales verdes y parasoles curvos de lámina blanca|El edificio nuevo: a la izquierda las aulas, con galerías y escalera exterior; a la derecha los laboratorios"
  },
  {
   "id": 14,
@@ -103,8 +107,8 @@
   "nombre": "Residencias Estudiantiles",
   "texto": "Residencias dentro del campus.",
   "enlace": "unidades/residencias.html",
-  "foto": "residencias-ciub.jpg",
-  "foto_alt": "Las residencias estudiantiles, de dos pisos con techo gris verdoso, y al frente el edificio bajo del CIUB con su área de juegos"
+  "fotos": "residencias-ciub.jpg",
+  "fotos_alt": "Las residencias estudiantiles, de dos pisos con techo gris verdoso, y al frente el edificio bajo del CIUB con su área de juegos"
  },
  {
   "id": 17,
@@ -112,8 +116,8 @@
   "nombre": "Centro Infantil Universitario Bilingüe (CIUB)",
   "texto": "Centro Infantil Universitario Bilingüe de la Sede.",
   "enlace": "unidades/ciub.html",
-  "foto": "residencias-ciub.jpg",
-  "foto_alt": "El CIUB, edificio bajo con área de juegos cercada, frente a las residencias estudiantiles"
+  "fotos": "residencias-ciub.jpg",
+  "fotos_alt": "El CIUB, edificio bajo con área de juegos cercada, frente a las residencias estudiantiles"
  },
  {
   "id": 18,

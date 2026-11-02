@@ -530,10 +530,8 @@ dialog::backdrop { background: rgba(0,25,45,.6); }
 .mapa3d__brujula::before { content: ""; position: absolute; left: 50%; top: 6px; margin-left: -6px; border: 6px solid transparent; border-bottom: 14px solid #C0392B; border-top: 0; }
 .mapa3d__brujula span { position: absolute; left: 0; right: 0; bottom: 6px; text-align: center; font: 800 .8rem/1 var(--f); color: #04203A; }
 .mapa3d__herramientas .boton { min-height: 40px; padding: 6px 14px; background: #fff; }
-.mapa3d__ficha { position: absolute; left: 12px; bottom: 12px; width: min(360px, calc(100% - 24px)); background: var(--papel); color: var(--tinta);
+.mapa3d__ficha { position: absolute; left: 12px; bottom: 12px; width: min(400px, calc(100% - 24px)); max-height: calc(100% - 24px); overflow-x: hidden; overflow-y: auto; background: var(--papel); color: var(--tinta);
   border-radius: 6px; padding: 16px 18px; box-shadow: 0 10px 30px rgba(0,30,60,.25); border-top: 4px solid #005DA4; }
-.mapa3d__ficha-foto { display: block; max-width: none; width: calc(100% + 36px); margin: -16px -18px 12px; aspect-ratio: 16 / 9; object-fit: cover; border-radius: 2px 2px 0 0; }
-.mapa3d__ficha-foto[hidden] { display: none; }
 .mapa3d__ficha-zona { margin: 0 0 2px; font-size: var(--t-xs); color: var(--tinta-2); font-weight: 600; }
 .mapa3d__ficha-titulo { margin: 0 32px 6px 0; font-size: var(--t-md); line-height: 1.2; }
 .mapa3d__ficha-texto { margin: 0 0 8px; font-size: var(--t-sm); }
@@ -572,3 +570,31 @@ dialog::backdrop { background: rgba(0,25,45,.6); }
 .portada__recorrido-boton:hover { background: #fff; text-decoration: underline; }
 .portada__recorrido-boton:focus-visible { outline: 3px solid var(--foco); outline-offset: 3px; }
 @media (max-width: 760px) { .portada__recorrido-boton { top: 12px; bottom: auto; right: var(--gutter); padding: 8px 14px; font-size: var(--t-sm); } }
+
+/* -------- carrusel de fotos (ficha del recorrido y visor en grande) -------- */
+.carrusel { position: relative; margin: -16px -18px 12px; }
+.carrusel__pista { display: flex; overflow-x: auto; scroll-snap-type: x mandatory; list-style: none; margin: 0; padding: 0; scrollbar-width: none; overscroll-behavior-x: contain; }
+.carrusel__pista::-webkit-scrollbar { display: none; }
+.carrusel__pista:focus-visible { outline: 3px solid var(--foco); outline-offset: -3px; }
+.carrusel__foto { flex: 0 0 100%; scroll-snap-align: start; }
+.carrusel__foto img { display: block; width: 100%; max-width: none; aspect-ratio: 16 / 10; object-fit: cover; background: var(--niebla); }
+.carrusel__ampliable { cursor: zoom-in; }
+.carrusel__boton { position: absolute; top: 50%; transform: translateY(-50%); width: 40px; height: 40px; border-radius: 50%; border: 0;
+  background: rgba(255,255,255,.92); color: #04203A; font: 700 1.6rem/1 var(--f); cursor: pointer; box-shadow: 0 2px 8px rgba(0,0,0,.3); }
+.carrusel__boton--antes { left: 8px; } .carrusel__boton--despues { right: 8px; }
+.carrusel__boton:hover { background: #fff; }
+.carrusel__boton:focus-visible { outline: 3px solid var(--foco); outline-offset: 2px; }
+.carrusel--una .carrusel__boton { display: none; }
+.carrusel__cuenta { position: absolute; left: 10px; bottom: 8px; margin: 0; padding: 2px 8px; border-radius: 10px; background: rgba(0,0,0,.6); color: #fff; font-size: var(--t-xs); font-weight: 700; }
+.carrusel__cuenta:empty { display: none; }
+.mapa3d__ficha .carrusel + .mapa3d__ficha-zona { margin-top: 0; }
+.visor-fotos { width: 100vw; height: 100vh; max-width: none; max-height: none; margin: 0; padding: 0; background: rgba(4,14,24,.96); }
+.visor-fotos::backdrop { background: rgba(4,14,24,.9); }
+.visor-fotos .carrusel { margin: 0; height: 100%; }
+.visor-fotos .carrusel__pista { height: 100%; }
+.visor-fotos .carrusel__foto { display: flex; align-items: center; justify-content: center; }
+.visor-fotos .carrusel__foto img { width: auto; max-width: 100%; height: auto; max-height: 100%; aspect-ratio: auto; object-fit: contain; background: none; }
+.visor-fotos .carrusel__cuenta { left: 50%; transform: translateX(-50%); bottom: 18px; font-size: var(--t-sm); }
+.visor-fotos .carrusel__boton { width: 52px; height: 52px; }
+.visor-fotos__cerrar { position: absolute; top: 12px; right: 12px; width: 48px; height: 48px; border-radius: 50%; border: 0; background: rgba(255,255,255,.92); color: #04203A; font-size: 1.8rem; line-height: 1; cursor: pointer; }
+.visor-fotos__cerrar:focus-visible { outline: 3px solid var(--foco); outline-offset: 2px; }
