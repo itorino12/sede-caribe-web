@@ -37,9 +37,10 @@
   <header class="cabecera">
     <div class="ancho cabecera__fila">
       <a class="firma" href="{{ raiz }}index.html" aria-label="Inicio, Universidad de Costa Rica, Sede del Caribe">
-        <img class="firma__ucr firma__ucr--claro" src="{{ raiz }}assets/img/ucr-celeste.svg" alt="" width="118" height="62">
-        <img class="firma__ucr firma__ucr--oscuro" src="{{ raiz }}assets/img/ucr-blanco.svg" alt="" width="118" height="62">
-        <span class="ident"><span class="ident__sigla">SC</span><span class="ident__linea"></span><span class="ident__nombre">Sede del<strong>Caribe</strong></span></span>
+        <img class="firma__escudo firma__escudo--claro" src="{{ raiz }}assets/img/escudo-negro.png" alt="" width="69" height="72">
+        <img class="firma__escudo firma__escudo--oscuro" src="{{ raiz }}assets/img/escudo-blanco.png" alt="" width="69" height="72">
+        <span class="firma__ucr-texto">Universidad de<br>Costa Rica</span>
+        <span class="ident"><span class="ident__linea"></span><span class="ident__nombre">Sede del<strong>Caribe</strong></span></span>
       </a>
       <button class="menu-boton" type="button" aria-controls="menu" aria-expanded="false" data-menu>
         <span class="menu-boton__icono" aria-hidden="true"></span><span>Menú</span>
@@ -92,7 +93,7 @@
   <footer class="pie">
     <div class="ancho pie__rejilla">
       <div class="pie__sede">
-        <img src="{{ raiz }}assets/img/ucr-blanco.svg" alt="Universidad de Costa Rica" width="150" height="78">
+        <p class="pie__firma"><img src="{{ raiz }}assets/img/escudo-blanco.png" alt="" width="77" height="80"><span>Universidad de<br>Costa Rica</span></p>
         <p class="pie__nombre">Sede del Caribe</p>
         <p>{{ sitio.direccion }}</p>
         <p><a href="{{ sitio.telefono|tel }}">Central telefónica {{ sitio.telefono }}</a><br>

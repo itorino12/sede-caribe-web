@@ -88,14 +88,17 @@ main:focus { outline: none; }
 @media (max-width: 600px) { .util a:not(.util__ucr):not(:last-of-type) { display: none; } }
 
 .cabecera { background: var(--papel); border-bottom: 1px solid var(--linea); position: relative; z-index: 20; }
-.cabecera__fila { display: flex; align-items: center; gap: 24px; min-height: 92px; }
+.cabecera__fila { display: flex; align-items: center; gap: 18px; min-height: 92px; }
 .firma { display: flex; align-items: center; gap: 18px; text-decoration: none; flex-shrink: 0; }
-.firma__ucr { width: 118px; height: auto; }
-.firma__ucr--oscuro { display: none; }
-:root[data-tema="oscuro"] .firma__ucr--claro { display: none; }
-:root[data-tema="oscuro"] .firma__ucr--oscuro { display: block; }
+/* Firma con escudo (Manual UCR 3.1): escudo + «Universidad de Costa Rica», y a la derecha el nombre de la unidad */
+.firma { gap: 12px; }
+.firma__escudo { width: auto; height: 72px; }
+.firma__escudo--oscuro { display: none; }
+:root[data-tema="oscuro"] .firma__escudo--claro { display: none; }
+:root[data-tema="oscuro"] .firma__escudo--oscuro { display: block; }
+.firma__ucr-texto { font-size: 1.05rem; font-weight: 700; line-height: 1.1; letter-spacing: .04em; text-transform: uppercase; color: var(--tinta); }
 /* identificador compuesto del manual: sigla | línea celeste | tipo y nombre de la unidad */
-.ident { display: flex; align-items: center; gap: 12px; color: #666; }
+.ident { display: flex; align-items: center; gap: 12px; color: #666; margin-left: 4px; }
 .ident__sigla { font-size: 1.8rem; font-weight: 700; letter-spacing: .06em; color: #000; line-height: 1; }
 .ident__linea { width: 2px; align-self: stretch; min-height: 38px; background: var(--celeste); }
 .ident__nombre { line-height: 1.08; font-size: 1rem; }
@@ -105,7 +108,7 @@ main:focus { outline: none; }
 .menu { margin-left: auto; }
 .menu > ul { display: flex; list-style: none; margin: 0; padding: 0; gap: 2px; }
 .menu__item { position: relative; }
-.menu__enlace { display: block; white-space: nowrap; padding: 10px 11px; color: var(--tinta); text-decoration: none; font-weight: 600; background: none; border: 0; cursor: pointer; border-bottom: 3px solid transparent; }
+.menu__enlace { display: block; white-space: nowrap; padding: 10px 9px; color: var(--tinta); text-decoration: none; font-weight: 600; background: none; border: 0; cursor: pointer; border-bottom: 3px solid transparent; }
 .menu__enlace:hover, .menu__enlace[aria-current="page"], .menu__enlace[aria-expanded="true"] { border-bottom-color: var(--azul); color: var(--azul); }
 .menu__item--sub > .menu__enlace::after { content: ""; display: inline-block; width: 6px; height: 6px; margin-left: 8px; border: solid currentColor; border-width: 0 2px 2px 0; transform: translateY(-3px) rotate(45deg); }
 .menu__sub { display: none; position: absolute; top: 100%; left: 0; min-width: 270px; list-style: none; margin: 0; padding: 8px 0; background: var(--papel); border: 1px solid var(--linea); border-top: 3px solid var(--azul); box-shadow: 0 14px 30px rgba(0,40,80,.12); }
@@ -114,6 +117,8 @@ main:focus { outline: none; }
 .menu__enlace[aria-expanded="true"] + .menu__sub { display: block; }
 .buscar-boton { display: inline-flex; align-items: center; gap: 8px; min-height: 44px; padding: 8px 16px; background: none; color: var(--azul); border: 2px solid var(--azul); border-radius: 4px; cursor: pointer; font-weight: 700; }
 .buscar-boton:hover { background: var(--niebla); }
+.buscar-boton span { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }  /* solo la lupa; el texto queda para lectores de pantalla */
+.buscar-boton { padding: 8px 11px; }
 .menu-boton { display: none; }
 @media (max-width: 1240px) {
   .cabecera__fila { flex-wrap: wrap; gap: 10px; padding-block: 12px; min-height: 0; }
@@ -130,7 +135,7 @@ main:focus { outline: none; }
 }
 @media (max-width: 560px) {
   .menu-boton > span:last-child { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
-  .firma { gap: 10px; } .firma__ucr { width: 86px; } .ident__sigla { font-size: 1.35rem; } .ident__nombre { font-size: .875rem; } .ident__nombre strong { font-size: 1rem; }
+  .firma { gap: 8px; } .firma__escudo { height: 60px; } .firma__ucr-texto { font-size: .8rem; } .ident { gap: 8px; } .ident__nombre { font-size: .8rem; } .ident__nombre strong { font-size: .95rem; }
   .buscar-boton span { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
 }
 
@@ -423,7 +428,9 @@ main:focus { outline: none; }
   -webkit-mask: url("../img/ola-borde.svg") repeat-x 40px 0 / 120px 18px; mask: url("../img/ola-borde.svg") repeat-x 40px 0 / 120px 18px; }
 .pie a { color: #fff; }
 .pie__rejilla { display: grid; grid-template-columns: 1.4fr 1fr 1fr 1fr; gap: 32px; padding-block: 52px 32px; }
-.pie__sede img { width: 130px; margin-bottom: 14px; }
+.pie__firma { display: flex; align-items: center; gap: 12px; margin-bottom: 14px; }
+.pie__firma img { height: 80px; width: auto; }
+.pie__firma span { font-weight: 700; text-transform: uppercase; letter-spacing: .04em; line-height: 1.1; color: #fff; }
 .pie__nombre { font-size: var(--t-md); font-weight: 700; color: #fff; }
 .pie h2 { font-size: var(--t-base); color: #fff; margin-bottom: 10px; letter-spacing: 0; }
 .pie ul { list-style: none; padding: 0; margin: 0; }
