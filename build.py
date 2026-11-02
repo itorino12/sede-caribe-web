@@ -134,7 +134,7 @@ def imagen(nombre, ancho_max=1600):
     Devuelve None si no existe, para que la plantilla simplemente no muestre imagen."""
     if not nombre:
         return None
-    origen = next((p for p in [CONT / "imagenes" / nombre, SRC / "assets" / "img" / nombre] if p.exists()), None)
+    origen = next((p for p in [CONT / "imagenes" / nombre, SRC / "assets" / "fotos" / nombre, SRC / "assets" / "img" / nombre] if p.exists()), None)
     if not origen:
         print(f"  ! imagen no encontrada: {nombre}")
         return None
@@ -143,7 +143,7 @@ def imagen(nombre, ancho_max=1600):
     salida = {}
     with Image.open(origen) as im:
         im = ImageOps.exif_transpose(im).convert("RGB")
-        for ancho in (640, 1280):
+        for ancho in (640, 1280, 1920):
             copia = im.copy()
             if copia.width > ancho:
                 copia = copia.resize((ancho, round(copia.height * ancho / copia.width)), Image.LANCZOS)
@@ -221,7 +221,16 @@ def preparar(sitio, d):
     for e in d["enlaces"]:
         enlaces.setdefault(e["grupo"], []).append(e)
 
-    return {"avisos": avisos, "noticias": noticias, "eventos": eventos, "recientes": recientes,
+    # «Esta semana en la Sede»: lunes a viernes de la semana en curso (el fin de semana, la siguiente)
+    lunes = HOY - timedelta(days=HOY.weekday()) + (timedelta(days=7) if HOY.weekday() >= 5 else timedelta())
+    semana = [{"f": lunes + timedelta(days=i), "hoy": lunes + timedelta(days=i) == HOY, "pasado": lunes + timedelta(days=i) < HOY,
+               "eventos": [e for e in eventos + recientes if e["f"] <= lunes + timedelta(days=i) <= e["fin"]]} for i in range(5)]
+
+    # Fotos de la portada y de las páginas: se cambian en la pestaña config del Drive
+    fotos = {k: imagen(sitio.get(f"foto_{k}") or por_defecto) for k, por_defecto in
+             [("portada", "edificio-aulas.jpg"), ("carreras", "auditorio.jpg"), ("historia", "entrada.jpg"), ("visitenos", "entrada-noche.jpg")]}
+
+    return {"semana": semana, "fotos": fotos, "avisos": avisos, "noticias": noticias, "eventos": eventos, "recientes": recientes,
             "carreras": carreras, "unidades": unidades, "unidad": {u["id"]: u for u in unidades},
             "directorio": grupos_dir, "enlaces": enlaces, "hitos": d["hitos"], "cifras": d["cifras"],
             "categorias": sorted({n["categoria"] for n in noticias if n.get("categoria")}),
@@ -264,7 +273,7 @@ def main():
     sitio, crudos, origen = cargar()
     if DIST.exists():
         shutil.rmtree(DIST)
-    shutil.copytree(SRC / "assets", DIST / "assets")
+    shutil.copytree(SRC / "assets", DIST / "assets", ignore=shutil.ignore_patterns("fotos"))  # las fotos originales solo se publican convertidas a WebP
     c = preparar(sitio, crudos)
 
     huella = hashlib.sha1()

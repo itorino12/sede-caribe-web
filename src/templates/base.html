@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>{% if pagina == "index.html" %}{{ sitio.nombre_largo }}{% else %}{{ titulo }} | UCR Sede del Caribe{% endif %}</title>
   <meta name="description" content="{{ descripcion|striptags|truncate(160) }}">
-  <meta name="theme-color" content="#0B3A53">
+  <meta name="theme-color" content="#005DA4">
   <link rel="canonical" href="{{ sitio.base_url }}/{{ '' if pagina == 'index.html' else pagina }}">
   <meta property="og:site_name" content="UCR Sede del Caribe">
   <meta property="og:title" content="{{ titulo }}">
@@ -14,8 +14,8 @@
   {% block og %}<meta property="og:type" content="website">{% endblock %}
   <link rel="icon" href="{{ raiz }}assets/img/favicon.svg" type="image/svg+xml">
   <link rel="alternate" type="application/rss+xml" title="Noticias de la Sede del Caribe" href="{{ raiz }}noticias.xml">
-  <link rel="preload" href="{{ raiz }}assets/fonts/fira-sans-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
-  <link rel="preload" href="{{ raiz }}assets/fonts/fira-sans-latin-800-normal.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="{{ raiz }}assets/fonts/source-sans-3-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="{{ raiz }}assets/fonts/source-sans-3-latin-900-normal.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="stylesheet" href="{{ raiz }}assets/css/sede.css">
   <script src="{{ raiz }}assets/js/tema.js"></script>
   <script type="application/ld+json">{"@context":"https://schema.org","@type":"CollegeOrUniversity","name":"Universidad de Costa Rica, Sede del Caribe","url":"{{ sitio.base_url }}","telephone":"+506 {{ sitio.telefono }}","email":"{{ sitio.correo }}","address":{"@type":"PostalAddress","addressLocality":"Limón","addressCountry":"CR"},"parentOrganization":{"@type":"CollegeOrUniversity","name":"Universidad de Costa Rica","url":"https://www.ucr.ac.cr"}}</script>
@@ -24,24 +24,22 @@
 <body class="p-{{ pagina|replace('/', '-')|replace('.html', '') }}">
   <a class="saltar" href="#contenido">Saltar al contenido</a>
 
-  <div class="franja-ucr">
-    <div class="ancho franja-ucr__fila">
-      <a href="https://www.ucr.ac.cr">Universidad de Costa Rica</a>
-      <nav aria-label="Accesos rápidos">
-        <a href="{{ raiz }}enlaces.html#estudiantes">Estudiantes</a>
-        <a href="{{ raiz }}enlaces.html#personal-universitario">Personal</a>
-        <a href="{{ raiz }}directorio.html">Directorio</a>
-        <button type="button" class="franja-ucr__a11y" data-abrir="panel-a11y" aria-controls="panel-a11y" aria-expanded="false">Accesibilidad</button>
-      </nav>
+  <div class="util">
+    <div class="ancho util__fila">
+      <a class="util__ucr" href="https://www.ucr.ac.cr">Universidad de Costa Rica</a>
+      <a href="{{ raiz }}enlaces.html#estudiantes">Estudiantes</a>
+      <a href="{{ raiz }}enlaces.html#personal-universitario">Personal</a>
+      <a href="{{ raiz }}directorio.html">Directorio</a>
+      <button type="button" data-abrir="panel-a11y" aria-controls="panel-a11y" aria-expanded="false">Accesibilidad</button>
     </div>
   </div>
 
   <header class="cabecera">
     <div class="ancho cabecera__fila">
       <a class="firma" href="{{ raiz }}index.html" aria-label="Inicio, Universidad de Costa Rica, Sede del Caribe">
-        <img class="firma__ucr firma__ucr--claro" src="{{ raiz }}assets/img/ucr-celeste.svg" alt="" width="132" height="69">
-        <img class="firma__ucr firma__ucr--oscuro" src="{{ raiz }}assets/img/ucr-blanco.svg" alt="" width="132" height="69">
-        <span class="firma__sede">Sede del<br>Caribe</span>
+        <img class="firma__ucr firma__ucr--claro" src="{{ raiz }}assets/img/ucr-celeste.svg" alt="" width="118" height="62">
+        <img class="firma__ucr firma__ucr--oscuro" src="{{ raiz }}assets/img/ucr-blanco.svg" alt="" width="118" height="62">
+        <span class="ident"><span class="ident__sigla">SC</span><span class="ident__linea"></span><span class="ident__nombre">Sede del<strong>Caribe</strong></span></span>
       </a>
       <button class="menu-boton" type="button" aria-controls="menu" aria-expanded="false" data-menu>
         <span class="menu-boton__icono" aria-hidden="true"></span><span>Menú</span>

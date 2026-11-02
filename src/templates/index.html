@@ -1,54 +1,50 @@
 {% extends "base.html" %}
-{% from "_macros.html" import evento, tarjeta_noticia %}
+{% from "_macros.html" import tarjeta_noticia %}
+{% macro foto(f, alt, tam, carga='lazy') %}<img src="{{ f[1280] }}" srcset="{{ f[640] }} 640w, {{ f[1280] }} 1280w, {{ f[1920] }} 1920w" sizes="{{ tam }}" alt="{{ alt }}" width="{{ f.w }}" height="{{ f.h }}" loading="{{ carga }}"{% if carga == 'eager' %} fetchpriority="high"{% endif %}>{% endmacro %}
+{% block cabeza %}{% if fotos.portada %}<link rel="preload" as="image" href="{{ fotos.portada[1280] }}" imagesrcset="{{ fotos.portada[640] }} 640w, {{ fotos.portada[1280] }} 1280w, {{ fotos.portada[1920] }} 1920w" imagesizes="(min-width: 900px) 52vw, 100vw">{% endif %}{% endblock %}
 {% block contenido %}
 <section class="portada" aria-labelledby="portada-titulo">
-  <svg class="portada__olas" aria-hidden="true" viewBox="0 0 1200 520" preserveAspectRatio="none">
-    {% for i in range(9) %}<path d="M0 {{ 300 + i * 26 }} C 200 {{ 270 + i * 26 }}, 400 {{ 330 + i * 26 }}, 600 {{ 296 + i * 26 }} S 1000 {{ 262 + i * 26 }}, 1200 {{ 300 + i * 26 }}"/>{% endfor %}
-  </svg>
-  <div class="ancho portada__rejilla">
+  <div class="portada__rejilla">
     <div class="portada__texto">
-      <h1 id="portada-titulo">{{ sitio.lema }}</h1>
+      <h1 id="portada-titulo">En Limón<span>desde 1975.</span></h1>
       <p class="portada__bajada">{{ carreras|length }} carreras en Limón y Siquirres, residencias dentro del campus y medio siglo de historia con la provincia.</p>
       <form class="portada__buscar" role="search" data-busqueda-directa>
         <label for="portada-buscar">¿Qué necesita encontrar?</label>
         <div class="portada__campo">
-          <input id="portada-buscar" type="search" placeholder="Por ejemplo: becas, Registro, Marina Civil" autocomplete="off">
+          <input id="portada-buscar" type="search" placeholder="Becas, Registro, Marina Civil…" autocomplete="off">
           <button type="submit" class="boton">Buscar</button>
         </div>
       </form>
-      <p class="portada__acciones">
-        <a class="boton boton--claro" href="estudiar.html">Ver las carreras</a>
-        <a class="enlace-claro" href="admision.html">Cómo ingresar a la UCR</a>
-      </p>
+      <p class="portada__acciones"><a href="estudiar.html">Ver las carreras</a><a href="admision.html">Cómo ingresar a la UCR</a></p>
     </div>
+    {% if fotos.portada %}
+    <figure class="portada__foto">{{ foto(fotos.portada, "Edificio de aulas y laboratorios de la Sede del Caribe, con su fachada de parasoles blancos", "(min-width: 900px) 52vw, 100vw", "eager") }}</figure>
+    {% endif %}
+  </div>
+</section>
 
-    <aside class="hoy" aria-labelledby="hoy-titulo" data-compilado="{{ ahora.isoformat(timespec='seconds') }}">
-      <div class="hoy__cabeza">
-        <h2 id="hoy-titulo" class="hoy__titulo">Hoy en la Sede</h2>
-        <p class="hoy__vivo"><span class="hoy__punto" aria-hidden="true"></span> <span data-hace>Actualizado el {{ ahora.date()|fecha_larga }}</span></p>
-      </div>
-      <p class="hoy__fecha"><span class="hoy__dia" data-hoy-dia>{{ hoy.day }}</span><span class="hoy__resto"><span data-hoy-semana>{{ hoy|dia_semana }}</span><br><span data-hoy-mes>{{ hoy|mes }} de {{ hoy.year }}</span></span></p>
-
-      {% for a in avisos if not a.urgente %}
-      <div class="hoy__aviso">
-        <p><strong>{{ a.titulo }}.</strong> {{ a.texto }}</p>
-        {% if a.enlace %}<a href="{{ a.enlace }}">{{ a.enlace_texto or 'Más información' }}</a>{% endif %}
-      </div>
+<section class="semana" aria-labelledby="semana-titulo">
+  <div class="ancho">
+    <div class="semana__cabeza">
+      <h2 id="semana-titulo">{{ "Esta semana" if semana[0].f <= hoy else "La próxima semana" }} en la Sede</h2>
+      <p><a href="agenda.html">Agenda completa</a> · <a href="agenda.ics">Agregar a mi calendario</a></p>
+    </div>
+    {% for a in avisos if not a.urgente %}
+    <p class="semana__aviso"><strong>{{ a.titulo }}.</strong> {{ a.texto }}{% if a.enlace %} <a href="{{ a.enlace }}">{{ a.enlace_texto or 'Más información' }}</a>{% endif %}{% if a.ejemplo %} <span class="marca-ejemplo">Ejemplo</span>{% endif %}</p>
+    {% endfor %}
+    <ol class="dias">
+      {% for d in semana %}
+      <li class="dia{% if d.hoy %} dia--hoy{% elif d.pasado %} dia--pasado{% endif %}">
+        <span class="dia__nombre">{{ d.f|dia_semana }}</span>
+        <time class="dia__num" datetime="{{ d.f.isoformat() }}">{{ d.f.day }}</time>
+        {% if d.eventos %}
+        <ul>{% for e in d.eventos %}<li><a href="agenda.html#{{ e.id }}"><b>{{ e.titulo }}</b></a>{{ e.hora ~ '. ' if e.hora }}{{ e.lugar }}{% if e.ejemplo %} <span class="marca-ejemplo">Ejemplo</span>{% endif %}</li>{% endfor %}</ul>
+        {% else %}
+        <p class="dia__vacio">Sin actividades registradas.</p>
+        {% endif %}
+      </li>
       {% endfor %}
-
-      <h3 class="hoy__sub">Próximas actividades</h3>
-      {% if eventos %}
-      <ul class="hoy__lista">{% for e in eventos[:3] %}{{ evento(e, '', compacto=true) }}{% endfor %}</ul>
-      <a class="hoy__mas" href="agenda.html">Agenda completa</a>
-      {% else %}
-      <p class="hoy__vacio">No hay actividades programadas para los próximos días.</p>
-      {% endif %}
-
-      {% if noticias %}
-      <h3 class="hoy__sub">Lo más reciente</h3>
-      <p class="hoy__nota"><a href="noticias/{{ noticias[0].id }}.html">{{ noticias[0].titulo }}</a><br><time datetime="{{ noticias[0].f.isoformat() }}">{{ noticias[0].f|fecha_larga }}</time></p>
-      {% endif %}
-    </aside>
+    </ol>
   </div>
 </section>
 
@@ -85,31 +81,42 @@
   <div class="ancho">
     <div class="bloque__cabeza">
       <h2 id="carreras-titulo">Qué se estudia en el Caribe</h2>
-      <a href="estudiar.html">Ver todas con sus planes</a>
+      <a href="estudiar.html">Todas las carreras con sus planes</a>
     </div>
-    <div class="carreras-portada__areas">
-      {% for area in areas %}
-      <div class="area">
-        <h3 class="area__titulo">{{ area }}</h3>
-        <ul>
-          {% for c in carreras if c.area == area %}
-          <li><a href="carreras/{{ c.id }}.html">{{ c.nombre }}</a><span>{{ c.grados }}{% if 'Siquirres' in c.recintos %}. También en Siquirres{% endif %}</span></li>
-          {% endfor %}
-        </ul>
+    <div class="carreras-portada__rejilla{% if not fotos.carreras %} sin-foto{% endif %}">
+      {% if fotos.carreras %}
+      <figure class="carreras-portada__foto">{{ foto(fotos.carreras, "Auditorio de la Sede del Caribe, con butacas rojas y paneles de madera", "(min-width: 900px) 30vw, 100vw") }}<figcaption>Auditorio de la Sede.</figcaption></figure>
+      {% endif %}
+      <div class="carreras-portada__areas">
+        {% set colores = ["var(--azul)", "var(--celeste)", "var(--verde)", "var(--amarillo)", "var(--tinta-2)"] %}
+        {% for area in areas %}
+        <div class="area" style="--c: {{ colores[loop.index0 % 5] }}">
+          <h3 class="area__titulo">{{ area }}</h3>
+          <ul>
+            {% for c in carreras if c.area == area %}
+            <li><a href="carreras/{{ c.id }}.html">{{ c.nombre }}</a><span>{{ c.grados }}{% if 'Siquirres' in c.recintos %}. También en Siquirres{% endif %}</span></li>
+            {% endfor %}
+          </ul>
+        </div>
+        {% endfor %}
       </div>
-      {% endfor %}
     </div>
   </div>
 </section>
 
-<section class="bloque ancho historia-portada" aria-labelledby="historia-titulo">
+<section class="bloque ancho" aria-labelledby="historia-titulo">
   <div class="bloque__cabeza">
-    <h2 id="historia-titulo">En Limón desde 1975</h2>
+    <h2 id="historia-titulo">Medio siglo con Limón</h2>
     <a href="la-sede.html#historia">Leer la historia</a>
   </div>
-  <ol class="linea-tiempo">
-    {% for h in hitos %}<li><span class="linea-tiempo__anio">{{ h.anio }}</span><p>{{ h.texto }}</p></li>{% endfor %}
-  </ol>
+  <div class="historia-portada__rejilla{% if not fotos.historia %} sin-foto{% endif %}">
+    <ol class="linea-tiempo">
+      {% for h in hitos %}<li><span class="linea-tiempo__anio">{{ h.anio }}</span><p>{{ h.texto }}</p></li>{% endfor %}
+    </ol>
+    {% if fotos.historia %}
+    <figure class="historia-portada__foto">{{ foto(fotos.historia, "Entrada principal de la Sede del Caribe, con las banderas y el rótulo de la Universidad de Costa Rica", "(min-width: 900px) 46vw, 100vw") }}<figcaption>Entrada principal del campus en Limón.</figcaption></figure>
+    {% endif %}
+  </div>
 </section>
 
 <section class="bloque ancho" aria-labelledby="servicios-titulo">
@@ -122,5 +129,14 @@
     <li><a href="unidades/{{ u.id }}.html">{{ u.nombre }}</a><p>{{ u.resumen }}</p></li>
     {% endfor %}
   </ul>
+</section>
+
+<section class="visitenos" aria-labelledby="visitenos-titulo">
+  {% if fotos.visitenos %}{{ foto(fotos.visitenos, "", "100vw") }}{% endif %}
+  <div class="ancho visitenos__texto">
+    <h2 id="visitenos-titulo">Visítenos</h2>
+    <p>{{ sitio.direccion }}. La central telefónica le comunica con cualquier oficina de la Sede.</p>
+    <p><a href="{{ sitio.telefono|tel }}">{{ sitio.telefono }}</a> · <a href="contacto.html">Contacto y cómo llegar</a></p>
+  </div>
 </section>
 {% endblock %}

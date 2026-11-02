@@ -44,8 +44,9 @@
 </aside>
 {% endmacro %}
 
-{% macro encabezado(titulo, migas, raiz, bajada='') %}
-<header class="encabezado">
+{% macro encabezado(titulo, migas, raiz, bajada='', foto=None, foto_alt='') %}
+<header class="encabezado{% if foto %} encabezado--foto{% endif %}">
+  {% if foto %}<img src="{{ raiz }}{{ foto[1920] }}" srcset="{{ raiz }}{{ foto[640] }} 640w, {{ raiz }}{{ foto[1280] }} 1280w, {{ raiz }}{{ foto[1920] }} 1920w" sizes="100vw" alt="{{ foto_alt }}" width="{{ foto.w }}" height="{{ foto.h }}">{% endif %}
   <div class="ancho">
     {% if migas %}
     <nav class="migas" aria-label="Ruta"><ol><li><a href="{{ raiz }}index.html">Inicio</a></li>{% for t, u in migas %}<li><a href="{{ raiz }}{{ u }}">{{ t }}</a></li>{% endfor %}</ol></nav>
