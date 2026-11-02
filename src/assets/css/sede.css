@@ -46,11 +46,18 @@
   color-scheme: light;
 }
 :root[data-tema="oscuro"] {
-  --azul: #4FA8E8; --azul-hondo: #06213A; --tinta: #E4ECF2; --tinta-2: #A9B8C4; --niebla: #10202D;
-  --linea: #263B4C; --papel: #0A1822; --enlace: #7DC3F2; --verde-texto: #93C69E; --musgo: #93C69E; --franja: #0B3354; --sobre-acento: #04203A; color-scheme: dark;
-  --banda: #0B3354; --sobre-banda: #FFFFFF; --sobre-banda-2: #CFE0EE; --linea-banda: rgba(255,255,255,.3); --filete: #4FA8E8;
-  --cab-fondo: var(--papel); --cab-texto: var(--tinta); --cab-texto-2: #A9B8C4; --cab-linea: var(--linea); --cab-ident: var(--celeste); --cab-boton: var(--azul);
+  /* Modo oscuro con los grises del sitio principal de la UCR (#323232 de fondo, #232323 en barras)
+     y el azul oscuro UCR (#01477C) en la franja de la semana y el pie */
+  --azul: #6FB8EE; --azul-hondo: #01477C; --tinta: #F2F2F2; --tinta-2: #C8C8C8; --niebla: #2A2A2A;
+  --linea: #4A4A4A; --papel: #323232; --enlace: #8CCBF5; --verde-texto: #9DCCA6; --musgo: #9DCCA6; --franja: #01477C; --sobre-acento: #04203A; color-scheme: dark;
+  --banda: #01477C; --sobre-banda: #FFFFFF; --sobre-banda-2: #D6E6F2; --linea-banda: rgba(255,255,255,.3); --filete: #6FB8EE;
+  --cab-fondo: #232323; --cab-texto: #F2F2F2; --cab-texto-2: #C8C8C8; --cab-linea: #3C3C3C; --cab-ident: var(--celeste); --cab-boton: #01477C;
+  --velo: 35 35 35;
 }
+:root[data-tema="oscuro"] .util { background: #1B1B1B; }
+:root[data-tema="oscuro"] .visitenos, :root[data-tema="oscuro"] .encabezado--foto { background: #232323; }
+:root[data-tema="oscuro"] .menu-boton { color: #fff; }
+:root[data-tema="oscuro"] .mapa3d__escena { background: linear-gradient(#3b4650, #2d3236 70%); }
 :root[data-contraste] { --enlace: #003B70; --azul: #003B70; --tinta: #000; --tinta-2: #111; --linea: #000; --niebla: #fff; }
 :root[data-tema="oscuro"][data-contraste] { --enlace: #A8E1FF; --azul: #A8E1FF; --tinta: #fff; --tinta-2: #f2f2f2; --linea: #fff; --niebla: #000; --papel: #000; }
 :root[data-subrayado] a { text-decoration: underline !important; }
