@@ -37,6 +37,7 @@ PENDIENTE = 0.32         # altura del techo por metro de medio ancho (cuatro agu
 # Elementos que no salen en el croquis, ubicados con Google Maps y las fotos (píxeles del croquis)
 PICNIC = {"centro": (1688, 1598), "radio": 64}      # área de picnic y juegos frente al CIUB y las residencias
 PUENTE = {"centro": (1540, 1478), "largo": 46}      # puente de la calle interna sobre la quebrada, al sur del gimnasio
+PLANTA = {"centro": (1486, 1566), "giro": 74}        # planta de tratamiento, al oeste de la calle, pasando el puente
 
 # Edificios: número del croquis, forma y pisos. rect = (cx, cy, largo, ancho, giro en grados, horario)
 EDIFICIOS = [
@@ -65,7 +66,9 @@ EDIFICIOS = [
     {"id": 14, "rect": (1689, 1292, 151, 196, 12.5), "pisos": 1, "alto": 11},
     {"id": 15, "rect": (1770, 1450, 59, 41, 0), "pisos": 1},
     # Residencias: barra doblada del croquis, en dos alas; en la foto, techo de dos niveles con linternilla
-    {"id": 16, "alas": [(1700, 1840, 200, 74, 81), (1768, 1992, 165, 70, 46)], "pisos": 2, "linterna": 0.42,
+    # el ala sur del croquis llega hasta la carretera: se acorta y se corre hacia adentro para que quede
+    # dentro de la cerca, como en el campus real
+    {"id": 16, "alas": [(1700, 1840, 200, 74, 81), (1742, 1960, 120, 66, 46)], "pisos": 2, "linterna": 0.42,
      "estilo": {"techo": "#66756b"}},
     {"id": 17, "rect": (1816, 1795, 63, 92, -11), "pisos": 1, "estilo": {"techo": "#66756b"}},
     {"id": 18, "rect": (1552, 1826, 30, 54, 15), "pisos": 1},
@@ -299,8 +302,8 @@ def main(pdf, sat=None):
     picnic = np.zeros_like(calles)
     cv2.circle(picnic, PICNIC["centro"], PICNIC["radio"], 255, -1)
     pintar(cv2.GaussianBlur(picnic, (0, 0), 6), (166, 208, 120))
-    pintar(cv2.bitwise_and(calles, cv2.bitwise_not(acceso)), (84, 88, 94), borde=(214, 212, 204))
-    pintar(acceso, (172, 164, 146), borde=(150, 160, 120))
+    # dentro de la U todo está asfaltado (fotos), también el camino a la pista; cordón de concreto claro
+    pintar(cv2.bitwise_or(calles, acceso), (84, 88, 94), borde=(214, 212, 204))
     pintar(carretera, (112, 116, 122), borde=(88, 92, 98))
     # sombra suave bajo cada edificio (contacto con el suelo)
     sombra = np.zeros((y1 - y0, x1 - x0), np.uint8)
@@ -332,6 +335,7 @@ def main(pdf, sat=None):
     lejos_edificios = cv2.dilate(lejos_edificios, cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (73, 73)))
     cv2.circle(lejos_edificios, PICNIC["centro"], PICNIC["radio"] + 18, 1, -1)
     cv2.circle(lejos_edificios, PUENTE["centro"], 40, 1, -1)
+    cv2.circle(lejos_edificios, PLANTA["centro"], 115, 1, -1)
     satelital = arboles_satelitales(sat, rng, ocupado | lejos_edificios) if sat else None
     for i in range(1, n):
         area = st[i, 4]
@@ -428,6 +432,13 @@ def main(pdf, sat=None):
         cerca.append([a_metros(float(x), float(y)) for x, y in simple])
     cy_pista, cx_pista = np.mean(np.nonzero(pista), axis=1)
 
+    for e in EDIFICIOS:
+        for pol in contornos_px(e):
+            for x, y in pol:
+                d = lejos_carretera[int(y), int(x)]
+                if d < 34:
+                    print(f"  ! el edificio {e['id']} queda pegado a la carretera ({d:.0f} px): se sale de la cerca")
+
     datos = {
         "nota": "Generado por herramientas/campus3d.py a partir del croquis oficial «Distribución de Aulas». Esquemático, no a escala.",
         "terreno": {"x": a_metros(x0, y0)[0], "z": a_metros(x0, y0)[1], "ancho": round((x1 - x0) * ESCALA, 2), "largo": round((y1 - y0) * ESCALA, 2)},
@@ -437,6 +448,7 @@ def main(pdf, sat=None):
         "porton_pista": porton,
         "porton_residencias": porton_res,
         "picnic": {"centro": a_metros(*PICNIC["centro"]), "radio": round(PICNIC["radio"] * ESCALA, 2)},
+        "planta": {"centro": a_metros(*PLANTA["centro"]), "giro": round(math.radians(PLANTA["giro"]), 3)},
         "puente": {"centro": a_metros(*PUENTE["centro"]), "largo": round(PUENTE["largo"] * ESCALA, 2),
                    "angulo": round(math.atan2(1557 - 1533, 1550 - 1450), 3)},
         "pista": {"centro": a_metros(float(cx_pista), float(cy_pista))},

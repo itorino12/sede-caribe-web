@@ -151,5 +151,21 @@
   "texto": "Zona verde frente al CIUB y las residencias, con mesas de concreto, un rancho de palma y juegos infantiles.",
   "fotos": "picnic-1.jpg, picnic-2.jpg",
   "fotos_alt": "Zona verde con mesas y bancas de concreto azul, dos palmeras de coco, un rancho con techo de palma y juegos infantiles, frente al bosque|La misma área de picnic vista desde la calle, con un árbol grande al frente y la casita de juegos al fondo"
+ },
+ {
+  "id": 22,
+  "zona": 4,
+  "nombre": "Planta de tratamiento de aguas",
+  "texto": "Planta de tratamiento de aguas residuales de la Sede, junto a la calle interna que baja hacia las residencias.",
+  "fotos": "planta-1.jpg, planta-2.jpg, planta-3.jpg, planta-4.jpg",
+  "fotos_alt": "Planta de tratamiento de aguas: casetas blancas con techo verde, estructura azul con plataforma y dos tanques grises, dentro de una malla ciclón|Los tanques grises y la estructura azul de la planta de tratamiento, vistos desde la calle|Las casetas de la planta de tratamiento, con puertas azules, frente al bosque|La calle interna asfaltada junto a la planta de tratamiento, bajando hacia el puente"
+ },
+ {
+  "id": 23,
+  "zona": 4,
+  "nombre": "Puente sobre la quebrada",
+  "texto": "Puente de la calle interna sobre la quebrada, con defensas amarillas y acera peatonal con baranda y guía táctil.",
+  "fotos": "puente-1.jpg, puente-2.jpg, puente-3.jpg, puente-4.jpg",
+  "fotos_alt": "El puente de la calle interna, con defensas amarillas y la acera peatonal con baranda, subiendo hacia el campus|El puente visto desde el paso de cebra, con la defensa amarilla y la baranda gris|El puente y la acera peatonal junto a la cerca verde, rodeados de bosque|La calle interna después del puente, con bambú a un lado y los edificios del campus al fondo"
  }
 ]
