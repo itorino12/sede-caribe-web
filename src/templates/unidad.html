@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% from "_macros.html" import encabezado, contacto, evento %}
+{% from "_macros.html" import encabezado, contacto, evento with context %}
 {% block contenido %}
 {% set padre = ("La Sede", "la-sede.html#coordinaciones") if u.grupo in ["Coordinaciones", "Gobierno", "Recintos"] else ("Campus y servicios", "la-sede.html#servicios") %}
 {{ encabezado(u.nombre, [padre], raiz, u.resumen) }}

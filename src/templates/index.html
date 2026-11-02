@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% from "_macros.html" import tarjeta_noticia %}
+{% from "_macros.html" import tarjeta_noticia with context %}
 {% macro foto(f, alt, tam, carga='lazy') %}<img src="{{ f[1280] }}" srcset="{{ f[640] }} 640w, {{ f[1280] }} 1280w, {{ f[1920] }} 1920w" sizes="{{ tam }}" alt="{{ alt }}" width="{{ f.w }}" height="{{ f.h }}" loading="{{ carga }}"{% if carga == 'eager' %} fetchpriority="high"{% endif %}>{% endmacro %}
 {% block cabeza %}{% if fotos.portada %}<link rel="preload" as="image" href="{{ fotos.portada[1280] }}" imagesrcset="{{ fotos.portada[640] }} 640w, {{ fotos.portada[1280] }} 1280w, {{ fotos.portada[1920] }} 1920w" imagesizes="(min-width: 900px) 52vw, 100vw">{% endif %}{% endblock %}
 {% block contenido %}
@@ -18,10 +18,14 @@
       <p class="portada__acciones"><a href="estudiar.html">Ver las carreras</a><a href="admision.html">Cómo ingresar a la UCR</a></p>
     </div>
     {% if fotos.portada %}
-    <figure class="portada__foto">{{ foto(fotos.portada, "Edificio de aulas y laboratorios de la Sede del Caribe, con su fachada de parasoles blancos", "(min-width: 900px) 52vw, 100vw", "eager") }}</figure>
+    <figure class="portada__foto">
+      <span class="foto-dia">{{ foto(fotos.portada, "Entrada principal de la Sede del Caribe de día, con las banderas y el rótulo de la Universidad de Costa Rica", "(min-width: 900px) 52vw, 100vw", "eager") }}</span>
+      {% if fotos.portada_noche %}<span class="foto-noche">{{ foto(fotos.portada_noche, "Entrada principal de la Sede del Caribe de noche, con el rótulo iluminado", "(min-width: 900px) 52vw, 100vw") }}</span>{% endif %}
+    </figure>
     {% endif %}
   </div>
 </section>
+{% include "_avisos.html" %}
 
 <section class="semana" aria-labelledby="semana-titulo">
   <div class="ancho">
@@ -114,7 +118,7 @@
       {% for h in hitos %}<li><span class="linea-tiempo__anio">{{ h.anio }}</span><p>{{ h.texto }}</p></li>{% endfor %}
     </ol>
     {% if fotos.historia %}
-    <figure class="historia-portada__foto">{{ foto(fotos.historia, "Entrada principal de la Sede del Caribe, con las banderas y el rótulo de la Universidad de Costa Rica", "(min-width: 900px) 46vw, 100vw") }}<figcaption>Entrada principal del campus en Limón.</figcaption></figure>
+    <figure class="historia-portada__foto">{{ foto(fotos.historia, "Edificio de aulas y laboratorios de la Sede del Caribe, con su fachada de parasoles blancos", "(min-width: 900px) 46vw, 100vw") }}<figcaption>Edificio de aulas y laboratorios para las ingenierías.</figcaption></figure>
     {% endif %}
   </div>
 </section>
@@ -132,7 +136,8 @@
 </section>
 
 <section class="visitenos" aria-labelledby="visitenos-titulo">
-  {% if fotos.visitenos %}{{ foto(fotos.visitenos, "", "100vw") }}{% endif %}
+  {% if fotos.portada_noche %}<span class="foto-dia">{{ foto(fotos.portada_noche, "", "100vw") }}</span>{% endif %}
+  {% if fotos.portada %}<span class="foto-noche">{{ foto(fotos.portada, "", "100vw") }}</span>{% endif %}
   <div class="ancho visitenos__texto">
     <h2 id="visitenos-titulo">Visítenos</h2>
     <p>{{ sitio.direccion }}. La central telefónica le comunica con cualquier oficina de la Sede.</p>

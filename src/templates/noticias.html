@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% from "_macros.html" import encabezado, tarjeta_noticia %}
+{% from "_macros.html" import encabezado, tarjeta_noticia with context %}
 {% block contenido %}
 {{ encabezado("Noticias", [], raiz, "Lo que pasa en la Sede, contado por la Unidad de Comunicación Estudiantil y las coordinaciones.") }}
 <div class="ancho pagina">

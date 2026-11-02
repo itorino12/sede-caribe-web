@@ -1,0 +1,8 @@
+{% for a in avisos if a.urgente %}
+<div class="aviso aviso--urgente" role="status">
+  <div class="ancho aviso__fila">
+    <p><strong>{{ a.titulo }}.</strong> {{ a.texto }}{% if a.enlace %} <a href="{{ a.enlace if '://' in a.enlace else raiz ~ a.enlace }}">{{ a.enlace_texto or 'Más información' }}</a>{% endif %}</p>
+    {% if a.ejemplo %}<span class="marca-ejemplo">Ejemplo</span>{% endif %}
+  </div>
+</div>
+{% endfor %}

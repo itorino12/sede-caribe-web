@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% from "_macros.html" import encabezado, contacto %}
+{% from "_macros.html" import encabezado, contacto with context %}
 {% block contenido %}
 {{ encabezado(carrera.nombre, [("Carreras", "estudiar.html")], raiz, carrera.grados) }}
 <div class="ancho pagina pagina--con-ficha">

@@ -80,22 +80,14 @@
     </div>
   </header>
 
-  {% for a in avisos if a.urgente %}
-  <div class="aviso aviso--urgente" role="status">
-    <div class="ancho aviso__fila">
-      <p><strong>{{ a.titulo }}.</strong> {{ a.texto }}{% if a.enlace %} <a href="{{ a.enlace if '://' in a.enlace else raiz ~ a.enlace }}">{{ a.enlace_texto or 'Más información' }}</a>{% endif %}</p>
-      {% if a.ejemplo %}<span class="marca-ejemplo">Ejemplo</span>{% endif %}
-    </div>
-  </div>
-  {% endfor %}
-
-  {% if ejemplos %}
-  <p class="vista-previa">Vista previa con contenido de ejemplo marcado. En el sitio real, todo sale del Drive.</p>
-  {% endif %}
 
   <main id="contenido" tabindex="-1">
     {% block contenido %}{% endblock %}
   </main>
+
+  {% if ejemplos %}
+  <p class="vista-previa">Vista previa con contenido de ejemplo marcado. En el sitio real, todo sale del Drive.</p>
+  {% endif %}
 
   <footer class="pie">
     <div class="ancho pie__rejilla">

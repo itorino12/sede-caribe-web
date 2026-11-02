@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% from "_macros.html" import encabezado %}
+{% from "_macros.html" import encabezado with context %}
 {% block contenido %}
 {{ encabezado("Directorio", [("La Sede", "la-sede.html")], raiz, "Desde fuera de la UCR, marque el número completo. Desde un teléfono de la Universidad, basta con los últimos cuatro dígitos.") }}
 <div class="ancho pagina">

@@ -138,7 +138,7 @@ main:focus { outline: none; }
 .aviso__fila p { margin: 0; }
 .aviso a { color: #1A1400; font-weight: 700; }
 .marca-ejemplo { display: inline-block; font-size: .8125rem; font-weight: 700; padding: 0 7px; border-radius: 2px; background: #6A4FB3; color: #fff; vertical-align: 2px; letter-spacing: 0; line-height: 1.5; }
-.vista-previa { margin: 0; padding: 7px var(--gutter); background: #EFEAFB; color: #3B2A73; font-size: var(--t-xs); text-align: center; }
+.vista-previa { margin: 0; border-top: 1px solid var(--linea); padding: 7px var(--gutter); background: #EFEAFB; color: #3B2A73; font-size: var(--t-xs); text-align: center; }
 
 /* -------- portada -------- */
 .portada { position: relative; overflow: hidden; }
@@ -156,7 +156,13 @@ main:focus { outline: none; }
 .portada__campo .boton { border-radius: 0 2px 2px 0; min-height: 0; }
 .portada__acciones { display: flex; flex-wrap: wrap; gap: 8px 22px; margin: 0; font-weight: 700; }
 .portada__foto { position: relative; margin: 0; min-height: 320px; background: var(--niebla); }
-.portada__foto img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: 55% 40%; }
+.portada__foto img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: 66% 50%; }
+.portada__foto .foto-noche img { object-position: 100% 50%; }
+/* Foto según el modo: la entrada de día en claro y de noche en oscuro (en «Visítenos», al revés) */
+.foto-noche { display: none; }
+:root[data-tema="oscuro"] .foto-dia { display: none; }
+:root[data-tema="oscuro"] .foto-noche { display: contents; }
+.foto-dia { display: contents; }
 .portada__foto figcaption { position: absolute; left: 16px; bottom: 16px; background: rgba(0,0,0,.6); color: #fff; font-size: var(--t-xs); padding: 4px 10px; border-radius: 2px; }
 @media (max-width: 900px) {
   .portada__rejilla { grid-template-columns: 1fr; min-height: 0; }
@@ -273,7 +279,7 @@ main:focus { outline: none; }
 .servicios p { font-size: var(--t-sm); color: var(--tinta-2); margin: 4px 0 0; }
 
 .visitenos { position: relative; color: #fff; background: #0B1F30; }
-.visitenos img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; opacity: .55; }
+.visitenos img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: 70% 50%; opacity: .55; }
 .visitenos__texto { position: relative; padding-block: clamp(56px, 9vw, 120px); }
 .visitenos h2 { color: #fff; font-size: var(--t-2xl); margin-bottom: 10px; }
 .visitenos p { font-size: var(--t-md); max-width: 44ch; margin-bottom: 18px; text-shadow: 0 1px 8px rgba(0,0,0,.5); }
