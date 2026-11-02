@@ -95,6 +95,67 @@ EDIFICIOS = [
 ]
 
 
+# Ensanche del mapa: el croquis deja muy poco espacio entre los edificios 7-9 y la piscina (los baños no caben)
+# y entre la piscina y la calle del este (el parqueo real mide unos 20 m). Se abren dos franjas verticales
+# en el croquis; todo lo que queda al este se corre. Las franjas pasan por zonas sin edificios.
+ENSANCHES = [(1345, 1365, 28), (1498, 1520, 52)]   # (desde x, hasta x, cuánto se abre, en píxeles del croquis)
+ENSANCHE_TOTAL = sum(d for *_, d in ENSANCHES)
+
+
+def _rampa(t):
+    t = min(max(t, 0.0), 1.0)
+    return t * t * (3 - 2 * t)
+
+
+def ensanchar(x):
+    """Coordenada x del croquis original → x del croquis ensanchado."""
+    return x + sum(d * _rampa((x - a) / (b - a)) for a, b, d in ENSANCHES)
+
+
+_TABLA = np.array([ensanchar(x) for x in np.arange(0, 2600, 0.25)])
+
+
+def angostar(xw):
+    """Inversa de ensanchar (la función es creciente)."""
+    return float(np.interp(xw, _TABLA, np.arange(0, 2600, 0.25)))
+
+
+def ensanchar_constantes():
+    for e in EDIFICIOS:
+        if "rect" in e:
+            cx, cy, *rest = e["rect"]; e["rect"] = (ensanchar(cx), cy, *rest)
+        if "alas" in e:
+            e["alas"] = [(ensanchar(cx), cy, *rest) for cx, cy, *rest in e["alas"]]
+        if "hex" in e:
+            cx, cy, rr = e["hex"]; e["hex"] = (ensanchar(cx), cy, rr)
+        if "poli" in e:
+            e["poli"] = [(ensanchar(x), y) for x, y in e["poli"]]
+    global PISCINA_RECT, RECORTE
+    PISCINA_RECT = (ensanchar(PISCINA_RECT[0]), *PISCINA_RECT[1:])
+    for d in (PICNIC, PUENTE, PLANTA):
+        x, y = d["centro"]; d["centro"] = (int(round(ensanchar(x))), y)
+    RECORTE = (RECORTE[0], RECORTE[1], RECORTE[2] + ENSANCHE_TOTAL, RECORTE[3])
+
+
+def ensanchar_imagen(img):
+    h, w = img.shape[:2]
+    mapa_x = np.array([angostar(xw) for xw in range(w + ENSANCHE_TOTAL)], np.float32)
+    mapa_x = np.tile(mapa_x, (h, 1))
+    mapa_y = np.tile(np.arange(h, dtype=np.float32)[:, None], (1, w + ENSANCHE_TOTAL))
+    return cv2.remap(img.astype(np.uint8), mapa_x, mapa_y, cv2.INTER_NEAREST, borderMode=cv2.BORDER_REPLICATE)
+
+
+# Cauce de la quebrada al oeste del puente, trazado sobre una vista de la maqueta (ajuste afín con los
+# números de los edificios); al este del puente sigue el trazo de antes
+_VISTA = np.array([(325, 795), (852, 332), (896, 170), (1270, 330), (1343, 131), (1540, 293), (1580, 917), (1662, 800), (1408, 836), (545, 573)], float)
+_CROQ = np.array([(466, 1759), (1011, 1306), (1049, 1131), (1433, 1304), (1510, 1113), (1689, 1292), (1721, 1900), (1816, 1795), (1553, 1826), (692, 1541)], float)
+_AFIN = np.linalg.lstsq(np.hstack([_VISTA, np.ones((len(_VISTA), 1))]), _CROQ, rcond=None)[0]
+QUEBRADA_OESTE = [tuple(np.array([x, y, 1.0]) @ _AFIN) for x, y in
+                  [(275, 425), (330, 400), (385, 372), (440, 352), (500, 368), (560, 395), (620, 430), (670, 470),
+                   (705, 505), (735, 550), (765, 580), (830, 596), (900, 600), (980, 590), (1060, 570), (1130, 545),
+                   (1190, 510), (1240, 482), (1290, 466), (1335, 472)]]
+
+
 def contornos_px(e):
     return [rect_contorno(*al) for al in e["alas"]] if "alas" in e else [contorno(e)]
 
@@ -239,7 +300,7 @@ def arboles_satelitales(ruta, rng, prohibido):
     inversa = cv2.invertAffineTransform(SAT_A_CROQUIS)
 
     def a_sat(x, y):
-        return inversa @ np.array([x, y, 1.0])
+        return inversa @ np.array([angostar(x), y, 1.0])   # la captura satelital calza con el croquis original
 
     def cubre(x, y):
         sx, sy = a_sat(x, y)
@@ -270,7 +331,8 @@ def edificio_json(e):
 
 
 def main(pdf, sat=None):
-    img = rasterizar(pdf).astype(int)
+    ensanchar_constantes()
+    img = ensanchar_imagen(rasterizar(pdf)).astype(int)
     R, G, B = img[..., 0], img[..., 1], img[..., 2]
     gris = (abs(R - G) < 6) & (abs(G - B) < 6)
     x0, y0, x1, y1 = RECORTE
@@ -342,8 +404,13 @@ def main(pdf, sat=None):
     mitad = PUENTE["largo"] / 2 + 6
     PUENTE["eje"] = [(float(np.polyval(coef, yy)), float(yy)) for yy in np.linspace(py0 - mitad, py0 + mitad, 9)]
     qx, qy = PUENTE["centro"]
-    puntos = [(int(qx + d), int(qy + 26 * math.sin(d / 90) + 0.12 * d)) for d in range(-420, 430, 12)]
-    cv2.polylines(quebrada, [np.array(puntos, np.int32)], False, 255, 13)
+    oeste = [(ensanchar(x), y) for x, y in QUEBRADA_OESTE] + [(qx, qy)]
+    este = [(qx + d, qy + 26 * math.sin(d / 90) + 0.12 * d) for d in range(12, 430, 12)]
+    puntos = np.array(oeste + este, np.float32)
+    # se suaviza el trazo a mano (media móvil) para que el cauce no quede quebrado
+    suave = np.array([puntos[max(0, i - 2):i + 3].mean(axis=0) for i in range(len(puntos))])
+    suave[-len(este) - 1] = (qx, qy)
+    cv2.polylines(quebrada, [suave.astype(np.int32)], False, 255, 13)
     pintar(quebrada, (88, 132, 150), borde=(120, 140, 96))
     # área de picnic: zacate más claro y cuidado
     picnic = np.zeros_like(calles)
@@ -405,6 +472,10 @@ def main(pdf, sat=None):
     lejos_edificios = cv2.dilate(lejos_edificios, cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (73, 73)))
     cv2.circle(lejos_edificios, PICNIC["centro"], PICNIC["radio"] + 18, 1, -1)
     cv2.circle(lejos_edificios, PUENTE["centro"], 40, 1, -1)
+    # alrededor de la piscina van el deck, los baños, los vestidores y el parqueo de bicicletas: sin árboles
+    pcx_, pcy_, pl_, pa_, pg_ = PISCINA_RECT
+    cv2.fillPoly(lejos_edificios, [np.array(rect_contorno(pcx_, pcy_, pl_ + 150, pa_ + 150, pg_), np.int32)], 1)
+    lejos_edificios |= cv2.dilate((quebrada > 0).astype(np.uint8), np.ones((25, 25), np.uint8))   # sin árboles en el cauce
     cv2.circle(lejos_edificios, PLANTA["centro"], 115, 1, -1)
     cv2.fillPoly(lejos_edificios, [np.array(rect_contorno(*PARQUEO["rect"]), np.int32)], 1)
     satelital = arboles_satelitales(sat, rng, ocupado | lejos_edificios) if sat else None
@@ -456,7 +527,7 @@ def main(pdf, sat=None):
     marco = np.zeros_like(libre); marco[y0 + 2:y1 - 2, x0 + 2:x1 - 2] = 1
     libre &= marco
     zona = np.zeros((libre.shape[0] + 2, libre.shape[1] + 2), np.uint8)
-    cv2.floodFill(libre.copy(), zona, (1510, 1113), 1, flags=4 | (1 << 8))
+    cv2.floodFill(libre.copy(), zona, (int(ensanchar(1510)), 1113), 1, flags=4 | (1 << 8))
     zona = zona[1:-1, 1:-1]
     cs, _ = cv2.findContours(zona, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_NONE)
     borde = max(cs, key=cv2.contourArea)[:, 0, :]
@@ -478,7 +549,7 @@ def main(pdf, sat=None):
     porton_res = None
     if sel.any():
         rx, ry = int(xs[sel].mean()), int(ys[sel].mean())
-        porton_res = {"p": a_metros(rx, ry), "hacia_dentro": round(math.atan2(1700 - rx, 1840 - ry), 3)}
+        porton_res = {"p": a_metros(rx, ry), "hacia_dentro": round(math.atan2(ensanchar(1700) - rx, 1840 - ry), 3)}
     # la cerca se abre en las calles internas que salen a la carretera y, en la pista, solo donde va el portón
     accesos = cv2.dilate(((calles > 0) & (acceso == 0)).astype(np.uint8), cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (31, 31)))
     if porton:
