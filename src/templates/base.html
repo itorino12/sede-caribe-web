@@ -40,13 +40,14 @@
         <img class="firma__escudo firma__escudo--claro" src="{{ raiz }}assets/img/escudo-negro.png" alt="" width="69" height="72">
         <img class="firma__escudo firma__escudo--oscuro" src="{{ raiz }}assets/img/escudo-blanco.png" alt="" width="69" height="72">
         <span class="firma__ucr-texto">Universidad de<br>Costa Rica</span>
-        <span class="ident"><span class="ident__linea"></span><span class="ident__nombre">Sede del<strong>Caribe</strong></span></span>
+        <span class="ident"><span class="ident__sigla">SC</span><span class="ident__linea"></span><span class="ident__nombre">Sede del<strong>Caribe</strong></span></span>
       </a>
       <button class="menu-boton" type="button" aria-controls="menu" aria-expanded="false" data-menu>
         <span class="menu-boton__icono" aria-hidden="true"></span><span>Menú</span>
       </button>
       <nav class="menu" id="menu" aria-label="Principal">
         <ul>
+          <li class="menu__item menu__buscar"><button type="button" class="menu__enlace" data-abrir="buscador" aria-controls="buscador" aria-expanded="false">Buscar en el sitio</button></li>
           {% set secciones = [
             ("Estudiar", "estudiar.html", [("Carreras", "estudiar.html"), ("Cómo ingresar", "admision.html"), ("Becas y vida estudiantil", "unidades/vida-estudiantil.html"), ("Aula de Siquirres", "unidades/siquirres.html")]),
             ("La Sede", "la-sede.html", [("Historia", "la-sede.html#historia"), ("Misión y visión", "la-sede.html#mision"), ("Coordinaciones", "la-sede.html#coordinaciones"), ("Directorio", "directorio.html")]),

@@ -99,7 +99,7 @@ main:focus { outline: none; }
 .firma__ucr-texto { font-size: 1.05rem; font-weight: 700; line-height: 1.1; letter-spacing: .04em; text-transform: uppercase; color: var(--tinta); }
 /* identificador compuesto del manual: sigla | línea celeste | tipo y nombre de la unidad */
 .ident { display: flex; align-items: center; gap: 12px; color: #666; margin-left: 4px; }
-.ident__sigla { font-size: 1.8rem; font-weight: 700; letter-spacing: .06em; color: #000; line-height: 1; }
+.ident__sigla { font-size: 1.6rem; font-weight: 700; letter-spacing: .06em; color: #000; line-height: 1; }
 .ident__linea { width: 2px; align-self: stretch; min-height: 38px; background: var(--celeste); }
 .ident__nombre { line-height: 1.08; font-size: 1rem; }
 .ident__nombre strong { display: block; font-size: 1.2rem; font-weight: 700; }
@@ -120,7 +120,7 @@ main:focus { outline: none; }
 .buscar-boton span { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }  /* solo la lupa; el texto queda para lectores de pantalla */
 .buscar-boton { padding: 8px 11px; }
 .menu-boton { display: none; }
-@media (max-width: 1240px) {
+@media (max-width: 1280px) {
   .cabecera__fila { flex-wrap: wrap; gap: 10px; padding-block: 12px; min-height: 0; }
   .buscar-boton { order: 2; margin-left: auto; }
   .menu-boton { order: 3; display: inline-flex; align-items: center; gap: 10px; min-height: 44px; padding: 8px 14px; background: var(--azul); border: 0; border-radius: 4px; color: #fff; cursor: pointer; font-weight: 700; }
@@ -135,7 +135,7 @@ main:focus { outline: none; }
 }
 @media (max-width: 560px) {
   .menu-boton > span:last-child { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
-  .firma { gap: 8px; } .firma__escudo { height: 60px; } .firma__ucr-texto { font-size: .8rem; } .ident { gap: 8px; } .ident__nombre { font-size: .8rem; } .ident__nombre strong { font-size: .95rem; }
+  .firma { gap: 8px; } .firma__escudo { height: 60px; } .firma__ucr-texto { font-size: .8rem; } .ident__sigla { font-size: 1.15rem; } .ident { gap: 8px; } .ident__nombre { font-size: .8rem; } .ident__nombre strong { font-size: .95rem; }
   .buscar-boton span { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
 }
 
@@ -482,3 +482,14 @@ dialog::backdrop { background: rgba(0,25,45,.6); }
 .caribe__lista p { color: var(--tinta-2); margin-bottom: 8px; }
 .caribe__lista a { font-weight: 700; }
 @media (max-width: 860px) { .caribe__lista { grid-template-columns: 1fr; } }
+
+/* Teléfonos: la firma completa necesita el ancho; la búsqueda pasa a ser la primera opción del menú */
+.menu__buscar { display: none; }
+@media (max-width: 480px) {
+  .buscar-boton { display: none; }
+  .menu-boton { margin-left: auto; padding: 8px 12px; }
+  .menu__buscar { display: block; }
+  .firma { gap: 6px; } .firma__ucr-texto { font-size: .72rem; } .ident { gap: 6px; margin-left: 2px; }
+  .ident__sigla { font-size: 1rem; } .ident__nombre { font-size: .72rem; } .ident__nombre strong { font-size: .86rem; }
+}
+@media (max-width: 340px) { .menu-boton { order: 3; width: 100%; justify-content: center; margin-left: 0; } }
