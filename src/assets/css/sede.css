@@ -425,7 +425,7 @@ main:focus { outline: none; }
   background: var(--azul-hondo); }
 /* El Black Star Line se para sobre la línea final del pie, como sobre la acera */
 .pie__calle { height: 150px; margin-top: -8px;
-  background: url("../img/black-star-line-blanco.svg") no-repeat right 0 bottom -2px / auto 150px; }
+  background: url("../img/black-star-line-blanco.svg") no-repeat center bottom -2px / auto 150px; }
 @media (max-width: 700px) { .pie__calle { height: 96px; background-size: auto 96px; background-position: center bottom -2px; } }
 .pie::before { content: ""; position: absolute; left: 0; right: 0; top: -17px; height: 18px; background: var(--azul-hondo);
   -webkit-mask: url("../img/ola-borde.svg") repeat-x 40px 0 / 120px 18px; mask: url("../img/ola-borde.svg") repeat-x 40px 0 / 120px 18px; }
@@ -475,10 +475,9 @@ dialog::backdrop { background: rgba(0,25,45,.6); }
 
 /* -------- del Caribe, para el Caribe -------- */
 .caribe { position: relative; padding-block: clamp(48px, 7vw, 88px); overflow: hidden; }
-/* El edificio Black Star Line, en línea muy tenue, de fondo de la sección */
-.caribe::before { content: ""; position: absolute; right: max(var(--gutter), calc((100vw - var(--ancho)) / 2 + var(--gutter))); top: 36px; width: min(560px, 46vw); aspect-ratio: 640 / 212; background: var(--musgo); opacity: .16;
-  -webkit-mask: url("../img/black-star-line.svg") no-repeat center / contain; mask: url("../img/black-star-line.svg") no-repeat center / contain; pointer-events: none; }
-@media (max-width: 860px) { .caribe::before { top: auto; bottom: 20px; width: 80vw; opacity: .1; } }
+/* El Black Star Line siempre cierra la sección en un espacio propio, sin texto encima */
+.edificio { width: min(620px, 100%); aspect-ratio: 640 / 255; margin: 44px auto 0; background: var(--musgo); opacity: .55;
+  -webkit-mask: url("../img/black-star-line.svg") no-repeat center bottom / contain; mask: url("../img/black-star-line.svg") no-repeat center bottom / contain; }
 .caribe .ancho { position: relative; }
 .caribe__intro { font-size: var(--t-md); color: var(--tinta-2); max-width: 58ch; margin-bottom: 30px; }
 .caribe__lista { list-style: none; padding: 0; margin: 0; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 32px 40px; }
