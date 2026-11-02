@@ -187,7 +187,7 @@
   "id": 25,
   "zona": 1,
   "nombre": "Parqueo frente a Docencia",
-  "texto": "Parqueo asfaltado frente a la Coordinación de Docencia, con entrada desde la calle interna."
+  "texto": "Parqueo asfaltado de una fila, con los carros de frente hacia la Coordinación de Docencia."
  },
  {
   "id": 26,
@@ -199,19 +199,19 @@
   "id": 27,
   "zona": 1,
   "nombre": "Camino techado hacia Administración",
-  "texto": "Continúa el pasillo techado de la entrada: cruza la quebrada junto a la calle y llega hasta las oficinas administrativas."
+  "texto": "Continúa el pasillo techado de la entrada: cruza la quebrada junto a la calle, pasa al otro lado de la calle antes del final y llega a las oficinas administrativas."
  },
  {
   "id": 28,
   "zona": 2,
   "nombre": "Paso de la alcantarilla del río",
-  "texto": "Punto donde la calle interna pasa sobre la quebrada por una alcantarilla. Ahí se cruza la calle para tomar el sendero hacia la explanada."
+  "texto": "Punto donde la quebrada pasa por un tubo bajo la calle interna. Ahí se cruza la calle para tomar el sendero hacia la explanada."
  },
  {
   "id": 29,
   "zona": 2,
   "nombre": "Explanada",
-  "texto": "Zona verde abierta al noroeste del Miniauditorio, a la que se llega por un sendero techado desde la calle interna."
+  "texto": "Zona verde amplia y abierta al noroeste del Miniauditorio, bordeada por el sendero que sube desde la calle interna."
  },
  {
   "id": 30,
@@ -223,7 +223,7 @@
   "id": 31,
   "zona": 2,
   "nombre": "Baño del Miniauditorio",
-  "texto": "Servicios sanitarios junto al sendero techado, al costado oeste del Miniauditorio."
+  "texto": "Servicios sanitarios al costado suroeste del Miniauditorio, junto al sendero que sube a la explanada."
  },
  {
   "id": 32,
@@ -241,7 +241,7 @@
   "id": 34,
   "zona": 1,
   "nombre": "Parqueo administrativo",
-  "texto": "Espacios de parqueo al final de la calle interna, frente a las oficinas administrativas."
+  "texto": "Parqueo techado al final de la calle interna, frente a las oficinas administrativas."
  },
  {
   "id": 35,
@@ -259,6 +259,6 @@
   "id": 37,
   "zona": 1,
   "nombre": "Caseta de arriba",
-  "texto": "Caseta al oeste de las oficinas administrativas, junto al final de la calle interna."
+  "texto": "Caseta en alto, con escalera para subir, al oeste de las oficinas administrativas."
  }
 ]
