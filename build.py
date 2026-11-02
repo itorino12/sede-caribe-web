@@ -128,7 +128,9 @@ def lugares_campus():
     salida = []
     for l in filas:
         try:
-            salida.append({**l, "id": int(l["id"]), "zona": int(l.get("zona") or 0)})
+            foto = imagen(l.get("foto"))
+            salida.append({**l, "id": int(l["id"]), "zona": int(l.get("zona") or 0),
+                           "foto": foto[640] if foto else "", "foto_alt": l.get("foto_alt") or (f"Foto de {l['nombre']}" if foto else "")})
         except (KeyError, ValueError):
             continue
     return sorted(salida, key=lambda l: l["id"])

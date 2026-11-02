@@ -60,11 +60,13 @@ base.position.set(suelo.position.x, -3.05, suelo.position.z);
 escena.add(base);
 
 // ---------- edificios
-const colores = { pared: 0xfbfaf6, techo: 0xaab6c1, losa: 0xe3e6ea, elegido: 0x005da4, paredElegida: 0xeaf2f9 };
+// Estilo tomado de las fotos de la Sede: paredes blancas, celosías grises en las ventanas y techos de cuatro
+// aguas gris verdoso con aleros anchos (las residencias llevan además una linternilla con su propio techo).
+const colores = { pared: 0xfbfaf6, techo: 0x66756b, losa: 0xe3e6ea, celosia: 0x7d858c, elegido: 0x005da4, paredElegida: 0xeaf2f9 };
 // La maqueta exagera un poco las alturas para que los edificios se lean desde arriba
-const EXAGERAR = 1.45;
+const EXAGERAR = 1.4;
 const edificios = [];
-function forma(contorno, crecer = 0) {
+function prisma(contorno, alto, desde, material, crecer = 0) {
   const cx = contorno.reduce((s, p) => s + p[0], 0) / contorno.length;
   const cz = contorno.reduce((s, p) => s + p[1], 0) / contorno.length;
   const sh = new THREE.Shape();
@@ -73,10 +75,6 @@ function forma(contorno, crecer = 0) {
     const px = x + (dx / d) * crecer, pz = z + (dz / d) * crecer;
     i ? sh.lineTo(px, -pz) : sh.moveTo(px, -pz);
   });
-  return { sh, cx, cz };
-}
-function prisma(contorno, alto, desde, material, crecer = 0) {
-  const { sh } = forma(contorno, crecer);
   const g = new THREE.ExtrudeGeometry(sh, { depth: alto, bevelEnabled: false });
   g.rotateX(-Math.PI / 2);
   g.translate(0, desde, 0);
@@ -84,32 +82,60 @@ function prisma(contorno, alto, desde, material, crecer = 0) {
   m.castShadow = true; m.receiveShadow = true;
   return m;
 }
+function techo(triangulos, material) {
+  const g = new THREE.BufferGeometry();
+  g.setAttribute("position", new THREE.Float32BufferAttribute(triangulos, 3));
+  g.computeVertexNormals();
+  const m = new THREE.Mesh(g, material);
+  m.castShadow = true; m.receiveShadow = true;
+  return m;
+}
+const celosia = new THREE.MeshStandardMaterial({ color: colores.celosia, roughness: 0.7 });
+const losa = new THREE.MeshStandardMaterial({ color: colores.losa });
 
-for (const e0 of datos.campus.edificios) {
-  const e = { ...e0, alto: e0.alto * EXAGERAR };
+const vidrio = new THREE.MeshStandardMaterial({ color: 0x33424f, roughness: 0.2, metalness: 0.3 });
+const celeste = new THREE.MeshStandardMaterial({ color: 0x9fd2ee, roughness: 0.8 });
+for (const e of datos.campus.edificios) {
   const grupo = new THREE.Group();
-  const { cx, cz } = forma(e.contorno);
+  const estilo = e.estilo || {};
   const mat = {
     pared: new THREE.MeshStandardMaterial({ color: colores.pared, roughness: 0.85 }),
-    techo: new THREE.MeshStandardMaterial({ color: colores.techo, roughness: 0.6, metalness: 0.1 }),
+    techo: new THREE.MeshStandardMaterial({ color: estilo.techo || colores.techo, roughness: 0.75, side: THREE.DoubleSide }),
   };
   if (e.tipo === "piscina") {
-    grupo.add(prisma(e.contorno, 0.5, 0, new THREE.MeshStandardMaterial({ color: 0xe9e4da, roughness: 0.9 }), 2));
-    const agua = prisma(e.contorno, 0.12, 0.5, new THREE.MeshStandardMaterial({ color: 0x2f8fd0, roughness: 0.15, metalness: 0.1 }), -2.2);
+    const c = e.volumenes[0].contorno;
+    grupo.add(prisma(c, 0.5, 0, new THREE.MeshStandardMaterial({ color: 0xe9e4da, roughness: 0.9 }), 2));
+    const agua = prisma(c, 0.12, 0.5, new THREE.MeshStandardMaterial({ color: 0x2f8fd0, roughness: 0.15, metalness: 0.1 }), -2.2);
     agua.castShadow = false;
     grupo.add(agua);
     mat.techo = agua.material;
   } else {
-    grupo.add(prisma(e.contorno, e.alto, 0, mat.pared));
-    // losa entre pisos y alero del techo, un poco más anchos que la pared
-    for (let p = 1; p < e.pisos; p++) grupo.add(prisma(e.contorno, 0.35, (e.alto / e.pisos) * p, new THREE.MeshStandardMaterial({ color: colores.losa }), 0.6));
-    // franja oscura de ventanas en cada piso
-    const vidrio = new THREE.MeshStandardMaterial({ color: 0x5b7186, roughness: 0.25, metalness: 0.2 });
     const pisos = Math.max(e.pisos, 1), altoPiso = e.alto / pisos;
-    if (e.id !== 6) for (let p = 0; p < pisos; p++) grupo.add(prisma(e.contorno, altoPiso * 0.24, altoPiso * p + altoPiso * 0.42, vidrio, 0.05));
-    grupo.add(prisma(e.contorno, 0.6, e.alto, mat.techo, 1.1));
+    for (const vol of e.volumenes) {
+      grupo.add(prisma(vol.contorno, vol.alto, vol.desde, mat.pared));
+      if (vol.linterna) {   // ventanas corridas de la linternilla
+        grupo.add(prisma(vol.contorno, vol.alto * 0.55, vol.desde + vol.alto * 0.25, celosia, 0.05));
+        continue;
+      }
+      for (let p = 1; p < e.pisos; p++) grupo.add(prisma(vol.contorno, 0.3, altoPiso * p, losa, 0.5));
+      if (estilo.zocalo) grupo.add(prisma(vol.contorno, altoPiso * 0.36, 0, new THREE.MeshStandardMaterial({ color: estilo.zocalo, roughness: 0.8 }), 0.04));
+      // ventanas: celosías grises (edificios nuevos) o ventanales de vidrio (biblioteca)
+      const ventanal = estilo.ventanas === "vidrio";
+      if (e.id !== 6) for (let p = 0; p < pisos; p++) grupo.add(prisma(vol.contorno, altoPiso * (ventanal ? 0.4 : 0.3), altoPiso * p + altoPiso * (ventanal ? 0.4 : 0.36), ventanal ? vidrio : celosia, 0.05));
+    }
+    grupo.add(techo(e.techo, mat.techo));
+    if (estilo.cupula) {   // torrecita de ventilación sobre la cumbrera
+      const torre = new THREE.Mesh(new THREE.BoxGeometry(2.6, 1.6, 2.6), celeste);
+      torre.position.set(e.centro[0], e.cumbre + 0.5, e.centro[1]);
+      const tapa = new THREE.Mesh(new THREE.ConeGeometry(2.6, 1.2, 4), new THREE.MeshStandardMaterial({ color: 0x4d5a63 }));
+      tapa.rotation.y = Math.PI / 4;
+      tapa.position.set(e.centro[0], e.cumbre + 1.9, e.centro[1]);
+      torre.castShadow = tapa.castShadow = true;
+      grupo.add(torre, tapa);
+    }
   }
-  grupo.userData = { id: e.id, centro: new THREE.Vector3(cx, e.alto, cz), mat, alto: e.alto };
+  grupo.scale.y = EXAGERAR;
+  grupo.userData = { id: e.id, centro: new THREE.Vector3(e.centro[0], e.cumbre * EXAGERAR, e.centro[1]), mat, alto: e.alto };
   grupo.traverse((o) => { o.userData.edificio = grupo; });
   escena.add(grupo);
   edificios.push(grupo);
@@ -192,7 +218,7 @@ const v = new THREE.Vector3();
 // para que cada botón mantenga su tamaño completo al tocarlo.
 function moverMarcas() {
   const w = lienzo.clientWidth, h = lienzo.clientHeight, puestas = [];
-  const lista = edificios.map((g) => { v.copy(g.userData.centro); v.y += 4; v.project(camara); return { g, x: ((v.x + 1) / 2) * w, y: ((1 - v.y) / 2) * h, z: v.z, fuera: v.z > 1 || Math.abs(v.x) > 1.05 || Math.abs(v.y) > 1.05 }; })
+  const lista = edificios.map((g) => { v.copy(g.userData.centro); v.y += 3; v.project(camara); return { g, x: ((v.x + 1) / 2) * w, y: ((1 - v.y) / 2) * h, z: v.z, fuera: v.z > 1 || Math.abs(v.x) > 1.05 || Math.abs(v.y) > 1.05 }; })
     .sort((a, b) => a.z - b.z);
   for (const m of lista) {
     const b = marcas.get(m.g.userData.id);
@@ -223,6 +249,9 @@ function elegir(id, volar) {
   ficha.querySelector(".mapa3d__ficha-zona").textContent = `Zona ${l.zona} · Edificio ${l.id}`;
   ficha.querySelector(".mapa3d__ficha-titulo").textContent = l.nombre;
   ficha.querySelector(".mapa3d__ficha-texto").textContent = l.texto || "";
+  const foto = ficha.querySelector(".mapa3d__ficha-foto");
+  foto.hidden = !l.foto;
+  if (l.foto) { foto.src = raiz.dataset.raiz + l.foto; foto.alt = l.foto_alt || ""; }
   const enlace = ficha.querySelector(".mapa3d__ficha-enlace");
   enlace.hidden = !l.enlace;
   if (l.enlace) enlace.href = raiz.dataset.raiz + l.enlace;

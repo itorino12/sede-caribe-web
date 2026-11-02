@@ -532,11 +532,13 @@ dialog::backdrop { background: rgba(0,25,45,.6); }
 .mapa3d__herramientas .boton { min-height: 40px; padding: 6px 14px; background: #fff; }
 .mapa3d__ficha { position: absolute; left: 12px; bottom: 12px; width: min(360px, calc(100% - 24px)); background: var(--papel); color: var(--tinta);
   border-radius: 6px; padding: 16px 18px; box-shadow: 0 10px 30px rgba(0,30,60,.25); border-top: 4px solid #005DA4; }
+.mapa3d__ficha-foto { display: block; max-width: none; width: calc(100% + 36px); margin: -16px -18px 12px; aspect-ratio: 16 / 9; object-fit: cover; border-radius: 2px 2px 0 0; }
+.mapa3d__ficha-foto[hidden] { display: none; }
 .mapa3d__ficha-zona { margin: 0 0 2px; font-size: var(--t-xs); color: var(--tinta-2); font-weight: 600; }
 .mapa3d__ficha-titulo { margin: 0 32px 6px 0; font-size: var(--t-md); line-height: 1.2; }
 .mapa3d__ficha-texto { margin: 0 0 8px; font-size: var(--t-sm); }
 .mapa3d__ficha-enlace { font-weight: 700; }
-.mapa3d__ficha-cerrar { position: absolute; top: 6px; right: 6px; width: 40px; height: 40px; border: 0; background: none; font-size: 1.6rem; line-height: 1; color: var(--tinta-2); cursor: pointer; border-radius: 4px; }
+.mapa3d__ficha-cerrar { position: absolute; top: 6px; right: 6px; z-index: 1; width: 40px; height: 40px; border: 0; background: rgba(255,255,255,.9); font-size: 1.6rem; line-height: 1; color: var(--tinta-2); cursor: pointer; border-radius: 4px; }
 .mapa3d__ficha-cerrar:hover { background: var(--niebla); }
 .mapa3d__sin3d { display: none; }
 .mapa3d__sin3d img { display: block; width: 100%; height: auto; }

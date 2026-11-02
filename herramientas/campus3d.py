@@ -27,6 +27,8 @@ ESCALA = 0.25            # metros por píxel del croquis (aprox.: el gimnasio qu
 ORIGEN = (1200, 1500)    # píxel del croquis que queda en el centro de la maqueta
 RECORTE = (0, 850, 2165, 3248)   # zona del croquis que es mapa (sin títulos ni leyendas)
 PISO = 4.2               # altura de un piso, en metros
+ALERO = 1.4              # vuelo del alero, en metros
+PENDIENTE = 0.32         # altura del techo por metro de medio ancho (cuatro aguas)
 
 # Edificios: número del croquis, forma y pisos. rect = (cx, cy, largo, ancho, giro en grados, horario)
 EDIFICIOS = [
@@ -40,15 +42,24 @@ EDIFICIOS = [
     {"id": 8, "rect": (1259, 1246, 180, 55, 5.5), "pisos": 1},
     {"id": 9, "rect": (1263, 1165, 180, 55, 5.5), "pisos": 1},
     {"id": 10, "rect": (1433, 1304, 60, 109, 15), "pisos": 0, "tipo": "piscina"},
-    {"id": 11, "rect": (1510, 1113, 128, 78, -6), "pisos": 2},
+    # Biblioteca (fotos): un piso, lámina verde, cuerpo central más alto, torrecita de ventilación,
+    # ventanales corridos y zócalo azul claro
+    {"id": 11, "rect": (1510, 1113, 128, 78, -6), "pisos": 1, "linterna": 0.55,
+     "estilo": {"techo": "#5f9a58", "zocalo": "#a9d4ef", "ventanas": "vidrio", "cupula": True}},
     {"id": 12, "rect": (1726, 1072, 128, 39, -2), "pisos": 2},
     {"id": 13, "rect": (1786, 1130, 113, 51, -10), "pisos": 2},
     {"id": 14, "rect": (1689, 1292, 151, 196, 12.5), "pisos": 1, "alto": 11},
     {"id": 15, "rect": (1770, 1450, 59, 41, 0), "pisos": 1},
-    {"id": 16, "poli": [(1645, 1748), (1725, 1737), (1852, 2028), (1790, 2065), (1688, 1950), (1665, 1905)], "pisos": 2},
-    {"id": 17, "rect": (1816, 1795, 63, 92, -11), "pisos": 1},
+    # Residencias: barra doblada del croquis, en dos alas; en la foto, techo de dos niveles con linternilla
+    {"id": 16, "alas": [(1700, 1840, 200, 74, 81), (1768, 1992, 165, 70, 46)], "pisos": 2, "linterna": 0.42,
+     "estilo": {"techo": "#66756b"}},
+    {"id": 17, "rect": (1816, 1795, 63, 92, -11), "pisos": 1, "estilo": {"techo": "#66756b"}},
     {"id": 18, "rect": (1552, 1826, 30, 54, 15), "pisos": 1},
 ]
+
+
+def contornos_px(e):
+    return [rect_contorno(*al) for al in e["alas"]] if "alas" in e else [contorno(e)]
 
 
 def rasterizar(pdf):
@@ -62,14 +73,91 @@ def a_metros(x, y):
 
 
 def contorno(e):
-    if "poli" in e:
-        return e["poli"]
     if "hex" in e:
         cx, cy, r = e["hex"]
         return [(cx + r * math.cos(math.radians(30 + 60 * i)), cy + r * math.sin(math.radians(30 + 60 * i))) for i in range(6)]
     cx, cy, l, a, g = e["rect"]
     c, s = math.cos(math.radians(g)), math.sin(math.radians(g))
     return [(cx + c * dx * l / 2 - s * dy * a / 2, cy + s * dx * l / 2 + c * dy * a / 2) for dx, dy in ((-1, -1), (1, -1), (1, 1), (-1, 1))]
+
+
+def rect_contorno(cx, cy, l, a, g):
+    return contorno({"rect": (cx, cy, l, a, g)})
+
+
+def a_local(cx, cz, g):
+    """Convierte coordenadas locales (u a lo largo, v a lo ancho, en metros) a la maqueta."""
+    c, s = math.cos(math.radians(g)), math.sin(math.radians(g))
+    return lambda u, v, y: [round(cx + c * u - s * v, 2), round(y, 2), round(cz + s * u + c * v, 2)]
+
+
+def techo_cuatro_aguas(cx, cz, largo, ancho, g, base, alero=ALERO, pendiente=PENDIENTE):
+    """Triángulos de un techo de cuatro aguas sobre un rectángulo (en metros). Si es cuadrado, queda en pirámide."""
+    a, b = largo / 2 + alero, ancho / 2 + alero
+    p = a_local(cx, cz, g)
+    if a >= b:
+        h = b * pendiente
+        r = a - b
+        e = [p(-a, -b, base), p(a, -b, base), p(a, b, base), p(-a, b, base)]
+        c1, c2 = p(-r, 0, base + h), p(r, 0, base + h)
+        caras = [(e[0], e[1], c2), (e[0], c2, c1), (e[2], e[3], c1), (e[2], c1, c2), (e[1], e[2], c2), (e[3], e[0], c1)]
+    else:
+        h = a * pendiente
+        r = b - a
+        e = [p(-a, -b, base), p(a, -b, base), p(a, b, base), p(-a, b, base)]
+        c1, c2 = p(0, -r, base + h), p(0, r, base + h)
+        caras = [(e[1], e[2], c2), (e[1], c2, c1), (e[3], e[0], c1), (e[3], c1, c2), (e[0], e[1], c1), (e[2], e[3], c2)]
+    return [v for t in caras for v in t], base + h
+
+
+def techo_piramide(cx, cz, radio, base, lados=6):
+    h = radio * 0.42
+    borde = [[round(cx + (radio + ALERO) * math.cos(math.radians(30 + 360 / lados * i)), 2), base,
+              round(cz + (radio + ALERO) * math.sin(math.radians(30 + 360 / lados * i)), 2)] for i in range(lados)]
+    cima = [cx, round(base + h, 2), cz]
+    return [v for i in range(lados) for v in (borde[i], borde[(i + 1) % lados], cima)], base + h
+
+
+def volumenes(e, alto):
+    """Volúmenes (paredes) y techo de un edificio, en metros."""
+    vol, techo, cumbre = [], [], alto
+    if e.get("tipo") == "piscina":
+        return [{"contorno": [a_metros(x, y) for x, y in contorno(e)], "desde": 0, "alto": 0.5}], [], 0.5
+    if "hex" in e:
+        cx, cy, rr = e["hex"]
+        vol.append({"contorno": [a_metros(x, y) for x, y in contorno(e)], "desde": 0, "alto": alto})
+        m = a_metros(cx, cy)
+        techo, cumbre = techo_piramide(m[0], m[1], rr * ESCALA, alto)
+        return vol, techo, cumbre
+    for (cx, cy, l, a, g) in e.get("alas") or [e["rect"]]:
+        vol.append({"contorno": [a_metros(x, y) for x, y in rect_contorno(cx, cy, l, a, g)], "desde": 0, "alto": alto})
+        m = a_metros(cx, cy)
+        L, W = l * ESCALA, a * ESCALA
+        if e.get("linterna"):
+            # techo bajo, y encima una linternilla con ventanas corridas y su propio techo de cuatro aguas
+            t, _ = techo_cuatro_aguas(m[0], m[1], L, W, g, alto, pendiente=0.22)
+            techo += t
+            k = float(e["linterna"])
+            lc = rect_contorno(cx, cy, l * 0.78, a * k, g)
+            alto_l = W / 2 * 0.22 * 0.85 + 2.2
+            vol.append({"contorno": [a_metros(x, y) for x, y in lc], "desde": alto, "alto": alto_l, "linterna": True})
+            t, c = techo_cuatro_aguas(m[0], m[1], L * 0.78, W * k, g, alto + alto_l, alero=0.9)
+            techo += t
+            cumbre = max(cumbre, c)
+        else:
+            t, c = techo_cuatro_aguas(m[0], m[1], L, W, g, alto, pendiente=0.2 if L * W > 900 else PENDIENTE)
+            techo += t
+            cumbre = max(cumbre, c)
+    return vol, techo, cumbre
+
+
+def edificio_json(e):
+    alto = 0 if e.get("tipo") == "piscina" else e.get("alto", round(max(e["pisos"], 1) * PISO, 1))
+    vol, techo, cumbre = volumenes(e, alto)
+    pts = [p for v in vol for p in v["contorno"]]
+    centro = [round(sum(p[0] for p in pts) / len(pts), 2), round(sum(p[1] for p in pts) / len(pts), 2)]
+    return {"id": e["id"], "tipo": e.get("tipo", "edificio"), "pisos": e["pisos"], "alto": alto, "centro": centro,
+            "cumbre": round(cumbre, 2), "volumenes": vol, "techo": [c for v in techo for c in v], "estilo": e.get("estilo", {})}
 
 
 def main(pdf):
@@ -125,7 +213,8 @@ def main(pdf):
     # sombra suave bajo cada edificio (contacto con el suelo)
     sombra = np.zeros((y1 - y0, x1 - x0), np.uint8)
     for e in EDIFICIOS:
-        cv2.fillPoly(sombra, [np.array([(x - x0 + 6, y - y0 + 6) for x, y in contorno(e)], np.int32)], 255)
+        for pol in contornos_px(e):
+            cv2.fillPoly(sombra, [np.array([(x - x0 + 6, y - y0 + 6) for x, y in pol], np.int32)], 255)
     sombra = cv2.GaussianBlur(cv2.resize(sombra, (w, h)), (0, 0), 6).astype(np.float32)[..., None] / 255
     suelo *= 1 - sombra * 0.28
     salida = RAIZ / "src/assets/img/campus-suelo.webp"
@@ -139,7 +228,8 @@ def main(pdf):
     verde = cv2.morphologyEx(verde, cv2.MORPH_CLOSE, cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (15, 15)))
     ocupado = cv2.dilate(((calles > 0) | (carretera > 0) | (pista > 0)).astype(np.uint8), np.ones((15, 15), np.uint8))
     for e in EDIFICIOS:
-        cv2.fillPoly(ocupado, [np.array(contorno(e), np.int32)], 1)
+        for pol in contornos_px(e):
+            cv2.fillPoly(ocupado, [np.array(pol, np.int32)], 1)
     n, lab, st, cen = cv2.connectedComponentsWithStats(verde)
     arboles = []
     for i in range(1, n):
@@ -174,8 +264,7 @@ def main(pdf):
     datos = {
         "nota": "Generado por herramientas/campus3d.py a partir del croquis oficial «Distribución de Aulas». Esquemático, no a escala.",
         "terreno": {"x": a_metros(x0, y0)[0], "z": a_metros(x0, y0)[1], "ancho": round((x1 - x0) * ESCALA, 2), "largo": round((y1 - y0) * ESCALA, 2)},
-        "edificios": [{"id": e["id"], "contorno": [a_metros(x, y) for x, y in contorno(e)], "pisos": e["pisos"],
-                       "alto": e.get("alto", round(max(e["pisos"], 1) * PISO, 1)), "tipo": e.get("tipo", "edificio")} for e in EDIFICIOS],
+        "edificios": [edificio_json(e) for e in EDIFICIOS],
         "arboles": arboles,
     }
     (RAIZ / "src/data/campus3d.json").write_text(json.dumps(datos, ensure_ascii=False), encoding="utf-8")

@@ -68,7 +68,9 @@
   "zona": 3,
   "nombre": "Biblioteca",
   "texto": "Biblioteca de la Sede del Caribe.",
-  "enlace": "unidades/biblioteca.html"
+  "enlace": "unidades/biblioteca.html",
+  "foto": "biblioteca.jpg",
+  "foto_alt": "La biblioteca: edificio de un piso con techo de lámina verde, ventanales corridos y pared azul claro"
  },
  {
   "id": 12,
@@ -100,14 +102,18 @@
   "zona": 4,
   "nombre": "Residencias Estudiantiles",
   "texto": "Residencias dentro del campus.",
-  "enlace": "unidades/residencias.html"
+  "enlace": "unidades/residencias.html",
+  "foto": "residencias-ciub.jpg",
+  "foto_alt": "Las residencias estudiantiles, de dos pisos con techo gris verdoso, y al frente el edificio bajo del CIUB con su área de juegos"
  },
  {
   "id": 17,
   "zona": 4,
   "nombre": "Centro Infantil Universitario Bilingüe (CIUB)",
   "texto": "Centro Infantil Universitario Bilingüe de la Sede.",
-  "enlace": "unidades/ciub.html"
+  "enlace": "unidades/ciub.html",
+  "foto": "residencias-ciub.jpg",
+  "foto_alt": "El CIUB, edificio bajo con área de juegos cercada, frente a las residencias estudiantiles"
  },
  {
   "id": 18,
