@@ -30,7 +30,10 @@
 <section class="semana" aria-labelledby="semana-titulo">
   <div class="ancho">
     <div class="semana__cabeza">
-      <h2 id="semana-titulo">{{ "Esta semana" if semana[0].f <= hoy else "La próxima semana" }} en la Sede</h2>
+      <div>
+        <p class="wapin"><b lang="en">Wapin?</b>«¿Qué pasa?», como se saluda en el criollo limonense</p>
+        <h2 id="semana-titulo">{{ "Esta semana" if semana[0].f <= hoy else "La próxima semana" }} en la Sede</h2>
+      </div>
       <p><a href="agenda.html">Agenda completa</a> · <a href="agenda.ics">Agregar a mi calendario</a></p>
     </div>
     {% for a in avisos if not a.urgente %}
@@ -92,7 +95,7 @@
       <figure class="carreras-portada__foto">{{ foto(fotos.carreras, "Auditorio de la Sede del Caribe, con butacas rojas y paneles de madera", "(min-width: 900px) 30vw, 100vw") }}<figcaption>Auditorio de la Sede.</figcaption></figure>
       {% endif %}
       <div class="carreras-portada__areas">
-        {% set colores = ["var(--azul)", "var(--celeste)", "var(--verde)", "var(--amarillo)", "var(--tinta-2)"] %}
+        {% set colores = ["var(--azul)", "var(--celeste)", "var(--musgo)", "var(--azul)", "var(--celeste)"] %}
         {% for area in areas %}
         <div class="area" style="--c: {{ colores[loop.index0 % 5] }}">
           <h3 class="area__titulo">{{ area }}</h3>
@@ -105,6 +108,18 @@
         {% endfor %}
       </div>
     </div>
+  </div>
+</section>
+
+<section class="caribe" aria-labelledby="caribe-titulo">
+  <div class="ancho">
+    <div class="bloque__cabeza"><h2 id="caribe-titulo">Del Caribe, para el Caribe</h2></div>
+    <p class="caribe__intro">Limón tiene historia, lengua y cultura propias, y la Sede las estudia, las enseña y las celebra.</p>
+    <ul class="caribe__lista">
+      <li><h3>Investigación con raíces</h3><p>Proyectos sobre las raíces del calipso, el aporte de las iglesias protestantes a la educación en Limón y la historia de Puerto Viejo.</p><a href="unidades/investigacion.html">Investigación en la Sede</a></li>
+      <li><h3>Cultura viva en el campus</h3><p>Danza folclórica y calipso, deporte y extensión cultural con las comunidades de la provincia.</p><a href="unidades/accion-social.html">Acción social y cultura</a></li>
+      <li><h3>Carreras para la región</h3><p>Marina Civil para la vida portuaria, Turismo Ecológico para la costa y la montaña, e inglés en una provincia con tradición angloafrocaribeña.</p><a href="estudiar.html">Ver las carreras</a></li>
+    </ul>
   </div>
 </section>
 
