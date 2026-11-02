@@ -1,8 +1,8 @@
 [
  {
   "publicar": "sí",
-  "responsable": "",
-  "cargo": "",
+  "responsable": "Ing. Walter Anderson Rivera, MBA",
+  "cargo": "Director",
   "correo": "sedecaribe@ucr.ac.cr",
   "extension": "2511-7303",
   "edificio": "Administrativo",
@@ -40,8 +40,8 @@
  },
  {
   "publicar": "sí",
-  "responsable": "Lic. Miguel Chavarría Chaves",
-  "cargo": "Coordinador",
+  "responsable": "MSc. Marisol Coto Molina",
+  "cargo": "Coordinadora",
   "correo": "accionsocial.sedecaribe@ucr.ac.cr",
   "extension": "2511-7349",
   "edificio": "Administrativo",
@@ -53,8 +53,8 @@
  },
  {
   "publicar": "sí",
-  "responsable": "MBA. Marianita Harvey Chavarría",
-  "cargo": "Coordinadora",
+  "responsable": "Lic. Miguel Chavarría Chaves",
+  "cargo": "Coordinador",
   "correo": "vidaestudiantil.sedecaribe@ucr.ac.cr",
   "extension": "2511-7308",
   "edificio": "Administrativo",
@@ -79,9 +79,9 @@
  },
  {
   "publicar": "sí",
-  "responsable": "MA. Felipe Jenkins Cruz",
+  "responsable": "MCi. Felipe Jenkins Cruz",
   "cargo": "Coordinador",
-  "correo": "",
+  "correo": "recintosiquirres.sedecaribe@ucr.ac.cr",
   "extension": "2511-7397",
   "edificio": "Antiguo palacio municipal de Siquirres",
   "resumen": "Desde 2013 acerca la universidad al cantón de Siquirres, gracias a un convenio con la Municipalidad.",
