@@ -546,12 +546,28 @@ dialog::backdrop { background: rgba(0,25,45,.6); }
 .mapa3d__ficha-cerrar { position: absolute; top: 6px; right: 6px; z-index: 1; width: 40px; height: 40px; border: 0; background: rgba(255,255,255,.9); font-size: 1.6rem; line-height: 1; color: var(--tinta-2); cursor: pointer; border-radius: 4px; }
 .mapa3d__ficha-cerrar:hover { background: var(--niebla); }
 .mapa3d__sin3d { display: none; }
-.mapa3d__sin3d img { display: block; width: 100%; height: auto; }
-.mapa3d__sin3d p { margin: 0; padding: 10px 14px; font-size: var(--t-sm); background: var(--papel); border-top: 1px solid var(--linea); }
 .mapa3d--sin-3d .mapa3d__escena { height: auto; min-height: 0; }
 .mapa3d--sin-3d .mapa3d__sin3d { display: block; }
-.mapa3d--sin-3d .mapa3d__lienzo, .mapa3d--sin-3d .mapa3d__herramientas, .mapa3d--sin-3d .mapa3d__brujula,
-.mapa3d--sin-3d .mapa3d__marcas, .mapa3d--sin-3d .mapa3d__ficha { display: none; }
+.mapa3d--sin-3d .mapa3d__lienzo, .mapa3d--sin-3d .mapa3d__herramientas, .mapa3d--sin-3d .mapa3d__brujula, .mapa3d--sin-3d .mapa3d__marcas { display: none; }
+/* maqueta giratoria (sin 3D) */
+.mapa3d__giro { position: relative; touch-action: pan-y; user-select: none; cursor: grab; }
+.mapa3d__giro.arrastrando { cursor: grabbing; }
+.mapa3d__giro:focus-visible { outline: 3px solid var(--foco); outline-offset: -3px; }
+.mapa3d__giro img { display: block; width: 100%; height: auto; aspect-ratio: 12 / 7; object-fit: cover; pointer-events: none; }
+.mapa3d__giro-marcas { position: absolute; inset: 0; pointer-events: none; }
+.mapa3d__giro-marcas .mapa3d__marca { transform: translate(-50%, -50%); }
+.mapa3d__giro-marcas, .mapa3d__giro-ayuda { display: none; }
+.mapa3d--giro .mapa3d__giro-marcas { display: block; }
+.mapa3d--giro .mapa3d__giro-ayuda { display: block; }
+.mapa3d__giro-ayuda { position: absolute; left: 50%; bottom: 12px; transform: translateX(-50%); margin: 0; padding: 6px 14px; border-radius: 16px;
+  background: rgba(4,32,58,.78); color: #fff; font-size: var(--t-sm); font-weight: 700; pointer-events: none; }
+.mapa3d__giro-ayuda[hidden] { display: none; }
+.mapa3d__giro-botones { display: none; justify-content: center; align-items: center; gap: 12px; padding: 8px; background: var(--papel); border-top: 1px solid var(--linea); }
+.mapa3d__giro-botones span { font-size: var(--t-sm); color: var(--tinta-2); font-weight: 600; }
+.mapa3d--giro .mapa3d__giro-botones { display: flex; }
+/* sin 3D la ficha va debajo de la maqueta, no encima */
+.mapa3d--giro .mapa3d__escena { display: flex; flex-direction: column; overflow: visible; }
+.mapa3d--giro .mapa3d__ficha { position: relative; left: auto; bottom: auto; order: 2; overflow: visible; width: auto; max-height: none; border-radius: 0; box-shadow: none; border-top: 4px solid #005DA4; }
 .mapa3d__nota { font-size: var(--t-xs); color: var(--tinta-2); margin: 10px 0 0; }
 .lugares { margin-block: 28px clamp(44px, 6vw, 76px); }
 .lugares__zonas { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 24px; }

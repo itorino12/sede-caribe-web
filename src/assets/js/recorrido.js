@@ -2,20 +2,22 @@
 // Se dibuja solo cuando algo cambia (girar, acercar, elegir un edificio), para no gastar batería.
 import * as THREE from "./vendor/three.module.min.js";
 import { OrbitControls } from "./vendor/OrbitControls.js";
+import { ficha, sinMovimiento, rellenarFicha } from "./recorrido-ficha.js";
 
 const raiz = document.querySelector("[data-recorrido]");
 const lienzo = raiz.querySelector(".mapa3d__lienzo");
 const capaMarcas = raiz.querySelector(".mapa3d__marcas");
-const ficha = raiz.querySelector(".mapa3d__ficha");
 const datos = JSON.parse(document.getElementById("datos-campus").textContent);
 const lugares = new Map(datos.lugares.map((l) => [l.id, l]));
-const sinMovimiento = matchMedia("(prefers-reduced-motion: reduce)").matches || document.documentElement.dataset.movimiento === "no";
 
 // ---------- escena
 // Se intenta con calidad alta y, si el teléfono no lo permite, con opciones más livianas.
 // Si no hay 3D, queda la imagen fija de la maqueta y la lista de lugares.
+// En teléfonos la maqueta va en modo liviano: sin suavizado de bordes, menos resolución y sombras más
+// simples. Algunos chips (por ejemplo PowerVR) pierden el contexto gráfico con la versión completa.
+const liviano = matchMedia("(pointer: coarse)").matches || Math.min(screen.width, screen.height) < 820;
 function crearRenderer() {
-  for (const opciones of [{ antialias: true, alpha: true }, { antialias: false, alpha: true, powerPreference: "low-power" }, { antialias: false, alpha: false, powerPreference: "low-power", precision: "mediump" }]) {
+  for (const opciones of [...(liviano ? [] : [{ antialias: true, alpha: true }]), { antialias: false, alpha: true, powerPreference: "low-power" }, { antialias: false, alpha: false, powerPreference: "low-power", precision: "mediump" }]) {
     try { return new THREE.WebGLRenderer({ canvas: lienzo, ...opciones }); }
     catch (e) { console.warn("Maqueta 3D: no se pudo iniciar con", opciones, e); }
   }
@@ -24,13 +26,14 @@ function crearRenderer() {
 const renderer = crearRenderer();
 if (!renderer) {
   raiz.classList.add("mapa3d--sin-3d");
-  throw new Error("Sin WebGL: queda la imagen de la maqueta y la lista de lugares");
+  import("./recorrido-giro.js");   // maqueta giratoria con imágenes (pesa poco y funciona en cualquier teléfono)
 }
-lienzo.addEventListener("webglcontextlost", (e) => { e.preventDefault(); raiz.classList.add("mapa3d--sin-3d"); });
-renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+if (renderer) {   // ---------- todo lo que sigue es la maqueta 3D
+lienzo.addEventListener("webglcontextlost", (e) => { e.preventDefault(); raiz.classList.add("mapa3d--sin-3d"); import("./recorrido-giro.js"); });
+renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, liviano ? 1.5 : 2));
 renderer.outputColorSpace = THREE.SRGBColorSpace;
 renderer.shadowMap.enabled = true;
-renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+renderer.shadowMap.type = liviano ? THREE.PCFShadowMap : THREE.PCFSoftShadowMap;
 const escena = new THREE.Scene();
 escena.fog = new THREE.Fog(0xdfeaf2, 520, 1100);
 const camara = new THREE.PerspectiveCamera(38, 1, 1, 3000);
@@ -39,7 +42,7 @@ escena.add(new THREE.HemisphereLight(0xf4f8ff, 0x6d8a5a, 1.45));
 const sol = new THREE.DirectionalLight(0xfff4e0, 2.1);
 sol.position.set(-160, 260, -120);
 sol.castShadow = true;
-sol.shadow.mapSize.set(2048, 2048);
+sol.shadow.mapSize.set(liviano ? 1024 : 2048, liviano ? 1024 : 2048);
 Object.assign(sol.shadow.camera, { left: -260, right: 260, top: 260, bottom: -260, near: 50, far: 800 });
 sol.shadow.bias = -0.0005;
 escena.add(sol);
@@ -311,7 +314,7 @@ for (const e of datos.campus.edificios) {
       hojas.setMatrixAt(i * HOJAS + k, ayuda.matrix);
     }
   });
-  for (const m of [copas, troncos, hojas]) { m.castShadow = true; m.instanceMatrix.needsUpdate = true; escena.add(m); }
+  for (const m of [copas, troncos, hojas]) { m.castShadow = !liviano; m.instanceMatrix.needsUpdate = true; escena.add(m); }
   if (copas.instanceColor) copas.instanceColor.needsUpdate = true;
 }
 
@@ -379,7 +382,6 @@ let elegido = null;
 function elegir(id, volar) {
   if (elegido) { elegido.userData.mat.techo.color.setHex(elegido.userData.mat.techo.userData.original); elegido.userData.mat.pared.color.setHex(colores.pared); }
   marcas.forEach((b, k) => b.setAttribute("aria-pressed", String(k === id)));
-  document.querySelectorAll("[data-lugar]").forEach((b) => b.setAttribute("aria-pressed", String(Number(b.dataset.lugar) === id)));
   const g = edificios.find((x) => x.userData.id === id);
   const l = lugares.get(id);
   if (!g || !l) return;
@@ -388,14 +390,7 @@ function elegir(id, volar) {
   if (techo.userData.original === undefined) techo.userData.original = techo.color.getHex();
   techo.color.setHex(g.userData.alto < 1 ? techo.userData.original : colores.elegido);
   g.userData.mat.pared.color.setHex(colores.paredElegida);
-  ficha.hidden = false;
-  ficha.querySelector(".mapa3d__ficha-zona").textContent = `Zona ${l.zona} · Edificio ${l.id}`;
-  ficha.querySelector(".mapa3d__ficha-titulo").textContent = l.nombre;
-  ficha.querySelector(".mapa3d__ficha-texto").textContent = l.texto || "";
-  carruselFicha.cargar(l.fotos || [], `Fotos de ${l.nombre}`);
-  const enlace = ficha.querySelector(".mapa3d__ficha-enlace");
-  enlace.hidden = !l.enlace;
-  if (l.enlace) enlace.href = raiz.dataset.raiz + l.enlace;
+  rellenarFicha(l);
   if (volar) {
     const c = g.userData.centro;
     const dir = camara.position.clone().sub(controles.target).normalize();
@@ -413,64 +408,7 @@ function cerrarFicha() {
 }
 ficha.querySelector(".mapa3d__ficha-cerrar").addEventListener("click", cerrarFicha);
 
-// ---------- carrusel de fotos: en la ficha y, al tocar una foto, en grande a pantalla completa
-class Carrusel {
-  constructor(nodo, grande, alTocar) {
-    this.nodo = nodo; this.grande = grande; this.alTocar = alTocar;
-    this.pista = nodo.querySelector(".carrusel__pista");
-    this.cuenta = nodo.querySelector(".carrusel__cuenta");
-    this.fotos = []; this.actual = 0;
-    nodo.querySelector("[data-antes]").addEventListener("click", () => this.ir(this.actual - 1));
-    nodo.querySelector("[data-despues]").addEventListener("click", () => this.ir(this.actual + 1));
-    this.pista.addEventListener("keydown", (e) => {
-      if (e.key === "ArrowLeft") { e.preventDefault(); this.ir(this.actual - 1); }
-      if (e.key === "ArrowRight") { e.preventDefault(); this.ir(this.actual + 1); }
-    });
-    let espera;
-    this.pista.addEventListener("scroll", () => { clearTimeout(espera); espera = setTimeout(() => this.leerPosicion(), 80); }, { passive: true });
-  }
-  cargar(fotos, titulo, inicio = 0) {
-    this.fotos = fotos; this.actual = 0;
-    this.nodo.hidden = !fotos.length;
-    this.nodo.setAttribute("aria-label", titulo);
-    this.nodo.classList.toggle("carrusel--una", fotos.length < 2);
-    this.pista.replaceChildren(...fotos.map((f, i) => {
-      const li = document.createElement("li");
-      li.className = "carrusel__foto";
-      li.setAttribute("aria-label", `${i + 1} de ${fotos.length}`);
-      const img = document.createElement("img");
-      img.src = raiz.dataset.raiz + (this.grande ? f.m : f.s);
-      img.srcset = `${raiz.dataset.raiz + f.s} 640w, ${raiz.dataset.raiz + f.m} 1280w, ${raiz.dataset.raiz + f.g} 1920w`;
-      img.sizes = this.grande ? "100vw" : "420px";
-      img.alt = f.alt; img.loading = i ? "lazy" : "eager"; img.decoding = "async";
-      if (this.alTocar) { img.addEventListener("click", () => this.alTocar(i)); img.classList.add("carrusel__ampliable"); }
-      li.appendChild(img);
-      return li;
-    }));
-    this.pista.scrollLeft = 0;
-    if (inicio) requestAnimationFrame(() => this.ir(inicio, true)); else this.marcar();
-  }
-  ir(i, inmediato) {
-    if (!this.fotos.length) return;
-    this.actual = (i + this.fotos.length) % this.fotos.length;
-    this.pista.scrollTo({ left: this.actual * this.pista.clientWidth, behavior: inmediato || sinMovimiento ? "auto" : "smooth" });
-    this.marcar();
-  }
-  leerPosicion() {
-    const i = Math.round(this.pista.scrollLeft / Math.max(this.pista.clientWidth, 1));
-    if (i !== this.actual) { this.actual = i; this.marcar(); }
-  }
-  marcar() { this.cuenta.textContent = this.fotos.length > 1 ? `${this.actual + 1} / ${this.fotos.length}` : ""; }
-}
-const visor = document.querySelector(".visor-fotos");
-const carruselGrande = new Carrusel(visor.querySelector("[data-carrusel]"), true);
-const carruselFicha = new Carrusel(ficha.querySelector("[data-carrusel]"), false, (i) => {
-  carruselGrande.cargar(carruselFicha.fotos, ficha.querySelector(".mapa3d__ficha-titulo").textContent, i);
-  visor.showModal();
-  carruselGrande.pista.focus();
-});
-visor.querySelector(".visor-fotos__cerrar").addEventListener("click", () => visor.close());
-visor.addEventListener("click", (e) => { if (e.target === visor) visor.close(); });
+
 document.querySelectorAll("[data-lugar]").forEach((b) => b.addEventListener("click", () => {
   elegir(Number(b.dataset.lugar), true);
   lienzo.scrollIntoView({ behavior: sinMovimiento ? "auto" : "smooth", block: "center" });
@@ -538,3 +476,9 @@ function dibujar(ahora) {
 new ResizeObserver(pedirDibujo).observe(lienzo);
 raiz.classList.add("mapa3d--listo");
 pedirDibujo();
+
+// Para herramientas/giro.py: con #captura-giro la página expone la cámara para dibujar las vistas de la maqueta giratoria
+if (location.hash === "#captura-giro") {
+  window.__giro = { camara, controles, renderer, escena, edificios, dibujarYa() { ajustar(); controles.update(); renderer.render(escena, camara); } };
+}
+}
