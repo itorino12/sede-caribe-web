@@ -2,7 +2,11 @@
 """Genera la maqueta 3D del campus a partir del croquis oficial «Distribución de Aulas».
 
 Uso:
-    python3 herramientas/campus3d.py croquis.pdf
+    python3 herramientas/campus3d.py croquis.pdf [satelite.png]
+
+Con la captura satelital de Google Maps (la del celular, sin girar), los árboles se colocan donde la
+foto muestra copa de árbol; sin ella, se toman los dibujos de árboles del croquis. La captura no se
+guarda en el repositorio (es imagen de Google): solo las posiciones que salen de ella.
 
 Necesita poppler (pdftoppm), OpenCV y Pillow. Produce:
     src/data/campus3d.json            edificios (contorno en metros, pisos), árboles y extensión del terreno
@@ -46,8 +50,12 @@ EDIFICIOS = [
     # ventanales corridos y zócalo azul claro
     {"id": 11, "rect": (1510, 1113, 128, 78, -6), "pisos": 1, "linterna": 0.55,
      "estilo": {"techo": "#5f9a58", "zocalo": "#a9d4ef", "ventanas": "vidrio", "cupula": True}},
-    {"id": 12, "rect": (1726, 1072, 128, 39, -2), "pisos": 2},
-    {"id": 13, "rect": (1786, 1130, 113, 51, -10), "pisos": 2},
+    # 12 y 13 (fotos): el edificio nuevo de dos pisos. Aulas con losa plana volada, galerías y escaleras
+    # exteriores; laboratorios con techo de una sola agua, ventanales verdes y parasoles curvos blancos.
+    {"id": 12, "rect": (1726, 1072, 128, 39, -2), "pisos": 2,
+     "estilo": {"forma_techo": "plano", "galeria": True, "techo": "#dcdfe2"}},
+    {"id": 13, "rect": (1786, 1130, 113, 51, -10), "pisos": 2,
+     "estilo": {"forma_techo": "una_agua", "parasoles": True, "ventanas": "vidrio_verde", "techo": "#d6dadd"}},
     {"id": 14, "rect": (1689, 1292, 151, 196, 12.5), "pisos": 1, "alto": 11},
     {"id": 15, "rect": (1770, 1450, 59, 41, 0), "pisos": 1},
     # Residencias: barra doblada del croquis, en dos alas; en la foto, techo de dos niveles con linternilla
@@ -110,6 +118,15 @@ def techo_cuatro_aguas(cx, cz, largo, ancho, g, base, alero=ALERO, pendiente=PEN
     return [v for t in caras for v in t], base + h
 
 
+def techo_una_agua(cx, cz, largo, ancho, g, base, alero=1.8, subida=None):
+    """Techo de una sola agua: plano inclinado, más alto en el lado norte (−v)."""
+    a, b = largo / 2 + alero, ancho / 2 + alero
+    subida = subida if subida is not None else ancho * 0.14
+    p = a_local(cx, cz, g)
+    e = [p(-a, -b, base + subida), p(a, -b, base + subida), p(a, b, base), p(-a, b, base)]
+    return [v for t in ((e[0], e[1], e[2]), (e[0], e[2], e[3])) for v in t], base + subida
+
+
 def techo_piramide(cx, cz, radio, base, lados=6):
     h = radio * 0.42
     borde = [[round(cx + (radio + ALERO) * math.cos(math.radians(30 + 360 / lados * i)), 2), base,
@@ -144,11 +161,59 @@ def volumenes(e, alto):
             t, c = techo_cuatro_aguas(m[0], m[1], L * 0.78, W * k, g, alto + alto_l, alero=0.9)
             techo += t
             cumbre = max(cumbre, c)
+        elif e.get("estilo", {}).get("forma_techo") == "plano":
+            cumbre = max(cumbre, alto + 0.6)   # la losa volada la dibuja la maqueta
+        elif e.get("estilo", {}).get("forma_techo") == "una_agua":
+            t, c = techo_una_agua(m[0], m[1], L, W, g, alto + 0.6)
+            techo += t
+            cumbre = max(cumbre, c)
         else:
             t, c = techo_cuatro_aguas(m[0], m[1], L, W, g, alto, pendiente=0.2 if L * W > 900 else PENDIENTE)
             techo += t
             cumbre = max(cumbre, c)
     return vol, techo, cumbre
+
+
+# Captura de Google Maps (celular, 1344 px de ancho) → croquis: ajuste afín con seis puntos comunes
+# (biblioteca, piscina, gimnasio, residencias, oficinas y centro de la pista), error menor a 9 m.
+SAT_ANCHO = 672
+SAT_A_CROQUIS = np.array([[2.5708, -0.4783, 668.36], [0.4804, 2.7018, -251.56]])
+SAT_VALIDA = (440, 1240)      # franja de la captura sin la barra de búsqueda ni el panel inferior
+SAT_BOTONES = [(570, 1050, 672, 1245)]   # botones de ubicación y rutas de la app
+
+
+def arboles_satelitales(ruta, rng, prohibido):
+    im = cv2.imread(str(ruta))
+    im = cv2.resize(im, (SAT_ANCHO, round(im.shape[0] * SAT_ANCHO / im.shape[1])), interpolation=cv2.INTER_AREA)
+    hsv = cv2.cvtColor(cv2.GaussianBlur(im, (0, 0), 2), cv2.COLOR_BGR2HSV).astype(int)
+    copa = (hsv[..., 2] < 85) & (hsv[..., 1] > 55) & (im[..., 1].astype(int) >= im[..., 2].astype(int))
+    copa = cv2.morphologyEx(copa.astype(np.uint8), cv2.MORPH_OPEN, np.ones((5, 5), np.uint8))
+    valida = np.zeros_like(copa)
+    valida[SAT_VALIDA[0]:SAT_VALIDA[1]] = 1
+    for x0, y0, x1, y1 in SAT_BOTONES:
+        valida[y0:y1, x0:x1] = 0
+    inversa = cv2.invertAffineTransform(SAT_A_CROQUIS)
+
+    def a_sat(x, y):
+        return inversa @ np.array([x, y, 1.0])
+
+    def cubre(x, y):
+        sx, sy = a_sat(x, y)
+        return 0 <= sx < copa.shape[1] and 0 <= sy < copa.shape[0] and valida[int(sy), int(sx)]
+
+    x0, y0, x1, y1 = RECORTE
+    paso = 54   # ≈ 13,5 m entre árboles
+    salida = []
+    for yy in range(y0 + 20, y1 - 20, paso):
+        for xx in range(x0 + 20 + (paso // 2 if (yy // paso) % 2 else 0), x1 - 20, paso):
+            x, y = xx + rng.uniform(-16, 16), yy + rng.uniform(-16, 16)
+            if not (0 <= x < prohibido.shape[1] and 0 <= y < prohibido.shape[0]) or prohibido[int(y), int(x)]:
+                continue
+            sx, sy = a_sat(x, y)
+            if not cubre(x, y) or not copa[int(sy), int(sx)]:
+                continue
+            salida.append({"p": a_metros(x, y), "r": round(rng.uniform(4.6, 7.2), 2), "palma": bool(rng.random() < 0.06)})
+    return {"arboles": salida, "cubre": cubre}
 
 
 def edificio_json(e):
@@ -160,7 +225,7 @@ def edificio_json(e):
             "cumbre": round(cumbre, 2), "volumenes": vol, "techo": [c for v in techo for c in v], "estilo": e.get("estilo", {})}
 
 
-def main(pdf):
+def main(pdf, sat=None):
     img = rasterizar(pdf).astype(int)
     R, G, B = img[..., 0], img[..., 1], img[..., 2]
     gris = (abs(R - G) < 6) & (abs(G - B) < 6)
@@ -179,11 +244,20 @@ def main(pdf):
 
     # --- pista de atletismo: la vuelta de calle gris claro al sur del campus
     n, lab, st, _ = cv2.connectedComponentsWithStats(calles)
-    pista = np.zeros_like(calles)
+    pista_cruda = np.zeros_like(calles)
     for i in range(1, n):
         if st[i, 1] > 2300 and st[i, 4] > 20000:
-            pista[lab == i] = 255
-    calles[pista > 0] = 0
+            pista_cruda[lab == i] = 255
+    calles[pista_cruda > 0] = 0
+    # El croquis deja el anillo abierto arriba y le pega el camino de acceso abajo. La pista real es un
+    # óvalo cerrado: se rehace como el borde de su envolvente convexa, y el acceso queda como calle.
+    acceso = pista_cruda.copy(); acceso[:2880] = 0
+    calles[acceso > 0] = 255
+    anillo = pista_cruda.copy(); anillo[2880:] = 0
+    cs, _ = cv2.findContours(anillo, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_NONE)
+    lleno = np.zeros_like(anillo)
+    cv2.fillPoly(lleno, [cv2.convexHull(np.vstack(cs))], 255)
+    pista = cv2.subtract(lleno, cv2.erode(lleno, cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (49, 49))))
     # el camino recto que baja de la pista a la carretera sigue siendo calle
     interior = np.zeros_like(pista)
     cs, _ = cv2.findContours(pista, cv2.RETR_CCOMP, cv2.CHAIN_APPROX_SIMPLE)
@@ -232,6 +306,13 @@ def main(pdf):
             cv2.fillPoly(ocupado, [np.array(pol, np.int32)], 1)
     n, lab, st, cen = cv2.connectedComponentsWithStats(verde)
     arboles = []
+    # distancia mínima entre árboles y edificios (≈ 9 m), para que la maqueta respire y se vean las fachadas
+    lejos_edificios = np.zeros_like(ocupado)
+    for e in EDIFICIOS:
+        for pol in contornos_px(e):
+            cv2.fillPoly(lejos_edificios, [np.array(pol, np.int32)], 1)
+    lejos_edificios = cv2.dilate(lejos_edificios, cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (73, 73)))
+    satelital = arboles_satelitales(sat, rng, ocupado | lejos_edificios) if sat else None
     for i in range(1, n):
         area = st[i, 4]
         if area < 1500:
@@ -257,9 +338,13 @@ def main(pdf):
                         puntos.append((xx + rng.uniform(-10, 10), yy + rng.uniform(-10, 10), rng.uniform(28, 38)))
         for x, y, r in puntos:
             xi, yi = int(x), int(y)
-            if ocupado[yi, xi]:
+            if ocupado[yi, xi] or lejos_edificios[yi, xi]:
                 continue
+            if satelital is not None and not palma and satelital["cubre"](x, y):
+                continue   # donde hay foto satelital, mandan los árboles de la foto
             arboles.append({"p": a_metros(x, y), "r": round(min(r, 45) * ESCALA, 2), "palma": bool(palma)})
+    if satelital is not None:
+        arboles += satelital["arboles"]
 
     datos = {
         "nota": "Generado por herramientas/campus3d.py a partir del croquis oficial «Distribución de Aulas». Esquemático, no a escala.",
@@ -272,4 +357,4 @@ def main(pdf):
 
 
 if __name__ == "__main__":
-    main(sys.argv[1])
+    main(sys.argv[1], sys.argv[2] if len(sys.argv) > 2 else None)

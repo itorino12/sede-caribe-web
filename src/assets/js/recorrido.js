@@ -95,6 +95,67 @@ const losa = new THREE.MeshStandardMaterial({ color: colores.losa });
 
 const vidrio = new THREE.MeshStandardMaterial({ color: 0x33424f, roughness: 0.2, metalness: 0.3 });
 const celeste = new THREE.MeshStandardMaterial({ color: 0x9fd2ee, roughness: 0.8 });
+const vidrioVerde = new THREE.MeshStandardMaterial({ color: 0x2f7d76, roughness: 0.15, metalness: 0.35 });
+const acero = new THREE.MeshStandardMaterial({ color: 0x4a5158, roughness: 0.6, metalness: 0.3 });
+const parasol = new THREE.MeshStandardMaterial({ color: 0xf2f3f4, roughness: 0.5, side: THREE.DoubleSide });
+
+// Fachada principal de un volumen: el lado largo que mira al sur (hacia donde se ve la maqueta)
+function fachadaSur(contorno) {
+  const cx = contorno.reduce((s, p) => s + p[0], 0) / contorno.length, cz = contorno.reduce((s, p) => s + p[1], 0) / contorno.length;
+  let mejor = null;
+  for (let i = 0; i < contorno.length; i++) {
+    const a = contorno[i], b = contorno[(i + 1) % contorno.length];
+    const mx = (a[0] + b[0]) / 2, mz = (a[1] + b[1]) / 2, largo = Math.hypot(b[0] - a[0], b[1] - a[1]);
+    let nx = -(b[1] - a[1]) / largo, nz = (b[0] - a[0]) / largo;
+    if (nx * (mx - cx) + nz * (mz - cz) < 0) { nx = -nx; nz = -nz; }
+    const puntaje = largo * (0.6 + nz);
+    if (!mejor || puntaje > mejor.puntaje) mejor = { a, b, largo, nx, nz, puntaje };
+  }
+  return mejor;
+}
+// Galería: columnas de acero, balcón corrido con baranda y escalera exterior (edificio 12)
+function galeria(grupo, vol, alto, pisos) {
+  const f = fachadaSur(vol.contorno), fondo = 2.6, dx = (f.b[0] - f.a[0]) / f.largo, dz = (f.b[1] - f.a[1]) / f.largo;
+  const angulo = Math.atan2(-dz, dx);
+  const n = Math.max(2, Math.round(f.largo / 5));
+  for (let i = 0; i <= n; i++) {
+    const t = i / n, col = new THREE.Mesh(new THREE.BoxGeometry(0.35, alto + 0.6, 0.35), acero);
+    col.position.set(f.a[0] + dx * f.largo * t + f.nx * fondo, (alto + 0.6) / 2, f.a[1] + dz * f.largo * t + f.nz * fondo);
+    col.castShadow = true; grupo.add(col);
+  }
+  for (let p = 1; p < pisos; p++) {
+    const y = (alto / pisos) * p;
+    const balcon = new THREE.Mesh(new THREE.BoxGeometry(f.largo, 0.3, fondo + 0.3), losa);
+    balcon.position.set((f.a[0] + f.b[0]) / 2 + f.nx * fondo / 2, y, (f.a[1] + f.b[1]) / 2 + f.nz * fondo / 2);
+    balcon.rotation.y = angulo; balcon.castShadow = true; grupo.add(balcon);
+    const baranda = new THREE.Mesh(new THREE.BoxGeometry(f.largo, 0.12, 0.12), acero);
+    baranda.position.set((f.a[0] + f.b[0]) / 2 + f.nx * (fondo + 0.1), y + 1.1, (f.a[1] + f.b[1]) / 2 + f.nz * (fondo + 0.1));
+    baranda.rotation.y = angulo; grupo.add(baranda);
+  }
+  // escalera exterior en diagonal, a un tercio de la fachada
+  const largoEsc = Math.hypot(alto / pisos, 6);
+  const esc = new THREE.Mesh(new THREE.BoxGeometry(largoEsc, 0.25, 1.4), acero);
+  esc.position.set(f.a[0] + dx * f.largo * 0.62 + f.nx * (fondo + 1.1), alto / pisos / 2, f.a[1] + dz * f.largo * 0.62 + f.nz * (fondo + 1.1));
+  esc.rotation.set(0, angulo, Math.atan2(alto / pisos, 6));
+  esc.castShadow = true; grupo.add(esc);
+}
+// Parasoles curvos de lámina blanca frente a la fachada (edificio 13): paneles altos que se arquean hacia afuera
+function parasoles(grupo, vol, alto) {
+  const f = fachadaSur(vol.contorno), dx = (f.b[0] - f.a[0]) / f.largo, dz = (f.b[1] - f.a[1]) / f.largo;
+  const cuantos = 3, ancho = (f.largo / cuantos) * 0.82, altoP = alto * 0.9;
+  for (let i = 0; i < cuantos; i++) {
+    const g = new THREE.PlaneGeometry(ancho, altoP, 1, 10);
+    const p = g.attributes.position;
+    for (let k = 0; k < p.count; k++) { const t = p.getY(k) / altoP + 0.5; p.setZ(k, Math.sin(Math.PI * t) * 1.3); }
+    g.computeVertexNormals();
+    const panel = new THREE.Mesh(g, parasol);
+    const t = (i + 0.5) / cuantos;
+    panel.position.set(f.a[0] + dx * f.largo * t + f.nx * 1.0, alto * 0.52, f.a[1] + dz * f.largo * t + f.nz * 1.0);
+    panel.rotation.y = Math.atan2(f.nx, f.nz);
+    panel.castShadow = true; grupo.add(panel);
+  }
+}
+
 for (const e of datos.campus.edificios) {
   const grupo = new THREE.Group();
   const estilo = e.estilo || {};
@@ -120,10 +181,17 @@ for (const e of datos.campus.edificios) {
       for (let p = 1; p < e.pisos; p++) grupo.add(prisma(vol.contorno, 0.3, altoPiso * p, losa, 0.5));
       if (estilo.zocalo) grupo.add(prisma(vol.contorno, altoPiso * 0.36, 0, new THREE.MeshStandardMaterial({ color: estilo.zocalo, roughness: 0.8 }), 0.04));
       // ventanas: celosías grises (edificios nuevos) o ventanales de vidrio (biblioteca)
-      const ventanal = estilo.ventanas === "vidrio";
-      if (e.id !== 6) for (let p = 0; p < pisos; p++) grupo.add(prisma(vol.contorno, altoPiso * (ventanal ? 0.4 : 0.3), altoPiso * p + altoPiso * (ventanal ? 0.4 : 0.36), ventanal ? vidrio : celosia, 0.05));
+      const ventanal = estilo.ventanas === "vidrio" || estilo.ventanas === "vidrio_verde";
+      const cristal = estilo.ventanas === "vidrio_verde" ? vidrioVerde : vidrio;
+      if (e.id !== 6) for (let p = 0; p < pisos; p++) grupo.add(prisma(vol.contorno, altoPiso * (ventanal ? 0.4 : 0.3), altoPiso * p + altoPiso * (ventanal ? 0.4 : 0.36), ventanal ? cristal : celosia, 0.05));
     }
-    grupo.add(techo(e.techo, mat.techo));
+    if (e.techo.length) grupo.add(techo(e.techo, mat.techo));
+    if (estilo.forma_techo === "plano") for (const vol of e.volumenes) {   // losa plana volada
+      const l = prisma(vol.contorno, 0.6, e.alto, mat.techo, 3.2);
+      grupo.add(l);
+    }
+    if (estilo.galeria) e.volumenes.forEach((vol) => galeria(grupo, vol, e.alto, Math.max(e.pisos, 1)));
+    if (estilo.parasoles) e.volumenes.forEach((vol) => parasoles(grupo, vol, e.alto));
     if (estilo.cupula) {   // torrecita de ventilación sobre la cumbrera
       const torre = new THREE.Mesh(new THREE.BoxGeometry(2.6, 1.6, 2.6), celeste);
       torre.position.set(e.centro[0], e.cumbre + 0.5, e.centro[1]);
@@ -141,36 +209,43 @@ for (const e of datos.campus.edificios) {
   edificios.push(grupo);
 }
 
-// ---------- árboles y palmeras
-const hojas = [0x4f8f3a, 0x5f9e43, 0x3f7d34, 0x6aa84f].map((c) => new THREE.MeshLambertMaterial({ color: c, flatShading: true }));
-const tronco = new THREE.MeshLambertMaterial({ color: 0x7a5a3a });
-const hojaPalma = new THREE.MeshLambertMaterial({ color: 0x5b9a3c, side: THREE.DoubleSide, flatShading: true });
-datos.campus.arboles.forEach((a, i) => {
-  const [x, z] = a.p, r = Math.max(a.r, 2.2), g = new THREE.Group();
-  if (a.palma) {
-    const h = r * 2.2;
-    const tr = new THREE.Mesh(new THREE.CylinderGeometry(0.35, 0.55, h, 6), tronco);
-    tr.position.y = h / 2; g.add(tr);
-    for (let k = 0; k < 8; k++) {
-      const hoja = new THREE.Mesh(new THREE.ConeGeometry(r * 0.28, r * 1.25, 3, 1), hojaPalma);
-      hoja.scale.z = 0.25;
-      hoja.position.set(0, h, 0);
-      hoja.rotation.set(0, (k / 8) * Math.PI * 2 + i, 0);
-      hoja.rotateZ(-Math.PI / 2 + 0.45);
-      hoja.translateY(r * 0.55);
-      g.add(hoja);
+// ---------- árboles y palmeras (instancias: cientos de árboles en pocas llamadas de dibujo)
+{
+  const lista = datos.campus.arboles;
+  const redondos = lista.filter((a) => !a.palma), palmas = lista.filter((a) => a.palma);
+  const m4 = new THREE.Matrix4(), q = new THREE.Quaternion(), pos = new THREE.Vector3(), esc = new THREE.Vector3(), color = new THREE.Color();
+  const tronco = new THREE.MeshLambertMaterial({ color: 0x7a5a3a });
+  const tonos = [0x4f8f3a, 0x5f9e43, 0x3f7d34, 0x6aa84f, 0x467f36];
+  const azar = (i) => { const x = Math.sin(i * 12.9898) * 43758.5453; return x - Math.floor(x); };
+
+  const copas = new THREE.InstancedMesh(new THREE.IcosahedronGeometry(1, 1), new THREE.MeshLambertMaterial({ flatShading: true }), redondos.length);
+  const troncos = new THREE.InstancedMesh(new THREE.CylinderGeometry(0.4, 0.6, 1, 6), tronco, redondos.length + palmas.length);
+  redondos.forEach((a, i) => {
+    const r = Math.max(a.r, 2.2), h = r * 0.9;
+    m4.compose(pos.set(a.p[0], h / 2, a.p[1]), q.identity(), esc.set(1, h, 1)); troncos.setMatrixAt(i, m4);
+    q.setFromEuler(new THREE.Euler(0, azar(i) * 6.28, 0));
+    m4.compose(pos.set(a.p[0], h + r * 0.75, a.p[1]), q, esc.set(r, r * 0.8, r)); copas.setMatrixAt(i, m4);
+    copas.setColorAt(i, color.setHex(tonos[Math.floor(azar(i + 7) * tonos.length)]));
+  });
+  const HOJAS = 8;
+  const hojas = new THREE.InstancedMesh(new THREE.ConeGeometry(0.28, 1.25, 3, 1).translate(0, 0.62, 0),
+    new THREE.MeshLambertMaterial({ color: 0x5b9a3c, side: THREE.DoubleSide, flatShading: true }), palmas.length * HOJAS);
+  const ayuda = new THREE.Object3D();
+  palmas.forEach((a, i) => {
+    const r = Math.max(a.r, 2.2), h = r * 2.2;
+    m4.compose(pos.set(a.p[0], h / 2, a.p[1]), q.identity(), esc.set(0.75, h, 0.75)); troncos.setMatrixAt(redondos.length + i, m4);
+    for (let k = 0; k < HOJAS; k++) {
+      ayuda.position.set(a.p[0], h, a.p[1]);
+      ayuda.rotation.set(0, (k / HOJAS) * Math.PI * 2 + i, 0);
+      ayuda.rotateZ(-Math.PI / 2 + 0.45);
+      ayuda.scale.set(r, r, r * 0.25);
+      ayuda.updateMatrix();
+      hojas.setMatrixAt(i * HOJAS + k, ayuda.matrix);
     }
-  } else {
-    const h = r * 0.9;
-    const tr = new THREE.Mesh(new THREE.CylinderGeometry(0.4, 0.6, h, 6), tronco);
-    tr.position.y = h / 2; g.add(tr);
-    const copa = new THREE.Mesh(new THREE.IcosahedronGeometry(r, 1), hojas[i % hojas.length]);
-    copa.position.y = h + r * 0.75; copa.scale.y = 0.8; g.add(copa);
-  }
-  g.position.set(x, 0, z);
-  g.traverse((o) => { o.castShadow = true; });
-  escena.add(g);
-});
+  });
+  for (const m of [copas, troncos, hojas]) { m.castShadow = true; m.instanceMatrix.needsUpdate = true; escena.add(m); }
+  if (copas.instanceColor) copas.instanceColor.needsUpdate = true;
+}
 
 // ---------- cámara y controles
 const controles = new OrbitControls(camara, lienzo);
