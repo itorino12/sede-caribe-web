@@ -63,8 +63,13 @@ EDIFICIOS = [
      "estilo": {"forma_techo": "plano", "galeria": True, "techo": "#dcdfe2"}},
     {"id": 13, "rect": (1786, 1130, 113, 51, -10), "pisos": 2,
      "estilo": {"forma_techo": "una_agua", "parasoles": True, "ventanas": "vidrio_verde", "techo": "#d6dadd"}},
-    {"id": 14, "rect": (1689, 1292, 151, 196, 12.5), "pisos": 1, "alto": 11},
-    {"id": 15, "rect": (1770, 1450, 59, 41, 0), "pisos": 1},
+    # Gimnasio (fotos): nave alta con techo de cuatro aguas de lámina verde y linternilla de ventilación,
+    # viga perimetral de concreto sobre columnas que forma un corredor abierto, paredes blancas con franja celeste
+    {"id": 14, "rect": (1689, 1292, 151, 196, 12.5), "pisos": 1, "alto": 9, "linterna": 0.6,
+     "estilo": {"techo": "#8db38a", "corredor": True, "franja": "#4fa8e8"}},
+    # Bodega de Acción Social (foto): casita blanca de techo a dos aguas gris oscuro con alero blanco y portón negro
+    {"id": 15, "rect": (1770, 1450, 59, 41, 0), "pisos": 1, "alto": 3.4,
+     "estilo": {"forma_techo": "dos_aguas", "techo": "#4a5056", "ventanas": "ninguna", "porton": "#2b2f33"}},
     # Residencias: barra doblada del croquis, en dos alas; en la foto, techo de dos niveles con linternilla
     # el ala sur del croquis llega hasta la carretera: se acorta y se corre hacia adentro para que quede
     # dentro de la cerca, como en el campus real
@@ -73,7 +78,8 @@ EDIFICIOS = [
     {"id": 17, "rect": (1816, 1795, 63, 92, -11), "pisos": 1, "estilo": {"techo": "#66756b"}},
     # Laboratorio de Investigación (fotos): un piso sobre un talud, paredes gris claro con paneles blancos,
     # ventanas verticales con marco gris, techo casi plano con alero muy ancho, escalera y rampa al frente
-    {"id": 18, "rect": (1552, 1826, 54, 30, 15), "pisos": 1, "alto": 3.6,
+    # a lo largo de la calle (que aquí corre casi de norte a sur, al este), con la escalera hacia la calle
+    {"id": 18, "rect": (1560, 1826, 54, 30, 82), "pisos": 1, "alto": 3.6, "frente_calle": True,
      "estilo": {"forma_techo": "una_agua", "techo": "#9ea5aa", "pared": "#d6d9dc", "ventanas": "vidrio", "talud": 1.8}},
 ]
 
@@ -130,6 +136,17 @@ def techo_cuatro_aguas(cx, cz, largo, ancho, g, base, alero=ALERO, pendiente=PEN
     return [v for t in caras for v in t], base + h
 
 
+def techo_dos_aguas(cx, cz, largo, ancho, g, base, alero=1.2, pendiente=0.36):
+    """Techo a dos aguas: cumbrera a lo largo del lado mayor y dos frontones."""
+    a, b = largo / 2 + alero, ancho / 2 + alero
+    p = a_local(cx, cz, g)
+    h = b * pendiente
+    e = [p(-a, -b, base), p(a, -b, base), p(a, b, base), p(-a, b, base)]
+    c1, c2 = p(-a, 0, base + h), p(a, 0, base + h)
+    caras = [(e[0], e[1], c2), (e[0], c2, c1), (e[2], e[3], c1), (e[2], c1, c2), (e[1], e[2], c2), (e[3], e[0], c1)]
+    return [v for t in caras for v in t], base + h
+
+
 def techo_una_agua(cx, cz, largo, ancho, g, base, alero=1.8, subida=None):
     """Techo de una sola agua: plano inclinado, más alto en el lado norte (−v)."""
     a, b = largo / 2 + alero, ancho / 2 + alero
@@ -175,6 +192,10 @@ def volumenes(e, alto):
             cumbre = max(cumbre, c)
         elif e.get("estilo", {}).get("forma_techo") == "plano":
             cumbre = max(cumbre, alto + 0.6)   # la losa volada la dibuja la maqueta
+        elif e.get("estilo", {}).get("forma_techo") == "dos_aguas":
+            t, c = techo_dos_aguas(m[0], m[1], L, W, g, alto)
+            techo += t
+            cumbre = max(cumbre, c)
         elif e.get("estilo", {}).get("forma_techo") == "una_agua":
             t, c = techo_una_agua(m[0], m[1], L, W, g, alto + 0.6, alero=2.2, subida=W * 0.05)
             techo += t
@@ -447,6 +468,14 @@ def main(pdf, sat=None):
         cerca.append([a_metros(float(x), float(y)) for x, y in simple])
     cy_pista, cx_pista = np.mean(np.nonzero(pista), axis=1)
 
+    ys_c, xs_c = np.nonzero(calles)
+    for e in EDIFICIOS:
+        if e.get("frente_calle"):
+            cx_e, cy_e = e["rect"][:2]
+            i = int(np.argmin(np.hypot(xs_c - cx_e, ys_c - cy_e)))
+            dx_e, dy_e = xs_c[i] - cx_e, ys_c[i] - cy_e
+            n = math.hypot(dx_e, dy_e) or 1
+            e["estilo"]["frente"] = [round(dx_e / n, 3), round(dy_e / n, 3)]
     for e in EDIFICIOS:
         for pol in contornos_px(e):
             for x, y in pol:

@@ -234,12 +234,49 @@ for (const e of datos.campus.edificios) {
     techo: new THREE.MeshStandardMaterial({ color: estilo.techo || colores.techo, roughness: 0.75, side: THREE.DoubleSide }),
   };
   if (e.tipo === "piscina") {
+    // Piscina (fotos): pileta celeste con borde amarillo, deck de granito lavado, malla verde electrosoldada
+    // alrededor, y detrás los vestidores (casetas blancas con zócalo gris y techo de una agua) y un toldo en arco
     const c = e.volumenes[0].contorno;
-    grupo.add(prisma(c, 0.5, 0, new THREE.MeshStandardMaterial({ color: 0xe9e4da, roughness: 0.9 }), 2));
-    const agua = prisma(c, 0.12, 0.5, new THREE.MeshStandardMaterial({ color: 0x2f8fd0, roughness: 0.15, metalness: 0.1 }), -2.2);
+    grupo.add(prisma(c, 0.3, 0, new THREE.MeshStandardMaterial({ color: 0xbdbab2, roughness: 0.95 }), 7));       // deck
+    grupo.add(prisma(c, 0.06, 0.3, new THREE.MeshStandardMaterial({ color: 0xf2c200, roughness: 0.6 }), -1.6));   // borde amarillo
+    const agua = prisma(c, 0.08, 0.33, new THREE.MeshStandardMaterial({ color: 0x5aaee8, roughness: 0.2, metalness: 0.05 }), -2.2);
     agua.castShadow = false;
     grupo.add(agua);
     mat.techo = agua.material;
+    // malla verde alrededor del deck
+    const cx0 = c.reduce((s, p) => s + p[0], 0) / c.length, cz0 = c.reduce((s, p) => s + p[1], 0) / c.length;
+    const fuera = (p, d) => { const dx = p[0] - cx0, dz = p[1] - cz0, n = Math.hypot(dx, dz) || 1; return [p[0] + (dx / n) * d, p[1] + (dz / n) * d]; };
+    const mallaV = new THREE.MeshLambertMaterial({ color: 0x1f4f3a, transparent: true, opacity: 0.45, side: THREE.DoubleSide, depthWrite: false });
+    const posteV = new THREE.MeshLambertMaterial({ color: 0x1d4630 });
+    for (let i = 0; i < c.length; i++) {
+      const a = fuera(c[i], 8.2), b = fuera(c[(i + 1) % c.length], 8.2), L = Math.hypot(b[0] - a[0], b[1] - a[1]);
+      const m = new THREE.Mesh(new THREE.PlaneGeometry(L, 2), mallaV); m.position.set((a[0] + b[0]) / 2, 1, (a[1] + b[1]) / 2); m.rotation.y = Math.atan2(-(b[1] - a[1]), b[0] - a[0]); grupo.add(m);
+      for (let d = 0; d <= L; d += 2.5) { const p = new THREE.Mesh(new THREE.BoxGeometry(0.1, 2.1, 0.1), posteV); p.position.set(a[0] + ((b[0] - a[0]) * d) / L, 1.05, a[1] + ((b[1] - a[1]) * d) / L); grupo.add(p); }
+    }
+    // vestidores y toldo, a lo largo del lado largo de la pileta que da al bosque (este)
+    let lado = null;
+    for (let i = 0; i < c.length; i++) {
+      const a = c[i], b = c[(i + 1) % c.length], L = Math.hypot(b[0] - a[0], b[1] - a[1]);
+      const mx = (a[0] + b[0]) / 2, mz = (a[1] + b[1]) / 2;
+      if (!lado || L > lado.L + 1 || (Math.abs(L - lado.L) < 1 && mx > lado.mx)) lado = { a, b, L, mx, mz };
+    }
+    const ux = (lado.b[0] - lado.a[0]) / lado.L, uz = (lado.b[1] - lado.a[1]) / lado.L;
+    let nx = -uz, nz = ux; if (nx * (lado.mx - cx0) + nz * (lado.mz - cz0) < 0) { nx = -nx; nz = -nz; }
+    const ang = Math.atan2(-uz, ux);
+    const blancoV = new THREE.MeshStandardMaterial({ color: 0xf5f5f2, roughness: 0.85 });
+    const grisV = new THREE.MeshStandardMaterial({ color: 0xa8b0b8, roughness: 0.85 });
+    const laminaV = new THREE.MeshStandardMaterial({ color: 0xd6dade, roughness: 0.5, metalness: 0.3, side: THREE.DoubleSide });
+    const enLado = (t, d, y) => [lado.mx + ux * t + nx * d, y, lado.mz + uz * t + nz * d];
+    for (const [t, largo] of [[-7, 7], [2.5, 10]]) {
+      const caseta = new THREE.Group();
+      const zocalo = new THREE.Mesh(new THREE.BoxGeometry(largo, 1.8, 4), grisV); zocalo.position.y = 0.9; caseta.add(zocalo);
+      const muro = new THREE.Mesh(new THREE.BoxGeometry(largo, 1.4, 4), blancoV); muro.position.y = 2.5; caseta.add(muro);
+      const techo = new THREE.Mesh(new THREE.BoxGeometry(largo + 1.2, 0.12, 5.6), laminaV); techo.position.set(0, 3.45, -0.3); techo.rotation.x = 0.16; caseta.add(techo);
+      caseta.position.set(...enLado(t, 15, 0)); caseta.rotation.y = ang; grupo.add(caseta);
+    }
+    const toldo = new THREE.Mesh(new THREE.CylinderGeometry(2.4, 2.4, 6, 14, 1, true, -Math.PI / 2, Math.PI), new THREE.MeshStandardMaterial({ color: 0x8c8f88, roughness: 0.7, side: THREE.DoubleSide }));
+    toldo.rotation.set(0, ang, Math.PI / 2); toldo.position.set(...enLado(13, 15, 2.2)); grupo.add(toldo);
+    grupo.traverse((o) => { if (o.isMesh && o.material !== mallaV) { o.castShadow = !liviano; o.receiveShadow = true; } });
   } else {
     const pisos = Math.max(e.pisos, 1), altoPiso = e.alto / pisos;
     for (const vol of e.volumenes) {
@@ -253,7 +290,28 @@ for (const e of datos.campus.edificios) {
       // ventanas: celosías grises (edificios nuevos) o ventanales de vidrio (biblioteca)
       const ventanal = estilo.ventanas === "vidrio" || estilo.ventanas === "vidrio_verde";
       const cristal = estilo.ventanas === "vidrio_verde" ? vidrioVerde : vidrio;
-      if (e.id !== 6) for (let p = 0; p < pisos; p++) grupo.add(prisma(vol.contorno, altoPiso * (ventanal ? 0.4 : 0.3), altoPiso * p + altoPiso * (ventanal ? 0.4 : 0.36), ventanal ? cristal : celosia, 0.05));
+      if (estilo.franja) grupo.add(prisma(vol.contorno, 0.7, altoPiso * 0.55, new THREE.MeshStandardMaterial({ color: estilo.franja, roughness: 0.8 }), 0.04));
+      if (estilo.porton) {   // portón de lámina oscura en la fachada que mira a la calle
+        const f = fachadaSur(vol.contorno), ang = Math.atan2(-(f.b[1] - f.a[1]), f.b[0] - f.a[0]);
+        const p = new THREE.Mesh(new THREE.BoxGeometry(f.largo * 0.45, altoPiso * 0.78, 0.12), new THREE.MeshStandardMaterial({ color: estilo.porton, roughness: 0.6 }));
+        p.position.set((f.a[0] + f.b[0]) / 2 + f.nx * 0.08, altoPiso * 0.39, (f.a[1] + f.b[1]) / 2 + f.nz * 0.08); p.rotation.y = ang; grupo.add(p);
+      }
+      if (estilo.corredor) {   // viga perimetral de concreto sobre columnas: corredor abierto alrededor de la nave
+        const concreto = new THREE.MeshStandardMaterial({ color: 0xa9aaa6, roughness: 0.95 });
+        grupo.add(prisma(vol.contorno, 1.8, e.alto - 1.8, concreto, 3.4));
+        const c = vol.contorno;
+        for (let i = 0; i < c.length; i++) {
+          const a = c[i], b = c[(i + 1) % c.length], L = Math.hypot(b[0] - a[0], b[1] - a[1]);
+          const cx = c.reduce((s, q) => s + q[0], 0) / c.length, cz = c.reduce((s, q) => s + q[1], 0) / c.length;
+          for (let k = 0; k <= Math.round(L / 7); k++) {
+            const t = k / Math.round(L / 7), x = a[0] + (b[0] - a[0]) * t, z = a[1] + (b[1] - a[1]) * t;
+            const d = Math.hypot(x - cx, z - cz) || 1, s = (d + 3.2) / d;
+            const col = new THREE.Mesh(new THREE.BoxGeometry(0.6, e.alto - 1.8, 0.6), concreto);
+            col.position.set(cx + (x - cx) * s, (e.alto - 1.8) / 2, cz + (z - cz) * s); col.castShadow = !liviano; grupo.add(col);
+          }
+        }
+      }
+      if (e.id !== 6 && estilo.ventanas !== "ninguna") for (let p = 0; p < pisos; p++) grupo.add(prisma(vol.contorno, altoPiso * (ventanal ? 0.4 : 0.3), altoPiso * p + altoPiso * (ventanal ? 0.4 : 0.36), ventanal ? cristal : celosia, 0.05));
     }
     if (e.techo.length) grupo.add(techo(e.techo, mat.techo));
     if (estilo.forma_techo === "plano") for (const vol of e.volumenes) {   // losa plana volada
@@ -268,7 +326,19 @@ for (const e of datos.campus.edificios) {
       grupo.children.forEach((h) => { h.position.y += t; });
       const tierra = prisma(c, t, 0, new THREE.MeshLambertMaterial({ color: 0x7fae5a }), 4.5);
       tierra.castShadow = false; grupo.add(tierra);
-      const f = fachadaSur(c), dx = (f.b[0] - f.a[0]) / f.largo, dz = (f.b[1] - f.a[1]) / f.largo;
+      const f = fachadaSur(c);
+      if (estilo.frente) {   // la escalera mira a la calle: se usa la fachada que da hacia ella
+        let mejor = -2;
+        for (let i = 0; i < c.length; i++) {
+          const p = c[i], q = c[(i + 1) % c.length], L = Math.hypot(q[0] - p[0], q[1] - p[1]);
+          let nx = (q[1] - p[1]) / L, nz = -(q[0] - p[0]) / L;
+          const mx = (p[0] + q[0]) / 2 - e.centro[0], mz = (p[1] + q[1]) / 2 - e.centro[1];
+          if (nx * mx + nz * mz < 0) { nx = -nx; nz = -nz; }
+          const puntaje = nx * estilo.frente[0] + nz * estilo.frente[1];
+          if (puntaje > mejor) { mejor = puntaje; Object.assign(f, { a: p, b: q, largo: L, nx, nz }); }
+        }
+      }
+      const dx = (f.b[0] - f.a[0]) / f.largo, dz = (f.b[1] - f.a[1]) / f.largo;
       const ang = Math.atan2(-dz, dx), largoEsc = Math.hypot(t, 5);
       const escalera = new THREE.Mesh(new THREE.BoxGeometry(2.4, 0.3, largoEsc), new THREE.MeshStandardMaterial({ color: 0xbdbdb8 }));
       const mx = (f.a[0] + f.b[0]) / 2 + f.nx * 6.5, mz = (f.a[1] + f.b[1]) / 2 + f.nz * 6.5;

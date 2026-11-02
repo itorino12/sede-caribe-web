@@ -62,8 +62,10 @@
   "id": 10,
   "zona": 2,
   "nombre": "Piscina",
-  "texto": "Piscina de la Sede.",
-  "enlace": "unidades/piscina.html"
+  "texto": "Piscina de la Sede, con deck de granito lavado y cerca de malla verde. Detrás están los vestidores, y al lado el parqueo de bicicletas y motos.",
+  "enlace": "unidades/piscina.html",
+  "fotos": "piscina-1.jpg, piscina-2.jpg, piscina-3.jpg, piscina-4.jpg, piscina-5.jpg",
+  "fotos_alt": "La piscina detrás de la malla verde, con los vestidores al fondo y el parqueo de bicicletas y motos de adoquín al frente|La piscina vista desde el portón, con la escalerilla, el deck de granito y el edificio de oficinas al fondo|Acera con guía táctil hacia la piscina, con el toldo en arco y mesas de concreto azul a un lado|Los vestidores de la piscina: casetas blancas con zócalo gris, celosías y techo de una agua, junto a una mesa de concreto azul|Acera junto a los vestidores y la malla de la piscina, con los carretes de las corcheras"
  },
  {
   "id": 11,
@@ -94,14 +96,19 @@
   "id": 14,
   "zona": 3,
   "nombre": "Gimnasio",
-  "texto": "Gimnasio de la Sede.",
-  "enlace": "unidades/gimnasio.html"
+  "texto": "Gimnasio multiuso de la Sede: nave techada para deportes, con sala de pesas y máquinas de ejercicio al aire libre en el costado.",
+  "enlace": "unidades/gimnasio.html",
+  "fotos": "gimnasio-1.jpg, gimnasio-2.jpg, gimnasio-3.jpg, gimnasio-4.jpg, gimnasio-5.jpg",
+  "fotos_alt": "Esquina del gimnasio con el techo de lámina verde, la viga de concreto sobre columnas y la sala de pesas abierta|Fachada del gimnasio hacia la calle, con el rótulo UCR Sede del Caribe, portones blancos y franja celeste|El acceso al gimnasio junto al edificio vecino, con el rótulo de la Sede y el corredor techado|Costado del gimnasio con las máquinas de ejercicio al aire libre y dos palmeras|Costado del gimnasio con máquinas de ejercicio y la sala de pesas en la esquina"
  },
  {
   "id": 15,
   "zona": 3,
-  "nombre": "Etapa Básica de Música",
-  "texto": "Edificio de la Etapa Básica de Música."
+  "nombre": "Bodega de Acción Social",
+  "texto": "Bodega de la Coordinación de Acción Social, junto a las mesas de concreto.",
+  "enlace": "unidades/accion-social.html",
+  "fotos": "bodega-accion-social.jpg",
+  "fotos_alt": "Bodega de Acción Social: casita blanca con techo a dos aguas, portón negro de dos hojas con el rótulo y una mesa de concreto azul al lado"
  },
  {
   "id": 16,
