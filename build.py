@@ -80,6 +80,7 @@ def md(texto):
                        attributes={"a": {"href", "title"}, "img": {"src", "alt"}, "th": {"scope"}},
                        url_schemes={"http", "https", "mailto", "tel"}, link_rel="noopener")
     # Los documentos de Google exportan el título como # o ##; el título ya lo pone la plantilla
+    limpio = re.sub(r"<(h[2-4])><strong>(.*?)</strong></\1>", r"<\1>\2</\1>", limpio)  # Drive exporta títulos en negrita
     return re.sub(r"<h1>.*?</h1>", "", limpio, count=1)
 
 
