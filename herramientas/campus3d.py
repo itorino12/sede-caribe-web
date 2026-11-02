@@ -41,7 +41,9 @@ EDIFICIOS = [
     {"id": 3, "rect": (728, 1777, 105, 50, 121), "pisos": 1},
     {"id": 4, "hex": (692, 1541, 36), "pisos": 1},
     {"id": 5, "rect": (1011, 1306, 100, 100, 34), "pisos": 1, "alto": 7.5},
-    {"id": 6, "rect": (1049, 1131, 97, 20, -3), "pisos": 1, "alto": 3.6},
+    # Entrada (fotos de la portada): pórtico blanco de losa delgada, caseta, rótulo de concreto y astas
+    {"id": 6, "rect": (1049, 1131, 97, 20, -3), "pisos": 1, "alto": 3.4,
+     "estilo": {"forma_techo": "plano", "techo": "#f4f5f6", "entrada": True}},
     {"id": 7, "rect": (1252, 1322, 180, 55, 5.5), "pisos": 1},
     {"id": 8, "rect": (1259, 1246, 180, 55, 5.5), "pisos": 1},
     {"id": 9, "rect": (1263, 1165, 180, 55, 5.5), "pisos": 1},

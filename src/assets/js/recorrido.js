@@ -139,6 +139,73 @@ function galeria(grupo, vol, alto, pisos) {
   esc.rotation.set(0, angulo, Math.atan2(alto / pisos, 6));
   esc.castShadow = true; grupo.add(esc);
 }
+// Entrada principal (fotos): rótulo de concreto con el nombre, cuatro astas con banderas y el pórtico
+// inclinado sobre el carril, con columnas en V. El rótulo mira a la ruta 32 (al norte).
+function texturaRotulo() {
+  const c = document.createElement("canvas"); c.width = 1024; c.height = 470;
+  const x = c.getContext("2d");
+  x.fillStyle = "#a3a8ad"; x.fillRect(0, 0, 1024, 470);
+  x.strokeStyle = "#c9cdd1"; x.lineWidth = 14; x.strokeRect(36, 36, 952, 398);
+  x.fillStyle = "#eef0f2"; x.textAlign = "center";
+  x.font = "600 64px 'Source Sans 3', Arial, sans-serif"; x.fillText("UNIVERSIDAD DE COSTA RICA", 512, 190);
+  x.font = "600 92px 'Source Sans 3', Arial, sans-serif"; x.fillText("Sede del Caribe", 512, 320);
+  const t = new THREE.CanvasTexture(c); t.colorSpace = THREE.SRGBColorSpace; t.anisotropy = 4;
+  return t;
+}
+function bandera(franjas, verticales = false) {
+  const c = document.createElement("canvas"); c.width = 96; c.height = 64;
+  const x = c.getContext("2d"), total = franjas.reduce((s, f) => s + f[1], 0);
+  let pos = 0;
+  for (const [color, peso] of franjas) {
+    x.fillStyle = color;
+    const tam = (peso / total) * (verticales ? 96 : 64);
+    verticales ? x.fillRect(pos, 0, tam + 1, 64) : x.fillRect(0, pos, 96, tam + 1);
+    pos += tam;
+  }
+  const t = new THREE.CanvasTexture(c); t.colorSpace = THREE.SRGBColorSpace;
+  return new THREE.MeshLambertMaterial({ map: t, side: THREE.DoubleSide });
+}
+function entrada(grupo, e) {
+  const k = e.volumenes[0].contorno, largo = Math.hypot(k[1][0] - k[0][0], k[1][1] - k[0][1]);
+  let dx = (k[1][0] - k[0][0]) / largo, dz = (k[1][1] - k[0][1]) / largo;
+  if (dx < 0) { dx = -dx; dz = -dz; }                      // d apunta al este
+  let nx = dz, nz = -dx;                                    // n apunta al norte (hacia la carretera)
+  if (nz > 0) { nx = -nx; nz = -nz; }
+  const [cx, cz] = e.centro, giro = Math.atan2(nx, nz);
+  const en = (a, b, y = 0) => new THREE.Vector3(cx + dx * a + nx * b, y, cz + dz * a + nz * b);
+  // rótulo de concreto, con el nombre en la cara que mira a la carretera
+  const gris = new THREE.MeshStandardMaterial({ color: 0xa3a8ad, roughness: 0.9 });
+  const cara = new THREE.MeshStandardMaterial({ map: texturaRotulo(), roughness: 0.9 });
+  const rotulo = new THREE.Mesh(new THREE.BoxGeometry(7.2, 3.3, 0.7), [gris, gris, gris, gris, cara, gris]);
+  rotulo.position.copy(en(3.5, 8, 2.05)); rotulo.rotation.y = giro; rotulo.castShadow = true; grupo.add(rotulo);
+  const base = new THREE.Mesh(new THREE.BoxGeometry(7.6, 0.4, 1.1), gris);
+  base.position.copy(en(3.5, 8, 0.2)); base.rotation.y = giro; grupo.add(base);
+  // cuatro astas detrás del rótulo; la cuarta, sin bandera, como en la foto
+  const asta = new THREE.MeshStandardMaterial({ color: 0xd9dde1, metalness: 0.6, roughness: 0.3 });
+  const telas = [
+    bandera([["#002b7f", 1], ["#ffffff", 1], ["#ce1126", 2], ["#ffffff", 1], ["#002b7f", 1]]),
+    bandera([["#cfe8f7", 1], ["#ffffff", 1], ["#cfe8f7", 1]]),
+    bandera([["#2e8b3e", 1], ["#ffffff", 1], ["#1f6fb5", 1]]),
+  ];
+  for (let i = 0; i < 4; i++) {
+    const p = en(1.6 + i * 1.5, 5.6);
+    const palo = new THREE.Mesh(new THREE.CylinderGeometry(0.07, 0.09, 10, 6), asta);
+    palo.position.set(p.x, 5, p.z); palo.castShadow = true; grupo.add(palo);
+    if (!telas[i]) continue;
+    const tela = new THREE.Mesh(new THREE.PlaneGeometry(2.1, 1.4), telas[i]);
+    tela.position.set(p.x + dx * 1.1, 9.1, p.z + dz * 1.1); tela.rotation.y = Math.atan2(-dz, dx); tela.castShadow = true; grupo.add(tela);
+  }
+  // pórtico inclinado sobre el carril de entrada, en el extremo este, con columnas en V
+  const blanco = new THREE.MeshStandardMaterial({ color: 0xf4f5f6, roughness: 0.6 });
+  const ala = new THREE.Mesh(new THREE.BoxGeometry(11, 0.3, 9), blanco);
+  ala.position.copy(en(largo / 2 + 4.5, 0.5, 4.9)); ala.rotation.set(0, Math.atan2(-dz, dx), 0); ala.rotateX(-0.09); ala.castShadow = true; grupo.add(ala);
+  const acero = new THREE.MeshStandardMaterial({ color: 0xb9bec3, metalness: 0.5, roughness: 0.4 });
+  for (const [a, b, inclina] of [[largo / 2 + 1.5, 3, 0.18], [largo / 2 + 1.5, 3, -0.18], [largo / 2 + 7.5, -2, 0.18], [largo / 2 + 7.5, -2, -0.18]]) {
+    const col = new THREE.Mesh(new THREE.CylinderGeometry(0.12, 0.12, 5, 6), acero);
+    col.position.copy(en(a, b, 2.5)); col.rotation.set(0, Math.atan2(-dz, dx), inclina); col.castShadow = true; grupo.add(col);
+  }
+}
+
 // Parasoles curvos de lámina blanca frente a la fachada (edificio 13): paneles altos que se arquean hacia afuera
 function parasoles(grupo, vol, alto) {
   const f = fachadaSur(vol.contorno), dx = (f.b[0] - f.a[0]) / f.largo, dz = (f.b[1] - f.a[1]) / f.largo;
@@ -192,6 +259,7 @@ for (const e of datos.campus.edificios) {
     }
     if (estilo.galeria) e.volumenes.forEach((vol) => galeria(grupo, vol, e.alto, Math.max(e.pisos, 1)));
     if (estilo.parasoles) e.volumenes.forEach((vol) => parasoles(grupo, vol, e.alto));
+    if (estilo.entrada) entrada(grupo, e);
     if (estilo.cupula) {   // torrecita de ventilación sobre la cumbrera
       const torre = new THREE.Mesh(new THREE.BoxGeometry(2.6, 1.6, 2.6), celeste);
       torre.position.set(e.centro[0], e.cumbre + 0.5, e.centro[1]);

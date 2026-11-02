@@ -35,7 +35,9 @@
   "id": 6,
   "zona": 2,
   "nombre": "Entrada principal",
-  "texto": "Acceso principal al campus, junto a la ruta 32."
+  "texto": "Acceso principal al campus, junto a la ruta 32.",
+  "fotos": "entrada.jpg, entrada-noche.jpg",
+  "fotos_alt": "La entrada principal de día: pórtico blanco, rótulo de concreto con el nombre de la Universidad de Costa Rica, Sede del Caribe, y cuatro astas con banderas|La entrada principal de noche, con el rótulo iluminado"
  },
  {
   "id": 7,
