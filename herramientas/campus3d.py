@@ -37,6 +37,8 @@ PENDIENTE = 0.32         # altura del techo por metro de medio ancho (cuatro agu
 # Elementos que no salen en el croquis, ubicados con Google Maps y las fotos (píxeles del croquis)
 PICNIC = {"centro": (1688, 1598), "radio": 64}      # área de picnic y juegos frente al CIUB y las residencias
 PUENTE = {"centro": (1540, 1478), "largo": 46}      # puente de la calle interna sobre la quebrada, al sur del gimnasio
+# parqueo asfaltado al costado de la piscina que da al gimnasio (fotos), entre la malla y la calle
+PARQUEO = {"rect": (1503, 1300, 120, 46, 105)}
 PLANTA = {"centro": (1486, 1566), "giro": 74}        # planta de tratamiento, al oeste de la calle, pasando el puente
 
 # Edificios: número del croquis, forma y pisos. rect = (cx, cy, largo, ancho, giro en grados, horario)
@@ -66,7 +68,7 @@ EDIFICIOS = [
     # Gimnasio (fotos): nave alta con techo de cuatro aguas de lámina verde y linternilla de ventilación,
     # viga perimetral de concreto sobre columnas que forma un corredor abierto, paredes blancas con franja celeste
     {"id": 14, "rect": (1689, 1292, 151, 196, 12.5), "pisos": 1, "alto": 9, "linterna": 0.6,
-     "estilo": {"techo": "#8db38a", "corredor": True, "franja": "#4fa8e8"}},
+     "estilo": {"techo": "#8db38a", "corredor": True, "franja": "#4fa8e8", "rotulo": [-1, 0]}},
     # Bodega de Acción Social (foto): casita blanca de techo a dos aguas gris oscuro con alero blanco y portón negro
     {"id": 15, "rect": (1770, 1450, 59, 41, 0), "pisos": 1, "alto": 3.4,
      "estilo": {"forma_techo": "dos_aguas", "techo": "#4a5056", "ventanas": "ninguna", "porton": "#2b2f33"}},
@@ -340,6 +342,19 @@ def main(pdf, sat=None):
     pintar(cv2.GaussianBlur(picnic, (0, 0), 6), (166, 208, 120))
     # dentro de la U todo está asfaltado (fotos), también el camino a la pista; cordón de concreto claro
     pintar(cv2.bitwise_or(calles, acceso), (84, 88, 94), borde=(214, 212, 204))
+    # parqueo: asfalto con cordón de concreto y líneas blancas de los espacios
+    parqueo = np.zeros_like(calles)
+    cv2.fillPoly(parqueo, [np.array(rect_contorno(*PARQUEO["rect"]), np.int32)], 255)
+    pintar(parqueo, (78, 82, 88), borde=(200, 198, 190))
+    rayas = np.zeros_like(calles)
+    pcx, pcy, pl, pa, pg = PARQUEO["rect"]
+    cg, sg = math.cos(math.radians(pg)), math.sin(math.radians(pg))
+    for k in range(-5, 6):
+        u = k * pl / 11
+        x0r, y0r = pcx + cg * u - sg * (-pa / 2), pcy + sg * u + cg * (-pa / 2)
+        x1r, y1r = pcx + cg * u - sg * (-pa / 2 + pa * 0.42), pcy + sg * u + cg * (-pa / 2 + pa * 0.42)
+        cv2.line(rayas, (int(x0r), int(y0r)), (int(x1r), int(y1r)), 255, 2)
+    pintar(rayas, (236, 236, 232))
     pintar(carretera, (112, 116, 122), borde=(88, 92, 98))
     # sombra suave bajo cada edificio (contacto con el suelo)
     sombra = np.zeros((y1 - y0, x1 - x0), np.uint8)
@@ -372,6 +387,7 @@ def main(pdf, sat=None):
     cv2.circle(lejos_edificios, PICNIC["centro"], PICNIC["radio"] + 18, 1, -1)
     cv2.circle(lejos_edificios, PUENTE["centro"], 40, 1, -1)
     cv2.circle(lejos_edificios, PLANTA["centro"], 115, 1, -1)
+    cv2.fillPoly(lejos_edificios, [np.array(rect_contorno(*PARQUEO["rect"]), np.int32)], 1)
     satelital = arboles_satelitales(sat, rng, ocupado | lejos_edificios) if sat else None
     for i in range(1, n):
         area = st[i, 4]
@@ -492,6 +508,8 @@ def main(pdf, sat=None):
         "porton_pista": porton,
         "porton_residencias": porton_res,
         "picnic": {"centro": a_metros(*PICNIC["centro"]), "radio": round(PICNIC["radio"] * ESCALA, 2)},
+        "parqueo": {"centro": a_metros(*PARQUEO["rect"][:2]), "largo": round(PARQUEO["rect"][2] * ESCALA, 2),
+                    "ancho": round(PARQUEO["rect"][3] * ESCALA, 2), "giro": round(math.radians(PARQUEO["rect"][4]), 3)},
         "planta": {"centro": a_metros(*PLANTA["centro"]), "giro": round(math.radians(PLANTA["giro"]), 3)},
         "puente": {"centro": a_metros(*PUENTE["centro"]), "eje": [a_metros(x, y) for x, y in PUENTE["eje"]]},
         "pista": {"centro": a_metros(float(cx_pista), float(cy_pista))},

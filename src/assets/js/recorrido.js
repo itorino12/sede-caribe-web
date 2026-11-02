@@ -103,7 +103,7 @@ const acero = new THREE.MeshStandardMaterial({ color: 0x4a5158, roughness: 0.6, 
 const parasol = new THREE.MeshStandardMaterial({ color: 0xf2f3f4, roughness: 0.5, side: THREE.DoubleSide });
 
 // Fachada principal de un volumen: el lado largo que mira al sur (hacia donde se ve la maqueta)
-function fachadaSur(contorno) {
+function fachadaSur(contorno, frente = [0, 1]) {   // frente: hacia dónde debe mirar la fachada (por defecto, al sur)
   const cx = contorno.reduce((s, p) => s + p[0], 0) / contorno.length, cz = contorno.reduce((s, p) => s + p[1], 0) / contorno.length;
   let mejor = null;
   for (let i = 0; i < contorno.length; i++) {
@@ -111,7 +111,7 @@ function fachadaSur(contorno) {
     const mx = (a[0] + b[0]) / 2, mz = (a[1] + b[1]) / 2, largo = Math.hypot(b[0] - a[0], b[1] - a[1]);
     let nx = -(b[1] - a[1]) / largo, nz = (b[0] - a[0]) / largo;
     if (nx * (mx - cx) + nz * (mz - cz) < 0) { nx = -nx; nz = -nz; }
-    const puntaje = largo * (0.6 + nz);
+    const puntaje = largo * (0.6 + nx * frente[0] + nz * frente[1]);
     if (!mejor || puntaje > mejor.puntaje) mejor = { a, b, largo, nx, nz, puntaje };
   }
   return mejor;
@@ -253,29 +253,51 @@ for (const e of datos.campus.edificios) {
       const m = new THREE.Mesh(new THREE.PlaneGeometry(L, 2), mallaV); m.position.set((a[0] + b[0]) / 2, 1, (a[1] + b[1]) / 2); m.rotation.y = Math.atan2(-(b[1] - a[1]), b[0] - a[0]); grupo.add(m);
       for (let d = 0; d <= L; d += 2.5) { const p = new THREE.Mesh(new THREE.BoxGeometry(0.1, 2.1, 0.1), posteV); p.position.set(a[0] + ((b[0] - a[0]) * d) / L, 1.05, a[1] + ((b[1] - a[1]) * d) / L); grupo.add(p); }
     }
-    // vestidores y toldo, a lo largo del lado largo de la pileta que da al bosque (este)
-    let lado = null;
-    for (let i = 0; i < c.length; i++) {
-      const a = c[i], b = c[(i + 1) % c.length], L = Math.hypot(b[0] - a[0], b[1] - a[1]);
-      const mx = (a[0] + b[0]) / 2, mz = (a[1] + b[1]) / 2;
-      if (!lado || L > lado.L + 1 || (Math.abs(L - lado.L) < 1 && mx > lado.mx)) lado = { a, b, L, mx, mz };
-    }
-    const ux = (lado.b[0] - lado.a[0]) / lado.L, uz = (lado.b[1] - lado.a[1]) / lado.L;
-    let nx = -uz, nz = ux; if (nx * (lado.mx - cx0) + nz * (lado.mz - cz0) < 0) { nx = -nx; nz = -nz; }
-    const ang = Math.atan2(-uz, ux);
+    // lados de la pileta según hacia dónde miran: el sur da a la quebrada, el norte a la calle de la biblioteca
+    const ladoHacia = (sentido) => {
+      let mejor = null;
+      for (let i = 0; i < c.length; i++) {
+        const a = c[i], b = c[(i + 1) % c.length], L = Math.hypot(b[0] - a[0], b[1] - a[1]);
+        const mx = (a[0] + b[0]) / 2, mz = (a[1] + b[1]) / 2;
+        let nx = -(b[1] - a[1]) / L, nz = (b[0] - a[0]) / L;
+        if (nx * (mx - cx0) + nz * (mz - cz0) < 0) { nx = -nx; nz = -nz; }
+        const puntaje = nz * sentido;
+        if (!mejor || puntaje > mejor.puntaje) mejor = { mx, mz, ux: (b[0] - a[0]) / L, uz: (b[1] - a[1]) / L, nx, nz, L, puntaje };
+      }
+      mejor.en = (t, d, y) => [mejor.mx + mejor.ux * t + mejor.nx * d, y, mejor.mz + mejor.uz * t + mejor.nz * d];
+      mejor.ang = Math.atan2(-mejor.uz, mejor.ux);
+      return mejor;
+    };
+    // vestidores y toldo en arco: detrás de la piscina, del lado de la quebrada (sur)
+    const sur = ladoHacia(1);
     const blancoV = new THREE.MeshStandardMaterial({ color: 0xf5f5f2, roughness: 0.85 });
     const grisV = new THREE.MeshStandardMaterial({ color: 0xa8b0b8, roughness: 0.85 });
     const laminaV = new THREE.MeshStandardMaterial({ color: 0xd6dade, roughness: 0.5, metalness: 0.3, side: THREE.DoubleSide });
-    const enLado = (t, d, y) => [lado.mx + ux * t + nx * d, y, lado.mz + uz * t + nz * d];
-    for (const [t, largo] of [[-7, 7], [2.5, 10]]) {
+    for (const [t, largo] of [[-6, 7], [3.5, 10]]) {
       const caseta = new THREE.Group();
       const zocalo = new THREE.Mesh(new THREE.BoxGeometry(largo, 1.8, 4), grisV); zocalo.position.y = 0.9; caseta.add(zocalo);
       const muro = new THREE.Mesh(new THREE.BoxGeometry(largo, 1.4, 4), blancoV); muro.position.y = 2.5; caseta.add(muro);
-      const techo = new THREE.Mesh(new THREE.BoxGeometry(largo + 1.2, 0.12, 5.6), laminaV); techo.position.set(0, 3.45, -0.3); techo.rotation.x = 0.16; caseta.add(techo);
-      caseta.position.set(...enLado(t, 15, 0)); caseta.rotation.y = ang; grupo.add(caseta);
+      const techo = new THREE.Mesh(new THREE.BoxGeometry(largo + 1.2, 0.12, 5.6), laminaV); techo.position.set(0, 3.45, 0.3); techo.rotation.x = -0.16; caseta.add(techo);
+      caseta.position.set(...sur.en(t, 12, 0)); caseta.rotation.y = sur.ang; grupo.add(caseta);
     }
     const toldo = new THREE.Mesh(new THREE.CylinderGeometry(2.4, 2.4, 6, 14, 1, true, -Math.PI / 2, Math.PI), new THREE.MeshStandardMaterial({ color: 0x8c8f88, roughness: 0.7, side: THREE.DoubleSide }));
-    toldo.rotation.set(0, ang, Math.PI / 2); toldo.position.set(...enLado(13, 15, 2.2)); grupo.add(toldo);
+    toldo.rotation.set(0, sur.ang, Math.PI / 2); toldo.position.set(...sur.en(-13, 11, 2.2)); grupo.add(toldo);
+    // parqueo de bicicletas y motos: adoquín rojizo pegado a la calle, en la cara que mira a la biblioteca (norte)
+    const norte = ladoHacia(-1);
+    const adoquin = new THREE.Mesh(new THREE.BoxGeometry(16, 0.08, 6), new THREE.MeshStandardMaterial({ color: 0x8e5a4c, roughness: 0.95 }));
+    adoquin.position.set(...norte.en(0, 12.5, 0.05)); adoquin.rotation.y = norte.ang; grupo.add(adoquin);
+    const inox = new THREE.MeshStandardMaterial({ color: 0xd9dde1, metalness: 0.7, roughness: 0.25 });
+    for (let k = 0; k < 4; k++) {
+      const u = new THREE.Mesh(new THREE.TorusGeometry(0.4, 0.04, 6, 12, Math.PI), inox);
+      u.position.set(...norte.en(-6.5 + k * 1.6, 11.5, 0.45)); u.rotation.y = norte.ang + Math.PI / 2; grupo.add(u);
+    }
+    const tonos = [0x1f4fa8, 0x2a2d31, 0x5b2a6e, 0xb3262e, 0xe8e8e8];
+    for (let k = 0; k < 5; k++) {
+      const moto = new THREE.Group(), m = new THREE.MeshStandardMaterial({ color: tonos[k], roughness: 0.4, metalness: 0.3 });
+      const cuerpo = new THREE.Mesh(new THREE.BoxGeometry(0.4, 0.55, 1.9), m); cuerpo.position.y = 0.6; moto.add(cuerpo);
+      for (const z of [-0.75, 0.75]) { const r = new THREE.Mesh(new THREE.CylinderGeometry(0.32, 0.32, 0.15, 10), new THREE.MeshStandardMaterial({ color: 0x1a1a1a })); r.rotation.z = Math.PI / 2; r.position.set(0, 0.32, z); moto.add(r); }
+      moto.position.set(...norte.en(1 + k * 1.4, 12.8, 0)); moto.rotation.y = norte.ang + Math.PI / 2; grupo.add(moto);
+    }
     grupo.traverse((o) => { if (o.isMesh && o.material !== mallaV) { o.castShadow = !liviano; o.receiveShadow = true; } });
   } else {
     const pisos = Math.max(e.pisos, 1), altoPiso = e.alto / pisos;
@@ -290,11 +312,26 @@ for (const e of datos.campus.edificios) {
       // ventanas: celosías grises (edificios nuevos) o ventanales de vidrio (biblioteca)
       const ventanal = estilo.ventanas === "vidrio" || estilo.ventanas === "vidrio_verde";
       const cristal = estilo.ventanas === "vidrio_verde" ? vidrioVerde : vidrio;
-      if (estilo.franja) grupo.add(prisma(vol.contorno, 0.7, altoPiso * 0.55, new THREE.MeshStandardMaterial({ color: estilo.franja, roughness: 0.8 }), 0.04));
+      if (estilo.franja) grupo.add(prisma(vol.contorno, 0.6, altoPiso * 0.27, new THREE.MeshStandardMaterial({ color: estilo.franja, roughness: 0.8 }), 0.06));
       if (estilo.porton) {   // portón de lámina oscura en la fachada que mira a la calle
         const f = fachadaSur(vol.contorno), ang = Math.atan2(-(f.b[1] - f.a[1]), f.b[0] - f.a[0]);
         const p = new THREE.Mesh(new THREE.BoxGeometry(f.largo * 0.45, altoPiso * 0.78, 0.12), new THREE.MeshStandardMaterial({ color: estilo.porton, roughness: 0.6 }));
         p.position.set((f.a[0] + f.b[0]) / 2 + f.nx * 0.08, altoPiso * 0.39, (f.a[1] + f.b[1]) / 2 + f.nz * 0.08); p.rotation.y = ang; grupo.add(p);
+      }
+      if (estilo.rotulo) {   // panel blanco con «UCR / Sede del Caribe» en celeste, bajo el corredor
+        const f = fachadaSur(vol.contorno, estilo.rotulo), ang = Math.atan2(f.nx, f.nz);
+        const cv = document.createElement("canvas"); cv.width = 512; cv.height = 320;
+        const x = cv.getContext("2d"); x.fillStyle = "#ffffff"; x.fillRect(0, 0, 512, 320);
+        x.strokeStyle = "#005da4"; x.lineWidth = 14; x.strokeRect(7, 7, 498, 306);
+        x.fillStyle = "#005da4"; x.textAlign = "center";
+        x.font = "600 120px 'Source Sans 3', Arial, sans-serif"; x.fillText("UCR", 256, 170);
+        x.fillRect(150, 192, 212, 6);
+        x.font = "600 46px 'Source Sans 3', Arial, sans-serif"; x.fillText("SEDE DEL CARIBE", 256, 262);
+        const tex = new THREE.CanvasTexture(cv); tex.colorSpace = THREE.SRGBColorSpace;
+        const panel = new THREE.Mesh(new THREE.PlaneGeometry(4.6, 2.9), new THREE.MeshBasicMaterial({ map: tex }));
+        const t = 0.12;   // cerca de la esquina, como en la foto
+        panel.position.set(f.a[0] + (f.b[0] - f.a[0]) * t + f.nx * 0.1, 1.35, f.a[1] + (f.b[1] - f.a[1]) * t + f.nz * 0.08);
+        panel.rotation.y = ang; grupo.add(panel);
       }
       if (estilo.corredor) {   // viga perimetral de concreto sobre columnas: corredor abierto alrededor de la nave
         const concreto = new THREE.MeshStandardMaterial({ color: 0xa9aaa6, roughness: 0.95 });
@@ -602,6 +639,35 @@ if (datos.campus.planta && lugares.get(22)) {
   g.traverse((o) => { o.userData.edificio = g; });
   escena.add(g);
   edificios.push(g);
+}
+
+// ---------- parqueo junto a la piscina (fotos): una fila de espacios con topes amarillos, postes de luz
+// verdes con brazo doble y algunos carros estacionados
+if (datos.campus.parqueo) {
+  const { centro: [cx, cz], largo, ancho, giro } = datos.campus.parqueo;
+  const g = new THREE.Group();
+  const verdePoste = new THREE.MeshStandardMaterial({ color: 0x2f6b45, roughness: 0.6 });
+  const amarilloTope = new THREE.MeshStandardMaterial({ color: 0xe6b800, roughness: 0.7 });
+  const colores = [0x1f2a44, 0xf0f0ee, 0xb9bcbf, 0x9b1b2a, 0x2a2d31, 0xf0f0ee, 0x1f2a44];
+  const espacios = 11, paso = largo / espacios;
+  const azar = (i) => { const v = Math.sin(i * 37.1) * 43758.5; return v - Math.floor(v); };
+  for (let k = 0; k < espacios; k++) {
+    const u = -largo / 2 + paso * (k + 0.5), v = -ancho / 2 + 2.6;
+    const tope = new THREE.Mesh(new THREE.BoxGeometry(1.6, 0.15, 0.25), amarilloTope); tope.position.set(u, 0.08, -ancho / 2 + 0.5); g.add(tope);
+    if (azar(k) < 0.35) continue;   // espacio libre
+    const carro = new THREE.Group(), mat = new THREE.MeshStandardMaterial({ color: colores[k % colores.length], roughness: 0.35, metalness: 0.4 });
+    const cuerpo = new THREE.Mesh(new THREE.BoxGeometry(1.8, 0.75, 4.3), mat); cuerpo.position.y = 0.55; carro.add(cuerpo);
+    const cabina = new THREE.Mesh(new THREE.BoxGeometry(1.6, 0.6, 2.3), new THREE.MeshStandardMaterial({ color: 0x27323c, roughness: 0.2, metalness: 0.5 })); cabina.position.set(0, 1.2, 0.2); carro.add(cabina);
+    carro.position.set(u, 0, v + 0.3); carro.castShadow = true; g.add(carro);
+  }
+  for (const u of [-largo / 2 + 3, -largo / 6, largo / 6, largo / 2 - 3]) {   // postes de luz verdes
+    const poste = new THREE.Mesh(new THREE.CylinderGeometry(0.12, 0.16, 8.5, 8), verdePoste); poste.position.set(u, 4.25, ancho / 2 - 1.2); g.add(poste);
+    const brazo = new THREE.Mesh(new THREE.BoxGeometry(2.4, 0.1, 0.1), verdePoste); brazo.position.set(u, 8.4, ancho / 2 - 1.2); g.add(brazo);
+  }
+  g.traverse((o) => { if (o.isMesh) o.castShadow = !liviano; });
+  g.position.set(cx, 0, cz);
+  g.rotation.y = -giro;   // el largo (x local) sigue el rumbo del parqueo
+  escena.add(g);
 }
 
 // ---------- árboles y palmeras (instancias: cientos de árboles en pocas llamadas de dibujo)
