@@ -176,5 +176,89 @@
   "texto": "Puente de la calle interna sobre la quebrada, con defensas amarillas y acera peatonal con baranda y guía táctil.",
   "fotos": "puente-1.jpg, puente-2.jpg, puente-3.jpg, puente-4.jpg",
   "fotos_alt": "El puente de la calle interna, con defensas amarillas y la acera peatonal con baranda, subiendo hacia el campus|El puente visto desde el paso de cebra, con la defensa amarilla y la baranda gris|El puente y la acera peatonal junto a la cerca verde, rodeados de bosque|La calle interna después del puente, con bambú a un lado y los edificios del campus al fondo"
+ },
+ {
+  "id": 24,
+  "zona": 1,
+  "nombre": "Baño Docencia",
+  "texto": "Servicios sanitarios del sector de Docencia."
+ },
+ {
+  "id": 25,
+  "zona": 1,
+  "nombre": "Parqueo frente a Docencia",
+  "texto": "Parqueo asfaltado frente a la Coordinación de Docencia, con entrada desde la calle interna."
+ },
+ {
+  "id": 26,
+  "zona": 2,
+  "nombre": "Camino techado de la entrada",
+  "texto": "Pasillo techado que baja desde la entrada principal junto a la calle interna; de él sale el pasillo que va a las aulas 8 a 17."
+ },
+ {
+  "id": 27,
+  "zona": 1,
+  "nombre": "Camino techado hacia Administración",
+  "texto": "Continúa el pasillo techado de la entrada: cruza la quebrada junto a la calle y llega hasta las oficinas administrativas."
+ },
+ {
+  "id": 28,
+  "zona": 2,
+  "nombre": "Paso de la alcantarilla del río",
+  "texto": "Punto donde la calle interna pasa sobre la quebrada por una alcantarilla. Ahí se cruza la calle para tomar el sendero hacia la explanada."
+ },
+ {
+  "id": 29,
+  "zona": 2,
+  "nombre": "Explanada",
+  "texto": "Zona verde abierta al noroeste del Miniauditorio, a la que se llega por un sendero techado desde la calle interna."
+ },
+ {
+  "id": 30,
+  "zona": 2,
+  "nombre": "Caseta del guarda",
+  "texto": "Caseta de vigilancia en la isla de zacate entre las calles, a la entrada del campus."
+ },
+ {
+  "id": 31,
+  "zona": 2,
+  "nombre": "Baño del Miniauditorio",
+  "texto": "Servicios sanitarios junto al sendero techado, al costado oeste del Miniauditorio."
+ },
+ {
+  "id": 32,
+  "zona": 3,
+  "nombre": "Puente peatonal",
+  "texto": "Puente para cruzar a pie la ruta 32 frente a la Sede, a la altura de los edificios nuevos."
+ },
+ {
+  "id": 33,
+  "zona": 2,
+  "nombre": "Parqueo de la piscina",
+  "texto": "Parqueo asfaltado e iluminado al costado de la piscina que da al gimnasio."
+ },
+ {
+  "id": 34,
+  "zona": 1,
+  "nombre": "Parqueo administrativo",
+  "texto": "Espacios de parqueo al final de la calle interna, frente a las oficinas administrativas."
+ },
+ {
+  "id": 35,
+  "zona": 1,
+  "nombre": "Entrada al Jardín Etnobotánico",
+  "texto": "Sendero que sale de la punta del edificio de aulas 1 a 7 y lleva a la entrada del Jardín Etnobotánico."
+ },
+ {
+  "id": 36,
+  "zona": 1,
+  "nombre": "Camino techado a la soda",
+  "texto": "Pasillo techado que va por el frente de las oficinas administrativas hasta la soda y comedor."
+ },
+ {
+  "id": 37,
+  "zona": 1,
+  "nombre": "Caseta de arriba",
+  "texto": "Caseta al oeste de las oficinas administrativas, junto al final de la calle interna."
  }
 ]

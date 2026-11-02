@@ -399,7 +399,30 @@ for (const e of datos.campus.edificios) {
       }
       if (e.id !== 6 && estilo.ventanas !== "ninguna") for (let p = 0; p < pisos; p++) grupo.add(prisma(vol.contorno, altoPiso * (ventanal ? 0.4 : 0.3), altoPiso * p + altoPiso * (ventanal ? 0.4 : 0.36), ventanal ? cristal : celosia, 0.05));
     }
+    if (estilo.banos) {   // los baños en el extremo del edificio: azulejo claro, bloques de ventilación y rótulo
+      const b = estilo.banos;
+      grupo.add(prisma(b.contorno, e.alto * 0.97, 0, new THREE.MeshStandardMaterial({ color: 0xe6edf0, roughness: 0.7 }), 0.08));
+      grupo.add(prisma(b.contorno, 0.7, e.alto * 0.6, new THREE.MeshStandardMaterial({ color: 0x8d949a, roughness: 0.9 }), 0.12));
+      const cv = document.createElement("canvas"); cv.width = 256; cv.height = 256;
+      const x = cv.getContext("2d"); x.fillStyle = "#005da4"; x.fillRect(0, 0, 256, 256); x.fillStyle = "#ffffff";
+      for (const [cx, falda] of [[78, false], [178, true]]) {   // pictogramas de hombre y mujer
+        x.beginPath(); x.arc(cx, 58, 20, 0, Math.PI * 2); x.fill();
+        if (falda) { x.beginPath(); x.moveTo(cx, 84); x.lineTo(cx + 34, 160); x.lineTo(cx - 34, 160); x.fill(); x.fillRect(cx - 16, 160, 10, 40); x.fillRect(cx + 6, 160, 10, 40); }
+        else { x.fillRect(cx - 22, 84, 44, 76); x.fillRect(cx - 20, 160, 16, 40); x.fillRect(cx + 4, 160, 16, 40); }
+      }
+      x.fillRect(126, 40, 4, 160);
+      x.font = "700 40px 'Source Sans 3', Arial, sans-serif"; x.textAlign = "center"; x.fillText("BAÑOS", 128, 242);
+      const tex = new THREE.CanvasTexture(cv); tex.colorSpace = THREE.SRGBColorSpace;
+      const rotulo = new THREE.Mesh(new THREE.PlaneGeometry(1.4, 1.4), new THREE.MeshBasicMaterial({ map: tex }));
+      rotulo.position.set(b.fin[0] + b.eje[0] * 0.2, 2.0, b.fin[1] + b.eje[1] * 0.2);
+      rotulo.rotation.y = Math.atan2(b.eje[0], b.eje[1]);
+      grupo.add(rotulo);
+    }
     if (e.techo.length) grupo.add(techo(e.techo, mat.techo));
+    if (estilo.base) {   // el edificio queda más alto que el terreno vecino, sobre una base de concreto
+      grupo.children.forEach((h) => { h.position.y += estilo.base; });
+      for (const vol of e.volumenes) grupo.add(prisma(vol.contorno, estilo.base, 0, new THREE.MeshStandardMaterial({ color: 0xb9b8b1, roughness: 0.95 }), 1.3));
+    }
     if (estilo.forma_techo === "plano") for (const vol of e.volumenes) {   // losa plana volada
       const l = prisma(vol.contorno, 0.6, e.alto, mat.techo, 3.2);
       grupo.add(l);
@@ -518,8 +541,7 @@ if (datos.campus.porton_pista && lugares.get(19)) {
 
 // ---------- entrada por residencias (fotos): portón verde de dos hojas, marco de tubo con malla y
 // refuerzos en X, columnas con baliza amarilla y faroles verdes de dos brazos a los lados de la calle
-if (datos.campus.porton_residencias && lugares.get(20)) {
-  const { p, hacia_dentro } = datos.campus.porton_residencias;
+function portonVerde(conFaroles) {
   const grupo = new THREE.Group();
   const verde = new THREE.MeshStandardMaterial({ color: 0x1f5a3c, roughness: 0.6, metalness: 0.2 });
   const mallaPorton = new THREE.MeshLambertMaterial({ color: 0x24533a, transparent: true, opacity: 0.45, side: THREE.DoubleSide, depthWrite: false });
@@ -537,11 +559,17 @@ if (datos.campus.porton_residencias && lugares.get(20)) {
     const col = new THREE.Mesh(new THREE.BoxGeometry(0.3, 2.8, 0.3), verde); col.position.set(x, 1.4, 0); grupo.add(col);
     const baliza = new THREE.Mesh(new THREE.CylinderGeometry(0.12, 0.12, 0.25, 8), amarillo); baliza.position.set(x, 2.95, 0); grupo.add(baliza);
   }
-  for (const x of [-ANCHO - 3, ANCHO + 3]) {   // faroles verdes de dos brazos
+  if (conFaroles) for (const x of [-ANCHO - 3, ANCHO + 3]) {   // faroles verdes de dos brazos
     const poste = new THREE.Mesh(new THREE.CylinderGeometry(0.12, 0.18, 8, 8), verde); poste.position.set(x, 4, 3); grupo.add(poste);
     const brazos = new THREE.Mesh(new THREE.BoxGeometry(2.6, 0.12, 0.12), verde); brazos.position.set(x, 7.9, 3); grupo.add(brazos);
   }
   grupo.traverse((o) => { if (o.isMesh) o.castShadow = !liviano; });
+  grupo.userData.verde = verde;
+  return grupo;
+}
+if (datos.campus.porton_residencias && lugares.get(20)) {
+  const { p, hacia_dentro } = datos.campus.porton_residencias;
+  const grupo = portonVerde(true), verde = grupo.userData.verde;
   grupo.position.set(p[0], 0, p[1]);
   grupo.rotation.y = hacia_dentro;
   grupo.userData = { id: 20, centro: new THREE.Vector3(p[0], 5, p[1]), mat: { pared: verde, techo: verde }, alto: 3 };
@@ -723,6 +751,238 @@ if (datos.campus.parqueo) {
   g.position.set(cx, 0, cz);
   g.rotation.y = -giro;   // x local = este de la piscina, z local = sur
   escena.add(g);
+  if (lugares.get(33)) {
+    g.userData = { id: 33, centro: new THREE.Vector3(cx, 3, cz), mat: { pared: verdePoste, techo: amarilloTope }, alto: 1, menor: true };
+    g.traverse((o) => { o.userData.edificio = g; });
+    edificios.push(g);
+  }
+}
+
+// ---------- lugares sin edificio que marcó la Sede (anotaciones sobre la maqueta): pasillos techados,
+// casetas, parqueos, la alcantarilla de la quebrada, la explanada, el puente peatonal y el jardín
+{
+  const azar = (i) => { const v = Math.sin(i * 53.3) * 43758.5; return v - Math.floor(v); };
+  const caja = new THREE.BoxGeometry(1, 1, 1);
+  // muchas cajas iguales en una sola llamada de dibujo
+  function cajas(mat, lista) {
+    const m = new THREE.InstancedMesh(caja, mat, lista.length), m4 = new THREE.Matrix4(), q = new THREE.Quaternion(), eje = new THREE.Vector3(0, 1, 0);
+    lista.forEach(([x, y, z, sx, sy, sz, ry], i) => { q.setFromAxisAngle(eje, ry || 0); m.setMatrixAt(i, m4.compose(new THREE.Vector3(x, y, z), q, new THREE.Vector3(sx, sy, sz))); });
+    m.instanceMatrix.needsUpdate = true;
+    m.castShadow = !liviano; m.receiveShadow = true;
+    return m;
+  }
+  function registrar(g, id, centro, mat, alto = 1) {
+    g.traverse((o) => { if (o.isMesh && !o.isInstancedMesh) { o.castShadow = !liviano && !o.material.transparent; o.receiveShadow = true; } });
+    escena.add(g);
+    if (id && lugares.get(id)) {
+      g.userData = { id, centro, mat, alto, menor: true };
+      g.traverse((o) => { o.userData.edificio = g; });
+      edificios.push(g);
+    }
+  }
+  const concretoClaro = new THREE.MeshStandardMaterial({ color: 0xc8c6bf, roughness: 0.95 });
+  const sinUso = () => new THREE.MeshStandardMaterial();   // para resaltar sin cambiar el color de nada
+
+  // pasillo techado: losa de concreto, columnas metálicas y techo de lámina, por tramos a lo largo del trazo
+  function pasillo({ id, puntos, ancho }) {
+    const g = new THREE.Group();
+    const lamina = new THREE.MeshStandardMaterial({ color: 0x8f9c98, roughness: 0.55, metalness: 0.3 });
+    const metal = new THREE.MeshStandardMaterial({ color: 0x3e4a52, roughness: 0.6, metalness: 0.4 });
+    const pisos = [], techos = [], columnas = [];
+    for (let i = 0; i < puntos.length - 1; i++) {
+      const [ax, az] = puntos[i], [bx, bz] = puntos[i + 1];
+      const L = Math.hypot(bx - ax, bz - az) + 0.15, ang = Math.atan2(bx - ax, bz - az);
+      const cx = (ax + bx) / 2, cz = (az + bz) / 2;
+      pisos.push([cx, 0.06, cz, ancho, 0.12, L, ang]);
+      techos.push([cx, 2.75, cz, ancho + 0.9, 0.08, L + 0.1, ang]);
+    }
+    puntos.forEach(([x, z], i) => {
+      const [ax, az] = puntos[Math.max(i - 1, 0)], [bx, bz] = puntos[Math.min(i + 1, puntos.length - 1)];
+      const L = Math.hypot(bx - ax, bz - az) || 1, nx = (bz - az) / L, nz = -(bx - ax) / L;
+      for (const lado of [-1, 1]) columnas.push([x + nx * lado * (ancho / 2), 1.37, z + nz * lado * (ancho / 2), 0.12, 2.74, 0.12, 0]);
+    });
+    g.add(cajas(concretoClaro, pisos), cajas(lamina, techos), cajas(metal, columnas));
+    const [mx, mz] = puntos[Math.floor(puntos.length / 2)];
+    registrar(g, id, new THREE.Vector3(mx, 3.5, mz), { pared: metal, techo: lamina });
+  }
+
+  // caseta pequeña: de guarda (ventanas corridas), de baños (bloques de ventilación) o de uso general
+  function caseta({ id, p, giro, largo, ancho, alto, uso }) {
+    const g = new THREE.Group();
+    const pared = new THREE.MeshStandardMaterial({ color: 0xf6f5f0, roughness: 0.85 });
+    const techoM = new THREE.MeshStandardMaterial({ color: uso === "guarda" ? 0x5d6b73 : 0x66756b, roughness: 0.7 });
+    const cuerpo = new THREE.Mesh(new THREE.BoxGeometry(largo, alto, ancho), pared); cuerpo.position.y = alto / 2; g.add(cuerpo);
+    const zocalo = new THREE.Mesh(new THREE.BoxGeometry(largo + 0.06, 0.6, ancho + 0.06), new THREE.MeshStandardMaterial({ color: 0xa8b0b8, roughness: 0.85 })); zocalo.position.y = 0.3; g.add(zocalo);
+    if (uso === "guarda") {
+      const vent = new THREE.Mesh(new THREE.BoxGeometry(largo + 0.08, 1.0, ancho + 0.08), vidrio); vent.position.y = 1.65; g.add(vent);
+    } else {
+      const banda = new THREE.Mesh(new THREE.BoxGeometry(largo + 0.08, uso === "banos" ? 0.5 : 0.8, ancho + 0.08), uso === "banos" ? new THREE.MeshStandardMaterial({ color: 0x8d949a, roughness: 0.9 }) : celosia);
+      banda.position.y = alto - 0.6; g.add(banda);
+    }
+    const puertas = uso === "banos" ? [-largo / 4, largo / 4] : [0];
+    for (const x of puertas) { const pu = new THREE.Mesh(new THREE.BoxGeometry(0.9, 2.05, 0.06), new THREE.MeshStandardMaterial({ color: 0x6d7880, roughness: 0.6 })); pu.position.set(x, 1.03, ancho / 2 + 0.04); g.add(pu); }
+    const losaT = new THREE.Mesh(new THREE.BoxGeometry(largo + 1.2, 0.16, ancho + 1.2), techoM); losaT.position.y = alto + 0.08; g.add(losaT);
+    g.position.set(p[0], 0, p[1]); g.rotation.y = -giro;
+    registrar(g, id, new THREE.Vector3(p[0], alto + 2, p[1]), { pared, techo: techoM }, alto);
+  }
+
+  // parqueo asfaltado (el asfalto y las rayas están en la textura): topes, algunos carros y alumbrado
+  function parqueo({ id, centro: [cx, cz], largo, ancho, giro, filas }, k0) {
+    const g = new THREE.Group();
+    const tope = new THREE.MeshStandardMaterial({ color: 0xe6b800, roughness: 0.7 });
+    const verdePoste = new THREE.MeshStandardMaterial({ color: 0x2f6b45, roughness: 0.6 });
+    const tonos = [0xf0f0ee, 0x1f2a44, 0xb9bcbf, 0x2a2d31, 0x9b1b2a, 0xc7c9cc];
+    let k = k0;
+    for (const { z: zv, fondo, n } of filas) {
+      const z = -zv, lado = Math.sign(z) || 1;   // la fila mide z hacia la izquierda del giro; en la maqueta es -z
+      for (let i = 0; i < n; i++, k++) {
+        const x = (-n / 2 + i + 0.5) * 2.6;
+        const t = new THREE.Mesh(new THREE.BoxGeometry(1.6, 0.15, 0.25), tope); t.position.set(x, 0.08, z + lado * (fondo / 2 - 0.6)); g.add(t);
+        if (azar(k) < 0.4) continue;
+        const carro = new THREE.Group(), m = new THREE.MeshStandardMaterial({ color: tonos[k % tonos.length], roughness: 0.35, metalness: 0.4 });
+        const cuerpo = new THREE.Mesh(new THREE.BoxGeometry(1.8, 0.75, 4.3), m); cuerpo.position.y = 0.55; carro.add(cuerpo);
+        const cabina = new THREE.Mesh(new THREE.BoxGeometry(1.6, 0.6, 2.3), vidrio); cabina.position.set(0, 1.2, 0.2 * lado); carro.add(cabina);
+        carro.position.set(x, 0, z); g.add(carro);
+      }
+    }
+    for (const x of [-largo / 2 + 0.8, largo / 2 - 0.8]) {
+      const poste = new THREE.Mesh(new THREE.CylinderGeometry(0.12, 0.16, 7.5, 8), verdePoste); poste.position.set(x, 3.75, -ancho / 2 + 0.6); g.add(poste);
+      const lampara = new THREE.Mesh(new THREE.BoxGeometry(0.5, 0.12, 0.9), new THREE.MeshBasicMaterial({ color: 0xfff3c4 })); lampara.position.set(x, 7.4, -ancho / 2 + 1.1); g.add(lampara);
+    }
+    g.position.set(cx, 0, cz); g.rotation.y = -giro;
+    registrar(g, id, new THREE.Vector3(cx, 3, cz), { pared: verdePoste, techo: tope });
+  }
+
+  // escalera de concreto con pasamanos: sube a lo largo del giro
+  function escalera({ p, giro, largo, ancho, alto }) {
+    const g = new THREE.Group(), h = alto * EXAGERAR, n = Math.max(3, Math.round(h / 0.17));
+    for (let i = 0; i < n; i++) {
+      const paso = new THREE.Mesh(new THREE.BoxGeometry(largo / n + 0.02, (h * (i + 1)) / n, ancho), concretoClaro);
+      paso.position.set(-largo / 2 + (largo / n) * (i + 0.5), (h * (i + 1)) / n / 2, 0); g.add(paso);
+    }
+    const tubo = new THREE.MeshStandardMaterial({ color: 0xd2a417, roughness: 0.5, metalness: 0.3 }), pend = Math.atan2(h, largo);
+    for (const lado of [-1, 1]) {
+      const pasamanos = new THREE.Mesh(new THREE.CylinderGeometry(0.04, 0.04, Math.hypot(largo, h), 6), tubo);
+      pasamanos.rotation.z = Math.PI / 2 - pend; pasamanos.position.set(0, h / 2 + 0.9, lado * (ancho / 2 - 0.1)); g.add(pasamanos);
+      for (const t of [-0.45, 0, 0.45]) { const poste = new THREE.Mesh(new THREE.CylinderGeometry(0.035, 0.035, 0.9, 6), tubo); poste.position.set(t * largo, h * (0.5 + t) + 0.45, lado * (ancho / 2 - 0.1)); g.add(poste); }
+    }
+    g.position.set(p[0], 0, p[1]); g.rotation.y = -giro;
+    registrar(g, null);
+  }
+
+  // mesas de picnic de concreto con bancas, como las del área frente al CIUB
+  function mesas({ puntos }) {
+    const g = new THREE.Group(), azulMesa = new THREE.MeshStandardMaterial({ color: 0x3d8fd6, roughness: 0.85 });
+    puntos.forEach(([x, z], i) => {
+      const m = new THREE.Group();
+      const pata = new THREE.Mesh(new THREE.CylinderGeometry(0.18, 0.25, 0.75, 8), azulMesa); pata.position.y = 0.37; m.add(pata);
+      const tablero = new THREE.Mesh(new THREE.CylinderGeometry(0.75, 0.75, 0.1, 14), azulMesa); tablero.position.y = 0.78; m.add(tablero);
+      for (const lado of [-1, 1]) { const banca = new THREE.Mesh(new THREE.BoxGeometry(1.5, 0.45, 0.38), azulMesa); banca.position.set(0, 0.23, lado * 1.15); m.add(banca); }
+      m.position.set(x, 0, z); m.rotation.y = azar(i + 3) * 3; g.add(m);
+    });
+    registrar(g, null);
+  }
+
+  // explanada: zacate abierto (ya pintado en el suelo) con bancas de concreto en el borde
+  function explanada({ id, contorno, centro }) {
+    const g = new THREE.Group();
+    const sh = new THREE.Shape(contorno.map(([x, z]) => new THREE.Vector2(x, -z)));
+    const piso = new THREE.Mesh(new THREE.ShapeGeometry(sh), new THREE.MeshLambertMaterial({ color: 0xa4ce7e, transparent: true, opacity: 0, depthWrite: false }));
+    piso.rotation.x = -Math.PI / 2; piso.position.y = 0.05; g.add(piso);
+    contorno.forEach(([x, z], i) => {
+      if (i % 3) return;
+      const dx = centro[0] - x, dz = centro[1] - z, d = Math.hypot(dx, dz) || 1;
+      const banca = new THREE.Mesh(new THREE.BoxGeometry(2, 0.45, 0.5), concretoClaro);
+      banca.position.set(x + (dx / d) * 2.5, 0.23, z + (dz / d) * 2.5); banca.rotation.y = Math.atan2(dx, dz); g.add(banca);
+    });
+    registrar(g, id, new THREE.Vector3(centro[0], 2, centro[1]), { pared: sinUso(), techo: sinUso() }, 0);
+  }
+
+  // alcantarilla donde la calle pasa sobre la quebrada: barandas de concreto a los dos lados y paso de cebra
+  function alcantarilla({ id, p, giro, ancho }) {
+    const g = new THREE.Group(), concreto = new THREE.MeshStandardMaterial({ color: 0xbfbdb5, roughness: 0.95 });
+    const amarillo = new THREE.MeshStandardMaterial({ color: 0xf2c200, roughness: 0.6 });
+    for (const lado of [-1, 1]) {
+      const muro = new THREE.Mesh(new THREE.BoxGeometry(0.35, 0.7, 7), concreto); muro.position.set(lado * (ancho / 2 + 0.6), 0.35, 0); g.add(muro);
+      const franja = new THREE.Mesh(new THREE.BoxGeometry(0.37, 0.18, 7), amarillo); franja.position.set(lado * (ancho / 2 + 0.6), 0.62, 0); g.add(franja);
+      for (const z of [-3.2, 3.2]) { const cab = new THREE.Mesh(new THREE.BoxGeometry(2.2, 1.2, 0.4), concreto); cab.position.set(lado * (ancho / 2 + 1.5), -0.1, z); g.add(cab); }
+    }
+    const tubo = new THREE.Mesh(new THREE.CylinderGeometry(0.8, 0.8, ancho + 4, 14, 1, true), new THREE.MeshStandardMaterial({ color: 0x8a8a84, side: THREE.DoubleSide }));
+    tubo.rotation.z = Math.PI / 2; tubo.position.y = -0.2; g.add(tubo);
+    g.position.set(p[0], 0, p[1]); g.rotation.y = giro;
+    registrar(g, id, new THREE.Vector3(p[0], 3, p[1]), { pared: concreto, techo: amarillo });
+  }
+
+  // puente peatonal sobre la ruta 32: tablero techado de estructura metálica con malla y escaleras en los extremos
+  function puentePeatonal({ id, p, giro }) {
+    const g = new THREE.Group();
+    const acero = new THREE.MeshStandardMaterial({ color: 0x4f6170, roughness: 0.5, metalness: 0.5 });
+    const techoP = new THREE.MeshStandardMaterial({ color: 0xd3d7da, roughness: 0.5, metalness: 0.3, side: THREE.DoubleSide });
+    const malla = new THREE.MeshLambertMaterial({ color: 0x55636e, transparent: true, opacity: 0.35, side: THREE.DoubleSide, depthWrite: false });
+    const H = 5.6, LUZ = 26, ANCHO = 2.4;   // la luz cruza la carretera (x local); la carretera corre por z local
+    const tablero = new THREE.Mesh(new THREE.BoxGeometry(LUZ, 0.35, ANCHO), concretoClaro); tablero.position.y = H; g.add(tablero);
+    for (const z of [-ANCHO / 2, ANCHO / 2]) {
+      const viga = new THREE.Mesh(new THREE.BoxGeometry(LUZ, 0.25, 0.15), acero); viga.position.set(0, H + 1.15, z); g.add(viga);
+      const m = new THREE.Mesh(new THREE.PlaneGeometry(LUZ, 1.1), malla); m.position.set(0, H + 0.7, z); g.add(m);
+    }
+    const arco = new THREE.Mesh(new THREE.CylinderGeometry(1.7, 1.7, LUZ, 12, 1, true, -Math.PI / 2.6, Math.PI / 1.3), techoP);
+    arco.rotation.z = Math.PI / 2; arco.position.y = H + 1.6; g.add(arco);
+    for (const lado of [-1, 1]) {
+      const x0 = lado * LUZ / 2;
+      for (const [dx, dz] of [[-1.3, -1.3], [1.3, -1.3], [-1.3, 1.3], [1.3, 1.3]]) {   // torre de la escalera
+        const col = new THREE.Mesh(new THREE.BoxGeometry(0.25, H + 3, 0.25), acero); col.position.set(x0 + dx + lado * 1.3, (H + 3) / 2, dz); g.add(col);
+      }
+      // dos tramos de escalera con un descanso, bajando a lo largo de la carretera (hacia -z)
+      const L = 8, pend = Math.atan2(H / 2, L), xs = x0 + lado * 1.3;
+      for (const [zc, yc] of [[-L / 2, (3 * H) / 4], [-L * 1.5 - 2, H / 4]]) {
+        const esc = new THREE.Mesh(new THREE.BoxGeometry(1.6, 0.25, Math.hypot(L, H / 2)), concretoClaro);
+        esc.position.set(xs, yc, zc); esc.rotation.x = -pend; g.add(esc);
+      }
+      const descanso = new THREE.Mesh(new THREE.BoxGeometry(1.6, 0.25, 2), concretoClaro); descanso.position.set(xs, H / 2, -L - 1); g.add(descanso);
+      for (const z of [-L - 1, -L * 2 - 2]) { const col = new THREE.Mesh(new THREE.BoxGeometry(0.2, H / 2, 0.2), acero); col.position.set(xs, H / 4, z); g.add(col); }
+    }
+    g.position.set(p[0], 0, p[1]); g.rotation.y = giro;
+    registrar(g, id, new THREE.Vector3(p[0], H + 4, p[1]), { pared: acero, techo: techoP }, H);
+  }
+
+  // entrada al Jardín Etnobotánico: sendero de lastre (en el suelo), arco de madera con rótulo y siembras en abanico
+  function jardin({ id, desde, hasta }) {
+    const g = new THREE.Group(), madera = new THREE.MeshLambertMaterial({ color: 0x6b4f33 });
+    const dx = hasta[0] - desde[0], dz = hasta[1] - desde[1], L = Math.hypot(dx, dz), ux = dx / L, uz = dz / L, ang = Math.atan2(dx, dz);
+    const arco = new THREE.Group();
+    for (const x of [-2.1, 2.1]) { const poste = new THREE.Mesh(new THREE.BoxGeometry(0.3, 3, 0.3), madera); poste.position.set(x, 1.5, 0); arco.add(poste); }
+    const viga = new THREE.Mesh(new THREE.BoxGeometry(5, 0.3, 0.35), madera); viga.position.y = 3.05; arco.add(viga);
+    const cv = document.createElement("canvas"); cv.width = 512; cv.height = 128;
+    const x = cv.getContext("2d"); x.fillStyle = "#5a4027"; x.fillRect(0, 0, 512, 128); x.fillStyle = "#f4ead8"; x.textAlign = "center";
+    x.font = "600 44px 'Source Sans 3', Arial, sans-serif"; x.fillText("JARDÍN ETNOBOTÁNICO", 256, 80);
+    const tex = new THREE.CanvasTexture(cv); tex.colorSpace = THREE.SRGBColorSpace;
+    for (const lado of [1, -1]) { const r = new THREE.Mesh(new THREE.PlaneGeometry(4, 1), new THREE.MeshBasicMaterial({ map: tex })); r.position.set(0, 2.5, lado * 0.19); r.rotation.y = lado > 0 ? 0 : Math.PI; arco.add(r); }
+    arco.position.set(hasta[0], 0, hasta[1]); arco.rotation.y = ang; g.add(arco);
+    const tonos = [0x3f7d34, 0x5f9e43, 0x2f6b2c, 0xd2452c, 0xe39b2d, 0x4f8f3a];
+    for (let i = 0; i < 26; i++) {   // matas en abanico más allá del arco
+      const a = (azar(i) - 0.5) * 1.6, d = 3 + azar(i + 40) * 12, r = 0.6 + azar(i + 80) * 1.1;
+      const px = hasta[0] + (ux * Math.cos(a) - uz * Math.sin(a)) * d, pz = hasta[1] + (uz * Math.cos(a) + ux * Math.sin(a)) * d;
+      const mata = new THREE.Mesh(new THREE.IcosahedronGeometry(r, 0), new THREE.MeshLambertMaterial({ color: tonos[i % tonos.length], flatShading: true }));
+      mata.position.set(px, r * 0.8, pz); g.add(mata);
+    }
+    registrar(g, id, new THREE.Vector3(hasta[0], 4, hasta[1]), { pared: madera, techo: sinUso() }, 3);
+  }
+
+  let kParqueo = 100;
+  for (const el of datos.campus.elementos || []) {
+    if (el.tipo === "pasillo") pasillo(el);
+    else if (el.tipo === "caseta") caseta(el);
+    else if (el.tipo === "parqueo") { parqueo(el, kParqueo); kParqueo += 40; }
+    else if (el.tipo === "escalera") escalera(el);
+    else if (el.tipo === "mesas") mesas(el);
+    else if (el.tipo === "explanada") explanada(el);
+    else if (el.tipo === "alcantarilla") alcantarilla(el);
+    else if (el.tipo === "puente_peatonal") puentePeatonal(el);
+    else if (el.tipo === "jardin") jardin(el);
+    else if (el.tipo === "porton") {   // acceso cerrado con portón (sin faroles)
+      const g = portonVerde(false); g.position.set(el.p[0], 0, el.p[1]); g.rotation.y = el.giro; escena.add(g);
+    }
+  }
 }
 
 // ---------- árboles y palmeras (instancias: cientos de árboles en pocas llamadas de dibujo)
@@ -807,9 +1067,13 @@ for (const g of edificios) {
 const v = new THREE.Vector3();
 // Las marcas de edificios vecinos (7, 8 y 9) se encimarían: se corren hasta que no se toquen,
 // para que cada botón mantenga su tamaño completo al tocarlo.
+// Los lugares menores (pasillos, casetas, parqueos…) solo muestran su número de cerca, o si están elegidos,
+// para que la vista general no se llene de botones
+const CERCA_MENORES = 300;
 function moverMarcas() {
   const w = lienzo.clientWidth, h = lienzo.clientHeight, puestas = [];
-  const lista = edificios.map((g) => { v.copy(g.userData.centro); v.y += 3; v.project(camara); return { g, x: ((v.x + 1) / 2) * w, y: ((1 - v.y) / 2) * h, z: v.z, fuera: v.z > 1 || Math.abs(v.x) > 1.05 || Math.abs(v.y) > 1.05 }; })
+  const lejos = camara.position.distanceTo(controles.target) > CERCA_MENORES;
+  const lista = edificios.map((g) => { v.copy(g.userData.centro); v.y += 3; v.project(camara); return { g, x: ((v.x + 1) / 2) * w, y: ((1 - v.y) / 2) * h, z: v.z, fuera: v.z > 1 || Math.abs(v.x) > 1.05 || Math.abs(v.y) > 1.05 || (lejos && g.userData.menor && g !== elegido) }; })
     .sort((a, b) => a.z - b.z);
   for (const m of lista) {
     const b = marcas.get(m.g.userData.id);
@@ -824,17 +1088,21 @@ function moverMarcas() {
 
 // ---------- elegir un edificio: lo resalta, muestra la ficha y acerca la cámara
 let elegido = null;
+// al soltar un lugar, techo y paredes vuelven a su color (no todos son blancos: portones, parqueos…)
+function soltar(g) {
+  for (const m of [g.userData.mat.techo, g.userData.mat.pared]) if (m.userData.original !== undefined) m.color.setHex(m.userData.original);
+}
 function elegir(id, volar) {
-  if (elegido) { elegido.userData.mat.techo.color.setHex(elegido.userData.mat.techo.userData.original); elegido.userData.mat.pared.color.setHex(colores.pared); }
+  if (elegido) soltar(elegido);
   marcas.forEach((b, k) => b.setAttribute("aria-pressed", String(k === id)));
   const g = edificios.find((x) => x.userData.id === id);
   const l = lugares.get(id);
   if (!g || !l) return;
   elegido = g;
-  const techo = g.userData.mat.techo;
-  if (techo.userData.original === undefined) techo.userData.original = techo.color.getHex();
+  const { techo, pared } = g.userData.mat;
+  for (const m of [techo, pared]) if (m.userData.original === undefined) m.userData.original = m.color.getHex();
   techo.color.setHex(g.userData.alto < 1 ? techo.userData.original : colores.elegido);
-  g.userData.mat.pared.color.setHex(colores.paredElegida);
+  pared.color.setHex(colores.paredElegida);
   rellenarFicha(l);
   if (volar) {
     const c = g.userData.centro;
@@ -844,7 +1112,7 @@ function elegir(id, volar) {
   pedirDibujo();
 }
 function cerrarFicha() {
-  if (elegido) { elegido.userData.mat.techo.color.setHex(elegido.userData.mat.techo.userData.original); elegido.userData.mat.pared.color.setHex(colores.pared); }
+  if (elegido) soltar(elegido);
   elegido = null;
   ficha.hidden = true;
   marcas.forEach((b) => b.setAttribute("aria-pressed", "false"));

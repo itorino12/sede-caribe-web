@@ -52,16 +52,20 @@ PLANTA = {"centro": (1486, 1566), "giro": 74}        # planta de tratamiento, al
 
 # Edificios: número del croquis, forma y pisos. rect = (cx, cy, largo, ancho, giro en grados, horario)
 EDIFICIOS = [
-    {"id": 1, "rect": (466, 1759, 175, 56, 49), "pisos": 1},
-    {"id": 2, "rect": (601, 1753, 215, 52, 51), "pisos": 1},
-    {"id": 3, "rect": (728, 1777, 105, 50, 121), "pisos": 1},
+    # 1 y 2 (anotaciones de la Sede): los baños ocupan el extremo noroeste de cada uno; el 2 queda un poco
+    # más alto y una escalera baja hacia el 1
+    {"id": 1, "rect": (466, 1759, 175, 56, 49), "pisos": 1, "estilo": {"banos": {"extremo": -1, "fraccion": 0.21}}},
+    {"id": 2, "rect": (601, 1753, 215, 52, 51), "pisos": 1, "estilo": {"banos": {"extremo": -1, "fraccion": 0.2}, "base": 1.0}},
+    # Soda y comedor: más al este de lo que marca el croquis, pasando la punta sureste del 2 (anotaciones)
+    {"id": 3, "rect": (745, 1826, 90, 70, -39), "pisos": 1},
     {"id": 4, "hex": (692, 1541, 36), "pisos": 1},
     {"id": 5, "rect": (1011, 1306, 100, 100, 34), "pisos": 1, "alto": 7.5},
     # Entrada (fotos de la portada): pórtico blanco de losa delgada, caseta, rótulo de concreto y astas
     {"id": 6, "rect": (1049, 1131, 97, 20, -3), "pisos": 1, "alto": 3.4,
      "estilo": {"forma_techo": "plano", "techo": "#f4f5f6", "entrada": True}},
-    {"id": 7, "rect": (1252, 1322, 180, 55, 5.5), "pisos": 1},
-    {"id": 8, "rect": (1259, 1246, 180, 55, 5.5), "pisos": 1},
+    # 7, 8 y 9: entre uno y otro hay zonas verdes con mesas de picnic, más anchas que en el croquis
+    {"id": 7, "rect": (1252, 1363, 180, 55, 5.5), "pisos": 1},
+    {"id": 8, "rect": (1259, 1264, 180, 55, 5.5), "pisos": 1},
     {"id": 9, "rect": (1263, 1165, 180, 55, 5.5), "pisos": 1},
     {"id": 10, "rect": (1433, 1304, 60, 109, 15), "pisos": 0, "tipo": "piscina"},
     # Biblioteca (fotos): un piso, lámina verde, cuerpo central más alto, torrecita de ventilación,
@@ -98,7 +102,7 @@ EDIFICIOS = [
 # Ensanche del mapa: el croquis deja muy poco espacio entre los edificios 7-9 y la piscina (los baños no caben)
 # y entre la piscina y la calle del este (el parqueo real mide unos 20 m). Se abren dos franjas verticales
 # en el croquis; todo lo que queda al este se corre. Las franjas pasan por zonas sin edificios.
-ENSANCHES = [(1345, 1365, 28), (1498, 1520, 52)]   # (desde x, hasta x, cuánto se abre, en píxeles del croquis)
+ENSANCHES = [(1345, 1365, 40), (1498, 1520, 52)]   # (desde x, hasta x, cuánto se abre, en píxeles del croquis)
 ENSANCHE_TOTAL = sum(d for *_, d in ENSANCHES)
 
 
@@ -154,6 +158,26 @@ QUEBRADA_OESTE = [tuple(np.array([x, y, 1.0]) @ _AFIN) for x, y in
                   [(275, 425), (330, 400), (385, 372), (440, 352), (500, 368), (560, 395), (620, 430), (670, 470),
                    (705, 505), (735, 550), (765, 580), (830, 596), (900, 600), (980, 590), (1060, 570), (1130, 545),
                    (1190, 510), (1240, 482), (1290, 466), (1335, 472)]]
+
+
+def marco(id_, u, v):
+    """Punto en el marco de un edificio: u a lo largo (sentido del giro), v hacia el lado izquierdo
+    (para 1 y 2: u hacia el sureste, v hacia el noreste). En píxeles del croquis."""
+    cx, cy, _, _, g = next(e for e in EDIFICIOS if e["id"] == id_)["rect"]
+    c, s = math.cos(math.radians(g)), math.sin(math.radians(g))
+    return (cx + c * u + s * v, cy + s * u - c * v)
+
+
+# Lugares sin edificio que marcó la Sede sobre la maqueta (capturas anotadas). Píxeles del croquis original;
+# los que dependen de las calles se calculan en main().
+PUENTE_PEATONAL_X = 1775          # sobre la ruta 32, al norte de los edificios 12 y 13
+CASETA_GUARDA = (1045, 1197)      # en la isla de zacate entre las calles, al sur de la entrada
+BANO_MINIAUDITORIO = (925, 1370)  # al oeste del miniauditorio, junto al sendero techado
+# sendero techado que sube desde la calle (cerca del paso de la quebrada) hasta la explanada
+SENDERO_EXPLANADA = [(948, 1466), (912, 1439), (883, 1417), (863, 1384), (864, 1351), (888, 1315), (923, 1279),
+                     (944, 1243), (945, 1212), (925, 1188), (899, 1157), (887, 1141)]
+RAMAL_EXPLANADA = [(943, 1222), (900, 1205), (856, 1192)]   # entrada del sendero a la explanada
+EXPLANADA = [(752, 1157), (775, 1130), (812, 1126), (838, 1142), (854, 1177), (854, 1205), (815, 1221), (769, 1220), (755, 1185)]
 
 
 def contornos_px(e):
@@ -321,13 +345,171 @@ def arboles_satelitales(ruta, rng, prohibido):
     return {"arboles": salida, "cubre": cubre}
 
 
+def junto_calle(puntos, d, calles):
+    """Corre cada punto hasta que quede a d píxeles del borde de la calle (para pasillos que la acompañan)."""
+    D = cv2.distanceTransform((calles == 0).astype(np.uint8), cv2.DIST_L2, 5)
+    gx, gy = cv2.Sobel(D, cv2.CV_32F, 1, 0, ksize=5), cv2.Sobel(D, cv2.CV_32F, 0, 1, ksize=5)
+    salida = []
+    for x, y in puntos:
+        for _ in range(30):
+            xi, yi = int(round(x)), int(round(y))
+            g = np.array([gx[yi, xi], gy[yi, xi]]); n = float(np.linalg.norm(g)) or 1.0
+            paso = d - float(D[yi, xi])
+            x += 0.6 * paso * g[0] / n; y += 0.6 * paso * g[1] / n
+        salida.append((x, y))
+    return salida
+
+
+def suavizar(puntos, vueltas=2):
+    """Esquinas redondeadas (Chaikin) y puntos cada ~4 m, para que el techo del pasillo siga la curva."""
+    p = np.array(puntos, float)
+    for _ in range(vueltas):
+        q = [p[0]]
+        for a, b in zip(p[:-1], p[1:]):
+            q += [0.75 * a + 0.25 * b, 0.25 * a + 0.75 * b]
+        q.append(p[-1]); p = np.array(q)
+    d = np.concatenate([[0], np.cumsum(np.hypot(*np.diff(p, axis=0).T))])
+    n = max(2, int(round(d[-1] / 16)) + 1)
+    t = np.linspace(0, d[-1], n)
+    return list(zip(np.interp(t, d, p[:, 0]), np.interp(t, d, p[:, 1])))
+
+
+def lugares_nuevos(calles, quebrada, lejos_carretera, y_ruta32):
+    """Elementos sin edificio (pasillos techados, casetas, parqueos, etc.) y las máscaras para pintarlos
+    en el suelo y para que no les caigan árboles encima. Todo sale en metros para la maqueta."""
+    forma = calles.shape
+    asfalto, lastre, claro, despejar = (np.zeros(forma, np.uint8) for _ in range(4))
+    rayas = np.zeros((forma[0] * 2, forma[1] * 2), np.uint8)   # al doble, para líneas finas
+    elem = []
+    M = lambda pts: [a_metros(float(x), float(y)) for x, y in pts]
+
+    def pasillo(pts, id_=None, ancho=2.6):
+        pts = suavizar(pts)
+        cv2.polylines(despejar, [np.array(pts, np.int32)], False, 1, 34)
+        elem.append({"tipo": "pasillo", "id": id_, "puntos": M(pts), "ancho": ancho})
+        return pts
+
+    def caja(id_, tipo, p, giro, largo, ancho, **extra):
+        cv2.fillPoly(despejar, [np.array(rect_contorno(p[0], p[1], largo / ESCALA + 30, ancho / ESCALA + 30, giro), np.int32)], 1)
+        elem.append({"tipo": tipo, "id": id_, "p": a_metros(*p), "giro": round(math.radians(giro), 3), "largo": largo, "ancho": ancho, **extra})
+
+    def parqueo(id_, centro, largo, ancho, giro, filas, conexion=None):
+        """Parqueo asfaltado (largo x ancho en metros); filas = [(z del centro de la fila, fondo)] en metros,
+        z medido hacia la izquierda del giro (como v en marco)."""
+        cx, cy = centro
+        cv2.fillPoly(asfalto, [np.array(rect_contorno(cx, cy, largo / ESCALA, ancho / ESCALA, giro), np.int32)], 255)
+        cv2.fillPoly(despejar, [np.array(rect_contorno(cx, cy, largo / ESCALA + 24, ancho / ESCALA + 24, giro), np.int32)], 1)
+        c, s = math.cos(math.radians(giro)), math.sin(math.radians(giro))
+        pt = lambda u, v: (cx + (c * u + s * v) / ESCALA, cy + (s * u - c * v) / ESCALA)
+        doble = lambda a, b: cv2.line(rayas, tuple(int(k * 2) for k in pt(*a)), tuple(int(k * 2) for k in pt(*b)), 255, 2)
+        espacios = []
+        for z, fondo in filas:
+            n = int((largo - 1.5) // 2.6)
+            u0 = -n * 2.6 / 2
+            for i in range(n + 1):
+                doble((u0 + i * 2.6, z - fondo / 2), (u0 + i * 2.6, z + fondo / 2))
+            espacios.append({"z": z, "fondo": fondo, "n": n})
+        if conexion:   # entrada de asfalto desde la calle
+            cv2.line(asfalto, tuple(int(k) for k in conexion[0]), tuple(int(k) for k in conexion[1]), 255, 22)
+        elem.append({"tipo": "parqueo", "id": id_, "centro": a_metros(cx, cy), "largo": largo, "ancho": ancho,
+                     "giro": round(math.radians(giro), 3), "filas": espacios})
+
+    # --- pasillos techados (anotaciones): de la entrada bajan por el lado sureste de la calle (26), cruzan la
+    # quebrada junto a la calle y siguen hacia el edificio administrativo (27) hasta la punta de la calle, donde
+    # arranca el pasillo que va pegado al 2 hasta la soda (36). Otro pasillo une la calle con la punta oeste del 7
+    # y uno más corre por el lado este de 7, 8 y 9.
+    tramo26 = junto_calle([(1150, 1250), (1132, 1305), (1100, 1358), (1064, 1410), (1012, 1462), (962, 1508)], 15, calles)
+    pasillo(tramo26, 26)
+    tramo27 = junto_calle([(930, 1548), (860, 1575), (790, 1600), (720, 1625), (650, 1648)], 15, calles)
+    pasillo([tramo26[-1]] + tramo27 + [marco(2, -100, 38)], 27)
+    pasillo([marco(2, -100, 38), marco(2, 15, 38), marco(2, 32, 48), marco(2, 104, 48)], 36)
+    union7 = junto_calle([(1080, 1392)], 15, calles)
+    pasillo([marco(7, -94, 6), marco(7, -110, 2), (1118, 1374)] + union7)
+    pasillo([marco(9, 104, 38), marco(9, 104, 0), marco(8, 104, 0), marco(7, 104, 0), marco(7, 104, -26)])
+    # sendero techado que sube de la calle a la explanada (29), pasando junto al baño del miniauditorio (31)
+    sendero = pasillo(junto_calle(SENDERO_EXPLANADA[:1], 9, calles) + SENDERO_EXPLANADA[1:])
+    pasillo(RAMAL_EXPLANADA)
+
+    # --- explanada (29): zacate abierto y parejo, sin árboles
+    cv2.fillPoly(claro, [np.array(EXPLANADA, np.int32)], 255)
+    cv2.fillPoly(despejar, [np.array(EXPLANADA, np.int32)], 1)
+    ex = np.array(EXPLANADA, float)
+    elem.append({"tipo": "explanada", "id": 29, "contorno": M(EXPLANADA), "centro": a_metros(*ex.mean(axis=0))})
+
+    # --- casetas y baños
+    caja(30, "caseta", CASETA_GUARDA, -3, 3.2, 3.2, alto=2.7, uso="guarda")
+    caja(31, "caseta", BANO_MINIAUDITORIO, 34, 6.5, 4.2, alto=2.8, uso="banos")
+    caja(37, "caseta", marco(2, -157, 0), 51, 5.0, 4.0, alto=2.8, uso="caseta")
+
+    # --- parqueos: frente a Docencia (25) y el administrativo al final de la calle, junto al 2 (34)
+    c25 = marco(2, 52, 149)
+    calle_cerca = min(zip(*np.nonzero(calles[1550:1750, 600:800])), key=lambda q: math.hypot(q[1] + 600 - c25[0], q[0] + 1550 - c25[1]))
+    parqueo(25, c25, 13.0, 15.0, 51, [(4.9, 5.0), (-4.9, 5.0)], conexion=(c25, (calle_cerca[1] + 600, calle_cerca[0] + 1550)))
+    parqueo(34, marco(2, -42, 63), 25.0, 9.5, 51, [(-2.25, 5.0)])
+    # la 33 es el parqueo de la piscina, que ya está modelado
+
+    # --- escalera entre el 1 y el 2: el 2 queda más alto (1 m) y la escalera baja hacia el 1
+    caja(None, "escalera", marco(2, -78, -42), -39, 5.5, 3.6, alto=1.0)   # el largo apunta al 2: sube hacia el noreste
+
+    # --- entrada al Jardín Etnobotánico (35): sendero de lastre desde la punta sureste del 1
+    a35, b35 = marco(1, 90, 20), marco(1, 200, 20)
+    cv2.line(lastre, tuple(int(k) for k in a35), tuple(int(k) for k in b35), 255, 15)
+    cv2.line(despejar, tuple(int(k) for k in a35), tuple(int(k) for k in marco(1, 240, 20)), 1, 70)
+    elem.append({"tipo": "jardin", "id": 35, "desde": a_metros(*a35), "hasta": a_metros(*b35)})
+
+    # --- mesas de picnic en las zonas verdes entre 9, 8 y 7, y en la isla de zacate al oeste del 8 y el 9
+    mesas = []
+    for arriba, abajo in ((9, 8), (8, 7)):
+        for u in (-54, -18, 18, 54):
+            p, q = marco(arriba, u, -27.5), marco(abajo, u, 27.5)
+            mesas.append(((p[0] + q[0]) / 2, (p[1] + q[1]) / 2))
+    mesas += [(1141, 1150), (1129, 1190)]
+    elem.append({"tipo": "mesas", "id": None, "puntos": M(mesas)})
+
+    # --- portón: el acceso este desde la ruta 32, junto a la entrada principal, está cerrado
+    ys, xs = np.nonzero((calles > 0) & (lejos_carretera < 40))
+    sel = (xs > 1120) & (xs < 1250) & (ys < 1130)
+    if sel.any():
+        gx_, gy_ = float(xs[sel].mean()), float(ys[sel].mean())
+        elem.append({"tipo": "porton", "id": None, "p": a_metros(gx_, gy_ + 8), "giro": round(math.atan2(1160 - gx_, 1160 - gy_), 3)})
+
+    # --- paso de la quebrada bajo la calle (28): alcantarilla con cabezales de concreto y paso de cebra
+    ys, xs = np.nonzero((calles > 0) & (cv2.dilate(quebrada, np.ones((9, 9), np.uint8)) > 0))
+    sel = np.hypot(xs - 905, ys - 1525) < 70
+    if sel.any():
+        ax_, ay_ = float(xs[sel].mean()), float(ys[sel].mean())
+        yc, xc = np.nonzero(calles[int(ay_) - 40:int(ay_) + 40, int(ax_) - 40:int(ax_) + 40])
+        vals, vecs = np.linalg.eigh(np.cov(np.vstack([xc, yc])))
+        dx_, dy_ = vecs[:, -1]   # dirección de la calle
+        anchura = (calles[int(ay_) - 40:int(ay_) + 40, int(ax_) - 40:int(ax_) + 40] > 0).sum() / 80 * ESCALA
+        elem.append({"tipo": "alcantarilla", "id": 28, "p": a_metros(ax_, ay_), "giro": round(math.atan2(dx_, dy_), 3), "ancho": round(float(anchura), 2)})
+
+    # --- puente peatonal sobre la ruta 32 (32)
+    xp = ensanchar(PUENTE_PEATONAL_X)
+    yp = y_ruta32(xp)
+    pend = y_ruta32(xp + 50) - yp
+    giro_calle = math.atan2(50, pend)   # dirección de la carretera en la maqueta (x, z)
+    cv2.circle(despejar, (int(xp), int(yp)), 70, 1, -1)
+    elem.append({"tipo": "puente_peatonal", "id": 32, "p": a_metros(xp, yp), "giro": round(giro_calle, 3)})
+    return elem, {"asfalto": asfalto, "rayas": rayas, "lastre": lastre, "claro": claro, "despejar": despejar}
+
+
 def edificio_json(e):
     alto = 0 if e.get("tipo") == "piscina" else e.get("alto", round(max(e["pisos"], 1) * PISO, 1))
     vol, techo, cumbre = volumenes(e, alto)
     pts = [p for v in vol for p in v["contorno"]]
     centro = [round(sum(p[0] for p in pts) / len(pts), 2), round(sum(p[1] for p in pts) / len(pts), 2)]
+    estilo = dict(e.get("estilo", {}))
+    if "banos" in estilo:   # tramo del extremo que ocupan los baños, y la cara del extremo (para el rótulo)
+        cx, cy, l, a, g = e["rect"]
+        b, c_, s_ = estilo["banos"], math.cos(math.radians(g)), math.sin(math.radians(g))
+        L = l * b["fraccion"]
+        u = b["extremo"] * (l - L) / 2
+        estilo["banos"] = {"contorno": [a_metros(*q) for q in rect_contorno(cx + c_ * u, cy + s_ * u, L, a, g)],
+                           "fin": a_metros(cx + c_ * b["extremo"] * l / 2, cy + s_ * b["extremo"] * l / 2),
+                           "eje": [round(c_ * b["extremo"], 3), round(s_ * b["extremo"], 3)], "ancho": round(a * ESCALA, 2)}
     return {"id": e["id"], "tipo": e.get("tipo", "edificio"), "pisos": e["pisos"], "alto": alto, "centro": centro,
-            "cumbre": round(cumbre, 2), "volumenes": vol, "techo": [c for v in techo for c in v], "estilo": e.get("estilo", {})}
+            "cumbre": round(cumbre, 2), "volumenes": vol, "techo": [c for v in techo for c in v], "estilo": estilo}
 
 
 def main(pdf, sat=None):
@@ -347,6 +529,16 @@ def main(pdf, sat=None):
     calles = cv2.morphologyEx(calles, cv2.MORPH_OPEN, cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (9, 9)))
     # La leyenda de la zona 2 tapa un tramo de la carretera en el croquis: se completa a mano
     cv2.polylines(carretera, [np.array([(0, 1242), (125, 1206), (470, 1112), (830, 1036)], np.int32)], False, 255, 46)
+    # La ruta 32 sigue hacia el este, pero el croquis la corta al norte del edificio 12: se prolonga hasta
+    # el borde con la misma dirección y el mismo ancho que trae
+    ys32, xs32 = np.nonzero(carretera[:1300])
+    punta = int(xs32.max())
+    cols = [x for x in range(punta - 200, punta - 70, 6) if (xs32 == x).any()]
+    medios = [ys32[xs32 == x].mean() for x in cols]
+    ancho32 = int(np.median([(xs32 == x).sum() for x in cols]))
+    recta = np.polyfit(cols, medios, 1)
+    y_de = lambda x: float(np.polyval(recta, x))
+    cv2.line(carretera, (punta - 90, int(y_de(punta - 90))), (x1 + 40, int(y_de(x1 + 40))), 255, ancho32)
 
     # --- pista de atletismo: la vuelta de calle gris claro al sur del campus
     n, lab, st, _ = cv2.connectedComponentsWithStats(calles)
@@ -411,6 +603,9 @@ def main(pdf, sat=None):
     suave = np.array([puntos[max(0, i - 2):i + 3].mean(axis=0) for i in range(len(puntos))])
     suave[-len(este) - 1] = (qx, qy)
     cv2.polylines(quebrada, [suave.astype(np.int32)], False, 255, 13)
+    lejos_carretera = cv2.distanceTransform((carretera == 0).astype(np.uint8), cv2.DIST_L2, 5)
+    elementos, extra = lugares_nuevos(calles, quebrada, lejos_carretera, y_de)
+    pintar(extra["claro"], (164, 206, 126))
     pintar(quebrada, (88, 132, 150), borde=(120, 140, 96))
     # área de picnic: zacate más claro y cuidado
     picnic = np.zeros_like(calles)
@@ -418,6 +613,9 @@ def main(pdf, sat=None):
     pintar(cv2.GaussianBlur(picnic, (0, 0), 6), (166, 208, 120))
     # dentro de la U todo está asfaltado (fotos), también el camino a la pista; cordón de concreto claro
     pintar(cv2.bitwise_or(calles, acceso), (84, 88, 94), borde=(214, 212, 204))
+    pintar(extra["lastre"], (176, 160, 128))
+    pintar(extra["asfalto"], (80, 84, 90), borde=(200, 198, 190))
+    pintar(cv2.resize(extra["rayas"], (calles.shape[1], calles.shape[0]), interpolation=cv2.INTER_AREA), (236, 236, 232))
     # parqueo junto a la piscina (satélite): rectángulo asfaltado con dos filas de espacios espalda con
     # espalda en la parte norte y pasillos al norte y al sur; se entra desde la calle del este
     u0, u1 = PARQUEO["u"]
@@ -478,6 +676,7 @@ def main(pdf, sat=None):
     lejos_edificios |= cv2.dilate((quebrada > 0).astype(np.uint8), np.ones((25, 25), np.uint8))   # sin árboles en el cauce
     cv2.circle(lejos_edificios, PLANTA["centro"], 115, 1, -1)
     cv2.fillPoly(lejos_edificios, [np.array(rect_contorno(*PARQUEO["rect"]), np.int32)], 1)
+    lejos_edificios |= extra["despejar"]
     satelital = arboles_satelitales(sat, rng, ocupado | lejos_edificios) if sat else None
     for i in range(1, n):
         area = st[i, 4]
@@ -603,6 +802,7 @@ def main(pdf, sat=None):
                     "divisor": round(PARQUEO["divisor"] - (PARQUEO["v"][0] + PARQUEO["v"][1]) / 2, 2)},
         "planta": {"centro": a_metros(*PLANTA["centro"]), "giro": round(math.radians(PLANTA["giro"]), 3)},
         "puente": {"centro": a_metros(*PUENTE["centro"]), "eje": [a_metros(x, y) for x, y in PUENTE["eje"]]},
+        "elementos": elementos,
         "pista": {"centro": a_metros(float(cx_pista), float(cy_pista))},
     }
     (RAIZ / "src/data/campus3d.json").write_text(json.dumps(datos, ensure_ascii=False), encoding="utf-8")
