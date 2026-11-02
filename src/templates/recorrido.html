@@ -56,9 +56,10 @@
   <section class="lugares" aria-labelledby="lugares-titulo">
     <h2 id="lugares-titulo">Lugares del campus</h2>
     <div class="lugares__zonas">
-      {% for zona, filas in lugares|groupby("zona") %}
+      {# primero las zonas del croquis y al final las áreas deportivas (zona 0) #}
+      {% for zona, filas in (lugares|groupby("zona"))|selectattr("grouper")|list + (lugares|groupby("zona"))|rejectattr("grouper")|list %}
       <div>
-        <h3>Zona {{ zona }}</h3>
+        <h3>{{ "Zona " ~ zona if zona else "Áreas deportivas" }}</h3>
         <ol>
           {% for l in filas %}
           <li value="{{ l.id }}"><button type="button" data-lugar="{{ l.id }}" aria-pressed="false"><b>{{ l.id }}</b> {{ l.nombre }}</button></li>

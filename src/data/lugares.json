@@ -127,5 +127,13 @@
   "nombre": "Laboratorio de Investigación",
   "texto": "Laboratorio de investigación de la Sede.",
   "enlace": "unidades/investigacion.html"
+ },
+ {
+  "id": 19,
+  "zona": 0,
+  "nombre": "Pista atlética",
+  "texto": "Pista de atletismo con cancha de fútbol en el centro, al sur del campus. Se entra por el portón junto a la carretera.",
+  "fotos": "pista-entrada-1.jpg, pista-entrada-2.jpg, pista-entrada-3.jpg, pista-entrada-4.jpg, pista-cerca.jpg",
+  "fotos_alt": "Portón y cerca de malla verde con alambre de púas de la pista atlética, vistos desde la calle, con el rótulo Sede del Caribe|El portón de la pista atlética junto a un arbusto grande, con la lámpara solar al lado|Camino de lastre hacia el portón de la pista; adentro se ven la cancha y un marco de fútbol|El portón de dos hojas de la pista, el poste azul con panel solar y la cancha al fondo|La cerca perimetral de malla verde con alambre de púas sobre el talud junto a la carretera"
  }
 ]

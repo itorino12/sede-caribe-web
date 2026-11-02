@@ -348,14 +348,71 @@ def main(pdf, sat=None):
     if satelital is not None:
         arboles += satelital["arboles"]
 
+    # --- cerca perimetral (fotos): malla verde con alambre de púas a lo largo de las carreteras que
+    # rodean la U. Se toma la zona del campus (lo que queda de este lado de la carretera, empezando en la
+    # biblioteca) y se sigue su borde solo donde da a la carretera; se abre en las calles de acceso.
+    lejos_carretera = cv2.distanceTransform((carretera == 0).astype(np.uint8), cv2.DIST_L2, 5)
+    # la ruta 32 se acaba antes del borde del croquis: se prolonga hasta el borde para que el lado norte
+    # (fuera de la U) no quede unido al campus
+    bloqueo = carretera.copy()
+    ys32, xs32 = np.nonzero(carretera[:1300])
+    if len(xs32):
+        k = int(np.argmax(xs32))
+        cv2.line(bloqueo, (int(xs32[k]), int(ys32[k])), (x1, int(ys32[k]) - 40), 255, 46)
+    libre = (cv2.distanceTransform((bloqueo == 0).astype(np.uint8), cv2.DIST_L2, 5) > 22).astype(np.uint8)
+    marco = np.zeros_like(libre); marco[y0 + 2:y1 - 2, x0 + 2:x1 - 2] = 1
+    libre &= marco
+    zona = np.zeros((libre.shape[0] + 2, libre.shape[1] + 2), np.uint8)
+    cv2.floodFill(libre.copy(), zona, (1510, 1113), 1, flags=4 | (1 << 8))
+    zona = zona[1:-1, 1:-1]
+    cs, _ = cv2.findContours(zona, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_NONE)
+    borde = max(cs, key=cv2.contourArea)[:, 0, :]
+    # portón de la pista: donde el camino de acceso de la pista llega a la carretera
+    ys, xs = np.nonzero(acceso)
+    k_min = int(np.argmin(lejos_carretera[ys, xs])) if len(xs) else None
+    porton = None
+    if k_min is not None:
+        # centro del camino donde llega a la carretera (promedio de la franja más cercana)
+        cerca_c = lejos_carretera[ys, xs] < lejos_carretera[ys[k_min], xs[k_min]] + 25
+        px, py = int(xs[cerca_c].mean()), int(ys[cerca_c].mean())
+        # dirección del camino de acceso (de la pista hacia la carretera) para orientar el portón
+        cy_pista, cx_pista = np.mean(np.nonzero(pista), axis=1)
+        porton = {"p": a_metros(px, py - 14), "hacia_pista": round(math.atan2(cx_pista - px, cy_pista - py), 3)}
+    # la cerca se abre en las calles internas que salen a la carretera y, en la pista, solo donde va el portón
+    accesos = cv2.dilate(((calles > 0) & (acceso == 0)).astype(np.uint8), cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (31, 31)))
+    if porton:
+        cv2.circle(accesos, (px, py - 14), 17, 1, -1)
+    entrada6 = (1049, 1131)
+    tramos, tramo = [], []
+    for i in range(0, len(borde), 6):
+        x, y = int(borde[i][0]), int(borde[i][1])
+        sirve = (lejos_carretera[y, x] < 60 and x0 + 8 < x < x1 - 8 and y0 + 8 < y < y1 - 8
+                 and not accesos[y, x] and math.hypot(x - entrada6[0], y - entrada6[1]) > 75)
+        if sirve:
+            tramo.append((x, y))
+        elif tramo:
+            tramos.append(tramo); tramo = []
+    if tramo:
+        tramos.append(tramo)
+    cerca = []
+    for t in tramos:
+        if len(t) < 4:
+            continue
+        simple = cv2.approxPolyDP(np.array(t, np.float32).reshape(-1, 1, 2), 3, False)[:, 0, :]
+        cerca.append([a_metros(float(x), float(y)) for x, y in simple])
+    cy_pista, cx_pista = np.mean(np.nonzero(pista), axis=1)
+
     datos = {
         "nota": "Generado por herramientas/campus3d.py a partir del croquis oficial «Distribución de Aulas». Esquemático, no a escala.",
         "terreno": {"x": a_metros(x0, y0)[0], "z": a_metros(x0, y0)[1], "ancho": round((x1 - x0) * ESCALA, 2), "largo": round((y1 - y0) * ESCALA, 2)},
         "edificios": [edificio_json(e) for e in EDIFICIOS],
         "arboles": arboles,
+        "cerca": cerca,
+        "porton_pista": porton,
+        "pista": {"centro": a_metros(float(cx_pista), float(cy_pista))},
     }
     (RAIZ / "src/data/campus3d.json").write_text(json.dumps(datos, ensure_ascii=False), encoding="utf-8")
-    print(f"Maqueta: {len(EDIFICIOS)} edificios, {len(arboles)} árboles, textura {w}x{h}")
+    print(f"Maqueta: {len(EDIFICIOS)} edificios, {len(arboles)} árboles, {sum(len(c) for c in cerca)} puntos de cerca en {len(cerca)} tramos, textura {w}x{h}")
 
 
 if __name__ == "__main__":

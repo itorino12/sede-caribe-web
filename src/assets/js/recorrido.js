@@ -280,6 +280,75 @@ for (const e of datos.campus.edificios) {
   edificios.push(grupo);
 }
 
+// ---------- cerca perimetral (fotos): malla verde electrosoldada con alambre de púas, a lo largo de las carreteras
+{
+  const ALTO = 2.4, PASO = 3;
+  const tramos = datos.campus.cerca || [];
+  const postes = [];
+  const malla = new THREE.MeshLambertMaterial({ color: 0x24533a, transparent: true, opacity: 0.5, side: THREE.DoubleSide, depthWrite: false });
+  const puas = new THREE.MeshLambertMaterial({ color: 0xc3c7cb });
+  const grupoCerca = new THREE.Group();
+  for (const t of tramos) {
+    for (let i = 0; i < t.length - 1; i++) {
+      const [ax, az] = t[i], [bx, bz] = t[i + 1];
+      const largo = Math.hypot(bx - ax, bz - az);
+      if (largo < 0.5) continue;
+      const ang = Math.atan2(-(bz - az), bx - ax), cx = (ax + bx) / 2, cz = (az + bz) / 2;
+      const panel = new THREE.Mesh(new THREE.PlaneGeometry(largo, ALTO - 0.2), malla);
+      panel.position.set(cx, (ALTO - 0.2) / 2 + 0.05, cz); panel.rotation.y = ang; grupoCerca.add(panel);
+      const alambre = new THREE.Mesh(new THREE.BoxGeometry(largo, 0.32, 0.32), puas);
+      alambre.position.set(cx, ALTO + 0.12, cz); alambre.rotation.y = ang; grupoCerca.add(alambre);
+      for (let d = 0; d < largo; d += PASO) postes.push([ax + ((bx - ax) * d) / largo, az + ((bz - az) * d) / largo]);
+    }
+    postes.push(t[t.length - 1]);
+  }
+  const palos = new THREE.InstancedMesh(new THREE.BoxGeometry(0.14, ALTO + 0.3, 0.14), new THREE.MeshLambertMaterial({ color: 0x1d4630 }), postes.length);
+  const m4 = new THREE.Matrix4();
+  postes.forEach(([x, z], i) => palos.setMatrixAt(i, m4.makeTranslation(x, (ALTO + 0.3) / 2, z)));
+  palos.castShadow = !liviano;
+  grupoCerca.add(palos);
+  escena.add(grupoCerca);
+}
+
+// ---------- pista atlética: cancha con marcos en el centro y portón de acceso desde la carretera (fotos)
+if (datos.campus.porton_pista && lugares.get(19)) {
+  const blancoTubo = new THREE.MeshLambertMaterial({ color: 0xf2f2f2 });
+  const [pcx, pcz] = datos.campus.pista.centro, eje = -0.46;
+  for (const lado of [-1, 1]) {   // marcos de fútbol en los extremos de la cancha
+    const gx = pcx + Math.cos(eje) * 42 * lado, gz = pcz - Math.sin(eje) * 42 * lado;
+    const marco = new THREE.Group();
+    for (const dz of [-3.6, 3.6]) { const palo = new THREE.Mesh(new THREE.CylinderGeometry(0.12, 0.12, 2.44, 6), blancoTubo); palo.position.set(0, 1.22, dz); marco.add(palo); }
+    const travesano = new THREE.Mesh(new THREE.BoxGeometry(0.2, 0.2, 7.4), blancoTubo); travesano.position.y = 2.44; marco.add(travesano);
+    marco.position.set(gx, 0, gz); marco.rotation.y = eje; marco.castShadow = true;
+    escena.add(marco);
+  }
+  // portón de dos hojas de tubo galvanizado, poste azul con panel solar y lámpara solar
+  const { p, hacia_pista } = datos.campus.porton_pista;
+  const grupo = new THREE.Group();
+  const acero = new THREE.MeshStandardMaterial({ color: 0xc8ccd0, metalness: 0.5, roughness: 0.4 });
+  const azul = new THREE.MeshStandardMaterial({ color: 0x1e88d8, roughness: 0.6 });
+  for (const lado of [-1, 1]) {
+    const hoja = new THREE.Group();
+    for (let k = 0; k <= 10; k++) { const barra = new THREE.Mesh(new THREE.BoxGeometry(0.06, 2.3, 0.06), acero); barra.position.set(lado * (0.25 + k * 0.33), 1.25, 0); hoja.add(barra); }
+    for (const y of [0.2, 1.3, 2.35]) { const larguero = new THREE.Mesh(new THREE.BoxGeometry(3.5, 0.08, 0.08), acero); larguero.position.set(lado * 1.9, y, 0); hoja.add(larguero); }
+    grupo.add(hoja);
+  }
+  for (const x of [-3.8, 3.8]) { const pilar = new THREE.Mesh(new THREE.BoxGeometry(0.2, 2.9, 0.2), acero); pilar.position.set(x, 1.45, 0); grupo.add(pilar); }
+  const postePanel = new THREE.Mesh(new THREE.CylinderGeometry(0.1, 0.1, 4.2, 6), azul); postePanel.position.set(6, 2.1, 1.5); grupo.add(postePanel);
+  const caja = new THREE.Mesh(new THREE.BoxGeometry(0.6, 0.8, 0.35), azul); caja.position.set(6, 3.2, 1.3); grupo.add(caja);
+  const panelSolar = new THREE.Mesh(new THREE.BoxGeometry(1.8, 0.08, 1.1), new THREE.MeshStandardMaterial({ color: 0x2b3a4a, metalness: 0.4, roughness: 0.3 }));
+  panelSolar.position.set(6, 4.3, 1.5); panelSolar.rotation.x = -0.25; grupo.add(panelSolar);
+  const lampara = new THREE.Mesh(new THREE.CylinderGeometry(0.09, 0.12, 7.5, 6), new THREE.MeshStandardMaterial({ color: 0x2f3337 })); lampara.position.set(9, 3.75, 2); grupo.add(lampara);
+  const panelLamp = new THREE.Mesh(new THREE.BoxGeometry(1.2, 0.08, 0.7), panelSolar.material); panelLamp.position.set(9, 7.6, 2); panelLamp.rotation.x = -0.3; grupo.add(panelLamp);
+  grupo.traverse((o) => { if (o.isMesh) o.castShadow = true; });
+  grupo.position.set(p[0], 0, p[1]);
+  grupo.rotation.y = hacia_pista;   // las hojas quedan atravesadas en el camino; +z local apunta a la pista
+  grupo.userData = { id: 19, centro: new THREE.Vector3(p[0], 5, p[1]), mat: { pared: acero, techo: azul }, alto: 3 };
+  grupo.traverse((o) => { o.userData.edificio = grupo; });
+  escena.add(grupo);
+  edificios.push(grupo);
+}
+
 // ---------- árboles y palmeras (instancias: cientos de árboles en pocas llamadas de dibujo)
 {
   const lista = datos.campus.arboles;
