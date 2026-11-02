@@ -5,6 +5,18 @@ export const ficha = raiz.querySelector(".mapa3d__ficha");
 export const sinMovimiento = matchMedia("(prefers-reduced-motion: reduce)").matches || document.documentElement.dataset.movimiento === "no";
 
 // ---------- carrusel de fotos: en la ficha y, al tocar una foto, en grande a pantalla completa
+// Si una foto no carga, casi siempre es porque el navegador guardó una versión vieja de la página
+// (que apunta a fotos que ya se reemplazaron). Se recarga una sola vez, pidiendo la página nueva.
+function fotoPerdida() {
+  try {
+    if (sessionStorage.getItem("recorrido-recargado")) return;
+    sessionStorage.setItem("recorrido-recargado", "1");
+  } catch (e) { return; }
+  const u = new URL(location.href);
+  u.searchParams.set("act", Date.now().toString(36));
+  location.replace(u.toString());
+}
+
 export class Carrusel {
   constructor(nodo, grande, alTocar) {
     this.nodo = nodo; this.grande = grande; this.alTocar = alTocar;
@@ -34,6 +46,7 @@ export class Carrusel {
       img.srcset = `${raiz.dataset.raiz + f.s} 640w, ${raiz.dataset.raiz + f.m} 1280w, ${raiz.dataset.raiz + f.g} 1920w`;
       img.sizes = this.grande ? "100vw" : "420px";
       img.alt = f.alt; img.loading = i ? "lazy" : "eager"; img.decoding = "async";
+      img.addEventListener("error", fotoPerdida, { once: true });
       if (this.alTocar) { img.addEventListener("click", () => this.alTocar(i)); img.classList.add("carrusel__ampliable"); }
       li.appendChild(img);
       return li;
