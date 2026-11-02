@@ -148,33 +148,44 @@ main:focus { outline: none; }
 .vista-previa { margin: 0; border-top: 1px solid var(--linea); padding: 7px var(--gutter); background: #EFEAFB; color: #3B2A73; font-size: var(--t-xs); text-align: center; }
 
 /* -------- portada -------- */
-.portada { position: relative; overflow: hidden; }
-.portada__rejilla { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.08fr); min-height: 560px; }
-.portada__texto { display: flex; flex-direction: column; justify-content: center; padding: clamp(40px, 6vw, 80px) clamp(24px, 4vw, 56px) clamp(40px, 6vw, 80px) max(var(--gutter), calc((100vw - var(--ancho)) / 2 + var(--gutter))); }
-.portada h1 { font-size: clamp(3rem, 7.2vw, 6.4rem); line-height: .9; letter-spacing: -.04em; margin: 0 0 .3em; }
-.portada h1 span { display: block; color: var(--tinta); }
-.portada__bajada { font-size: var(--t-md); line-height: 1.45; color: var(--tinta-2); max-width: 34ch; }
+/* Foto del campus a todo lo ancho y el texto encima, sobre un velo azul noche que garantiza el contraste */
+.portada { position: relative; overflow: hidden; background: #061A2C; color: #fff; }
+.portada__rejilla { display: grid; min-height: clamp(540px, 82vh, 760px); }
+.portada__rejilla > * { grid-area: 1 / 1; }
+.portada__foto { position: relative; margin: 0; z-index: 0; }
+.portada__foto img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: 62% 50%; }
+.portada__foto .foto-noche img { object-position: 80% 50%; }
+.portada__foto::after { content: ""; position: absolute; inset: 0;
+  background: linear-gradient(90deg, rgba(6,26,44,.92) 0%, rgba(6,26,44,.78) 34%, rgba(6,26,44,.25) 62%, rgba(6,26,44,0) 80%),
+              linear-gradient(0deg, rgba(6,26,44,.55) 0%, rgba(6,26,44,0) 30%); }
+.portada__texto { position: relative; z-index: 1; display: flex; flex-direction: column; justify-content: center; max-width: 720px;
+  padding: clamp(48px, 7vw, 96px) var(--gutter) clamp(48px, 7vw, 96px) max(var(--gutter), calc((100vw - var(--ancho)) / 2 + var(--gutter))); box-sizing: content-box; }
+.portada h1 { font-size: clamp(3rem, 7.2vw, 6.4rem); line-height: .9; letter-spacing: -.04em; margin: 0 0 .3em; color: var(--celeste); text-shadow: 0 2px 18px rgba(0,0,0,.25); }
+.portada h1 span { display: block; color: #fff; }
+.portada__bajada { font-size: var(--t-md); line-height: 1.45; color: rgba(255,255,255,.92); max-width: 34ch; }
 .portada__buscar { margin: 10px 0 18px; max-width: 520px; }
-.portada__buscar label { display: block; font-weight: 700; margin-bottom: 6px; }
-.portada__campo { display: flex; border: 2px solid var(--azul); border-radius: 4px; background: var(--papel); }
-.portada__campo input { flex: 1; min-width: 0; border: 0; padding: 12px 14px; font: inherit; color: var(--tinta); background: transparent; }
+.portada__buscar label { display: block; font-weight: 700; margin-bottom: 6px; color: #fff; }
+.portada__campo { display: flex; border: 2px solid #fff; border-radius: 4px; background: #fff; }
+.portada__campo input { flex: 1; min-width: 0; border: 0; padding: 12px 14px; font: inherit; color: #18232D; background: transparent; }
+.portada__campo input::placeholder { color: #5A6773; }
 .portada__campo input:focus-visible { outline: none; }
 .portada__campo:focus-within { outline: 3px solid var(--foco); outline-offset: 2px; }
-.portada__campo .boton { border-radius: 0 2px 2px 0; min-height: 0; }
+.portada__campo .boton, :root[data-tema="oscuro"] .portada__campo .boton { border-radius: 0 2px 2px 0; min-height: 0; background: #005DA4; border-color: #005DA4; color: #fff; }
 .portada__acciones { display: flex; flex-wrap: wrap; gap: 8px 22px; margin: 0; font-weight: 700; }
-.portada__foto { position: relative; margin: 0; min-height: 320px; background: var(--niebla); }
-.portada__foto img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: 66% 50%; }
-.portada__foto .foto-noche img { object-position: 100% 50%; }
+.portada__acciones a { color: #fff; text-decoration-color: var(--celeste); text-decoration-thickness: 2px; text-underline-offset: 4px; }
+.portada__acciones a:hover { color: var(--celeste); }
 /* Foto según el modo: la entrada de día en claro y de noche en oscuro (en «Visítenos», al revés) */
 .foto-noche { display: none; }
 :root[data-tema="oscuro"] .foto-dia { display: none; }
 :root[data-tema="oscuro"] .foto-noche { display: contents; }
 .foto-dia { display: contents; }
 .portada__foto figcaption { position: absolute; left: 16px; bottom: 16px; background: rgba(0,0,0,.6); color: #fff; font-size: var(--t-xs); padding: 4px 10px; border-radius: 2px; }
-@media (max-width: 900px) {
-  .portada__rejilla { grid-template-columns: 1fr; min-height: 0; }
-  .portada__foto { min-height: 0; aspect-ratio: 3 / 2; order: -1; }
-  .portada__texto { padding: 28px var(--gutter) 36px; }
+/* En el celular la foto llena la pantalla y el texto se apoya abajo, sobre el velo */
+@media (max-width: 760px) {
+  .portada__rejilla { min-height: min(92svh, 760px); }
+  .portada__texto { justify-content: flex-end; padding: 120px var(--gutter) 32px; max-width: none; box-sizing: border-box; }
+  .portada__foto img { object-position: 70% 50%; }
+  .portada__foto::after { background: linear-gradient(0deg, rgba(6,26,44,.95) 0%, rgba(6,26,44,.86) 42%, rgba(6,26,44,.2) 72%, rgba(6,26,44,0) 88%); }
 }
 
 /* -------- esta semana -------- */

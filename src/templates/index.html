@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% from "_macros.html" import tarjeta_noticia with context %}
 {% macro foto(f, alt, tam, carga='lazy') %}<img src="{{ f[1280] }}" srcset="{{ f[640] }} 640w, {{ f[1280] }} 1280w, {{ f[1920] }} 1920w" sizes="{{ tam }}" alt="{{ alt }}" width="{{ f.w }}" height="{{ f.h }}" loading="{{ carga }}"{% if carga == 'eager' %} fetchpriority="high"{% endif %}>{% endmacro %}
-{% block cabeza %}{% if fotos.portada %}<link rel="preload" as="image" href="{{ fotos.portada[1280] }}" imagesrcset="{{ fotos.portada[640] }} 640w, {{ fotos.portada[1280] }} 1280w, {{ fotos.portada[1920] }} 1920w" imagesizes="(min-width: 900px) 52vw, 100vw">{% endif %}{% endblock %}
+{% block cabeza %}{% if fotos.portada %}<link rel="preload" as="image" href="{{ fotos.portada[1280] }}" imagesrcset="{{ fotos.portada[640] }} 640w, {{ fotos.portada[1280] }} 1280w, {{ fotos.portada[1920] }} 1920w" imagesizes="100vw">{% endif %}{% endblock %}
 {% block contenido %}
 <section class="portada" aria-labelledby="portada-titulo">
   <div class="portada__rejilla">
@@ -19,8 +19,8 @@
     </div>
     {% if fotos.portada %}
     <figure class="portada__foto">
-      <span class="foto-dia">{{ foto(fotos.portada, "Entrada principal de la Sede del Caribe de día, con las banderas y el rótulo de la Universidad de Costa Rica", "(min-width: 900px) 52vw, 100vw", "eager") }}</span>
-      {% if fotos.portada_noche %}<span class="foto-noche">{{ foto(fotos.portada_noche, "Entrada principal de la Sede del Caribe de noche, con el rótulo iluminado", "(min-width: 900px) 52vw, 100vw") }}</span>{% endif %}
+      <span class="foto-dia">{{ foto(fotos.portada, "Entrada principal de la Sede del Caribe de día, con las banderas y el rótulo de la Universidad de Costa Rica", "100vw", "eager") }}</span>
+      {% if fotos.portada_noche %}<span class="foto-noche">{{ foto(fotos.portada_noche, "Entrada principal de la Sede del Caribe de noche, con el rótulo iluminado", "100vw") }}</span>{% endif %}
     </figure>
     {% endif %}
   </div>
