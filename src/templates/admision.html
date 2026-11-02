@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% from "_macros.html" import encabezado %}
+{% block contenido %}
+{{ encabezado("Cómo ingresar", [("Carreras", "estudiar.html")], raiz) }}
+<div class="ancho pagina pagina--con-ficha">
+  <div class="prosa prosa--pasos">{{ html|safe }}</div>
+  <div class="columna-ficha">
+    <aside class="ficha">
+      <h2 class="ficha__titulo">Fechas oficiales</h2>
+      <p>El calendario de admisión de cada año lo publica la Oficina de Registro e Información.</p>
+      <a class="boton boton--bloque" href="https://ori.ucr.ac.cr/">Ir a ori.ucr.ac.cr</a>
+    </aside>
+    <aside class="ficha">
+      <h2 class="ficha__titulo">Registro de la Sede</h2>
+      <dl><dt>Ventanilla</dt><dd><a href="{{ '2511-7304'|tel }}">2511-7304</a></dd><dt>Becas</dt><dd><a href="{{ '2511-7337'|tel }}">2511-7337</a></dd><dt>Orientación</dt><dd><a href="{{ '2511-7323'|tel }}">2511-7323</a></dd></dl>
+    </aside>
+  </div>
+</div>
+{% endblock %}

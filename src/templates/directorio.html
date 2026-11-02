@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% from "_macros.html" import encabezado %}
+{% block contenido %}
+{{ encabezado("Directorio", [("La Sede", "la-sede.html")], raiz, "Desde fuera de la UCR, marque el número completo. Desde un teléfono de la Universidad, basta con los últimos cuatro dígitos.") }}
+<div class="ancho pagina">
+  <div class="filtro-texto">
+    <label for="filtro-directorio">Buscar una oficina, extensión o edificio</label>
+    <input id="filtro-directorio" type="search" autocomplete="off" data-filtrar-tabla="directorio" placeholder="Por ejemplo: becas, 7304, Pabellón 1">
+    <p class="filtro-texto__estado" aria-live="polite" data-estado-filtro></p>
+  </div>
+  <div id="directorio">
+    {% for unidad, filas in directorio.items() %}
+    <section class="directorio-grupo" data-grupo>
+      <h2>{{ unidad }}</h2>
+      <table class="tabla tabla--directorio">
+        <thead><tr><th scope="col">Oficina</th><th scope="col">Teléfono</th><th scope="col">Edificio</th><th scope="col">Correo</th></tr></thead>
+        <tbody>
+          {% for f in filas %}
+          <tr data-fila><td>{{ f.oficina }}</td><td><a href="{{ f.extension|tel }}">{{ f.extension }}</a></td><td>{{ f.edificio }}</td><td>{% if f.correo %}<a href="mailto:{{ f.correo }}">{{ f.correo }}</a>{% endif %}</td></tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </section>
+    {% endfor %}
+  </div>
+</div>
+{% endblock %}

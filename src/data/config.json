@@ -1,0 +1,62 @@
+[
+ {
+  "clave": "nombre",
+  "valor": "Sede del Caribe"
+ },
+ {
+  "clave": "nombre_largo",
+  "valor": "Universidad de Costa Rica, Sede del Caribe"
+ },
+ {
+  "clave": "lema",
+  "valor": "Universidad de Costa Rica en el Caribe desde 1975"
+ },
+ {
+  "clave": "descripcion",
+  "valor": "Carreras, admisión, noticias, agenda y servicios de la Universidad de Costa Rica en Limón y Siquirres."
+ },
+ {
+  "clave": "base_url",
+  "valor": "https://sedecaribe.ucr.ac.cr"
+ },
+ {
+  "clave": "telefono",
+  "valor": "2511-7300"
+ },
+ {
+  "clave": "correo",
+  "valor": "sedecaribe@ucr.ac.cr"
+ },
+ {
+  "clave": "direccion",
+  "valor": "Limón, Costa Rica"
+ },
+ {
+  "clave": "mapa_url",
+  "valor": ""
+ },
+ {
+  "clave": "facebook",
+  "valor": ""
+ },
+ {
+  "clave": "instagram",
+  "valor": ""
+ },
+ {
+  "clave": "youtube",
+  "valor": ""
+ },
+ {
+  "clave": "tiktok",
+  "valor": ""
+ },
+ {
+  "clave": "formulario_cobertura",
+  "valor": "https://forms.gle/TMtnbD1L5CJ7R7Z8A"
+ },
+ {
+  "clave": "correo_comunicacion",
+  "valor": ""
+ }
+]

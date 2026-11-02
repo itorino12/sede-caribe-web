@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+{% from "_macros.html" import tarjeta_noticia %}
+{% block og %}<meta property="og:type" content="article">{% if n.img %}<meta property="og:image" content="{{ sitio.base_url }}/{{ n.img[1280] }}">{% endif %}{% endblock %}
+{% block cabeza %}<script type="application/ld+json">{{ {"@context": "https://schema.org", "@type": "NewsArticle", "headline": n.titulo, "datePublished": n.f.isoformat(), "author": {"@type": "Organization", "name": n.autor or "UCR Sede del Caribe"}, "publisher": {"@type": "CollegeOrUniversity", "name": "Universidad de Costa Rica, Sede del Caribe"}}|tojson }}</script>{% endblock %}
+{% block contenido %}
+<article class="articulo">
+  <header class="ancho articulo__cabeza">
+    <nav class="migas" aria-label="Ruta"><ol><li><a href="{{ raiz }}index.html">Inicio</a></li><li><a href="{{ raiz }}noticias.html">Noticias</a></li></ol></nav>
+    <p class="nota__meta"><a href="{{ raiz }}noticias.html?categoria={{ n.categoria|urlencode }}">{{ n.categoria }}</a> <time datetime="{{ n.f.isoformat() }}">{{ n.f|fecha_larga }}</time></p>
+    <h1>{{ n.titulo }}</h1>
+    <p class="bajada">{{ n.resumen }}</p>
+  </header>
+  {% if n.img %}
+  <figure class="articulo__figura ancho">
+    <img src="{{ raiz }}{{ n.img[1280] }}" srcset="{{ raiz }}{{ n.img[640] }} 640w, {{ raiz }}{{ n.img[1280] }} 1280w" sizes="(min-width: 1000px) 960px, 100vw" alt="{{ n.imagen_alt }}" width="1280" height="{{ (1280 * n.img.h / n.img.w)|round|int }}">
+  </figure>
+  {% endif %}
+  <div class="ancho articulo__cuerpo">
+    <div class="prosa">{{ n.html|safe }}</div>
+    <footer class="articulo__pie">
+      {% if n.autor %}<p>{{ n.autor }}</p>{% endif %}
+      <p class="compartir">Compartir:
+        <a href="https://wa.me/?text={{ (n.titulo ~ ' ' ~ sitio.base_url ~ '/noticias/' ~ n.id ~ '.html')|urlencode }}">WhatsApp</a>
+        <a href="https://www.facebook.com/sharer/sharer.php?u={{ (sitio.base_url ~ '/noticias/' ~ n.id ~ '.html')|urlencode }}">Facebook</a>
+        <a href="mailto:?subject={{ n.titulo|urlencode }}&amp;body={{ (sitio.base_url ~ '/noticias/' ~ n.id ~ '.html')|urlencode }}">Correo</a>
+      </p>
+    </footer>
+  </div>
+</article>
+{% set otras = noticias|rejectattr('id', 'equalto', n.id)|list %}
+{% if otras %}
+<section class="bloque ancho" aria-labelledby="mas-titulo">
+  <div class="bloque__cabeza"><h2 id="mas-titulo">Más noticias</h2><a href="{{ raiz }}noticias.html">Todas las noticias</a></div>
+  <div class="rejilla-noticias">{% for o in otras[:3] %}{{ tarjeta_noticia(o, raiz) }}{% endfor %}</div>
+</section>
+{% endif %}
+{% endblock %}

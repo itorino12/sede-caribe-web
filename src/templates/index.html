@@ -1,0 +1,126 @@
+{% extends "base.html" %}
+{% from "_macros.html" import evento, tarjeta_noticia %}
+{% block contenido %}
+<section class="portada" aria-labelledby="portada-titulo">
+  <svg class="portada__olas" aria-hidden="true" viewBox="0 0 1200 520" preserveAspectRatio="none">
+    {% for i in range(9) %}<path d="M0 {{ 300 + i * 26 }} C 200 {{ 270 + i * 26 }}, 400 {{ 330 + i * 26 }}, 600 {{ 296 + i * 26 }} S 1000 {{ 262 + i * 26 }}, 1200 {{ 300 + i * 26 }}"/>{% endfor %}
+  </svg>
+  <div class="ancho portada__rejilla">
+    <div class="portada__texto">
+      <h1 id="portada-titulo">{{ sitio.lema }}</h1>
+      <p class="portada__bajada">{{ carreras|length }} carreras en Limón y Siquirres, residencias dentro del campus y medio siglo de historia con la provincia.</p>
+      <form class="portada__buscar" role="search" data-busqueda-directa>
+        <label for="portada-buscar">¿Qué necesita encontrar?</label>
+        <div class="portada__campo">
+          <input id="portada-buscar" type="search" placeholder="Por ejemplo: becas, Registro, Marina Civil" autocomplete="off">
+          <button type="submit" class="boton">Buscar</button>
+        </div>
+      </form>
+      <p class="portada__acciones">
+        <a class="boton boton--claro" href="estudiar.html">Ver las carreras</a>
+        <a class="enlace-claro" href="admision.html">Cómo ingresar a la UCR</a>
+      </p>
+    </div>
+
+    <aside class="hoy" aria-labelledby="hoy-titulo" data-compilado="{{ ahora.isoformat(timespec='seconds') }}">
+      <div class="hoy__cabeza">
+        <h2 id="hoy-titulo" class="hoy__titulo">Hoy en la Sede</h2>
+        <p class="hoy__vivo"><span class="hoy__punto" aria-hidden="true"></span> <span data-hace>Actualizado el {{ ahora.date()|fecha_larga }}</span></p>
+      </div>
+      <p class="hoy__fecha"><span class="hoy__dia" data-hoy-dia>{{ hoy.day }}</span><span class="hoy__resto"><span data-hoy-semana>{{ hoy|dia_semana }}</span><br><span data-hoy-mes>{{ hoy|mes }} de {{ hoy.year }}</span></span></p>
+
+      {% for a in avisos if not a.urgente %}
+      <div class="hoy__aviso">
+        <p><strong>{{ a.titulo }}.</strong> {{ a.texto }}</p>
+        {% if a.enlace %}<a href="{{ a.enlace }}">{{ a.enlace_texto or 'Más información' }}</a>{% endif %}
+      </div>
+      {% endfor %}
+
+      <h3 class="hoy__sub">Próximas actividades</h3>
+      {% if eventos %}
+      <ul class="hoy__lista">{% for e in eventos[:3] %}{{ evento(e, '', compacto=true) }}{% endfor %}</ul>
+      <a class="hoy__mas" href="agenda.html">Agenda completa</a>
+      {% else %}
+      <p class="hoy__vacio">No hay actividades programadas para los próximos días.</p>
+      {% endif %}
+
+      {% if noticias %}
+      <h3 class="hoy__sub">Lo más reciente</h3>
+      <p class="hoy__nota"><a href="noticias/{{ noticias[0].id }}.html">{{ noticias[0].titulo }}</a><br><time datetime="{{ noticias[0].f.isoformat() }}">{{ noticias[0].f|fecha_larga }}</time></p>
+      {% endif %}
+    </aside>
+  </div>
+</section>
+
+<section class="perfiles ancho" aria-labelledby="perfiles-titulo">
+  <h2 id="perfiles-titulo" class="oculto">Accesos por perfil</h2>
+  <div class="perfiles__rejilla">
+    <nav aria-labelledby="pf-1"><h3 id="pf-1">Quiero estudiar aquí</h3>
+      <ul><li><a href="estudiar.html">Carreras y planes de estudio</a></li><li><a href="admision.html">Pasos de admisión</a></li><li><a href="unidades/vida-estudiantil.html">Becas y residencias</a></li></ul></nav>
+    <nav aria-labelledby="pf-2"><h3 id="pf-2">Ya estudio aquí</h3>
+      <ul><li><a href="https://ematricula.ucr.ac.cr/ematricula/">ematrícula</a></li><li><a href="https://mediacionvirtual.ucr.ac.cr/login/">Mediación Virtual</a></li><li><a href="enlaces.html#estudiantes">Todos los sistemas y trámites</a></li></ul></nav>
+    <nav aria-labelledby="pf-3"><h3 id="pf-3">Trabajo en la UCR</h3>
+      <ul><li><a href="https://portal.ucr.ac.cr">Portal universitario</a></li><li><a href="directorio.html">Directorio de extensiones</a></li><li><a href="enlaces.html#personal-universitario">Sistemas del personal</a></li></ul></nav>
+    <nav aria-labelledby="pf-4"><h3 id="pf-4">Soy de la comunidad</h3>
+      <ul><li><a href="unidades/educacion-continua.html">Cursos libres</a></li><li><a href="unidades/accion-social.html">Proyectos con comunidades</a></li><li><a href="agenda.html">Actividades abiertas</a></li></ul></nav>
+  </div>
+</section>
+
+{% if noticias %}
+<section class="bloque ancho" aria-labelledby="noticias-titulo">
+  <div class="bloque__cabeza">
+    <h2 id="noticias-titulo">Noticias</h2>
+    <a href="noticias.html">Todas las noticias</a>
+  </div>
+  <div class="noticias-portada">
+    {{ tarjeta_noticia(noticias[0], '', grande=true) }}
+    <div class="noticias-portada__lista">
+      {% for n in noticias[1:5] %}{{ tarjeta_noticia(n, '') }}{% endfor %}
+    </div>
+  </div>
+</section>
+{% endif %}
+
+<section class="carreras-portada" aria-labelledby="carreras-titulo">
+  <div class="ancho">
+    <div class="bloque__cabeza">
+      <h2 id="carreras-titulo">Qué se estudia en el Caribe</h2>
+      <a href="estudiar.html">Ver todas con sus planes</a>
+    </div>
+    <div class="carreras-portada__areas">
+      {% for area in areas %}
+      <div class="area">
+        <h3 class="area__titulo">{{ area }}</h3>
+        <ul>
+          {% for c in carreras if c.area == area %}
+          <li><a href="carreras/{{ c.id }}.html">{{ c.nombre }}</a><span>{{ c.grados }}{% if 'Siquirres' in c.recintos %}. También en Siquirres{% endif %}</span></li>
+          {% endfor %}
+        </ul>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+<section class="bloque ancho historia-portada" aria-labelledby="historia-titulo">
+  <div class="bloque__cabeza">
+    <h2 id="historia-titulo">En Limón desde 1975</h2>
+    <a href="la-sede.html#historia">Leer la historia</a>
+  </div>
+  <ol class="linea-tiempo">
+    {% for h in hitos %}<li><span class="linea-tiempo__anio">{{ h.anio }}</span><p>{{ h.texto }}</p></li>{% endfor %}
+  </ol>
+</section>
+
+<section class="bloque ancho" aria-labelledby="servicios-titulo">
+  <div class="bloque__cabeza">
+    <h2 id="servicios-titulo">En el campus</h2>
+    <a href="la-sede.html#servicios">Todos los servicios</a>
+  </div>
+  <ul class="servicios">
+    {% for u in unidades if u.grupo == 'Servicios' %}
+    <li><a href="unidades/{{ u.id }}.html">{{ u.nombre }}</a><p>{{ u.resumen }}</p></li>
+    {% endfor %}
+  </ul>
+</section>
+{% endblock %}

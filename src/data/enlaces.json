@@ -1,0 +1,104 @@
+[
+ {
+  "grupo": "Estudiantes",
+  "titulo": "ematrícula",
+  "url": "https://ematricula.ucr.ac.cr/ematricula/",
+  "descripcion": "Matrícula, expediente y estado de cursos"
+ },
+ {
+  "grupo": "Estudiantes",
+  "titulo": "Mediación Virtual",
+  "url": "https://mediacionvirtual.ucr.ac.cr/login/",
+  "descripcion": "Aulas virtuales de los cursos"
+ },
+ {
+  "grupo": "Estudiantes",
+  "titulo": "Correo universitario",
+  "url": "https://correo.ucr.ac.cr/",
+  "descripcion": "Su cuenta @ucr.ac.cr"
+ },
+ {
+  "grupo": "Estudiantes",
+  "titulo": "Becas y atención socioeconómica",
+  "url": "http://becas.ucr.ac.cr/becas/",
+  "descripcion": "Solicitud y renovación de beca"
+ },
+ {
+  "grupo": "Estudiantes",
+  "titulo": "Oficina de Registro e Información",
+  "url": "https://ori.ucr.ac.cr/",
+  "descripcion": "Admisión, calendario y trámites"
+ },
+ {
+  "grupo": "Estudiantes",
+  "titulo": "Bibliotecas SIBDI",
+  "url": "http://sibdi.ucr.ac.cr/",
+  "descripcion": "Catálogo y bases de datos"
+ },
+ {
+  "grupo": "Estudiantes",
+  "titulo": "Oficina de Administración Financiera",
+  "url": "https://oaf.ucr.ac.cr/",
+  "descripcion": "Pagos y cobros"
+ },
+ {
+  "grupo": "Estudiantes",
+  "titulo": "Soda estudiantil",
+  "url": "https://soda.ucr.ac.cr/#/serviciodealimentacion/24",
+  "descripcion": "Menú del servicio de alimentación"
+ },
+ {
+  "grupo": "Personal universitario",
+  "titulo": "Portal universitario",
+  "url": "https://portal.ucr.ac.cr",
+  "descripcion": "Gestiones del personal"
+ },
+ {
+  "grupo": "Personal universitario",
+  "titulo": "Expediente único",
+  "url": "https://expediente.ucr.ac.cr/Inicio.aspx",
+  "descripcion": "Expediente del personal"
+ },
+ {
+  "grupo": "Personal universitario",
+  "titulo": "Expediente único para jefaturas",
+  "url": "https://expediente.ucr.ac.cr/Unidades/Inicio.aspx",
+  "descripcion": "Gestión de unidades"
+ },
+ {
+  "grupo": "Personal universitario",
+  "titulo": "Estándares de equipo de cómputo",
+  "url": "https://ci.ucr.ac.cr/estandares",
+  "descripcion": "Centro de Informática"
+ },
+ {
+  "grupo": "De interés",
+  "titulo": "Aula Desconcentrada de Siquirres",
+  "url": "https://siquirres.ucr.ac.cr/",
+  "descripcion": "Sitio del recinto"
+ },
+ {
+  "grupo": "De interés",
+  "titulo": "Centro Infantil Universitario, Limón",
+  "url": "https://cius.ucr.ac.cr/caribe-cil",
+  "descripcion": "CIUB en el sitio de los centros infantiles"
+ },
+ {
+  "grupo": "De interés",
+  "titulo": "Observatorio del Turismo del Caribe",
+  "url": "http://obturcaribe.ucr.ac.cr/",
+  "descripcion": "ObturCaribe"
+ },
+ {
+  "grupo": "De interés",
+  "titulo": "Informática Empresarial Intersedes",
+  "url": "https://informaticaempresarial.ucr.ac.cr",
+  "descripcion": "Sitio de la carrera en las diez sedes"
+ },
+ {
+  "grupo": "De interés",
+  "titulo": "Universidad de Costa Rica",
+  "url": "https://www.ucr.ac.cr",
+  "descripcion": "Portal institucional"
+ }
+]

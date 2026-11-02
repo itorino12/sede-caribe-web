@@ -1,0 +1,166 @@
+<!doctype html>
+<html lang="es-CR" data-theme="auto">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% if pagina == "index.html" %}{{ sitio.nombre_largo }}{% else %}{{ titulo }} | UCR Sede del Caribe{% endif %}</title>
+  <meta name="description" content="{{ descripcion|striptags|truncate(160) }}">
+  <meta name="theme-color" content="#0B3A53">
+  <link rel="canonical" href="{{ sitio.base_url }}/{{ '' if pagina == 'index.html' else pagina }}">
+  <meta property="og:site_name" content="UCR Sede del Caribe">
+  <meta property="og:title" content="{{ titulo }}">
+  <meta property="og:description" content="{{ descripcion|striptags|truncate(200) }}">
+  <meta property="og:locale" content="es_CR">
+  {% block og %}<meta property="og:type" content="website">{% endblock %}
+  <link rel="icon" href="{{ raiz }}assets/img/favicon.svg" type="image/svg+xml">
+  <link rel="alternate" type="application/rss+xml" title="Noticias de la Sede del Caribe" href="{{ raiz }}noticias.xml">
+  <link rel="preload" href="{{ raiz }}assets/fonts/fira-sans-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="{{ raiz }}assets/fonts/fira-sans-latin-800-normal.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="{{ raiz }}assets/css/sede.css">
+  <script src="{{ raiz }}assets/js/tema.js"></script>
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"CollegeOrUniversity","name":"Universidad de Costa Rica, Sede del Caribe","url":"{{ sitio.base_url }}","telephone":"+506 {{ sitio.telefono }}","email":"{{ sitio.correo }}","address":{"@type":"PostalAddress","addressLocality":"Limón","addressCountry":"CR"},"parentOrganization":{"@type":"CollegeOrUniversity","name":"Universidad de Costa Rica","url":"https://www.ucr.ac.cr"}}</script>
+  {% block cabeza %}{% endblock %}
+</head>
+<body class="p-{{ pagina|replace('/', '-')|replace('.html', '') }}">
+  <a class="saltar" href="#contenido">Saltar al contenido</a>
+
+  <div class="franja-ucr">
+    <div class="ancho franja-ucr__fila">
+      <a href="https://www.ucr.ac.cr">Universidad de Costa Rica</a>
+      <nav aria-label="Accesos rápidos">
+        <a href="{{ raiz }}enlaces.html#estudiantes">Estudiantes</a>
+        <a href="{{ raiz }}enlaces.html#personal-universitario">Personal</a>
+        <a href="{{ raiz }}directorio.html">Directorio</a>
+        <button type="button" class="franja-ucr__a11y" data-abrir="panel-a11y" aria-controls="panel-a11y" aria-expanded="false">Accesibilidad</button>
+      </nav>
+    </div>
+  </div>
+
+  <header class="cabecera">
+    <div class="ancho cabecera__fila">
+      <a class="firma" href="{{ raiz }}index.html" aria-label="Inicio, Universidad de Costa Rica, Sede del Caribe">
+        <img class="firma__ucr firma__ucr--claro" src="{{ raiz }}assets/img/ucr-celeste.svg" alt="" width="132" height="69">
+        <img class="firma__ucr firma__ucr--oscuro" src="{{ raiz }}assets/img/ucr-blanco.svg" alt="" width="132" height="69">
+        <span class="firma__sede">Sede del<br>Caribe</span>
+      </a>
+      <button class="menu-boton" type="button" aria-controls="menu" aria-expanded="false" data-menu>
+        <span class="menu-boton__icono" aria-hidden="true"></span><span>Menú</span>
+      </button>
+      <nav class="menu" id="menu" aria-label="Principal">
+        <ul>
+          {% set secciones = [
+            ("Estudiar", "estudiar.html", [("Carreras", "estudiar.html"), ("Cómo ingresar", "admision.html"), ("Becas y vida estudiantil", "unidades/vida-estudiantil.html"), ("Aula de Siquirres", "unidades/siquirres.html")]),
+            ("La Sede", "la-sede.html", [("Historia", "la-sede.html#historia"), ("Misión y visión", "la-sede.html#mision"), ("Coordinaciones", "la-sede.html#coordinaciones"), ("Directorio", "directorio.html")]),
+            ("Campus y servicios", "la-sede.html#servicios", []),
+            ("Investigación y acción social", "unidades/investigacion.html", [("Investigación", "unidades/investigacion.html"), ("Acción social", "unidades/accion-social.html"), ("Educación continua", "unidades/educacion-continua.html")]),
+            ("Noticias", "noticias.html", []),
+            ("Agenda", "agenda.html", []),
+          ] %}
+          {% for nombre, url, hijos in secciones %}
+          {% set activo = pagina == url or (pagina.startswith('carreras/') and url == 'estudiar.html') or (pagina.startswith('noticias/') and url == 'noticias.html') %}
+          <li class="menu__item{% if hijos or nombre == 'Campus y servicios' %} menu__item--sub{% endif %}">
+            {% if hijos or nombre == 'Campus y servicios' %}
+            <button type="button" class="menu__enlace" aria-expanded="false" data-sub>{{ nombre }}</button>
+            <ul class="menu__sub">
+              {% if nombre == 'Campus y servicios' %}
+              {% for u in nav_unidades %}<li><a href="{{ raiz }}unidades/{{ u.id }}.html">{{ u.nombre }}</a></li>{% endfor %}
+              {% else %}
+              {% for t, h in hijos %}<li><a href="{{ raiz }}{{ h }}">{{ t }}</a></li>{% endfor %}
+              {% endif %}
+            </ul>
+            {% else %}
+            <a class="menu__enlace" href="{{ raiz }}{{ url }}"{% if activo %} aria-current="page"{% endif %}>{{ nombre }}</a>
+            {% endif %}
+          </li>
+          {% endfor %}
+        </ul>
+      </nav>
+      <button type="button" class="buscar-boton" data-abrir="buscador" aria-controls="buscador" aria-expanded="false">
+        <svg aria-hidden="true" viewBox="0 0 24 24" width="20" height="20"><circle cx="10.5" cy="10.5" r="6.5" fill="none" stroke="currentColor" stroke-width="2"/><path d="M15.5 15.5 21 21" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+        <span>Buscar</span>
+      </button>
+    </div>
+  </header>
+
+  {% for a in avisos if a.urgente %}
+  <div class="aviso aviso--urgente" role="status">
+    <div class="ancho aviso__fila">
+      <p><strong>{{ a.titulo }}.</strong> {{ a.texto }}{% if a.enlace %} <a href="{{ a.enlace if '://' in a.enlace else raiz ~ a.enlace }}">{{ a.enlace_texto or 'Más información' }}</a>{% endif %}</p>
+      {% if a.ejemplo %}<span class="marca-ejemplo">Ejemplo</span>{% endif %}
+    </div>
+  </div>
+  {% endfor %}
+
+  {% if ejemplos %}
+  <p class="vista-previa">Vista previa con contenido de ejemplo marcado. En el sitio real, todo sale del Drive.</p>
+  {% endif %}
+
+  <main id="contenido" tabindex="-1">
+    {% block contenido %}{% endblock %}
+  </main>
+
+  <footer class="pie">
+    <div class="ancho pie__rejilla">
+      <div class="pie__sede">
+        <img src="{{ raiz }}assets/img/ucr-blanco.svg" alt="Universidad de Costa Rica" width="150" height="78">
+        <p class="pie__nombre">Sede del Caribe</p>
+        <p>{{ sitio.direccion }}</p>
+        <p><a href="{{ sitio.telefono|tel }}">Central telefónica {{ sitio.telefono }}</a><br>
+           <a href="mailto:{{ sitio.correo }}">{{ sitio.correo }}</a></p>
+        {% set redes = [("Facebook", sitio.facebook), ("Instagram", sitio.instagram), ("YouTube", sitio.youtube), ("TikTok", sitio.tiktok)] %}
+        {% if redes|selectattr(1)|list %}
+        <ul class="pie__redes">{% for r, u in redes if u %}<li><a href="{{ u }}">{{ r }}</a></li>{% endfor %}</ul>
+        {% endif %}
+      </div>
+      <nav aria-label="Estudiar">
+        <h2>Estudiar</h2>
+        <ul><li><a href="{{ raiz }}estudiar.html">Carreras</a></li><li><a href="{{ raiz }}admision.html">Cómo ingresar</a></li>
+            <li><a href="{{ raiz }}unidades/vida-estudiantil.html">Becas y vida estudiantil</a></li><li><a href="{{ raiz }}unidades/siquirres.html">Aula de Siquirres</a></li></ul>
+      </nav>
+      <nav aria-label="La Sede">
+        <h2>La Sede</h2>
+        <ul><li><a href="{{ raiz }}la-sede.html">Historia y misión</a></li><li><a href="{{ raiz }}la-sede.html#coordinaciones">Coordinaciones</a></li>
+            <li><a href="{{ raiz }}directorio.html">Directorio</a></li><li><a href="{{ raiz }}contacto.html">Contacto</a></li></ul>
+      </nav>
+      <nav aria-label="Al día">
+        <h2>Al día</h2>
+        <ul><li><a href="{{ raiz }}noticias.html">Noticias</a></li><li><a href="{{ raiz }}agenda.html">Agenda</a></li>
+            <li><a href="{{ raiz }}agenda.ics">Agregar la agenda a su calendario</a></li><li><a href="{{ raiz }}noticias.xml">Noticias por RSS</a></li></ul>
+      </nav>
+    </div>
+    <div class="ancho pie__base">
+      <p>Información actualizada el {{ ahora.date()|fecha_larga }}. <a href="{{ raiz }}accesibilidad.html">Accesibilidad</a></p>
+      <p>© {{ hoy.year }} Universidad de Costa Rica</p>
+    </div>
+  </footer>
+
+  <dialog class="buscador" id="buscador" aria-label="Buscar en el sitio">
+    <form method="dialog" class="buscador__form" role="search">
+      <label for="buscador-campo" class="oculto">Buscar en el sitio</label>
+      <input id="buscador-campo" type="search" placeholder="Carreras, oficinas, extensiones, noticias…" autocomplete="off">
+      <button type="submit" class="buscador__cerrar">Cerrar</button>
+    </form>
+    <p class="buscador__estado" id="buscador-estado" aria-live="polite"></p>
+    <ul class="buscador__resultados" id="buscador-resultados"></ul>
+  </dialog>
+
+  <dialog class="panel-a11y" id="panel-a11y" aria-labelledby="panel-a11y-titulo">
+    <h2 id="panel-a11y-titulo">Accesibilidad</h2>
+    <fieldset><legend>Tamaño del texto</legend>
+      <div class="segmentos"><button type="button" data-escala="1">Normal</button><button type="button" data-escala="1.15">Grande</button><button type="button" data-escala="1.3">Muy grande</button></div>
+    </fieldset>
+    <fieldset><legend>Colores</legend>
+      <div class="segmentos"><button type="button" data-tema="auto">Automático</button><button type="button" data-tema="light">Claro</button><button type="button" data-tema="dark">Oscuro</button></div>
+    </fieldset>
+    <fieldset><legend>Ajustes</legend>
+      <label class="interruptor"><input type="checkbox" data-opcion="contraste"> Alto contraste</label>
+      <label class="interruptor"><input type="checkbox" data-opcion="subrayado"> Subrayar enlaces</label>
+      <label class="interruptor"><input type="checkbox" data-opcion="quieto"> Detener animaciones</label>
+    </fieldset>
+    <form method="dialog"><button class="boton boton--claro">Listo</button></form>
+  </dialog>
+
+  <script src="{{ raiz }}assets/js/indice.js" defer></script>
+  <script src="{{ raiz }}assets/js/sede.js" defer data-raiz="{{ raiz }}"></script>
+</body>
+</html>

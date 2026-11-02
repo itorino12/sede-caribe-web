@@ -1,0 +1,6 @@
+dist/
+contenido/
+.venv/
+__pycache__/
+*.json.key
+cuenta-servicio*.json

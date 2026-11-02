@@ -1,0 +1,10 @@
+{
+ "avisos": [
+  {"publicar": "sí", "ejemplo": "sí", "tipo": "urgente", "titulo": "Aviso de ejemplo", "texto": "Así se ve un aviso urgente: por ejemplo, un cierre del campus por lluvias o un cambio de fecha de matrícula. Se escribe en la pestaña Avisos y desaparece solo en su fecha «hasta».", "enlace_texto": "Ver la agenda", "enlace": "agenda.html", "desde": "2026-11-01", "hasta": "2026-12-31"}
+ ],
+ "eventos": [
+  {"publicar": "sí", "ejemplo": "sí", "id": "ejemplo-1", "fecha": "2026-11-06", "hora": "09:00", "fecha_fin": "", "titulo": "Actividad de ejemplo: feria de carreras", "lugar": "Gimnasio", "categoria": "Admisión", "descripcion": "Las coordinaciones de carrera atienden a estudiantes de colegio.", "enlace": "", "enlace_texto": "", "organiza": "Vida Estudiantil"},
+  {"publicar": "sí", "ejemplo": "sí", "id": "ejemplo-2", "fecha": "2026-11-12", "hora": "14:00", "fecha_fin": "", "titulo": "Actividad de ejemplo: charla de investigación", "lugar": "Aula Multiuso", "categoria": "Investigación", "descripcion": "Presentación de resultados de un proyecto inscrito.", "enlace": "", "enlace_texto": "", "organiza": "Coordinación de Investigación"},
+  {"publicar": "sí", "ejemplo": "sí", "id": "ejemplo-3", "fecha": "2026-11-20", "hora": "", "fecha_fin": "2026-11-21", "titulo": "Actividad de ejemplo: festival cultural", "lugar": "Campus de Limón", "categoria": "Cultura", "descripcion": "Dos días de música, danza y gastronomía del Caribe.", "enlace": "", "enlace_texto": "", "organiza": "Acción Social"}
+ ]
+}

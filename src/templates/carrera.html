@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% from "_macros.html" import encabezado, contacto %}
+{% block contenido %}
+{{ encabezado(carrera.nombre, [("Carreras", "estudiar.html")], raiz, carrera.grados) }}
+<div class="ancho pagina pagina--con-ficha">
+  <div class="prosa">
+    {% if carrera.html %}{{ carrera.html|safe }}
+    {% else %}<p>La coordinación de la carrera está preparando la descripción de esta página. Mientras tanto, el plan de estudios detalla los cursos y el grado que se obtiene.</p>{% endif %}
+  </div>
+  <div class="columna-ficha">
+    <aside class="ficha" aria-label="Datos de la carrera">
+      <h2 class="ficha__titulo">La carrera en datos</h2>
+      <dl>
+        <dt>Grado</dt><dd>{{ carrera.grados }}</dd>
+        <dt>Dónde</dt><dd>{{ carrera.recintos }}</dd>
+        {% if carrera.codigo %}<dt>Código de carrera</dt><dd>{{ carrera.codigo }}</dd>{% endif %}
+        <dt>Área</dt><dd>{{ carrera.area }}</dd>
+      </dl>
+      {% if carrera.plan_url %}<a class="boton boton--bloque" href="{{ carrera.plan_url }}">Plan de estudios</a>{% endif %}
+      <a class="ficha__enlace" href="{{ raiz }}admision.html">Cómo ingresar</a>
+    </aside>
+    {{ contacto(carrera, raiz) }}
+  </div>
+</div>
+{% endblock %}

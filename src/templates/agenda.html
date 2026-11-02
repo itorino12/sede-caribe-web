@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+{% from "_macros.html" import encabezado, evento %}
+{% block cabeza %}
+{% if eventos %}
+{% set grafo = [] %}
+{% for e in eventos if not e.ejemplo %}{% set _ = grafo.append({"@type": "Event", "name": e.titulo, "startDate": e.f.isoformat(), "endDate": e.fin.isoformat(), "location": {"@type": "Place", "name": e.lugar or "UCR Sede del Caribe", "address": "Limón, Costa Rica"}, "organizer": {"@type": "CollegeOrUniversity", "name": "Universidad de Costa Rica, Sede del Caribe"}}) %}{% endfor %}
+{% if grafo %}<script type="application/ld+json">{{ {"@context": "https://schema.org", "@graph": grafo}|tojson }}</script>{% endif %}
+{% endif %}
+{% endblock %}
+{% block contenido %}
+{{ encabezado("Agenda", [], raiz, "Actividades, cursos, plazos y eventos abiertos de la Sede del Caribe.") }}
+<div class="ancho pagina">
+  <p class="suscribir">
+    <a class="boton boton--secundario" href="{{ raiz }}agenda.ics">Agregar la agenda a mi calendario</a>
+    <span>Funciona con Google Calendar, Outlook y el calendario del teléfono. Las actividades nuevas aparecen solas.</span>
+  </p>
+  {% if eventos %}
+    {% for grupo in eventos|groupby('f.month') %}
+    <section class="agenda-mes">
+      <h2>{{ grupo.list[0].f|mes|capitalize }} de {{ grupo.list[0].f.year }}</h2>
+      <ul class="agenda">{% for e in grupo.list %}{{ evento(e, raiz) }}{% endfor %}</ul>
+    </section>
+    {% endfor %}
+  {% else %}
+    <p class="vacio">No hay actividades programadas por ahora. Las coordinaciones publican aquí sus actividades en cuanto las confirman.</p>
+  {% endif %}
+  {% if recientes %}
+  <section class="agenda-mes agenda-mes--pasado">
+    <h2>Del último mes</h2>
+    <ul class="agenda">{% for e in recientes %}{{ evento(e, raiz, compacto=true) }}{% endfor %}</ul>
+  </section>
+  {% endif %}
+</div>
+{% endblock %}

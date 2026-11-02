@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% from "_macros.html" import encabezado %}
+{% block contenido %}
+{{ encabezado("Accesibilidad", [], raiz) }}
+<div class="ancho pagina">
+  <div class="prosa">
+    <p>Este sitio se construye para cumplir las Pautas de Accesibilidad para el Contenido Web (WCAG) 2.2 en su nivel AA, en concordancia con la política universitaria de inclusión.</p>
+    <h2>Qué puede hacer</h2>
+    <ul>
+      <li>Ampliar la página con el zoom del navegador o del teléfono, sin perder contenido.</li>
+      <li>Usar el botón «Accesibilidad», arriba a la derecha, para agrandar el texto, cambiar a colores oscuros o de alto contraste, subrayar los enlaces y detener las animaciones.</li>
+      <li>Recorrer todo el sitio con el teclado. La primera tecla Tab ofrece saltar directo al contenido.</li>
+      <li>Usarlo con lectores de pantalla como NVDA, JAWS, VoiceOver o TalkBack.</li>
+    </ul>
+    <h2>Si algo no funciona</h2>
+    <p>Escriba a <a href="mailto:{{ sitio.correo }}">{{ sitio.correo }}</a> con la dirección de la página y el problema. Si lo necesita, le enviamos la información en otro formato.</p>
+  </div>
+</div>
+{% endblock %}

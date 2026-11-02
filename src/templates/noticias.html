@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% from "_macros.html" import encabezado, tarjeta_noticia %}
+{% block contenido %}
+{{ encabezado("Noticias", [], raiz, "Lo que pasa en la Sede, contado por la Unidad de Comunicación Estudiantil y las coordinaciones.") }}
+<div class="ancho pagina">
+  <div class="filtros" role="group" aria-label="Filtrar por tema" data-filtro="noticias">
+    <button type="button" aria-pressed="true" data-valor="">Todas</button>
+    {% for cat in categorias %}<button type="button" aria-pressed="false" data-valor="{{ cat }}">{{ cat }}</button>{% endfor %}
+  </div>
+  <div class="rejilla-noticias" id="noticias">
+    {% for n in noticias %}<div data-area="{{ n.categoria }}">{{ tarjeta_noticia(n, raiz) }}</div>{% endfor %}
+  </div>
+  {% if not noticias %}<p class="vacio">Todavía no hay noticias publicadas.</p>{% endif %}
+  <section class="llamado">
+    <h2>¿Tiene una noticia de su unidad?</h2>
+    <p>El personal y el estudiantado pueden solicitar cobertura a la Unidad de Comunicación Estudiantil. Se atiende por orden de llegada y según la disponibilidad del equipo.</p>
+    {% if sitio.formulario_cobertura %}<a class="boton" href="{{ sitio.formulario_cobertura }}">Solicitar cobertura</a>{% endif %}
+  </section>
+</div>
+{% endblock %}

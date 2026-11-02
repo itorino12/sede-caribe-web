@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% from "_macros.html" import encabezado %}
+{% block contenido %}
+{{ encabezado("Enlaces y trámites", [], raiz, "Los sistemas de la Universidad que más se usan, ordenados por quién los necesita.") }}
+<div class="ancho pagina">
+  {% for grupo, filas in enlaces.items() %}
+  <section class="seccion" id="{{ grupo|lower|replace(' ', '-') }}">
+    <h2>{{ grupo }}</h2>
+    <ul class="enlaces">
+      {% for e in filas %}<li><a href="{{ e.url }}">{{ e.titulo }}</a><span>{{ e.descripcion }}</span></li>{% endfor %}
+    </ul>
+  </section>
+  {% endfor %}
+</div>
+{% endblock %}

@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% from "_macros.html" import encabezado %}
+{% block contenido %}
+{{ encabezado("Contacto", [], raiz, "Para una oficina en particular, use el directorio. Para todo lo demás, empiece por aquí.") }}
+<div class="ancho pagina">
+  <div class="contacto">
+    <section>
+      <h2>Central telefónica</h2>
+      <p class="contacto__dato"><a href="{{ sitio.telefono|tel }}">{{ sitio.telefono }}</a></p>
+      <p>Le comunican con cualquier oficina de la Sede.</p>
+    </section>
+    <section>
+      <h2>Correo de la Dirección</h2>
+      <p class="contacto__dato"><a href="mailto:{{ sitio.correo }}">{{ sitio.correo }}</a></p>
+      <p>Para correspondencia oficial y consultas generales.</p>
+    </section>
+    <section>
+      <h2>Dónde estamos</h2>
+      <p class="contacto__dato">{{ sitio.direccion }}</p>
+      {% if sitio.mapa_url %}<p><a href="{{ sitio.mapa_url }}">Abrir en el mapa</a></p>{% endif %}
+    </section>
+  </div>
+  <section class="seccion">
+    <h2>Escribir a una coordinación</h2>
+    <ul class="enlaces">
+      {% for u in unidades if u.correo %}<li><a href="mailto:{{ u.correo }}">{{ u.nombre }}</a><span>{{ u.correo }}</span></li>{% endfor %}
+    </ul>
+  </section>
+</div>
+{% endblock %}

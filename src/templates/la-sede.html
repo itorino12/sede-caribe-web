@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+{% from "_macros.html" import encabezado %}
+{% block contenido %}
+{{ encabezado("La Sede del Caribe", [], raiz, "La Universidad de Costa Rica llegó a Limón en 1975, con 54 estudiantes y aulas prestadas. Hoy tiene campus propio en Limón y un aula desconcentrada en Siquirres.") }}
+<div class="ancho pagina">
+  <nav class="indice" aria-label="En esta página">
+    <a href="#historia">Historia</a><a href="#mision">Misión y visión</a><a href="#coordinaciones">Coordinaciones</a><a href="#servicios">Campus y servicios</a>
+  </nav>
+
+  <section id="historia" class="seccion seccion--dos">
+    <h2>Historia</h2>
+    <div>
+      <div class="prosa">{{ historia|safe }}</div>
+      <ol class="linea-tiempo linea-tiempo--vertical">
+        {% for h in hitos %}<li><span class="linea-tiempo__anio">{{ h.anio }}</span><p>{{ h.texto }}</p></li>{% endfor %}
+      </ol>
+    </div>
+  </section>
+
+  <section id="mision" class="seccion seccion--dos">
+    <h2>Misión y visión</h2>
+    <div class="prosa prosa--destacada">{{ mision|safe }}</div>
+  </section>
+
+  <section id="coordinaciones" class="seccion">
+    <h2>Dirección y coordinaciones</h2>
+    <ul class="unidades">
+      {% for u in unidades if u.grupo in ["Gobierno", "Coordinaciones", "Recintos"] %}
+      <li>
+        <h3><a href="unidades/{{ u.id }}.html">{{ u.nombre }}</a></h3>
+        {% if u.responsable %}<p class="unidades__persona">{{ u.responsable }}</p>{% endif %}
+        <p>{{ u.resumen }}</p>
+        <p class="unidades__contacto">{% if u.extension %}<a href="{{ u.extension|tel }}">{{ u.extension }}</a>{% endif %}{% if u.correo %} <a href="mailto:{{ u.correo }}">{{ u.correo }}</a>{% endif %}</p>
+      </li>
+      {% endfor %}
+    </ul>
+  </section>
+
+  <section id="servicios" class="seccion">
+    <h2>Campus y servicios</h2>
+    <ul class="servicios">
+      {% for u in unidades if u.grupo == 'Servicios' %}
+      <li><a href="unidades/{{ u.id }}.html">{{ u.nombre }}</a><p>{{ u.resumen }}</p></li>
+      {% endfor %}
+    </ul>
+  </section>
+</div>
+{% endblock %}

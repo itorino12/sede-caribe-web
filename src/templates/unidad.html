@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% from "_macros.html" import encabezado, contacto, evento %}
+{% block contenido %}
+{% set padre = ("La Sede", "la-sede.html#coordinaciones") if u.grupo in ["Coordinaciones", "Gobierno", "Recintos"] else ("Campus y servicios", "la-sede.html#servicios") %}
+{{ encabezado(u.nombre, [padre], raiz, u.resumen) }}
+<div class="ancho pagina pagina--con-ficha">
+  <div class="prosa">
+    {{ u.html|safe }}
+    {% if u.extensiones %}
+    <h2>Extensiones</h2>
+    <table class="tabla">
+      <thead><tr><th scope="col">Oficina</th><th scope="col">Extensión</th><th scope="col">Edificio</th></tr></thead>
+      <tbody>{% for f in u.extensiones %}<tr><td>{{ f.oficina }}</td><td><a href="{{ f.extension|tel }}">{{ f.extension }}</a></td><td>{{ f.edificio }}</td></tr>{% endfor %}</tbody>
+    </table>
+    {% endif %}
+    {% set propios = eventos|selectattr('organiza', 'equalto', u.nombre)|list %}
+    {% if propios %}
+    <h2>Próximas actividades</h2>
+    <ul class="agenda">{% for e in propios %}{{ evento(e, raiz) }}{% endfor %}</ul>
+    {% endif %}
+  </div>
+  <div class="columna-ficha">{{ contacto(u, raiz) }}</div>
+</div>
+{% endblock %}

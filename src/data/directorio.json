@@ -1,0 +1,415 @@
+[
+ {
+  "unidad": "Dirección",
+  "oficina": "Dirección, secretaría ejecutiva",
+  "extension": "2511-7303",
+  "edificio": "Administrativo",
+  "correo": "sedecaribe@ucr.ac.cr"
+ },
+ {
+  "unidad": "Dirección",
+  "oficina": "Dirección, asistente",
+  "extension": "2511-7338",
+  "edificio": "Administrativo",
+  "correo": ""
+ },
+ {
+  "unidad": "Acción Social",
+  "oficina": "Coordinación de Acción Social",
+  "extension": "2511-7349",
+  "edificio": "Administrativo",
+  "correo": "accionsocial.sedecaribe@ucr.ac.cr"
+ },
+ {
+  "unidad": "Acción Social",
+  "oficina": "Coordinación de Acción Social, asistente",
+  "extension": "2511-7307",
+  "edificio": "Administrativo",
+  "correo": ""
+ },
+ {
+  "unidad": "Acción Social",
+  "oficina": "Extensión docente, extensión cultural y TCU",
+  "extension": "2511-7313",
+  "edificio": "Pabellón 1",
+  "correo": ""
+ },
+ {
+  "unidad": "Acción Social",
+  "oficina": "Centro Infantil Universitario Bilingüe",
+  "extension": "2511-7331",
+  "edificio": "Residencias estudiantiles",
+  "correo": ""
+ },
+ {
+  "unidad": "Acción Social",
+  "oficina": "Educación Continua (cursos cortos)",
+  "extension": "2511-7330",
+  "edificio": "Aula 6",
+  "correo": ""
+ },
+ {
+  "unidad": "Administración",
+  "oficina": "Coordinación de Administración",
+  "extension": "2511-7321",
+  "edificio": "Administrativo",
+  "correo": "jefaturaadministrativa.sedecaribe@ucr.ac.cr"
+ },
+ {
+  "unidad": "Administración",
+  "oficina": "Asistente administrativa",
+  "extension": "2511-7353",
+  "edificio": "Administrativo",
+  "correo": ""
+ },
+ {
+  "unidad": "Administración",
+  "oficina": "Unidad de Compras Especializadas, encargado",
+  "extension": "2511-7322",
+  "edificio": "Administrativo",
+  "correo": ""
+ },
+ {
+  "unidad": "Administración",
+  "oficina": "Unidad de Compras Especializadas, asistente",
+  "extension": "2511-7306",
+  "edificio": "Administrativo",
+  "correo": ""
+ },
+ {
+  "unidad": "Administración",
+  "oficina": "Administración de red",
+  "extension": "2511-7305",
+  "edificio": "Administrativo",
+  "correo": ""
+ },
+ {
+  "unidad": "Administración",
+  "oficina": "Activos fijos",
+  "extension": "2511-7327",
+  "edificio": "Gimnasio",
+  "correo": ""
+ },
+ {
+  "unidad": "Administración",
+  "oficina": "Bodega",
+  "extension": "2511-7345",
+  "edificio": "Gimnasio",
+  "correo": ""
+ },
+ {
+  "unidad": "Administración",
+  "oficina": "Servicios generales",
+  "extension": "2511-7329",
+  "edificio": "Pabellón 1",
+  "correo": ""
+ },
+ {
+  "unidad": "Administración",
+  "oficina": "Oficina de Administración Financiera",
+  "extension": "2511-7328",
+  "edificio": "Administrativo",
+  "correo": ""
+ },
+ {
+  "unidad": "Administración",
+  "oficina": "Recursos humanos, encargada",
+  "extension": "2511-7344",
+  "edificio": "Administrativo",
+  "correo": ""
+ },
+ {
+  "unidad": "Administración",
+  "oficina": "Recursos humanos, asistente",
+  "extension": "2511-7324",
+  "edificio": "Administrativo",
+  "correo": ""
+ },
+ {
+  "unidad": "Administración",
+  "oficina": "Mantenimiento",
+  "extension": "2511-7352",
+  "edificio": "Gimnasio",
+  "correo": ""
+ },
+ {
+  "unidad": "Administración",
+  "oficina": "Central telefónica",
+  "extension": "2511-7300",
+  "edificio": "Administrativo",
+  "correo": ""
+ },
+ {
+  "unidad": "Carreras",
+  "oficina": "Coordinación de Inglés, Enseñanza del Inglés y Contaduría Pública",
+  "extension": "2511-7315",
+  "edificio": "Pabellón 1",
+  "correo": ""
+ },
+ {
+  "unidad": "Carreras",
+  "oficina": "Coordinación de Dirección de Empresas",
+  "extension": "2511-7310",
+  "edificio": "Pabellón 1",
+  "correo": ""
+ },
+ {
+  "unidad": "Carreras",
+  "oficina": "Coordinación de Estudios Generales",
+  "extension": "2511-7353",
+  "edificio": "Pabellón 1",
+  "correo": ""
+ },
+ {
+  "unidad": "Carreras",
+  "oficina": "Coordinación de Informática Empresarial",
+  "extension": "2511-7330",
+  "edificio": "Aula 6",
+  "correo": ""
+ },
+ {
+  "unidad": "Carreras",
+  "oficina": "Coordinación de Educación Inicial en Inglés",
+  "extension": "2511-7331",
+  "edificio": "Centro Universitario",
+  "correo": ""
+ },
+ {
+  "unidad": "Carreras",
+  "oficina": "Coordinación de Química y de Laboratorios",
+  "extension": "2511-7348",
+  "edificio": "Administrativo",
+  "correo": ""
+ },
+ {
+  "unidad": "Carreras",
+  "oficina": "Coordinación de Turismo Ecológico",
+  "extension": "2511-7316",
+  "edificio": "Pabellón 1",
+  "correo": ""
+ },
+ {
+  "unidad": "Docencia",
+  "oficina": "Coordinación de Docencia",
+  "extension": "2511-7346",
+  "edificio": "Administrativo",
+  "correo": "docencia.sedecaribe@ucr.ac.cr"
+ },
+ {
+  "unidad": "Docencia",
+  "oficina": "Coordinación de Docencia",
+  "extension": "2511-7306",
+  "edificio": "Administrativo",
+  "correo": "docencia.sedecaribe@ucr.ac.cr"
+ },
+ {
+  "unidad": "Docencia",
+  "oficina": "Coordinación de Docencia, asistente",
+  "extension": "2511-7341",
+  "edificio": "Administrativo",
+  "correo": ""
+ },
+ {
+  "unidad": "Investigación",
+  "oficina": "Coordinación de Investigación",
+  "extension": "2511-7310",
+  "edificio": "Biblioteca",
+  "correo": "investigacion.sedecaribe@ucr.ac.cr"
+ },
+ {
+  "unidad": "Investigación",
+  "oficina": "Coordinación de Investigación, asistente",
+  "extension": "2511-7357",
+  "edificio": "Biblioteca",
+  "correo": ""
+ },
+ {
+  "unidad": "Investigación",
+  "oficina": "Biblioteca, encargado",
+  "extension": "2511-7309",
+  "edificio": "Biblioteca",
+  "correo": ""
+ },
+ {
+  "unidad": "Investigación",
+  "oficina": "Biblioteca, asistente",
+  "extension": "2511-7311",
+  "edificio": "Biblioteca",
+  "correo": ""
+ },
+ {
+  "unidad": "Investigación",
+  "oficina": "Oficina de Proyectos de Investigación",
+  "extension": "2511-7312",
+  "edificio": "Pabellón 1",
+  "correo": ""
+ },
+ {
+  "unidad": "Investigación",
+  "oficina": "Oficina de Proyectos de Investigación",
+  "extension": "2511-7313",
+  "edificio": "Pabellón 1",
+  "correo": ""
+ },
+ {
+  "unidad": "Vida Estudiantil",
+  "oficina": "Coordinación de Vida Estudiantil",
+  "extension": "2511-7308",
+  "edificio": "Administrativo",
+  "correo": "vidaestudiantil.sedecaribe@ucr.ac.cr"
+ },
+ {
+  "unidad": "Vida Estudiantil",
+  "oficina": "Coordinación de Vida Estudiantil, asistente",
+  "extension": "2511-7336",
+  "edificio": "Administrativo",
+  "correo": ""
+ },
+ {
+  "unidad": "Vida Estudiantil",
+  "oficina": "Trabajo Social",
+  "extension": "2511-7325",
+  "edificio": "Administrativo",
+  "correo": ""
+ },
+ {
+  "unidad": "Vida Estudiantil",
+  "oficina": "Registro, encargada",
+  "extension": "2511-7343",
+  "edificio": "Administrativo",
+  "correo": ""
+ },
+ {
+  "unidad": "Vida Estudiantil",
+  "oficina": "Registro, ventanilla",
+  "extension": "2511-7304",
+  "edificio": "Administrativo",
+  "correo": ""
+ },
+ {
+  "unidad": "Vida Estudiantil",
+  "oficina": "Registro",
+  "extension": "2511-7363",
+  "edificio": "Administrativo",
+  "correo": ""
+ },
+ {
+  "unidad": "Vida Estudiantil",
+  "oficina": "Becas, encargada",
+  "extension": "2511-7337",
+  "edificio": "Administrativo",
+  "correo": ""
+ },
+ {
+  "unidad": "Vida Estudiantil",
+  "oficina": "Becas, asistente",
+  "extension": "2511-7326",
+  "edificio": "Administrativo",
+  "correo": ""
+ },
+ {
+  "unidad": "Vida Estudiantil",
+  "oficina": "Orientación",
+  "extension": "2511-7323",
+  "edificio": "Administrativo",
+  "correo": ""
+ },
+ {
+  "unidad": "Vida Estudiantil",
+  "oficina": "Psicología",
+  "extension": "2511-7342",
+  "edificio": "Administrativo",
+  "correo": ""
+ },
+ {
+  "unidad": "Vida Estudiantil",
+  "oficina": "Odontología",
+  "extension": "2511-7339",
+  "edificio": "Pabellón 1",
+  "correo": ""
+ },
+ {
+  "unidad": "Vida Estudiantil",
+  "oficina": "Consultorio médico",
+  "extension": "2511-7351",
+  "edificio": "Pabellón 1",
+  "correo": ""
+ },
+ {
+  "unidad": "Vida Estudiantil",
+  "oficina": "Residencias estudiantiles",
+  "extension": "2511-7317",
+  "edificio": "Residencias",
+  "correo": ""
+ },
+ {
+  "unidad": "Seguridad",
+  "oficina": "Oficiales de seguridad, entrada",
+  "extension": "2511-7350",
+  "edificio": "Entrada",
+  "correo": ""
+ },
+ {
+  "unidad": "Seguridad",
+  "oficina": "Oficiales de seguridad, residencias",
+  "extension": "2511-7318",
+  "edificio": "Residencias estudiantiles",
+  "correo": ""
+ },
+ {
+  "unidad": "Seguridad",
+  "oficina": "Oficiales de seguridad, edificio administrativo",
+  "extension": "2511-7340",
+  "edificio": "Administrativo",
+  "correo": ""
+ },
+ {
+  "unidad": "Siquirres",
+  "oficina": "Coordinación del Aula Desconcentrada",
+  "extension": "2511-7397",
+  "edificio": "Siquirres",
+  "correo": ""
+ },
+ {
+  "unidad": "Siquirres",
+  "oficina": "Aula Desconcentrada, asistente",
+  "extension": "2511-7399",
+  "edificio": "Siquirres",
+  "correo": ""
+ },
+ {
+  "unidad": "Siquirres",
+  "oficina": "Apoyo estudiantil y cursos cortos",
+  "extension": "2511-7398",
+  "edificio": "Siquirres",
+  "correo": ""
+ },
+ {
+  "unidad": "Otros",
+  "oficina": "SINDEU",
+  "extension": "2511-7356",
+  "edificio": "Pabellón 1",
+  "correo": ""
+ },
+ {
+  "unidad": "Otros",
+  "oficina": "AUDEL",
+  "extension": "2511-7333",
+  "edificio": "Pabellón 1",
+  "correo": ""
+ },
+ {
+  "unidad": "Otros",
+  "oficina": "Soda de la Sede",
+  "extension": "2511-7332",
+  "edificio": "Administrativo",
+  "correo": ""
+ },
+ {
+  "unidad": "Otros",
+  "oficina": "Junta Administradora del Fondo de Ahorro y Préstamo",
+  "extension": "2511-7370",
+  "edificio": "Pabellón 1",
+  "correo": ""
+ }
+]

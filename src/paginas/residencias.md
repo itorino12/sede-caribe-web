@@ -1,0 +1,1 @@
+Las residencias estudiantiles están dentro del campus y se conectan con la Sede por un puente peatonal. Se asignan a estudiantes con beca que viven lejos de Limón, por medio de la Coordinación de Vida Estudiantil.

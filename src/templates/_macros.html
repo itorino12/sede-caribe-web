@@ -1,0 +1,57 @@
+{% macro evento(e, raiz, compacto=false) %}
+<li class="evento{% if compacto %} evento--compacto{% endif %}" id="{{ e.id }}">
+  <time class="evento__fecha" datetime="{{ e.f.isoformat() }}">
+    <span class="evento__dia">{{ e.f.day }}</span>
+    <span class="evento__mes">{{ (e.f|mes)[:3] }}</span>
+  </time>
+  <div class="evento__texto">
+    <h3 class="evento__titulo">{{ e.titulo }}{% if e.ejemplo %} <span class="marca-ejemplo">Ejemplo</span>{% endif %}</h3>
+    <p class="evento__meta">
+      {{ e.f|dia_semana|capitalize }}{% if e.fin != e.f %} al {{ e.fin|dia_semana }} {{ e.fin.day }} de {{ e.fin|mes }}{% endif %}{% if e.hora %}, {{ e.hora }}{% endif %}{% if e.lugar %}. {{ e.lugar }}{% endif %}
+    </p>
+    {% if not compacto %}
+      {% if e.html %}<div class="evento__desc">{{ e.html|safe }}</div>{% endif %}
+      {% if e.organiza %}<p class="evento__organiza">Organiza: {{ e.organiza }}</p>{% endif %}
+      {% if e.enlace %}<p><a href="{{ e.enlace }}">{{ e.enlace_texto or 'Más información e inscripción' }}</a></p>{% endif %}
+    {% endif %}
+  </div>
+</li>
+{% endmacro %}
+
+{% macro tarjeta_noticia(n, raiz, grande=false) %}
+<article class="nota{% if grande %} nota--grande{% endif %}">
+  {% if n.img %}
+  <img class="nota__img" src="{{ raiz }}{{ n.img[640] }}" srcset="{{ raiz }}{{ n.img[640] }} 640w, {{ raiz }}{{ n.img[1280] }} 1280w"
+       sizes="{{ '(min-width: 900px) 50vw, 100vw' if grande else '(min-width: 900px) 25vw, 100vw' }}" alt="{{ n.imagen_alt }}" loading="lazy" width="640" height="{{ (640 * n.img.h / n.img.w)|round|int }}">
+  {% endif %}
+  <p class="nota__meta"><a href="{{ raiz }}noticias.html?categoria={{ n.categoria|urlencode }}">{{ n.categoria }}</a> <time datetime="{{ n.f.isoformat() }}">{{ n.f|fecha_larga }}</time></p>
+  <h3 class="nota__titulo"><a href="{{ raiz }}noticias/{{ n.id }}.html">{{ n.titulo }}</a></h3>
+  {% if grande or not n.img %}<p class="nota__resumen">{{ n.resumen }}</p>{% endif %}
+</article>
+{% endmacro %}
+
+{% macro contacto(u, raiz) %}
+<aside class="ficha" aria-label="Contacto">
+  <h2 class="ficha__titulo">Contacto</h2>
+  <dl>
+    {% if u.responsable %}<dt>{{ u.cargo or 'A cargo' }}</dt><dd>{{ u.responsable }}</dd>{% endif %}
+    {% if u.coordinacion %}<dt>Coordinación</dt><dd>{{ u.coordinacion }}</dd>{% endif %}
+    {% if u.extension %}<dt>Teléfono</dt><dd><a href="{{ u.extension|tel }}">{{ u.extension }}</a></dd>{% endif %}
+    {% if u.correo %}<dt>Correo</dt><dd><a href="mailto:{{ u.correo }}">{{ u.correo }}</a></dd>{% endif %}
+    {% if u.edificio %}<dt>Dónde</dt><dd>{{ u.edificio }}</dd>{% endif %}
+  </dl>
+  {% if not (u.extension or u.correo) %}<p>Central telefónica <a href="{{ sitio.telefono|tel }}">{{ sitio.telefono }}</a></p>{% endif %}
+</aside>
+{% endmacro %}
+
+{% macro encabezado(titulo, migas, raiz, bajada='') %}
+<header class="encabezado">
+  <div class="ancho">
+    {% if migas %}
+    <nav class="migas" aria-label="Ruta"><ol><li><a href="{{ raiz }}index.html">Inicio</a></li>{% for t, u in migas %}<li><a href="{{ raiz }}{{ u }}">{{ t }}</a></li>{% endfor %}</ol></nav>
+    {% endif %}
+    <h1>{{ titulo }}</h1>
+    {% if bajada %}<p class="bajada">{{ bajada }}</p>{% endif %}
+  </div>
+</header>
+{% endmacro %}

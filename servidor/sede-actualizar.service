@@ -1,0 +1,19 @@
+[Unit]
+Description=Sincroniza el sitio de la Sede del Caribe con GitHub y Google Drive, y lo publica si hay cambios
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=oneshot
+User=sedeweb
+Group=sedeweb
+RuntimeDirectory=sede-web
+RuntimeDirectoryPreserve=yes
+ExecStart=/opt/sede-web/servidor/actualizar.sh
+TimeoutStartSec=15min
+# Endurecimiento: el servicio solo puede escribir en el repositorio y en la carpeta publicada
+NoNewPrivileges=yes
+ProtectSystem=strict
+ProtectHome=yes
+PrivateTmp=yes
+ReadWritePaths=/opt/sede-web /var/www/sede /run/sede-web
