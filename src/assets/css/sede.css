@@ -31,9 +31,11 @@
   --sobre-azul: #FFFFFF;
   --foco: #E89B00;
   --sobre-acento: #FFFFFF; /* texto sobre fondos azul UCR; en oscuro el azul se aclara y el texto pasa a oscuro */
-  /* Celeste UCR solo en franjas pequeñas y filetes, y solo en modo claro; el texto sobre celeste va en azul noche */
-  --banda: #00C0F3; --sobre-banda: #04203A; --sobre-banda-2: #0A3355; --linea-banda: rgba(4,32,58,.28); --filete: var(--celeste);
-  --velo: 6 26 44; --titulo-portada: #7DC3F2;
+  /* Franja de la semana: azul UCR con texto blanco */
+  --banda: #005DA4; --sobre-banda: #FFFFFF; --sobre-banda-2: #D7ECF8; --linea-banda: rgba(255,255,255,.3); --filete: var(--azul);
+  --velo: 6 26 44; --titulo-portada: #FFFFFF;
+  /* Cabecera (logo y menú): el único lugar con fondo celeste UCR, solo en modo claro; el texto va en azul noche */
+  --cab-fondo: #00C0F3; --cab-texto: #04203A; --cab-texto-2: #0A3355; --cab-linea: rgba(4,32,58,.25); --cab-ident: #FFFFFF; --cab-boton: #04203A;
 
   --f: "Source Sans 3", "Myriad Pro", Arial, sans-serif;
   --t-xs: .875rem; --t-sm: 1rem; --t-base: 1.125rem; --t-md: 1.3125rem;
@@ -47,6 +49,7 @@
   --azul: #4FA8E8; --azul-hondo: #06213A; --tinta: #E4ECF2; --tinta-2: #A9B8C4; --niebla: #10202D;
   --linea: #263B4C; --papel: #0A1822; --enlace: #7DC3F2; --verde-texto: #93C69E; --musgo: #93C69E; --franja: #0B3354; --sobre-acento: #04203A; color-scheme: dark;
   --banda: #0B3354; --sobre-banda: #FFFFFF; --sobre-banda-2: #CFE0EE; --linea-banda: rgba(255,255,255,.3); --filete: #4FA8E8;
+  --cab-fondo: var(--papel); --cab-texto: var(--tinta); --cab-texto-2: #A9B8C4; --cab-linea: var(--linea); --cab-ident: var(--celeste); --cab-boton: var(--azul);
 }
 :root[data-contraste] { --enlace: #003B70; --azul: #003B70; --tinta: #000; --tinta-2: #111; --linea: #000; --niebla: #fff; }
 :root[data-tema="oscuro"][data-contraste] { --enlace: #A8E1FF; --azul: #A8E1FF; --tinta: #fff; --tinta-2: #f2f2f2; --linea: #fff; --niebla: #000; --papel: #000; }
@@ -91,7 +94,7 @@ main:focus { outline: none; }
 .util__ucr { margin-right: auto; }
 @media (max-width: 600px) { .util a:not(.util__ucr):not(:last-of-type) { display: none; } }
 
-.cabecera { background: var(--papel); border-bottom: 1px solid var(--linea); position: relative; z-index: 20; }
+.cabecera { background: var(--cab-fondo); color: var(--cab-texto); border-bottom: 1px solid var(--cab-linea); position: relative; z-index: 20; }
 .cabecera__fila { display: flex; align-items: center; gap: 18px; min-height: 92px; }
 .firma { display: flex; align-items: center; gap: 18px; text-decoration: none; flex-shrink: 0; }
 /* Firma con escudo (Manual UCR 3.1): escudo + «Universidad de Costa Rica», y a la derecha el nombre de la unidad */
@@ -100,11 +103,12 @@ main:focus { outline: none; }
 .firma__escudo--oscuro { display: none; }
 :root[data-tema="oscuro"] .firma__escudo--claro { display: none; }
 :root[data-tema="oscuro"] .firma__escudo--oscuro { display: block; }
-.firma__ucr-texto { font-size: 1.05rem; font-weight: 700; line-height: 1.1; letter-spacing: .04em; text-transform: uppercase; color: var(--tinta); }
-/* identificador compuesto del manual: sigla | línea celeste | tipo y nombre de la unidad */
-.ident { display: flex; align-items: center; gap: 12px; color: #666; margin-left: 4px; }
+.firma__ucr-texto { font-size: 1.05rem; font-weight: 700; line-height: 1.1; letter-spacing: .04em; text-transform: uppercase; color: var(--cab-texto); }
+/* identificador compuesto del manual: sigla | línea celeste | tipo y nombre de la unidad
+   (sobre la cabecera celeste la línea va en blanco para que se vea) */
+.ident { display: flex; align-items: center; gap: 12px; color: var(--cab-texto-2); margin-left: 4px; }
 .ident__sigla { font-size: 1.6rem; font-weight: 700; letter-spacing: .06em; color: #000; line-height: 1; }
-.ident__linea { width: 2px; align-self: stretch; min-height: 38px; background: var(--celeste); }
+.ident__linea { width: 2px; align-self: stretch; min-height: 38px; background: var(--cab-ident); }
 .ident__nombre { line-height: 1.08; font-size: 1rem; }
 .ident__nombre strong { display: block; font-size: 1.2rem; font-weight: 700; }
 :root[data-tema="oscuro"] .ident, :root[data-tema="oscuro"] .ident__sigla { color: #E4ECF2; }
@@ -112,29 +116,33 @@ main:focus { outline: none; }
 .menu { margin-left: auto; }
 .menu > ul { display: flex; list-style: none; margin: 0; padding: 0; gap: 2px; }
 .menu__item { position: relative; }
-.menu__enlace { display: block; white-space: nowrap; padding: 10px 9px; color: var(--tinta); text-decoration: none; font-weight: 600; background: none; border: 0; cursor: pointer; border-bottom: 3px solid transparent; }
-.menu__enlace:hover, .menu__enlace[aria-current="page"], .menu__enlace[aria-expanded="true"] { border-bottom-color: var(--azul); color: var(--azul); }
+.menu__enlace { display: block; white-space: nowrap; padding: 10px 9px; color: var(--cab-texto); text-decoration: none; font-weight: 600; background: none; border: 0; cursor: pointer; border-bottom: 3px solid transparent; }
+.menu__enlace:hover, .menu__enlace[aria-current="page"], .menu__enlace[aria-expanded="true"] { border-bottom-color: var(--cab-texto); color: var(--cab-texto); }
+:root[data-tema="oscuro"] .menu__enlace:hover, :root[data-tema="oscuro"] .menu__enlace[aria-current="page"], :root[data-tema="oscuro"] .menu__enlace[aria-expanded="true"] { border-bottom-color: var(--azul); color: var(--azul); }
 .menu__item--sub > .menu__enlace::after { content: ""; display: inline-block; width: 6px; height: 6px; margin-left: 8px; border: solid currentColor; border-width: 0 2px 2px 0; transform: translateY(-3px) rotate(45deg); }
 .menu__sub { display: none; position: absolute; top: 100%; left: 0; min-width: 270px; list-style: none; margin: 0; padding: 8px 0; background: var(--papel); border: 1px solid var(--linea); border-top: 3px solid var(--azul); box-shadow: 0 14px 30px rgba(0,40,80,.12); }
 .menu__sub a { display: block; padding: 9px 18px; color: var(--tinta); text-decoration: none; }
 .menu__sub a:hover { background: var(--niebla); color: var(--enlace); }
 .menu__enlace[aria-expanded="true"] + .menu__sub { display: block; }
-.buscar-boton { display: inline-flex; align-items: center; gap: 8px; min-height: 44px; padding: 8px 16px; background: none; color: var(--azul); border: 2px solid var(--azul); border-radius: 4px; cursor: pointer; font-weight: 700; }
-.buscar-boton:hover { background: var(--niebla); }
+.buscar-boton { display: inline-flex; align-items: center; gap: 8px; min-height: 44px; padding: 8px 16px; background: none; color: var(--cab-boton); border: 2px solid var(--cab-boton); border-radius: 4px; cursor: pointer; font-weight: 700; }
+.buscar-boton:hover { background: rgba(255,255,255,.3); }
 .buscar-boton span { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }  /* solo la lupa; el texto queda para lectores de pantalla */
 .buscar-boton { padding: 8px 11px; }
 .menu-boton { display: none; }
 @media (max-width: 1280px) {
   .cabecera__fila { flex-wrap: wrap; gap: 10px; padding-block: 12px; min-height: 0; }
   .buscar-boton { order: 2; margin-left: auto; }
-  .menu-boton { order: 3; display: inline-flex; align-items: center; gap: 10px; min-height: 44px; padding: 8px 14px; background: var(--azul); border: 0; border-radius: 4px; color: #fff; cursor: pointer; font-weight: 700; }
+  .menu-boton { order: 3; display: inline-flex; align-items: center; gap: 10px; min-height: 44px; padding: 8px 14px; background: var(--cab-boton); border: 0; border-radius: 4px; color: #fff; cursor: pointer; font-weight: 700; }
   .menu-boton__icono, .menu-boton__icono::before, .menu-boton__icono::after { display: block; width: 18px; height: 2px; background: currentColor; position: relative; }
   .menu-boton__icono::before, .menu-boton__icono::after { content: ""; position: absolute; }
   .menu-boton__icono::before { top: -6px; } .menu-boton__icono::after { top: 6px; }
   .menu { display: none; order: 5; width: 100%; margin: 0; }
   .menu.abierto { display: block; }
-  .menu > ul { flex-direction: column; gap: 0; border-top: 1px solid var(--linea); }
-  .menu__enlace { width: 100%; text-align: left; padding: 14px 0; border-bottom: 1px solid var(--linea); }
+  .menu > ul { flex-direction: column; gap: 0; border-top: 1px solid var(--cab-linea); }
+  .menu__enlace { width: 100%; text-align: left; padding: 14px 0; border-bottom: 1px solid var(--cab-linea); }
+  .menu__sub a { color: var(--cab-texto); }
+  .menu__sub a:hover { background: rgba(255,255,255,.3); color: var(--cab-texto); }
+  :root[data-tema="oscuro"] .menu__sub a:hover { background: var(--niebla); }
   .menu__sub { position: static; box-shadow: none; border: 0; padding: 0 0 8px 16px; }
 }
 @media (max-width: 560px) {
@@ -175,7 +183,7 @@ main:focus { outline: none; }
 .portada__campo:focus-within { outline: 3px solid var(--foco); outline-offset: 2px; }
 .portada__campo .boton, :root[data-tema="oscuro"] .portada__campo .boton { border-radius: 0 2px 2px 0; min-height: 0; background: #005DA4; border-color: #005DA4; color: #fff; }
 .portada__acciones { display: flex; flex-wrap: wrap; gap: 8px 22px; margin: 0; font-weight: 700; }
-.portada__acciones a { color: #fff; text-decoration-color: #7DC3F2; text-decoration-thickness: 2px; text-underline-offset: 4px; }
+.portada__acciones a { color: #fff; text-decoration-color: currentColor; text-decoration-thickness: 2px; text-underline-offset: 4px; }
 .portada__acciones a:hover { text-decoration-thickness: 3px; }
 /* Foto según el modo: la entrada de día en claro y de noche en oscuro (en «Visítenos», al revés) */
 .foto-noche { display: none; }
