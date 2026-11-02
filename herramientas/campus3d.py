@@ -38,7 +38,16 @@ PENDIENTE = 0.32         # altura del techo por metro de medio ancho (cuatro agu
 PICNIC = {"centro": (1688, 1598), "radio": 64}      # área de picnic y juegos frente al CIUB y las residencias
 PUENTE = {"centro": (1540, 1478), "largo": 46}      # puente de la calle interna sobre la quebrada, al sur del gimnasio
 # parqueo asfaltado al costado de la piscina que da al gimnasio (fotos), entre la malla y la calle
-PARQUEO = {"rect": (1503, 1300, 120, 46, 105)}
+# Medidas tomadas de la vista satelital (en metros, en el marco de la piscina: u al este, v al sur);
+# el borde este se recorta para que no se meta en la calle del croquis
+PARQUEO = {"u": (16.0, 37.0), "v": (-21.0, 10.0), "divisor": -8.0}
+PISCINA_RECT = (1433, 1304, 60, 109, 15)
+
+
+def piscina_a_px(u, v):
+    cx, cy, _, _, g = PISCINA_RECT
+    c, s_ = math.cos(math.radians(g)), math.sin(math.radians(g))
+    return cx + (c * u - s_ * v) / ESCALA, cy + (s_ * u + c * v) / ESCALA
 PLANTA = {"centro": (1486, 1566), "giro": 74}        # planta de tratamiento, al oeste de la calle, pasando el puente
 
 # Edificios: número del croquis, forma y pisos. rect = (cx, cy, largo, ancho, giro en grados, horario)
@@ -342,18 +351,28 @@ def main(pdf, sat=None):
     pintar(cv2.GaussianBlur(picnic, (0, 0), 6), (166, 208, 120))
     # dentro de la U todo está asfaltado (fotos), también el camino a la pista; cordón de concreto claro
     pintar(cv2.bitwise_or(calles, acceso), (84, 88, 94), borde=(214, 212, 204))
-    # parqueo: asfalto con cordón de concreto y líneas blancas de los espacios
+    # parqueo junto a la piscina (satélite): rectángulo asfaltado con dos filas de espacios espalda con
+    # espalda en la parte norte y pasillos al norte y al sur; se entra desde la calle del este
+    u0, u1 = PARQUEO["u"]
+    for u_ in np.arange(u0, u1, 0.5):   # no meterse en la calle: se corta 1,5 m antes
+        x_, y_ = piscina_a_px(u_, (PARQUEO["v"][0] + PARQUEO["v"][1]) / 2)
+        if calles[int(y_), int(x_)]:
+            u1 = u_ - 1.5
+            break
+    PARQUEO["u"] = (u0, u1)
+    v0, v1 = PARQUEO["v"]
+    esquinas = [piscina_a_px(u0, v0), piscina_a_px(u1, v0), piscina_a_px(u1, v1), piscina_a_px(u0, v1)]
+    PARQUEO["rect"] = (*piscina_a_px((u0 + u1) / 2, (v0 + v1) / 2), (u1 - u0) / ESCALA, (v1 - v0) / ESCALA, PISCINA_RECT[4])
     parqueo = np.zeros_like(calles)
-    cv2.fillPoly(parqueo, [np.array(rect_contorno(*PARQUEO["rect"]), np.int32)], 255)
+    cv2.fillPoly(parqueo, [np.array(esquinas, np.int32)], 255)
     pintar(parqueo, (78, 82, 88), borde=(200, 198, 190))
-    rayas = np.zeros_like(calles)
-    pcx, pcy, pl, pa, pg = PARQUEO["rect"]
-    cg, sg = math.cos(math.radians(pg)), math.sin(math.radians(pg))
-    for k in range(-5, 6):
-        u = k * pl / 11
-        x0r, y0r = pcx + cg * u - sg * (-pa / 2), pcy + sg * u + cg * (-pa / 2)
-        x1r, y1r = pcx + cg * u - sg * (-pa / 2 + pa * 0.42), pcy + sg * u + cg * (-pa / 2 + pa * 0.42)
-        cv2.line(rayas, (int(x0r), int(y0r)), (int(x1r), int(y1r)), 255, 2)
+    rayas = np.zeros((calles.shape[0] * 2, calles.shape[1] * 2), np.uint8)   # al doble para líneas finas
+    dv = PARQUEO["divisor"]
+    linea = lambda a, b: cv2.line(rayas, tuple(int(c * 2) for c in piscina_a_px(*a)), tuple(int(c * 2) for c in piscina_a_px(*b)), 255, 2)
+    linea((u0 + 1, dv), (u1 - 1, dv))
+    for u_ in np.arange(u0 + 1, u1 - 0.9, 2.6):
+        linea((u_, dv - 5), (u_, dv + 5))
+    rayas = cv2.resize(rayas, (calles.shape[1], calles.shape[0]), interpolation=cv2.INTER_AREA)
     pintar(rayas, (236, 236, 232))
     pintar(carretera, (112, 116, 122), borde=(88, 92, 98))
     # sombra suave bajo cada edificio (contacto con el suelo)
@@ -509,7 +528,8 @@ def main(pdf, sat=None):
         "porton_residencias": porton_res,
         "picnic": {"centro": a_metros(*PICNIC["centro"]), "radio": round(PICNIC["radio"] * ESCALA, 2)},
         "parqueo": {"centro": a_metros(*PARQUEO["rect"][:2]), "largo": round(PARQUEO["rect"][2] * ESCALA, 2),
-                    "ancho": round(PARQUEO["rect"][3] * ESCALA, 2), "giro": round(math.radians(PARQUEO["rect"][4]), 3)},
+                    "ancho": round(PARQUEO["rect"][3] * ESCALA, 2), "giro": round(math.radians(PARQUEO["rect"][4]), 3),
+                    "divisor": round(PARQUEO["divisor"] - (PARQUEO["v"][0] + PARQUEO["v"][1]) / 2, 2)},
         "planta": {"centro": a_metros(*PLANTA["centro"]), "giro": round(math.radians(PLANTA["giro"]), 3)},
         "puente": {"centro": a_metros(*PUENTE["centro"]), "eje": [a_metros(x, y) for x, y in PUENTE["eje"]]},
         "pista": {"centro": a_metros(float(cx_pista), float(cy_pista))},

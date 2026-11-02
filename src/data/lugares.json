@@ -62,10 +62,10 @@
   "id": 10,
   "zona": 2,
   "nombre": "Piscina",
-  "texto": "Piscina de la Sede, con deck de granito lavado y cerca de malla verde. Detrás están los vestidores, y al lado el parqueo de bicicletas y motos.",
+  "texto": "Piscina de la Sede, con deck de granito lavado y cerca de malla verde. Al costado oeste están los baños; al este, un parqueo asfaltado con alumbrado, y hacia la calle de la biblioteca, el parqueo de bicicletas y motos.",
   "enlace": "unidades/piscina.html",
   "fotos": "piscina-1.jpg, piscina-2.jpg, piscina-3.jpg, piscina-4.jpg, piscina-5.jpg",
-  "fotos_alt": "La piscina detrás de la malla verde, con los vestidores al fondo y el parqueo de bicicletas y motos de adoquín al frente|La piscina vista desde el portón, con la escalerilla, el deck de granito y el edificio de oficinas al fondo|Acera con guía táctil hacia la piscina, con el toldo en arco y mesas de concreto azul a un lado|Los vestidores de la piscina: casetas blancas con zócalo gris, celosías y techo de una agua, junto a una mesa de concreto azul|Acera junto a los vestidores y la malla de la piscina, con los carretes de las corcheras"
+  "fotos_alt": "La piscina detrás de la malla verde, con los vestidores al fondo y el parqueo de bicicletas y motos de adoquín al frente|La piscina vista desde el portón, con la escalerilla, el deck de granito y un edificio al fondo|Acera con guía táctil hacia la piscina, con el toldo en arco y mesas de concreto azul a un lado|Los baños de la piscina: casetas blancas con zócalo gris, celosías y techo de una agua, junto a una mesa de concreto azul|Acera con guía táctil frente a los baños de la piscina, junto a la malla, con los carretes de las corcheras"
  },
  {
   "id": 11,
