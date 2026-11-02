@@ -349,6 +349,118 @@ if (datos.campus.porton_pista && lugares.get(19)) {
   edificios.push(grupo);
 }
 
+// ---------- entrada por residencias (fotos): portón verde de dos hojas, marco de tubo con malla y
+// refuerzos en X, columnas con baliza amarilla y faroles verdes de dos brazos a los lados de la calle
+if (datos.campus.porton_residencias && lugares.get(20)) {
+  const { p, hacia_dentro } = datos.campus.porton_residencias;
+  const grupo = new THREE.Group();
+  const verde = new THREE.MeshStandardMaterial({ color: 0x1f5a3c, roughness: 0.6, metalness: 0.2 });
+  const mallaPorton = new THREE.MeshLambertMaterial({ color: 0x24533a, transparent: true, opacity: 0.45, side: THREE.DoubleSide, depthWrite: false });
+  const amarillo = new THREE.MeshStandardMaterial({ color: 0xf2b705, emissive: 0x3a2a00 });
+  const ANCHO = 4.2, ALTO = 2.2;
+  for (const lado of [-1, 1]) {
+    const cx = lado * ANCHO / 2;
+    for (const y of [0.15, ALTO]) { const b = new THREE.Mesh(new THREE.BoxGeometry(ANCHO, 0.1, 0.1), verde); b.position.set(cx, y, 0); grupo.add(b); }
+    for (const x of [cx - ANCHO / 2 + 0.05, cx + ANCHO / 2 - 0.05]) { const b = new THREE.Mesh(new THREE.BoxGeometry(0.1, ALTO, 0.1), verde); b.position.set(x, ALTO / 2 + 0.1, 0); grupo.add(b); }
+    const diag = Math.hypot(ANCHO, ALTO - 0.15);
+    for (const sgn of [-1, 1]) { const x = new THREE.Mesh(new THREE.BoxGeometry(diag, 0.07, 0.07), verde); x.position.set(cx, ALTO / 2 + 0.08, 0); x.rotation.z = sgn * Math.atan2(ALTO - 0.15, ANCHO); grupo.add(x); }
+    const malla = new THREE.Mesh(new THREE.PlaneGeometry(ANCHO - 0.1, ALTO - 0.2), mallaPorton); malla.position.set(cx, ALTO / 2 + 0.1, 0); grupo.add(malla);
+  }
+  for (const x of [-ANCHO - 0.25, ANCHO + 0.25]) {
+    const col = new THREE.Mesh(new THREE.BoxGeometry(0.3, 2.8, 0.3), verde); col.position.set(x, 1.4, 0); grupo.add(col);
+    const baliza = new THREE.Mesh(new THREE.CylinderGeometry(0.12, 0.12, 0.25, 8), amarillo); baliza.position.set(x, 2.95, 0); grupo.add(baliza);
+  }
+  for (const x of [-ANCHO - 3, ANCHO + 3]) {   // faroles verdes de dos brazos
+    const poste = new THREE.Mesh(new THREE.CylinderGeometry(0.12, 0.18, 8, 8), verde); poste.position.set(x, 4, 3); grupo.add(poste);
+    const brazos = new THREE.Mesh(new THREE.BoxGeometry(2.6, 0.12, 0.12), verde); brazos.position.set(x, 7.9, 3); grupo.add(brazos);
+  }
+  grupo.traverse((o) => { if (o.isMesh) o.castShadow = !liviano; });
+  grupo.position.set(p[0], 0, p[1]);
+  grupo.rotation.y = hacia_dentro;
+  grupo.userData = { id: 20, centro: new THREE.Vector3(p[0], 5, p[1]), mat: { pared: verde, techo: verde }, alto: 3 };
+  grupo.traverse((o) => { o.userData.edificio = grupo; });
+  escena.add(grupo);
+  edificios.push(grupo);
+}
+
+// ---------- área de picnic y juegos frente al CIUB y las residencias (fotos): mesas de concreto azul
+// con bancas, rancho con techo de palma, casita y tobogán infantiles, y dos palmeras de coco
+function palmeraCoco(x, z, alto, giro) {
+  const g = new THREE.Group();
+  const tronco = new THREE.Mesh(new THREE.CylinderGeometry(0.22, 0.32, alto, 7), new THREE.MeshLambertMaterial({ color: 0x8a7354 }));
+  tronco.position.y = alto / 2; tronco.rotation.z = 0.06; g.add(tronco);
+  const hoja = new THREE.MeshLambertMaterial({ color: 0x5f9447, side: THREE.DoubleSide, flatShading: true });
+  for (let k = 0; k < 12; k++) {
+    const h = new THREE.Mesh(new THREE.ConeGeometry(0.55, 4.6, 3, 1).translate(0, 2.3, 0), hoja);
+    h.position.y = alto; h.rotation.set(0, (k / 12) * Math.PI * 2 + giro, 0); h.rotateZ(-Math.PI / 2 + 0.5 + (k % 2) * 0.25); h.scale.z = 0.3;
+    g.add(h);
+  }
+  g.position.set(x, 0, z);
+  g.traverse((o) => { if (o.isMesh) o.castShadow = !liviano; });
+  return g;
+}
+if (datos.campus.picnic) {
+  const [cx, cz] = datos.campus.picnic.centro, r = datos.campus.picnic.radio;
+  const zona = new THREE.Group();
+  const celesteMesa = new THREE.MeshStandardMaterial({ color: 0x3d8fd6, roughness: 0.85 });
+  const azar = (i) => { const v = Math.sin(i * 91.7) * 43758.5; return v - Math.floor(v); };
+  const mesas = new THREE.Group();
+  for (let i = 0; i < 9; i++) {
+    const ang = i * 2.39996, d = r * (0.25 + 0.6 * Math.sqrt((i + 0.5) / 9));
+    const m = new THREE.Group();
+    const pata = new THREE.Mesh(new THREE.CylinderGeometry(0.18, 0.25, 0.75, 8), celesteMesa); pata.position.y = 0.37; m.add(pata);
+    const tablero = new THREE.Mesh(new THREE.CylinderGeometry(0.75, 0.75, 0.1, 14), celesteMesa); tablero.position.y = 0.78; m.add(tablero);
+    for (const lado of [-1, 1]) {
+      const banca = new THREE.Mesh(new THREE.BoxGeometry(1.5, 0.45, 0.38), celesteMesa); banca.position.set(0, 0.23, lado * 1.15); m.add(banca);
+    }
+    m.position.set(cx + Math.cos(ang) * d, 0, cz + Math.sin(ang) * d); m.rotation.y = azar(i) * 3;
+    mesas.add(m);
+  }
+  zona.add(mesas);
+  // rancho de palma
+  const rancho = new THREE.Group();
+  const madera = new THREE.MeshLambertMaterial({ color: 0x6b5236 });
+  for (let k = 0; k < 6; k++) { const poste = new THREE.Mesh(new THREE.CylinderGeometry(0.1, 0.1, 2.6, 6), madera); poste.position.set(Math.cos(k * Math.PI / 3) * 2.6, 1.3, Math.sin(k * Math.PI / 3) * 2.6); rancho.add(poste); }
+  const techoPalma = new THREE.Mesh(new THREE.ConeGeometry(3.6, 1.6, 6), new THREE.MeshLambertMaterial({ color: 0x8a6a48, flatShading: true }));
+  techoPalma.position.y = 3.3; rancho.add(techoPalma);
+  rancho.position.set(cx + r * 0.45, 0, cz - r * 0.55);
+  zona.add(rancho);
+  // juegos infantiles
+  const casita = new THREE.Mesh(new THREE.BoxGeometry(1.4, 1.4, 1.2), new THREE.MeshLambertMaterial({ color: 0xc98b3f }));
+  casita.position.set(cx + r * 0.8, 0.7, cz - r * 0.2); zona.add(casita);
+  const techoCasita = new THREE.Mesh(new THREE.ConeGeometry(1.1, 0.6, 4), new THREE.MeshLambertMaterial({ color: 0x4b8b5a }));
+  techoCasita.position.set(casita.position.x, 1.7, casita.position.z); techoCasita.rotation.y = Math.PI / 4; zona.add(techoCasita);
+  const tobogan = new THREE.Mesh(new THREE.BoxGeometry(0.6, 0.08, 2.4), new THREE.MeshLambertMaterial({ color: 0xf2c230 }));
+  tobogan.position.set(cx + r * 0.65, 0.6, cz - r * 0.05); tobogan.rotation.x = -0.45; zona.add(tobogan);
+  zona.add(palmeraCoco(cx - r * 0.45, cz - r * 0.75, 7.5, 0.3), palmeraCoco(cx + r * 0.05, cz - r * 0.85, 6.8, 1.1));
+  zona.traverse((o) => { if (o.isMesh) { o.castShadow = !liviano; o.receiveShadow = true; } });
+  if (lugares.get(21)) {
+    zona.userData = { id: 21, centro: new THREE.Vector3(cx, 4, cz), mat: { pared: celesteMesa, techo: celesteMesa }, alto: 1 };
+    zona.traverse((o) => { o.userData.edificio = zona; });
+    edificios.push(zona);
+  }
+  escena.add(zona);
+}
+
+// ---------- puente de la calle interna sobre la quebrada, al sur del gimnasio
+if (datos.campus.puente) {
+  const { centro: [px, pz], largo, angulo } = datos.campus.puente;
+  const puente = new THREE.Group();
+  const concreto = new THREE.MeshStandardMaterial({ color: 0xc9c7c0, roughness: 0.9 });
+  const asfalto = new THREE.MeshStandardMaterial({ color: 0x55595f, roughness: 0.95 });
+  const ANCHO = 7.2;
+  const losa = new THREE.Mesh(new THREE.BoxGeometry(ANCHO + 0.8, 0.5, largo), concreto); losa.position.y = 0.1; puente.add(losa);
+  const capa = new THREE.Mesh(new THREE.BoxGeometry(ANCHO, 0.06, largo), asfalto); capa.position.y = 0.38; puente.add(capa);
+  for (const lado of [-1, 1]) {
+    const baranda = new THREE.Mesh(new THREE.BoxGeometry(0.3, 0.9, largo), concreto); baranda.position.set(lado * (ANCHO / 2 + 0.25), 0.8, 0); puente.add(baranda);
+    for (const e of [-1, 1]) { const pilar = new THREE.Mesh(new THREE.BoxGeometry(0.6, 1.3, 0.6), concreto); pilar.position.set(lado * (ANCHO / 2 + 0.25), 0.9, e * largo / 2); puente.add(pilar); }
+  }
+  puente.traverse((o) => { if (o.isMesh) { o.castShadow = !liviano; o.receiveShadow = true; } });
+  puente.position.set(px, 0, pz);
+  puente.rotation.y = angulo;   // el largo (z local) sigue la calle
+  escena.add(puente);
+}
+
 // ---------- árboles y palmeras (instancias: cientos de árboles en pocas llamadas de dibujo)
 {
   const lista = datos.campus.arboles;

@@ -135,5 +135,21 @@
   "texto": "Pista de atletismo con cancha de fútbol en el centro, al sur del campus. Se entra por el portón junto a la carretera.",
   "fotos": "pista-entrada-1.jpg, pista-entrada-2.jpg, pista-entrada-3.jpg, pista-entrada-4.jpg, pista-cerca.jpg",
   "fotos_alt": "Portón y cerca de malla verde con alambre de púas de la pista atlética, vistos desde la calle, con el rótulo Sede del Caribe|El portón de la pista atlética junto a un arbusto grande, con la lámpara solar al lado|Camino de lastre hacia el portón de la pista; adentro se ven la cancha y un marco de fútbol|El portón de dos hojas de la pista, el poste azul con panel solar y la cancha al fondo|La cerca perimetral de malla verde con alambre de púas sobre el talud junto a la carretera"
+ },
+ {
+  "id": 20,
+  "zona": 4,
+  "nombre": "Entrada por residencias",
+  "texto": "Entrada secundaria del campus, junto a las residencias: portón verde para vehículos y acera con guía táctil para personas con discapacidad visual.",
+  "fotos": "entrada-residencias-1.jpg, entrada-residencias-2.jpg, entrada-residencias-3.jpg, entrada-residencias-4.jpg, entrada-residencias-5.jpg, entrada-residencias-6.jpg",
+  "fotos_alt": "Portón verde de dos hojas de la entrada por residencias visto desde la carretera, con la calle interna asfaltada subiendo al campus|Edificio de techo oscuro junto a la entrada por residencias, detrás de la cerca de malla verde con alambre de púas|La calle frente al edificio y la entrada por residencias, con faroles verdes y la cerca perimetral|Calle interna asfaltada hacia el portón de residencias, con flecha de giro y cordón amarillo|Acera junto a la calle interna con guía táctil amarilla y luminarias bajas, hacia el portón|La cerca de malla verde con alambre de púas a lo largo de la calle interna, junto al edificio"
+ },
+ {
+  "id": 21,
+  "zona": 4,
+  "nombre": "Área de picnic y juegos",
+  "texto": "Zona verde frente al CIUB y las residencias, con mesas de concreto, un rancho de palma y juegos infantiles.",
+  "fotos": "picnic-1.jpg, picnic-2.jpg",
+  "fotos_alt": "Zona verde con mesas y bancas de concreto azul, dos palmeras de coco, un rancho con techo de palma y juegos infantiles, frente al bosque|La misma área de picnic vista desde la calle, con un árbol grande al frente y la casita de juegos al fondo"
  }
 ]

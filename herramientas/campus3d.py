@@ -34,6 +34,10 @@ PISO = 4.2               # altura de un piso, en metros
 ALERO = 1.4              # vuelo del alero, en metros
 PENDIENTE = 0.32         # altura del techo por metro de medio ancho (cuatro aguas)
 
+# Elementos que no salen en el croquis, ubicados con Google Maps y las fotos (píxeles del croquis)
+PICNIC = {"centro": (1688, 1598), "radio": 64}      # área de picnic y juegos frente al CIUB y las residencias
+PUENTE = {"centro": (1540, 1478), "largo": 46}      # puente de la calle interna sobre la quebrada, al sur del gimnasio
+
 # Edificios: número del croquis, forma y pisos. rect = (cx, cy, largo, ancho, giro en grados, horario)
 EDIFICIOS = [
     {"id": 1, "rect": (466, 1759, 175, 56, 49), "pisos": 1},
@@ -284,7 +288,19 @@ def main(pdf, sat=None):
 
     pintar(interior, (170, 210, 140))
     pintar(pista, (196, 116, 88), borde=(235, 235, 228))
-    pintar(calles, (226, 226, 220), borde=(200, 200, 192))
+    # calles internas: asfalto con cordón de concreto (fotos); el camino a la pista es de lastre
+    # quebrada: cruza bajo el puente, de oeste a este, con un trazo ondulado
+    quebrada = np.zeros_like(calles)
+    qx, qy = PUENTE["centro"]
+    puntos = [(int(qx + d), int(qy + 26 * math.sin(d / 90) + 0.12 * d)) for d in range(-420, 430, 12)]
+    cv2.polylines(quebrada, [np.array(puntos, np.int32)], False, 255, 13)
+    pintar(quebrada, (88, 132, 150), borde=(120, 140, 96))
+    # área de picnic: zacate más claro y cuidado
+    picnic = np.zeros_like(calles)
+    cv2.circle(picnic, PICNIC["centro"], PICNIC["radio"], 255, -1)
+    pintar(cv2.GaussianBlur(picnic, (0, 0), 6), (166, 208, 120))
+    pintar(cv2.bitwise_and(calles, cv2.bitwise_not(acceso)), (84, 88, 94), borde=(214, 212, 204))
+    pintar(acceso, (172, 164, 146), borde=(150, 160, 120))
     pintar(carretera, (112, 116, 122), borde=(88, 92, 98))
     # sombra suave bajo cada edificio (contacto con el suelo)
     sombra = np.zeros((y1 - y0, x1 - x0), np.uint8)
@@ -314,6 +330,8 @@ def main(pdf, sat=None):
         for pol in contornos_px(e):
             cv2.fillPoly(lejos_edificios, [np.array(pol, np.int32)], 1)
     lejos_edificios = cv2.dilate(lejos_edificios, cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (73, 73)))
+    cv2.circle(lejos_edificios, PICNIC["centro"], PICNIC["radio"] + 18, 1, -1)
+    cv2.circle(lejos_edificios, PUENTE["centro"], 40, 1, -1)
     satelital = arboles_satelitales(sat, rng, ocupado | lejos_edificios) if sat else None
     for i in range(1, n):
         area = st[i, 4]
@@ -378,6 +396,14 @@ def main(pdf, sat=None):
         # dirección del camino de acceso (de la pista hacia la carretera) para orientar el portón
         cy_pista, cx_pista = np.mean(np.nonzero(pista), axis=1)
         porton = {"p": a_metros(px, py - 14), "hacia_pista": round(math.atan2(cx_pista - px, cy_pista - py), 3)}
+    # portón verde de la entrada por residencias (fotos): donde la calle interna junto a las residencias
+    # sale a la carretera
+    ys, xs = np.nonzero((calles > 0) & (acceso == 0) & (lejos_carretera < 40))
+    sel = (xs > 1600) & (ys > 1700)
+    porton_res = None
+    if sel.any():
+        rx, ry = int(xs[sel].mean()), int(ys[sel].mean())
+        porton_res = {"p": a_metros(rx, ry), "hacia_dentro": round(math.atan2(1700 - rx, 1840 - ry), 3)}
     # la cerca se abre en las calles internas que salen a la carretera y, en la pista, solo donde va el portón
     accesos = cv2.dilate(((calles > 0) & (acceso == 0)).astype(np.uint8), cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (31, 31)))
     if porton:
@@ -409,6 +435,10 @@ def main(pdf, sat=None):
         "arboles": arboles,
         "cerca": cerca,
         "porton_pista": porton,
+        "porton_residencias": porton_res,
+        "picnic": {"centro": a_metros(*PICNIC["centro"]), "radio": round(PICNIC["radio"] * ESCALA, 2)},
+        "puente": {"centro": a_metros(*PUENTE["centro"]), "largo": round(PUENTE["largo"] * ESCALA, 2),
+                   "angulo": round(math.atan2(1557 - 1533, 1550 - 1450), 3)},
         "pista": {"centro": a_metros(float(cx_pista), float(cy_pista))},
     }
     (RAIZ / "src/data/campus3d.json").write_text(json.dumps(datos, ensure_ascii=False), encoding="utf-8")
