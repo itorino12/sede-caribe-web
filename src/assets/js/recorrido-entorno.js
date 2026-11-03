@@ -73,7 +73,8 @@ const CALLES = [
 const RUMBOS = [{ cerca: [-264, 437], por: [[-310, 478], [-385, 560], [-480, 690], [-607, 846], [-700, 1000], [-820, 1300], [-1000, 1900]] }];
 
 // ---------- colores
-const SUELO = { barrio: 0xa9b591, patio: 0xa3a6a8, tierra: 0xb49c74, bosque: 0x6f9a55, potrero: 0xa8c97e };
+// barrios, bosques y potreros van sobre el mismo zacate del croquis (sin suelo propio): solo patios y lotes cambian de color
+const SUELO = { patio: 0xa3a6a8, tierra: 0xb49c74 };
 const CAPA = { bosque: 1, potrero: 2, barrio: 2, tierra: 3, patio: 3 };   // las zonas de encima tapan a las de abajo
 const PAREDES = [0xefe7d6, 0xf1d9b5, 0xcfe0e8, 0xe9c7c0, 0xf3f0e8, 0xd9e6c8, 0xf4e3a6, 0xd7d3e8];
 const TECHOS = [0x8f979e, 0x9aa1a6, 0xb4553f, 0xc46a4a, 0x5f7f99, 0xd8d8d2, 0x5c8a6a, 0x7d858c];
@@ -197,6 +198,7 @@ export function armarEntorno({ THREE, escena, datos, liviano }) {
   const sue = [], col = [], cc = new THREE.Color();
   const capaDe = (z) => CAPA[z.tipo] || 1;
   for (const z of ZONAS) {
+    if (SUELO[z.tipo] === undefined) continue;
     const contorno = z.borde.map(([x, y]) => new THREE.Vector2(x, y));
     const caras = THREE.ShapeUtils.triangulateShape(contorno, []);
     cc.setHex(SUELO[z.tipo]);
