@@ -58,7 +58,7 @@ PLANTA = {"centro": (1486, 1566), "giro": 74}        # planta de tratamiento, al
 NUMERACION = {"1": 1, "2": 2, "3": 3, "4": 4, "24": 5, "25": 6, "27": 7, "34": 8, "35": 9, "36": 10, "37": 11, "5": 12, "6": 13, "7": 14, "8": 15, "9": 16, "10": 17, "26": 18, "28": 19, "29": 20, "30": 21, "31": 22, "33": 23, "11": 24, "12": 25, "13": 26, "14": 27, "15": 28, "32": 29, "16": 30, "17": 31, "18": 32, "20": 33, "21": 34, "22": 35, "23": 36, "19": 37}
 NUMERACION = {int(k): v for k, v in NUMERACION.items()}
 
-# Aulas y dependencias de cada edificio, tal como las detalla el croquis oficial (número del croquis). Cada grupo
+# Aulas y dependencias de cada edificio, tal como las detalla el croquis oficial o la Sede (número del croquis). Cada grupo
 # es un piso (sin nombre si el edificio es de uno); cada espacio, [nombre, uso o detalle].
 DEPENDENCIAS = {
     1: [{"piso": None, "espacios": [["Aula 1", None], ["Aula 2", None], ["Aula 3", "Laboratorio de Idiomas"], ["Aula 4", None],
@@ -66,6 +66,9 @@ DEPENDENCIAS = {
     2: [{"piso": None, "espacios": [["Recepción", None], ["Registro", None], ["Becas", None], ["OAF", None], ["Acción Social", None],
                                     ["Vida Estudiantil", None], ["Oficinas", "Orientación, Psicología y Trabajo Social"],
                                     ["Coordinación de Administración", None], ["Dirección", None]]}],
+    # (la Sede) Coordinación de Docencia: el croquis no la detalla
+    4: [{"piso": None, "espacios": [["Coordinación de Docencia", None], ["Audiovisuales", None], ["Tecnologías de la Información", None],
+                                    ["Sala de Profesores", None]]}],
     7: [{"piso": None, "espacios": [["Aula 8", None], ["Aula 9", None], ["Aula 10", None], ["Aula 11", None], ["Aula 12", None]]}],
     8: [{"piso": None, "espacios": [["Aula 13", None], ["Aula 14", "Laboratorio de Química y Física"], ["Aula 15", "Laboratorio de Cómputo #2"],
                                     ["Aula 16", None], ["Aula 17", "Laboratorio de Cómputo #3"]]}],
@@ -591,17 +594,34 @@ def lugares_nuevos(calles, quebrada, lejos_carretera, y_ruta32):
     for x, z in nuevas:   # sin árboles encima de las mesas nuevas
         cv2.circle(despejar, a_px(x, z), int(4.5 / ESCALA), 1, -1)
     elem.append({"tipo": "mesas", "id": None, "puntos": M(mesas) + nuevas})
-    # (anotaciones) paso de cebra frente al pórtico: sigue la línea marcada y cruza las dos calles que rodean la
-    # isla de zacate, de la caseta del guarda hacia la acera del camino de la entrada; franjas solo sobre el asfalto
-    (ax_, az_), (bx_, bz_) = (-23.5, -84.0), (-15.6, -77.0)
-    L_ = math.hypot(bx_ - ax_, bz_ - az_); ux_, uz_ = (bx_ - ax_) / L_, (bz_ - az_) / L_
-    franjas = []
-    for d_ in np.arange(-8.0, L_ + 14.0, 0.9):
-        x_, z_ = ax_ + ux_ * d_, az_ + uz_ * d_
-        px_, py_ = a_px(x_, z_)
-        if calles[py_, px_]:
-            franjas.append([round(x_, 2), round(z_, 2)])
-    elem.append({"tipo": "cebra", "id": None, "franjas": franjas, "giro": round(math.atan2(ux_, uz_), 3), "ancho": 3.0})
+    # (anotaciones y revisión) paso de cebra frente al pórtico: cruza las dos calles que rodean la isla de zacate,
+    # cada una en ángulo recto (no en diagonal, que lo llevaba debajo del alero del 13), y una acera une los dos
+    # cruces por la isla. Del lado oeste llega al zacate frente a la caseta del guarda, con una acera corta hasta
+    # el 13; del este, a la acera que baja junto al camino de la entrada
+    def cebra_en(x, z, ancho=3.0):
+        cx_, cy_ = a_px(x, z)
+        R = int(7 / ESCALA)
+        yy, xx = np.nonzero(calles[cy_ - R:cy_ + R, cx_ - R:cx_ + R])
+        _, vecs_ = np.linalg.eigh(np.cov(np.vstack([xx, yy])))
+        rx_, ry_ = vecs_[:, -1]                    # dirección de la calle
+        ux_, uz_ = -ry_, rx_                       # el cruce va de lado a lado, en ángulo recto
+        ds = np.round(np.arange(-12.0, 12.01, 0.3), 2)
+        sobre = [bool(calles[a_px(x + ux_ * d, z + uz_ * d)[::-1]]) for d in ds]
+        k0 = min((k for k, s in enumerate(sobre) if s), key=lambda k: abs(ds[k]))   # el asfalto más cercano a la semilla
+        ki = k0
+        while ki > 0 and sobre[ki - 1]: ki -= 1
+        kd = k0
+        while kd < len(ds) - 1 and sobre[kd + 1]: kd += 1
+        izq, der = float(ds[ki]), float(ds[kd])
+        franjas = [[round(x + ux_ * d, 2), round(z + uz_ * d, 2)] for d in np.arange(izq + 0.45, der - 0.2, 0.9)]
+        elem.append({"tipo": "cebra", "id": None, "franjas": franjas, "giro": round(math.atan2(ux_, uz_), 3), "ancho": ancho})
+        return [round(x + ux_ * (izq - 0.6), 2), round(z + uz_ * (izq - 0.6), 2)], [round(x + ux_ * (der + 0.6), 2), round(z + uz_ * (der + 0.6), 2)]
+    oeste_a, oeste_b = cebra_en(-26.0, -84.0)
+    este_a, este_b = cebra_en(-12.5, -76.0)
+    lados_ = sorted([oeste_a, oeste_b], key=lambda q: q[0])        # el extremo de más al oeste llega al zacate del guarda
+    isla_ = sorted([este_a, este_b], key=lambda q: q[0])
+    elem.append({"tipo": "acera", "id": None, "ancho": 1.8, "puntos": [lados_[1], isla_[0]]})          # por la isla
+    elem.append({"tipo": "acera", "id": None, "ancho": 1.8, "puntos": [lados_[0], [lados_[0][0], -88.4]]})   # hasta el 13
     # (anotaciones) acera desde la calle del puente hasta la esquina sur del 7, donde llega el pasillo de las aulas.
     # Pasa pegada a la malla de la piscina (a unos 2,4 m), de modo que los vestidores, el toldo y las mesas quedan
     # detrás de ella, del lado de la quebrada (ver vestidores en recorrido.js)
@@ -632,13 +652,38 @@ def lugares_nuevos(calles, quebrada, lejos_carretera, y_ruta32):
         sx = cv2.Sobel(lejos_carretera, cv2.CV_32F, 1, 0, ksize=5)[int(gy_), int(gx_)]
         sy = cv2.Sobel(lejos_carretera, cv2.CV_32F, 0, 1, ksize=5)[int(gy_), int(gx_)]
         giro_p = math.atan2(float(sx), float(sy))
-        elem.append({"tipo": "porton", "id": None, "p": a_metros(gx_, gy_), "giro": round(giro_p, 3)})
-        # postes del portón (a 4,45 m del centro, a lo largo de las hojas): ahí empalma la cerca
-        ex, ey = math.cos(giro_p) * 4.45 / ESCALA, -math.sin(giro_p) * 4.45 / ESCALA
-        postes = sorted([(gx_ + ex, gy_ - ey), (gx_ - ex, gy_ + ey)])   # oeste, este
+        # (revisión) el portón cierra todo el asfalto en la línea de la cerca: se mide la calle de borde a borde a
+        # lo largo de las hojas y el portón se centra en ella (antes medía 8,4 m y quedaban 4,5 m de malla sobre el asfalto)
+        ux_g, uy_g = math.cos(giro_p), -math.sin(giro_p)
+        lado_ = lambda s: next(d for d in range(1, 80) if not calles[int(round(gy_ + s * uy_g * d)), int(round(gx_ + s * ux_g * d))])
+        d1_, d2_ = lado_(1), lado_(-1)
+        gx_, gy_ = gx_ + ux_g * (d1_ - d2_) / 2, gy_ + uy_g * (d1_ - d2_) / 2
+        semi_g = (d1_ + d2_) / 2 * ESCALA
+        elem.append({"tipo": "porton", "id": None, "p": a_metros(gx_, gy_), "giro": round(giro_p, 3), "hoja": round(semi_g, 2)})
+        # postes del portón (en los bordes del asfalto, 0,3 m afuera): ahí empalma la cerca
+        ex, ey = ux_g * (semi_g + 0.3) / ESCALA, uy_g * (semi_g + 0.3) / ESCALA
+        postes = sorted([(gx_ + ex, gy_ + ey), (gx_ - ex, gy_ - ey)])   # oeste, este
         # (anotaciones) la cerca baja desde el poste este del portón por el borde este del acceso hasta el pórtico
         # de la entrada; ahí termina en un portón para peatones
-        cerca_extra = [postes[1]] + junto_calle([(1178, 1062), (1164, 1080), (1151, 1098), (1141, 1114)], 4, calles)
+        # (revisión) la cerca va por la franja de zacate entre el acceso y la calle interna, sin pisar asfalto: arranca
+        # donde empieza esa franja (entre ella y el poste del portón hay asfalto, el de la entrada a la calle interna)
+        # y en cada punto se busca el centro de la franja, lo más lejos posible de las dos calles
+        lejos_c = cv2.distanceTransform((calles == 0).astype(np.uint8), cv2.DIST_L2, 5)
+        # línea marcada (en metros) por la franja de zacate de 1,5 m entre el acceso y la calle interna, hasta el pórtico
+        guia_ = np.array([(x / ESCALA + ORIGEN[0], z / ESCALA + ORIGEN[1]) for x, z in
+                          [(-2.5, -112.5), (-5.0, -108.0), (-8.0, -103.0), (-10.5, -99.0), (-12.8, -96.2)]], float)
+        largo_g = np.concatenate([[0], np.cumsum(np.hypot(*np.diff(guia_, axis=0).T))])
+        cerca_extra = []
+        for s_ in np.arange(0, largo_g[-1] + 0.1, 4):
+            x_, y_ = np.interp(s_, largo_g, guia_[:, 0]), np.interp(s_, largo_g, guia_[:, 1])
+            k_ = min(int(np.searchsorted(largo_g, s_, side="right")) - 1, len(guia_) - 2)
+            tx_, ty_ = guia_[k_ + 1] - guia_[k_]; n_ = math.hypot(tx_, ty_) or 1
+            nx_, ny_ = -ty_ / n_, tx_ / n_
+            mejor_ = max((lejos_c[int(round(y_ + ny_ * d)), int(round(x_ + nx_ * d))], -abs(d), d) for d in range(-10, 11))
+            mejor_ = (mejor_[0], mejor_[2])
+            if mejor_[0] >= 2:   # al menos 0,5 m de zacate a cada lado
+                cerca_extra.append((float(x_ + nx_ * mejor_[1]), float(y_ + ny_ * mejor_[1])))
+        cerca_extra = [q for i, q in enumerate(cerca_extra) if i == 0 or math.dist(q, cerca_extra[i - 1]) > 2]
         (ax_, ay_), (bx_, by_) = [(float(x), float(y)) for x, y in cerca_extra[-2:]]
         d_ = math.hypot(bx_ - ax_, by_ - ay_) or 1
         ux_, uy_ = (bx_ - ax_) / d_, (by_ - ay_) / d_
@@ -780,7 +825,65 @@ def main(pdf, sat=None):
     cs, _ = cv2.findContours(anillo, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_NONE)
     lleno = np.zeros_like(anillo)
     cv2.fillPoly(lleno, [cv2.convexHull(np.vstack(cs))], 255)
+    # (revisión) la envolvente convexa deja recto y con un quiebre el lado que el croquis no cierra: se ajusta una
+    # pista de verdad (dos rectas y dos semicírculos) al borde exterior que sí está dibujado
+    from scipy.optimize import least_squares
+    borde_o = np.vstack(cs)[:, 0, :].astype(float)
+    borde_o = borde_o[borde_o[:, 1] < 2870]                         # sin el corte recto donde estaba el acceso
+    mx_o, my_o = borde_o.mean(axis=0)
+    _, v_o = np.linalg.eigh(np.cov(borde_o.T)); ang0 = math.atan2(v_o[1, -1], v_o[0, -1])
+    def resto(q):
+        cx_, cy_, an_, a_, r_ = q
+        ux_, uy_ = math.cos(an_), math.sin(an_)
+        lo_ = (borde_o[:, 0] - cx_) * ux_ + (borde_o[:, 1] - cy_) * uy_
+        tr_ = -(borde_o[:, 0] - cx_) * uy_ + (borde_o[:, 1] - cy_) * ux_
+        return np.hypot(np.clip(np.abs(lo_) - a_, 0, None), tr_) - r_
+    sol = least_squares(resto, [mx_o, my_o, ang0, 200.0, 150.0]).x
+    cx_s, cy_s, an_s, a_s, r_s = sol
+    us_, vs_ = (math.cos(an_s), math.sin(an_s)), (-math.sin(an_s), math.cos(an_s))
+    lleno = np.zeros_like(anillo)
+    esq_ = [(cx_s + us_[0] * a_s * i + vs_[0] * r_s * j, cy_s + us_[1] * a_s * i + vs_[1] * r_s * j) for i, j in ((-1, -1), (1, -1), (1, 1), (-1, 1))]
+    cv2.fillPoly(lleno, [np.array(esq_, np.int32)], 255)
+    for i in (-1, 1):
+        cv2.circle(lleno, (int(round(cx_s + us_[0] * a_s * i)), int(round(cy_s + us_[1] * a_s * i))), int(round(r_s)), 255, -1)
     pista = cv2.subtract(lleno, cv2.erode(lleno, cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (49, 49))))
+    # (revisión) el acceso de la pista es un camino recto que llega al borde del óvalo: se rehace como una franja
+    # limpia (el croquis le pegaba una cuña de asfalto a lo largo de la curva) y no se pinta sobre carriles ni cancha
+    calles[acceso > 0] = 0
+    lejos_ovalo = cv2.dilate(lleno, cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (73, 73)))   # ~9 m alrededor
+    nucleo = ((acceso > 0) & (lejos_ovalo == 0)).astype(np.uint8)
+    n_, lab_, st_, _ = cv2.connectedComponentsWithStats(nucleo)
+    nuevo_acceso = np.zeros_like(acceso)
+    if n_ > 1:
+        k_ = 1 + int(np.argmax(st_[1:, 4]))
+        ys_a, xs_a = np.nonzero(lab_ == k_)
+        mx_a, my_a = xs_a.mean(), ys_a.mean()
+        _, vecs_a = np.linalg.eigh(np.cov(np.vstack([xs_a, ys_a])))
+        ax_, ay_ = vecs_a[:, -1]
+        cy_o, cx_o = np.mean(np.nonzero(lleno), axis=1)
+        if ax_ * (cx_o - mx_a) + ay_ * (cy_o - my_a) < 0:
+            ax_, ay_ = -ax_, -ay_          # a lo largo del camino, hacia la pista
+        a_lo = (xs_a - mx_a) * ax_ + (ys_a - my_a) * ay_
+        a_tr = -(xs_a - mx_a) * ay_ + (ys_a - my_a) * ax_
+        ancho_a = float(np.percentile(a_tr, 95) - np.percentile(a_tr, 5))
+        ini = (mx_a + ax_ * a_lo.min(), my_a + ay_ * a_lo.min())
+        fin = next(((mx_a + ax_ * s, my_a + ay_ * s) for s in range(int(a_lo.max()), 600)
+                    if lleno[int(my_a + ay_ * s), int(mx_a + ax_ * s)]), (mx_a + ax_ * a_lo.max(), my_a + ay_ * a_lo.max()))
+        cv2.line(nuevo_acceso, (int(ini[0]), int(ini[1])), (int(fin[0]), int(fin[1])), 255, max(int(ancho_a), 8))
+    acceso = cv2.bitwise_and(nuevo_acceso, cv2.bitwise_not(lleno))
+    calles[acceso > 0] = 255
+    # eje largo de la pista (componente principal del óvalo) y medio largo de la cancha, para los marcos
+    ys_o, xs_o = np.nonzero(lleno)
+    _, vecs_o = np.linalg.eigh(np.cov(np.vstack([xs_o, ys_o])))
+    vx_o, vy_o = vecs_o[:, -1]
+    proy_o = (xs_o - xs_o.mean()) * vx_o + (ys_o - ys_o.mean()) * vy_o
+    trans_o = -(xs_o - xs_o.mean()) * vy_o + (ys_o - ys_o.mean()) * vx_o
+    eje_pista = math.atan2(-vy_o, vx_o)                                   # en recorrido.js: dirección (cos, −sen)
+    # medidas interiores del óvalo (sin el anillo de 6,1 m); en una pista reglamentaria la cancha termina unos
+    # 0,72 semianchos antes del extremo interior de las curvas
+    largo_in = (proy_o.max() - proy_o.min()) / 2 * ESCALA - 49 * ESCALA / 2
+    ancho_in = (trans_o.max() - trans_o.min()) / 2 * ESCALA - 49 * ESCALA / 2
+    medio_cancha = largo_in - 0.72 * ancho_in
     # el camino recto que baja de la pista a la carretera sigue siendo calle
     interior = np.zeros_like(pista)
     cs, _ = cv2.findContours(pista, cv2.RETR_CCOMP, cv2.CHAIN_APPROX_SIMPLE)
@@ -936,6 +1039,11 @@ def main(pdf, sat=None):
             arboles.append({"p": a_metros(x, y), "r": round(min(r, 45) * ESCALA, 2), "palma": bool(palma)})
     if satelital is not None:
         arboles += satelital["arboles"]
+    # (revisión) ningún árbol con la copa sobre los carriles de la pista
+    lejos_pista = cv2.distanceTransform((pista == 0).astype(np.uint8), cv2.DIST_L2, 5)
+    a_px_ = lambda x, z: (int(round(x / ESCALA + ORIGEN[0])), int(round(z / ESCALA + ORIGEN[1])))
+    arboles = [a for a in arboles if lejos_pista[a_px_(*a["p"])[1], a_px_(*a["p"])[0]] * ESCALA >= a["r"] + 0.5
+               and not lleno[a_px_(*a["p"])[1], a_px_(*a["p"])[0]]]   # ni dentro de la cancha
 
     # --- cerca perimetral (fotos): malla verde con alambre de púas a lo largo de las carreteras que
     # rodean la U. Se toma la zona del campus (lo que queda de este lado de la carretera, empezando en la
@@ -960,13 +1068,31 @@ def main(pdf, sat=None):
     ys, xs = np.nonzero(acceso)
     k_min = int(np.argmin(lejos_carretera[ys, xs])) if len(xs) else None
     porton = None
+    tramo_porton = []
     if k_min is not None:
-        # centro del camino donde llega a la carretera (promedio de la franja más cercana)
-        cerca_c = lejos_carretera[ys, xs] < lejos_carretera[ys[k_min], xs[k_min]] + 25
-        px, py = int(xs[cerca_c].mean()), int(ys[cerca_c].mean())
-        # dirección del camino de acceso (de la pista hacia la carretera) para orientar el portón
-        cy_pista, cx_pista = np.mean(np.nonzero(pista), axis=1)
-        porton = {"p": a_metros(px, py - 14), "hacia_pista": round(math.atan2(cx_pista - px, cy_pista - py), 3)}
+        # (revisión) el portón va exactamente donde el camino de acceso cruza la línea de la cerca: el tramo del
+        # borde que cae sobre el camino es la abertura, sus extremos son los postes y el portón la cierra de lado a lado
+        acc_d = cv2.dilate(acceso, np.ones((5, 5), np.uint8))
+        en_camino = [i for i, (x, y) in enumerate(borde) if acc_d[int(y), int(x)]]
+        grupos_ = []
+        for i in en_camino:
+            if grupos_ and i - grupos_[-1][-1] <= 3:
+                grupos_[-1].append(i)
+            else:
+                grupos_.append([i])
+        if grupos_:
+            tramo_porton = max(grupos_, key=len)
+            (ax_, ay_), (bx_, by_) = [tuple(map(float, borde[i])) for i in (tramo_porton[0], tramo_porton[-1])]
+            L_ = math.hypot(bx_ - ax_, by_ - ay_) or 1
+            ux_, uy_ = (bx_ - ax_) / L_, (by_ - ay_) / L_
+            mx_, my_ = (ax_ + bx_) / 2, (ay_ + by_) / 2
+            cy_pista, cx_pista = np.mean(np.nonzero(pista), axis=1)
+            nx_, ny_ = -uy_, ux_
+            if nx_ * (cx_pista - mx_) + ny_ * (cy_pista - my_) < 0:
+                nx_, ny_ = -nx_, -ny_   # +z local del portón apunta a la pista
+            m_ = 0.4 / ESCALA
+            porton = {"p": a_metros(mx_, my_), "hacia_pista": round(math.atan2(nx_, ny_), 3), "semiancho": round(L_ / 2 * ESCALA + 0.4, 2),
+                      "postes": [a_metros(ax_ - ux_ * m_, ay_ - uy_ * m_), a_metros(bx_ + ux_ * m_, by_ + uy_ * m_)]}
     # portón verde de la entrada por residencias (fotos): donde la calle interna junto a las residencias
     # sale a la carretera
     ys, xs = np.nonzero((calles > 0) & (acceso == 0) & (lejos_carretera > 18) & (lejos_carretera < 26))
@@ -989,8 +1115,8 @@ def main(pdf, sat=None):
                                  a_metros(rx - dy_ * (semi_ + 0.5) / ESCALA, ry + dx_ * (semi_ + 0.5) / ESCALA)]}
     # la cerca se abre en las calles internas que salen a la carretera y, en la pista, solo donde va el portón
     accesos = cv2.dilate(((calles > 0) & (acceso == 0)).astype(np.uint8), cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (31, 31)))
-    if porton:
-        cv2.circle(accesos, (px, py - 14), 17, 1, -1)
+    for i in tramo_porton:   # la cerca se abre solo donde está el portón
+        cv2.circle(accesos, (int(borde[i][0]), int(borde[i][1])), 3, 1, -1)
     entrada6 = (1049, 1131)
     tramos, tramo = [], []
     for i in range(0, len(borde), 6):
@@ -1013,20 +1139,40 @@ def main(pdf, sat=None):
     if len(extra["cerca"]) > 1:
         cerca.append([a_metros(float(x), float(y)) for x, y in extra["cerca"]])
         pass
-    if porton_res:
-        for pe in porton_res["postes"]:
-            mejor = min(((t, k) for t in cerca for k in (0, -1)), key=lambda tk: math.dist(tk[0][tk[1]], pe))
-            if math.dist(mejor[0][mejor[1]], pe) < 16:
-                (mejor[0].insert(0, pe) if mejor[1] == 0 else mejor[0].append(pe))
-    if len(extra["cerca"]) > 1:
-        # el tramo de la carretera que viene del este llega hasta el poste este del portón
-        porton_n = next(e for e in elementos if e["tipo"] == "porton")
+    # la cerca empalma con los postes del portón de la pista y del de residencias
+    for pe in (porton["postes"] if porton else []) + (porton_res["postes"] if porton_res else []):
+        mejor = min(((t, k) for t in cerca for k in (0, -1)), key=lambda tk: math.dist(tk[0][tk[1]], pe))
+        if math.dist(mejor[0][mejor[1]], pe) < 16:
+            (mejor[0].insert(0, pe) if mejor[1] == 0 else mejor[0].append(pe))
+    porton_n = next((e for e in elementos if e["tipo"] == "porton"), None)
+    if porton_n:
+        # (revisión) el portón del acceso cerrado va en la misma línea que la cerca que viene del este y cierra el
+        # asfalto de borde a borde: se sigue esa línea desde el último poste hasta entrar y salir del asfalto
         pe = a_metros(*porton_n.pop("poste_este"))
         t0 = min(cerca[:-1], key=lambda t: min(math.dist(t[0], pe), math.dist(t[-1], pe)))
-        if math.dist(t0[-1], pe) < math.dist(t0[0], pe):
-            t0.append(pe)
-        else:
-            t0.insert(0, pe)
+        if math.dist(t0[0], pe) < math.dist(t0[-1], pe):
+            t0.reverse()
+        en_asfalto = lambda x, z: bool(calles[int(round(z / ESCALA + ORIGEN[1])), int(round(x / ESCALA + ORIGEN[0]))])
+        (ax_, az_), (bx_, bz_) = t0[-2], t0[-1]
+        L_ = math.hypot(bx_ - ax_, bz_ - az_); ux_, uz_ = (bx_ - ax_) / L_, (bz_ - az_) / L_
+        pasos = [s / 10 for s in range(0, int((L_ + 30) * 10))]
+        dentro_ = [s for s in pasos if en_asfalto(ax_ + ux_ * s, az_ + uz_ * s)]
+        if dentro_:
+            # tramos de asfalto en la línea (la esquina redondeada de la calle interna y luego el acceso): el portón
+            # va desde el primer asfalto hasta el final del tramo más largo, que es el acceso
+            tramos_a = []
+            for s in dentro_:
+                if tramos_a and s - tramos_a[-1][1] <= 1.0:
+                    tramos_a[-1][1] = s
+                else:
+                    tramos_a.append([s, s])
+            s_e = tramos_a[0][0]
+            s_w = max(tramos_a, key=lambda r: r[1] - r[0])[1] + 0.1
+            E_ = (ax_ + ux_ * (s_e - 0.3), az_ + uz_ * (s_e - 0.3)); W_ = (ax_ + ux_ * (s_w + 0.3), az_ + uz_ * (s_w + 0.3))
+            t0[-1] = [round(E_[0], 2), round(E_[1], 2)]
+            porton_n["p"] = [round((E_[0] + W_[0]) / 2, 2), round((E_[1] + W_[1]) / 2, 2)]
+            porton_n["giro"] = round(math.atan2(-uz_, ux_), 3)
+            porton_n["hoja"] = round(math.dist(E_, W_) / 2 - 0.1, 2)
     cy_pista, cx_pista = np.mean(np.nonzero(pista), axis=1)
 
     ys_c, xs_c = np.nonzero(calles)
@@ -1061,7 +1207,7 @@ def main(pdf, sat=None):
         "elementos": [{**el, "id": NUMERACION.get(el["id"]) if el.get("id") else el.get("id")} for el in elementos],
         "numeros": {"pista": NUMERACION[19], "porton_residencias": NUMERACION[20], "picnic": NUMERACION[21],
                     "planta": NUMERACION[22], "puente": NUMERACION[23], "parqueo_piscina": NUMERACION[33]},
-        "pista": {"centro": a_metros(float(cx_pista), float(cy_pista))},
+        "pista": {"centro": a_metros(float(cx_pista), float(cy_pista)), "eje": round(float(eje_pista), 3), "medio_cancha": round(float(medio_cancha), 1)},
     }
     datos["salidas"] = salidas_carretera(np.clip(suelo, 0, 255).astype(np.uint8), datos["terreno"])
     (RAIZ / "src/data/campus3d.json").write_text(json.dumps(datos, ensure_ascii=False), encoding="utf-8")

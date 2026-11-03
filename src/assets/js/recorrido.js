@@ -621,9 +621,10 @@ for (const e of datos.campus.edificios) {
 // ---------- pista atlética: cancha con marcos en el centro y portón de acceso desde la carretera (fotos)
 if (datos.campus.porton_pista && lugares.get(N.pista)) {
   const blancoTubo = new THREE.MeshLambertMaterial({ color: 0xf2f2f2 });
-  const [pcx, pcz] = datos.campus.pista.centro, eje = -0.46;
+  // eje largo y medio largo de la cancha, medidos en el óvalo de la pista (campus3d.py)
+  const [pcx, pcz] = datos.campus.pista.centro, eje = datos.campus.pista.eje ?? -0.46, medio = datos.campus.pista.medio_cancha ?? 42;
   for (const lado of [-1, 1]) {   // marcos de fútbol en los extremos de la cancha
-    const gx = pcx + Math.cos(eje) * 42 * lado, gz = pcz - Math.sin(eje) * 42 * lado;
+    const gx = pcx + Math.cos(eje) * medio * lado, gz = pcz - Math.sin(eje) * medio * lado;
     const marco = new THREE.Group();
     for (const dz of [-3.6, 3.6]) { const palo = new THREE.Mesh(new THREE.CylinderGeometry(0.12, 0.12, 2.44, 6), blancoTubo); palo.position.set(0, 1.22, dz); marco.add(palo); }
     const travesano = new THREE.Mesh(new THREE.BoxGeometry(0.2, 0.2, 7.4), blancoTubo); travesano.position.y = 2.44; marco.add(travesano);
@@ -631,23 +632,25 @@ if (datos.campus.porton_pista && lugares.get(N.pista)) {
     escena.add(marco);
   }
   // portón de dos hojas de tubo galvanizado, poste azul con panel solar y lámpara solar
-  const { p, hacia_pista } = datos.campus.porton_pista;
-  const grupo = new THREE.Group();
+  const { p, hacia_pista, semiancho = 3.8 } = datos.campus.porton_pista;
+  const grupo = new THREE.Group(), hojaL = semiancho - 0.3;   // cada hoja cubre media abertura
   const acero = new THREE.MeshStandardMaterial({ color: 0xc8ccd0, metalness: 0.5, roughness: 0.4 });
   const azul = new THREE.MeshStandardMaterial({ color: 0x1e88d8, roughness: 0.6 });
   for (const lado of [-1, 1]) {
     const hoja = new THREE.Group();
-    for (let k = 0; k <= 10; k++) { const barra = new THREE.Mesh(new THREE.BoxGeometry(0.06, 2.3, 0.06), acero); barra.position.set(lado * (0.25 + k * 0.33), 1.25, 0); hoja.add(barra); }
-    for (const y of [0.2, 1.3, 2.35]) { const larguero = new THREE.Mesh(new THREE.BoxGeometry(3.5, 0.08, 0.08), acero); larguero.position.set(lado * 1.9, y, 0); hoja.add(larguero); }
+    const barras = Math.round(hojaL / 0.33);
+    for (let k = 0; k <= barras; k++) { const barra = new THREE.Mesh(new THREE.BoxGeometry(0.06, 2.3, 0.06), acero); barra.position.set(lado * (0.25 + (k * (hojaL - 0.1)) / barras), 1.25, 0); hoja.add(barra); }
+    for (const y of [0.2, 1.3, 2.35]) { const larguero = new THREE.Mesh(new THREE.BoxGeometry(hojaL, 0.08, 0.08), acero); larguero.position.set(lado * (0.2 + hojaL / 2), y, 0); hoja.add(larguero); }
     grupo.add(hoja);
   }
-  for (const x of [-3.8, 3.8]) { const pilar = new THREE.Mesh(new THREE.BoxGeometry(0.2, 2.9, 0.2), acero); pilar.position.set(x, 1.45, 0); grupo.add(pilar); }
-  const postePanel = new THREE.Mesh(new THREE.CylinderGeometry(0.1, 0.1, 4.2, 6), azul); postePanel.position.set(6, 2.1, 1.5); grupo.add(postePanel);
-  const caja = new THREE.Mesh(new THREE.BoxGeometry(0.6, 0.8, 0.35), azul); caja.position.set(6, 3.2, 1.3); grupo.add(caja);
+  for (const x of [-semiancho, semiancho]) { const pilar = new THREE.Mesh(new THREE.BoxGeometry(0.2, 2.9, 0.2), acero); pilar.position.set(x, 1.45, 0); grupo.add(pilar); }
+  const xPanel = semiancho + 2.2, xLampara = semiancho + 5.2;
+  const postePanel = new THREE.Mesh(new THREE.CylinderGeometry(0.1, 0.1, 4.2, 6), azul); postePanel.position.set(xPanel, 2.1, 1.5); grupo.add(postePanel);
+  const caja = new THREE.Mesh(new THREE.BoxGeometry(0.6, 0.8, 0.35), azul); caja.position.set(xPanel, 3.2, 1.3); grupo.add(caja);
   const panelSolar = new THREE.Mesh(new THREE.BoxGeometry(1.8, 0.08, 1.1), new THREE.MeshStandardMaterial({ color: 0x2b3a4a, metalness: 0.4, roughness: 0.3 }));
-  panelSolar.position.set(6, 4.3, 1.5); panelSolar.rotation.x = -0.25; grupo.add(panelSolar);
-  const lampara = new THREE.Mesh(new THREE.CylinderGeometry(0.09, 0.12, 7.5, 6), new THREE.MeshStandardMaterial({ color: 0x2f3337 })); lampara.position.set(9, 3.75, 2); grupo.add(lampara);
-  const panelLamp = new THREE.Mesh(new THREE.BoxGeometry(1.2, 0.08, 0.7), panelSolar.material); panelLamp.position.set(9, 7.6, 2); panelLamp.rotation.x = -0.3; grupo.add(panelLamp);
+  panelSolar.position.set(xPanel, 4.3, 1.5); panelSolar.rotation.x = -0.25; grupo.add(panelSolar);
+  const lampara = new THREE.Mesh(new THREE.CylinderGeometry(0.09, 0.12, 7.5, 6), new THREE.MeshStandardMaterial({ color: 0x2f3337 })); lampara.position.set(xLampara, 3.75, 2); grupo.add(lampara);
+  const panelLamp = new THREE.Mesh(new THREE.BoxGeometry(1.2, 0.08, 0.7), panelSolar.material); panelLamp.position.set(xLampara, 7.6, 2); panelLamp.rotation.x = -0.3; grupo.add(panelLamp);
   grupo.traverse((o) => { if (o.isMesh) o.castShadow = true; });
   grupo.position.set(p[0], 0, p[1]);
   grupo.rotation.y = hacia_pista;   // las hojas quedan atravesadas en el camino; +z local apunta a la pista
@@ -1159,7 +1162,10 @@ if (datos.campus.parqueo) {
       banca.position.set(x + (dx / d) * 3, alto + 0.23, z + (dz / d) * 3); banca.rotation.y = Math.atan2(dx, dz); g.add(banca);
     });
     if (arbol) g.add(higueron(arbol[0], alto, arbol[1], 3));
-    registrar(g, id, new THREE.Vector3(centro[0], alto + 4, centro[1]), { pared: sinUso(), techo: arriba }, 0);
+    // el número va a un costado del higuerón (encima tapaba el tronco)
+    let ax = centro[0], az = centro[1];
+    if (arbol) { const dx = centro[0] - arbol[0], dz = centro[1] - arbol[1], d = Math.hypot(dx, dz) || 1; ax = arbol[0] + (dx / d) * 16; az = arbol[1] + (dz / d) * 16; }
+    registrar(g, id, new THREE.Vector3(ax, alto + 4, az), { pared: sinUso(), techo: arriba }, 0);
   }
 
   // paso de la quebrada (28): la calle pasa sobre un tubo con cabezales de concreto, y encima la cruza una
@@ -1293,7 +1299,7 @@ if (datos.campus.parqueo) {
       acera, cebra, porton_peatonal: portonPeatonal, puente_peatonal: puentePeatonal, arbol_grande: arbolGrande }[el.tipo];
     if (hacer) hacer(el);
     else if (el.tipo === "porton") {   // acceso cerrado con portón (sin faroles)
-      const g = portonVerde(false); g.position.set(el.p[0], 0, el.p[1]); g.rotation.y = el.giro; escena.add(g);
+      const g = portonVerde(false, el.hoja || 4.2); g.position.set(el.p[0], 0, el.p[1]); g.rotation.y = el.giro; escena.add(g);
     }
   }
 }
@@ -1465,7 +1471,9 @@ function actualizarNivel() {
   nivelZoom = n;
 }
 // los que entran por zoom esperan a que la cámara se detenga (se calcula si tapan a otro) y aparecen con fundido
-function elegible(m) { return m.g === elegido || m.prioridad <= nivelZoom; }
+// con una zona elegida en los botones de zona, todos sus números se ven, sin importar la prioridad
+let zonaActiva = null;
+function elegible(m) { return m.g === elegido || m.prioridad <= nivelZoom || (zonaActiva !== null && lugares.get(m.id)?.zona === zonaActiva); }
 function moverMarcas() {
   const w = lienzo.clientWidth, h = lienzo.clientHeight;
   actualizarNivel();
@@ -1548,7 +1556,24 @@ function acercar(factor) {
 }
 raiz.querySelector("[data-acercar]").addEventListener("click", () => acercar(0.7));
 raiz.querySelector("[data-alejar]").addEventListener("click", () => acercar(1.4));
-raiz.querySelector("[data-vista-general]").addEventListener("click", () => { cerrarFicha(); calcularVistaGeneral(); viajar(vistaGeneral.objetivo, vistaGeneral.posicion); });
+const botonesZona = raiz.querySelectorAll("[data-zona]");
+const marcarZona = (z) => { zonaActiva = z; botonesZona.forEach((b) => b.setAttribute("aria-pressed", String(Number(b.dataset.zona) === z))); pedirDibujo(); };
+raiz.querySelector("[data-vista-general]").addEventListener("click", () => { cerrarFicha(); marcarZona(null); calcularVistaGeneral(); viajar(vistaGeneral.objetivo, vistaGeneral.posicion); });
+// botones de zona: la cámara se acerca hasta que caben todos los lugares de esa zona, sin cambiar el ángulo de vista
+function enfocarZona(z) {
+  const puntos = [...marcas.values()].filter((m) => lugares.get(m.id)?.zona === z).map((m) => m.g.userData.centro);
+  if (!puntos.length) return;
+  cerrarFicha();
+  const caja = new THREE.Box3().setFromPoints(puntos), centro = caja.getCenter(new THREE.Vector3());
+  centro.y = 0;
+  const radio = Math.max(caja.getSize(new THREE.Vector3()).length() / 2, 35);
+  const fov = THREE.MathUtils.degToRad(camara.fov), angulo = Math.min(fov, 2 * Math.atan(Math.tan(fov / 2) * camara.aspect));
+  const distancia = THREE.MathUtils.clamp((radio * 1.1) / Math.sin(angulo / 2), controles.minDistance, controles.maxDistance);
+  const dir = camara.position.clone().sub(controles.target).normalize();
+  viajar(centro, centro.clone().addScaledVector(dir, distancia));
+  marcarZona(z);
+}
+botonesZona.forEach((b) => b.addEventListener("click", () => enfocarZona(Number(b.dataset.zona))));
 
 // ---------- pantalla completa: la maqueta, con sus números, botones y ficha, ocupa toda la pantalla. Donde el
 // navegador no lo permite (el iPhone), se expande a toda la ventana; Esc o el mismo botón la devuelven.

@@ -14,12 +14,9 @@
           <svg class="mapa3d__icono-cerrar" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M9 4v5H4M15 4v5h5M9 20v-5H4M15 20v-5h5"/></svg>
         </button>
       </div>
-      <ul class="mapa3d__leyenda" aria-label="Color de los números por zona">
-        <li><span class="mapa3d__chip mapa3d__chip--z1"></span>Zona 1</li>
-        <li><span class="mapa3d__chip mapa3d__chip--z2"></span>Zona 2</li>
-        <li><span class="mapa3d__chip mapa3d__chip--z3"></span>Zona 3</li>
-        <li><span class="mapa3d__chip mapa3d__chip--z4"></span>Zona 4</li>
-      </ul>
+      <div class="mapa3d__zonas" role="group" aria-label="Ir a una zona del campus">
+        {% for z in [1, 2, 3, 4] %}<button type="button" class="mapa3d__zona mapa3d__chip--z{{ z }}" data-zona="{{ z }}" aria-pressed="false"><span class="mapa3d__chip"></span>Zona {{ z }}</button>{% endfor %}
+      </div>
       <div class="mapa3d__ficha" role="region" aria-live="polite" aria-label="Lugar elegido" hidden>
         <button type="button" class="mapa3d__ficha-cerrar" aria-label="Cerrar">×</button>
         <div class="carrusel" data-carrusel role="group" aria-roledescription="carrusel" hidden>
@@ -32,7 +29,7 @@
         <h3 class="mapa3d__ficha-titulo"></h3>
         <p class="mapa3d__ficha-texto"></p>
         <div class="mapa3d__ficha-dependencias" hidden>
-          <h4>Según el croquis</h4>
+          <h4>Aulas y dependencias</h4>
           <div class="mapa3d__ficha-pisos"></div>
         </div>
         <a class="mapa3d__ficha-enlace" href="#" hidden>Más información</a>

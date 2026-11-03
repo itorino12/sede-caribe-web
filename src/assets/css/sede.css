@@ -560,12 +560,16 @@ dialog::backdrop { background: rgba(0,25,45,.6); }
 .mapa3d__escena:-webkit-full-screen { width: 100%; height: 100%; min-height: 0; border: 0; border-radius: 0; margin: 0; }
 .mapa3d--pantalla-css .mapa3d__escena { position: fixed; inset: 0; z-index: 1000; height: 100vh; height: 100dvh; min-height: 0; margin: 0; border: 0; border-radius: 0; }
 html.sin-desplazar, html.sin-desplazar body { overflow: hidden; }
-/* leyenda de colores por zona */
-.mapa3d__leyenda { position: absolute; right: 12px; bottom: 12px; display: flex; flex-wrap: wrap; gap: 4px 12px; margin: 0; padding: 6px 10px; list-style: none;
-  background: rgba(255,255,255,.92); border-radius: 6px; box-shadow: 0 2px 8px rgba(0,30,60,.2); font-size: var(--t-xs); font-weight: 700; color: #04203A; pointer-events: none; }
-.mapa3d__leyenda li { display: flex; align-items: center; gap: 5px; }
-.mapa3d__chip { display: inline-block; width: 14px; height: 14px; border-radius: 50%; background: var(--fondo); border: 2px solid #fff; box-shadow: 0 0 0 1px rgba(0,30,60,.35); }
-.mapa3d--portada .mapa3d__leyenda, .mapa3d--sin-3d .mapa3d__leyenda { display: none; }
+/* botones de zona: muestran el color de cada zona y, al tocarlos, la maqueta se enfoca en ella */
+.mapa3d__zonas { position: absolute; right: 12px; bottom: 12px; display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 8px; max-width: calc(100% - 24px); }
+.mapa3d__zona { display: inline-flex; align-items: center; gap: 8px; min-height: 40px; padding: 6px 14px 6px 10px; border-radius: 20px; cursor: pointer;
+  border: 2px solid var(--fondo); background: #fff; color: #04203A; font: 700 var(--t-sm)/1 var(--f); box-shadow: 0 2px 8px rgba(0,30,60,.22); }
+.mapa3d__zona:hover { box-shadow: 0 0 0 3px rgba(4,32,58,.25), 0 2px 8px rgba(0,30,60,.22); }
+.mapa3d__zona[aria-pressed="true"] { background: var(--fondo); color: var(--letra); }
+.mapa3d__zona:focus-visible { outline: 3px solid var(--foco); outline-offset: 2px; }
+.mapa3d__chip { display: inline-block; width: 16px; height: 16px; border-radius: 50%; background: var(--fondo); border: 2px solid #fff; box-shadow: 0 0 0 1px rgba(0,30,60,.35); }
+.mapa3d--portada .mapa3d__zonas, .mapa3d--sin-3d .mapa3d__zonas { display: none; }
+@media (max-width: 560px) { .mapa3d__zonas { left: 8px; right: 8px; bottom: 8px; max-width: none; justify-content: center; gap: 6px; } .mapa3d__zona { min-height: 36px; padding: 4px 10px 4px 8px; } }
 .mapa3d__ficha { position: absolute; left: 12px; bottom: 12px; width: min(400px, calc(100% - 24px)); max-height: calc(100% - 24px); overflow-x: hidden; overflow-y: auto; background: var(--papel); color: var(--tinta);
   border-radius: 6px; padding: 16px 18px; box-shadow: 0 10px 30px rgba(0,30,60,.25); border-top: 4px solid #005DA4; }
 .mapa3d__ficha-zona { margin: 0 0 2px; font-size: var(--t-xs); color: var(--tinta-2); font-weight: 600; }
