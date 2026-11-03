@@ -170,7 +170,18 @@ def imagen(nombre, ancho_max=1600):
     # el nombre lleva una huella del archivo: si alguien cambia la foto en el Drive, cambia la dirección
     # y ni el navegador ni la caché muestran la vieja
     base = f"{slug(Path(nombre).stem)}-{hashlib.sha1(origen.read_bytes()).hexdigest()[:8]}"
+    # caché fuera de dist (que se borra en cada compilación): convertir 4 tamaños en WebP es lento
+    cache = RAIZ / ".cache" / "media"
+    cache.mkdir(parents=True, exist_ok=True)
+    medidas = cache / f"{base}.json"
     salida = {}
+    (DIST / "media").mkdir(parents=True, exist_ok=True)
+    if medidas.exists() and all((cache / f"{base}-{a}.webp").exists() for a in (640, 1280, 1920, 2560)):
+        for ancho in (640, 1280, 1920, 2560):
+            shutil.copy2(cache / f"{base}-{ancho}.webp", DIST / "media" / f"{base}-{ancho}.webp")
+            salida[ancho] = f"media/{base}-{ancho}.webp"
+        salida.update(json.loads(medidas.read_text()))
+        return salida
     with Image.open(origen) as im:
         im = ImageOps.exif_transpose(im).convert("RGB")
         # 2560 px para pantallas grandes o de alta densidad (portada a todo lo ancho en PC)
@@ -178,12 +189,13 @@ def imagen(nombre, ancho_max=1600):
             copia = im.copy()
             if copia.width > ancho:
                 copia = copia.resize((ancho, round(copia.height * ancho / copia.width)), Image.LANCZOS)
-            destino = DIST / "media" / f"{base}-{ancho}.webp"
-            destino.parent.mkdir(parents=True, exist_ok=True)
-            if not destino.exists():
-                copia.save(destino, "WEBP", quality=86 if ancho >= 1920 else 82, method=6)
-            salida[ancho] = f"media/{destino.name}"
+            guardada = cache / f"{base}-{ancho}.webp"
+            if not guardada.exists():
+                copia.save(guardada, "WEBP", quality=86 if ancho >= 1920 else 82, method=6)
+            shutil.copy2(guardada, DIST / "media" / guardada.name)
+            salida[ancho] = f"media/{guardada.name}"
         salida["w"], salida["h"] = im.width, im.height
+    medidas.write_text(json.dumps({"w": salida["w"], "h": salida["h"]}))
     return salida
 
 

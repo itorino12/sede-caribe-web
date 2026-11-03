@@ -960,16 +960,19 @@ if (datos.campus.parqueo) {
     } else if (uso === "torre") {   // caseta de arriba: dos niveles, cuartos eléctricos abajo, escalera metálica azul
       const azulEsc = mate(0x2f5fb0, { roughness: 0.5, metalness: 0.3 });
       bloque(largo, elevada, ancho, pared, 0, elevada / 2);
-      for (const x of [-largo / 4, largo / 4]) puerta(x, ancho / 2 + 0.05, azulEsc);
+      for (const z of [-ancho / 4, ancho / 4]) puerta(largo / 2 + 0.05, z, azulEsc, Math.PI / 2);   // cuartos eléctricos
       bloque(largo, alto, ancho, pared, 0, elevada + alto / 2);
       bloque(largo + 0.08, 0.9, ancho + 0.08, vidrio, 0, elevada + alto * 0.62);
       techoM = mate(0xe6e8ea);
       bloque(largo + 1.4, 0.18, ancho + 1.4, techoM, 0, elevada + alto + 0.1);
-      const n = Math.round(elevada / 0.2), run = elevada * 1.5;   // escalera con su techito de lámina gris
-      for (let i = 0; i < n; i++) bloque(1.0, 0.06, run / n + 0.05, azulEsc, largo / 2 + 0.6, (elevada * (i + 1)) / n, ancho / 2 + run - (run / n) * (i + 0.5));
-      bloque(0.05, 1, run * 1.15, azulEsc, largo / 2 + 1.1, elevada / 2 + 0.9, ancho / 2 + run / 2).rotation.x = Math.atan2(elevada, run);
-      const t = bloque(1.6, 0.06, run + 1, mate(0x4a5056), largo / 2 + 0.6, elevada + 2.4, ancho / 2 + run / 2); t.rotation.x = 0.25;
-      puerta(largo / 2 - 0.45, ancho / 2 + 0.05, azulEsc, 0, elevada);
+      // (anotaciones) la escalera corre pegada a la cara que no mira al pabellón 1: sube a lo largo de la pared
+      // hasta la puerta de arriba, con su techito de lámina gris
+      const n = Math.round(elevada / 0.2), run = elevada * 1.5, ze = -ancho / 2 - 0.6, xTop = largo / 2 - 0.4;
+      for (let i = 0; i < n; i++) bloque(run / n + 0.05, 0.06, 1.0, azulEsc, xTop - run + (run / n) * (i + 0.5), (elevada * (i + 1)) / n, ze);
+      bloque(1.0, 0.06, 1.0, azulEsc, xTop + 0.5, elevada, ze);   // descanso frente a la puerta
+      bloque(Math.hypot(run, elevada), 0.05, 0.05, azulEsc, xTop - run / 2, elevada / 2 + 0.9, ze - 0.5).rotation.z = Math.atan2(elevada, run);
+      const t = bloque(run + 1.4, 0.06, 1.6, mate(0x4a5056), xTop - run / 2 + 0.3, elevada + 2.4, ze); t.rotation.x = -0.25;
+      puerta(largo / 2 - 0.45, -ancho / 2 - 0.05, azulEsc, 0, elevada);
     } else if (uso === "banos_crema") {   // baño de Docencia: crema, techo verde a una agua con alero blanco
       pared = mate(0xefe6c8);
       bloque(largo, alto, ancho, pared);

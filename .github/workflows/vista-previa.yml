@@ -31,6 +31,11 @@ jobs:
           python-version: "3.12"
           cache: pip
       - run: pip install jinja2 markdown nh3 pillow
+      - uses: actions/cache@v4   # fotos ya convertidas a WebP: la compilación no las vuelve a convertir
+        with:
+          path: .cache
+          key: media-${{ hashFiles('src/assets/fotos/**', 'src/assets/img/**') }}
+          restore-keys: media-
       - run: python build.py --vista-previa
         env:
           TZ: America/Costa_Rica

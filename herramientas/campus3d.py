@@ -70,7 +70,8 @@ EDIFICIOS = [
      "estilo": {"techo": "#7fae9f", "ventanas": "celeste", "alero": 1.6, "hundido": 1.6}},
     # Coordinación de Docencia (fotos): hexágono con corredor perimetral de columnas azules y alero celeste,
     # techo verde agua en pirámide con una linternilla de ventanas arriba
-    {"id": 4, "hex": (692, 1541, 36), "pisos": 1,
+    # (anotaciones) más atrás de lo que marca el croquis, lejos del pasillo 27, con su propio pasillo techado
+    {"id": 4, "hex": (679, 1506, 36), "pisos": 1,
      "estilo": {"techo": "#6fa596", "fascia": "#a9d4ef", "alero": 2.8, "columnas": "#3f6f9e", "linterna_hex": True}},
     # Miniauditorio (fotos): blanco, franja alta de paneles grises, losa de techo muy volada sobre columnas de
     # acero en V, mural de cerámica hacia la calle y parasoles celestes junto a la puerta lateral
@@ -481,7 +482,10 @@ def lugares_nuevos(calles, quebrada, lejos_carretera, y_ruta32):
     # caseta de arriba (37, fotos): torre blanca de dos niveles, cuartos eléctricos abajo y escalera metálica azul
     caja(37, "caseta", marco(2, -157, 0), 51, 5.0, 4.0, alto=2.8, uso="torre", elevada=2.8)
     # baño de Docencia (24): casita crema de techo verde a una agua, justo detrás de la Coordinación (4)
-    caja(24, "caseta", (631, 1541), 90, 6.0, 4.5, alto=2.8, uso="banos_crema")
+    # (anotaciones) justo detrás de Docencia, del lado contrario a la calle
+    caja(24, "caseta", (690, 1443), -20, 6.0, 4.5, alto=2.8, uso="banos_crema")
+    # pasillo techado corto que une la puerta de Docencia con el pasillo 27 (anotaciones)
+    pasillo([(703.5, 1573.7), (694, 1548)])
     # baño del pabellón 7 (fotos y anotaciones): casita aparte con techo a dos aguas, alero celeste y un mural,
     # pasando el extremo oeste del 7, junto al pasillo techado que llega del camino de la entrada
     caja(None, "caseta", marco(7, -108, -21), 5.5, 9.0, 6.0, alto=3.0, uso="banos_mural")
@@ -530,7 +534,7 @@ def lugares_nuevos(calles, quebrada, lejos_carretera, y_ruta32):
             mesas.append(((p[0] + q[0]) / 2, (p[1] + q[1]) / 2))
     mesas += [(1141, 1150), (1129, 1190)]
     # alrededor de Docencia (4) hay varias mesas redondas de concreto en el zacate (fotos)
-    mesas += [(692 + 62 * math.cos(math.radians(a)), 1541 + 62 * math.sin(math.radians(a))) for a in (205, 250, 300)]
+    mesas += [(679 + 64 * math.cos(math.radians(a)), 1506 + 64 * math.sin(math.radians(a))) for a in (205, 232)]   # la del noreste se quitó (anotaciones)
     elem.append({"tipo": "mesas", "id": None, "puntos": M(mesas)})
     # higuerón grande en el patio entre el 8 y el 9 (fotos)
     elem.append({"tipo": "arbol_grande", "id": None, "p": a_metros(*marco(9, -36, -50)), "escala": 1.7})
