@@ -341,6 +341,10 @@ def main():
     env.globals.update(sitio=sitio, hoy=HOY, ahora=AHORA, ejemplos=EJEMPLOS, vista_previa=VISTA_PREVIA, origen=origen,
                        nav_unidades=[u for u in c["unidades"] if u["grupo"] == "Servicios"])
 
+    # datos de la maqueta 3D: van dentro de recorrido.html y, aparte, en un archivo que la portada pide después de cargar
+    recorrido = {"campus": json.loads((SRC / "data" / "campus3d.json").read_text(encoding="utf-8")), "lugares": lugares_campus()}
+    (DIST / "assets" / "datos-recorrido.json").write_text(json.dumps(recorrido, ensure_ascii=False, separators=(",", ":")), encoding="utf-8")
+
     # (archivo de salida, plantilla, título, descripción, variables extra)
     paginas = [
         ("index.html", "index.html", "Inicio", sitio["descripcion"], {}),
@@ -354,8 +358,7 @@ def main():
         ("enlaces.html", "enlaces.html", "Enlaces y trámites", "Accesos a los sistemas universitarios para estudiantes y personal.", {}),
         ("contacto.html", "contacto.html", "Contacto", "Cómo comunicarse con la Sede del Caribe.", {}),
         ("recorrido.html", "recorrido.html", "Recorrido por la Sede", "Maqueta 3D del campus de la Sede del Caribe: edificios, aulas, laboratorios y servicios.",
-         {"lugares": lugares_campus(),
-          "campus3d": json.loads((SRC / "data" / "campus3d.json").read_text(encoding="utf-8"))}),
+         {"lugares": recorrido["lugares"], "campus3d": recorrido["campus"]}),
         ("accesibilidad.html", "accesibilidad.html", "Accesibilidad", "Compromiso de accesibilidad del sitio.", {}),
         ("404.html", "404.html", "Página no encontrada", "La página que busca no existe o cambió de dirección.", {}),
     ]

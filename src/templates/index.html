@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% from "_macros.html" import tarjeta_noticia with context %}
 {% macro foto(f, alt, tam, carga='lazy') %}<img src="{{ f[1280] }}" srcset="{{ f[640] }} 640w, {{ f[1280] }} 1280w, {{ f[1920] }} 1920w, {{ f[2560] }} 2560w" sizes="{{ tam }}" alt="{{ alt }}" width="{{ f.w }}" height="{{ f.h }}" loading="{{ carga }}"{% if carga == 'eager' %} fetchpriority="high"{% endif %}>{% endmacro %}
-{% block cabeza %}{% if fotos.portada %}<link rel="preload" as="image" href="{{ fotos.portada[1280] }}" imagesrcset="{{ fotos.portada[640] }} 640w, {{ fotos.portada[1280] }} 1280w, {{ fotos.portada[1920] }} 1920w, {{ fotos.portada[2560] }} 2560w" imagesizes="100vw">{% endif %}{% endblock %}
+{% block cabeza %}<link rel="preload" as="image" href="{{ raiz }}assets/img/portada-maqueta.webp">{% endblock %}
 {% block contenido %}
 <section class="portada" aria-labelledby="portada-titulo">
   <div class="portada__rejilla">
@@ -17,13 +17,12 @@
       </form>
       <p class="portada__acciones"><a href="estudiar.html">Ver las carreras</a><a href="admision.html">Cómo ingresar a la UCR</a></p>
     </div>
-    {% if fotos.portada %}
-    <figure class="portada__foto">
-      <a class="portada__recorrido" href="recorrido.html" tabindex="-1" aria-hidden="true"></a>
-      <span class="foto-dia">{{ foto(fotos.portada, "Entrada principal de la Sede del Caribe de día, con las banderas y el rótulo de la Universidad de Costa Rica", "100vw", "eager") }}</span>
-      {% if fotos.portada_noche %}<span class="foto-noche">{{ foto(fotos.portada_noche, "Entrada principal de la Sede del Caribe de noche, con el rótulo iluminado", "100vw") }}</span>{% endif %}
+    {# la maqueta 3D del campus: primero una captura fija (aparece enseguida) y, cuando la página termina de
+       cargar, la maqueta en vivo, que gira sola y despacio; al tocarla se abre el recorrido #}
+    <figure class="portada__foto portada__foto--3d">
+      <img class="portada__maqueta-fija" src="{{ raiz }}assets/img/portada-maqueta.webp" alt="" width="1920" height="600" fetchpriority="high">
+      {% set portada = True %}{% include "_mapa3d.html" %}
     </figure>
-    {% endif %}
   </div>
   <a class="portada__recorrido-boton" href="recorrido.html"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M12 3 3 8l9 5 9-5-9-5Z"/><path d="m3 13 9 5 9-5"/></svg>Recorrer la Sede en 3D</a>
 </section>
@@ -167,4 +166,8 @@
     <p><a href="{{ sitio.telefono|tel }}">{{ sitio.telefono }}</a> · <a href="contacto.html">Contacto y cómo llegar</a></p>
   </div>
 </section>
+<script>
+  // la maqueta en vivo se carga después de la página, para que la portada aparezca igual de rápido
+  addEventListener("load", () => setTimeout(() => import(new URL("{{ raiz }}assets/js/recorrido.js", document.baseURI).href), 400));
+</script>
 {% endblock %}

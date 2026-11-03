@@ -592,6 +592,16 @@ dialog::backdrop { background: rgba(0,25,45,.6); }
 
 /* Entrada al recorrido desde la foto de la portada */
 .portada__recorrido { position: absolute; inset: 0; z-index: 0; }
+/* portada con la maqueta 3D: captura fija mientras carga; luego la maqueta en vivo con un fundido */
+.portada__foto--3d { background: linear-gradient(#cfe2ef, #eef4f8 70%); }
+.portada__foto--3d .portada__maqueta-fija { object-position: 70% 50%; }
+.mapa3d--portada { position: absolute; inset: 0; margin: 0; }
+.mapa3d--portada .mapa3d__escena { height: 100%; min-height: 0; border: 0; border-radius: 0; background: transparent; }
+.mapa3d--portada .mapa3d__marcas, .mapa3d--portada .mapa3d__herramientas, .mapa3d--portada .mapa3d__brujula, .mapa3d--portada .mapa3d__ficha { display: none !important; }
+.mapa3d--portada .mapa3d__lienzo { opacity: 0; transition: opacity .8s ease; }
+.mapa3d--portada.mapa3d--listo .mapa3d__lienzo { opacity: 1; }
+.mapa3d--portada.mapa3d--sin-3d { display: none; }
+@media (max-width: 760px) { .portada__foto--3d { aspect-ratio: 4 / 3; } .portada__foto--3d .portada__maqueta-fija { object-position: 62% 50%; } }
 .portada__recorrido-boton { position: absolute; right: max(var(--gutter), calc((100vw - var(--ancho)) / 2 + var(--gutter))); bottom: 24px; z-index: 2;
   display: inline-flex; align-items: center; gap: 10px; padding: 10px 18px; border-radius: 999px; background: rgba(255,255,255,.94); color: #04203A;
   font-weight: 700; text-decoration: none; box-shadow: 0 6px 18px rgba(0,0,0,.25); }

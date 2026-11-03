@@ -3,55 +3,7 @@
 {% block contenido %}
 {{ encabezado("Recorrido por la Sede", [("La Sede", "la-sede.html")], raiz, "Maqueta 3D del campus, hecha a partir del croquis oficial de distribución de aulas. Gire con el dedo o el ratón, acerque con dos dedos o la rueda, y toque un edificio para ver qué hay.") }}
 <div class="ancho">
-  <section class="mapa3d" data-recorrido data-raiz="{{ raiz }}" data-suelo="{{ raiz }}assets/img/campus-suelo.webp" aria-labelledby="mapa3d-titulo">
-    <h2 id="mapa3d-titulo" class="oculto">Maqueta 3D</h2>
-    <div class="mapa3d__escena">
-      <canvas class="mapa3d__lienzo" aria-label="Maqueta 3D del campus de la Sede del Caribe. La misma información está en la lista de lugares." role="img"></canvas>
-      <div class="mapa3d__marcas"></div>
-      <div class="mapa3d__brujula" aria-hidden="true"><span>N</span></div>
-      <div class="mapa3d__herramientas">
-        <button type="button" class="mapa3d__redondo" data-acercar aria-label="Acercar">+</button>
-        <button type="button" class="mapa3d__redondo" data-alejar aria-label="Alejar">−</button>
-        <button type="button" class="boton boton--secundario" data-vista-general>Vista general</button>
-      </div>
-      <div class="mapa3d__ficha" role="region" aria-live="polite" aria-label="Lugar elegido" hidden>
-        <button type="button" class="mapa3d__ficha-cerrar" aria-label="Cerrar">×</button>
-        <div class="carrusel" data-carrusel role="group" aria-roledescription="carrusel" hidden>
-          <ul class="carrusel__pista" tabindex="0"></ul>
-          <button type="button" class="carrusel__boton carrusel__boton--antes" data-antes aria-label="Foto anterior">‹</button>
-          <button type="button" class="carrusel__boton carrusel__boton--despues" data-despues aria-label="Foto siguiente">›</button>
-          <p class="carrusel__cuenta" aria-live="polite"></p>
-        </div>
-        <p class="mapa3d__ficha-zona"></p>
-        <h3 class="mapa3d__ficha-titulo"></h3>
-        <p class="mapa3d__ficha-texto"></p>
-        <a class="mapa3d__ficha-enlace" href="#" hidden>Más información</a>
-      </div>
-      <div class="mapa3d__sin3d">
-        <div class="mapa3d__giro" tabindex="0" aria-label="Maqueta del campus. Arrastre a los lados o use las flechas para girarla; toque un número para ver el edificio.">
-          <img src="{{ raiz }}assets/img/campus-maqueta.webp" alt="Maqueta del campus con los edificios y lugares numerados; los nombres están en la lista de lugares." width="1200" height="700" draggable="false">
-          <div class="mapa3d__giro-marcas"></div>
-          <p class="mapa3d__giro-ayuda" aria-hidden="true">↔ Arrastre para girar</p>
-        </div>
-        <div class="mapa3d__giro-botones">
-          <button type="button" class="mapa3d__redondo" data-girar-izq aria-label="Girar a la izquierda">‹</button>
-          <span aria-hidden="true">Girar la maqueta</span>
-          <button type="button" class="mapa3d__redondo" data-girar-der aria-label="Girar a la derecha">›</button>
-        </div>
-      </div>
-    </div>
-    <p class="mapa3d__nota">Vista preliminar: el croquis es esquemático, así que la forma y la altura de los edificios son aproximadas. Las fotos 360° de cada lugar se agregarán cuando estén listas.</p>
-  </section>
-
-  <dialog class="visor-fotos" aria-label="Fotos en grande">
-    <div class="carrusel carrusel--grande" data-carrusel role="group" aria-roledescription="carrusel">
-      <ul class="carrusel__pista" tabindex="0"></ul>
-      <button type="button" class="carrusel__boton carrusel__boton--antes" data-antes aria-label="Foto anterior">‹</button>
-      <button type="button" class="carrusel__boton carrusel__boton--despues" data-despues aria-label="Foto siguiente">›</button>
-      <p class="carrusel__cuenta" aria-live="polite"></p>
-    </div>
-    <button type="button" class="visor-fotos__cerrar" aria-label="Cerrar fotos">×</button>
-  </dialog>
+  {% set portada = False %}{% include "_mapa3d.html" %}
 
   <section class="lugares" aria-labelledby="lugares-titulo">
     <h2 id="lugares-titulo">Lugares del campus</h2>

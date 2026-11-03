@@ -8,7 +8,11 @@ import { MARCAS, prioridadDe, compararRango } from "./recorrido-config.js";
 const raiz = document.querySelector("[data-recorrido]");
 const lienzo = raiz.querySelector(".mapa3d__lienzo");
 const capaMarcas = raiz.querySelector(".mapa3d__marcas");
-const datos = JSON.parse(document.getElementById("datos-campus").textContent);
+// En la portada la maqueta gira sola, sin números ni fichas, y al tocarla abre el recorrido
+const PORTADA = raiz.dataset.portada !== undefined;
+// el recorrido trae los datos en la página; la portada los pide aparte, después de cargar
+const enPagina = document.getElementById("datos-campus");
+const datos = enPagina ? JSON.parse(enPagina.textContent) : await fetch(raiz.dataset.datos).then((r) => r.json());
 const lugares = new Map(datos.lugares.map((l) => [l.id, l]));
 const N = datos.campus.numeros;   // números de los lugares que se arman aparte (pista, portones, puente…)
 
@@ -28,10 +32,11 @@ function crearRenderer() {
 const renderer = crearRenderer();
 if (!renderer) {
   raiz.classList.add("mapa3d--sin-3d");
-  import("./recorrido-giro.js");   // maqueta giratoria con imágenes (pesa poco y funciona en cualquier teléfono)
+  // maqueta giratoria con imágenes (pesa poco y funciona en cualquier teléfono); en la portada queda la captura fija
+  if (!PORTADA) import("./recorrido-giro.js");
 }
 if (renderer) {   // ---------- todo lo que sigue es la maqueta 3D
-lienzo.addEventListener("webglcontextlost", (e) => { e.preventDefault(); raiz.classList.add("mapa3d--sin-3d"); import("./recorrido-giro.js"); });
+lienzo.addEventListener("webglcontextlost", (e) => { e.preventDefault(); raiz.classList.add("mapa3d--sin-3d"); if (!PORTADA) import("./recorrido-giro.js"); });
 renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, liviano ? 1.5 : 2));
 renderer.outputColorSpace = THREE.SRGBColorSpace;
 renderer.shadowMap.enabled = true;
@@ -1328,6 +1333,12 @@ calcularVistaGeneral();
 camara.position.copy(vistaGeneral.posicion);
 controles.target.copy(vistaGeneral.objetivo);
 controles.addEventListener("change", pedirDibujo);
+if (PORTADA) {
+  controles.autoRotate = !sinMovimiento && location.hash !== "#captura-portada";
+  controles.autoRotateSpeed = 0.5;   // una vuelta cada dos minutos
+  controles.enableZoom = false; controles.enablePan = false;
+  controles.minPolarAngle = controles.maxPolarAngle = 0.98;   // solo gira alrededor, sin inclinarse
+}
 
 // ---------- marcas numeradas (botones HTML encima del lienzo)
 // Cada número tiene un ancla 3D fija (sobre el punto más alto de su lugar) que se calcula una sola vez. En cada
@@ -1459,6 +1470,7 @@ lienzo.addEventListener("pointerup", (e) => {
   puntero.set(((e.clientX - r.left) / r.width) * 2 - 1, -((e.clientY - r.top) / r.height) * 2 + 1);
   rayo.setFromCamera(puntero, camara);
   const golpe = rayo.intersectObjects(edificios, true)[0];
+  if (PORTADA) { location.href = raiz.dataset.raiz + "recorrido.html" + (golpe ? `#lugar-${golpe.object.userData.edificio.userData.id}` : ""); return; }
   if (golpe) elegir(golpe.object.userData.edificio.userData.id, false);
 });
 
@@ -1478,8 +1490,16 @@ function ajustar() {
   if (lienzo.width !== Math.round(w * renderer.getPixelRatio()) || lienzo.height !== Math.round(h * renderer.getPixelRatio())) {
     renderer.setSize(w, h, false);
     camara.aspect = w / h;
+    // en la portada de PC el campus se corre a la derecha, para dejar libre el texto de la izquierda
+    if (PORTADA && w > 760) camara.setViewOffset(w, h, -Math.round(w * 0.2), 0, w, h); else camara.clearViewOffset();
     camara.updateProjectionMatrix();
   }
+}
+// en la portada solo se dibuja mientras se ve: al bajar por la página o cambiar de pestaña no gasta batería
+let enPantalla = true;
+if (PORTADA) {
+  new IntersectionObserver(([e]) => { enPantalla = e.isIntersecting; if (enPantalla) pedirDibujo(); }).observe(lienzo);
+  document.addEventListener("visibilitychange", () => { if (!document.hidden) pedirDibujo(); });
 }
 function dibujar(ahora) {
   pendiente = false;
@@ -1498,14 +1518,17 @@ function dibujar(ahora) {
   moverMarcas();   // en el mismo fotograma que el dibujo: los números no se atrasan respecto a la escena
   if (seguir) camaraEnMovimiento(); else camaraQuieta();
   brujula.style.transform = `rotate(${THREE.MathUtils.radToDeg(controles.getAzimuthalAngle())}deg)`;
-  if (seguir) pedirDibujo();
+  if (seguir && (!PORTADA || (enPantalla && !document.hidden))) pedirDibujo();
 }
 new ResizeObserver(pedirDibujo).observe(lienzo);
 raiz.classList.add("mapa3d--listo");
 pedirDibujo();
 
 // Para herramientas/giro.py: con #captura-giro la página expone la cámara para dibujar las vistas de la maqueta giratoria
-if (location.hash === "#captura-giro") {
+// desde la portada: #lugar-N abre el recorrido con ese lugar elegido
+const pedido = !PORTADA && location.hash.match(/^#lugar-(\d+)$/);
+if (pedido) elegir(Number(pedido[1]), true);
+if (location.hash === "#captura-giro" || location.hash === "#captura-portada") {
   window.__giro = { camara, controles, renderer, escena, edificios, dibujarYa() { ajustar(); controles.update(); renderer.render(escena, camara); } };
 }
 }
