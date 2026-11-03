@@ -10,6 +10,7 @@ const lienzo = raiz.querySelector(".mapa3d__lienzo");
 const capaMarcas = raiz.querySelector(".mapa3d__marcas");
 const datos = JSON.parse(document.getElementById("datos-campus").textContent);
 const lugares = new Map(datos.lugares.map((l) => [l.id, l]));
+const N = datos.campus.numeros;   // números de los lugares que se arman aparte (pista, portones, puente…)
 
 // ---------- escena
 // Se intenta con calidad alta y, si el teléfono no lo permite, con opciones más livianas.
@@ -426,7 +427,7 @@ for (const e of datos.campus.edificios) {
         }
       }
       const banda = estilo.ventanas === "celeste" ? celeste : celosia;
-      if (e.id !== 6 && estilo.ventanas !== "ninguna") for (let p = 0; p < pisos; p++) grupo.add(prisma(vol.contorno, altoPiso * (ventanal ? 0.4 : 0.3), altoPiso * p + altoPiso * (ventanal ? 0.4 : 0.36), ventanal ? cristal : banda, 0.05));
+      if (!estilo.entrada && estilo.ventanas !== "ninguna") for (let p = 0; p < pisos; p++) grupo.add(prisma(vol.contorno, altoPiso * (ventanal ? 0.4 : 0.3), altoPiso * p + altoPiso * (ventanal ? 0.4 : 0.36), ventanal ? cristal : banda, 0.05));
     }
     if (estilo.banos) {   // los baños en el extremo del edificio: azulejo claro, bloques de ventilación y rótulo
       const b = estilo.banos;
@@ -512,8 +513,12 @@ for (const e of datos.campus.edificios) {
       const haciaCalle = fachadaSur(c, [0.86, 0.5]), haciaAla = fachadaSur(c, [-0.56, 0.83]);
       const enFachada = (f, t, d, y) => [f.a[0] + (f.b[0] - f.a[0]) * t + f.nx * d, y, f.a[1] + (f.b[1] - f.a[1]) * t + f.nz * d];
       const angF = (f) => Math.atan2(f.nx, f.nz);
-      const mural = new THREE.Mesh(new THREE.PlaneGeometry(haciaCalle.largo * 0.62, e.alto * 0.5), new THREE.MeshBasicMaterial({ map: texturaMuralEd(5) }));
-      mural.position.set(...enFachada(haciaCalle, 0.4, 0.06, e.alto * 0.3)); mural.rotation.y = angF(haciaCalle); grupo.add(mural);
+      // el mural es la foto de la Sede (recortada y enderezada), en la mitad baja de la fachada
+      const texMural = new THREE.TextureLoader().load(raiz.dataset.raiz + "assets/img/mural-miniauditorio.webp", pedirDibujo);
+      texMural.colorSpace = THREE.SRGBColorSpace;
+      const anchoMural = haciaCalle.largo * 0.62;
+      const mural = new THREE.Mesh(new THREE.PlaneGeometry(anchoMural, anchoMural / 4.15), new THREE.MeshBasicMaterial({ map: texMural }));
+      mural.position.set(...enFachada(haciaCalle, 0.4, 0.06, anchoMural / 4.15 / 2 + 0.3)); mural.rotation.y = angF(haciaCalle); grupo.add(mural);
       const parasol = new THREE.MeshStandardMaterial({ color: 0x8ec3e6, roughness: 0.6 });
       for (let k = 0; k < 7; k++) {
         const l = new THREE.Mesh(new THREE.BoxGeometry(3.2, 0.05, 0.55), parasol);
@@ -599,7 +604,7 @@ for (const e of datos.campus.edificios) {
 }
 
 // ---------- pista atlética: cancha con marcos en el centro y portón de acceso desde la carretera (fotos)
-if (datos.campus.porton_pista && lugares.get(19)) {
+if (datos.campus.porton_pista && lugares.get(N.pista)) {
   const blancoTubo = new THREE.MeshLambertMaterial({ color: 0xf2f2f2 });
   const [pcx, pcz] = datos.campus.pista.centro, eje = -0.46;
   for (const lado of [-1, 1]) {   // marcos de fútbol en los extremos de la cancha
@@ -631,7 +636,7 @@ if (datos.campus.porton_pista && lugares.get(19)) {
   grupo.traverse((o) => { if (o.isMesh) o.castShadow = true; });
   grupo.position.set(p[0], 0, p[1]);
   grupo.rotation.y = hacia_pista;   // las hojas quedan atravesadas en el camino; +z local apunta a la pista
-  grupo.userData = { id: 19, centro: new THREE.Vector3(p[0], 5, p[1]), mat: { pared: acero, techo: azul }, alto: 3 };
+  grupo.userData = { id: N.pista, centro: new THREE.Vector3(p[0], 5, p[1]), mat: { pared: acero, techo: azul }, alto: 3 };
   grupo.traverse((o) => { o.userData.edificio = grupo; });
   escena.add(grupo);
   edificios.push(grupo);
@@ -665,13 +670,13 @@ function portonVerde(conFaroles, anchoHoja = 4.2) {
   grupo.userData.verde = verde;
   return grupo;
 }
-if (datos.campus.porton_residencias && lugares.get(20)) {
+if (datos.campus.porton_residencias && lugares.get(N.porton_residencias)) {
   const { p, hacia_dentro, semiancho } = datos.campus.porton_residencias;
   // las dos hojas cierran la calle de borde a borde
   const grupo = portonVerde(true, semiancho ? semiancho + 0.25 : 4.2), verde = grupo.userData.verde;
   grupo.position.set(p[0], 0, p[1]);
   grupo.rotation.y = hacia_dentro;
-  grupo.userData = { id: 20, centro: new THREE.Vector3(p[0], 5, p[1]), mat: { pared: verde, techo: verde }, alto: 3 };
+  grupo.userData = { id: N.porton_residencias, centro: new THREE.Vector3(p[0], 5, p[1]), mat: { pared: verde, techo: verde }, alto: 3 };
   grupo.traverse((o) => { o.userData.edificio = grupo; });
   escena.add(grupo);
   edificios.push(grupo);
@@ -728,8 +733,8 @@ if (datos.campus.picnic) {
   tobogan.position.set(cx + r * 0.65, 0.6, cz - r * 0.05); tobogan.rotation.x = -0.45; zona.add(tobogan);
   zona.add(palmeraCoco(cx - r * 0.45, cz - r * 0.75, 7.5, 0.3), palmeraCoco(cx + r * 0.05, cz - r * 0.85, 6.8, 1.1));
   zona.traverse((o) => { if (o.isMesh) { o.castShadow = !liviano; o.receiveShadow = true; } });
-  if (lugares.get(21)) {
-    zona.userData = { id: 21, centro: new THREE.Vector3(cx, 4, cz), mat: { pared: celesteMesa, techo: celesteMesa }, alto: 1 };
+  if (lugares.get(N.picnic)) {
+    zona.userData = { id: N.picnic, centro: new THREE.Vector3(cx, 4, cz), mat: { pared: celesteMesa, techo: celesteMesa }, alto: 1 };
     zona.traverse((o) => { o.userData.edificio = zona; });
     edificios.push(zona);
   }
@@ -773,8 +778,8 @@ if (datos.campus.puente) {
   const [nx, nz] = eje[1], [mx, mz] = eje[0], angN = Math.atan2(nx - mx, nz - mz);
   for (let k = 0; k < 6; k++) caja(0.5, 0.04, 2.6, blanco, -CALZADA / 2 + 0.6 + k * 0.9, 0.1, angN, (nx + mx) / 2, (nz + mz) / 2);
   puente.traverse((o) => { if (o.isMesh) { o.castShadow = !liviano; o.receiveShadow = true; } });
-  if (lugares.get(23)) {
-    puente.userData = { id: 23, centro: new THREE.Vector3(px, 3, pz), mat: { pared: amarillo, techo: amarillo }, alto: 1 };
+  if (lugares.get(N.puente)) {
+    puente.userData = { id: N.puente, centro: new THREE.Vector3(px, 3, pz), mat: { pared: amarillo, techo: amarillo }, alto: 1 };
     puente.traverse((o) => { o.userData.edificio = puente; });
     edificios.push(puente);
   }
@@ -783,7 +788,7 @@ if (datos.campus.puente) {
 
 // ---------- planta de tratamiento de aguas (fotos): dos tanques grises, estructura azul con plataforma
 // y techo, casetas blancas con techo verde y borde azul, y malla ciclón alrededor
-if (datos.campus.planta && lugares.get(22)) {
+if (datos.campus.planta && lugares.get(N.planta)) {
   const { centro: [cx, cz], giro } = datos.campus.planta;
   const g = new THREE.Group();
   const grisTanque = new THREE.MeshStandardMaterial({ color: 0xb4b8bb, roughness: 0.6, metalness: 0.2 });
@@ -811,7 +816,7 @@ if (datos.campus.planta && lugares.get(22)) {
   g.traverse((o) => { if (o.isMesh) { o.castShadow = !liviano && o.material !== malla; o.receiveShadow = true; } });
   g.position.set(cx, 0, cz);
   g.rotation.y = giro;
-  g.userData = { id: 22, centro: new THREE.Vector3(cx, 8, cz), mat: { pared: blancoP, techo: techoVerde }, alto: 5 };
+  g.userData = { id: N.planta, centro: new THREE.Vector3(cx, 8, cz), mat: { pared: blancoP, techo: techoVerde }, alto: 5 };
   g.traverse((o) => { o.userData.edificio = g; });
   escena.add(g);
   edificios.push(g);
@@ -850,8 +855,8 @@ if (datos.campus.parqueo) {
   g.position.set(cx, 0, cz);
   g.rotation.y = -giro;   // x local = este de la piscina, z local = sur
   escena.add(g);
-  if (lugares.get(33)) {
-    g.userData = { id: 33, centro: new THREE.Vector3(cx, 3, cz), mat: { pared: verdePoste, techo: amarilloTope }, alto: 1, menor: true };
+  if (lugares.get(N.parqueo_piscina)) {
+    g.userData = { id: N.parqueo_piscina, centro: new THREE.Vector3(cx, 3, cz), mat: { pared: verdePoste, techo: amarilloTope }, alto: 1, menor: true };
     g.traverse((o) => { o.userData.edificio = g; });
     edificios.push(g);
   }
@@ -1206,6 +1211,18 @@ if (datos.campus.parqueo) {
     registrar(g, id, new THREE.Vector3(hasta[0], 4, hasta[1]), { pared: sinUso(), techo: sinUso() }, 0);
   }
 
+  // bancas de concreto celeste (plaza del Miniauditorio)
+  function bancas({ puntos, giro }) {
+    const g = new THREE.Group(), mat = mate(0x9cc4df, { roughness: 0.9 });
+    for (const [x, z] of puntos) {
+      const b = new THREE.Group();
+      const asiento = new THREE.Mesh(new THREE.BoxGeometry(2.6, 0.14, 0.55), mat); asiento.position.y = 0.45; b.add(asiento);
+      for (const dx of [-1.05, 1.05]) { const pata = new THREE.Mesh(new THREE.BoxGeometry(0.16, 0.45, 0.5), mat); pata.position.set(dx, 0.22, 0); b.add(pata); }
+      b.position.set(x, 0, z); b.rotation.y = -giro + Math.PI / 2; g.add(b);
+    }
+    registrar(g, null);
+  }
+
   // pluma de acceso vehicular, roja y blanca
   function pluma({ p, giro, largo }) {
     const g = new THREE.Group(), rojo = mate(0xd23a2c, { roughness: 0.5 });
@@ -1238,7 +1255,7 @@ if (datos.campus.parqueo) {
   }
 
   for (const el of datos.campus.elementos || []) {
-    const hacer = { pasillo, caseta, parqueo, escalera, rampa, descanso, mesas, explanada, alcantarilla, jardin, pluma, comedor, tanque,
+    const hacer = { pasillo, caseta, parqueo, bancas, escalera, rampa, descanso, mesas, explanada, alcantarilla, jardin, pluma, comedor, tanque,
       puente_peatonal: puentePeatonal, arbol_grande: arbolGrande }[el.tipo];
     if (hacer) hacer(el);
     else if (el.tipo === "porton") {   // acceso cerrado con portón (sin faroles)

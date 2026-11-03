@@ -8,7 +8,7 @@ Qué lee (todo dentro de la carpeta raíz del sitio en Drive):
                            es el identificador que se escribe en la columna «documento» (p. ej. «historia»).
     Imágenes/              Fotos que se citan por nombre de archivo en la columna «imagen».
     Imágenes/Recorrido/    Una carpeta por lugar del recorrido 3D, que empieza con su número
-                           («19 - Pista Atlética»). Sus fotos salen en el carrusel de ese lugar.
+                           («37 - Pista Atlética»). Sus fotos salen en el carrusel de ese lugar.
 
 Escribe:
     contenido/datos/<pestaña>.json, contenido/paginas/<nombre>.md, contenido/imagenes/<archivo>

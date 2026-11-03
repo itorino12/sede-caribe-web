@@ -5,8 +5,8 @@ export const MARCAS = {
   // 3 = detalle (zoom cercano). Los números que no estén en ninguna lista son de prioridad 3.
   // Dentro de una misma prioridad, el orden de la lista decide cuál se queda si dos se tapan.
   prioridad: {
-    1: [6, 11, 1, 2, 8, 14, 12, 10, 16, 19, 4, 5],
-    2: [3, 7, 9, 13, 18, 17, 20, 15, 21, 22, 23, 29, 32],
+    1: [13, 24, 1, 2, 15, 27, 25, 17, 30, 37, 4, 12],
+    2: [3, 14, 16, 26, 32, 31, 33, 28, 34, 35, 36, 20, 29],
   },
   // Distancia de la cámara al punto que mira (en metros de la maqueta, medida con un lente de 38°; con otro
   // lente se corrige sola). Por debajo de «medio» aparecen los de prioridad 2 y por debajo de «cerca», los de 3.

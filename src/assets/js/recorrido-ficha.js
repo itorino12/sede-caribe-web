@@ -78,7 +78,7 @@ visor.addEventListener("click", (e) => { if (e.target === visor) visor.close(); 
 
 export function rellenarFicha(l) {
   ficha.hidden = false;
-  ficha.querySelector(".mapa3d__ficha-zona").textContent = l.zona ? `Zona ${l.zona} · ${l.id <= 18 ? "Edificio" : "Lugar"} ${l.id}` : "Áreas deportivas";
+  ficha.querySelector(".mapa3d__ficha-zona").textContent = l.zona ? `Zona ${l.zona} · Lugar ${l.id}` : "Áreas deportivas";
   ficha.querySelector(".mapa3d__ficha-titulo").textContent = l.nombre;
   ficha.querySelector(".mapa3d__ficha-texto").textContent = l.texto || "";
   carruselFicha.cargar(l.fotos || [], `Fotos de ${l.nombre}`);

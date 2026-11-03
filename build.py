@@ -169,16 +169,25 @@ def imagen(nombre, ancho_max=1600):
     from PIL import Image, ImageOps
     # el nombre lleva una huella del archivo: si alguien cambia la foto en el Drive, cambia la dirección
     # y ni el navegador ni la caché muestran la vieja
-    base = f"{slug(Path(nombre).stem)}-{hashlib.sha1(origen.read_bytes()).hexdigest()[:8]}"
-    # caché fuera de dist (que se borra en cada compilación): convertir 4 tamaños en WebP es lento
+    huella = hashlib.sha1(origen.read_bytes()).hexdigest()[:8]
+    base = f"{slug(Path(nombre).stem)}-{huella}"
+    # caché fuera de dist (que se borra en cada compilación): convertir 4 tamaños en WebP es lento.
+    # Se guarda por contenido, así que renombrar una foto no obliga a convertirla de nuevo.
     cache = RAIZ / ".cache" / "media"
     cache.mkdir(parents=True, exist_ok=True)
-    medidas = cache / f"{base}.json"
+    medidas = cache / f"{huella}.json"
     salida = {}
     (DIST / "media").mkdir(parents=True, exist_ok=True)
-    if medidas.exists() and all((cache / f"{base}-{a}.webp").exists() for a in (640, 1280, 1920, 2560)):
+    viejas = {a: next(iter(cache.glob(f"*-{huella}-{a}.webp")), None) for a in (640, 1280, 1920, 2560)}
+    for ancho, f in viejas.items():   # cachés guardadas con el nombre anterior
+        if f and not (cache / f"{huella}-{ancho}.webp").exists():
+            f.rename(cache / f"{huella}-{ancho}.webp")
+    viejo_json = next(iter(cache.glob(f"*-{huella}.json")), None)
+    if viejo_json and not medidas.exists():
+        viejo_json.rename(medidas)
+    if medidas.exists() and all((cache / f"{huella}-{a}.webp").exists() for a in (640, 1280, 1920, 2560)):
         for ancho in (640, 1280, 1920, 2560):
-            shutil.copy2(cache / f"{base}-{ancho}.webp", DIST / "media" / f"{base}-{ancho}.webp")
+            shutil.copy2(cache / f"{huella}-{ancho}.webp", DIST / "media" / f"{base}-{ancho}.webp")
             salida[ancho] = f"media/{base}-{ancho}.webp"
         salida.update(json.loads(medidas.read_text()))
         return salida
@@ -189,11 +198,11 @@ def imagen(nombre, ancho_max=1600):
             copia = im.copy()
             if copia.width > ancho:
                 copia = copia.resize((ancho, round(copia.height * ancho / copia.width)), Image.LANCZOS)
-            guardada = cache / f"{base}-{ancho}.webp"
+            guardada = cache / f"{huella}-{ancho}.webp"
             if not guardada.exists():
                 copia.save(guardada, "WEBP", quality=86 if ancho >= 1920 else 82, method=6)
-            shutil.copy2(guardada, DIST / "media" / guardada.name)
-            salida[ancho] = f"media/{guardada.name}"
+            shutil.copy2(guardada, DIST / "media" / f"{base}-{ancho}.webp")
+            salida[ancho] = f"media/{base}-{ancho}.webp"
         salida["w"], salida["h"] = im.width, im.height
     medidas.write_text(json.dumps({"w": salida["w"], "h": salida["h"]}))
     return salida

@@ -35,14 +35,70 @@
  },
  {
   "id": 5,
-  "zona": 2,
-  "nombre": "Miniauditorio",
-  "texto": "Miniauditorio de la Sede.",
-  "fotos": "lugar-05-1.jpg, lugar-05-2.jpg, lugar-05-3.jpg, lugar-05-4.jpg",
-  "fotos_alt": "Costado del Miniauditorio con parasoles celestes y la planta eléctrica roja junto a la calle|El Miniauditorio y su mural de cerámica sobre la historia del Caribe|Frente del Miniauditorio: techo volado sobre columnas en V, plaza con bancas celestes y pluma de acceso|Parte trasera del Miniauditorio, con el techo de lámina y los equipos de aire acondicionado"
+  "zona": 1,
+  "nombre": "Baño Docencia",
+  "texto": "Baño justo detrás de la Coordinación de Docencia, al que se llega por un pasillo techado.",
+  "fotos": "lugar-05-1.jpg",
+  "fotos_alt": "Baño de Docencia: casita crema con techo verde y pasillo techado con baranda azul"
  },
  {
   "id": 6,
+  "zona": 1,
+  "nombre": "Parqueo frente a Docencia",
+  "texto": "Cuatro espacios de parqueo de frente hacia Docencia, dentro de la explanada de asfalto al final de la calle interna.",
+  "fotos": "lugar-06-1.jpg",
+  "fotos_alt": "Parqueo frente a Docencia, sobre la explanada de asfalto, con el bosque detrás"
+ },
+ {
+  "id": 7,
+  "zona": 1,
+  "nombre": "Camino techado hacia Administración",
+  "texto": "Continúa el pasillo techado de la entrada: cruza la calle encima de la alcantarilla de la quebrada y sigue por el otro lado hasta empatar con el pasillo a la soda, frente a las oficinas administrativas.",
+  "fotos": "lugar-07-1.jpg, lugar-07-2.jpg",
+  "fotos_alt": "Camino techado hacia Administración, con guía táctil amarilla y columnas azules|El camino techado pegado a la calle interna, con baranda azul hacia el zacate"
+ },
+ {
+  "id": 8,
+  "zona": 1,
+  "nombre": "Parqueo administrativo",
+  "texto": "Parqueo al final de la calle interna, frente a las oficinas administrativas, dentro de la explanada de asfalto. Tres espacios están bajo un carport de lámina verde.",
+  "fotos": "lugar-08-1.jpg, lugar-08-2.jpg",
+  "fotos_alt": "Parqueo administrativo con el carport verde y el patio de asfalto frente a las oficinas|Carport de lámina verde sobre columnas azules, con los espacios techados"
+ },
+ {
+  "id": 9,
+  "zona": 1,
+  "nombre": "Entrada al Jardín Etnobotánico",
+  "texto": "Sendero que sale de la punta del pabellón de aulas 1 a 7, sube por el zacate y se mete al bosque del Jardín Etnobotánico.",
+  "fotos": "lugar-09-1.jpg, lugar-09-2.jpg, lugar-09-3.jpg",
+  "fotos_alt": "Sendero hacia el Jardín Etnobotánico, junto al pasillo techado verde del pabellón de aulas|El sendero sube en curva por el zacate entre árboles grandes|Entrada al bosque del Jardín Etnobotánico"
+ },
+ {
+  "id": 10,
+  "zona": 1,
+  "nombre": "Camino techado a la soda",
+  "texto": "Pasillo techado que va por el frente de las oficinas administrativas hasta la soda y comedor.",
+  "fotos": "lugar-10-1.jpg, lugar-10-2.jpg, lugar-10-3.jpg",
+  "fotos_alt": "Camino techado hacia la soda, con guía táctil amarilla, junto al parqueo administrativo|Interior del camino techado a la soda, con baranda azul|El camino techado llegando a la soda, con el comedor al fondo"
+ },
+ {
+  "id": 11,
+  "zona": 1,
+  "nombre": "Caseta de arriba",
+  "texto": "Torre blanca de dos niveles al oeste de las oficinas administrativas: abajo hay cuartos eléctricos y arriba una caseta, con escalera metálica azul.",
+  "fotos": "lugar-11-1.jpg, lugar-11-2.jpg",
+  "fotos_alt": "Caseta de arriba: torre blanca de dos niveles con escalera metálica azul|La caseta de arriba vista desde el sendero, con sus puertas azules abajo"
+ },
+ {
+  "id": 12,
+  "zona": 2,
+  "nombre": "Miniauditorio",
+  "texto": "Miniauditorio de la Sede. Al frente tiene una pequeña plaza con bancas de concreto, y en la fachada, el mural sobre la historia del Caribe.",
+  "fotos": "lugar-12-1.jpg, lugar-12-2.jpg, lugar-12-3.jpg, lugar-12-4.jpg",
+  "fotos_alt": "Costado del Miniauditorio con parasoles celestes y la planta eléctrica roja junto a la calle|El Miniauditorio y su mural de cerámica sobre la historia del Caribe|Frente del Miniauditorio: techo volado sobre columnas en V, plaza con bancas celestes y pluma de acceso|Parte trasera del Miniauditorio, con el techo de lámina y los equipos de aire acondicionado"
+ },
+ {
+  "id": 13,
   "zona": 2,
   "nombre": "Entrada principal",
   "texto": "Acceso principal al campus, junto a la ruta 32.",
@@ -50,32 +106,32 @@
   "fotos_alt": "La entrada principal de día: pórtico blanco, rótulo de concreto con el nombre de la Universidad de Costa Rica, Sede del Caribe, y cuatro astas con banderas|La entrada principal de noche, con el rótulo iluminado"
  },
  {
-  "id": 7,
+  "id": 14,
   "zona": 2,
   "nombre": "Aulas 8 a 12",
   "texto": "Aulas de la zona 2.",
-  "fotos": "lugar-07-1.jpg, lugar-07-2.jpg, lugar-07-3.jpg, lugar-07-4.jpg",
-  "fotos_alt": "Zona verde junto al pabellón de aulas 8 a 12, con el pasillo techado de columnas azules|Corredor del pabellón de aulas 8 a 12, con piso de mosaico en damero|Fachada de las aulas 8 a 12, con alero verde lima y ventanales con rejas|Baño del pabellón 7, una casita aparte con un mapamundi pintado en la pared, junto al pasillo techado"
+  "fotos": "lugar-14-1.jpg, lugar-14-2.jpg, lugar-14-3.jpg, lugar-14-4.jpg",
+  "fotos_alt": "Zona verde junto al pabellón de aulas 8 a 12, con el pasillo techado de columnas azules|Corredor del pabellón de aulas 8 a 12, con piso de mosaico en damero|Fachada de las aulas 8 a 12, con alero verde lima y ventanales con rejas|Baño del pabellón de aulas 8 a 12, una casita aparte con un mapamundi pintado en la pared, junto al pasillo techado"
  },
  {
-  "id": 8,
+  "id": 15,
   "zona": 2,
   "nombre": "Aulas 13 a 17",
   "texto": "El Aula 14 es el Laboratorio de Química y Física; el Aula 15, el Laboratorio de Cómputo 2, y el Aula 17, el Laboratorio de Cómputo 3.",
   "enlace": "unidades/laboratorios.html",
-  "fotos": "lugar-08-1.jpg, lugar-08-2.jpg, lugar-08-3.jpg",
+  "fotos": "lugar-15-1.jpg, lugar-15-2.jpg, lugar-15-3.jpg",
   "fotos_alt": "Aulas 13 a 17 vistas desde el patio, con mesas de concreto celeste|Patio arbolado entre los pabellones de aulas, con barandas celestes y el pasillo techado|Costado de las aulas 13 a 17, con el pasillo techado y el zacate junto al bosque"
  },
  {
-  "id": 9,
+  "id": 16,
   "zona": 2,
   "nombre": "Consultorios y oficinas",
   "texto": "Oficinas administrativas, consultorio médico y consultorio odontológico.",
-  "fotos": "lugar-09-1.jpg, lugar-09-2.jpg, lugar-09-3.jpg, lugar-09-4.jpg",
+  "fotos": "lugar-16-1.jpg, lugar-16-2.jpg, lugar-16-3.jpg, lugar-16-4.jpg",
   "fotos_alt": "Consultorios y oficinas, con techo bajo de alero verde oscuro y corredores techados|Patio entre los pabellones con un árbol grande y mesas de concreto celeste|Pasillo techado que llega a los consultorios, junto a una zona verde|Mesas y bancas de concreto celeste bajo el árbol del patio, junto a los consultorios"
  },
  {
-  "id": 10,
+  "id": 17,
   "zona": 2,
   "nombre": "Piscina",
   "texto": "Piscina de la Sede, con deck de granito lavado y cerca de malla verde. Al costado oeste están los baños; al este, un parqueo asfaltado con alumbrado, y hacia la calle de la biblioteca, el parqueo de bicicletas y motos.",
@@ -84,7 +140,53 @@
   "fotos_alt": "La piscina detrás de la malla verde, con los vestidores al fondo y el parqueo de bicicletas y motos de adoquín al frente|La piscina vista desde el portón, con la escalerilla, el deck de granito y un edificio al fondo|Acera con guía táctil hacia la piscina, con el toldo en arco y mesas de concreto azul a un lado|Los baños de la piscina: casetas blancas con zócalo gris, celosías y techo de una agua, junto a una mesa de concreto azul|Acera con guía táctil frente a los baños de la piscina, junto a la malla, con los carretes de las corcheras"
  },
  {
-  "id": 11,
+  "id": 18,
+  "zona": 2,
+  "nombre": "Camino techado de la entrada",
+  "texto": "Pasillo techado que baja desde la entrada principal junto a la calle interna; de él sale el pasillo que va a las aulas 8 a 17.",
+  "fotos": "lugar-18-1.jpg, lugar-18-2.jpg, lugar-18-3.jpg",
+  "fotos_alt": "Inicio del camino techado junto a la calle, frente al Miniauditorio|Camino techado junto a la calle, con el parqueo de motos y bicicletas al lado|El camino techado bajando en curva junto a la calle interna"
+ },
+ {
+  "id": 19,
+  "zona": 2,
+  "nombre": "Paso de la alcantarilla del río",
+  "texto": "Punto donde la quebrada pasa por un tubo bajo la calle interna. Encima de la alcantarilla, una plataforma de concreto con guía táctil cruza la calle y une los dos pasillos techados; de ahí sale el sendero hacia la explanada.",
+  "fotos": "lugar-19-1.jpg, lugar-19-2.jpg, lugar-19-3.jpg",
+  "fotos_alt": "Plataforma de concreto que cruza la calle sobre la alcantarilla, entre los dos pasillos techados|La quebrada bajo la calle, entre vegetación densa, con la baranda azul|La calle interna en curva después de la alcantarilla, con el pasillo techado al lado"
+ },
+ {
+  "id": 20,
+  "zona": 2,
+  "nombre": "Explanada",
+  "texto": "Gran planicie en lo alto, junto a la carretera, con bancas de concreto y un higuerón enorme. Se sube por una rampa entre muros celestes desde la calle interna.",
+  "fotos": "lugar-20-1.jpg, lugar-20-2.jpg, lugar-20-3.jpg, lugar-20-4.jpg, lugar-20-5.jpg",
+  "fotos_alt": "Rampa de concreto entre muros celestes que sube a la explanada|Otro tramo de la rampa de subida a la explanada|Sendero con baranda en lo alto de la explanada, junto a la cerca y la carretera|La explanada con el higuerón enorme y bancas de concreto celeste|El higuerón de la explanada, con su copa muy ancha"
+ },
+ {
+  "id": 21,
+  "zona": 2,
+  "nombre": "Caseta del guarda",
+  "texto": "Caseta de vigilancia en la isla de zacate entre las calles, a la entrada del campus.",
+  "fotos": "lugar-21-1.jpg, lugar-21-2.jpg, lugar-21-3.jpg",
+  "fotos_alt": "Caseta de seguridad en la isla de la entrada, con techo blanco inclinado|La caseta y la calle de entrada, con la flecha pintada en el asfalto|Zona verde frente a la entrada, con la caseta de seguridad al fondo"
+ },
+ {
+  "id": 22,
+  "zona": 2,
+  "nombre": "Baño del Miniauditorio",
+  "texto": "Baños del Miniauditorio, en el ala baja del mismo edificio, con entrada propia bajo el alero.",
+  "fotos": "lugar-22-1.jpg",
+  "fotos_alt": "Ala de baños del Miniauditorio, con celosías y entrada propia bajo el alero"
+ },
+ {
+  "id": 23,
+  "zona": 2,
+  "nombre": "Parqueo de la piscina",
+  "texto": "Parqueo asfaltado e iluminado al costado de la piscina que da al gimnasio."
+ },
+ {
+  "id": 24,
   "zona": 3,
   "nombre": "Biblioteca",
   "texto": "Biblioteca de la Sede del Caribe.",
@@ -93,7 +195,7 @@
   "fotos_alt": "La biblioteca: edificio de un piso con techo de lámina verde, ventanales corridos y pared azul claro|Costado de la biblioteca con un mural de mosaico de colores, pared naranja y bancas de concreto"
  },
  {
-  "id": 12,
+  "id": 25,
   "zona": 3,
   "nombre": "Aulas 18 a 23",
   "texto": "Aulas 18 a 20 en el primer piso y aulas 21 a 23 en el segundo.",
@@ -101,7 +203,7 @@
   "fotos_alt": "El edificio nuevo: a la izquierda las aulas, con galerías y escalera exterior; a la derecha los laboratorios, con parasoles curvos blancos"
  },
  {
-  "id": 13,
+  "id": 26,
   "zona": 3,
   "nombre": "Edificio de Ingeniería, Laboratorios y Simuladores",
   "texto": "Primer piso: Laboratorio de Ingeniería Química y Simulador de Navegación. Segundo piso: Aula 24, Laboratorio de Física y otros simuladores.",
@@ -109,7 +211,7 @@
   "fotos_alt": "Edificio de laboratorios de dos pisos con ventanales verdes y parasoles curvos de lámina blanca|El edificio nuevo: a la izquierda las aulas, con galerías y escalera exterior; a la derecha los laboratorios"
  },
  {
-  "id": 14,
+  "id": 27,
   "zona": 3,
   "nombre": "Gimnasio",
   "texto": "Gimnasio multiuso de la Sede: nave techada para deportes, con sala de pesas y máquinas de ejercicio al aire libre en el costado.",
@@ -118,7 +220,7 @@
   "fotos_alt": "Esquina del gimnasio con el techo de lámina verde, la viga de concreto sobre columnas y la sala de pesas abierta|Fachada del gimnasio hacia la calle, con el rótulo UCR Sede del Caribe, portones blancos y franja celeste|El acceso al gimnasio junto al edificio vecino, con el rótulo de la Sede y el corredor techado|Costado del gimnasio con las máquinas de ejercicio al aire libre y dos palmeras|Costado del gimnasio con máquinas de ejercicio y la sala de pesas en la esquina"
  },
  {
-  "id": 15,
+  "id": 28,
   "zona": 3,
   "nombre": "Bodega de Acción Social",
   "texto": "Bodega de la Coordinación de Acción Social, junto a las mesas de concreto.",
@@ -127,7 +229,15 @@
   "fotos_alt": "Bodega de Acción Social: casita blanca con techo a dos aguas, portón negro de dos hojas con el rótulo y una mesa de concreto azul al lado"
  },
  {
-  "id": 16,
+  "id": 29,
+  "zona": 3,
+  "nombre": "Puente peatonal",
+  "texto": "Puente peatonal para cruzar la ruta 32 frente a la Sede, a la altura de los edificios nuevos. No tiene techo; sus rampas corren junto a la carretera, fuera de la cerca.",
+  "fotos": "lugar-29-1.jpg, lugar-29-2.jpg",
+  "fotos_alt": "Puente peatonal sobre la ruta 32, con baranda azul y rampas junto a la carretera|El puente peatonal y su rampa, vistos desde la acera junto a la cerca de la Sede"
+ },
+ {
+  "id": 30,
   "zona": 4,
   "nombre": "Residencias Estudiantiles",
   "texto": "Residencias dentro del campus.",
@@ -136,7 +246,7 @@
   "fotos_alt": "Las residencias estudiantiles, de dos pisos con techo gris verdoso, y al frente el edificio bajo del CIUB con su área de juegos"
  },
  {
-  "id": 17,
+  "id": 31,
   "zona": 4,
   "nombre": "Centro Infantil Universitario Bilingüe (CIUB)",
   "texto": "Centro Infantil Universitario Bilingüe de la Sede.",
@@ -145,7 +255,7 @@
   "fotos_alt": "El CIUB, edificio bajo con área de juegos cercada, frente a las residencias estudiantiles"
  },
  {
-  "id": 18,
+  "id": 32,
   "zona": 4,
   "nombre": "Laboratorio de Investigación",
   "texto": "Laboratorio de investigación de la Sede: edificio de un piso sobre un talud, con escalera y rampa de acceso desde la calle.",
@@ -154,15 +264,7 @@
   "fotos_alt": "El Laboratorio de Investigación: edificio gris claro de un piso con ventanas verticales y puerta de vidrio, sobre un talud de zacate, con escalera al frente|La rampa con baranda que sube al Laboratorio de Investigación desde la calle"
  },
  {
-  "id": 19,
-  "zona": 0,
-  "nombre": "Pista atlética",
-  "texto": "Pista de atletismo con cancha de fútbol en el centro, al sur del campus. Se entra por el portón junto a la carretera.",
-  "fotos": "pista-entrada-1.jpg, pista-entrada-2.jpg, pista-entrada-3.jpg, pista-entrada-4.jpg, pista-cerca.jpg",
-  "fotos_alt": "Portón y cerca de malla verde con alambre de púas de la pista atlética, vistos desde la calle, con el rótulo Sede del Caribe|El portón de la pista atlética junto a un arbusto grande, con la lámpara solar al lado|Camino de lastre hacia el portón de la pista; adentro se ven la cancha y un marco de fútbol|El portón de dos hojas de la pista, el poste azul con panel solar y la cancha al fondo|La cerca perimetral de malla verde con alambre de púas sobre el talud junto a la carretera"
- },
- {
-  "id": 20,
+  "id": 33,
   "zona": 4,
   "nombre": "Entrada por residencias",
   "texto": "Entrada secundaria del campus, junto a las residencias: portón verde para vehículos y acera con guía táctil para personas con discapacidad visual.",
@@ -170,7 +272,7 @@
   "fotos_alt": "Portón verde de dos hojas de la entrada por residencias visto desde la carretera, con la calle interna asfaltada subiendo al campus|Edificio de techo oscuro junto a la entrada por residencias, detrás de la cerca de malla verde con alambre de púas|La calle frente al edificio y la entrada por residencias, con faroles verdes y la cerca perimetral|Calle interna asfaltada hacia el portón de residencias, con flecha de giro y cordón amarillo|Acera junto a la calle interna con guía táctil amarilla y luminarias bajas, hacia el portón|La cerca de malla verde con alambre de púas a lo largo de la calle interna, junto al edificio"
  },
  {
-  "id": 21,
+  "id": 34,
   "zona": 4,
   "nombre": "Área de picnic y juegos",
   "texto": "Zona verde frente al CIUB y las residencias, con mesas de concreto, un rancho de palma y juegos infantiles.",
@@ -178,7 +280,7 @@
   "fotos_alt": "Zona verde con mesas y bancas de concreto azul, dos palmeras de coco, un rancho con techo de palma y juegos infantiles, frente al bosque|La misma área de picnic vista desde la calle, con un árbol grande al frente y la casita de juegos al fondo"
  },
  {
-  "id": 22,
+  "id": 35,
   "zona": 4,
   "nombre": "Planta de tratamiento de aguas",
   "texto": "Planta de tratamiento de aguas residuales de la Sede, junto a la calle interna que baja hacia las residencias.",
@@ -186,7 +288,7 @@
   "fotos_alt": "Planta de tratamiento de aguas: casetas blancas con techo verde, estructura azul con plataforma y dos tanques grises, dentro de una malla ciclón|Los tanques grises y la estructura azul de la planta de tratamiento, vistos desde la calle|Las casetas de la planta de tratamiento, con puertas azules, frente al bosque|La calle interna asfaltada junto a la planta de tratamiento, bajando hacia el puente"
  },
  {
-  "id": 23,
+  "id": 36,
   "zona": 4,
   "nombre": "Puente sobre la quebrada",
   "texto": "Puente de la calle interna sobre la quebrada, con defensas amarillas y acera peatonal con baranda y guía táctil.",
@@ -194,113 +296,11 @@
   "fotos_alt": "El puente de la calle interna, con defensas amarillas y la acera peatonal con baranda, subiendo hacia el campus|El puente visto desde el paso de cebra, con la defensa amarilla y la baranda gris|El puente y la acera peatonal junto a la cerca verde, rodeados de bosque|La calle interna después del puente, con bambú a un lado y los edificios del campus al fondo"
  },
  {
-  "id": 24,
-  "zona": 1,
-  "nombre": "Baño Docencia",
-  "texto": "Baño justo detrás de la Coordinación de Docencia, al que se llega por un pasillo techado.",
-  "fotos": "lugar-24-1.jpg",
-  "fotos_alt": "Baño de Docencia: casita crema con techo verde y pasillo techado con baranda azul"
- },
- {
-  "id": 25,
-  "zona": 1,
-  "nombre": "Parqueo frente a Docencia",
-  "texto": "Cuatro espacios de parqueo de frente hacia Docencia, dentro de la explanada de asfalto al final de la calle interna.",
-  "fotos": "lugar-25-1.jpg",
-  "fotos_alt": "Parqueo frente a Docencia, sobre la explanada de asfalto, con el bosque detrás"
- },
- {
-  "id": 26,
-  "zona": 2,
-  "nombre": "Camino techado de la entrada",
-  "texto": "Pasillo techado que baja desde la entrada principal junto a la calle interna; de él sale el pasillo que va a las aulas 8 a 17.",
-  "fotos": "lugar-26-1.jpg, lugar-26-2.jpg, lugar-26-3.jpg",
-  "fotos_alt": "Inicio del camino techado junto a la calle, frente al Miniauditorio|Camino techado junto a la calle, con el parqueo de motos y bicicletas al lado|El camino techado bajando en curva junto a la calle interna"
- },
- {
-  "id": 27,
-  "zona": 1,
-  "nombre": "Camino techado hacia Administración",
-  "texto": "Continúa el pasillo techado de la entrada: cruza la calle encima de la alcantarilla de la quebrada y sigue por el otro lado hasta empatar con el pasillo a la soda, frente a las oficinas administrativas.",
-  "fotos": "lugar-27-1.jpg, lugar-27-2.jpg",
-  "fotos_alt": "Camino techado hacia Administración, con guía táctil amarilla y columnas azules|El camino techado pegado a la calle interna, con baranda azul hacia el zacate"
- },
- {
-  "id": 28,
-  "zona": 2,
-  "nombre": "Paso de la alcantarilla del río",
-  "texto": "Punto donde la quebrada pasa por un tubo bajo la calle interna. Encima de la alcantarilla, una plataforma de concreto con guía táctil cruza la calle y une los dos pasillos techados; de ahí sale el sendero hacia la explanada.",
-  "fotos": "lugar-28-1.jpg, lugar-28-2.jpg, lugar-28-3.jpg",
-  "fotos_alt": "Plataforma de concreto que cruza la calle sobre la alcantarilla, entre los dos pasillos techados|La quebrada bajo la calle, entre vegetación densa, con la baranda azul|La calle interna en curva después de la alcantarilla, con el pasillo techado al lado"
- },
- {
-  "id": 29,
-  "zona": 2,
-  "nombre": "Explanada",
-  "texto": "Gran planicie en lo alto, junto a la carretera, con bancas de concreto y un higuerón enorme. Se sube por una rampa entre muros celestes desde la calle interna.",
-  "fotos": "lugar-29-1.jpg, lugar-29-2.jpg, lugar-29-3.jpg, lugar-29-4.jpg, lugar-29-5.jpg",
-  "fotos_alt": "Rampa de concreto entre muros celestes que sube a la explanada|Otro tramo de la rampa de subida a la explanada|Sendero con baranda en lo alto de la explanada, junto a la cerca y la carretera|La explanada con el higuerón enorme y bancas de concreto celeste|El higuerón de la explanada, con su copa muy ancha"
- },
- {
-  "id": 30,
-  "zona": 2,
-  "nombre": "Caseta del guarda",
-  "texto": "Caseta de vigilancia en la isla de zacate entre las calles, a la entrada del campus.",
-  "fotos": "lugar-30-1.jpg, lugar-30-2.jpg, lugar-30-3.jpg",
-  "fotos_alt": "Caseta de seguridad en la isla de la entrada, con techo blanco inclinado|La caseta y la calle de entrada, con la flecha pintada en el asfalto|Zona verde frente a la entrada, con la caseta de seguridad al fondo"
- },
- {
-  "id": 31,
-  "zona": 2,
-  "nombre": "Baño del Miniauditorio",
-  "texto": "Baños del Miniauditorio, en el ala baja del mismo edificio, con entrada propia bajo el alero.",
-  "fotos": "lugar-31-1.jpg",
-  "fotos_alt": "Ala de baños del Miniauditorio, con celosías y entrada propia bajo el alero"
- },
- {
-  "id": 32,
-  "zona": 3,
-  "nombre": "Puente peatonal",
-  "texto": "Puente peatonal para cruzar la ruta 32 frente a la Sede, a la altura de los edificios nuevos. No tiene techo; sus rampas corren junto a la carretera, fuera de la cerca.",
-  "fotos": "lugar-32-1.jpg, lugar-32-2.jpg",
-  "fotos_alt": "Puente peatonal sobre la ruta 32, con baranda azul y rampas junto a la carretera|El puente peatonal y su rampa, vistos desde la acera junto a la cerca de la Sede"
- },
- {
-  "id": 33,
-  "zona": 2,
-  "nombre": "Parqueo de la piscina",
-  "texto": "Parqueo asfaltado e iluminado al costado de la piscina que da al gimnasio."
- },
- {
-  "id": 34,
-  "zona": 1,
-  "nombre": "Parqueo administrativo",
-  "texto": "Parqueo al final de la calle interna, frente a las oficinas administrativas, dentro de la explanada de asfalto. Tres espacios están bajo un carport de lámina verde.",
-  "fotos": "lugar-34-1.jpg, lugar-34-2.jpg",
-  "fotos_alt": "Parqueo administrativo con el carport verde y el patio de asfalto frente a las oficinas|Carport de lámina verde sobre columnas azules, con los espacios techados"
- },
- {
-  "id": 35,
-  "zona": 1,
-  "nombre": "Entrada al Jardín Etnobotánico",
-  "texto": "Sendero que sale de la punta del pabellón de aulas 1 a 7, sube por el zacate y se mete al bosque del Jardín Etnobotánico.",
-  "fotos": "lugar-35-1.jpg, lugar-35-2.jpg, lugar-35-3.jpg",
-  "fotos_alt": "Sendero hacia el Jardín Etnobotánico, junto al pasillo techado verde del pabellón de aulas|El sendero sube en curva por el zacate entre árboles grandes|Entrada al bosque del Jardín Etnobotánico"
- },
- {
-  "id": 36,
-  "zona": 1,
-  "nombre": "Camino techado a la soda",
-  "texto": "Pasillo techado que va por el frente de las oficinas administrativas hasta la soda y comedor.",
-  "fotos": "lugar-36-1.jpg, lugar-36-2.jpg, lugar-36-3.jpg",
-  "fotos_alt": "Camino techado hacia la soda, con guía táctil amarilla, junto al parqueo administrativo|Interior del camino techado a la soda, con baranda azul|El camino techado llegando a la soda, con el comedor al fondo"
- },
- {
   "id": 37,
-  "zona": 1,
-  "nombre": "Caseta de arriba",
-  "texto": "Torre blanca de dos niveles al oeste de las oficinas administrativas: abajo hay cuartos eléctricos y arriba una caseta, con escalera metálica azul.",
-  "fotos": "lugar-37-1.jpg, lugar-37-2.jpg",
-  "fotos_alt": "Caseta de arriba: torre blanca de dos niveles con escalera metálica azul|La caseta de arriba vista desde el sendero, con sus puertas azules abajo"
+  "zona": 0,
+  "nombre": "Pista atlética",
+  "texto": "Pista de atletismo con cancha de fútbol en el centro, al sur del campus. Se entra por el portón junto a la carretera.",
+  "fotos": "pista-entrada-1.jpg, pista-entrada-2.jpg, pista-entrada-3.jpg, pista-entrada-4.jpg, pista-cerca.jpg",
+  "fotos_alt": "Portón y cerca de malla verde con alambre de púas de la pista atlética, vistos desde la calle, con el rótulo Sede del Caribe|El portón de la pista atlética junto a un arbusto grande, con la lámpara solar al lado|Camino de lastre hacia el portón de la pista; adentro se ven la cancha y un marco de fútbol|El portón de dos hojas de la pista, el poste azul con panel solar y la cancha al fondo|La cerca perimetral de malla verde con alambre de púas sobre el talud junto a la carretera"
  }
 ]
