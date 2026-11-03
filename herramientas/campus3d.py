@@ -589,6 +589,14 @@ def lugares_nuevos(calles, quebrada, lejos_carretera, y_ruta32):
     # detrás de ella, del lado de la quebrada (ver vestidores en recorrido.js)
     elem.append({"tipo": "acera", "id": None, "ancho": 1.8,
                  "puntos": [[107.0, -11.5], [98.0, -14.6], [86.56, -19.89], [67.24, -25.07], [56.13, -28.04], [41.4, -29.5]]})
+    # (anotaciones) acera en la zona verde al norte del 9: sale del pasillo de los extremos de las aulas, bordea la
+    # calle de arriba hasta la esquina y baja junto al camino de la entrada hasta la acera que ya estaba; otra
+    # corta llega a ella desde el extremo oeste del 9
+    elem.append({"tipo": "acera", "id": None, "ancho": 1.8,
+                 "puntos": [[42.3, -90.86], [35.4, -91.2], [29.4, -94.6], [23.4, -97.2], [17.4, -99.7], [11.4, -102.6],
+                            [6.2, -104.8], [3.8, -103.4], [1.8, -99.5], [-1.4, -95.0], [-3.2, -90.0], [-4.8, -86.0],
+                            [-6.1, -82.0], [-7.5, -78.0], [-8.9, -74.0], [-10.1, -70.0], [-11.1, -66.0], [-11.66, -62.19]]})
+    elem.append({"tipo": "acera", "id": None, "ancho": 1.8, "puntos": [[2.3, -80.5], [-6.1, -82.0]]})
     # higuerón grande en el patio entre el 8 y el 9 (fotos)
     elem.append({"tipo": "arbol_grande", "id": None, "p": a_metros(*marco(9, -36, -50)), "escala": 1.7})
     # soda (fotos): comedor abierto al costado, con techo a dos aguas sobre columnas azules, y un tanque de agua
