@@ -71,7 +71,7 @@ EDIFICIOS = [
     # Coordinación de Docencia (fotos): hexágono con corredor perimetral de columnas azules y alero celeste,
     # techo verde agua en pirámide con una linternilla de ventanas arriba
     # (anotaciones) más atrás de lo que marca el croquis, lejos del pasillo 27, con su propio pasillo techado
-    {"id": 4, "hex": (679, 1506, 36), "pisos": 1,
+    {"id": 4, "hex": (672, 1490, 36), "pisos": 1,
      "estilo": {"techo": "#6fa596", "fascia": "#a9d4ef", "alero": 2.8, "columnas": "#3f6f9e", "linterna_hex": True}},
     # Miniauditorio (fotos): blanco, franja alta de paneles grises, losa de techo muy volada sobre columnas de
     # acero en V, mural de cerámica hacia la calle y parasoles celestes junto a la puerta lateral
@@ -420,7 +420,7 @@ def lugares_nuevos(calles, quebrada, lejos_carretera, y_ruta32):
         return pts
 
     def caja(id_, tipo, p, giro, largo, ancho, **extra):
-        cv2.fillPoly(despejar, [np.array(rect_contorno(p[0], p[1], largo / ESCALA + 30, ancho / ESCALA + 30, giro), np.int32)], 1)
+        cv2.fillPoly(despejar, [np.array(rect_contorno(p[0], p[1], largo / ESCALA + 56, ancho / ESCALA + 56, giro), np.int32)], 1)
         elem.append({"tipo": tipo, "id": id_, "p": a_metros(*p), "giro": round(math.radians(giro), 3), "largo": largo, "ancho": ancho, **extra})
 
     def parqueo(id_, centro, largo, ancho, giro, filas, conexion=None, techado=False):
@@ -483,9 +483,9 @@ def lugares_nuevos(calles, quebrada, lejos_carretera, y_ruta32):
     caja(37, "caseta", marco(2, -157, 0), 51, 5.0, 4.0, alto=2.8, uso="torre", elevada=2.8)
     # baño de Docencia (24): casita crema de techo verde a una agua, justo detrás de la Coordinación (4)
     # (anotaciones) justo detrás de Docencia, del lado contrario a la calle
-    caja(24, "caseta", (690, 1443), -20, 6.0, 4.5, alto=2.8, uso="banos_crema")
+    caja(24, "caseta", (684, 1426), -20, 6.0, 4.5, alto=2.8, uso="banos_crema")
     # pasillo techado corto que une la puerta de Docencia con el pasillo 27 (anotaciones)
-    pasillo([(703.5, 1573.7), (694, 1548)])
+    pasillo([(705, 1577), (688, 1531)])
     # baño del pabellón 7 (fotos y anotaciones): casita aparte con techo a dos aguas, alero celeste y un mural,
     # pasando el extremo oeste del 7, junto al pasillo techado que llega del camino de la entrada
     caja(None, "caseta", marco(7, -108, -21), 5.5, 9.0, 6.0, alto=3.0, uso="banos_mural")
@@ -511,7 +511,7 @@ def lugares_nuevos(calles, quebrada, lejos_carretera, y_ruta32):
     # paralelos a los edificios, con un descanso en la vuelta (pendiente cercana al 8 %)
     # (anotaciones) la escalera va en el extremo noroeste, pasando la punta del 2; la rampa corre pegada al 2
     # desde el otro extremo y, al final, un tramo corto sube atravesando el talud hasta el corredor del 1
-    caja(None, "escalera", marco(2, -118, -54), 141, 8.4, 2.8, alto=3.5, techado=True)   # sube hacia el suroeste, al 1
+    caja(None, "escalera", marco(2, -140, -54), 141, 8.4, 2.8, alto=3.5, techado=True)   # sube hacia el suroeste, al 1
     r0, r1 = marco(2, 4, -41), marco(2, -92, -41)
     cv2.line(despejar, tuple(int(k) for k in r0), tuple(int(k) for k in r1), 1, 26)
     elem.append({"tipo": "rampa", "id": None, "desde": a_metros(*r0), "hasta": a_metros(*r1), "ancho": 1.8, "alto": 2.6, "base": 0.0, "techado": True})
@@ -534,7 +534,7 @@ def lugares_nuevos(calles, quebrada, lejos_carretera, y_ruta32):
             mesas.append(((p[0] + q[0]) / 2, (p[1] + q[1]) / 2))
     mesas += [(1141, 1150), (1129, 1190)]
     # alrededor de Docencia (4) hay varias mesas redondas de concreto en el zacate (fotos)
-    mesas += [(679 + 64 * math.cos(math.radians(a)), 1506 + 64 * math.sin(math.radians(a))) for a in (205, 232)]   # la del noreste se quitó (anotaciones)
+    mesas += [(672 + 64 * math.cos(math.radians(a)), 1490 + 64 * math.sin(math.radians(a))) for a in (205, 232)]   # la del noreste se quitó (anotaciones)
     elem.append({"tipo": "mesas", "id": None, "puntos": M(mesas)})
     # higuerón grande en el patio entre el 8 y el 9 (fotos)
     elem.append({"tipo": "arbol_grande", "id": None, "p": a_metros(*marco(9, -36, -50)), "escala": 1.7})
