@@ -375,19 +375,20 @@ for (const e of datos.campus.edificios) {
     const pata = new THREE.Mesh(new THREE.CylinderGeometry(0.2, 0.28, 0.75, 8), mesaAzul); pata.position.set(...oeste.en(sentido * 12, D + 4.5, 0.37)); grupo.add(pata);
     // parqueo de bicicletas y motos: adoquín rojizo pegado a la calle, en la cara que mira a la biblioteca (norte)
     const norte = ladoHacia(-1);
-    const adoquin = new THREE.Mesh(new THREE.BoxGeometry(16, 0.08, 6), new THREE.MeshStandardMaterial({ color: 0x8e5a4c, roughness: 0.95 }));
-    adoquin.position.set(...norte.en(0, 12.5, 0.05)); adoquin.rotation.y = norte.ang; grupo.add(adoquin);
+    // (anotaciones) un poco más grande y separado de la malla
+    const adoquin = new THREE.Mesh(new THREE.BoxGeometry(18, 0.08, 7.5), new THREE.MeshStandardMaterial({ color: 0x8e5a4c, roughness: 0.95 }));
+    adoquin.position.set(...norte.en(0, 14, 0.05)); adoquin.rotation.y = norte.ang; grupo.add(adoquin);
     const inox = new THREE.MeshStandardMaterial({ color: 0xd9dde1, metalness: 0.7, roughness: 0.25 });
     for (let k = 0; k < 4; k++) {
       const u = new THREE.Mesh(new THREE.TorusGeometry(0.4, 0.04, 6, 12, Math.PI), inox);
-      u.position.set(...norte.en(-6.5 + k * 1.6, 11.5, 0.45)); u.rotation.y = norte.ang + Math.PI / 2; grupo.add(u);
+      u.position.set(...norte.en(-6.5 + k * 1.6, 12.8, 0.45)); u.rotation.y = norte.ang + Math.PI / 2; grupo.add(u);
     }
     const tonos = [0x1f4fa8, 0x2a2d31, 0x5b2a6e, 0xb3262e, 0xe8e8e8];
     for (let k = 0; k < 5; k++) {
       const moto = new THREE.Group(), m = new THREE.MeshStandardMaterial({ color: tonos[k], roughness: 0.4, metalness: 0.3 });
       const cuerpo = new THREE.Mesh(new THREE.BoxGeometry(0.4, 0.55, 1.9), m); cuerpo.position.y = 0.6; moto.add(cuerpo);
       for (const z of [-0.75, 0.75]) { const r = new THREE.Mesh(new THREE.CylinderGeometry(0.32, 0.32, 0.15, 10), new THREE.MeshStandardMaterial({ color: 0x1a1a1a })); r.rotation.z = Math.PI / 2; r.position.set(0, 0.32, z); moto.add(r); }
-      moto.position.set(...norte.en(1 + k * 1.4, 12.8, 0)); moto.rotation.y = norte.ang + Math.PI / 2; grupo.add(moto);
+      moto.position.set(...norte.en(1 + k * 1.4, 14.6, 0)); moto.rotation.y = norte.ang + Math.PI / 2; grupo.add(moto);
     }
     grupo.traverse((o) => { if (o.isMesh && o.material !== mallaV) { o.castShadow = !liviano; o.receiveShadow = true; } });
   } else {
@@ -1267,9 +1268,28 @@ if (datos.campus.parqueo) {
     registrar(g, null);
   }
 
+  // acera sin techo (anotaciones): losa de concreto con guía táctil amarilla, sin barandas
+  function acera({ puntos, ancho }) {
+    const losas = [], guias = [];
+    for (let i = 0; i < puntos.length - 1; i++) {
+      const [ax, az] = puntos[i], [bx, bz] = puntos[i + 1];
+      const L = Math.hypot(bx - ax, bz - az) + ancho * 0.5, ang = Math.atan2(bx - ax, bz - az), cx = (ax + bx) / 2, cz = (az + bz) / 2;
+      losas.push([cx, 0.06, cz, ancho, 0.12, L, ang]);
+      guias.push([cx, 0.125, cz, 0.36, 0.02, L, ang]);
+    }
+    const g = new THREE.Group(); g.add(cajas(concretoClaro, losas), cajas(amarilloGuia, guias)); registrar(g, null);
+  }
+  // paso de cebra (anotaciones): franjas blancas a lo largo de la calle, una tras otra de lado a lado
+  function cebra({ franjas, giro, ancho = 3 }) {
+    const g = new THREE.Group(); g.add(cajas(blanco, franjas.map(([x, z]) => [x, 0.1, z, ancho, 0.04, 0.5, giro]))); registrar(g, null);
+  }
+  // portón peatonal (anotaciones): dos hojas angostas como las del portón grande, al final de la cerca
+  function portonPeatonal({ p, giro, ancho = 1.4 }) {
+    const g = portonVerde(false, ancho / 2); g.position.set(p[0], 0, p[1]); g.rotation.y = giro; escena.add(g);
+  }
   for (const el of datos.campus.elementos || []) {
     const hacer = { pasillo, caseta, parqueo, bancas, escalera, rampa, descanso, mesas, explanada, alcantarilla, jardin, pluma, comedor, tanque,
-      puente_peatonal: puentePeatonal, arbol_grande: arbolGrande }[el.tipo];
+      acera, cebra, porton_peatonal: portonPeatonal, puente_peatonal: puentePeatonal, arbol_grande: arbolGrande }[el.tipo];
     if (hacer) hacer(el);
     else if (el.tipo === "porton") {   // acceso cerrado con portón (sin faroles)
       const g = portonVerde(false); g.position.set(el.p[0], 0, el.p[1]); g.rotation.y = el.giro; escena.add(g);

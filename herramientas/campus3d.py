@@ -41,7 +41,9 @@ PUENTE = {"centro": (1540, 1478), "largo": 46}      # puente de la calle interna
 # Medidas tomadas de la vista satelital (en metros, en el marco de la piscina: u al este, v al sur);
 # el borde este se recorta para que no se meta en la calle del croquis
 PARQUEO = {"u": (16.0, 37.0), "v": (-21.0, 10.0), "divisor": -8.0}
-PISCINA_RECT = (1433, 1304, 60, 109, 15)
+# (anotaciones) la piscina con su deck, malla, baños y vestidores va 5 m al este y 1,5 m al sur de donde estaba,
+# para dejar espacio libre (con mesas) entre ella y las aulas, y entre la malla y el adoquín del norte
+PISCINA_RECT = (1453, 1310, 60, 109, 15)
 
 
 def piscina_a_px(u, v):
@@ -90,13 +92,15 @@ EDIFICIOS = [
     # 7, 8 y 9: entre uno y otro hay zonas verdes con mesas de picnic, más anchas que en el croquis
     # 7, 8 y 9 (fotos): alineados entre sí (mismos extremos) y sin que el alero del 9 se meta en la calle; un piso, paredes blancas, ventanas corridas con rejas, techo bajo a dos aguas con alero
     # ancho (verde oscuro en 8 y 9, verde lima en 7) y corredores con columnas celestes
-    {"id": 7, "rect": (1268, 1363, 167, 55, 5.5), "pisos": 1,
+    # (anotaciones) entre el camino de la entrada y las puntas oeste de 7, 8 y 9 hay una zona verde: las aulas
+    # se acortan 7 m de ese lado (28 px; el centro se corre 14 px a lo largo) y el extremo este queda igual
+    {"id": 7, "rect": (1281.94, 1364.34, 139, 55, 5.5), "pisos": 1,
      "estilo": {"forma_techo": "dos_aguas", "pendiente": 0.14, "alero": 2.6, "techo": "#5d8a72", "fascia": "#9acd3c", "columnas": "#8ec3e6"}},
-    {"id": 8, "rect": (1268, 1264, 167, 55, 5.5), "pisos": 1,
+    {"id": 8, "rect": (1281.94, 1265.34, 139, 55, 5.5), "pisos": 1,
      "estilo": {"forma_techo": "dos_aguas", "pendiente": 0.14, "alero": 2.6, "techo": "#4f7d63", "fascia": "#1f6b4a", "columnas": "#8ec3e6"}},
-    {"id": 9, "rect": (1268, 1165, 167, 55, 5.5), "pisos": 1,
+    {"id": 9, "rect": (1281.94, 1166.34, 139, 55, 5.5), "pisos": 1,
      "estilo": {"forma_techo": "dos_aguas", "pendiente": 0.14, "alero": 2.6, "techo": "#4f7d63", "fascia": "#1f6b4a", "columnas": "#8ec3e6"}},
-    {"id": 10, "rect": (1433, 1304, 60, 109, 15), "pisos": 0, "tipo": "piscina"},
+    {"id": 10, "rect": (1453, 1310, 60, 109, 15), "pisos": 0, "tipo": "piscina"},
     # Biblioteca (fotos): un piso, lámina verde, cuerpo central más alto, torrecita de ventilación,
     # ventanales corridos y zócalo azul claro
     {"id": 11, "rect": (1510, 1113, 128, 78, -6), "pisos": 1, "linterna": 0.55,
@@ -457,10 +461,20 @@ def lugares_nuevos(calles, quebrada, lejos_carretera, y_ruta32):
     # y uno más corre por el lado este de 7, 8 y 9.
     tramo26 = junto_calle([(1150, 1250), (1132, 1305), (1100, 1358), (1064, 1410), (1012, 1462), (962, 1508)], 15, calles)
     pasillo(tramo26, 26)
+    # (anotaciones) el tramo norte, junto a la calle y frente a las puntas de 7, 8 y 9, es una acera sin techo;
+    # el techo empieza donde llega el pasillo del 7
+    p26 = elem[-1]
+    k26 = next(i for i, (x, z) in enumerate(p26["puntos"]) if z > -31)
+    elem.append({"tipo": "acera", "id": None, "puntos": p26["puntos"][:k26 + 1], "ancho": 2.4})
+    for clave in ("puntos", "en_calle"):
+        p26[clave] = p26[clave][k26:]
+    if p26["alturas"]:
+        p26["alturas"] = p26["alturas"][k26:]
     pasillo([marco(2, -100, 47), marco(2, 15, 47), marco(2, 32, 51), marco(2, 104, 51)], 36)
     union7 = junto_calle([(1080, 1392)], 15, calles)
-    pasillo([marco(7, -88, 6), marco(7, -104, 2), (1118, 1374)] + union7)
-    pasillo([marco(9, 98, 38), marco(9, 98, 0), marco(8, 98, 0), marco(7, 98, 0), marco(7, 98, -26)])
+    pasillo([marco(7, -74, 6), marco(7, -90, 2), (1118, 1374)] + union7)
+    # (anotaciones) el pasillo del lado de la piscina termina antes de la esquina sur del 7
+    pasillo([marco(9, 84, 38), marco(9, 84, 0), marco(8, 84, 0), marco(7, 84, 0), marco(7, 84, -8)])
     # sendero techado que sube de la calle a la explanada (29), pasando junto al baño del miniauditorio (31)
     # (fotos) el sendero sube a la explanada entre muros celestes, con baranda gris, y entra a ella por el norte
     pasillo(junto_calle(SENDERO_EXPLANADA[:1], 9, calles) + SENDERO_EXPLANADA[1:] + [(856, 1170)], techo=False, ancho=2.0, subida=3.5,
@@ -502,7 +516,7 @@ def lugares_nuevos(calles, quebrada, lejos_carretera, y_ruta32):
     pasillo([(705, 1577), (688, 1531)])
     # baño del pabellón 7 (fotos y anotaciones): casita aparte con techo a dos aguas, alero celeste y un mural,
     # pasando el extremo oeste del 7, junto al pasillo techado que llega del camino de la entrada
-    caja(None, "caseta", marco(7, -108, -21), 5.5, 9.0, 6.0, alto=3.0, uso="banos_mural")
+    caja(None, "caseta", marco(7, -94, -21), 5.5, 9.0, 6.0, alto=3.0, uso="banos_mural")
 
     # --- parqueos: frente a Docencia (25) y el administrativo al final de la calle, junto al 2 (34)
     # (anotaciones y fotos) no hay calle hacia el 25: entre el final de la calle, el 25 y el 34 todo es una
@@ -548,10 +562,31 @@ def lugares_nuevos(calles, quebrada, lejos_carretera, y_ruta32):
         for u in (-54, -18, 18, 54):
             p, q = marco(arriba, u, -27.5), marco(abajo, u, 27.5)
             mesas.append(((p[0] + q[0]) / 2, (p[1] + q[1]) / 2))
-    mesas += [(1141, 1150), (1129, 1190)]
+    # (anotaciones) las dos mesas de la isla de zacate frente al pórtico de la entrada se quitaron
     # alrededor de Docencia (4) hay varias mesas redondas de concreto en el zacate (fotos)
     mesas += [(672 + 64 * math.cos(math.radians(a)), 1490 + 64 * math.sin(math.radians(a))) for a in (205, 232)]   # la del noreste se quitó (anotaciones)
-    elem.append({"tipo": "mesas", "id": None, "puntos": M(mesas)})
+    # (anotaciones) mesas nuevas: junto al camino de la entrada, al sur de la unión con el pasillo del 7; tres entre
+    # el pasillo de las aulas y los baños de la piscina; dos junto a la acera nueva, pasando los vestidores
+    nuevas = [[-22.8, -22.2], [45.6, -65.5], [45.6, -60.0], [45.6, -54.5], [88.0, -15.2], [92.5, -15.2]]
+    a_px = lambda x, z: (int(round(x / ESCALA + ORIGEN[0])), int(round(z / ESCALA + ORIGEN[1])))
+    for x, z in nuevas:   # sin árboles encima de las mesas nuevas
+        cv2.circle(despejar, a_px(x, z), int(4.5 / ESCALA), 1, -1)
+    elem.append({"tipo": "mesas", "id": None, "puntos": M(mesas) + nuevas})
+    # (anotaciones) paso de cebra frente al pórtico: sigue la línea marcada y cruza las dos calles que rodean la
+    # isla de zacate, de la caseta del guarda hacia la acera del camino de la entrada; franjas solo sobre el asfalto
+    (ax_, az_), (bx_, bz_) = (-23.5, -84.0), (-15.6, -77.0)
+    L_ = math.hypot(bx_ - ax_, bz_ - az_); ux_, uz_ = (bx_ - ax_) / L_, (bz_ - az_) / L_
+    franjas = []
+    for d_ in np.arange(-8.0, L_ + 14.0, 0.9):
+        x_, z_ = ax_ + ux_ * d_, az_ + uz_ * d_
+        px_, py_ = a_px(x_, z_)
+        if calles[py_, px_]:
+            franjas.append([round(x_, 2), round(z_, 2)])
+    elem.append({"tipo": "cebra", "id": None, "franjas": franjas, "giro": round(math.atan2(ux_, uz_), 3), "ancho": 3.0})
+    # (anotaciones) acera desde la calle del puente, al norte de la quebrada y al sur de los vestidores, hasta la
+    # esquina sur del 7, donde llega el pasillo de las aulas
+    elem.append({"tipo": "acera", "id": None, "ancho": 1.8,
+                 "puntos": [[107.0, -11.5], [88.0, -11.5], [60.0, -12.5], [48.0, -14.0], [43.5, -21.0], [41.4, -29.5]]})
     # higuerón grande en el patio entre el 8 y el 9 (fotos)
     elem.append({"tipo": "arbol_grande", "id": None, "p": a_metros(*marco(9, -36, -50)), "escala": 1.7})
     # soda (fotos): comedor abierto al costado, con techo a dos aguas sobre columnas azules, y un tanque de agua
@@ -573,9 +608,16 @@ def lugares_nuevos(calles, quebrada, lejos_carretera, y_ruta32):
         # postes del portón (a 4,45 m del centro, a lo largo de las hojas): ahí empalma la cerca
         ex, ey = math.cos(giro_p) * 4.45 / ESCALA, -math.sin(giro_p) * 4.45 / ESCALA
         postes = sorted([(gx_ + ex, gy_ - ey), (gx_ - ex, gy_ + ey)])   # oeste, este
-        # la cerca baja desde el portón por el borde oeste del acceso, hasta la isla de zacate (anotaciones)
-        cerca_extra = [postes[0]] + junto_calle([(1146, 1098), (1138, 1118), (1128, 1140)], 4, calles)
-        elem[-1]["poste_este"] = postes[1]
+        # (anotaciones) la cerca baja desde el poste este del portón por el borde este del acceso hasta el pórtico
+        # de la entrada; ahí termina en un portón para peatones
+        cerca_extra = [postes[1]] + junto_calle([(1178, 1062), (1164, 1080), (1151, 1098), (1141, 1114)], 4, calles)
+        (ax_, ay_), (bx_, by_) = [(float(x), float(y)) for x, y in cerca_extra[-2:]]
+        d_ = math.hypot(bx_ - ax_, by_ - ay_) or 1
+        ux_, uy_ = (bx_ - ax_) / d_, (by_ - ay_) / d_
+        fin_ = (bx_ + ux_ * 1.5 / ESCALA, by_ + uy_ * 1.5 / ESCALA)   # el portón ocupa 1,5 m al final de la cerca
+        elem.append({"tipo": "porton_peatonal", "id": None, "p": a_metros((bx_ + fin_[0]) / 2, (by_ + fin_[1]) / 2),
+                     "giro": round(math.atan2(-uy_, ux_), 3), "ancho": 1.4})
+        next(e for e in elem if e["tipo"] == "porton")["poste_este"] = postes[1]
 
     # --- paso de la quebrada bajo la calle (28): alcantarilla con cabezales de concreto y paso de cebra
     ys, xs = np.nonzero((calles > 0) & (cv2.dilate(quebrada, np.ones((9, 9), np.uint8)) > 0))
