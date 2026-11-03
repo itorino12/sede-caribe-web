@@ -4,6 +4,7 @@ import * as THREE from "./vendor/three.module.min.js";
 import { OrbitControls } from "./vendor/OrbitControls.js";
 import { ficha, sinMovimiento, rellenarFicha } from "./recorrido-ficha.js";
 import { MARCAS, prioridadDe, compararRango, FRENTE_PORTADA } from "./recorrido-config.js";
+import { armarEntorno } from "./recorrido-entorno.js";
 
 const raiz = document.querySelector("[data-recorrido]");
 const lienzo = raiz.querySelector(".mapa3d__lienzo");
@@ -40,7 +41,7 @@ if (!renderer) {
   import(PORTADA ? "./portada-giro.js" : "./recorrido-giro.js");
 }
 if (renderer) {   // ---------- todo lo que sigue es la maqueta 3D
-lienzo.addEventListener("webglcontextlost", (e) => { e.preventDefault(); raiz.classList.add("mapa3d--sin-3d"); import(PORTADA ? "./portada-giro.js" : "./recorrido-giro.js"); });
+lienzo.addEventListener("webglcontextlost", (e) => { e.preventDefault(); raiz.classList.add("mapa3d--sin-3d"); raiz.closest(".portada__foto")?.classList.remove("portada__foto--en-vivo"); import(PORTADA ? "./portada-giro.js" : "./recorrido-giro.js"); });
 // la portada es de adorno: en celular basta un poco menos de resolución que en el recorrido
 renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, liviano ? (PORTADA ? 1.25 : 1.5) : 2));
 renderer.outputColorSpace = THREE.SRGBColorSpace;
@@ -72,32 +73,9 @@ suelo.rotation.x = -Math.PI / 2;
 suelo.position.set(t.x + t.ancho / 2, 0, t.z + t.largo / 2);
 suelo.receiveShadow = true;
 escena.add(suelo);
-// Alrededor del croquis sigue el zacate hasta el horizonte (la niebla lo funde con el cielo), para que la maqueta no
-// se vea como un cuadro suelto. Son cuatro piezas que tocan el borde sin montarse sobre la textura.
-const zacate = new THREE.MeshLambertMaterial({ color: 0x98c47a });   // el mismo verde de los bordes de la textura
-{
-  const L = 4000, x0 = t.x, x1 = t.x + t.ancho, z0 = t.z, z1 = t.z + t.largo;
-  const pieza = (xa, xb, za, zb) => {
-    const m = new THREE.Mesh(new THREE.PlaneGeometry(xb - xa, zb - za), zacate);
-    m.rotation.x = -Math.PI / 2; m.position.set((xa + xb) / 2, 0, (za + zb) / 2); m.receiveShadow = true; escena.add(m);
-  };
-  pieza(x0 - L, x1 + L, z0 - L, z0); pieza(x0 - L, x1 + L, z1, z1 + L); pieza(x0 - L, x0, z0, z1); pieza(x1, x1 + L, z0, z1);
-  // la carretera y las calles siguen más allá del borde: arrancan del tramo exacto donde la textura las corta y,
-  // a los 30 m, quedan del ancho de una calle
-  const asfalto = new THREE.MeshLambertMaterial({ color: 0x70747a, side: THREE.DoubleSide, polygonOffset: true, polygonOffsetFactor: -1, polygonOffsetUnits: -4 });
-  for (const s of datos.campus.salidas || []) {
-    const [ax, az] = s.a, [bx, bz] = s.b, [dx, dz] = s.dir, nx = -dz, nz = dx;
-    const cx = (ax + bx) / 2, cz = (az + bz) / 2, medio = Math.min(Math.abs((bx - ax) * nx + (bz - az) * nz), 10) / 2;
-    const en = (d, lado) => [cx + dx * d + nx * lado, cz + dz * d + nz * lado];
-    const p = [[ax, az], [bx, bz], en(30, medio), en(30, -medio), en(L, medio), en(L, -medio)];
-    // que b quede del mismo lado que +medio
-    if ((bx - cx) * nx + (bz - cz) * nz < 0) { [p[0], p[1]] = [p[1], p[0]]; }
-    const v = new Float32Array([0, 2, 1, 0, 3, 2, 2, 4, 3, 3, 4, 5].flatMap((i) => [p[i][0], 0, p[i][1]]));
-    const g = new THREE.BufferGeometry(); g.setAttribute("position", new THREE.BufferAttribute(v, 3)); g.computeVertexNormals();
-    g.attributes.normal.array.fill(0); for (let i = 1; i < g.attributes.normal.array.length; i += 3) g.attributes.normal.array[i] = 1;
-    const m = new THREE.Mesh(g, asfalto); m.receiveShadow = true; escena.add(m);
-  }
-}
+// Alrededor del croquis: zacate hasta el horizonte, las carreteras que siguen y los barrios, naves y bosques de
+// los alrededores según Google Maps (recorrido-entorno.js)
+const entorno = armarEntorno({ THREE, escena, datos, liviano });
 
 // ---------- edificios
 // Estilo tomado de las fotos de la Sede: paredes blancas, celosías grises en las ventanas y techos de cuatro
@@ -1301,25 +1279,7 @@ if (datos.campus.parqueo) {
 
 // ---------- árboles y palmeras (instancias: cientos de árboles en pocas llamadas de dibujo)
 {
-  // árboles de afuera: dispersos alrededor del campus, más tupidos cerca del borde y cada vez más ralos;
-  // ninguno sobre las calles que siguen afuera. Siempre salen en el mismo lugar (azar con semilla).
-  const afuera = [];
-  {
-    const { x: x0, z: z0, ancho, largo } = datos.campus.terreno, x1 = x0 + ancho, z1 = z0 + largo;
-    let semilla = 7;
-    const rnd = () => { semilla = (semilla * 16807) % 2147483647; return semilla / 2147483647; };
-    const calles = (datos.campus.salidas || []).map((s) => ({ c: [(s.a[0] + s.b[0]) / 2, (s.a[1] + s.b[1]) / 2], d: s.dir }));
-    const sobreCalle = (x, z) => calles.some(({ c, d }) => { const ux = x - c[0], uz = z - c[1], a = ux * d[0] + uz * d[1];
-      return a > -5 && Math.abs(ux * d[1] - uz * d[0]) < 14; });
-    const meta = liviano ? 320 : 520;
-    for (let intento = 0; afuera.length < meta && intento < meta * 40; intento++) {
-      const x = x0 - 420 + rnd() * (ancho + 840), z = z0 - 420 + rnd() * (largo + 840);
-      const dx = Math.max(x0 - x, 0, x - x1), dz = Math.max(z0 - z, 0, z - z1), d = Math.hypot(dx, dz);
-      if (d < 4 || rnd() > Math.exp(-d / 140) || sobreCalle(x, z)) continue;
-      afuera.push({ p: [x, z], r: 2.6 + rnd() * 2.4, palma: rnd() < 0.15 });
-    }
-  }
-  const lista = [...datos.campus.arboles, ...afuera];
+  const lista = [...datos.campus.arboles, ...entorno.arboles];
   const redondos = lista.filter((a) => !a.palma), palmas = lista.filter((a) => a.palma);
   const m4 = new THREE.Matrix4(), q = new THREE.Quaternion(), pos = new THREE.Vector3(), esc = new THREE.Vector3(), color = new THREE.Color();
   const tronco = new THREE.MeshLambertMaterial({ color: 0x7a5a3a });
@@ -1333,7 +1293,7 @@ if (datos.campus.parqueo) {
     m4.compose(pos.set(a.p[0], h / 2, a.p[1]), q.identity(), esc.set(1, h, 1)); troncos.setMatrixAt(i, m4);
     q.setFromEuler(new THREE.Euler(0, azar(i) * 6.28, 0));
     m4.compose(pos.set(a.p[0], h + r * 0.75, a.p[1]), q, esc.set(r, r * 0.8, r)); copas.setMatrixAt(i, m4);
-    copas.setColorAt(i, color.setHex(tonos[Math.floor(azar(i + 7) * tonos.length)]));
+    copas.setColorAt(i, color.setHex(a.tono || tonos[Math.floor(azar(i + 7) * tonos.length)]));
   });
   const HOJAS = 8;
   const hojas = new THREE.InstancedMesh(new THREE.ConeGeometry(0.28, 1.25, 3, 1).translate(0, 0.62, 0),
@@ -1622,6 +1582,7 @@ function rendirse(motivo) {
   rendido = true;
   console.info(`Maqueta 3D de la portada: se pasa a las vistas de respaldo (${motivo})`);
   raiz.classList.add("mapa3d--sin-3d");
+  raiz.closest(".portada__foto")?.classList.remove("portada__foto--en-vivo");   // la imagen fija vuelve de inmediato
   renderer.dispose(); renderer.forceContextLoss();
   import("./portada-giro.js");
 }
