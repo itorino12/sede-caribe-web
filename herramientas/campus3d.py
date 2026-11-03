@@ -566,8 +566,9 @@ def lugares_nuevos(calles, quebrada, lejos_carretera, y_ruta32):
     # alrededor de Docencia (4) hay varias mesas redondas de concreto en el zacate (fotos)
     mesas += [(672 + 64 * math.cos(math.radians(a)), 1490 + 64 * math.sin(math.radians(a))) for a in (205, 232)]   # la del noreste se quitó (anotaciones)
     # (anotaciones) mesas nuevas: junto al camino de la entrada, al sur de la unión con el pasillo del 7; tres entre
-    # el pasillo de las aulas y los baños de la piscina; dos junto a la acera nueva, pasando los vestidores
-    nuevas = [[-22.8, -22.2], [45.6, -65.5], [45.6, -60.0], [45.6, -54.5], [88.0, -15.2], [92.5, -15.2]]
+    # el pasillo de las aulas y los baños de la piscina; (anotaciones) tres detrás de la acera, entre ella y la
+    # quebrada, pasando el toldo de los vestidores
+    nuevas = [[-22.8, -22.2], [45.6, -65.5], [45.6, -60.0], [45.6, -54.5], [85.77, -15.02], [90.04, -13.57], [94.26, -11.92]]
     a_px = lambda x, z: (int(round(x / ESCALA + ORIGEN[0])), int(round(z / ESCALA + ORIGEN[1])))
     for x, z in nuevas:   # sin árboles encima de las mesas nuevas
         cv2.circle(despejar, a_px(x, z), int(4.5 / ESCALA), 1, -1)
@@ -583,10 +584,11 @@ def lugares_nuevos(calles, quebrada, lejos_carretera, y_ruta32):
         if calles[py_, px_]:
             franjas.append([round(x_, 2), round(z_, 2)])
     elem.append({"tipo": "cebra", "id": None, "franjas": franjas, "giro": round(math.atan2(ux_, uz_), 3), "ancho": 3.0})
-    # (anotaciones) acera desde la calle del puente, al norte de la quebrada y al sur de los vestidores, hasta la
-    # esquina sur del 7, donde llega el pasillo de las aulas
+    # (anotaciones) acera desde la calle del puente hasta la esquina sur del 7, donde llega el pasillo de las aulas.
+    # Pasa pegada a la malla de la piscina (a unos 2,4 m), de modo que los vestidores, el toldo y las mesas quedan
+    # detrás de ella, del lado de la quebrada (ver vestidores en recorrido.js)
     elem.append({"tipo": "acera", "id": None, "ancho": 1.8,
-                 "puntos": [[107.0, -11.5], [88.0, -11.5], [60.0, -12.5], [48.0, -14.0], [43.5, -21.0], [41.4, -29.5]]})
+                 "puntos": [[107.0, -11.5], [98.0, -14.6], [86.56, -19.89], [67.24, -25.07], [56.13, -28.04], [41.4, -29.5]]})
     # higuerón grande en el patio entre el 8 y el 9 (fotos)
     elem.append({"tipo": "arbol_grande", "id": None, "p": a_metros(*marco(9, -36, -50)), "escala": 1.7})
     # soda (fotos): comedor abierto al costado, con techo a dos aguas sobre columnas azules, y un tanque de agua
