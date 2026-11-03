@@ -5,3 +5,6 @@ __pycache__/
 *.json.key
 cuenta-servicio*.json
 .cache/
+
+# capturas sueltas de pruebas locales
+/*.png
