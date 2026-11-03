@@ -22,9 +22,13 @@ const N = datos.campus.numeros;   // números de los lugares que se arman aparte
 // En teléfonos la maqueta va en modo liviano: sin suavizado de bordes, menos resolución y sombras más
 // simples. Algunos chips (por ejemplo PowerVR) pierden el contexto gráfico con la versión completa.
 const liviano = matchMedia("(pointer: coarse)").matches || Math.min(screen.width, screen.height) < 820;
+// En la portada no se acepta un 3D sin aceleración gráfica (iría a saltos y calentaría el teléfono): ahí van las
+// vistas de respaldo. Las herramientas que dibujan las capturas (#captura-…) sí lo usan.
+const CAPTURA = location.hash.startsWith("#captura-");
+const exigente = PORTADA && !CAPTURA;
 function crearRenderer() {
   for (const opciones of [...(liviano ? [] : [{ antialias: true, alpha: true }]), { antialias: false, alpha: true, powerPreference: "low-power" }, { antialias: false, alpha: false, powerPreference: "low-power", precision: "mediump" }]) {
-    try { return new THREE.WebGLRenderer({ canvas: lienzo, ...opciones }); }
+    try { return new THREE.WebGLRenderer({ canvas: lienzo, failIfMajorPerformanceCaveat: exigente, ...opciones }); }
     catch (e) { console.warn("Maqueta 3D: no se pudo iniciar con", opciones, e); }
   }
   return null;
@@ -37,9 +41,13 @@ if (!renderer) {
 }
 if (renderer) {   // ---------- todo lo que sigue es la maqueta 3D
 lienzo.addEventListener("webglcontextlost", (e) => { e.preventDefault(); raiz.classList.add("mapa3d--sin-3d"); import(PORTADA ? "./portada-giro.js" : "./recorrido-giro.js"); });
-renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, liviano ? 1.5 : 2));
+// la portada es de adorno: en celular basta un poco menos de resolución que en el recorrido
+renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, liviano ? (PORTADA ? 1.25 : 1.5) : 2));
 renderer.outputColorSpace = THREE.SRGBColorSpace;
 renderer.shadowMap.enabled = true;
+// ni el sol ni los edificios se mueven: las sombras se calculan una vez y no en cada cuadro (es la mitad del trabajo)
+renderer.shadowMap.autoUpdate = false;
+renderer.shadowMap.needsUpdate = true;
 renderer.shadowMap.type = liviano ? THREE.PCFShadowMap : THREE.PCFSoftShadowMap;
 const escena = new THREE.Scene();
 escena.fog = new THREE.Fog(0xdfeaf2, 520, 1100);
@@ -64,10 +72,32 @@ suelo.rotation.x = -Math.PI / 2;
 suelo.position.set(t.x + t.ancho / 2, 0, t.z + t.largo / 2);
 suelo.receiveShadow = true;
 escena.add(suelo);
-// borde de la maqueta: una base gruesa, como una maqueta de verdad
-const base = new THREE.Mesh(new THREE.BoxGeometry(t.ancho, 6, t.largo), new THREE.MeshLambertMaterial({ color: 0x7c6a52 }));
-base.position.set(suelo.position.x, -3.05, suelo.position.z);
-escena.add(base);
+// Alrededor del croquis sigue el zacate hasta el horizonte (la niebla lo funde con el cielo), para que la maqueta no
+// se vea como un cuadro suelto. Son cuatro piezas que tocan el borde sin montarse sobre la textura.
+const zacate = new THREE.MeshLambertMaterial({ color: 0x98c47a });   // el mismo verde de los bordes de la textura
+{
+  const L = 4000, x0 = t.x, x1 = t.x + t.ancho, z0 = t.z, z1 = t.z + t.largo;
+  const pieza = (xa, xb, za, zb) => {
+    const m = new THREE.Mesh(new THREE.PlaneGeometry(xb - xa, zb - za), zacate);
+    m.rotation.x = -Math.PI / 2; m.position.set((xa + xb) / 2, 0, (za + zb) / 2); m.receiveShadow = true; escena.add(m);
+  };
+  pieza(x0 - L, x1 + L, z0 - L, z0); pieza(x0 - L, x1 + L, z1, z1 + L); pieza(x0 - L, x0, z0, z1); pieza(x1, x1 + L, z0, z1);
+  // la carretera y las calles siguen más allá del borde: arrancan del tramo exacto donde la textura las corta y,
+  // a los 30 m, quedan del ancho de una calle
+  const asfalto = new THREE.MeshLambertMaterial({ color: 0x70747a, side: THREE.DoubleSide, polygonOffset: true, polygonOffsetFactor: -1, polygonOffsetUnits: -4 });
+  for (const s of datos.campus.salidas || []) {
+    const [ax, az] = s.a, [bx, bz] = s.b, [dx, dz] = s.dir, nx = -dz, nz = dx;
+    const cx = (ax + bx) / 2, cz = (az + bz) / 2, medio = Math.min(Math.abs((bx - ax) * nx + (bz - az) * nz), 10) / 2;
+    const en = (d, lado) => [cx + dx * d + nx * lado, cz + dz * d + nz * lado];
+    const p = [[ax, az], [bx, bz], en(30, medio), en(30, -medio), en(L, medio), en(L, -medio)];
+    // que b quede del mismo lado que +medio
+    if ((bx - cx) * nx + (bz - cz) * nz < 0) { [p[0], p[1]] = [p[1], p[0]]; }
+    const v = new Float32Array([0, 2, 1, 0, 3, 2, 2, 4, 3, 3, 4, 5].flatMap((i) => [p[i][0], 0, p[i][1]]));
+    const g = new THREE.BufferGeometry(); g.setAttribute("position", new THREE.BufferAttribute(v, 3)); g.computeVertexNormals();
+    g.attributes.normal.array.fill(0); for (let i = 1; i < g.attributes.normal.array.length; i += 3) g.attributes.normal.array[i] = 1;
+    const m = new THREE.Mesh(g, asfalto); m.receiveShadow = true; escena.add(m);
+  }
+}
 
 // ---------- edificios
 // Estilo tomado de las fotos de la Sede: paredes blancas, celosías grises en las ventanas y techos de cuatro
@@ -1271,7 +1301,25 @@ if (datos.campus.parqueo) {
 
 // ---------- árboles y palmeras (instancias: cientos de árboles en pocas llamadas de dibujo)
 {
-  const lista = datos.campus.arboles;
+  // árboles de afuera: dispersos alrededor del campus, más tupidos cerca del borde y cada vez más ralos;
+  // ninguno sobre las calles que siguen afuera. Siempre salen en el mismo lugar (azar con semilla).
+  const afuera = [];
+  {
+    const { x: x0, z: z0, ancho, largo } = datos.campus.terreno, x1 = x0 + ancho, z1 = z0 + largo;
+    let semilla = 7;
+    const rnd = () => { semilla = (semilla * 16807) % 2147483647; return semilla / 2147483647; };
+    const calles = (datos.campus.salidas || []).map((s) => ({ c: [(s.a[0] + s.b[0]) / 2, (s.a[1] + s.b[1]) / 2], d: s.dir }));
+    const sobreCalle = (x, z) => calles.some(({ c, d }) => { const ux = x - c[0], uz = z - c[1], a = ux * d[0] + uz * d[1];
+      return a > -5 && Math.abs(ux * d[1] - uz * d[0]) < 14; });
+    const meta = liviano ? 320 : 520;
+    for (let intento = 0; afuera.length < meta && intento < meta * 40; intento++) {
+      const x = x0 - 420 + rnd() * (ancho + 840), z = z0 - 420 + rnd() * (largo + 840);
+      const dx = Math.max(x0 - x, 0, x - x1), dz = Math.max(z0 - z, 0, z - z1), d = Math.hypot(dx, dz);
+      if (d < 4 || rnd() > Math.exp(-d / 140) || sobreCalle(x, z)) continue;
+      afuera.push({ p: [x, z], r: 2.6 + rnd() * 2.4, palma: rnd() < 0.15 });
+    }
+  }
+  const lista = [...datos.campus.arboles, ...afuera];
   const redondos = lista.filter((a) => !a.palma), palmas = lista.filter((a) => a.palma);
   const m4 = new THREE.Matrix4(), q = new THREE.Quaternion(), pos = new THREE.Vector3(), esc = new THREE.Vector3(), color = new THREE.Color();
   const tronco = new THREE.MeshLambertMaterial({ color: 0x7a5a3a });
@@ -1305,6 +1353,60 @@ if (datos.campus.parqueo) {
   });
   for (const m of [copas, troncos, hojas]) { m.castShadow = !liviano; m.instanceMatrix.needsUpdate = true; escena.add(m); }
   if (copas.instanceColor) copas.instanceColor.needsUpdate = true;
+}
+
+// ---------- fundir piezas
+// La maqueta tiene unas 1200 piezas y cada una es una llamada de dibujo por cuadro; un celular sufre con más de unos
+// cientos. Como nada se mueve después de armarla, las piezas de un mismo lugar que comparten material se funden en una
+// sola. Cada lugar sigue siendo su propio grupo, así que se puede tocar y resaltar igual que antes.
+{
+  escena.updateMatrixWorld(true);
+  const dueno = new Map();
+  for (const g of edificios) g.traverse((o) => { if (o.isMesh) dueno.set(o, g); });
+  const lotes = new Map();
+  escena.traverse((o) => {
+    if (!o.isMesh || o.isInstancedMesh || Array.isArray(o.material) || o.material.transparent || !o.visible) return;
+    const atributos = Object.entries(o.geometry.attributes);
+    if (atributos.some(([, a]) => a.isInterleavedBufferAttribute) || Object.keys(o.geometry.morphAttributes).length) return;
+    if (o.matrixWorld.determinant() < 0) return;   // una pieza reflejada quedaría con las caras al revés
+    const g = dueno.get(o) || null;
+    const firma = atributos.map(([k, a]) => k + a.itemSize).sort().join(",");
+    const clave = [g ? g.id : "-", o.material.id, o.castShadow, o.receiveShadow, o.renderOrder, firma].join("|");
+    if (!lotes.has(clave)) lotes.set(clave, { g, o, piezas: [] });
+    lotes.get(clave).piezas.push(o);
+  });
+  const m = new THREE.Matrix4(), inversa = new THREE.Matrix4();
+  for (const { g, o: modelo, piezas } of lotes.values()) {
+    if (piezas.length < 2) continue;
+    const padre = g || escena;
+    inversa.copy(padre.matrixWorld).invert();
+    const geos = piezas.map((o) => o.geometry.clone().applyMatrix4(m.multiplyMatrices(inversa, o.matrixWorld)));
+    const nombres = Object.keys(geos[0].attributes);
+    const vertices = geos.reduce((s, x) => s + x.attributes.position.count, 0);
+    const caras = geos.reduce((s, x) => s + (x.index ? x.index.count : x.attributes.position.count), 0);
+    const unida = new THREE.BufferGeometry();
+    for (const k of nombres) {
+      const tam = geos[0].attributes[k].itemSize, arr = new Float32Array(vertices * tam);
+      let pos = 0;
+      for (const x of geos) { const a = x.attributes[k]; for (let i = 0; i < a.count; i++) for (let c = 0; c < tam; c++) arr[pos++] = a.getComponent(i, c); }
+      unida.setAttribute(k, new THREE.BufferAttribute(arr, tam));
+    }
+    const indice = vertices > 65535 ? new Uint32Array(caras) : new Uint16Array(caras);
+    let pi = 0, base = 0;
+    for (const x of geos) {
+      const n = x.attributes.position.count;
+      if (x.index) for (let i = 0; i < x.index.count; i++) indice[pi++] = x.index.getX(i) + base;
+      else for (let i = 0; i < n; i++) indice[pi++] = i + base;
+      base += n;
+      x.dispose();
+    }
+    unida.setIndex(new THREE.BufferAttribute(indice, 1));
+    const malla = new THREE.Mesh(unida, modelo.material);
+    Object.assign(malla, { castShadow: modelo.castShadow, receiveShadow: modelo.receiveShadow, renderOrder: modelo.renderOrder });
+    if (g) malla.userData.edificio = g;
+    padre.add(malla);
+    for (const o of piezas) o.removeFromParent();
+  }
 }
 
 // ---------- cámara y controles
@@ -1506,11 +1608,43 @@ function ajustar() {
 // en la portada solo se dibuja mientras se ve: al bajar por la página o cambiar de pestaña no gasta batería
 let enPantalla = true;
 if (PORTADA) {
-  new IntersectionObserver(([e]) => { enPantalla = e.isIntersecting; if (enPantalla) pedirDibujo(); }).observe(lienzo);
-  document.addEventListener("visibilitychange", () => { if (!document.hidden) pedirDibujo(); });
+  new IntersectionObserver(([e]) => { enPantalla = e.isIntersecting; if (enPantalla) { ultimoCuadro = 0; pedirDibujo(); } }).observe(lienzo);
+  document.addEventListener("visibilitychange", () => { if (!document.hidden) { ultimoCuadro = 0; pedirDibujo(); } });
+}
+// La portada gira despacio: 24 cuadros por segundo se ven fluidos y son menos de la mitad del trabajo que 60.
+// El giro se mide en segundos reales, así dura dos minutos aunque la pantalla vaya a 30, 60 o 120 cuadros.
+const INTERVALO_PORTADA = 1000 / 24;
+let ultimoCuadro = 0, rendido = false;
+const muestras = [];
+// si la portada va muy lenta (menos de 10 cuadros por segundo), suelta el 3D y deja las vistas de respaldo
+function rendirse(motivo) {
+  if (rendido) return;
+  rendido = true;
+  console.info(`Maqueta 3D de la portada: se pasa a las vistas de respaldo (${motivo})`);
+  raiz.classList.add("mapa3d--sin-3d");
+  renderer.dispose(); renderer.forceContextLoss();
+  import("./portada-giro.js");
 }
 function dibujar(ahora) {
   pendiente = false;
+  if (rendido) return;
+  let paso = null;
+  if (PORTADA) {
+    if (ultimoCuadro && ahora - ultimoCuadro < INTERVALO_PORTADA - 4) { pedirDibujo(); return; }
+    if (ultimoCuadro) {
+      paso = Math.min((ahora - ultimoCuadro) / 1000, 0.5);
+      // se mide la fluidez en los primeros cuadros con la portada a la vista (sin contar los 8 primeros, que compilan)
+      if (exigente && muestras.length < 48 && enPantalla && !document.hidden) {
+        muestras.push(ahora - ultimoCuadro);
+        if (muestras.length === 48) {
+          // promedio y no mediana: un teléfono a tirones (la mayoría rápidos y algunos muy lentos) también se ve mal
+          const medio = muestras.slice(8).reduce((s, x) => s + x, 0) / 40;
+          if (medio > 100) { rendirse(`${Math.round(1000 / medio)} cuadros por segundo`); return; }
+        }
+      }
+    }
+    ultimoCuadro = ahora;
+  }
   ajustar();
   let seguir = false;
   if (viaje) {
@@ -1519,7 +1653,7 @@ function dibujar(ahora) {
     camara.position.lerpVectors(viaje.de[1], viaje.a[1], s);
     if (k >= 1) viaje = null; else seguir = true;
   }
-  if (controles.update()) seguir = true;   // con amortiguación, sigue hasta detenerse
+  if (controles.update(paso)) seguir = true;   // con amortiguación, sigue hasta detenerse
   const d = camara.position.distanceTo(controles.target);
   escena.fog.near = d * 1.2; escena.fog.far = d * 3;
   renderer.render(escena, camara);
@@ -1529,10 +1663,13 @@ function dibujar(ahora) {
   if (seguir && (!PORTADA || (enPantalla && !document.hidden))) pedirDibujo();
 }
 new ResizeObserver(pedirDibujo).observe(lienzo);
-raiz.classList.add("mapa3d--listo");
-// en la portada, con la maqueta ya en pantalla se apaga la imagen fija de abajo (si no, se ve por el cielo)
-raiz.closest(".portada__foto")?.classList.add("portada__foto--en-vivo");
-pedirDibujo();
+if (PORTADA && raiz.closest(".portada__foto")?.dataset.giro) rendirse("llegó tarde");
+if (!rendido) {
+  raiz.classList.add("mapa3d--listo");
+  // en la portada, con la maqueta ya en pantalla se apaga la imagen fija de abajo (si no, se ve por el cielo)
+  raiz.closest(".portada__foto")?.classList.add("portada__foto--en-vivo");
+  pedirDibujo();
+}
 
 // Para herramientas/giro.py: con #captura-giro la página expone la cámara para dibujar las vistas de la maqueta giratoria
 // desde la portada: #lugar-N abre el recorrido con ese lugar elegido

@@ -9,7 +9,10 @@ if (figura && !figura.dataset.giro) {
   figura.dataset.giro = "activo";
   figura.querySelector(".mapa3d")?.classList.add("mapa3d--sin-3d");
   figura.classList.remove("portada__foto--en-vivo");   // vuelve la imagen fija, que es donde giran las vistas
-  if (!matchMedia("(prefers-reduced-motion: reduce)").matches) arrancar().catch(() => {});   // si falla, queda la imagen fija
+  const red = navigator.connection || {};
+  const ahorro = red.saveData || /2g$/.test(red.effectiveType || "");
+  // con movimiento reducido, ahorro de datos o red muy lenta queda la imagen fija; si algo falla, también
+  if (!ahorro && !matchMedia("(prefers-reduced-motion: reduce)").matches) arrancar().catch(() => {});
 }
 
 async function arrancar() {

@@ -630,6 +630,42 @@ def edificio_json(e):
             "cumbre": round(cumbre, 2), "volumenes": vol, "techo": [c for v in techo for c in v], "estilo": estilo}
 
 
+def salidas_carretera(suelo_rgb, terreno):
+    """Dónde salen la carretera y las calles por los bordes de la textura del suelo, para prolongarlas en la
+    maqueta (alrededor de la maqueta hay zacate y sin esto las calles quedarían cortadas en el borde).
+    Devuelve [{a, b: extremos [x, z] del tramo de calle sobre el borde, dir: [dx, dz] hacia afuera}]:
+    la prolongación arranca exactamente en ese tramo, así empata con la textura aunque la calle cruce en diagonal."""
+    a = np.asarray(suelo_rgb).astype(int)
+    h, w = a.shape[:2]
+    gris = (np.abs(a[..., 0] - a[..., 2]) < 18) & (a[..., 0] < 160) & (a[..., 1] < 165)
+    mx, mz = terreno["ancho"] / w, terreno["largo"] / h
+    ys, xs = np.nonzero(gris)
+    a_m = lambda x, y: [round(float(terreno["x"] + x * mx), 2), round(float(terreno["z"] + y * mz), 2)]
+    salidas = []
+    bordes = [(gris[0, :], lambda i: (i, 0), (0, 1)), (gris[h - 1, :], lambda i: (i, h), (0, -1)),
+              (gris[:, 0], lambda i: (0, i), (1, 0)), (gris[:, w - 1], lambda i: (w, i), (-1, 0))]
+    for fila, punto, adentro in bordes:
+        corridas, inicio = [], None
+        for i, v in enumerate(list(fila) + [False]):
+            if v and inicio is None:
+                inicio = i
+            elif not v and inicio is not None:
+                if i - inicio >= 12:   # menos de unos 5 m: es la orilla de una calle que sale por la esquina
+                    corridas.append((inicio, i))
+                inicio = None
+        for i0, i1 in corridas:
+            bx, by = punto((i0 + i1) / 2)
+            # dirección: del centro de la calle unos píxeles adentro hacia el borde
+            d_borde = (xs - bx) * adentro[0] + (ys - by) * adentro[1]
+            lateral = np.abs((xs - bx) * adentro[1] - (ys - by) * adentro[0])
+            sel = (d_borde > 6) & (d_borde < 30) & (lateral < (i1 - i0) / 2 + 20)
+            if sel.sum() < 10:
+                continue
+            dx, dz = (bx - xs[sel].mean()) * mx, (by - ys[sel].mean()) * mz
+            n = math.hypot(dx, dz)
+            salidas.append({"a": a_m(*punto(i0)), "b": a_m(*punto(i1)), "dir": [round(float(dx / n), 4), round(float(dz / n), 4)]})
+    return salidas
+
 def main(pdf, sat=None):
     ensanchar_constantes()
     img = ensanchar_imagen(rasterizar(pdf)).astype(int)
@@ -956,6 +992,7 @@ def main(pdf, sat=None):
                     "planta": NUMERACION[22], "puente": NUMERACION[23], "parqueo_piscina": NUMERACION[33]},
         "pista": {"centro": a_metros(float(cx_pista), float(cy_pista))},
     }
+    datos["salidas"] = salidas_carretera(np.clip(suelo, 0, 255).astype(np.uint8), datos["terreno"])
     (RAIZ / "src/data/campus3d.json").write_text(json.dumps(datos, ensure_ascii=False), encoding="utf-8")
     print(f"Maqueta: {len(EDIFICIOS)} edificios, {len(arboles)} árboles, {sum(len(c) for c in cerca)} puntos de cerca en {len(cerca)} tramos, textura {w}x{h}")
 

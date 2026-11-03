@@ -169,8 +169,16 @@
 <script>
   // la maqueta en vivo se carga después de la página, para que la portada aparezca igual de rápido;
   // si no carga (error de red o navegador sin soporte), quedan las vistas de respaldo girando
+  // En teléfonos con poca memoria o con ahorro de datos ni se intenta el 3D: van directo a las vistas de respaldo.
+  // Si el 3D no está listo en 15 segundos, también se pasa a las vistas (y el 3D, si llega después, no se muestra).
   const js = (ruta) => new URL(ruta, document.baseURI).href;
-  addEventListener("load", () => setTimeout(() => import(js("{{ raiz }}assets/js/recorrido.js"))
-    .catch(() => import(js("{{ raiz }}assets/js/portada-giro.js"))), 400));
+  const respaldo = () => import(js("{{ raiz }}assets/js/portada-giro.js"));
+  const red = navigator.connection || {};
+  const debil = red.saveData || /2g$/.test(red.effectiveType || "") || (navigator.deviceMemory || 8) <= 2;
+  addEventListener("load", () => setTimeout(() => {
+    if (debil) { respaldo(); return; }
+    import(js("{{ raiz }}assets/js/recorrido.js")).catch(respaldo);
+    setTimeout(() => { if (!document.querySelector(".mapa3d--listo, .mapa3d--sin-3d")) respaldo(); }, 15000);
+  }, 400));
 </script>
 {% endblock %}
