@@ -46,11 +46,12 @@ function mostrar(i) {
     const x0 = (m.x / 100) * w, y0 = (m.y / 100) * h;
     let x = x0, y = y0;
     // busca el lugar libre más cercano en una espiral alrededor de la posición real
-    for (let k = 0; k < 40 && puestos.some((p) => Math.abs(p[0] - x) < 33 && Math.abs(p[1] - y) < 33); k++) {
+    for (let k = 0; k < 60 && puestos.some((p) => Math.abs(p[0] - x) < 33 && Math.abs(p[1] - y) < 33); k++) {
       const ang = k * 2.4, r = 14 + k * 3.2;
       x = x0 + Math.cos(ang) * r; y = y0 + Math.sin(ang) * r;
     }
     puestos.push([x, y]); visibles.add(m.id);
+    b.classList.toggle("mapa3d__marca--menor", !!m.menor);
     b.style.left = `${x}px`; b.style.top = `${y}px`;
   }
   botones.forEach((b, id) => { b.hidden = !visibles.has(id); });

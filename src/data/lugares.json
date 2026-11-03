@@ -3,33 +3,43 @@
   "id": 1,
   "zona": 1,
   "nombre": "Aulas 1 a 7",
-  "texto": "Aulas de la zona 1. El Aula 3 es el Laboratorio de Idiomas y el Aula 5, el Laboratorio de Cómputo 1."
+  "texto": "Aulas de la zona 1. El Aula 3 es el Laboratorio de Idiomas y el Aula 5, el Laboratorio de Cómputo 1. El pabellón está en lo alto del talud; una escalera techada y una rampa (Ley 7600) lo unen con las oficinas administrativas. Los baños están en un extremo del pabellón.",
+  "fotos": "lugar-01-1.jpg, lugar-01-2.jpg, lugar-01-3.jpg, lugar-01-4.jpg, lugar-01-5.jpg, lugar-01-6.jpg, lugar-01-7.jpg",
+  "fotos_alt": "Escalera larga y techada que sube desde el vestíbulo de las oficinas administrativas al pabellón de aulas 1 a 7|Rampa techada que baja por el talud entre el pabellón de aulas y las oficinas administrativas|Interior de la rampa techada, entre muretes celestes con pasamanos|Vista desde lo alto de la escalera hacia el vestíbulo de las oficinas administrativas|Corredor del pabellón de aulas 1 a 7, con piso de baldosa terracota y columnas celestes|Corredor frente al Laboratorio de Cómputo 1, con mesas de concreto bajo un techito junto al talud|Entrada a los baños del pabellón, con puertas para hombres y mujeres"
  },
  {
   "id": 2,
   "zona": 1,
   "nombre": "Oficinas administrativas",
   "texto": "Recepción, Registro, Becas, OAF, Acción Social, Vida Estudiantil, Orientación, Psicología y Trabajo Social, Coordinación de Administración y Dirección.",
-  "enlace": "directorio.html"
+  "enlace": "directorio.html",
+  "fotos": "lugar-02-1.jpg, lugar-02-2.jpg, lugar-02-3.jpg, lugar-02-4.jpg, lugar-02-5.jpg, lugar-02-6.jpg",
+  "fotos_alt": "Fachada trasera de las oficinas administrativas, con alero verde lima y ventanas con rejas|Vestíbulo con las ventanillas de Registro e Información y la Oficina de Becas|Recepción e Información en el vestíbulo, con bancas de espera|Costado de las oficinas administrativas, con árboles en el zacate y el pasillo techado al fondo|Busto sobre un pedestal y mesas de concreto junto a las oficinas administrativas|Pasillo interno con casilleros y el rótulo que señala los baños"
  },
  {
   "id": 3,
   "zona": 1,
   "nombre": "Soda y comedor",
-  "texto": "Soda y comedor estudiantil."
+  "texto": "Soda y comedor estudiantil.",
+  "fotos": "lugar-03-1.jpg, lugar-03-2.jpg, lugar-03-3.jpg",
+  "fotos_alt": "Entrada a la Soda UCR Caribe al final del pasillo techado|Comedor abierto junto a la soda, con mesas bajo techo y rodeado de bosque|La soda vista desde el talud, con techo de lámina verde y el tanque de agua azul"
  },
  {
   "id": 4,
   "zona": 1,
   "nombre": "Coordinación de Docencia",
   "texto": "Oficina de la Coordinación de Docencia.",
-  "enlace": "unidades/docencia.html"
+  "enlace": "unidades/docencia.html",
+  "fotos": "lugar-04-1.jpg, lugar-04-2.jpg, lugar-04-3.jpg, lugar-04-4.jpg, lugar-04-5.jpg, lugar-04-6.jpg",
+  "fotos_alt": "Coordinación de Docencia y Oficina de Audiovisuales, con el rótulo de baños detrás del edificio|Corredor techado alrededor de la Coordinación de Docencia, con columnas azules|Llegada del pasillo techado a la puerta de la Coordinación de Docencia|Mesa redonda de concreto frente a la Oficina de Audiovisuales|Zona verde con mesas de concreto junto al pasillo techado y el parqueo de motos|Mesa de concreto entre árboles grandes cerca de Docencia"
  },
  {
   "id": 5,
   "zona": 2,
   "nombre": "Miniauditorio",
-  "texto": "Miniauditorio de la Sede."
+  "texto": "Miniauditorio de la Sede.",
+  "fotos": "lugar-05-1.jpg, lugar-05-2.jpg, lugar-05-3.jpg, lugar-05-4.jpg",
+  "fotos_alt": "Costado del Miniauditorio con parasoles celestes y la planta eléctrica roja junto a la calle|El Miniauditorio y su mural de cerámica sobre la historia del Caribe|Frente del Miniauditorio: techo volado sobre columnas en V, plaza con bancas celestes y pluma de acceso|Parte trasera del Miniauditorio, con el techo de lámina y los equipos de aire acondicionado"
  },
  {
   "id": 6,
@@ -43,20 +53,26 @@
   "id": 7,
   "zona": 2,
   "nombre": "Aulas 8 a 12",
-  "texto": "Aulas de la zona 2."
+  "texto": "Aulas de la zona 2.",
+  "fotos": "lugar-07-1.jpg, lugar-07-2.jpg, lugar-07-3.jpg, lugar-07-4.jpg",
+  "fotos_alt": "Zona verde junto al pabellón de aulas 8 a 12, con el pasillo techado de columnas azules|Corredor del pabellón de aulas 8 a 12, con piso de mosaico en damero|Fachada de las aulas 8 a 12, con alero verde lima y ventanales con rejas|Baño del pabellón 7, una casita aparte con un mapamundi pintado en la pared, junto al pasillo techado"
  },
  {
   "id": 8,
   "zona": 2,
   "nombre": "Aulas 13 a 17",
   "texto": "El Aula 14 es el Laboratorio de Química y Física; el Aula 15, el Laboratorio de Cómputo 2, y el Aula 17, el Laboratorio de Cómputo 3.",
-  "enlace": "unidades/laboratorios.html"
+  "enlace": "unidades/laboratorios.html",
+  "fotos": "lugar-08-1.jpg, lugar-08-2.jpg, lugar-08-3.jpg",
+  "fotos_alt": "Aulas 13 a 17 vistas desde el patio, con mesas de concreto celeste|Patio arbolado entre los pabellones de aulas, con barandas celestes y el pasillo techado|Costado de las aulas 13 a 17, con el pasillo techado y el zacate junto al bosque"
  },
  {
   "id": 9,
   "zona": 2,
   "nombre": "Consultorios y oficinas",
-  "texto": "Oficinas administrativas, consultorio médico y consultorio odontológico."
+  "texto": "Oficinas administrativas, consultorio médico y consultorio odontológico.",
+  "fotos": "lugar-09-1.jpg, lugar-09-2.jpg, lugar-09-3.jpg, lugar-09-4.jpg",
+  "fotos_alt": "Consultorios y oficinas, con techo bajo de alero verde oscuro y corredores techados|Patio entre los pabellones con un árbol grande y mesas de concreto celeste|Pasillo techado que llega a los consultorios, junto a una zona verde|Mesas y bancas de concreto celeste bajo el árbol del patio, junto a los consultorios"
  },
  {
   "id": 10,
@@ -181,55 +197,73 @@
   "id": 24,
   "zona": 1,
   "nombre": "Baño Docencia",
-  "texto": "Servicios sanitarios del sector de Docencia."
+  "texto": "Baño justo detrás de la Coordinación de Docencia, al que se llega por un pasillo techado.",
+  "fotos": "lugar-24-1.jpg",
+  "fotos_alt": "Baño de Docencia: casita crema con techo verde y pasillo techado con baranda azul"
  },
  {
   "id": 25,
   "zona": 1,
   "nombre": "Parqueo frente a Docencia",
-  "texto": "Parqueo asfaltado de una fila, con los carros de frente hacia la Coordinación de Docencia."
+  "texto": "Cuatro espacios de parqueo de frente hacia Docencia, dentro de la explanada de asfalto al final de la calle interna.",
+  "fotos": "lugar-25-1.jpg",
+  "fotos_alt": "Parqueo frente a Docencia, sobre la explanada de asfalto, con el bosque detrás"
  },
  {
   "id": 26,
   "zona": 2,
   "nombre": "Camino techado de la entrada",
-  "texto": "Pasillo techado que baja desde la entrada principal junto a la calle interna; de él sale el pasillo que va a las aulas 8 a 17."
+  "texto": "Pasillo techado que baja desde la entrada principal junto a la calle interna; de él sale el pasillo que va a las aulas 8 a 17.",
+  "fotos": "lugar-26-1.jpg, lugar-26-2.jpg, lugar-26-3.jpg",
+  "fotos_alt": "Inicio del camino techado junto a la calle, frente al Miniauditorio|Camino techado junto a la calle, con el parqueo de motos y bicicletas al lado|El camino techado bajando en curva junto a la calle interna"
  },
  {
   "id": 27,
   "zona": 1,
   "nombre": "Camino techado hacia Administración",
-  "texto": "Continúa el pasillo techado de la entrada: cruza la calle encima de la alcantarilla de la quebrada y sigue por el otro lado hasta empatar con el pasillo a la soda, frente a las oficinas administrativas."
+  "texto": "Continúa el pasillo techado de la entrada: cruza la calle encima de la alcantarilla de la quebrada y sigue por el otro lado hasta empatar con el pasillo a la soda, frente a las oficinas administrativas.",
+  "fotos": "lugar-27-1.jpg, lugar-27-2.jpg",
+  "fotos_alt": "Camino techado hacia Administración, con guía táctil amarilla y columnas azules|El camino techado pegado a la calle interna, con baranda azul hacia el zacate"
  },
  {
   "id": 28,
   "zona": 2,
   "nombre": "Paso de la alcantarilla del río",
-  "texto": "Punto donde la quebrada pasa por un tubo bajo la calle interna. Encima de la alcantarilla el pasillo techado cruza la calle, y de ahí sale el sendero hacia la explanada."
+  "texto": "Punto donde la quebrada pasa por un tubo bajo la calle interna. Encima de la alcantarilla, una plataforma de concreto con guía táctil cruza la calle y une los dos pasillos techados; de ahí sale el sendero hacia la explanada.",
+  "fotos": "lugar-28-1.jpg, lugar-28-2.jpg, lugar-28-3.jpg",
+  "fotos_alt": "Plataforma de concreto que cruza la calle sobre la alcantarilla, entre los dos pasillos techados|La quebrada bajo la calle, entre vegetación densa, con la baranda azul|La calle interna en curva después de la alcantarilla, con el pasillo techado al lado"
  },
  {
   "id": 29,
   "zona": 2,
   "nombre": "Explanada",
-  "texto": "Zona verde amplia y abierta al noroeste del Miniauditorio, bordeada por el sendero que sube desde la calle interna."
+  "texto": "Gran planicie en lo alto, junto a la carretera, con bancas de concreto y un higuerón enorme. Se sube por una rampa entre muros celestes desde la calle interna.",
+  "fotos": "lugar-29-1.jpg, lugar-29-2.jpg, lugar-29-3.jpg, lugar-29-4.jpg, lugar-29-5.jpg",
+  "fotos_alt": "Rampa de concreto entre muros celestes que sube a la explanada|Otro tramo de la rampa de subida a la explanada|Sendero con baranda en lo alto de la explanada, junto a la cerca y la carretera|La explanada con el higuerón enorme y bancas de concreto celeste|El higuerón de la explanada, con su copa muy ancha"
  },
  {
   "id": 30,
   "zona": 2,
   "nombre": "Caseta del guarda",
-  "texto": "Caseta de vigilancia en la isla de zacate entre las calles, a la entrada del campus."
+  "texto": "Caseta de vigilancia en la isla de zacate entre las calles, a la entrada del campus.",
+  "fotos": "lugar-30-1.jpg, lugar-30-2.jpg, lugar-30-3.jpg",
+  "fotos_alt": "Caseta de seguridad en la isla de la entrada, con techo blanco inclinado|La caseta y la calle de entrada, con la flecha pintada en el asfalto|Zona verde frente a la entrada, con la caseta de seguridad al fondo"
  },
  {
   "id": 31,
   "zona": 2,
   "nombre": "Baño del Miniauditorio",
-  "texto": "Servicios sanitarios al costado suroeste del Miniauditorio, junto al sendero que sube a la explanada."
+  "texto": "Baños del Miniauditorio, en el ala baja del mismo edificio, con entrada propia bajo el alero.",
+  "fotos": "lugar-31-1.jpg",
+  "fotos_alt": "Ala de baños del Miniauditorio, con celosías y entrada propia bajo el alero"
  },
  {
   "id": 32,
   "zona": 3,
   "nombre": "Puente peatonal",
-  "texto": "Puente para cruzar a pie la ruta 32 frente a la Sede, a la altura de los edificios nuevos."
+  "texto": "Puente peatonal para cruzar la ruta 32 frente a la Sede, a la altura de los edificios nuevos. No tiene techo; sus rampas corren junto a la carretera, fuera de la cerca.",
+  "fotos": "lugar-32-1.jpg, lugar-32-2.jpg",
+  "fotos_alt": "Puente peatonal sobre la ruta 32, con baranda azul y rampas junto a la carretera|El puente peatonal y su rampa, vistos desde la acera junto a la cerca de la Sede"
  },
  {
   "id": 33,
@@ -241,24 +275,32 @@
   "id": 34,
   "zona": 1,
   "nombre": "Parqueo administrativo",
-  "texto": "Parqueo techado al final de la calle interna, frente a las oficinas administrativas."
+  "texto": "Parqueo al final de la calle interna, frente a las oficinas administrativas, dentro de la explanada de asfalto. Tres espacios están bajo un carport de lámina verde.",
+  "fotos": "lugar-34-1.jpg, lugar-34-2.jpg",
+  "fotos_alt": "Parqueo administrativo con el carport verde y el patio de asfalto frente a las oficinas|Carport de lámina verde sobre columnas azules, con los espacios techados"
  },
  {
   "id": 35,
   "zona": 1,
   "nombre": "Entrada al Jardín Etnobotánico",
-  "texto": "Sendero que sale de la punta del edificio de aulas 1 a 7 y lleva a la entrada del Jardín Etnobotánico."
+  "texto": "Sendero que sale de la punta del pabellón de aulas 1 a 7, sube por el zacate y se mete al bosque del Jardín Etnobotánico.",
+  "fotos": "lugar-35-1.jpg, lugar-35-2.jpg, lugar-35-3.jpg",
+  "fotos_alt": "Sendero hacia el Jardín Etnobotánico, junto al pasillo techado verde del pabellón de aulas|El sendero sube en curva por el zacate entre árboles grandes|Entrada al bosque del Jardín Etnobotánico"
  },
  {
   "id": 36,
   "zona": 1,
   "nombre": "Camino techado a la soda",
-  "texto": "Pasillo techado que va por el frente de las oficinas administrativas hasta la soda y comedor."
+  "texto": "Pasillo techado que va por el frente de las oficinas administrativas hasta la soda y comedor.",
+  "fotos": "lugar-36-1.jpg, lugar-36-2.jpg, lugar-36-3.jpg",
+  "fotos_alt": "Camino techado hacia la soda, con guía táctil amarilla, junto al parqueo administrativo|Interior del camino techado a la soda, con baranda azul|El camino techado llegando a la soda, con el comedor al fondo"
  },
  {
   "id": 37,
   "zona": 1,
   "nombre": "Caseta de arriba",
-  "texto": "Caseta en alto, con escalera para subir, al oeste de las oficinas administrativas."
+  "texto": "Torre blanca de dos niveles al oeste de las oficinas administrativas: abajo hay cuartos eléctricos y arriba una caseta, con escalera metálica azul.",
+  "fotos": "lugar-37-1.jpg, lugar-37-2.jpg",
+  "fotos_alt": "Caseta de arriba: torre blanca de dos niveles con escalera metálica azul|La caseta de arriba vista desde el sendero, con sus puertas azules abajo"
  }
 ]

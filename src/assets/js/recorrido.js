@@ -102,6 +102,33 @@ const vidrioVerde = new THREE.MeshStandardMaterial({ color: 0x2f7d76, roughness:
 const acero = new THREE.MeshStandardMaterial({ color: 0x4a5158, roughness: 0.6, metalness: 0.3 });
 const parasol = new THREE.MeshStandardMaterial({ color: 0xf2f3f4, roughness: 0.5, side: THREE.DoubleSide });
 
+// Mural de colores inventado (manchas y figuras: sugiere un mural, no copia ninguno)
+function texturaMuralEd(semilla, fondo = "#e9dcc0") {
+  const az = (i) => { const v = Math.sin(i * 53.3) * 43758.5; return v - Math.floor(v); };
+  const cv = document.createElement("canvas"); cv.width = 512; cv.height = 192;
+  const x = cv.getContext("2d"); x.fillStyle = fondo; x.fillRect(0, 0, 512, 192);
+  const tonos = ["#1f7a8c", "#e07a2e", "#2f8f4e", "#c23b3b", "#f2c230", "#5a3e8c", "#3d8fd6", "#8a5a3c", "#f08fb0"];
+  for (let k = 0; k < 70; k++) {
+    const a = az(semilla + k), b = az(semilla + k * 7 + 3), c = az(semilla + k * 13 + 5);
+    x.fillStyle = tonos[Math.floor(c * tonos.length)];
+    x.beginPath(); x.ellipse(a * 512, b * 192, 8 + c * 34, 6 + a * 22, b * 3, 0, Math.PI * 2); x.fill();
+  }
+  const t = new THREE.CanvasTexture(cv); t.colorSpace = THREE.SRGBColorSpace; return t;
+}
+// Desplaza un contorno convexo d metros hacia afuera (cada lado paralelo a sí mismo)
+function desplazar(c, d) {
+  const n = c.length, sal = [];
+  const cx = c.reduce((s, p) => s + p[0], 0) / n, cz = c.reduce((s, p) => s + p[1], 0) / n;
+  const normal = (a, b) => { const L = Math.hypot(b[0] - a[0], b[1] - a[1]) || 1; let nx = -(b[1] - a[1]) / L, nz = (b[0] - a[0]) / L;
+    if (nx * ((a[0] + b[0]) / 2 - cx) + nz * ((a[1] + b[1]) / 2 - cz) < 0) { nx = -nx; nz = -nz; } return [nx, nz]; };
+  for (let i = 0; i < n; i++) {
+    const p0 = c[(i + n - 1) % n], p1 = c[i], p2 = c[(i + 1) % n];
+    const [ax, az] = normal(p0, p1), [bx, bz] = normal(p1, p2);
+    const mx = ax + bx, mz = az + bz, k = d / Math.max(0.3, (mx * ax + mz * az) / Math.hypot(mx, mz)) / (Math.hypot(mx, mz) || 1);
+    sal.push([p1[0] + mx * k, p1[1] + mz * k]);
+  }
+  return sal;
+}
 // Fachada principal de un volumen: el lado largo que mira al sur (hacia donde se ve la maqueta)
 function fachadaSur(contorno, frente = [0, 1]) {   // frente: hacia dónde debe mirar la fachada (por defecto, al sur)
   const cx = contorno.reduce((s, p) => s + p[0], 0) / contorno.length, cz = contorno.reduce((s, p) => s + p[1], 0) / contorno.length;
@@ -397,7 +424,8 @@ for (const e of datos.campus.edificios) {
           }
         }
       }
-      if (e.id !== 6 && estilo.ventanas !== "ninguna") for (let p = 0; p < pisos; p++) grupo.add(prisma(vol.contorno, altoPiso * (ventanal ? 0.4 : 0.3), altoPiso * p + altoPiso * (ventanal ? 0.4 : 0.36), ventanal ? cristal : celosia, 0.05));
+      const banda = estilo.ventanas === "celeste" ? celeste : celosia;
+      if (e.id !== 6 && estilo.ventanas !== "ninguna") for (let p = 0; p < pisos; p++) grupo.add(prisma(vol.contorno, altoPiso * (ventanal ? 0.4 : 0.3), altoPiso * p + altoPiso * (ventanal ? 0.4 : 0.36), ventanal ? cristal : banda, 0.05));
     }
     if (estilo.banos) {   // los baños en el extremo del edificio: azulejo claro, bloques de ventilación y rótulo
       const b = estilo.banos;
@@ -419,9 +447,21 @@ for (const e of datos.campus.edificios) {
       grupo.add(rotulo);
     }
     if (e.techo.length) grupo.add(techo(e.techo, mat.techo));
-    if (estilo.base) {   // el edificio queda más alto que el terreno vecino, sobre una base de concreto
-      grupo.children.forEach((h) => { h.position.y += estilo.base; });
-      for (const vol of e.volumenes) grupo.add(prisma(vol.contorno, estilo.base, 0, new THREE.MeshStandardMaterial({ color: 0xb9b8b1, roughness: 0.95 }), 1.3));
+    const alero = estilo.alero ?? 1.4;
+    if (estilo.fascia) for (const vol of e.volumenes) {   // alero ancho con su fascia de color (fotos)
+      grupo.add(prisma(desplazar(vol.contorno, alero), e.techo.length ? 0.75 : 0.5, e.alto - 0.7, new THREE.MeshStandardMaterial({ color: estilo.fascia, roughness: 0.8 })));
+    }
+    if (estilo.columnas) for (const vol of e.volumenes) {   // corredor perimetral bajo el alero, con columnas delgadas
+      const c = desplazar(vol.contorno, alero - 0.45), mat = new THREE.MeshStandardMaterial({ color: estilo.columnas, roughness: 0.6 });
+      const piso = prisma(desplazar(vol.contorno, alero - 0.2), 0.15, 0, new THREE.MeshStandardMaterial({ color: 0xb4614e, roughness: 0.9 }));
+      piso.castShadow = false; grupo.add(piso);
+      for (let i = 0; i < c.length; i++) {
+        const a = c[i], b = c[(i + 1) % c.length], L = Math.hypot(b[0] - a[0], b[1] - a[1]), n = Math.max(1, Math.round(L / 4.5));
+        for (let k = 0; k < n; k++) {
+          const t = k / n, col = new THREE.Mesh(new THREE.CylinderGeometry(0.11, 0.11, e.alto - 0.7, 8), mat);
+          col.position.set(a[0] + (b[0] - a[0]) * t, (e.alto - 0.7) / 2, a[1] + (b[1] - a[1]) * t); col.castShadow = !liviano; grupo.add(col);
+        }
+      }
     }
     if (estilo.forma_techo === "plano") for (const vol of e.volumenes) {   // losa plana volada
       const l = prisma(vol.contorno, 0.6, e.alto, mat.techo, 3.2);
@@ -453,6 +493,34 @@ for (const e of datos.campus.edificios) {
       const mx = (f.a[0] + f.b[0]) / 2 + f.nx * 6.5, mz = (f.a[1] + f.b[1]) / 2 + f.nz * 6.5;
       escalera.position.set(mx, t / 2, mz); escalera.rotation.set(0, ang + Math.PI / 2, 0); escalera.rotateX(-Math.atan2(t, 5)); grupo.add(escalera);
     }
+    if (estilo.linterna_hex) {   // linternilla de ventanas en la punta del techo (Docencia)
+      const anillo = new THREE.Mesh(new THREE.CylinderGeometry(2.6, 2.6, 1.0, 6), celosia); anillo.position.set(e.centro[0], e.cumbre - 0.3, e.centro[1]);
+      const tapa = new THREE.Mesh(new THREE.ConeGeometry(3.6, 0.9, 6), mat.techo); tapa.position.set(e.centro[0], e.cumbre + 0.65, e.centro[1]);
+      const borde = new THREE.Mesh(new THREE.CylinderGeometry(3.62, 3.62, 0.18, 6), new THREE.MeshStandardMaterial({ color: 0x3f6f9e })); borde.position.set(e.centro[0], e.cumbre + 0.2, e.centro[1]);
+      grupo.add(anillo, tapa, borde);
+    }
+    if (estilo.moderno) {   // Miniauditorio (fotos): franja alta gris, losa muy volada, columnas en V, mural y parasoles
+      const c = e.volumenes[0].contorno;
+      grupo.add(prisma(c, e.alto * 0.36, e.alto * 0.64, new THREE.MeshStandardMaterial({ color: 0xd2d5d8, roughness: 0.8 }), 0.05));
+      grupo.add(prisma(desplazar(c, 4.2), 0.35, e.alto, mat.techo));
+      const haciaCalle = fachadaSur(c, [0.86, 0.5]), haciaAla = fachadaSur(c, [-0.56, 0.83]);
+      const enFachada = (f, t, d, y) => [f.a[0] + (f.b[0] - f.a[0]) * t + f.nx * d, y, f.a[1] + (f.b[1] - f.a[1]) * t + f.nz * d];
+      const angF = (f) => Math.atan2(f.nx, f.nz);
+      const mural = new THREE.Mesh(new THREE.PlaneGeometry(haciaCalle.largo * 0.62, e.alto * 0.5), new THREE.MeshBasicMaterial({ map: texturaMuralEd(5) }));
+      mural.position.set(...enFachada(haciaCalle, 0.4, 0.06, e.alto * 0.3)); mural.rotation.y = angF(haciaCalle); grupo.add(mural);
+      const parasol = new THREE.MeshStandardMaterial({ color: 0x8ec3e6, roughness: 0.6 });
+      for (let k = 0; k < 7; k++) {
+        const l = new THREE.Mesh(new THREE.BoxGeometry(3.2, 0.05, 0.55), parasol);
+        l.position.set(...enFachada(haciaCalle, 0.86, 0.35, 0.8 + k * 0.42)); l.rotation.set(0, angF(haciaCalle) + Math.PI / 2, 0); l.rotateX(-0.35); grupo.add(l);
+      }
+      const acer = new THREE.MeshStandardMaterial({ color: 0x7d858c, roughness: 0.5, metalness: 0.4 });
+      for (const t of [0.3, 0.7]) for (const lado of [-1, 1]) {   // columnas en V bajo el alero del lado del ala de baños
+        const col = new THREE.Mesh(new THREE.CylinderGeometry(0.12, 0.12, e.alto + 0.2, 8), acer);
+        col.position.set(...enFachada(haciaAla, t, 3.2, e.alto / 2)); col.rotation.set(0, angF(haciaAla), lado * 0.2); grupo.add(col);
+      }
+      const planta = new THREE.Mesh(new THREE.BoxGeometry(3, 1.5, 1.2), new THREE.MeshStandardMaterial({ color: 0xd8261c, roughness: 0.5 }));
+      planta.position.set(...enFachada(haciaCalle, 0.9, 5, 0.75)); planta.rotation.y = angF(haciaCalle); grupo.add(planta);
+    }
     if (estilo.cupula) {   // torrecita de ventilación sobre la cumbrera
       const torre = new THREE.Mesh(new THREE.BoxGeometry(2.6, 1.6, 2.6), celeste);
       torre.position.set(e.centro[0], e.cumbre + 0.5, e.centro[1]);
@@ -461,6 +529,30 @@ for (const e of datos.campus.edificios) {
       tapa.position.set(e.centro[0], e.cumbre + 1.9, e.centro[1]);
       torre.castShadow = tapa.castShadow = true;
       grupo.add(torre, tapa);
+    }
+    if (estilo.loma) {   // el edificio está en lo alto de un talud de zacate
+      grupo.children.forEach((h) => { h.position.y += estilo.loma; });
+      const zacate = new THREE.MeshLambertMaterial({ color: 0x86b862 });
+      for (const vol of e.volumenes) for (let k = 0; k < 5; k++) {
+        const m = prisma(desplazar(vol.contorno, alero + 0.6 + 6 * (1 - k / 5)), estilo.loma / 5, (estilo.loma * k) / 5, zacate);
+        m.castShadow = false; grupo.add(m);
+      }
+    }
+    if (estilo.hundido) {   // está en un bajo: talud de zacate alrededor, abierto del lado de la entrada (hacia el 2)
+      const c = e.volumenes[0].contorno, zacate = new THREE.MeshLambertMaterial({ color: 0x86b862 }), h = estilo.hundido;
+      const ext = desplazar(c, alero + 1.5);
+      for (let i = 0; i < ext.length; i++) {
+        const a = ext[i], b = ext[(i + 1) % ext.length], L = Math.hypot(b[0] - a[0], b[1] - a[1]);
+        let nx = -(b[1] - a[1]) / L, nz = (b[0] - a[0]) / L;
+        if (nx * ((a[0] + b[0]) / 2 - e.centro[0]) + nz * ((a[1] + b[1]) / 2 - e.centro[1]) < 0) { nx = -nx; nz = -nz; }
+        if (nx * -0.89 + nz * -0.45 > 0.3 || nx * 0.777 + nz * -0.629 > 0.6) continue;   // entrada (hacia el 2) y comedor (este): abiertos
+        const corte = new THREE.Shape([new THREE.Vector2(0, 0), new THREE.Vector2(5, 0), new THREE.Vector2(0.6, h), new THREE.Vector2(0, h)]);
+        const geo = new THREE.ExtrudeGeometry(corte, { depth: L + 6, bevelEnabled: false });
+        geo.translate(0, 0, -(L + 6) / 2);
+        const m = new THREE.Mesh(geo, zacate);
+        m.position.set((a[0] + b[0]) / 2, 0, (a[1] + b[1]) / 2); m.rotation.y = Math.atan2(nx, nz) - Math.PI / 2; m.receiveShadow = true;
+        grupo.add(m);
+      }
     }
   }
   grupo.scale.y = EXAGERAR;
@@ -734,7 +826,7 @@ if (datos.campus.parqueo) {
     for (let i = 0; i < espacios; i++, k++) {
       const x = -largo / 2 + 1 + 2.6 * (i + 0.5), z = divisor + fila * 2.5;
       const tope = new THREE.Mesh(new THREE.BoxGeometry(1.6, 0.15, 0.25), amarilloTope); tope.position.set(x, 0.08, divisor + fila * 0.6); g.add(tope);
-      if (azar(k) < 0.45) continue;   // espacio libre
+      continue;   // sin carros (pedido de la Sede)
       const carro = new THREE.Group(), mat = new THREE.MeshStandardMaterial({ color: colores[k % colores.length], roughness: 0.35, metalness: 0.4 });
       const cuerpo = new THREE.Mesh(new THREE.BoxGeometry(1.8, 0.75, 4.3), mat); cuerpo.position.y = 0.55; carro.add(cuerpo);
       const cabina = new THREE.Mesh(new THREE.BoxGeometry(1.6, 0.6, 2.3), new THREE.MeshStandardMaterial({ color: 0x27323c, roughness: 0.2, metalness: 0.5 })); cabina.position.set(0, 1.2, 0.2 * fila); carro.add(cabina);
@@ -758,15 +850,19 @@ if (datos.campus.parqueo) {
   }
 }
 
-// ---------- lugares sin edificio que marcó la Sede (anotaciones sobre la maqueta): pasillos techados,
-// casetas, parqueos, la alcantarilla de la quebrada, la explanada, el puente peatonal y el jardín
+// ---------- lugares sin edificio que marcó la Sede (anotaciones y fotos): pasillos techados, casetas, parqueos,
+// la alcantarilla de la quebrada, la explanada en lo alto, el puente peatonal y la entrada al jardín
 {
   const azar = (i) => { const v = Math.sin(i * 53.3) * 43758.5; return v - Math.floor(v); };
   const caja = new THREE.BoxGeometry(1, 1, 1);
-  // muchas cajas iguales en una sola llamada de dibujo
+  const eu = new THREE.Euler(0, 0, 0, "YXZ");
+  // muchas cajas iguales en una sola llamada de dibujo: [x, y, z, ancho, alto, largo, giro, inclinación, ladeo]
   function cajas(mat, lista) {
-    const m = new THREE.InstancedMesh(caja, mat, lista.length), m4 = new THREE.Matrix4(), q = new THREE.Quaternion(), eje = new THREE.Vector3(0, 1, 0);
-    lista.forEach(([x, y, z, sx, sy, sz, ry], i) => { q.setFromAxisAngle(eje, ry || 0); m.setMatrixAt(i, m4.compose(new THREE.Vector3(x, y, z), q, new THREE.Vector3(sx, sy, sz))); });
+    const m = new THREE.InstancedMesh(caja, mat, Math.max(lista.length, 1)), m4 = new THREE.Matrix4(), q = new THREE.Quaternion();
+    m.count = lista.length;
+    lista.forEach(([x, y, z, sx, sy, sz, ry = 0, rx = 0, rz = 0], i) => {
+      q.setFromEuler(eu.set(rx, ry, rz)); m.setMatrixAt(i, m4.compose(new THREE.Vector3(x, y, z), q, new THREE.Vector3(sx, sy, sz)));
+    });
     m.instanceMatrix.needsUpdate = true;
     m.castShadow = !liviano; m.receiveShadow = true;
     return m;
@@ -780,102 +876,135 @@ if (datos.campus.parqueo) {
       edificios.push(g);
     }
   }
-  const concretoClaro = new THREE.MeshStandardMaterial({ color: 0xc8c6bf, roughness: 0.95 });
+  const mate = (color, extra = {}) => new THREE.MeshStandardMaterial({ color, roughness: 0.8, ...extra });
+  const concretoClaro = mate(0xc8c6bf, { roughness: 0.95 });
+  const azulColumna = mate(0x4f7fb0, { roughness: 0.6 });
+  const laminaVerde = mate(0x7fae9f, { roughness: 0.55, metalness: 0.25 });
+  const amarilloGuia = mate(0xe8b42a);
+  const celesteMuro = mate(0x9ccbe8, { roughness: 0.9 });
+  const blanco = mate(0xf6f5f0, { roughness: 0.85 });
   const sinUso = () => new THREE.MeshStandardMaterial();   // para resaltar sin cambiar el color de nada
+  // mural de colores (manchas y figuras inventadas: sugiere un mural, no copia ninguno)
+  const texturaMural = texturaMuralEd;
+  // techo a dos aguas de lámina sobre un tramo (de a hasta b), con caída de y0 a y1
+  function tramoTecho(lista, a, b, y0, y1, ancho) {
+    const L = Math.hypot(b[0] - a[0], b[1] - a[1]) + 0.12, ang = Math.atan2(b[0] - a[0], b[1] - a[1]);
+    const cx = (a[0] + b[0]) / 2, cz = (a[1] + b[1]) / 2, nx = Math.cos(ang), nz = -Math.sin(ang);
+    const pend = Math.atan2(y1 - y0, L), mitad = ancho / 2 + 0.45, cai = 0.26;
+    for (const lado of [-1, 1]) {
+      const d = (mitad / 2) * Math.cos(cai);
+      lista.push([cx + nx * lado * d, (y0 + y1) / 2 + 2.75 + (mitad / 2) * Math.sin(cai), cz + nz * lado * d, mitad, 0.07, L / Math.cos(pend), ang, -pend, -lado * cai]);
+    }
+  }
 
-  // pasillo techado: losa de concreto, columnas metálicas y techo de lámina, por tramos a lo largo del trazo
-  function pasillo({ id, puntos, ancho, techo = true, en_calle = [], cruces = [] }) {
-    const g = new THREE.Group();
-    const lamina = new THREE.MeshStandardMaterial({ color: 0x8f9c98, roughness: 0.55, metalness: 0.3 });
-    const metal = new THREE.MeshStandardMaterial({ color: 0x3e4a52, roughness: 0.6, metalness: 0.4 });
-    const pisos = [], techos = [], columnas = [];
+  // pasillo techado (fotos): losa de concreto con guía táctil amarilla, columnas y cerchas azules, techo a dos
+  // aguas de lámina verde agua y baranda azul del lado del zacate. Sin techo, es un sendero; si sube, va sobre
+  // un muro celeste (las rampas a la explanada)
+  function pasillo({ id, puntos, ancho, techo = true, en_calle = [], alturas = [] }) {
+    const g = new THREE.Group(), pisos = [], guias = [], techos = [], columnas = [], barandas = [], muros = [];
+    const y = (i) => alturas[i] || 0;
     for (let i = 0; i < puntos.length - 1; i++) {
       if (en_calle[i] || en_calle[i + 1]) continue;
       const [ax, az] = puntos[i], [bx, bz] = puntos[i + 1];
-      const L = Math.hypot(bx - ax, bz - az) + 0.15, ang = Math.atan2(bx - ax, bz - az);
-      const cx = (ax + bx) / 2, cz = (az + bz) / 2;
-      pisos.push([cx, 0.06, cz, ancho, 0.12, L, ang]);
-      if (techo) techos.push([cx, 2.75, cz, ancho + 0.9, 0.08, L + 0.1, ang]);
+      const L = Math.hypot(bx - ax, bz - az) + 0.12, ang = Math.atan2(bx - ax, bz - az), pend = Math.atan2(y(i + 1) - y(i), L);
+      const cx = (ax + bx) / 2, cz = (az + bz) / 2, ym = (y(i) + y(i + 1)) / 2, nx = Math.cos(ang), nz = -Math.sin(ang);
+      pisos.push([cx, ym + 0.06, cz, ancho, 0.12, L, ang, -pend]);
+      guias.push([cx, ym + 0.125, cz, 0.36, 0.02, L, ang, -pend]);
+      if (ym > 0.25) for (const lado of [-1, 1]) muros.push([cx + nx * lado * (ancho / 2 - 0.1), ym / 2, cz + nz * lado * (ancho / 2 - 0.1), 0.2, ym, L, ang]);
+      const lados = techo ? [1] : [-1, 1];
+      for (const lado of lados) barandas.push([cx + nx * lado * (ancho / 2 - 0.08), ym + 0.95, cz + nz * lado * (ancho / 2 - 0.08), 0.06, 0.06, L, ang, -pend]);
+      if (techo) tramoTecho(techos, [ax, az], [bx, bz], y(i), y(i + 1), ancho);
     }
     if (techo) puntos.forEach(([x, z], i) => {
       if (en_calle[i]) return;
       const [ax, az] = puntos[Math.max(i - 1, 0)], [bx, bz] = puntos[Math.min(i + 1, puntos.length - 1)];
       const L = Math.hypot(bx - ax, bz - az) || 1, nx = (bz - az) / L, nz = -(bx - ax) / L;
-      for (const lado of [-1, 1]) columnas.push([x + nx * lado * (ancho / 2), 1.37, z + nz * lado * (ancho / 2), 0.12, 2.74, 0.12, 0]);
-    });
-    g.add(cajas(concretoClaro, pisos));
-    if (techo) g.add(cajas(lamina, techos), cajas(metal, columnas));
-    // paso de cebra donde el pasillo cruza la calle: franjas a lo largo del paso
-    const blancoCebra = new THREE.MeshLambertMaterial({ color: 0xf2f2f2 });
-    for (const [cx, cz] of cruces) {
-      let k = 0, d0 = Infinity;
-      puntos.forEach(([x, z], i) => { const d = Math.hypot(x - cx, z - cz); if (d < d0) { d0 = d; k = i; } });
-      const [ax, az] = puntos[Math.max(k - 1, 0)], [bx, bz] = puntos[Math.min(k + 1, puntos.length - 1)];
-      const ang = Math.atan2(bx - ax, bz - az), ux = Math.cos(ang), uz = -Math.sin(ang);   // perpendicular al paso
-      for (let j = -3; j <= 3; j++) {
-        const f = new THREE.Mesh(new THREE.BoxGeometry(0.45, 0.03, 3), blancoCebra);
-        f.position.set(cx + ux * j * 0.9, 0.09, cz + uz * j * 0.9); f.rotation.y = ang; g.add(f);
+      for (const lado of [-1, 1]) {
+        columnas.push([x + nx * lado * (ancho / 2), y(i) + 1.37, z + nz * lado * (ancho / 2), 0.16, 2.74, 0.16]);
+        columnas.push([x + nx * lado * (ancho / 2), y(i) + 0.15, z + nz * lado * (ancho / 2), 0.36, 0.3, 0.36]);   // base de concreto azul
       }
-    }
+    });
+    g.add(cajas(concretoClaro, pisos), cajas(amarilloGuia, guias), cajas(azulColumna, barandas));
+    if (muros.length) g.add(cajas(celesteMuro, muros));
+    if (techo) g.add(cajas(laminaVerde, techos), cajas(azulColumna, columnas));
     const [mx, mz] = puntos[Math.floor(puntos.length / 2)];
-    registrar(g, id, new THREE.Vector3(mx, 3.5, mz), techo ? { pared: metal, techo: lamina } : { pared: sinUso(), techo: sinUso() }, techo ? 1 : 0);
+    registrar(g, id, new THREE.Vector3(mx, 3.5, mz), techo ? { pared: azulColumna, techo: laminaVerde } : { pared: sinUso(), techo: sinUso() }, techo ? 1 : 0);
   }
 
-  // caseta pequeña: de guarda (ventanas corridas), de baños (bloques de ventilación) o de uso general
+  // casetas y anexos, cada uno como en sus fotos
   function caseta({ id, p, giro, largo, ancho, alto, uso, elevada = 0 }) {
     const g = new THREE.Group();
-    const pared = new THREE.MeshStandardMaterial({ color: 0xf6f5f0, roughness: 0.85 });
-    const techoM = new THREE.MeshStandardMaterial({ color: uso === "guarda" ? 0x5d6b73 : 0x66756b, roughness: 0.7 });
-    const cuerpo = new THREE.Mesh(new THREE.BoxGeometry(largo, alto, ancho), pared); cuerpo.position.y = alto / 2; g.add(cuerpo);
-    const zocalo = new THREE.Mesh(new THREE.BoxGeometry(largo + 0.06, 0.6, ancho + 0.06), new THREE.MeshStandardMaterial({ color: 0xa8b0b8, roughness: 0.85 })); zocalo.position.y = 0.3; g.add(zocalo);
-    if (uso === "guarda") {
-      const vent = new THREE.Mesh(new THREE.BoxGeometry(largo + 0.08, 1.0, ancho + 0.08), vidrio); vent.position.y = 1.65; g.add(vent);
+    let pared = blanco, techoM = mate(0x66756b, { roughness: 0.7 });
+    const bloque = (w, h, d, mat, x = 0, yy = h / 2, z = 0) => { const m = new THREE.Mesh(new THREE.BoxGeometry(w, h, d), mat); m.position.set(x, yy, z); g.add(m); return m; };
+    const puerta = (x, z, mat, giroP = 0, yy = 0) => { const m = bloque(0.9, 2.05, 0.06, mat, x, yy + 1.03, z); m.rotation.y = giroP; };
+    if (uso === "guarda") {   // gris claro con ventanales, losa blanca inclinada sobre dos columnas de acero inclinadas
+      pared = mate(0xc9ccd0);
+      bloque(largo, alto, ancho, pared);
+      bloque(largo + 0.08, 1.05, ancho + 0.08, vidrio, 0, 1.6);
+      techoM = mate(0xf4f5f6);
+      const losa = bloque(largo + 2.2, 0.18, ancho + 1.6, techoM, 0.6, alto + 0.3); losa.rotation.z = 0.06;
+      for (const z of [-ancho / 2 - 0.4, ancho / 2 + 0.4]) { const c = new THREE.Mesh(new THREE.CylinderGeometry(0.08, 0.08, alto + 0.4, 8), acero); c.position.set(largo / 2 + 1.2, (alto + 0.4) / 2, z); c.rotation.z = 0.25; g.add(c); }
+      puerta(0, ancho / 2 + 0.05, vidrio);
+    } else if (uso === "ala_moderna") {   // ala de baños del Miniauditorio: blanca, celosías arriba, losa gris volada
+      bloque(largo, alto, ancho, pared);
+      bloque(largo + 0.08, 0.6, ancho + 0.08, mate(0xe9ebec), 0, alto - 0.55);
+      techoM = mate(0xd9dcdf);
+      bloque(largo + 3, 0.3, ancho + 2.4, techoM, 0, alto + 0.15);
+      for (const x of [-largo / 4, largo / 4]) puerta(x, ancho / 2 + 0.05, mate(0x6d7880));
+    } else if (uso === "torre") {   // caseta de arriba: dos niveles, cuartos eléctricos abajo, escalera metálica azul
+      const azulEsc = mate(0x2f5fb0, { roughness: 0.5, metalness: 0.3 });
+      bloque(largo, elevada, ancho, pared, 0, elevada / 2);
+      for (const x of [-largo / 4, largo / 4]) puerta(x, ancho / 2 + 0.05, azulEsc);
+      bloque(largo, alto, ancho, pared, 0, elevada + alto / 2);
+      bloque(largo + 0.08, 0.9, ancho + 0.08, vidrio, 0, elevada + alto * 0.62);
+      techoM = mate(0xe6e8ea);
+      bloque(largo + 1.4, 0.18, ancho + 1.4, techoM, 0, elevada + alto + 0.1);
+      const n = Math.round(elevada / 0.2), run = elevada * 1.5;   // escalera con su techito de lámina gris
+      for (let i = 0; i < n; i++) bloque(1.0, 0.06, run / n + 0.05, azulEsc, largo / 2 + 0.6, (elevada * (i + 1)) / n, ancho / 2 + run - (run / n) * (i + 0.5));
+      bloque(0.05, 1, run * 1.15, azulEsc, largo / 2 + 1.1, elevada / 2 + 0.9, ancho / 2 + run / 2).rotation.x = Math.atan2(elevada, run);
+      const t = bloque(1.6, 0.06, run + 1, mate(0x4a5056), largo / 2 + 0.6, elevada + 2.4, ancho / 2 + run / 2); t.rotation.x = 0.25;
+      puerta(largo / 2 - 0.45, ancho / 2 + 0.05, azulEsc, 0, elevada);
+    } else if (uso === "banos_crema") {   // baño de Docencia: crema, techo verde a una agua con alero blanco
+      pared = mate(0xefe6c8);
+      bloque(largo, alto, ancho, pared);
+      techoM = mate(0x4f8a62);
+      const t = bloque(largo + 1.2, 0.12, ancho + 1.4, techoM, 0, alto + 0.25); t.rotation.x = 0.12;
+      bloque(largo + 1.25, 0.25, 0.08, blanco, 0, alto + 0.05, ancho / 2 + 0.7);
+      for (const x of [-largo / 4, largo / 4]) puerta(x, ancho / 2 + 0.05, vidrio);
+    } else if (uso === "banos_mural") {   // baño del pabellón 7: dos aguas, alero celeste, celosías y mural
+      bloque(largo, alto, ancho, mate(0xdfeaf4));
+      bloque(largo + 0.08, 0.5, ancho + 0.08, celosia, 0, alto - 0.4);
+      const mural = new THREE.Mesh(new THREE.PlaneGeometry(largo * 0.85, alto * 0.6), new THREE.MeshBasicMaterial({ map: texturaMural(11, "#cfe3f5") }));
+      mural.position.set(0, alto * 0.42, ancho / 2 + 0.05); g.add(mural);
+      techoM = mate(0x8f9c98, { metalness: 0.25 });
+      for (const lado of [-1, 1]) { const t = bloque(largo + 1.2, 0.08, ancho / 2 + 1, techoM, 0, alto + 0.45, lado * (ancho / 4 + 0.3)); t.rotation.x = lado * 0.22; }
+      bloque(largo + 1.25, 0.3, 0.1, mate(0xa9d4ef), 0, alto + 0.05, ancho / 2 + 0.95);
     } else {
-      const banda = new THREE.Mesh(new THREE.BoxGeometry(largo + 0.08, uso === "banos" ? 0.5 : 0.8, ancho + 0.08), uso === "banos" ? new THREE.MeshStandardMaterial({ color: 0x8d949a, roughness: 0.9 }) : celosia);
-      banda.position.y = alto - 0.6; g.add(banda);
-    }
-    const puertas = uso === "banos" ? (largo > 8 ? [-0.36, -0.12, 0.12, 0.36].map((t) => t * largo) : [-largo / 4, largo / 4]) : [0];
-    for (const x of puertas) { const pu = new THREE.Mesh(new THREE.BoxGeometry(0.9, 2.05, 0.06), new THREE.MeshStandardMaterial({ color: 0x6d7880, roughness: 0.6 })); pu.position.set(x, 1.03, ancho / 2 + 0.04); g.add(pu); }
-    const losaT = new THREE.Mesh(new THREE.BoxGeometry(largo + 1.2, 0.16, ancho + 1.2), techoM); losaT.position.y = alto + 0.08; g.add(losaT);
-    if (elevada) {   // caseta en alto: sobre columnas, con una escalera que sube hasta la puerta
-      g.children.forEach((h) => { h.position.y += elevada; });
-      const concreto = new THREE.MeshStandardMaterial({ color: 0xa9aaa6, roughness: 0.95 });
-      const losaP = new THREE.Mesh(new THREE.BoxGeometry(largo + 0.6, 0.25, ancho + 1.6), concreto); losaP.position.set(0, elevada - 0.12, 0.5); g.add(losaP);
-      for (const [x, z] of [[-1, -1], [1, -1], [-1, 1], [1, 1]]) { const c = new THREE.Mesh(new THREE.BoxGeometry(0.35, elevada, 0.35), concreto); c.position.set(x * (largo / 2 - 0.2), elevada / 2, z * (ancho / 2 + 0.3)); g.add(c); }
-      const n = Math.round(elevada / 0.18), run = elevada * 1.6;
-      for (let i = 0; i < n; i++) {
-        const paso = new THREE.Mesh(new THREE.BoxGeometry(1.1, (elevada * (i + 1)) / n, run / n + 0.02), concretoClaro);
-        paso.position.set(largo / 2 + 0.6, (elevada * (i + 1)) / n / 2, ancho / 2 + 1.2 + run - (run / n) * (i + 0.5)); g.add(paso);
-      }
+      bloque(largo, alto, ancho, pared);
+      bloque(largo + 1.2, 0.16, ancho + 1.2, techoM, 0, alto + 0.08);
     }
     g.position.set(p[0], 0, p[1]); g.rotation.y = -giro;
     registrar(g, id, new THREE.Vector3(p[0], alto + elevada + 2, p[1]), { pared, techo: techoM }, alto);
   }
 
-  // parqueo asfaltado (el asfalto y las rayas están en la textura): topes, algunos carros y alumbrado
-  function parqueo({ id, centro: [cx, cz], largo, ancho, giro, filas, techado }, k0) {
+  // parqueo asfaltado (asfalto y rayas en la textura): topes amarillos, alumbrado verde y, si lleva, carport
+  // de lámina verde a una agua sobre columnas azules con base amarilla. Sin carros.
+  function parqueo({ id, centro: [cx, cz], largo, ancho, giro, filas, techado }) {
     const g = new THREE.Group();
-    const tope = new THREE.MeshStandardMaterial({ color: 0xe6b800, roughness: 0.7 });
-    const verdePoste = new THREE.MeshStandardMaterial({ color: 0x2f6b45, roughness: 0.6 });
-    const tonos = [0xf0f0ee, 0x1f2a44, 0xb9bcbf, 0x2a2d31, 0x9b1b2a, 0xc7c9cc];
-    let k = k0;
+    const tope = mate(0xe6b800, { roughness: 0.7 }), verdePoste = mate(0x2f6b45, { roughness: 0.6 });
     for (const { z: zv, fondo, n } of filas) {
       const z = -zv, lado = Math.sign(z) || 1;   // la fila mide z hacia la izquierda del giro; en la maqueta es -z
-      for (let i = 0; i < n; i++, k++) {
-        const x = (-n / 2 + i + 0.5) * 2.6;
-        const t = new THREE.Mesh(new THREE.BoxGeometry(1.6, 0.15, 0.25), tope); t.position.set(x, 0.08, z + lado * (fondo / 2 - 0.6)); g.add(t);
-        if (azar(k) < 0.4) continue;
-        const carro = new THREE.Group(), m = new THREE.MeshStandardMaterial({ color: tonos[k % tonos.length], roughness: 0.35, metalness: 0.4 });
-        const cuerpo = new THREE.Mesh(new THREE.BoxGeometry(1.8, 0.75, 4.3), m); cuerpo.position.y = 0.55; carro.add(cuerpo);
-        const cabina = new THREE.Mesh(new THREE.BoxGeometry(1.6, 0.6, 2.3), vidrio); cabina.position.set(0, 1.2, 0.2 * lado); carro.add(cabina);
-        carro.position.set(x, 0, z); g.add(carro);
+      for (let i = 0; i < n; i++) {
+        const t = new THREE.Mesh(new THREE.BoxGeometry(1.6, 0.15, 0.25), tope); t.position.set((-n / 2 + i + 0.5) * 2.6, 0.08, z + lado * (fondo / 2 - 0.6)); g.add(t);
       }
-      if (techado) {   // techo de lámina sobre la fila, con columnas en la parte de atrás y al frente
-        const L = n * 2.6 + 0.8, metal = new THREE.MeshStandardMaterial({ color: 0x3e4a52, roughness: 0.6, metalness: 0.4 });
-        const t = new THREE.Mesh(new THREE.BoxGeometry(L, 0.08, fondo + 0.8), new THREE.MeshStandardMaterial({ color: 0x8f9c98, roughness: 0.55, metalness: 0.3 }));
-        t.position.set(0, 2.7, z); t.rotation.x = lado * 0.05; g.add(t);
-        for (let i = 0; i <= n; i += 2) for (const dz of [-1, 1]) {
-          const c = new THREE.Mesh(new THREE.BoxGeometry(0.14, 2.65, 0.14), metal); c.position.set((-n / 2 + i) * 2.6, 1.33, z + dz * (fondo / 2)); g.add(c);
+      if (techado) {
+        const k = Math.min(techado, n), x0 = -n / 2 * 2.6, L = k * 2.6;
+        const t = new THREE.Mesh(new THREE.BoxGeometry(L + 0.6, 0.08, fondo + 1), mate(0x4e8a62, { roughness: 0.55, metalness: 0.25 }));
+        t.position.set(x0 + L / 2, 2.75, z); t.rotation.x = lado * 0.07; g.add(t);
+        const losa = new THREE.Mesh(new THREE.BoxGeometry(L, 0.18, fondo), concretoClaro); losa.position.set(x0 + L / 2, 0.09, z); g.add(losa);
+        for (let i = 0; i <= k; i++) for (const dz of [-1, 1]) {
+          const c = new THREE.Mesh(new THREE.BoxGeometry(0.16, 2.7, 0.16), azulColumna); c.position.set(x0 + i * 2.6, 1.35, z + dz * (fondo / 2)); g.add(c);
+          const b = new THREE.Mesh(new THREE.BoxGeometry(0.3, 0.5, 0.3), tope); b.position.set(x0 + i * 2.6, 0.25, z + dz * (fondo / 2)); g.add(b);
         }
       }
     }
@@ -887,152 +1016,221 @@ if (datos.campus.parqueo) {
     registrar(g, id, new THREE.Vector3(cx, 3, cz), { pared: verdePoste, techo: tope });
   }
 
-  // escalera de concreto con pasamanos: sube a lo largo del giro
-  function escalera({ p, giro, largo, ancho, alto }) {
+  // escalera de concreto con pasamanos gris; la larga entre el 1 y el 2 va techada
+  function escalera({ p, giro, largo, ancho, alto, techado }) {
     const g = new THREE.Group(), h = alto * EXAGERAR, n = Math.max(3, Math.round(h / 0.17));
     for (let i = 0; i < n; i++) {
       const paso = new THREE.Mesh(new THREE.BoxGeometry(largo / n + 0.02, (h * (i + 1)) / n, ancho), concretoClaro);
       paso.position.set(-largo / 2 + (largo / n) * (i + 0.5), (h * (i + 1)) / n / 2, 0); g.add(paso);
     }
-    const tubo = new THREE.MeshStandardMaterial({ color: 0xd2a417, roughness: 0.5, metalness: 0.3 }), pend = Math.atan2(h, largo);
+    const tubo = mate(0xaab0b5, { roughness: 0.5, metalness: 0.4 }), pend = Math.atan2(h, largo);
     for (const lado of [-1, 1]) {
-      const pasamanos = new THREE.Mesh(new THREE.CylinderGeometry(0.04, 0.04, Math.hypot(largo, h), 6), tubo);
-      pasamanos.rotation.z = Math.PI / 2 - pend; pasamanos.position.set(0, h / 2 + 0.9, lado * (ancho / 2 - 0.1)); g.add(pasamanos);
+      const pm = new THREE.Mesh(new THREE.CylinderGeometry(0.04, 0.04, Math.hypot(largo, h), 6), tubo);
+      pm.rotation.z = Math.PI / 2 - pend; pm.position.set(0, h / 2 + 0.9, lado * (ancho / 2 - 0.1)); g.add(pm);
       for (const t of [-0.45, 0, 0.45]) { const poste = new THREE.Mesh(new THREE.CylinderGeometry(0.035, 0.035, 0.9, 6), tubo); poste.position.set(t * largo, h * (0.5 + t) + 0.45, lado * (ancho / 2 - 0.1)); g.add(poste); }
+    }
+    if (techado) {
+      const techos = [], columnas = [];
+      // en el marco local la escalera sube por x: el techo va de 0 (abajo) a h (arriba, del lado del 1)
+      tramoTecho(techos, [-largo / 2, 0], [largo / 2, 0], 0, h, ancho);
+      g.add(cajas(laminaVerde, techos));
+      for (const t of [-0.5, 0, 0.5]) for (const lado of [-1, 1]) columnas.push([t * largo, h * (0.5 + t) + 1.37, lado * (ancho / 2 + 0.05), 0.16, 2.74, 0.16]);
+      g.add(cajas(azulColumna, columnas));
     }
     g.position.set(p[0], 0, p[1]); g.rotation.y = -giro;
     registrar(g, null);
   }
 
-  // rampa para sillas de ruedas: losa inclinada con bordillo y pasamanos a los dos lados
-  function rampa({ desde, hasta, ancho, alto }) {
-    const g = new THREE.Group(), h = alto * EXAGERAR;
+  // rampa (Ley 7600): losa inclinada entre muretes celestes con pasamanos, techada como los pasillos
+  function rampa({ desde, hasta, ancho, alto, base = 0, techado }) {
+    const g = new THREE.Group(), h = alto * EXAGERAR, y0 = base * EXAGERAR;
     const dx = hasta[0] - desde[0], dz = hasta[1] - desde[1], L = Math.hypot(dx, dz), pend = Math.atan2(h, L);
     const losaR = new THREE.Mesh(new THREE.BoxGeometry(ancho, 0.2, Math.hypot(L, h)), concretoClaro);
-    losaR.position.set(0, h / 2, L / 2); losaR.rotation.x = -pend; g.add(losaR);
-    const relleno = new THREE.Mesh(new THREE.BoxGeometry(ancho, h, L), new THREE.MeshStandardMaterial({ color: 0xb9b8b1, roughness: 0.95 }));
-    relleno.scale.y = 0.5; relleno.position.set(0, h / 4, L * 0.75); g.add(relleno);
-    const tubo = new THREE.MeshStandardMaterial({ color: 0xd2a417, roughness: 0.5, metalness: 0.3 });
+    losaR.position.set(0, y0 + h / 2, L / 2); losaR.rotation.x = -pend; g.add(losaR);
     for (const lado of [-1, 1]) {
-      const pm = new THREE.Mesh(new THREE.CylinderGeometry(0.04, 0.04, Math.hypot(L, h), 6), tubo);
-      pm.rotation.x = Math.PI / 2 - pend; pm.position.set(lado * (ancho / 2), h / 2 + 0.9, L / 2); g.add(pm);
-      for (let t = 0; t <= 1.001; t += 0.25) { const poste = new THREE.Mesh(new THREE.CylinderGeometry(0.035, 0.035, 0.9, 6), tubo); poste.position.set(lado * (ancho / 2), h * t + 0.45, L * t); g.add(poste); }
+      const muro = new THREE.Mesh(new THREE.BoxGeometry(0.2, 1, L), celesteMuro);
+      muro.scale.y = y0 + h / 2 + 0.5; muro.position.set(lado * (ancho / 2 + 0.1), (y0 + h / 2 + 0.5) / 2, L / 2); g.add(muro);
+      const pm = new THREE.Mesh(new THREE.CylinderGeometry(0.04, 0.04, Math.hypot(L, h), 6), mate(0xaab0b5, { metalness: 0.4 }));
+      pm.rotation.x = Math.PI / 2 - pend; pm.position.set(lado * (ancho / 2 - 0.05), y0 + h / 2 + 0.9, L / 2); g.add(pm);
+    }
+    if (techado) {
+      const techos = [], columnas = [];
+      tramoTecho(techos, [0, 0], [0, L], y0, y0 + h, ancho);
+      g.add(cajas(laminaVerde, techos));
+      for (let t = 0; t <= 1.001; t += 0.25) for (const lado of [-1, 1]) columnas.push([lado * (ancho / 2 + 0.25), y0 + h * t + 1.37, L * t, 0.16, 2.74, 0.16]);
+      g.add(cajas(mate(0xc3d6e3), columnas));
     }
     g.position.set(desde[0], 0, desde[1]); g.rotation.y = Math.atan2(dx, dz);
     registrar(g, null);
   }
+  function descanso({ p, giro, largo, ancho, alto }) {
+    const g = new THREE.Group(), h = alto * EXAGERAR;
+    const b = new THREE.Mesh(new THREE.BoxGeometry(largo, h, ancho), celesteMuro); b.position.y = h / 2; g.add(b);
+    const t = new THREE.Mesh(new THREE.BoxGeometry(largo, 0.2, ancho), concretoClaro); t.position.y = h + 0.1; g.add(t);
+    g.position.set(p[0], 0, p[1]); g.rotation.y = -giro;
+    registrar(g, null);
+  }
 
-  // mesas de picnic de concreto con bancas, como las del área frente al CIUB
+  // mesas redondas de concreto con bancas curvas, como las de todo el campus (fotos)
   function mesas({ puntos }) {
-    const g = new THREE.Group(), azulMesa = new THREE.MeshStandardMaterial({ color: 0x3d8fd6, roughness: 0.85 });
+    const g = new THREE.Group(), azulMesa = mate(0x8fb4cf, { roughness: 0.9 });
     puntos.forEach(([x, z], i) => {
       const m = new THREE.Group();
-      const pata = new THREE.Mesh(new THREE.CylinderGeometry(0.18, 0.25, 0.75, 8), azulMesa); pata.position.y = 0.37; m.add(pata);
+      const placa = new THREE.Mesh(new THREE.CylinderGeometry(2.1, 2.1, 0.08, 6), concretoClaro); placa.position.y = 0.04; m.add(placa);
+      const pata = new THREE.Mesh(new THREE.CylinderGeometry(0.22, 0.3, 0.75, 8), azulMesa); pata.position.y = 0.37; m.add(pata);
       const tablero = new THREE.Mesh(new THREE.CylinderGeometry(0.75, 0.75, 0.1, 14), azulMesa); tablero.position.y = 0.78; m.add(tablero);
-      for (const lado of [-1, 1]) { const banca = new THREE.Mesh(new THREE.BoxGeometry(1.5, 0.45, 0.38), azulMesa); banca.position.set(0, 0.23, lado * 1.15); m.add(banca); }
+      for (let k = 0; k < 3; k++) {
+        const banca = new THREE.Mesh(new THREE.BoxGeometry(1.3, 0.45, 0.4), azulMesa), a = (k / 3) * Math.PI * 2;
+        banca.position.set(Math.cos(a) * 1.25, 0.23, Math.sin(a) * 1.25); banca.rotation.y = -a + Math.PI / 2; m.add(banca);
+      }
       m.position.set(x, 0, z); m.rotation.y = azar(i + 3) * 3; g.add(m);
     });
     registrar(g, null);
   }
 
-  // explanada: zacate abierto (ya pintado en el suelo) con bancas de concreto en el borde
-  function explanada({ id, contorno, centro }) {
-    const g = new THREE.Group();
-    const sh = new THREE.Shape(contorno.map(([x, z]) => new THREE.Vector2(x, -z)));
-    const piso = new THREE.Mesh(new THREE.ShapeGeometry(sh), new THREE.MeshLambertMaterial({ color: 0xa4ce7e, transparent: true, opacity: 0, depthWrite: false }));
-    piso.rotation.x = -Math.PI / 2; piso.position.y = 0.05; g.add(piso);
-    contorno.forEach(([x, z], i) => {
-      if (i % 3) return;
-      const dx = centro[0] - x, dz = centro[1] - z, d = Math.hypot(dx, dz) || 1;
-      const banca = new THREE.Mesh(new THREE.BoxGeometry(2, 0.45, 0.5), concretoClaro);
-      banca.position.set(x + (dx / d) * 2.5, 0.23, z + (dz / d) * 2.5); banca.rotation.y = Math.atan2(dx, dz); g.add(banca);
+  // higuerón: varios troncos y raíces, copa muy ancha y abierta hecha de varias masas
+  function higueron(x, y0, z, escala) {
+    const g = new THREE.Group(), corteza = new THREE.MeshLambertMaterial({ color: 0x7a6a58 });
+    const hoja = [0x3f7d34, 0x4f8f3a, 0x35702e].map((c) => new THREE.MeshLambertMaterial({ color: c, flatShading: true }));
+    const alto = 6 * escala;
+    for (let k = 0; k < 6; k++) {
+      const a = k * 1.05, r = 0.25 * escala;
+      const t = new THREE.Mesh(new THREE.CylinderGeometry(0.22 * escala, 0.38 * escala, alto, 7), corteza);
+      t.position.set(x + Math.cos(a) * r, y0 + alto / 2, z + Math.sin(a) * r); t.rotation.set(Math.sin(a) * 0.12, 0, Math.cos(a) * 0.12); g.add(t);
+      const raiz = new THREE.Mesh(new THREE.ConeGeometry(0.5 * escala, 1.2 * escala, 5), corteza);
+      raiz.position.set(x + Math.cos(a) * r * 3, y0 + 0.5 * escala, z + Math.sin(a) * r * 3); g.add(raiz);
+    }
+    const copas = [[0, 0, 0, 1], [0.55, -0.1, 0.2, 0.75], [-0.5, -0.12, 0.25, 0.72], [0.1, -0.15, -0.6, 0.7], [-0.2, -0.05, 0.6, 0.68], [0.6, -0.2, -0.45, 0.6], [-0.6, -0.2, -0.4, 0.62]];
+    copas.forEach(([dx, dy, dz, r], k) => {
+      const c = new THREE.Mesh(new THREE.IcosahedronGeometry(1, 1), hoja[k % 3]);
+      const R = 5.2 * escala * r;
+      c.scale.set(R, R * 0.42, R);
+      c.position.set(x + dx * 5.6 * escala, y0 + alto + 1.2 * escala + dy * 4 * escala, z + dz * 5.6 * escala); g.add(c);
     });
-    registrar(g, id, new THREE.Vector3(centro[0], 2, centro[1]), { pared: sinUso(), techo: sinUso() }, 0);
+    g.traverse((o) => { if (o.isMesh) { o.castShadow = !liviano; o.receiveShadow = true; } });
+    return g;
+  }
+  function arbolGrande({ p, escala }) { escena.add(higueron(p[0], 0, p[1], escala)); }
+
+  // explanada (fotos): una gran planicie en lo alto, con taludes de zacate, bancas de concreto celeste en el borde
+  // y un higuerón enorme (unas tres veces más grande que los árboles comunes)
+  function explanada({ id, contorno, centro, alto, arbol }) {
+    const g = new THREE.Group();
+    const lado = new THREE.MeshLambertMaterial({ color: 0x86b862 }), arriba = new THREE.MeshLambertMaterial({ color: 0xa4ce7e });
+    const capas = 6;
+    for (let k = 0; k < capas; k++) {
+      const m = prisma(desplazar(contorno, 5 * (1 - k / capas)), alto / capas, (alto * k) / capas, k === capas - 1 ? arriba : lado);
+      m.castShadow = false; g.add(m);
+    }
+    contorno.forEach(([x, z], i) => {
+      if (i % 2) return;
+      const dx = centro[0] - x, dz = centro[1] - z, d = Math.hypot(dx, dz) || 1;
+      const banca = new THREE.Mesh(new THREE.BoxGeometry(2, 0.45, 0.5), mate(0x8fb4cf, { roughness: 0.9 }));
+      banca.position.set(x + (dx / d) * 3, alto + 0.23, z + (dz / d) * 3); banca.rotation.y = Math.atan2(dx, dz); g.add(banca);
+    });
+    if (arbol) g.add(higueron(arbol[0], alto, arbol[1], 3));
+    registrar(g, id, new THREE.Vector3(centro[0], alto + 4, centro[1]), { pared: sinUso(), techo: arriba }, 0);
   }
 
-  // alcantarilla donde la calle pasa sobre la quebrada: un tubo bajo la calle, con cabezales de concreto
-  // a los dos lados y la boca del tubo a la vista
+  // paso de la quebrada (28): la calle pasa sobre un tubo con cabezales de concreto, y encima la cruza una
+  // plataforma de concreto rayado de lado a lado, con guía táctil, que une los dos pasillos techados
   function alcantarilla({ id, p, giro, ancho }) {
-    const g = new THREE.Group(), concreto = new THREE.MeshStandardMaterial({ color: 0xbfbdb5, roughness: 0.95 });
+    const g = new THREE.Group(), concreto = mate(0xbfbdb5, { roughness: 0.95 });
     const boca = new THREE.MeshBasicMaterial({ color: 0x1d2326 });
-    for (const lado of [-1, 1]) {
+    for (const lado of [-1, 1]) {   // local x: de lado a lado de la calle; local z: a lo largo de la calle
       const x = lado * (ancho / 2 + 0.9);
       const cabezal = new THREE.Mesh(new THREE.BoxGeometry(0.5, 1.5, 4.2), concreto); cabezal.position.set(x, 0.15, 0); g.add(cabezal);
-      for (const z of [-2.3, 2.3]) { const ala = new THREE.Mesh(new THREE.BoxGeometry(1.8, 1.1, 0.35), concreto); ala.position.set(x + lado * 0.9, -0.05, z); ala.rotation.y = lado * z * 0.12; g.add(ala); }
       const ojo = new THREE.Mesh(new THREE.CircleGeometry(0.75, 18), boca); ojo.position.set(x + lado * 0.26, 0.1, 0); ojo.rotation.y = lado * Math.PI / 2; g.add(ojo);
-      const anillo = new THREE.Mesh(new THREE.TorusGeometry(0.8, 0.09, 6, 18), new THREE.MeshStandardMaterial({ color: 0x8a8a84 })); anillo.position.copy(ojo.position); anillo.rotation.y = lado * Math.PI / 2; g.add(anillo);
+      const baranda = new THREE.Mesh(new THREE.BoxGeometry(0.06, 0.06, 4.2), azulColumna); baranda.position.set(x, 1.1, 0); g.add(baranda);
     }
+    const plataforma = new THREE.Mesh(new THREE.BoxGeometry(ancho + 0.6, 0.14, 3.2), mate(0xd3d1ca, { roughness: 0.95 }));
+    plataforma.position.y = 0.09; g.add(plataforma);
+    const rayas = [];
+    for (let z = -1.4; z <= 1.41; z += 0.28) if (Math.abs(z) > 0.3) rayas.push([0, 0.165, z, ancho + 0.6, 0.02, 0.07]);
+    g.add(cajas(mate(0x9d9b94), rayas));
+    const guia = new THREE.Mesh(new THREE.BoxGeometry(ancho + 0.6, 0.03, 0.4), amarilloGuia); guia.position.y = 0.175; g.add(guia);
     g.position.set(p[0], 0, p[1]); g.rotation.y = giro;
     registrar(g, id, new THREE.Vector3(p[0], 3, p[1]), { pared: concreto, techo: concreto });
   }
 
-  // puente peatonal sobre la ruta 32: tablero techado de estructura metálica con malla y escaleras en los extremos
-  function puentePeatonal({ id, p, giro }) {
-    const g = new THREE.Group();
-    const acero = new THREE.MeshStandardMaterial({ color: 0x4f6170, roughness: 0.5, metalness: 0.5 });
-    const techoP = new THREE.MeshStandardMaterial({ color: 0xd3d7da, roughness: 0.5, metalness: 0.3, side: THREE.DoubleSide });
-    const malla = new THREE.MeshLambertMaterial({ color: 0x55636e, transparent: true, opacity: 0.35, side: THREE.DoubleSide, depthWrite: false });
-    const H = 5.6, LUZ = 26, ANCHO = 2.4;   // la luz cruza la carretera (x local); la carretera corre por z local
-    const tablero = new THREE.Mesh(new THREE.BoxGeometry(LUZ, 0.35, ANCHO), concretoClaro); tablero.position.y = H; g.add(tablero);
-    for (const z of [-ANCHO / 2, ANCHO / 2]) {
-      const viga = new THREE.Mesh(new THREE.BoxGeometry(LUZ, 0.25, 0.15), acero); viga.position.set(0, H + 1.15, z); g.add(viga);
-      const m = new THREE.Mesh(new THREE.PlaneGeometry(LUZ, 1.1), malla); m.position.set(0, H + 0.7, z); g.add(m);
-    }
-    const arco = new THREE.Mesh(new THREE.CylinderGeometry(1.7, 1.7, LUZ, 12, 1, true, -Math.PI / 2.6, Math.PI / 1.3), techoP);
-    arco.rotation.z = Math.PI / 2; arco.position.y = H + 1.6; g.add(arco);
+  // puente peatonal sobre la ruta 32 (fotos): tablero de concreto sobre columnas cilíndricas, baranda azul y
+  // sin techo; en cada extremo, rampas en dos tramos que corren junto a la carretera, fuera de la cerca
+  function puentePeatonal({ id, p, giro, semiancho }) {
+    const g = new THREE.Group(), azulB = mate(0x1f4fc4, { roughness: 0.5, metalness: 0.3 });
+    const H = 5.6, ANCHO = 2.2, LUZ = 2 * (semiancho + 1.8), L = 17;   // el asfalto pintado mide ~1 m más que semiancho
+    const losas = [], barandas = [], columnas = [];
+    const columna = (x, z, h) => { const c = new THREE.Mesh(new THREE.CylinderGeometry(0.3, 0.3, h, 12), concretoClaro); c.position.set(x, h / 2, z); g.add(c); };
+    losas.push([0, H, 0, LUZ + 1.8, 0.35, ANCHO]);
+    for (const z of [-ANCHO / 2, ANCHO / 2]) { barandas.push([0, H + 1.1, z, LUZ + 1.8, 0.07, 0.07]); barandas.push([0, H + 0.6, z, LUZ + 1.8, 0.05, 0.05]); }
+    for (let x = -LUZ / 2; x <= LUZ / 2 + 0.01; x += LUZ / 6) for (const z of [-ANCHO / 2, ANCHO / 2]) barandas.push([x, H + 0.6, z, 0.05, 1.1, 0.05]);
     for (const lado of [-1, 1]) {
-      const x0 = lado * LUZ / 2;
-      for (const [dx, dz] of [[-1.3, -1.3], [1.3, -1.3], [-1.3, 1.3], [1.3, 1.3]]) {   // torre de la escalera
-        const col = new THREE.Mesh(new THREE.BoxGeometry(0.25, H + 3, 0.25), acero); col.position.set(x0 + dx + lado * 1.3, (H + 3) / 2, dz); g.add(col);
+      const x0 = lado * (LUZ / 2), x1 = x0 + lado * 1.85;
+      columna(x0, 0, H); columna(x1, -1.2 - L, H / 2);
+      // tramo 1: del tablero baja a lo largo de la carretera hasta el descanso; tramo 2: vuelve, más afuera, al suelo
+      const pend = Math.atan2(H / 2, L);
+      losas.push([x0, H * 0.75, -1.2 - L / 2, 1.7, 0.25, Math.hypot(L, H / 2), 0, -pend]);
+      losas.push([(x0 + x1) / 2, H / 2, -1.6 - L, 3.6, 0.25, 1.8]);
+      losas.push([x1, H * 0.25, -1.2 - L / 2, 1.7, 0.25, Math.hypot(L, H / 2), 0, pend]);
+      for (const [x, yc, s] of [[x0, H * 0.75, -1], [x1, H * 0.25, 1]]) {
+        const borde = x + lado * 0.85;
+        barandas.push([borde, yc + 1.0, -1.2 - L / 2, 0.07, 0.07, Math.hypot(L, H / 2), 0, s * pend]);
+        columna(x, -1.2 - L / 2, yc);
       }
-      // dos tramos de escalera con un descanso, bajando a lo largo de la carretera (hacia -z)
-      const L = 8, pend = Math.atan2(H / 2, L), xs = x0 + lado * 1.3;
-      for (const [zc, yc] of [[-L / 2, (3 * H) / 4], [-L * 1.5 - 2, H / 4]]) {
-        const esc = new THREE.Mesh(new THREE.BoxGeometry(1.6, 0.25, Math.hypot(L, H / 2)), concretoClaro);
-        esc.position.set(xs, yc, zc); esc.rotation.x = -pend; g.add(esc);
-      }
-      const descanso = new THREE.Mesh(new THREE.BoxGeometry(1.6, 0.25, 2), concretoClaro); descanso.position.set(xs, H / 2, -L - 1); g.add(descanso);
-      for (const z of [-L - 1, -L * 2 - 2]) { const col = new THREE.Mesh(new THREE.BoxGeometry(0.2, H / 2, 0.2), acero); col.position.set(xs, H / 4, z); g.add(col); }
     }
-    g.position.set(p[0], 0, p[1]); g.rotation.y = giro;
-    registrar(g, id, new THREE.Vector3(p[0], H + 4, p[1]), { pared: acero, techo: techoP }, H);
+    g.add(cajas(concretoClaro, losas), cajas(azulB, barandas));
+    g.position.set(p[0], 0, p[1]); g.rotation.y = giro;   // x local: de lado a lado de la carretera
+    registrar(g, id, new THREE.Vector3(p[0], H + 4, p[1]), { pared: concretoClaro, techo: azulB }, H);
   }
 
-  // entrada al Jardín Etnobotánico: sendero de lastre (en el suelo), arco de madera con rótulo y siembras en abanico
+  // entrada al Jardín Etnobotánico (fotos): el sendero (en el suelo) sube por el zacate y se mete al bosque
   function jardin({ id, desde, hasta }) {
-    const g = new THREE.Group(), madera = new THREE.MeshLambertMaterial({ color: 0x6b4f33 });
-    const dx = hasta[0] - desde[0], dz = hasta[1] - desde[1], L = Math.hypot(dx, dz), ux = dx / L, uz = dz / L, ang = Math.atan2(dx, dz);
-    const arco = new THREE.Group();
-    for (const x of [-2.1, 2.1]) { const poste = new THREE.Mesh(new THREE.BoxGeometry(0.3, 3, 0.3), madera); poste.position.set(x, 1.5, 0); arco.add(poste); }
-    const viga = new THREE.Mesh(new THREE.BoxGeometry(5, 0.3, 0.35), madera); viga.position.y = 3.05; arco.add(viga);
-    const cv = document.createElement("canvas"); cv.width = 512; cv.height = 128;
-    const x = cv.getContext("2d"); x.fillStyle = "#5a4027"; x.fillRect(0, 0, 512, 128); x.fillStyle = "#f4ead8"; x.textAlign = "center";
-    x.font = "600 44px 'Source Sans 3', Arial, sans-serif"; x.fillText("JARDÍN ETNOBOTÁNICO", 256, 80);
-    const tex = new THREE.CanvasTexture(cv); tex.colorSpace = THREE.SRGBColorSpace;
-    for (const lado of [1, -1]) { const r = new THREE.Mesh(new THREE.PlaneGeometry(4, 1), new THREE.MeshBasicMaterial({ map: tex })); r.position.set(0, 2.5, lado * 0.19); r.rotation.y = lado > 0 ? 0 : Math.PI; arco.add(r); }
-    arco.position.set(hasta[0], 0, hasta[1]); arco.rotation.y = ang; g.add(arco);
-    const tonos = [0x3f7d34, 0x5f9e43, 0x2f6b2c, 0xd2452c, 0xe39b2d, 0x4f8f3a];
-    for (let i = 0; i < 26; i++) {   // matas en abanico más allá del arco
-      const a = (azar(i) - 0.5) * 1.6, d = 3 + azar(i + 40) * 12, r = 0.6 + azar(i + 80) * 1.1;
-      const px = hasta[0] + (ux * Math.cos(a) - uz * Math.sin(a)) * d, pz = hasta[1] + (uz * Math.cos(a) + ux * Math.sin(a)) * d;
+    const g = new THREE.Group();
+    const dx = hasta[0] - desde[0], dz = hasta[1] - desde[1], L = Math.hypot(dx, dz), ux = dx / L, uz = dz / L;
+    const tonos = [0x3f7d34, 0x5f9e43, 0x2f6b2c, 0x4f8f3a, 0x355f2a];
+    for (let i = 0; i < 34; i++) {   // vegetación densa a los lados del final del sendero
+      const lado = i % 2 ? 1 : -1, a = azar(i), d = 2 + azar(i + 40) * 14, r = 0.8 + azar(i + 80) * 1.8;
+      const px = hasta[0] + ux * d * (a - 0.2) - uz * lado * (2.5 + a * 6), pz = hasta[1] + uz * d * (a - 0.2) + ux * lado * (2.5 + a * 6);
       const mata = new THREE.Mesh(new THREE.IcosahedronGeometry(r, 0), new THREE.MeshLambertMaterial({ color: tonos[i % tonos.length], flatShading: true }));
       mata.position.set(px, r * 0.8, pz); g.add(mata);
     }
-    registrar(g, id, new THREE.Vector3(hasta[0], 4, hasta[1]), { pared: madera, techo: sinUso() }, 3);
+    registrar(g, id, new THREE.Vector3(hasta[0], 4, hasta[1]), { pared: sinUso(), techo: sinUso() }, 0);
   }
 
-  let kParqueo = 100;
+  // pluma de acceso vehicular, roja y blanca
+  function pluma({ p, giro, largo }) {
+    const g = new THREE.Group(), rojo = mate(0xd23a2c, { roughness: 0.5 });
+    const caja_ = new THREE.Mesh(new THREE.BoxGeometry(0.35, 1.1, 0.35), rojo); caja_.position.y = 0.55; g.add(caja_);
+    for (let k = 0; k < 6; k++) { const b = new THREE.Mesh(new THREE.BoxGeometry(0.08, 0.08, largo / 6), k % 2 ? blanco : rojo); b.position.set(0, 0.95, 0.2 + (largo / 6) * (k + 0.5)); g.add(b); }
+    g.position.set(p[0], 0, p[1]); g.rotation.y = giro;
+    registrar(g, null);
+  }
+
+  // comedor abierto junto a la soda: losa, columnas azules, techo a dos aguas y mesas
+  function comedor({ p, giro, largo, ancho, alto }) {
+    const g = new THREE.Group(), techos = [], columnas = [], mesasC = [];
+    const losa = new THREE.Mesh(new THREE.BoxGeometry(largo, 0.25, ancho), concretoClaro); losa.position.y = 0.12; g.add(losa);
+    for (let i = 0; i <= 4; i++) for (const lado of [-1, 1]) columnas.push([lado * (largo / 2 - 0.2), alto / 2, -ancho / 2 + (ancho * i) / 4, 0.18, alto, 0.18]);
+    tramoTecho(techos, [0, -ancho / 2 - 0.6], [0, ancho / 2 + 0.6], alto - 2.75, alto - 2.75, largo + 0.4);
+    for (let i = 0; i < 4; i++) for (const lado of [-1, 1]) mesasC.push([lado * 2.2, 0.75, -ancho / 2 + 2 + i * 3.6, 1.8, 0.06, 0.8]);
+    g.add(cajas(mate(0xb9bdc0, { metalness: 0.3 }), techos), cajas(azulColumna, columnas), cajas(blanco, mesasC));
+    g.position.set(p[0], 0, p[1]); g.rotation.y = -giro;
+    registrar(g, null);
+  }
+  // tanque de agua azul sobre una torre de tubo verde
+  function tanque({ p }) {
+    const g = new THREE.Group(), verde = mate(0x4f7d3a), patas = [];
+    for (const [x, z] of [[-1, -1], [1, -1], [-1, 1], [1, 1]]) patas.push([x * 1.1, 2.2, z * 1.1, 0.12, 4.4, 0.12]);
+    patas.push([0, 4.45, 0, 2.6, 0.1, 2.6]);
+    g.add(cajas(verde, patas));
+    const t = new THREE.Mesh(new THREE.CylinderGeometry(1.1, 1.1, 1.7, 18), mate(0x1f6fd0, { roughness: 0.5 })); t.position.y = 5.35; g.add(t);
+    g.position.set(p[0], 0, p[1]);
+    registrar(g, null);
+  }
+
   for (const el of datos.campus.elementos || []) {
-    if (el.tipo === "pasillo") pasillo(el);
-    else if (el.tipo === "caseta") caseta(el);
-    else if (el.tipo === "parqueo") { parqueo(el, kParqueo); kParqueo += 40; }
-    else if (el.tipo === "escalera") escalera(el);
-    else if (el.tipo === "rampa") rampa(el);
-    else if (el.tipo === "mesas") mesas(el);
-    else if (el.tipo === "explanada") explanada(el);
-    else if (el.tipo === "alcantarilla") alcantarilla(el);
-    else if (el.tipo === "puente_peatonal") puentePeatonal(el);
-    else if (el.tipo === "jardin") jardin(el);
+    const hacer = { pasillo, caseta, parqueo, escalera, rampa, descanso, mesas, explanada, alcantarilla, jardin, pluma, comedor, tanque,
+      puente_peatonal: puentePeatonal, arbol_grande: arbolGrande }[el.tipo];
+    if (hacer) hacer(el);
     else if (el.tipo === "porton") {   // acceso cerrado con portón (sin faroles)
       const g = portonVerde(false); g.position.set(el.p[0], 0, el.p[1]); g.rotation.y = el.giro; escena.add(g);
     }
@@ -1111,7 +1309,7 @@ for (const g of edificios) {
   if (!l) continue;
   const b = document.createElement("button");
   b.type = "button";
-  b.className = "mapa3d__marca";
+  b.className = g.userData.menor ? "mapa3d__marca mapa3d__marca--menor" : "mapa3d__marca";
   b.textContent = l.id;
   b.setAttribute("aria-label", `${l.id}. ${l.nombre}`);
   b.addEventListener("click", () => elegir(l.id, true));
@@ -1121,20 +1319,21 @@ for (const g of edificios) {
 const v = new THREE.Vector3();
 // Las marcas de edificios vecinos (7, 8 y 9) se encimarían: se corren hasta que no se toquen,
 // para que cada botón mantenga su tamaño completo al tocarlo.
-// Los lugares menores (pasillos, casetas, parqueos…) solo muestran su número de cerca, o si están elegidos,
-// para que la vista general no se llene de botones
-const CERCA_MENORES = 300;
+// Todos los lugares llevan su número; los menores (pasillos, casetas, parqueos…) con un botón algo más pequeño
 function moverMarcas() {
   const w = lienzo.clientWidth, h = lienzo.clientHeight, puestas = [];
-  const lejos = camara.position.distanceTo(controles.target) > CERCA_MENORES;
-  const lista = edificios.map((g) => { v.copy(g.userData.centro); v.y += 3; v.project(camara); return { g, x: ((v.x + 1) / 2) * w, y: ((1 - v.y) / 2) * h, z: v.z, fuera: v.z > 1 || Math.abs(v.x) > 1.05 || Math.abs(v.y) > 1.05 || (lejos && g.userData.menor && g !== elegido) }; })
+  const lista = edificios.map((g) => { v.copy(g.userData.centro); v.y += 3; v.project(camara); return { g, x: ((v.x + 1) / 2) * w, y: ((1 - v.y) / 2) * h, z: v.z, fuera: v.z > 1 || Math.abs(v.x) > 1.05 || Math.abs(v.y) > 1.05 }; })
     .sort((a, b) => a.z - b.z);
   for (const m of lista) {
     const b = marcas.get(m.g.userData.id);
     if (!b) continue;
     b.hidden = m.fuera;
     if (m.fuera) continue;
-    for (let intento = 0; intento < 8 && puestas.some((p) => Math.abs(p.x - m.x) < 34 && Math.abs(p.y - m.y) < 34); intento++) m.x += 18;
+    // busca el lugar libre más cercano en una espiral alrededor de la posición real
+    const x0 = m.x, y0 = m.y;
+    for (let k = 0; k < 60 && puestas.some((p) => Math.abs(p.x - m.x) < 33 && Math.abs(p.y - m.y) < 33); k++) {
+      const ang = k * 2.4, r = 14 + k * 3; m.x = x0 + Math.cos(ang) * r; m.y = y0 + Math.sin(ang) * r;
+    }
     puestas.push(m);
     b.style.transform = `translate(${m.x}px, ${m.y}px) translate(-50%, -50%)`;
   }

@@ -54,10 +54,9 @@ def main():
               g.dibujarYa();
               const salida = [];
               for (const e of g.edificios) {
-                if (e.userData.menor) continue;   // los lugares menores salen solo en la lista
                 const v = e.userData.centro.clone(); v.y += 3; v.project(g.camara);
                 const x = (v.x + 1) / 2 * 100, y = (1 - v.y) / 2 * 100;
-                if (v.z < 1 && x > 2 && x < 98 && y > 4 && y < 96) salida.push({ id: e.userData.id, x: +x.toFixed(2), y: +y.toFixed(2) });
+                if (v.z < 1 && x > 2 && x < 98 && y > 4 && y < 96) salida.push({ id: e.userData.id, x: +x.toFixed(2), y: +y.toFixed(2), ...(e.userData.menor ? { menor: 1 } : {}) });
               }
               return salida;
             }""", [i, CUADROS])

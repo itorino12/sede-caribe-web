@@ -54,19 +54,40 @@ PLANTA = {"centro": (1486, 1566), "giro": 74}        # planta de tratamiento, al
 EDIFICIOS = [
     # 1 y 2 (anotaciones de la Sede): los baños ocupan el extremo noroeste de cada uno; el 1 queda más alto
     # que el 2, y entre los dos hay una escalera y una rampa para sillas de ruedas que suben hacia el 1
-    {"id": 1, "rect": (466, 1759, 175, 56, 49), "pisos": 1, "estilo": {"banos": {"extremo": -1, "fraccion": 0.21}, "base": 1.0}},
-    {"id": 2, "rect": (601, 1753, 215, 52, 51), "pisos": 1, "estilo": {"banos": {"extremo": -1, "fraccion": 0.2}}},
+    # 1 y 2 (fotos): un piso, alero ancho verde lima, techo de lámina verde agua, corredor con columnas celestes.
+    # El 1 queda en lo alto de un talud, unos 3,5 m sobre el 2; los une una escalera larga techada y una rampa
+    # techada (Ley 7600) que bajan por el talud. Los baños están en el extremo noroeste de cada uno.
+    {"id": 1, "rect": (466, 1759, 175, 56, 49), "pisos": 1,
+     "estilo": {"banos": {"extremo": -1, "fraccion": 0.21}, "loma": 3.5, "techo": "#7fae9f", "fascia": "#9acd3c",
+                "alero": 2.6, "pendiente": 0.16, "columnas": "#8ec3e6"}},
+    {"id": 2, "rect": (601, 1753, 215, 52, 51), "pisos": 1,
+     "estilo": {"banos": {"extremo": -1, "fraccion": 0.2}, "techo": "#7fae9f", "fascia": "#9acd3c",
+                "alero": 2.6, "pendiente": 0.16, "columnas": "#8ec3e6"}},
     # Soda y comedor: más al este de lo que marca el croquis, pasando la punta sureste del 2 (anotaciones)
-    {"id": 3, "rect": (745, 1826, 90, 70, -39), "pisos": 1},
-    {"id": 4, "hex": (692, 1541, 36), "pisos": 1},
-    {"id": 5, "rect": (1011, 1306, 100, 100, 34), "pisos": 1, "alto": 7.5},
+    # Soda (fotos): columnas de concreto a la vista, celosías celestes, techo verde agua a cuatro aguas; está en
+    # un bajo, con un talud de zacate alrededor
+    {"id": 3, "rect": (745, 1826, 90, 70, -39), "pisos": 1,
+     "estilo": {"techo": "#7fae9f", "ventanas": "celeste", "alero": 1.6, "hundido": 1.6}},
+    # Coordinación de Docencia (fotos): hexágono con corredor perimetral de columnas azules y alero celeste,
+    # techo verde agua en pirámide con una linternilla de ventanas arriba
+    {"id": 4, "hex": (692, 1541, 36), "pisos": 1,
+     "estilo": {"techo": "#6fa596", "fascia": "#a9d4ef", "alero": 2.8, "columnas": "#3f6f9e", "linterna_hex": True}},
+    # Miniauditorio (fotos): blanco, franja alta de paneles grises, losa de techo muy volada sobre columnas de
+    # acero en V, mural de cerámica hacia la calle y parasoles celestes junto a la puerta lateral
+    {"id": 5, "rect": (1011, 1306, 100, 100, 34), "pisos": 1, "alto": 7.5,
+     "estilo": {"forma_techo": "plano", "techo": "#d9dcdf", "ventanas": "ninguna", "moderno": True}},
     # Entrada (fotos de la portada): pórtico blanco de losa delgada, caseta, rótulo de concreto y astas
     {"id": 6, "rect": (1049, 1131, 97, 20, -3), "pisos": 1, "alto": 3.4,
      "estilo": {"forma_techo": "plano", "techo": "#f4f5f6", "entrada": True}},
     # 7, 8 y 9: entre uno y otro hay zonas verdes con mesas de picnic, más anchas que en el croquis
-    {"id": 7, "rect": (1252, 1363, 180, 55, 5.5), "pisos": 1},
-    {"id": 8, "rect": (1259, 1264, 180, 55, 5.5), "pisos": 1},
-    {"id": 9, "rect": (1263, 1165, 180, 55, 5.5), "pisos": 1},
+    # 7, 8 y 9 (fotos): un piso, paredes blancas, ventanas corridas con rejas, techo bajo a dos aguas con alero
+    # ancho (verde oscuro en 8 y 9, verde lima en 7) y corredores con columnas celestes
+    {"id": 7, "rect": (1252, 1363, 180, 55, 5.5), "pisos": 1,
+     "estilo": {"forma_techo": "dos_aguas", "pendiente": 0.14, "alero": 2.6, "techo": "#5d8a72", "fascia": "#9acd3c", "columnas": "#8ec3e6"}},
+    {"id": 8, "rect": (1259, 1264, 180, 55, 5.5), "pisos": 1,
+     "estilo": {"forma_techo": "dos_aguas", "pendiente": 0.14, "alero": 2.6, "techo": "#4f7d63", "fascia": "#1f6b4a", "columnas": "#8ec3e6"}},
+    {"id": 9, "rect": (1263, 1165, 180, 55, 5.5), "pisos": 1,
+     "estilo": {"forma_techo": "dos_aguas", "pendiente": 0.14, "alero": 2.6, "techo": "#4f7d63", "fascia": "#1f6b4a", "columnas": "#8ec3e6"}},
     {"id": 10, "rect": (1433, 1304, 60, 109, 15), "pisos": 0, "tipo": "piscina"},
     # Biblioteca (fotos): un piso, lámina verde, cuerpo central más alto, torrecita de ventilación,
     # ventanales corridos y zócalo azul claro
@@ -265,11 +286,12 @@ def volumenes(e, alto):
     vol, techo, cumbre = [], [], alto
     if e.get("tipo") == "piscina":
         return [{"contorno": [a_metros(x, y) for x, y in contorno(e)], "desde": 0, "alto": 0.5}], [], 0.5
+    est = e.get("estilo", {})
     if "hex" in e:
         cx, cy, rr = e["hex"]
         vol.append({"contorno": [a_metros(x, y) for x, y in contorno(e)], "desde": 0, "alto": alto})
         m = a_metros(cx, cy)
-        techo, cumbre = techo_piramide(m[0], m[1], rr * ESCALA, alto)
+        techo, cumbre = techo_piramide(m[0], m[1], rr * ESCALA + est.get("alero", ALERO) - ALERO, alto)
         return vol, techo, cumbre
     for (cx, cy, l, a, g) in e.get("alas") or [e["rect"]]:
         vol.append({"contorno": [a_metros(x, y) for x, y in rect_contorno(cx, cy, l, a, g)], "desde": 0, "alto": alto})
@@ -289,7 +311,7 @@ def volumenes(e, alto):
         elif e.get("estilo", {}).get("forma_techo") == "plano":
             cumbre = max(cumbre, alto + 0.6)   # la losa volada la dibuja la maqueta
         elif e.get("estilo", {}).get("forma_techo") == "dos_aguas":
-            t, c = techo_dos_aguas(m[0], m[1], L, W, g, alto)
+            t, c = techo_dos_aguas(m[0], m[1], L, W, g, alto, alero=est.get("alero", 1.2), pendiente=est.get("pendiente", 0.36))
             techo += t
             cumbre = max(cumbre, c)
         elif e.get("estilo", {}).get("forma_techo") == "una_agua":
@@ -297,7 +319,8 @@ def volumenes(e, alto):
             techo += t
             cumbre = max(cumbre, c)
         else:
-            t, c = techo_cuatro_aguas(m[0], m[1], L, W, g, alto, pendiente=0.2 if L * W > 900 else PENDIENTE)
+            t, c = techo_cuatro_aguas(m[0], m[1], L, W, g, alto, alero=est.get("alero", ALERO),
+                                      pendiente=est.get("pendiente", 0.2 if L * W > 900 else PENDIENTE))
             techo += t
             cumbre = max(cumbre, c)
     return vol, techo, cumbre
@@ -383,11 +406,13 @@ def lugares_nuevos(calles, quebrada, lejos_carretera, y_ruta32):
     elem = []
     M = lambda pts: [a_metros(float(x), float(y)) for x, y in pts]
 
-    def pasillo(pts, id_=None, ancho=2.6, techo=True, cruces=()):
+    def pasillo(pts, id_=None, ancho=2.6, techo=True, cruces=(), subida=0.0):
         pts = suavizar(pts)
+        largo_ = np.concatenate([[0], np.cumsum(np.hypot(*np.diff(np.array(pts), axis=0).T))])
+        alturas = [round(float(subida * d / largo_[-1]), 2) for d in largo_] if subida else []
         cv2.polylines(despejar, [np.array(pts, np.int32)], False, 1, 34)
         en_calle = [bool(calles[int(y), int(x)]) for x, y in pts]   # donde cruza una calle no lleva losa, columnas ni techo
-        elem.append({"tipo": "pasillo", "id": id_, "puntos": M(pts), "ancho": ancho, "techo": techo, "en_calle": en_calle,
+        elem.append({"tipo": "pasillo", "id": id_, "puntos": M(pts), "ancho": ancho, "techo": techo, "en_calle": en_calle, "alturas": alturas,
                      "cruces": [M([c])[0] for c in cruces]})
         return pts
 
@@ -422,38 +447,65 @@ def lugares_nuevos(calles, quebrada, lejos_carretera, y_ruta32):
     # y uno más corre por el lado este de 7, 8 y 9.
     tramo26 = junto_calle([(1150, 1250), (1132, 1305), (1100, 1358), (1064, 1410), (1012, 1462), (962, 1508)], 15, calles)
     pasillo(tramo26, 26)
-    pasillo([marco(2, -100, 38), marco(2, 15, 38), marco(2, 32, 48), marco(2, 104, 48)], 36)
+    pasillo([marco(2, -100, 47), marco(2, 15, 47), marco(2, 32, 51), marco(2, 104, 51)], 36)
     union7 = junto_calle([(1080, 1392)], 15, calles)
     pasillo([marco(7, -94, 6), marco(7, -110, 2), (1118, 1374)] + union7)
     pasillo([marco(9, 104, 38), marco(9, 104, 0), marco(8, 104, 0), marco(7, 104, 0), marco(7, 104, -26)])
     # sendero techado que sube de la calle a la explanada (29), pasando junto al baño del miniauditorio (31)
-    pasillo(junto_calle(SENDERO_EXPLANADA[:1], 9, calles) + SENDERO_EXPLANADA[1:], techo=False, ancho=2.0)
+    # (fotos) el sendero sube a la explanada entre muros celestes, con baranda gris, y entra a ella por el norte
+    pasillo(junto_calle(SENDERO_EXPLANADA[:1], 9, calles) + SENDERO_EXPLANADA[1:] + [(856, 1170)], techo=False, ancho=2.0, subida=3.5)
 
     # --- explanada (29): zacate abierto y parejo, sin árboles
     cv2.fillPoly(claro, [np.array(EXPLANADA, np.int32)], 255)
     cv2.fillPoly(despejar, [np.array(EXPLANADA, np.int32)], 1)
     despejar[:] = np.maximum(despejar, cv2.dilate(claro, np.ones((25, 25), np.uint8)) // 255)
     ex = np.array(EXPLANADA, float)
-    elem.append({"tipo": "explanada", "id": 29, "contorno": M(EXPLANADA), "centro": a_metros(*ex.mean(axis=0))})
+    # (fotos) es una planicie en lo alto, con taludes de zacate, y en ella un higuerón enorme
+    elem.append({"tipo": "explanada", "id": 29, "contorno": M(EXPLANADA), "centro": a_metros(*ex.mean(axis=0)), "alto": 3.5,
+                 "arbol": a_metros(*(ex.mean(axis=0) + (-14, 6)))})
 
     # --- casetas y baños
-    caja(30, "caseta", CASETA_GUARDA, -3, 3.2, 3.2, alto=2.7, uso="guarda")
-    caja(31, "caseta", BANO_MINIAUDITORIO, 34, 14.0, 12.0, alto=3.0, uso="banos")
-    caja(37, "caseta", marco(2, -157, 0), 51, 5.0, 4.0, alto=2.8, uso="caseta", elevada=2.6)   # en alto, con escalera
+    caja(30, "caseta", CASETA_GUARDA, -3, 3.6, 3.2, alto=2.7, uso="guarda")
+    # pluma roja y blanca junto a la caseta, atravesada en el carril de entrada
+    ys_, xs_ = np.nonzero(calles[CASETA_GUARDA[1] - 60:CASETA_GUARDA[1] + 60, CASETA_GUARDA[0] - 60:CASETA_GUARDA[0] + 60])
+    k_ = int(np.argmin(np.hypot(xs_ - 60, ys_ - 60)))
+    hx, hy = xs_[k_] - 60, ys_[k_] - 60
+    elem.append({"tipo": "pluma", "id": None, "p": a_metros(CASETA_GUARDA[0] + hx * 0.8, CASETA_GUARDA[1] + hy * 0.8),
+                 "giro": round(math.atan2(hx, hy), 3), "largo": 4.5})
+    # baños del Miniauditorio (31): el ala baja del mismo edificio (fotos), pegada a su cara suroeste, con celosías
+    # y entrada propia bajo el alero
+    caja(31, "caseta", marco(5, -20, -74), 34, 14.0, 12.0, alto=3.4, uso="ala_moderna")
+    # caseta de arriba (37, fotos): torre blanca de dos niveles, cuartos eléctricos abajo y escalera metálica azul
+    caja(37, "caseta", marco(2, -157, 0), 51, 5.0, 4.0, alto=2.8, uso="torre", elevada=2.8)
+    # baño de Docencia (24): casita crema de techo verde a una agua, justo detrás de la Coordinación (4)
+    caja(24, "caseta", (631, 1541), 90, 6.0, 4.5, alto=2.8, uso="banos_crema")
+    # baño del pabellón 7 (fotos): casita aparte con techo a dos aguas, alero celeste y un mural en la pared,
+    # en el extremo oeste del 7, del lado del bosque
+    caja(None, "caseta", marco(7, -55, -48), 5.5, 9.0, 6.0, alto=3.0, uso="banos_mural")
 
     # --- parqueos: frente a Docencia (25) y el administrativo al final de la calle, junto al 2 (34)
+    # (anotaciones y fotos) no hay calle hacia el 25: entre el final de la calle, el 25 y el 34 todo es una
+    # explanada de asfalto. El 25 tiene cuatro espacios de frente hacia Docencia; el 34, tres espacios techados
+    # (carport verde) y el resto del patio con rayas
     c25 = marco(2, 52, 149)
-    calle_cerca = min(zip(*np.nonzero(calles[1550:1750, 600:800])), key=lambda q: math.hypot(q[1] + 600 - c25[0], q[0] + 1550 - c25[1]))
-    parqueo(25, c25, 14.0, 11.0, -39, [(3.0, 5.0)], conexion=(c25, (calle_cerca[1] + 600, calle_cerca[0] + 1550)))
-    parqueo(34, marco(2, -42, 63), 25.0, 9.5, 51, [(-2.25, 5.0)], techado=True)
+    parqueo(25, c25, 11.9, 6.0, -39, [(0.0, 5.0)])
+    c34 = marco(2, -42, 63)
+    parqueo(34, c34, 25.0, 9.5, 51, [(-2.25, 5.0)], techado=3)
+    esquinas_ = rect_contorno(c25[0], c25[1], 11.9 / ESCALA + 8, 6.0 / ESCALA + 8, -39) + rect_contorno(c34[0], c34[1], 25.0 / ESCALA + 4, 9.5 / ESCALA + 4, 51)
+    plaza = cv2.convexHull(np.array(esquinas_, np.float32)).astype(np.int32)
+    cv2.fillPoly(asfalto, [plaza], 255)
+    cv2.fillPoly(despejar, [plaza], 1)
     # la 33 es el parqueo de la piscina, que ya está modelado
 
-    # --- escalera entre el 1 y el 2: el 2 queda más alto (1 m) y la escalera baja hacia el 1
-    caja(None, "escalera", marco(2, -78, -63), 141, 5.5, 3.6, alto=1.0)   # el largo apunta al 1: sube hacia el suroeste
-    # rampa para sillas de ruedas al lado de la escalera, a lo largo de la cara del 1 (pendiente de un 8 %)
-    r0, r1 = marco(2, -8, -71), marco(2, -66, -71)
-    cv2.line(despejar, tuple(int(k) for k in r0), tuple(int(k) for k in r1), 1, 30)
-    elem.append({"tipo": "rampa", "id": None, "desde": a_metros(*r0), "hasta": a_metros(*r1), "ancho": 1.8, "alto": 1.0})
+    # --- (fotos) el 1 está en lo alto del talud, unos 3,5 m sobre el 2. Una escalera larga y techada baja del
+    # corredor del 1 al vestíbulo del 2, y a su lado una rampa techada (Ley 7600) baja por el talud en dos tramos
+    # paralelos a los edificios, con un descanso en la vuelta (pendiente cercana al 8 %)
+    caja(None, "escalera", marco(2, -2, -54), 141, 8.4, 2.8, alto=3.5, techado=True)   # sube hacia el suroeste, al 1
+    for (u0, u1, v, y0) in ((-16, -104, -44, 0.0), (-104, -16, -62, 1.75)):
+        r0, r1 = marco(2, u0, v), marco(2, u1, v)
+        cv2.line(despejar, tuple(int(k) for k in r0), tuple(int(k) for k in r1), 1, 26)
+        elem.append({"tipo": "rampa", "id": None, "desde": a_metros(*r0), "hasta": a_metros(*r1), "ancho": 1.8, "alto": 1.75, "base": y0, "techado": True})
+    elem.append({"tipo": "descanso", "id": None, "p": a_metros(*marco(2, -109, -53)), "giro": round(math.radians(51), 3), "largo": 3.0, "ancho": 6.4, "alto": 1.75})
 
     # --- entrada al Jardín Etnobotánico (35): sendero de lastre desde la punta sureste del 1
     a35, b35 = marco(1, 90, 20), marco(1, 200, 20)
@@ -468,7 +520,15 @@ def lugares_nuevos(calles, quebrada, lejos_carretera, y_ruta32):
             p, q = marco(arriba, u, -27.5), marco(abajo, u, 27.5)
             mesas.append(((p[0] + q[0]) / 2, (p[1] + q[1]) / 2))
     mesas += [(1141, 1150), (1129, 1190)]
+    # alrededor de Docencia (4) hay varias mesas redondas de concreto en el zacate (fotos)
+    mesas += [(692 + 62 * math.cos(math.radians(a)), 1541 + 62 * math.sin(math.radians(a))) for a in (205, 250, 300)]
     elem.append({"tipo": "mesas", "id": None, "puntos": M(mesas)})
+    # higuerón grande en el patio entre el 8 y el 9 (fotos)
+    elem.append({"tipo": "arbol_grande", "id": None, "p": a_metros(*marco(9, -36, -50)), "escala": 1.7})
+    # soda (fotos): comedor abierto al costado, con techo a dos aguas sobre columnas azules, y un tanque de agua
+    # azul sobre una torre de tubo
+    caja(None, "comedor", marco(3, 78, 0), -39, 10.0, 16.0, alto=3.2)
+    elem.append({"tipo": "tanque", "id": None, "p": a_metros(*marco(3, 20, 56))})
 
     # --- portón: el acceso este desde la ruta 32, junto a la entrada principal, está cerrado
     ys, xs = np.nonzero((calles > 0) & (lejos_carretera > 20) & (lejos_carretera < 28))
@@ -497,6 +557,7 @@ def lugares_nuevos(calles, quebrada, lejos_carretera, y_ruta32):
         vals, vecs = np.linalg.eigh(np.cov(np.vstack([xc, yc])))
         dx_, dy_ = vecs[:, -1]   # dirección de la calle
         anchura = (calles[int(ay_) - 40:int(ay_) + 40, int(ax_) - 40:int(ax_) + 40] > 0).sum() / 80 * ESCALA
+        # (fotos) el cruce es una plataforma de concreto rayado de lado a lado de la calle, con guía táctil
         elem.append({"tipo": "alcantarilla", "id": 28, "p": a_metros(ax_, ay_), "giro": round(math.atan2(dx_, dy_), 3), "ancho": round(float(anchura), 2)})
         # 27 (anotaciones): el pasillo de la entrada llega por el lado sureste hasta la alcantarilla, cruza la
         # calle justo encima de ella y sigue derecho por el otro lado hasta empatar con el pasillo de la soda
@@ -505,15 +566,19 @@ def lugares_nuevos(calles, quebrada, lejos_carretera, y_ruta32):
             nx_, ny_ = -nx_, -ny_   # que apunte al sureste
         lado_se, lado_no = (ax_ + 20 * nx_, ay_ + 20 * ny_), (ax_ - 20 * nx_, ay_ - 20 * ny_)
         norte27 = junto_calle([(860, 1515), (790, 1545), (720, 1570), (655, 1593), (610, 1610), (582, 1628)], 9, calles)
-        pasillo([tramo26[-1], lado_se, lado_no] + norte27 + [marco(2, -100, 38)], 27, cruces=[(ax_, ay_)])
+        pasillo([tramo26[-1], lado_se, lado_no] + norte27 + [marco(2, -100, 47)], 27)
 
     # --- puente peatonal sobre la ruta 32 (32)
     xp = ensanchar(PUENTE_PEATONAL_X)
     yp = y_ruta32(xp)
     pend = y_ruta32(xp + 50) - yp
     giro_calle = math.atan2(50, pend)   # dirección de la carretera en la maqueta (x, z)
+    # medio ancho de la carretera: desde el eje, hacia el sur, hasta que se sale del asfalto
+    nx_, ny_ = -pend / math.hypot(50, pend), 50 / math.hypot(50, pend)
+    semi = next(d for d in range(1, 120) if lejos_carretera[int(yp + ny_ * d), int(xp + nx_ * d)] > 0.5) * ESCALA
     cv2.circle(despejar, (int(xp), int(yp)), 70, 1, -1)
-    elem.append({"tipo": "puente_peatonal", "id": 32, "p": a_metros(xp, yp), "giro": round(giro_calle, 3)})
+    # (fotos) sin techo; las rampas corren junto a la carretera, fuera de la cerca de la UCR
+    elem.append({"tipo": "puente_peatonal", "id": 32, "p": a_metros(xp, yp), "giro": round(giro_calle, 3), "semiancho": round(semi, 2)})
     return elem, {"asfalto": asfalto, "rayas": rayas, "lastre": lastre, "claro": claro, "despejar": despejar, "cerca": cerca_extra}
 
 

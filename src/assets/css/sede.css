@@ -526,6 +526,7 @@ dialog::backdrop { background: rgba(0,25,45,.6); }
 .mapa3d__marcas { position: absolute; inset: 0; pointer-events: none; overflow: hidden; }
 .mapa3d__marca { position: absolute; left: 0; top: 0; pointer-events: auto; min-width: 30px; height: 30px; padding: 0 6px; border-radius: 15px;
   border: 2px solid #fff; background: #005DA4; color: #fff; font: 700 .9375rem/1 var(--f); cursor: pointer; box-shadow: 0 2px 6px rgba(0,30,60,.35); }
+.mapa3d__marca--menor { min-width: 26px; height: 26px; border-radius: 13px; padding: 0 4px; font-size: .8125rem; }
 .mapa3d__marca:hover, .mapa3d__marca[aria-pressed="true"] { background: #04203A; transform-origin: center; }
 .mapa3d__marca[aria-pressed="true"] { outline: 3px solid var(--foco); outline-offset: 1px; }
 .mapa3d__marca:focus-visible { outline: 3px solid var(--foco); outline-offset: 2px; }
