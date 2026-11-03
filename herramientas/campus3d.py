@@ -80,13 +80,13 @@ EDIFICIOS = [
     {"id": 6, "rect": (1049, 1131, 97, 20, -3), "pisos": 1, "alto": 3.4,
      "estilo": {"forma_techo": "plano", "techo": "#f4f5f6", "entrada": True}},
     # 7, 8 y 9: entre uno y otro hay zonas verdes con mesas de picnic, más anchas que en el croquis
-    # 7, 8 y 9 (fotos): un piso, paredes blancas, ventanas corridas con rejas, techo bajo a dos aguas con alero
+    # 7, 8 y 9 (fotos): alineados entre sí (mismos extremos) y sin que el alero del 9 se meta en la calle; un piso, paredes blancas, ventanas corridas con rejas, techo bajo a dos aguas con alero
     # ancho (verde oscuro en 8 y 9, verde lima en 7) y corredores con columnas celestes
-    {"id": 7, "rect": (1252, 1363, 180, 55, 5.5), "pisos": 1,
+    {"id": 7, "rect": (1268, 1363, 167, 55, 5.5), "pisos": 1,
      "estilo": {"forma_techo": "dos_aguas", "pendiente": 0.14, "alero": 2.6, "techo": "#5d8a72", "fascia": "#9acd3c", "columnas": "#8ec3e6"}},
-    {"id": 8, "rect": (1259, 1264, 180, 55, 5.5), "pisos": 1,
+    {"id": 8, "rect": (1268, 1264, 167, 55, 5.5), "pisos": 1,
      "estilo": {"forma_techo": "dos_aguas", "pendiente": 0.14, "alero": 2.6, "techo": "#4f7d63", "fascia": "#1f6b4a", "columnas": "#8ec3e6"}},
-    {"id": 9, "rect": (1263, 1165, 180, 55, 5.5), "pisos": 1,
+    {"id": 9, "rect": (1268, 1165, 167, 55, 5.5), "pisos": 1,
      "estilo": {"forma_techo": "dos_aguas", "pendiente": 0.14, "alero": 2.6, "techo": "#4f7d63", "fascia": "#1f6b4a", "columnas": "#8ec3e6"}},
     {"id": 10, "rect": (1433, 1304, 60, 109, 15), "pisos": 0, "tipo": "piscina"},
     # Biblioteca (fotos): un piso, lámina verde, cuerpo central más alto, torrecita de ventilación,
@@ -406,10 +406,12 @@ def lugares_nuevos(calles, quebrada, lejos_carretera, y_ruta32):
     elem = []
     M = lambda pts: [a_metros(float(x), float(y)) for x, y in pts]
 
-    def pasillo(pts, id_=None, ancho=2.6, techo=True, cruces=(), subida=0.0):
+    def pasillo(pts, id_=None, ancho=2.6, techo=True, cruces=(), subida=0.0, cima=None):
         pts = suavizar(pts)
         largo_ = np.concatenate([[0], np.cumsum(np.hypot(*np.diff(np.array(pts), axis=0).T))])
-        alturas = [round(float(subida * d / largo_[-1]), 2) for d in largo_] if subida else []
+        # sube parejo hasta el punto «cima» (o hasta el final) y de ahí sigue plano
+        fin_ = largo_[int(np.argmin([math.dist(q, cima) for q in pts]))] if cima else largo_[-1]
+        alturas = [round(float(subida * min(1.0, d / fin_)), 2) for d in largo_] if subida else []
         cv2.polylines(despejar, [np.array(pts, np.int32)], False, 1, 34)
         en_calle = [bool(calles[int(y), int(x)]) for x, y in pts]   # donde cruza una calle no lleva losa, columnas ni techo
         elem.append({"tipo": "pasillo", "id": id_, "puntos": M(pts), "ancho": ancho, "techo": techo, "en_calle": en_calle, "alturas": alturas,
@@ -449,11 +451,12 @@ def lugares_nuevos(calles, quebrada, lejos_carretera, y_ruta32):
     pasillo(tramo26, 26)
     pasillo([marco(2, -100, 47), marco(2, 15, 47), marco(2, 32, 51), marco(2, 104, 51)], 36)
     union7 = junto_calle([(1080, 1392)], 15, calles)
-    pasillo([marco(7, -94, 6), marco(7, -110, 2), (1118, 1374)] + union7)
-    pasillo([marco(9, 104, 38), marco(9, 104, 0), marco(8, 104, 0), marco(7, 104, 0), marco(7, 104, -26)])
+    pasillo([marco(7, -88, 6), marco(7, -104, 2), (1118, 1374)] + union7)
+    pasillo([marco(9, 98, 38), marco(9, 98, 0), marco(8, 98, 0), marco(7, 98, 0), marco(7, 98, -26)])
     # sendero techado que sube de la calle a la explanada (29), pasando junto al baño del miniauditorio (31)
     # (fotos) el sendero sube a la explanada entre muros celestes, con baranda gris, y entra a ella por el norte
-    pasillo(junto_calle(SENDERO_EXPLANADA[:1], 9, calles) + SENDERO_EXPLANADA[1:] + [(856, 1170)], techo=False, ancho=2.0, subida=3.5)
+    pasillo(junto_calle(SENDERO_EXPLANADA[:1], 9, calles) + SENDERO_EXPLANADA[1:] + [(856, 1170)], techo=False, ancho=2.0, subida=3.5,
+            cima=(945, 1212))
 
     # --- explanada (29): zacate abierto y parejo, sin árboles
     cv2.fillPoly(claro, [np.array(EXPLANADA, np.int32)], 255)
@@ -479,9 +482,9 @@ def lugares_nuevos(calles, quebrada, lejos_carretera, y_ruta32):
     caja(37, "caseta", marco(2, -157, 0), 51, 5.0, 4.0, alto=2.8, uso="torre", elevada=2.8)
     # baño de Docencia (24): casita crema de techo verde a una agua, justo detrás de la Coordinación (4)
     caja(24, "caseta", (631, 1541), 90, 6.0, 4.5, alto=2.8, uso="banos_crema")
-    # baño del pabellón 7 (fotos): casita aparte con techo a dos aguas, alero celeste y un mural en la pared,
-    # en el extremo oeste del 7, del lado del bosque
-    caja(None, "caseta", marco(7, -55, -48), 5.5, 9.0, 6.0, alto=3.0, uso="banos_mural")
+    # baño del pabellón 7 (fotos y anotaciones): casita aparte con techo a dos aguas, alero celeste y un mural,
+    # pasando el extremo oeste del 7, junto al pasillo techado que llega del camino de la entrada
+    caja(None, "caseta", marco(7, -108, -21), 5.5, 9.0, 6.0, alto=3.0, uso="banos_mural")
 
     # --- parqueos: frente a Docencia (25) y el administrativo al final de la calle, junto al 2 (34)
     # (anotaciones y fotos) no hay calle hacia el 25: entre el final de la calle, el 25 y el 34 todo es una
@@ -492,6 +495,8 @@ def lugares_nuevos(calles, quebrada, lejos_carretera, y_ruta32):
     c34 = marco(2, -42, 63)
     parqueo(34, c34, 25.0, 9.5, 51, [(-2.25, 5.0)], techado=3)
     esquinas_ = rect_contorno(c25[0], c25[1], 11.9 / ESCALA + 8, 6.0 / ESCALA + 8, -39) + rect_contorno(c34[0], c34[1], 25.0 / ESCALA + 4, 9.5 / ESCALA + 4, 51)
+    esquinas_ += [p_ for p_ in zip(*np.nonzero(calles[1570:1625, 640:830])[::-1])]   # borde de la calle, al norte
+    esquinas_ = [(x + 640, y + 1570) if i_ >= 8 else (x, y) for i_, (x, y) in enumerate(esquinas_)]
     plaza = cv2.convexHull(np.array(esquinas_, np.float32)).astype(np.int32)
     cv2.fillPoly(asfalto, [plaza], 255)
     cv2.fillPoly(despejar, [plaza], 1)
@@ -500,12 +505,16 @@ def lugares_nuevos(calles, quebrada, lejos_carretera, y_ruta32):
     # --- (fotos) el 1 está en lo alto del talud, unos 3,5 m sobre el 2. Una escalera larga y techada baja del
     # corredor del 1 al vestíbulo del 2, y a su lado una rampa techada (Ley 7600) baja por el talud en dos tramos
     # paralelos a los edificios, con un descanso en la vuelta (pendiente cercana al 8 %)
-    caja(None, "escalera", marco(2, -2, -54), 141, 8.4, 2.8, alto=3.5, techado=True)   # sube hacia el suroeste, al 1
-    for (u0, u1, v, y0) in ((-16, -104, -44, 0.0), (-104, -16, -62, 1.75)):
-        r0, r1 = marco(2, u0, v), marco(2, u1, v)
-        cv2.line(despejar, tuple(int(k) for k in r0), tuple(int(k) for k in r1), 1, 26)
-        elem.append({"tipo": "rampa", "id": None, "desde": a_metros(*r0), "hasta": a_metros(*r1), "ancho": 1.8, "alto": 1.75, "base": y0, "techado": True})
-    elem.append({"tipo": "descanso", "id": None, "p": a_metros(*marco(2, -109, -53)), "giro": round(math.radians(51), 3), "largo": 3.0, "ancho": 6.4, "alto": 1.75})
+    # (anotaciones) la escalera va en el extremo noroeste, pasando la punta del 2; la rampa corre pegada al 2
+    # desde el otro extremo y, al final, un tramo corto sube atravesando el talud hasta el corredor del 1
+    caja(None, "escalera", marco(2, -118, -54), 141, 8.4, 2.8, alto=3.5, techado=True)   # sube hacia el suroeste, al 1
+    r0, r1 = marco(2, 4, -41), marco(2, -92, -41)
+    cv2.line(despejar, tuple(int(k) for k in r0), tuple(int(k) for k in r1), 1, 26)
+    elem.append({"tipo": "rampa", "id": None, "desde": a_metros(*r0), "hasta": a_metros(*r1), "ancho": 1.8, "alto": 2.6, "base": 0.0, "techado": True})
+    elem.append({"tipo": "descanso", "id": None, "p": a_metros(*marco(2, -98, -42)), "giro": round(math.radians(51), 3), "largo": 3.2, "ancho": 3.0, "alto": 2.6})
+    r0, r1 = marco(2, -98, -48), marco(2, -98, -72)
+    cv2.line(despejar, tuple(int(k) for k in r0), tuple(int(k) for k in r1), 1, 26)
+    elem.append({"tipo": "rampa", "id": None, "desde": a_metros(*r0), "hasta": a_metros(*r1), "ancho": 1.8, "alto": 0.9, "base": 2.6, "techado": True})
 
     # --- entrada al Jardín Etnobotánico (35): sendero de lastre desde la punta sureste del 1
     a35, b35 = marco(1, 90, 20), marco(1, 200, 20)
@@ -831,12 +840,24 @@ def main(pdf, sat=None):
         porton = {"p": a_metros(px, py - 14), "hacia_pista": round(math.atan2(cx_pista - px, cy_pista - py), 3)}
     # portón verde de la entrada por residencias (fotos): donde la calle interna junto a las residencias
     # sale a la carretera
-    ys, xs = np.nonzero((calles > 0) & (acceso == 0) & (lejos_carretera < 40))
+    ys, xs = np.nonzero((calles > 0) & (acceso == 0) & (lejos_carretera > 18) & (lejos_carretera < 26))
     sel = (xs > 1600) & (ys > 1700)
     porton_res = None
     if sel.any():
-        rx, ry = int(xs[sel].mean()), int(ys[sel].mean())
-        porton_res = {"p": a_metros(rx, ry), "hacia_dentro": round(math.atan2(ensanchar(1700) - rx, 1840 - ry), 3)}
+        rx, ry = float(xs[sel].mean()), float(ys[sel].mean())
+        # dirección de la calle interna en el portón (componente principal de la calle alrededor)
+        yc, xc = np.nonzero(calles[int(ry) - 45:int(ry) + 45, int(rx) - 45:int(rx) + 45])
+        _, vecs = np.linalg.eigh(np.cov(np.vstack([xc, yc])))
+        dx_, dy_ = vecs[:, -1]
+        sx = cv2.Sobel(lejos_carretera, cv2.CV_32F, 1, 0, ksize=5)[int(ry), int(rx)]
+        sy = cv2.Sobel(lejos_carretera, cv2.CV_32F, 0, 1, ksize=5)[int(ry), int(rx)]
+        if dx_ * sx + dy_ * sy < 0:
+            dx_, dy_ = -dx_, -dy_   # hacia adentro del campus
+        # ancho de la calle en el portón, para que las hojas la cierren de borde a borde
+        semi_ = next(d for d in range(1, 60) if not calles[int(ry + dx_ * d), int(rx - dy_ * d)]) * ESCALA
+        porton_res = {"p": a_metros(rx, ry), "hacia_dentro": round(math.atan2(dx_, dy_), 3), "semiancho": round(semi_, 2),
+                      "postes": [a_metros(rx + dy_ * (semi_ + 0.5) / ESCALA, ry - dx_ * (semi_ + 0.5) / ESCALA),
+                                 a_metros(rx - dy_ * (semi_ + 0.5) / ESCALA, ry + dx_ * (semi_ + 0.5) / ESCALA)]}
     # la cerca se abre en las calles internas que salen a la carretera y, en la pista, solo donde va el portón
     accesos = cv2.dilate(((calles > 0) & (acceso == 0)).astype(np.uint8), cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (31, 31)))
     if porton:
@@ -862,6 +883,13 @@ def main(pdf, sat=None):
         cerca.append([a_metros(float(x), float(y)) for x, y in simple])
     if len(extra["cerca"]) > 1:
         cerca.append([a_metros(float(x), float(y)) for x, y in extra["cerca"]])
+        pass
+    if porton_res:
+        for pe in porton_res["postes"]:
+            mejor = min(((t, k) for t in cerca for k in (0, -1)), key=lambda tk: math.dist(tk[0][tk[1]], pe))
+            if math.dist(mejor[0][mejor[1]], pe) < 16:
+                (mejor[0].insert(0, pe) if mejor[1] == 0 else mejor[0].append(pe))
+    if len(extra["cerca"]) > 1:
         # el tramo de la carretera que viene del este llega hasta el poste este del portón
         porton_n = next(e for e in elementos if e["tipo"] == "porton")
         pe = a_metros(*porton_n.pop("poste_este"))

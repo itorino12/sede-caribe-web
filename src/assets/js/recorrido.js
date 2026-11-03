@@ -487,11 +487,16 @@ for (const e of datos.campus.edificios) {
           if (puntaje > mejor) { mejor = puntaje; Object.assign(f, { a: p, b: q, largo: L, nx, nz }); }
         }
       }
-      const dx = (f.b[0] - f.a[0]) / f.largo, dz = (f.b[1] - f.a[1]) / f.largo;
-      const ang = Math.atan2(-dz, dx), largoEsc = Math.hypot(t, 5);
-      const escalera = new THREE.Mesh(new THREE.BoxGeometry(2.4, 0.3, largoEsc), new THREE.MeshStandardMaterial({ color: 0xbdbdb8 }));
-      const mx = (f.a[0] + f.b[0]) / 2 + f.nx * 6.5, mz = (f.a[1] + f.b[1]) / 2 + f.nz * 6.5;
-      escalera.position.set(mx, t / 2, mz); escalera.rotation.set(0, ang + Math.PI / 2, 0); escalera.rotateX(-Math.atan2(t, 5)); grupo.add(escalera);
+      // la escalera sale perpendicular a la fachada: arriba toca el edificio y abajo llega al pie del talud
+      const largoEsc = Math.hypot(t, 4.5), concretoE = new THREE.MeshStandardMaterial({ color: 0xbdbdb8 });
+      const mx = (f.a[0] + f.b[0]) / 2 + f.nx * 2.6, mz = (f.a[1] + f.b[1]) / 2 + f.nz * 2.6;
+      const escalera = new THREE.Group();
+      const n = 8;
+      for (let i = 0; i < n; i++) {   // gradas: de afuera (abajo) hacia el edificio (arriba)
+        const g = new THREE.Mesh(new THREE.BoxGeometry(2.4, (t * (i + 1)) / n, 4.5 / n + 0.02), concretoE);
+        g.position.set(0, (t * (i + 1)) / n / 2, 2.25 - (4.5 / n) * (i + 0.5)); escalera.add(g);
+      }
+      escalera.position.set(mx, 0, mz); escalera.rotation.y = Math.atan2(f.nx, f.nz); grupo.add(escalera);
     }
     if (estilo.linterna_hex) {   // linternilla de ventanas en la punta del techo (Docencia)
       const anillo = new THREE.Mesh(new THREE.CylinderGeometry(2.6, 2.6, 1.0, 6), celosia); anillo.position.set(e.centro[0], e.cumbre - 0.3, e.centro[1]);
@@ -633,12 +638,12 @@ if (datos.campus.porton_pista && lugares.get(19)) {
 
 // ---------- entrada por residencias (fotos): portón verde de dos hojas, marco de tubo con malla y
 // refuerzos en X, columnas con baliza amarilla y faroles verdes de dos brazos a los lados de la calle
-function portonVerde(conFaroles) {
+function portonVerde(conFaroles, anchoHoja = 4.2) {
   const grupo = new THREE.Group();
   const verde = new THREE.MeshStandardMaterial({ color: 0x1f5a3c, roughness: 0.6, metalness: 0.2 });
   const mallaPorton = new THREE.MeshLambertMaterial({ color: 0x24533a, transparent: true, opacity: 0.45, side: THREE.DoubleSide, depthWrite: false });
   const amarillo = new THREE.MeshStandardMaterial({ color: 0xf2b705, emissive: 0x3a2a00 });
-  const ANCHO = 4.2, ALTO = 2.2;
+  const ANCHO = anchoHoja, ALTO = 2.2;
   for (const lado of [-1, 1]) {
     const cx = lado * ANCHO / 2;
     for (const y of [0.15, ALTO]) { const b = new THREE.Mesh(new THREE.BoxGeometry(ANCHO, 0.1, 0.1), verde); b.position.set(cx, y, 0); grupo.add(b); }
@@ -660,8 +665,9 @@ function portonVerde(conFaroles) {
   return grupo;
 }
 if (datos.campus.porton_residencias && lugares.get(20)) {
-  const { p, hacia_dentro } = datos.campus.porton_residencias;
-  const grupo = portonVerde(true), verde = grupo.userData.verde;
+  const { p, hacia_dentro, semiancho } = datos.campus.porton_residencias;
+  // las dos hojas cierran la calle de borde a borde
+  const grupo = portonVerde(true, semiancho ? semiancho + 0.25 : 4.2), verde = grupo.userData.verde;
   grupo.position.set(p[0], 0, p[1]);
   grupo.rotation.y = hacia_dentro;
   grupo.userData = { id: 20, centro: new THREE.Vector3(p[0], 5, p[1]), mat: { pared: verde, techo: verde }, alto: 3 };
