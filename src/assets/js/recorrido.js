@@ -3,7 +3,7 @@
 import * as THREE from "./vendor/three.module.min.js";
 import { OrbitControls } from "./vendor/OrbitControls.js";
 import { ficha, sinMovimiento, rellenarFicha } from "./recorrido-ficha.js";
-import { MARCAS, prioridadDe, compararRango } from "./recorrido-config.js";
+import { MARCAS, prioridadDe, compararRango, FRENTE_PORTADA } from "./recorrido-config.js";
 
 const raiz = document.querySelector("[data-recorrido]");
 const lienzo = raiz.querySelector(".mapa3d__lienzo");
@@ -1327,6 +1327,13 @@ function calcularVistaGeneral() {
   const lejos = vertical ? Math.max(1, Math.pow(0.62 / aspecto, 0.5)) : aspecto < 1.6 ? Math.pow(1.6 / aspecto, 0.6) : 1;
   const desde = vertical ? new THREE.Vector3(360, 430, 76) : new THREE.Vector3(-80, 240, 370);
   vistaGeneral.objetivo.set(-15, 0, vertical ? 2 : 18);
+  // en la portada arranca con la cámara del lado del lugar elegido (la entrada), mirándolo de frente
+  const frente = PORTADA && datos.campus.edificios.find((e) => e.id === FRENTE_PORTADA);
+  if (frente) {
+    const dx = frente.centro[0] - vistaGeneral.objetivo.x, dz = frente.centro[1] - vistaGeneral.objetivo.z;
+    const r = Math.hypot(desde.x, desde.z) / Math.max(Math.hypot(dx, dz), 1);
+    desde.set(dx * r, desde.y, dz * r);
+  }
   vistaGeneral.posicion.copy(desde).multiplyScalar(lejos).add(vistaGeneral.objetivo);
 }
 calcularVistaGeneral();
@@ -1491,6 +1498,7 @@ function ajustar() {
     renderer.setSize(w, h, false);
     camara.aspect = w / h;
     // en la portada de PC el campus se corre a la derecha, para dejar libre el texto de la izquierda
+    // portada en PC: el campus se corre a la derecha, porque a la izquierda va el texto
     if (PORTADA && w > 760) camara.setViewOffset(w, h, -Math.round(w * 0.2), 0, w, h); else camara.clearViewOffset();
     camara.updateProjectionMatrix();
   }
@@ -1522,6 +1530,8 @@ function dibujar(ahora) {
 }
 new ResizeObserver(pedirDibujo).observe(lienzo);
 raiz.classList.add("mapa3d--listo");
+// en la portada, con la maqueta ya en pantalla se apaga la imagen fija de abajo (si no, se ve por el cielo)
+raiz.closest(".portada__foto")?.classList.add("portada__foto--en-vivo");
 pedirDibujo();
 
 // Para herramientas/giro.py: con #captura-giro la página expone la cámara para dibujar las vistas de la maqueta giratoria

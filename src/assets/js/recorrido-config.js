@@ -42,3 +42,6 @@ export function compararRango(a, b) {
   const [pa, ia] = rango(a), [pb, ib] = rango(b);
   return pa - pb || ia - ib;
 }
+
+// Portada: número del lugar que queda de frente a la cámara cuando la maqueta empieza a girar (13 = Entrada principal).
+export const FRENTE_PORTADA = 13;

@@ -8,6 +8,7 @@ const figura = document.querySelector(".portada__foto--3d");
 if (figura && !figura.dataset.giro) {
   figura.dataset.giro = "activo";
   figura.querySelector(".mapa3d")?.classList.add("mapa3d--sin-3d");
+  figura.classList.remove("portada__foto--en-vivo");   // vuelve la imagen fija, que es donde giran las vistas
   if (!matchMedia("(prefers-reduced-motion: reduce)").matches) arrancar().catch(() => {});   // si falla, queda la imagen fija
 }
 
