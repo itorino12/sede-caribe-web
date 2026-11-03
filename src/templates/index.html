@@ -167,7 +167,10 @@
   </div>
 </section>
 <script>
-  // la maqueta en vivo se carga después de la página, para que la portada aparezca igual de rápido
-  addEventListener("load", () => setTimeout(() => import(new URL("{{ raiz }}assets/js/recorrido.js", document.baseURI).href), 400));
+  // la maqueta en vivo se carga después de la página, para que la portada aparezca igual de rápido;
+  // si no carga (error de red o navegador sin soporte), quedan las vistas de respaldo girando
+  const js = (ruta) => new URL(ruta, document.baseURI).href;
+  addEventListener("load", () => setTimeout(() => import(js("{{ raiz }}assets/js/recorrido.js"))
+    .catch(() => import(js("{{ raiz }}assets/js/portada-giro.js"))), 400));
 </script>
 {% endblock %}

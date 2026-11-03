@@ -32,11 +32,11 @@ function crearRenderer() {
 const renderer = crearRenderer();
 if (!renderer) {
   raiz.classList.add("mapa3d--sin-3d");
-  // maqueta giratoria con imágenes (pesa poco y funciona en cualquier teléfono); en la portada queda la captura fija
-  if (!PORTADA) import("./recorrido-giro.js");
+  // maqueta giratoria con imágenes (pesa poco y funciona en cualquier teléfono); en la portada, vistas que giran solas
+  import(PORTADA ? "./portada-giro.js" : "./recorrido-giro.js");
 }
 if (renderer) {   // ---------- todo lo que sigue es la maqueta 3D
-lienzo.addEventListener("webglcontextlost", (e) => { e.preventDefault(); raiz.classList.add("mapa3d--sin-3d"); if (!PORTADA) import("./recorrido-giro.js"); });
+lienzo.addEventListener("webglcontextlost", (e) => { e.preventDefault(); raiz.classList.add("mapa3d--sin-3d"); import(PORTADA ? "./portada-giro.js" : "./recorrido-giro.js"); });
 renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, liviano ? 1.5 : 2));
 renderer.outputColorSpace = THREE.SRGBColorSpace;
 renderer.shadowMap.enabled = true;

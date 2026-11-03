@@ -595,6 +595,8 @@ dialog::backdrop { background: rgba(0,25,45,.6); }
 /* portada con la maqueta 3D: captura fija mientras carga; luego la maqueta en vivo con un fundido */
 .portada__foto--3d { background: linear-gradient(#cfe2ef, #eef4f8 70%); }
 .portada__foto--3d .portada__maqueta-fija { object-position: 70% 50%; }
+.portada__foto--3d .portada__maqueta-giro { opacity: 0; transition: opacity 1.6s ease; }
+.portada__foto--3d .portada__maqueta-giro--visible { opacity: 1; }
 .mapa3d--portada { position: absolute; inset: 0; margin: 0; }
 .mapa3d--portada .mapa3d__escena { height: 100%; min-height: 0; border: 0; border-radius: 0; background: transparent; }
 .mapa3d--portada .mapa3d__marcas, .mapa3d--portada .mapa3d__herramientas, .mapa3d--portada .mapa3d__brujula, .mapa3d--portada .mapa3d__ficha { display: none !important; }
