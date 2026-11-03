@@ -199,13 +199,13 @@
   "id": 27,
   "zona": 1,
   "nombre": "Camino techado hacia Administración",
-  "texto": "Continúa el pasillo techado de la entrada: cruza la quebrada junto a la calle, pasa al otro lado de la calle antes del final y llega a las oficinas administrativas."
+  "texto": "Continúa el pasillo techado de la entrada: cruza la calle encima de la alcantarilla de la quebrada y sigue por el otro lado hasta empatar con el pasillo a la soda, frente a las oficinas administrativas."
  },
  {
   "id": 28,
   "zona": 2,
   "nombre": "Paso de la alcantarilla del río",
-  "texto": "Punto donde la quebrada pasa por un tubo bajo la calle interna. Ahí se cruza la calle para tomar el sendero hacia la explanada."
+  "texto": "Punto donde la quebrada pasa por un tubo bajo la calle interna. Encima de la alcantarilla el pasillo techado cruza la calle, y de ahí sale el sendero hacia la explanada."
  },
  {
   "id": 29,

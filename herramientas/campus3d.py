@@ -422,9 +422,6 @@ def lugares_nuevos(calles, quebrada, lejos_carretera, y_ruta32):
     # y uno más corre por el lado este de 7, 8 y 9.
     tramo26 = junto_calle([(1150, 1250), (1132, 1305), (1100, 1358), (1064, 1410), (1012, 1462), (962, 1508)], 15, calles)
     pasillo(tramo26, 26)
-    sur27 = junto_calle([(930, 1548), (860, 1575), (790, 1600), (720, 1628), (676, 1642)], 15, calles)
-    norte27 = junto_calle([(640, 1598), (606, 1612), (572, 1630)], 15, calles)
-    pasillo([tramo26[-1]] + sur27 + norte27 + [marco(2, -100, 38)], 27, cruces=[((sur27[-1][0] + norte27[0][0]) / 2, (sur27[-1][1] + norte27[0][1]) / 2)])
     pasillo([marco(2, -100, 38), marco(2, 15, 38), marco(2, 32, 48), marco(2, 104, 48)], 36)
     union7 = junto_calle([(1080, 1392)], 15, calles)
     pasillo([marco(7, -94, 6), marco(7, -110, 2), (1118, 1374)] + union7)
@@ -501,6 +498,14 @@ def lugares_nuevos(calles, quebrada, lejos_carretera, y_ruta32):
         dx_, dy_ = vecs[:, -1]   # dirección de la calle
         anchura = (calles[int(ay_) - 40:int(ay_) + 40, int(ax_) - 40:int(ax_) + 40] > 0).sum() / 80 * ESCALA
         elem.append({"tipo": "alcantarilla", "id": 28, "p": a_metros(ax_, ay_), "giro": round(math.atan2(dx_, dy_), 3), "ancho": round(float(anchura), 2)})
+        # 27 (anotaciones): el pasillo de la entrada llega por el lado sureste hasta la alcantarilla, cruza la
+        # calle justo encima de ella y sigue derecho por el otro lado hasta empatar con el pasillo de la soda
+        nx_, ny_ = -dy_, dx_   # perpendicular a la calle
+        if nx_ * 1 + ny_ * 1 < 0:
+            nx_, ny_ = -nx_, -ny_   # que apunte al sureste
+        lado_se, lado_no = (ax_ + 20 * nx_, ay_ + 20 * ny_), (ax_ - 20 * nx_, ay_ - 20 * ny_)
+        norte27 = junto_calle([(860, 1515), (790, 1545), (720, 1570), (655, 1593), (610, 1610), (582, 1628)], 9, calles)
+        pasillo([tramo26[-1], lado_se, lado_no] + norte27 + [marco(2, -100, 38)], 27, cruces=[(ax_, ay_)])
 
     # --- puente peatonal sobre la ruta 32 (32)
     xp = ensanchar(PUENTE_PEATONAL_X)
