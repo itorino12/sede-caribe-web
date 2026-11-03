@@ -324,7 +324,8 @@ for (const e of datos.campus.edificios) {
       mejor.ang = Math.atan2(-mejor.uz, mejor.ux);
       return mejor;
     };
-    // vestidores y toldo en arco: detrás de la piscina, del lado de la quebrada (sur)
+    // vestidores y toldo en arco: detrás de la piscina, del lado de la quebrada (sur), al otro lado de la acera
+    // que bordea la malla (la acera va a ~9,6 m del borde de la pileta; ver campus3d.py)
     const sur = ladoHacia(1);
     const blancoV = new THREE.MeshStandardMaterial({ color: 0xf5f5f2, roughness: 0.85 });
     const grisV = new THREE.MeshStandardMaterial({ color: 0xa8b0b8, roughness: 0.85 });
@@ -334,10 +335,10 @@ for (const e of datos.campus.edificios) {
       const zocalo = new THREE.Mesh(new THREE.BoxGeometry(largo, 1.8, 4), grisV); zocalo.position.y = 0.9; caseta.add(zocalo);
       const muro = new THREE.Mesh(new THREE.BoxGeometry(largo, 1.4, 4), blancoV); muro.position.y = 2.5; caseta.add(muro);
       const techo = new THREE.Mesh(new THREE.BoxGeometry(largo + 1.2, 0.12, 5.6), laminaV); techo.position.set(0, 3.45, 0.3); techo.rotation.x = -0.16; caseta.add(techo);
-      caseta.position.set(...sur.en(t, 12, 0)); caseta.rotation.y = sur.ang; grupo.add(caseta);
+      caseta.position.set(...sur.en(t, 14.5, 0)); caseta.rotation.y = sur.ang; grupo.add(caseta);
     }
     const toldo = new THREE.Mesh(new THREE.CylinderGeometry(2.4, 2.4, 6, 14, 1, true, -Math.PI / 2, Math.PI), new THREE.MeshStandardMaterial({ color: 0x8c8f88, roughness: 0.7, side: THREE.DoubleSide }));
-    toldo.rotation.set(0, sur.ang, Math.PI / 2); toldo.position.set(...sur.en(-13, 11, 2.2)); grupo.add(toldo);
+    toldo.rotation.set(0, sur.ang, Math.PI / 2); toldo.position.set(...sur.en(-13, 14.5, 2.2)); grupo.add(toldo);
     // baños de la piscina (fotos y satélite): al costado oeste, a lo largo de una acera con guía táctil.
     // Primero el cuarto de máquinas gris con celosías (extremo sur) y luego los baños blancos con zócalo gris,
     // puertas hacia la piscina y un alero oscuro sobre ellas
