@@ -3,6 +3,7 @@
 import * as THREE from "./vendor/three.module.min.js";
 import { OrbitControls } from "./vendor/OrbitControls.js";
 import { ficha, sinMovimiento, rellenarFicha } from "./recorrido-ficha.js";
+import { MARCAS, prioridadDe, compararRango } from "./recorrido-config.js";
 
 const raiz = document.querySelector("[data-recorrido]");
 const lienzo = raiz.querySelector(".mapa3d__lienzo");
@@ -1312,41 +1313,72 @@ controles.target.copy(vistaGeneral.objetivo);
 controles.addEventListener("change", pedirDibujo);
 
 // ---------- marcas numeradas (botones HTML encima del lienzo)
-const marcas = new Map();
+// Cada número tiene un ancla 3D fija (sobre el punto más alto de su lugar) que se calcula una sola vez. En cada
+// fotograma solo se proyecta esa ancla: los números nunca se corren. Cuáles se ven depende de dos cosas:
+//  · el zoom (prioridad 1, 2 o 3 según la distancia de la cámara, con histéresis), y
+//  · si se tapan: cuando la cámara se detiene, el de menor prioridad se oculta con un fundido.
+raiz.style.setProperty("--fundido-marcas", `${sinMovimiento ? 0 : MARCAS.fundidoMs}ms`);
+const marcas = new Map();   // id → { b, g, ancla, prioridad, tapada, visible, x, y, fuera }
 for (const g of edificios) {
   const l = lugares.get(g.userData.id);
   if (!l) continue;
   const b = document.createElement("button");
   b.type = "button";
-  b.className = g.userData.menor ? "mapa3d__marca mapa3d__marca--menor" : "mapa3d__marca";
+  b.className = (g.userData.menor ? "mapa3d__marca mapa3d__marca--menor" : "mapa3d__marca") + " mapa3d__marca--oculta";
   b.textContent = l.id;
   b.setAttribute("aria-label", `${l.id}. ${l.nombre}`);
   b.addEventListener("click", () => elegir(l.id, true));
   capaMarcas.appendChild(b);
-  marcas.set(l.id, b);
+  const ancla = g.userData.centro.clone(); ancla.y += MARCAS.alturaAncla;
+  marcas.set(l.id, { id: l.id, b, g, ancla, prioridad: prioridadDe(l.id), tapada: true, visible: false, x: 0, y: 0, fuera: true });
 }
 const v = new THREE.Vector3();
-// Las marcas de edificios vecinos (7, 8 y 9) se encimarían: se corren hasta que no se toquen,
-// para que cada botón mantenga su tamaño completo al tocarlo.
-// Todos los lugares llevan su número; los menores (pasillos, casetas, parqueos…) con un botón algo más pequeño
+const TAN_REF = Math.tan(THREE.MathUtils.degToRad(19));
+let nivelZoom = 1;
+function actualizarNivel() {
+  // distancia equivalente con un lente de 38°, para que el umbral valga igual en PC (38°) y en celular (52°)
+  const d = camara.position.distanceTo(controles.target) * Math.tan(THREE.MathUtils.degToRad(camara.fov / 2)) / TAN_REF;
+  const { medio, cerca } = MARCAS.zoom, h = MARCAS.histeresis;
+  let n = nivelZoom;
+  if (d > medio * (1 + h)) n = 1;
+  else if (n < 2 && d < medio * (1 - h)) n = 2;
+  if (n === 3 && d > cerca * (1 + h)) n = 2;
+  else if (n === 2 && d < cerca * (1 - h)) n = 3;
+  nivelZoom = n;
+}
+// los que entran por zoom esperan a que la cámara se detenga (se calcula si tapan a otro) y aparecen con fundido
+function elegible(m) { return m.g === elegido || m.prioridad <= nivelZoom; }
 function moverMarcas() {
-  const w = lienzo.clientWidth, h = lienzo.clientHeight, puestas = [];
-  const lista = edificios.map((g) => { v.copy(g.userData.centro); v.y += 3; v.project(camara); return { g, x: ((v.x + 1) / 2) * w, y: ((1 - v.y) / 2) * h, z: v.z, fuera: v.z > 1 || Math.abs(v.x) > 1.05 || Math.abs(v.y) > 1.05 }; })
-    .sort((a, b) => a.z - b.z);
-  for (const m of lista) {
-    const b = marcas.get(m.g.userData.id);
-    if (!b) continue;
-    b.hidden = m.fuera;
-    if (m.fuera) continue;
-    // busca el lugar libre más cercano en una espiral alrededor de la posición real
-    const x0 = m.x, y0 = m.y;
-    for (let k = 0; k < 60 && puestas.some((p) => Math.abs(p.x - m.x) < 33 && Math.abs(p.y - m.y) < 33); k++) {
-      const ang = k * 2.4, r = 14 + k * 3; m.x = x0 + Math.cos(ang) * r; m.y = y0 + Math.sin(ang) * r;
-    }
-    puestas.push(m);
-    b.style.transform = `translate(${m.x}px, ${m.y}px) translate(-50%, -50%)`;
+  const w = lienzo.clientWidth, h = lienzo.clientHeight;
+  actualizarNivel();
+  for (const m of marcas.values()) {
+    v.copy(m.ancla).project(camara);
+    m.fuera = v.z > 1 || Math.abs(v.x) > 1.05 || Math.abs(v.y) > 1.05;
+    m.x = ((v.x + 1) / 2) * w; m.y = ((1 - v.y) / 2) * h;
+    if (!elegible(m)) m.tapada = true;
+    const visible = !m.fuera && elegible(m) && !m.tapada;
+    if (visible !== m.visible) { m.visible = visible; m.b.classList.toggle("mapa3d__marca--oculta", !visible); }
+    if (!m.fuera) m.b.style.transform = `translate3d(${m.x.toFixed(1)}px, ${m.y.toFixed(1)}px, 0) translate(-50%, -50%)`;
   }
 }
+// Con la cámara quieta: de más a menos importante, cada número se muestra solo si no tapa a uno ya puesto
+function resolverEncimados() {
+  const puestos = [], sep = MARCAS.separacion;
+  const lista = [...marcas.values()].filter((m) => !m.fuera && elegible(m))
+    .sort((a, b) => (b.g === elegido) - (a.g === elegido) || compararRango(a.id, b.id));
+  for (const m of marcas.values()) m.tapada = true;
+  for (const m of lista) {
+    if (puestos.some((p) => Math.abs(p.x - m.x) < sep && Math.abs(p.y - m.y) < sep)) continue;
+    m.tapada = false; puestos.push(m);
+  }
+  moverMarcas();
+}
+let esperaQuieta = null;
+function camaraQuieta() {
+  clearTimeout(esperaQuieta);
+  esperaQuieta = setTimeout(resolverEncimados, MARCAS.esperaMs);
+}
+function camaraEnMovimiento() { clearTimeout(esperaQuieta); }
 
 // ---------- elegir un edificio: lo resalta, muestra la ficha y acerca la cámara
 let elegido = null;
@@ -1356,11 +1388,13 @@ function soltar(g) {
 }
 function elegir(id, volar) {
   if (elegido) soltar(elegido);
-  marcas.forEach((b, k) => b.setAttribute("aria-pressed", String(k === id)));
+  marcas.forEach((m, k) => m.b.setAttribute("aria-pressed", String(k === id)));
   const g = edificios.find((x) => x.userData.id === id);
   const l = lugares.get(id);
   if (!g || !l) return;
   elegido = g;
+  const mElegida = marcas.get(id);
+  if (mElegida) mElegida.tapada = false;
   const { techo, pared } = g.userData.mat;
   for (const m of [techo, pared]) if (m.userData.original === undefined) m.userData.original = m.color.getHex();
   techo.color.setHex(g.userData.alto < 1 ? techo.userData.original : colores.elegido);
@@ -1377,7 +1411,7 @@ function cerrarFicha() {
   if (elegido) soltar(elegido);
   elegido = null;
   ficha.hidden = true;
-  marcas.forEach((b) => b.setAttribute("aria-pressed", "false"));
+  marcas.forEach((m) => m.b.setAttribute("aria-pressed", "false"));
   document.querySelectorAll("[data-lugar]").forEach((b) => b.setAttribute("aria-pressed", "false"));
   pedirDibujo();
 }
@@ -1444,7 +1478,8 @@ function dibujar(ahora) {
   const d = camara.position.distanceTo(controles.target);
   escena.fog.near = d * 1.2; escena.fog.far = d * 3;
   renderer.render(escena, camara);
-  moverMarcas();
+  moverMarcas();   // en el mismo fotograma que el dibujo: los números no se atrasan respecto a la escena
+  if (seguir) camaraEnMovimiento(); else camaraQuieta();
   brujula.style.transform = `rotate(${THREE.MathUtils.radToDeg(controles.getAzimuthalAngle())}deg)`;
   if (seguir) pedirDibujo();
 }

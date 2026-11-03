@@ -2,6 +2,7 @@
 // (herramientas/giro.py); al arrastrar se pasa de una a otra y la maqueta parece girar. Los números
 // de los edificios son botones que abren la misma ficha con fotos que la maqueta 3D.
 import { ficha, sinMovimiento, rellenarFicha } from "./recorrido-ficha.js";
+import { MARCAS, prioridadDe, compararRango } from "./recorrido-config.js";
 
 const raiz = document.querySelector("[data-recorrido]");
 const caja = raiz.querySelector(".mapa3d__giro");
@@ -16,6 +17,7 @@ const capa = caja.querySelector(".mapa3d__giro-marcas");
 const aviso = caja.querySelector(".mapa3d__giro-ayuda");
 const cuadros = Array.from({ length: n }, (_, i) => base + `giro-${String(i).padStart(2, "0")}.webp`);
 raiz.classList.add("mapa3d--giro");
+raiz.style.setProperty("--fundido-marcas", `${sinMovimiento ? 0 : MARCAS.fundidoMs}ms`);
 
 // precarga: primero los vecinos, luego el resto
 const cargados = new Set();
@@ -34,37 +36,35 @@ for (const l of datos.lugares) {
   capa.appendChild(b); botones.set(l.id, b);
 }
 
-let actual = 0;
+let actual = 0, elegidoGiro = null;
 function mostrar(i) {
   actual = ((i % n) + n) % n;
   imagen.src = cuadros[actual];
-  // los números de edificios vecinos se correrían uno encima del otro: se separan en pantalla
-  const w = caja.clientWidth, h = caja.clientHeight, puestos = [], visibles = new Set();
-  for (const m of info.marcas[actual]) {
-    const b = botones.get(m.id);
-    if (!b) continue;
-    const x0 = (m.x / 100) * w, y0 = (m.y / 100) * h;
-    let x = x0, y = y0;
-    // busca el lugar libre más cercano en una espiral alrededor de la posición real
-    for (let k = 0; k < 60 && puestos.some((p) => Math.abs(p[0] - x) < 33 && Math.abs(p[1] - y) < 33); k++) {
-      const ang = k * 2.4, r = 14 + k * 3.2;
-      x = x0 + Math.cos(ang) * r; y = y0 + Math.sin(ang) * r;
-    }
+  // cada número va siempre sobre su edificio; si dos se tapan, se oculta el de menor prioridad
+  const w = caja.clientWidth, h = caja.clientHeight, puestos = [], visibles = new Set(), sep = MARCAS.separacion;
+  const lista = info.marcas[actual].filter((m) => botones.has(m.id) && prioridadDe(m.id) <= MARCAS.giroNivel)
+    .sort((a, b) => (b.id === elegidoGiro) - (a.id === elegidoGiro) || compararRango(a.id, b.id));
+  for (const m of lista) {
+    const x = (m.x / 100) * w, y = (m.y / 100) * h;
+    if (m.id !== elegidoGiro && puestos.some((p) => Math.abs(p[0] - x) < sep && Math.abs(p[1] - y) < sep)) continue;
     puestos.push([x, y]); visibles.add(m.id);
-    b.classList.toggle("mapa3d__marca--menor", !!m.menor);
+    const b = botones.get(m.id);
     b.style.left = `${x}px`; b.style.top = `${y}px`;
+    b.classList.toggle("mapa3d__marca--menor", !!m.menor);
   }
-  botones.forEach((b, id) => { b.hidden = !visibles.has(id); });
+  botones.forEach((b, id) => b.classList.toggle("mapa3d__marca--oculta", !visibles.has(id)));
   for (const d of [1, -1, 2, -2]) precargar((actual + d + n) % n);
 }
 function elegir(id) {
   const l = lugares.get(id);
   if (!l) return;
+  elegidoGiro = id; mostrar(actual);
   rellenarFicha(l);
   botones.forEach((b, k) => b.setAttribute("aria-pressed", String(k === id)));
 }
 ficha.querySelector(".mapa3d__ficha-cerrar").addEventListener("click", () => {
   ficha.hidden = true;
+  elegidoGiro = null; mostrar(actual);
   botones.forEach((b) => b.setAttribute("aria-pressed", "false"));
   document.querySelectorAll("[data-lugar]").forEach((b) => b.setAttribute("aria-pressed", "false"));
 });
