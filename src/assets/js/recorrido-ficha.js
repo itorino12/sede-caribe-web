@@ -81,6 +81,23 @@ export function rellenarFicha(l) {
   ficha.querySelector(".mapa3d__ficha-zona").textContent = l.zona ? `Zona ${l.zona} · Lugar ${l.id}` : "Áreas deportivas";
   ficha.querySelector(".mapa3d__ficha-titulo").textContent = l.nombre;
   ficha.querySelector(".mapa3d__ficha-texto").textContent = l.texto || "";
+  ficha.style.setProperty("--zona", `var(--zona-${l.zona || 0})`);
+  // aulas y dependencias del edificio según el croquis, por piso cuando tiene dos
+  const dep = ficha.querySelector(".mapa3d__ficha-dependencias"), pisos = dep.querySelector(".mapa3d__ficha-pisos");
+  dep.hidden = !l.dependencias?.length;
+  pisos.replaceChildren(...(l.dependencias || []).flatMap((g) => {
+    const nodos = [];
+    if (g.piso) { const h = document.createElement("p"); h.className = "mapa3d__ficha-piso"; h.textContent = g.piso; nodos.push(h); }
+    const ul = document.createElement("ul");
+    for (const [nombre, detalle] of g.espacios) {
+      const li = document.createElement("li"), b = document.createElement("b");
+      b.textContent = nombre; li.append(b);
+      if (detalle) li.append(` · ${detalle}`);
+      ul.append(li);
+    }
+    nodos.push(ul);
+    return nodos;
+  }));
   carruselFicha.cargar(l.fotos || [], `Fotos de ${l.nombre}`);
   const enlace = ficha.querySelector(".mapa3d__ficha-enlace");
   enlace.hidden = !l.enlace;

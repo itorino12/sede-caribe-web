@@ -1442,7 +1442,7 @@ for (const g of edificios) {
   if (!l) continue;
   const b = document.createElement("button");
   b.type = "button";
-  b.className = (g.userData.menor ? "mapa3d__marca mapa3d__marca--menor" : "mapa3d__marca") + " mapa3d__marca--oculta";
+  b.className = (g.userData.menor ? "mapa3d__marca mapa3d__marca--menor" : "mapa3d__marca") + ` mapa3d__marca--oculta mapa3d__chip--z${l.zona || 0}`;
   b.textContent = l.id;
   b.setAttribute("aria-label", `${l.id}. ${l.nombre}`);
   b.addEventListener("click", () => elegir(l.id, true));
@@ -1549,6 +1549,35 @@ function acercar(factor) {
 raiz.querySelector("[data-acercar]").addEventListener("click", () => acercar(0.7));
 raiz.querySelector("[data-alejar]").addEventListener("click", () => acercar(1.4));
 raiz.querySelector("[data-vista-general]").addEventListener("click", () => { cerrarFicha(); calcularVistaGeneral(); viajar(vistaGeneral.objetivo, vistaGeneral.posicion); });
+
+// ---------- pantalla completa: la maqueta, con sus números, botones y ficha, ocupa toda la pantalla. Donde el
+// navegador no lo permite (el iPhone), se expande a toda la ventana; Esc o el mismo botón la devuelven.
+if (!PORTADA) {
+  const escenaNodo = raiz.querySelector(".mapa3d__escena"), botonPantalla = raiz.querySelector("[data-pantalla]");
+  const nativa = () => document.fullscreenElement || document.webkitFullscreenElement;
+  const marcarPantalla = () => {
+    const activa = !!nativa() || raiz.classList.contains("mapa3d--pantalla-css");
+    raiz.classList.toggle("mapa3d--pantalla", activa);
+    botonPantalla.setAttribute("aria-pressed", String(activa));
+    botonPantalla.setAttribute("aria-label", activa ? "Salir de pantalla completa" : "Ver la maqueta en pantalla completa");
+    pedirDibujo();
+  };
+  const salirCss = () => { raiz.classList.remove("mapa3d--pantalla-css"); document.documentElement.classList.remove("sin-desplazar"); marcarPantalla(); };
+  botonPantalla.addEventListener("click", async () => {
+    if (nativa()) { (document.exitFullscreen || document.webkitExitFullscreen).call(document); return; }
+    if (raiz.classList.contains("mapa3d--pantalla-css")) { salirCss(); return; }
+    const pedir = escenaNodo.requestFullscreen || escenaNodo.webkitRequestFullscreen;
+    try {
+      if (!pedir) throw new Error("sin pantalla completa");
+      await pedir.call(escenaNodo);
+    } catch {
+      raiz.classList.add("mapa3d--pantalla-css"); document.documentElement.classList.add("sin-desplazar"); marcarPantalla();
+    }
+  });
+  document.addEventListener("fullscreenchange", marcarPantalla);
+  document.addEventListener("webkitfullscreenchange", marcarPantalla);
+  document.addEventListener("keydown", (e) => { if (e.key === "Escape" && raiz.classList.contains("mapa3d--pantalla-css")) salirCss(); });
+}
 
 // tocar un edificio en el lienzo (sin confundirlo con arrastrar para girar)
 const rayo = new THREE.Raycaster(), puntero = new THREE.Vector2();

@@ -58,6 +58,24 @@ PLANTA = {"centro": (1486, 1566), "giro": 74}        # planta de tratamiento, al
 NUMERACION = {"1": 1, "2": 2, "3": 3, "4": 4, "24": 5, "25": 6, "27": 7, "34": 8, "35": 9, "36": 10, "37": 11, "5": 12, "6": 13, "7": 14, "8": 15, "9": 16, "10": 17, "26": 18, "28": 19, "29": 20, "30": 21, "31": 22, "33": 23, "11": 24, "12": 25, "13": 26, "14": 27, "15": 28, "32": 29, "16": 30, "17": 31, "18": 32, "20": 33, "21": 34, "22": 35, "23": 36, "19": 37}
 NUMERACION = {int(k): v for k, v in NUMERACION.items()}
 
+# Aulas y dependencias de cada edificio, tal como las detalla el croquis oficial (número del croquis). Cada grupo
+# es un piso (sin nombre si el edificio es de uno); cada espacio, [nombre, uso o detalle].
+DEPENDENCIAS = {
+    1: [{"piso": None, "espacios": [["Aula 1", None], ["Aula 2", None], ["Aula 3", "Laboratorio de Idiomas"], ["Aula 4", None],
+                                    ["Aula 5", "Laboratorio de Cómputo #1"], ["Aula 6", None], ["Aula 7", None], ["Servicios sanitarios", None]]}],
+    2: [{"piso": None, "espacios": [["Recepción", None], ["Registro", None], ["Becas", None], ["OAF", None], ["Acción Social", None],
+                                    ["Vida Estudiantil", None], ["Oficinas", "Orientación, Psicología y Trabajo Social"],
+                                    ["Coordinación de Administración", None], ["Dirección", None]]}],
+    7: [{"piso": None, "espacios": [["Aula 8", None], ["Aula 9", None], ["Aula 10", None], ["Aula 11", None], ["Aula 12", None]]}],
+    8: [{"piso": None, "espacios": [["Aula 13", None], ["Aula 14", "Laboratorio de Química y Física"], ["Aula 15", "Laboratorio de Cómputo #2"],
+                                    ["Aula 16", None], ["Aula 17", "Laboratorio de Cómputo #3"]]}],
+    9: [{"piso": None, "espacios": [["Oficinas administrativas", None], ["Consultorio Médico", None], ["Consultorio Odontológico", None]]}],
+    12: [{"piso": "Piso 1", "espacios": [["Aula 18", None], ["Aula 19", None], ["Aula 20", None]]},
+         {"piso": "Piso 2", "espacios": [["Aula 21", None], ["Aula 22", None], ["Aula 23", None]]}],
+    13: [{"piso": "Piso 1", "espacios": [["Laboratorio de Ingeniería Química", None], ["Simulador de Navegación", None]]},
+         {"piso": "Piso 2", "espacios": [["Aula 24", None], ["Laboratorio de Física", None], ["Otros simuladores", None]]}],
+}
+
 # Edificios: número del croquis, forma y pisos. rect = (cx, cy, largo, ancho, giro en grados, horario)
 EDIFICIOS = [
     # 1 y 2 (anotaciones de la Sede): los baños ocupan el extremo noroeste de cada uno; el 1 queda más alto
@@ -679,7 +697,8 @@ def edificio_json(e):
                            "fin": a_metros(cx + c_ * b["extremo"] * l / 2, cy + s_ * b["extremo"] * l / 2),
                            "eje": [round(c_ * b["extremo"], 3), round(s_ * b["extremo"], 3)], "ancho": round(a * ESCALA, 2)}
     return {"id": NUMERACION[e["id"]], "croquis": e["id"], "tipo": e.get("tipo", "edificio"), "pisos": e["pisos"], "alto": alto, "centro": centro,
-            "cumbre": round(cumbre, 2), "volumenes": vol, "techo": [c for v in techo for c in v], "estilo": estilo}
+            "cumbre": round(cumbre, 2), "volumenes": vol, "techo": [c for v in techo for c in v], "estilo": estilo,
+            **({"dependencias": DEPENDENCIAS[e["id"]]} if e["id"] in DEPENDENCIAS else {})}
 
 
 def salidas_carretera(suelo_rgb, terreno):

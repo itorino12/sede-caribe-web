@@ -343,6 +343,11 @@ def main():
 
     # datos de la maqueta 3D: van dentro de recorrido.html y, aparte, en un archivo que la portada pide después de cargar
     recorrido = {"campus": json.loads((SRC / "data" / "campus3d.json").read_text(encoding="utf-8")), "lugares": lugares_campus()}
+    # las aulas y dependencias de cada edificio (según el croquis) van con su lugar, para la ficha
+    dependencias = {e["id"]: e["dependencias"] for e in recorrido["campus"]["edificios"] if e.get("dependencias")}
+    for l in recorrido["lugares"]:
+        if l["id"] in dependencias:
+            l["dependencias"] = dependencias[l["id"]]
     (DIST / "assets" / "datos-recorrido.json").write_text(json.dumps(recorrido, ensure_ascii=False, separators=(",", ":")), encoding="utf-8")
 
     # (archivo de salida, plantilla, título, descripción, variables extra)

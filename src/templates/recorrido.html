@@ -14,7 +14,7 @@
         <h3>{{ "Zona " ~ zona if zona else "Áreas deportivas" }}</h3>
         <ol>
           {% for l in filas %}
-          <li value="{{ l.id }}"><button type="button" data-lugar="{{ l.id }}" aria-pressed="false"><b>{{ l.id }}</b> {{ l.nombre }}</button></li>
+          <li value="{{ l.id }}"><button type="button" data-lugar="{{ l.id }}" aria-pressed="false"><b class="mapa3d__chip--z{{ l.zona }}">{{ l.id }}</b> {{ l.nombre }}</button></li>
           {% endfor %}
         </ol>
       </div>

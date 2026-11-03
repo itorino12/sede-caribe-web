@@ -30,7 +30,7 @@ function precargar(i) {
 const botones = new Map();
 for (const l of datos.lugares) {
   const b = document.createElement("button");
-  b.type = "button"; b.className = "mapa3d__marca"; b.textContent = l.id;
+  b.type = "button"; b.className = `mapa3d__marca mapa3d__chip--z${l.zona || 0}`; b.textContent = l.id;
   b.setAttribute("aria-label", `${l.id}. ${l.nombre}`);
   b.addEventListener("click", () => elegir(l.id));
   capa.appendChild(b); botones.set(l.id, b);

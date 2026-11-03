@@ -530,8 +530,16 @@ dialog::backdrop { background: rgba(0,25,45,.6); }
 .mapa3d__marca--oculta { opacity: 0; visibility: hidden; pointer-events: none; }
 .mapa3d__marcas .mapa3d__marca--oculta, .mapa3d__giro-marcas .mapa3d__marca--oculta { transition: opacity var(--fundido-marcas, 150ms) ease, visibility 0s linear var(--fundido-marcas, 150ms); }
 .mapa3d__giro-marcas .mapa3d__marca { transition: opacity var(--fundido-marcas, 150ms) ease, visibility 0s linear 0s; }
+/* color de los números por zona (como pidió la Sede): cian, amarillo, magenta y negro; la letra, con contraste suficiente */
+:root { --zona-0: #005DA4; --zona-1: #00BCD4; --zona-2: #FFD23F; --zona-3: #C2187A; --zona-4: #111417; }
+.mapa3d__chip--z0 { --fondo: var(--zona-0); --letra: #fff; }
+.mapa3d__chip--z1 { --fondo: var(--zona-1); --letra: #04203A; }
+.mapa3d__chip--z2 { --fondo: var(--zona-2); --letra: #04203A; }
+.mapa3d__chip--z3 { --fondo: var(--zona-3); --letra: #fff; }
+.mapa3d__chip--z4 { --fondo: var(--zona-4); --letra: #fff; }
+.mapa3d__marca { background: var(--fondo, #005DA4); color: var(--letra, #fff); }
 .mapa3d__marca--menor { min-width: 26px; height: 26px; border-radius: 13px; padding: 0 4px; font-size: .8125rem; }
-.mapa3d__marca:hover, .mapa3d__marca[aria-pressed="true"] { background: #04203A; transform-origin: center; }
+.mapa3d__marca:hover, .mapa3d__marca[aria-pressed="true"] { box-shadow: 0 0 0 3px #04203A, 0 2px 8px rgba(0,30,60,.45); }
 .mapa3d__marca[aria-pressed="true"] { outline: 3px solid var(--foco); outline-offset: 1px; }
 .mapa3d__marca:focus-visible { outline: 3px solid var(--foco); outline-offset: 2px; }
 .mapa3d__herramientas { position: absolute; top: 12px; right: 12px; display: flex; gap: 8px; align-items: center; }
@@ -543,12 +551,36 @@ dialog::backdrop { background: rgba(0,25,45,.6); }
 .mapa3d__brujula::before { content: ""; position: absolute; left: 50%; top: 6px; margin-left: -6px; border: 6px solid transparent; border-bottom: 14px solid #C0392B; border-top: 0; }
 .mapa3d__brujula span { position: absolute; left: 0; right: 0; bottom: 6px; text-align: center; font: 800 .8rem/1 var(--f); color: #04203A; }
 .mapa3d__herramientas .boton { min-height: 40px; padding: 6px 14px; background: #fff; }
+/* pantalla completa */
+.mapa3d__pantalla { display: grid; place-items: center; padding: 0; }
+.mapa3d__pantalla svg { width: 20px; height: 20px; }
+.mapa3d__icono-cerrar, .mapa3d--pantalla .mapa3d__icono-abrir { display: none; }
+.mapa3d--pantalla .mapa3d__icono-cerrar { display: block; }
+.mapa3d__escena:fullscreen { width: 100%; height: 100%; min-height: 0; border: 0; border-radius: 0; margin: 0; }
+.mapa3d__escena:-webkit-full-screen { width: 100%; height: 100%; min-height: 0; border: 0; border-radius: 0; margin: 0; }
+.mapa3d--pantalla-css .mapa3d__escena { position: fixed; inset: 0; z-index: 1000; height: 100vh; height: 100dvh; min-height: 0; margin: 0; border: 0; border-radius: 0; }
+html.sin-desplazar, html.sin-desplazar body { overflow: hidden; }
+/* leyenda de colores por zona */
+.mapa3d__leyenda { position: absolute; right: 12px; bottom: 12px; display: flex; flex-wrap: wrap; gap: 4px 12px; margin: 0; padding: 6px 10px; list-style: none;
+  background: rgba(255,255,255,.92); border-radius: 6px; box-shadow: 0 2px 8px rgba(0,30,60,.2); font-size: var(--t-xs); font-weight: 700; color: #04203A; pointer-events: none; }
+.mapa3d__leyenda li { display: flex; align-items: center; gap: 5px; }
+.mapa3d__chip { display: inline-block; width: 14px; height: 14px; border-radius: 50%; background: var(--fondo); border: 2px solid #fff; box-shadow: 0 0 0 1px rgba(0,30,60,.35); }
+.mapa3d--portada .mapa3d__leyenda, .mapa3d--sin-3d .mapa3d__leyenda { display: none; }
 .mapa3d__ficha { position: absolute; left: 12px; bottom: 12px; width: min(400px, calc(100% - 24px)); max-height: calc(100% - 24px); overflow-x: hidden; overflow-y: auto; background: var(--papel); color: var(--tinta);
   border-radius: 6px; padding: 16px 18px; box-shadow: 0 10px 30px rgba(0,30,60,.25); border-top: 4px solid #005DA4; }
 .mapa3d__ficha-zona { margin: 0 0 2px; font-size: var(--t-xs); color: var(--tinta-2); font-weight: 600; }
 .mapa3d__ficha-titulo { margin: 0 32px 6px 0; font-size: var(--t-md); line-height: 1.2; }
 .mapa3d__ficha-texto { margin: 0 0 8px; font-size: var(--t-sm); }
 .mapa3d__ficha-enlace { font-weight: 700; }
+.mapa3d__ficha { border-top-color: var(--zona, #005DA4); }
+/* la ficha nunca tapa los botones de arriba (acercar, vista general, pantalla completa) */
+.mapa3d__ficha { max-height: calc(100% - 76px); }
+.mapa3d__herramientas { z-index: 2; }
+.mapa3d__ficha-dependencias { margin: 4px 0 10px; padding-top: 10px; border-top: 1px solid var(--linea); }
+.mapa3d__ficha-dependencias h4 { margin: 0 0 6px; font-size: var(--t-xs); text-transform: uppercase; letter-spacing: .04em; color: var(--tinta-2); }
+.mapa3d__ficha-piso { margin: 8px 0 2px; font-size: var(--t-xs); font-weight: 700; color: var(--tinta-2); }
+.mapa3d__ficha-dependencias ul { margin: 0; padding: 0 0 0 18px; font-size: var(--t-sm); line-height: 1.45; }
+.mapa3d__ficha-dependencias li b { font-weight: 700; }
 .mapa3d__ficha-cerrar { position: absolute; top: 6px; right: 6px; z-index: 1; width: 40px; height: 40px; border: 0; background: rgba(255,255,255,.9); font-size: 1.6rem; line-height: 1; color: var(--tinta-2); cursor: pointer; border-radius: 4px; }
 .mapa3d__ficha-cerrar:hover { background: var(--niebla); }
 .mapa3d__sin3d { display: none; }
@@ -573,7 +605,7 @@ dialog::backdrop { background: rgba(0,25,45,.6); }
 .mapa3d--giro .mapa3d__giro-botones { display: flex; }
 /* sin 3D la ficha va debajo de la maqueta, no encima */
 .mapa3d--giro .mapa3d__escena { display: flex; flex-direction: column; overflow: visible; }
-.mapa3d--giro .mapa3d__ficha { position: relative; left: auto; bottom: auto; order: 2; overflow: visible; width: auto; max-height: none; border-radius: 0; box-shadow: none; border-top: 4px solid #005DA4; }
+.mapa3d--giro .mapa3d__ficha { position: relative; left: auto; bottom: auto; order: 2; overflow: visible; width: auto; max-height: none; border-radius: 0; box-shadow: none; border-top: 4px solid var(--zona, #005DA4); }
 .mapa3d__nota { font-size: var(--t-xs); color: var(--tinta-2); margin: 10px 0 0; }
 .lugares { margin-block: 28px clamp(44px, 6vw, 76px); }
 .lugares__zonas { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 24px; }
@@ -581,7 +613,8 @@ dialog::backdrop { background: rgba(0,25,45,.6); }
 .lugares ol { list-style: none; margin: 0; padding: 0; }
 .lugares button { display: flex; gap: 8px; width: 100%; text-align: left; padding: 8px 6px; background: none; border: 0; border-bottom: 1px solid var(--linea);
   font: inherit; font-size: var(--t-sm); color: var(--enlace); cursor: pointer; }
-.lugares button b { min-width: 1.6em; color: var(--tinta-2); }
+.lugares button b { flex: none; min-width: 1.9em; height: 1.6em; padding: 0 4px; border-radius: .8em; display: inline-grid; place-items: center;
+  background: var(--fondo, var(--niebla)); color: var(--letra, var(--tinta-2)); font-size: .8125rem; box-shadow: 0 0 0 1px rgba(0,30,60,.2); }
 .lugares button:hover, .lugares button[aria-pressed="true"] { background: var(--niebla); text-decoration: underline; }
 @media (max-width: 900px) { .lugares__zonas { grid-template-columns: 1fr 1fr; } }
 @media (max-width: 560px) {
