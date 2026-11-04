@@ -871,17 +871,19 @@ if (datos.campus.parqueo) {
       carro.position.set(x, 0, z); g.add(carro);
     }
   }
-  // (anotaciones) una fila de espacios a lo largo de cada borde (norte y sur), con las rayas a la par de las del
-  // centro (las del centro van pintadas en la textura del suelo)
+  // rayas blancas, todas iguales (anotaciones): las de las dos filas del centro, la línea del divisor y, a la par,
+  // una fila de espacios a lo largo de cada borde (norte y sur). Ya no van pintadas en la textura del suelo
   const blancoRaya = new THREE.MeshLambertMaterial({ color: 0xececE8 });
   const { rayas_bordes: fondoBorde, discapacidad } = datos.campus.parqueo;
   const xsRaya = [];
   for (let i = 0; -largo / 2 + 1 + 2.6 * i < largo / 2 - 0.9 - 1e-6; i++) xsRaya.push(-largo / 2 + 1 + 2.6 * i);
+  const raya = (x, z, ancho_, largo_) => {
+    const m = new THREE.Mesh(new THREE.BoxGeometry(ancho_, 0.02, largo_), blancoRaya); m.position.set(x, 0.03, z); m.receiveShadow = true; g.add(m);
+  };
+  for (const x of xsRaya) raya(x, divisor, 0.15, 10);   // filas del centro, espalda con espalda
+  raya(0, divisor, largo - 2, 0.15);                    // línea del divisor
   if (fondoBorde) {
-    for (const borde of [-1, 1]) for (const x of xsRaya) {
-      const raya = new THREE.Mesh(new THREE.BoxGeometry(0.15, 0.02, fondoBorde), blancoRaya);
-      raya.position.set(x, 0.03, borde * (ancho / 2 - 0.3 - fondoBorde / 2)); raya.receiveShadow = true; g.add(raya);
-    }
+    for (const borde of [-1, 1]) for (const x of xsRaya) raya(x, borde * (ancho / 2 - 0.3 - fondoBorde / 2), 0.15, fondoBorde);
   }
   // (anotaciones) espacio para personas con discapacidad: el del extremo este de la fila sur, con el símbolo
   // internacional de accesibilidad pintado en el suelo (blanco sobre azul)

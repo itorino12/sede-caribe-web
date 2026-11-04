@@ -649,6 +649,8 @@ def lugares_nuevos(calles, quebrada, lejos_carretera, y_ruta32):
     # (anotaciones) acera corta que une esa acera, junto al paso de cebra, con el pasillo techado de los extremos
     # de las aulas, frente al 9
     elem.append({"tipo": "acera", "id": None, "ancho": 1.8, "puntos": [[56.0, -85.2], [50.0, -81.0], [43.2, -79.0]]})
+    # (anotaciones) tramo corto que sigue la acera de los baños de la piscina hasta la acera que bordea la malla
+    elem.append({"tipo": "acera", "id": None, "ancho": 1.6, "puntos": [[53.01, -35.32], [51.19, -28.53]]})
     elem.append({"tipo": "acera", "id": None, "ancho": 1.8,
                  "puntos": [[127.42, -86.52], [125.48, -86.38], [121.37, -85.51], [118.17, -84.89], [114.09, -84.28],
                             [109.52, -83.53], [104.0, -83.24], [100.0, -83.24], [96.0, -83.24], [92.0, -83.24], [88.0, -83.49],
@@ -658,8 +660,10 @@ def lugares_nuevos(calles, quebrada, lejos_carretera, y_ruta32):
                  "franjas": [[58.04, -86.15], [58.57, -86.89], [59.09, -87.62], [59.61, -88.36], [60.13, -89.09],
                              [60.65, -89.82]]})
     # (anotaciones) acera frente a las puntas oeste de 16, 15 y 14: sale de la acera corta que llega al extremo oeste
-    # del 9 y corre hasta el pasillo techado que une la calle con la punta oeste del 7, fuera del alero
-    elem.append({"tipo": "acera", "id": None, "ancho": 1.8, "puntos": [[-1.6, -81.2], [-1.6, -38.3]]})
+    # del 9 y corre hasta el pasillo techado que une la calle con la punta oeste del 7
+    # (anotaciones) pegada a los edificios: corre junto al piso rojo del corredor de cada pabellón y cruza los patios
+    elem.append({"tipo": "acera", "id": None, "ancho": 1.8,
+                 "puntos": [[-0.57, -80.5], [-0.99, -76.17], [0.8, -69.88], [-0.99, -51.42], [0.8, -45.13], [0.13, -38.2]]})
     # (anotaciones) acera por el lado este de la calle que baja de la entrada por residencias (33) al puente (36),
     # del lado de las residencias; termina antes de la cerca y empata con la acera este del puente
     elem.append({"tipo": "acera", "id": None, "ancho": 1.8,
@@ -995,14 +999,8 @@ def main(pdf, sat=None):
     parqueo = np.zeros_like(calles)
     cv2.fillPoly(parqueo, [np.array(esquinas, np.int32)], 255)
     pintar(parqueo, (78, 82, 88), borde=(200, 198, 190))
-    rayas = np.zeros((calles.shape[0] * 2, calles.shape[1] * 2), np.uint8)   # al doble para líneas finas
-    dv = PARQUEO["divisor"]
-    linea = lambda a, b: cv2.line(rayas, tuple(int(c * 2) for c in piscina_a_px(*a)), tuple(int(c * 2) for c in piscina_a_px(*b)), 255, 2)
-    linea((u0 + 1, dv), (u1 - 1, dv))
-    for u_ in np.arange(u0 + 1, u1 - 0.9, 2.6):
-        linea((u_, dv - 5), (u_, dv + 5))
-    rayas = cv2.resize(rayas, (calles.shape[1], calles.shape[0]), interpolation=cv2.INTER_AREA)
-    pintar(rayas, (236, 236, 232))
+    # (anotaciones) las rayas de este parqueo ya no se pintan en la textura: recorrido.js las dibuja todas iguales
+    # (filas del centro, divisor y filas de los bordes)
     pintar(carretera, (112, 116, 122), borde=(88, 92, 98))
     # sombra suave bajo cada edificio (contacto con el suelo)
     sombra = np.zeros((y1 - y0, x1 - x0), np.uint8)
@@ -1205,9 +1203,13 @@ def main(pdf, sat=None):
             s_w = max(tramos_a, key=lambda r: r[1] - r[0])[1] + 0.1
             E_ = (ax_ + ux_ * (s_e - 0.3), az_ + uz_ * (s_e - 0.3)); W_ = (ax_ + ux_ * (s_w + 0.3), az_ + uz_ * (s_w + 0.3))
             t0[-1] = [round(E_[0], 2), round(E_[1], 2)]
-            porton_n["p"] = [round((E_[0] + W_[0]) / 2, 2), round((E_[1] + W_[1]) / 2, 2)]
-            porton_n["giro"] = round(math.atan2(-uz_, ux_), 3)
-            porton_n["hoja"] = round(math.dist(E_, W_) / 2 - 0.1, 2)
+            # (anotaciones) el portón no va atravesado en el acceso: va entre el poste de la cerca y el arranque de
+            # la cerca de la franja de zacate (la entrada de asfalto a la calle interna), y el acceso queda libre
+            M_ = cerca[-1][0]
+            L_p = math.dist(E_, M_); ux_p, uz_p = (M_[0] - E_[0]) / L_p, (M_[1] - E_[1]) / L_p
+            porton_n["p"] = [round((E_[0] + M_[0]) / 2, 2), round((E_[1] + M_[1]) / 2, 2)]
+            porton_n["giro"] = round(math.atan2(-uz_p, ux_p), 3)
+            porton_n["hoja"] = round(L_p / 2 - 0.1, 2)
     cy_pista, cx_pista = np.mean(np.nonzero(pista), axis=1)
 
     ys_c, xs_c = np.nonzero(calles)
