@@ -654,6 +654,19 @@ def lugares_nuevos(calles, quebrada, lejos_carretera, y_ruta32):
     elem.append({"tipo": "cebra", "id": None, "giro": 2.524, "ancho": 3.0,
                  "franjas": [[58.04, -86.15], [58.57, -86.89], [59.09, -87.62], [59.61, -88.36], [60.13, -89.09],
                              [60.65, -89.82]]})
+    # (anotaciones) acera frente a las puntas oeste de 16, 15 y 14: sale de la acera corta que llega al extremo oeste
+    # del 9 y corre hasta el pasillo techado que une la calle con la punta oeste del 7, fuera del alero
+    elem.append({"tipo": "acera", "id": None, "ancho": 1.8, "puntos": [[-1.6, -81.2], [-1.6, -38.3]]})
+    # (anotaciones) acera por el lado este de la calle que baja de la entrada por residencias (33) al puente (36),
+    # del lado de las residencias; termina antes de la cerca y empata con la acera este del puente
+    elem.append({"tipo": "acera", "id": None, "ancho": 1.8,
+                 "puntos": [[114.77, -1.05], [116.46, 4.19], [117.91, 8.23], [119.06, 12.14], [120.41, 16.23], [121.67, 20.19],
+                            [123.19, 24.21], [124.36, 28.2], [125.81, 32.33], [125.8, 36.0], [126.18, 40.14], [126.55, 44.01],
+                            [127.05, 48.0], [127.43, 52.14], [127.8, 56.01], [128.3, 60.0], [129.18, 64.03], [129.39, 68.21],
+                            [129.92, 72.08], [130.3, 76.0], [130.8, 80.14], [131.55, 84.0], [132.05, 88.02], [133.06, 92.32],
+                            [134.07, 96.24], [135.42, 100.02], [136.39, 104.36], [137.3, 108.22], [138.97, 112.27],
+                            [141.53, 116.08], [144.45, 120.09], [147.13, 124.01], [149.7, 128.22], [151.58, 132.12],
+                            [153.06, 136.29], [154.68, 140.25], [156.1, 144.31]]})
     # higuerón grande en el patio entre el 8 y el 9 (fotos)
     elem.append({"tipo": "arbol_grande", "id": None, "p": a_metros(*marco(9, -36, -50)), "escala": 1.7})
     # soda (fotos): comedor abierto al costado, con techo a dos aguas sobre columnas azules, y un tanque de agua
@@ -1222,7 +1235,8 @@ def main(pdf, sat=None):
                     "ancho": round(PARQUEO["rect"][3] * ESCALA, 2), "giro": round(math.radians(PARQUEO["rect"][4]), 3),
                     "divisor": round(PARQUEO["divisor"] - (PARQUEO["v"][0] + PARQUEO["v"][1]) / 2, 2)},
         "planta": {"centro": a_metros(*PLANTA["centro"]), "giro": round(math.radians(PLANTA["giro"]), 3)},
-        "puente": {"centro": a_metros(*PUENTE["centro"]), "eje": [a_metros(x, y) for x, y in PUENTE["eje"]]},
+        # (anotaciones) el puente lleva acera también del lado este, donde llega la acera de la calle de las residencias
+        "puente": {"centro": a_metros(*PUENTE["centro"]), "eje": [a_metros(x, y) for x, y in PUENTE["eje"]], "acera_este": True},
         "elementos": [{**el, "id": NUMERACION.get(el["id"]) if el.get("id") else el.get("id")} for el in elementos],
         "numeros": {"pista": NUMERACION[19], "porton_residencias": NUMERACION[20], "picnic": NUMERACION[21],
                     "planta": NUMERACION[22], "puente": NUMERACION[23], "parqueo_piscina": NUMERACION[33]},

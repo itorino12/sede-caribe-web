@@ -771,6 +771,8 @@ if (datos.campus.puente) {
   const gris = new THREE.MeshStandardMaterial({ color: 0xb8bdc2, roughness: 0.4, metalness: 0.5 });
   const blanco = new THREE.MeshLambertMaterial({ color: 0xf2f2f2 });
   const CALZADA = 5.8, ACERA = 1.8;
+  // (anotaciones) acera también del lado este, donde llega la acera de la calle que viene de la entrada por residencias
+  const lados = datos.campus.puente.acera_este ? [-1, 1] : [-1];
   const caja = (w, h, l, mat, x, y, ang, cx, cz) => {
     const m = new THREE.Mesh(new THREE.BoxGeometry(w, h, l), mat);
     m.position.set(cx + Math.cos(ang) * x, y, cz - Math.sin(ang) * x); m.rotation.y = ang; puente.add(m); return m;
@@ -781,16 +783,19 @@ if (datos.campus.puente) {
     const cx = (ax + bx) / 2, cz = (az + bz) / 2, borde = i === 0 || i === eje.length - 2;
     caja(CALZADA, 0.04, L, asfalto, 0, 0.07, ang, cx, cz);                    // calzada a ras de la calle
     if (borde) continue;                                                       // los extremos solo empatan el asfalto
-    caja(CALZADA + ACERA + 0.6, 0.9, L, concreto, -ACERA / 2, -0.4, ang, cx, cz);   // tablero
-    caja(ACERA, 0.2, L, concreto, -(CALZADA + ACERA) / 2, 0.15, ang, cx, cz);        // acera
+    if (lados.length > 1) caja(CALZADA + 2 * ACERA + 0.6, 0.9, L, concreto, 0, -0.4, ang, cx, cz);   // tablero
+    else caja(CALZADA + ACERA + 0.6, 0.9, L, concreto, -ACERA / 2, -0.4, ang, cx, cz);
     for (const x of [CALZADA / 2 + 0.1, -CALZADA / 2 - 0.1]) {                 // defensas amarillas
       caja(0.12, 0.35, L, amarillo, x, 0.65, ang, cx, cz);
       caja(0.15, 0.75, 0.15, amarillo, x, 0.42, ang, ax, az);
     }
-    const xb = -CALZADA / 2 - ACERA - 0.1;                                      // baranda de la acera
-    caja(0.07, 0.07, L, amarillo, xb, 0.75, ang, cx, cz);
-    caja(0.07, 0.07, L, gris, xb, 1.2, ang, cx, cz);
-    caja(0.06, 1.5, 0.06, gris, xb, 0.55, ang, ax, az);
+    for (const lado of lados) {
+      caja(ACERA, 0.2, L, concreto, lado * (CALZADA + ACERA) / 2, 0.15, ang, cx, cz);   // acera
+      const xb = lado * (CALZADA / 2 + ACERA + 0.1);                                  // baranda de la acera
+      caja(0.07, 0.07, L, amarillo, xb, 0.75, ang, cx, cz);
+      caja(0.07, 0.07, L, gris, xb, 1.2, ang, cx, cz);
+      caja(0.06, 1.5, 0.06, gris, xb, 0.55, ang, ax, az);
+    }
   }
   // paso de cebra al norte del puente
   const [nx, nz] = eje[1], [mx, mz] = eje[0], angN = Math.atan2(nx - mx, nz - mz);
