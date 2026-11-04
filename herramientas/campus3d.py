@@ -635,6 +635,25 @@ def lugares_nuevos(calles, quebrada, lejos_carretera, y_ruta32):
                             [6.2, -104.8], [3.8, -103.4], [1.8, -99.5], [-1.4, -95.0], [-3.2, -90.0], [-4.8, -86.0],
                             [-6.1, -82.0], [-7.5, -78.0], [-8.9, -74.0], [-10.1, -70.0], [-11.1, -66.0], [-11.66, -62.19]]})
     elem.append({"tipo": "acera", "id": None, "ancho": 1.8, "puntos": [[2.3, -80.5], [-6.1, -82.0]]})
+    # (anotaciones) aceras a los dos lados de la calle que pasa entre la piscina y la Biblioteca: la del lado de la
+    # piscina va desde la esquina de la calle que baja al puente hasta la acera que ya salía del pasillo de los
+    # extremos de las aulas; la del lado de la Biblioteca, desde pasando la esquina hasta frente al 16. Un paso de
+    # cebra las une cerca del extremo oeste
+    # (la del lado de la piscina se corta en el adoquín del parqueo de bicicletas y motos, ver recorrido.js)
+    elem.append({"tipo": "acera", "id": None, "ancho": 1.8,
+                 "puntos": [[115.78, -75.92], [111.91, -75.29], [108.0, -74.76], [104.0, -74.76], [100.0, -75.26],
+                            [96.0, -75.26], [92.0, -75.26], [90.6, -75.26]]})
+    elem.append({"tipo": "acera", "id": None, "ancho": 1.8,
+                 "puntos": [[71.4, -77.6], [69.69, -78.25], [66.41, -79.85], [62.72, -81.44], [60.82, -82.49],
+                            [57.51, -84.34], [54.93, -86.06], [51.09, -88.14], [42.3, -90.86]]})
+    elem.append({"tipo": "acera", "id": None, "ancho": 1.8,
+                 "puntos": [[127.42, -86.52], [125.48, -86.38], [121.37, -85.51], [118.17, -84.89], [114.09, -84.28],
+                            [109.52, -83.53], [104.0, -83.24], [100.0, -83.24], [96.0, -83.24], [92.0, -83.24], [88.0, -83.49],
+                            [84.0, -83.49], [76.38, -85.19], [72.52, -86.49], [69.42, -87.85], [64.87, -89.74],
+                            [62.27, -91.82], [59.3, -93.54]]})
+    elem.append({"tipo": "cebra", "id": None, "giro": 2.524, "ancho": 3.0,
+                 "franjas": [[58.04, -86.15], [58.57, -86.89], [59.09, -87.62], [59.61, -88.36], [60.13, -89.09],
+                             [60.65, -89.82]]})
     # higuerón grande en el patio entre el 8 y el 9 (fotos)
     elem.append({"tipo": "arbol_grande", "id": None, "p": a_metros(*marco(9, -36, -50)), "escala": 1.7})
     # soda (fotos): comedor abierto al costado, con techo a dos aguas sobre columnas azules, y un tanque de agua
