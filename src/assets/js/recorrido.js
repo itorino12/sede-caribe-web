@@ -382,16 +382,17 @@ for (const e of datos.campus.edificios) {
     const adoquin = new THREE.Mesh(new THREE.BoxGeometry(15, 0.08, 4.8), new THREE.MeshStandardMaterial({ color: 0x8e5a4c, roughness: 0.95 }));
     adoquin.position.set(...norte.en(T0, D0, 0.05)); adoquin.rotation.y = norte.ang; grupo.add(adoquin);
     const inox = new THREE.MeshStandardMaterial({ color: 0xd9dde1, metalness: 0.7, roughness: 0.25 });
+    // (anotaciones) vistos desde la calle, los tubos para bicicletas van a la izquierda y las motos a la derecha
     for (let k = 0; k < 4; k++) {
       const u = new THREE.Mesh(new THREE.TorusGeometry(0.4, 0.04, 6, 12, Math.PI), inox);
-      u.position.set(...norte.en(T0 - 6.5 + k * 1.6, D0 - 1.2, 0.45)); u.rotation.y = norte.ang + Math.PI / 2; grupo.add(u);
+      u.position.set(...norte.en(T0 + 1.7 + k * 1.6, D0 - 1.2, 0.45)); u.rotation.y = norte.ang + Math.PI / 2; grupo.add(u);
     }
     const tonos = [0x1f4fa8, 0x2a2d31, 0x5b2a6e, 0xb3262e, 0xe8e8e8];
     for (let k = 0; k < 5; k++) {
       const moto = new THREE.Group(), m = new THREE.MeshStandardMaterial({ color: tonos[k], roughness: 0.4, metalness: 0.3 });
       const cuerpo = new THREE.Mesh(new THREE.BoxGeometry(0.4, 0.55, 1.9), m); cuerpo.position.y = 0.6; moto.add(cuerpo);
       for (const z of [-0.75, 0.75]) { const r = new THREE.Mesh(new THREE.CylinderGeometry(0.32, 0.32, 0.15, 10), new THREE.MeshStandardMaterial({ color: 0x1a1a1a })); r.rotation.z = Math.PI / 2; r.position.set(0, 0.32, z); moto.add(r); }
-      moto.position.set(...norte.en(T0 + 1 + k * 1.4, D0 + 0.6, 0)); moto.rotation.y = norte.ang + Math.PI / 2; grupo.add(moto);
+      moto.position.set(...norte.en(T0 - 6.6 + k * 1.4, D0 + 0.6, 0)); moto.rotation.y = norte.ang + Math.PI / 2; grupo.add(moto);
     }
     grupo.traverse((o) => { if (o.isMesh && o.material !== mallaV) { o.castShadow = !liviano; o.receiveShadow = true; } });
   } else {
