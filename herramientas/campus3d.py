@@ -639,13 +639,16 @@ def lugares_nuevos(calles, quebrada, lejos_carretera, y_ruta32):
     # piscina va desde la esquina de la calle que baja al puente hasta la acera que ya salía del pasillo de los
     # extremos de las aulas; la del lado de la Biblioteca, desde pasando la esquina hasta frente al 16. Un paso de
     # cebra las une cerca del extremo oeste
-    # (la del lado de la piscina se corta en el adoquín del parqueo de bicicletas y motos, ver recorrido.js)
+    # (anotaciones) el parqueo de bicicletas y motos se corrió detrás de la acera (ver recorrido.js), así que la del
+    # lado de la piscina va de corrido
     elem.append({"tipo": "acera", "id": None, "ancho": 1.8,
                  "puntos": [[115.78, -75.92], [111.91, -75.29], [108.0, -74.76], [104.0, -74.76], [100.0, -75.26],
-                            [96.0, -75.26], [92.0, -75.26], [90.6, -75.26]]})
-    elem.append({"tipo": "acera", "id": None, "ancho": 1.8,
-                 "puntos": [[71.4, -77.6], [69.69, -78.25], [66.41, -79.85], [62.72, -81.44], [60.82, -82.49],
+                            [96.0, -75.26], [92.0, -75.26], [88.0, -75.26], [84.0, -75.26], [80.1, -75.5], [76.11, -75.61],
+                            [72.99, -76.99], [69.69, -78.25], [66.41, -79.85], [62.72, -81.44], [60.82, -82.49],
                             [57.51, -84.34], [54.93, -86.06], [51.09, -88.14], [42.3, -90.86]]})
+    # (anotaciones) acera corta que une esa acera, junto al paso de cebra, con el pasillo techado de los extremos
+    # de las aulas, frente al 9
+    elem.append({"tipo": "acera", "id": None, "ancho": 1.8, "puntos": [[56.0, -85.2], [50.0, -81.0], [43.2, -79.0]]})
     elem.append({"tipo": "acera", "id": None, "ancho": 1.8,
                  "puntos": [[127.42, -86.52], [125.48, -86.38], [121.37, -85.51], [118.17, -84.89], [114.09, -84.28],
                             [109.52, -83.53], [104.0, -83.24], [100.0, -83.24], [96.0, -83.24], [92.0, -83.24], [88.0, -83.49],
@@ -1233,10 +1236,12 @@ def main(pdf, sat=None):
         "picnic": {"centro": a_metros(*PICNIC["centro"]), "radio": round(PICNIC["radio"] * ESCALA, 2)},
         "parqueo": {"centro": a_metros(*PARQUEO["rect"][:2]), "largo": round(PARQUEO["rect"][2] * ESCALA, 2),
                     "ancho": round(PARQUEO["rect"][3] * ESCALA, 2), "giro": round(math.radians(PARQUEO["rect"][4]), 3),
-                    "divisor": round(PARQUEO["divisor"] - (PARQUEO["v"][0] + PARQUEO["v"][1]) / 2, 2)},
+                    "divisor": round(PARQUEO["divisor"] - (PARQUEO["v"][0] + PARQUEO["v"][1]) / 2, 2),
+                    # (anotaciones) filas de espacios en los bordes norte y sur (fondo en m) y espacio de discapacidad
+                    "rayas_bordes": 5.0, "discapacidad": True},
         "planta": {"centro": a_metros(*PLANTA["centro"]), "giro": round(math.radians(PLANTA["giro"]), 3)},
-        # (anotaciones) el puente lleva acera también del lado este, donde llega la acera de la calle de las residencias
-        "puente": {"centro": a_metros(*PUENTE["centro"]), "eje": [a_metros(x, y) for x, y in PUENTE["eje"]], "acera_este": True},
+        # (anotaciones) el puente lleva acera solo del lado este, donde llega la acera de la calle de las residencias
+        "puente": {"centro": a_metros(*PUENTE["centro"]), "eje": [a_metros(x, y) for x, y in PUENTE["eje"]], "acera": "este"},
         "elementos": [{**el, "id": NUMERACION.get(el["id"]) if el.get("id") else el.get("id")} for el in elementos],
         "numeros": {"pista": NUMERACION[19], "porton_residencias": NUMERACION[20], "picnic": NUMERACION[21],
                     "planta": NUMERACION[22], "puente": NUMERACION[23], "parqueo_piscina": NUMERACION[33]},

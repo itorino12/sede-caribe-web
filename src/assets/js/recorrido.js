@@ -377,19 +377,21 @@ for (const e of datos.campus.edificios) {
     // parqueo de bicicletas y motos: adoquín rojizo pegado a la calle, en la cara que mira a la biblioteca (norte)
     const norte = ladoHacia(-1);
     // (anotaciones) un poco más grande y separado de la malla
-    const adoquin = new THREE.Mesh(new THREE.BoxGeometry(18, 0.08, 7.5), new THREE.MeshStandardMaterial({ color: 0x8e5a4c, roughness: 0.95 }));
-    adoquin.position.set(...norte.en(0, 14, 0.05)); adoquin.rotation.y = norte.ang; grupo.add(adoquin);
+    // (anotaciones) se corrió hacia las aulas, entre la malla y la acera de la calle, sin tocar la calle
+    const T0 = -9.4, D0 = 10.6;
+    const adoquin = new THREE.Mesh(new THREE.BoxGeometry(15, 0.08, 4.8), new THREE.MeshStandardMaterial({ color: 0x8e5a4c, roughness: 0.95 }));
+    adoquin.position.set(...norte.en(T0, D0, 0.05)); adoquin.rotation.y = norte.ang; grupo.add(adoquin);
     const inox = new THREE.MeshStandardMaterial({ color: 0xd9dde1, metalness: 0.7, roughness: 0.25 });
     for (let k = 0; k < 4; k++) {
       const u = new THREE.Mesh(new THREE.TorusGeometry(0.4, 0.04, 6, 12, Math.PI), inox);
-      u.position.set(...norte.en(-6.5 + k * 1.6, 12.8, 0.45)); u.rotation.y = norte.ang + Math.PI / 2; grupo.add(u);
+      u.position.set(...norte.en(T0 - 6.5 + k * 1.6, D0 - 1.2, 0.45)); u.rotation.y = norte.ang + Math.PI / 2; grupo.add(u);
     }
     const tonos = [0x1f4fa8, 0x2a2d31, 0x5b2a6e, 0xb3262e, 0xe8e8e8];
     for (let k = 0; k < 5; k++) {
       const moto = new THREE.Group(), m = new THREE.MeshStandardMaterial({ color: tonos[k], roughness: 0.4, metalness: 0.3 });
       const cuerpo = new THREE.Mesh(new THREE.BoxGeometry(0.4, 0.55, 1.9), m); cuerpo.position.y = 0.6; moto.add(cuerpo);
       for (const z of [-0.75, 0.75]) { const r = new THREE.Mesh(new THREE.CylinderGeometry(0.32, 0.32, 0.15, 10), new THREE.MeshStandardMaterial({ color: 0x1a1a1a })); r.rotation.z = Math.PI / 2; r.position.set(0, 0.32, z); moto.add(r); }
-      moto.position.set(...norte.en(1 + k * 1.4, 14.6, 0)); moto.rotation.y = norte.ang + Math.PI / 2; grupo.add(moto);
+      moto.position.set(...norte.en(T0 + 1 + k * 1.4, D0 + 0.6, 0)); moto.rotation.y = norte.ang + Math.PI / 2; grupo.add(moto);
     }
     grupo.traverse((o) => { if (o.isMesh && o.material !== mallaV) { o.castShadow = !liviano; o.receiveShadow = true; } });
   } else {
@@ -771,8 +773,9 @@ if (datos.campus.puente) {
   const gris = new THREE.MeshStandardMaterial({ color: 0xb8bdc2, roughness: 0.4, metalness: 0.5 });
   const blanco = new THREE.MeshLambertMaterial({ color: 0xf2f2f2 });
   const CALZADA = 5.8, ACERA = 1.8;
-  // (anotaciones) acera también del lado este, donde llega la acera de la calle que viene de la entrada por residencias
-  const lados = datos.campus.puente.acera_este ? [-1, 1] : [-1];
+  // lado de la acera (anotaciones): solo del este, donde llega la acera de la calle que viene de la entrada por
+  // residencias; del oeste no hay
+  const lados = { este: [1], oeste: [-1], ambos: [-1, 1] }[datos.campus.puente.acera] || [-1];
   const caja = (w, h, l, mat, x, y, ang, cx, cz) => {
     const m = new THREE.Mesh(new THREE.BoxGeometry(w, h, l), mat);
     m.position.set(cx + Math.cos(ang) * x, y, cz - Math.sin(ang) * x); m.rotation.y = ang; puente.add(m); return m;
@@ -784,7 +787,7 @@ if (datos.campus.puente) {
     caja(CALZADA, 0.04, L, asfalto, 0, 0.07, ang, cx, cz);                    // calzada a ras de la calle
     if (borde) continue;                                                       // los extremos solo empatan el asfalto
     if (lados.length > 1) caja(CALZADA + 2 * ACERA + 0.6, 0.9, L, concreto, 0, -0.4, ang, cx, cz);   // tablero
-    else caja(CALZADA + ACERA + 0.6, 0.9, L, concreto, -ACERA / 2, -0.4, ang, cx, cz);
+    else caja(CALZADA + ACERA + 0.6, 0.9, L, concreto, lados[0] * ACERA / 2, -0.4, ang, cx, cz);
     for (const x of [CALZADA / 2 + 0.1, -CALZADA / 2 - 0.1]) {                 // defensas amarillas
       caja(0.12, 0.35, L, amarillo, x, 0.65, ang, cx, cz);
       caja(0.15, 0.75, 0.15, amarillo, x, 0.42, ang, ax, az);
@@ -867,6 +870,36 @@ if (datos.campus.parqueo) {
       const cabina = new THREE.Mesh(new THREE.BoxGeometry(1.6, 0.6, 2.3), new THREE.MeshStandardMaterial({ color: 0x27323c, roughness: 0.2, metalness: 0.5 })); cabina.position.set(0, 1.2, 0.2 * fila); carro.add(cabina);
       carro.position.set(x, 0, z); g.add(carro);
     }
+  }
+  // (anotaciones) una fila de espacios a lo largo de cada borde (norte y sur), con las rayas a la par de las del
+  // centro (las del centro van pintadas en la textura del suelo)
+  const blancoRaya = new THREE.MeshLambertMaterial({ color: 0xececE8 });
+  const { rayas_bordes: fondoBorde, discapacidad } = datos.campus.parqueo;
+  const xsRaya = [];
+  for (let i = 0; -largo / 2 + 1 + 2.6 * i < largo / 2 - 0.9 - 1e-6; i++) xsRaya.push(-largo / 2 + 1 + 2.6 * i);
+  if (fondoBorde) {
+    for (const borde of [-1, 1]) for (const x of xsRaya) {
+      const raya = new THREE.Mesh(new THREE.BoxGeometry(0.15, 0.02, fondoBorde), blancoRaya);
+      raya.position.set(x, 0.03, borde * (ancho / 2 - 0.3 - fondoBorde / 2)); raya.receiveShadow = true; g.add(raya);
+    }
+  }
+  // (anotaciones) espacio para personas con discapacidad: el del extremo este de la fila sur, con el símbolo
+  // internacional de accesibilidad pintado en el suelo (blanco sobre azul)
+  if (discapacidad) {
+    const lienzo = document.createElement("canvas"); lienzo.width = lienzo.height = 128;
+    const c2 = lienzo.getContext("2d");
+    c2.fillStyle = "#1f5fbf"; c2.fillRect(0, 0, 128, 128);
+    c2.fillStyle = c2.strokeStyle = "#ffffff"; c2.lineCap = "round"; c2.lineWidth = 11;
+    c2.beginPath(); c2.arc(60, 24, 10, 0, Math.PI * 2); c2.fill();                         // cabeza
+    c2.beginPath(); c2.moveTo(56, 40); c2.lineTo(52, 74); c2.lineTo(84, 74); c2.lineTo(96, 102); c2.stroke();   // cuerpo y piernas
+    c2.beginPath(); c2.moveTo(54, 54); c2.lineTo(78, 54); c2.stroke();                     // brazo
+    c2.lineWidth = 8; c2.beginPath(); c2.arc(54, 82, 26, Math.PI * 0.62, Math.PI * 1.85); c2.stroke();   // rueda
+    const textura = new THREE.CanvasTexture(lienzo); textura.anisotropy = 4;
+    if ("colorSpace" in textura) textura.colorSpace = THREE.SRGBColorSpace;
+    const logo = new THREE.Mesh(new THREE.PlaneGeometry(1.7, 1.7), new THREE.MeshLambertMaterial({ map: textura }));
+    const xEste = xsRaya[xsRaya.length - 1];
+    logo.rotation.x = -Math.PI / 2;   // acostado en el suelo, se lee desde el pasillo sur
+    logo.position.set((xEste + largo / 2) / 2, 0.035, divisor + 2.8); logo.receiveShadow = true; g.add(logo);
   }
   // alumbrado: postes en el divisor y en el borde sur, cada uno con dos luminarias
   for (const [x, z] of [[-largo / 2 + 1.2, divisor], [largo / 2 - 1.2, divisor], [-largo / 2 + 1.2, ancho / 2 - 1], [largo / 2 - 1.2, ancho / 2 - 1]]) {
