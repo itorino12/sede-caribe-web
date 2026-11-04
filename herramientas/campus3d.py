@@ -659,11 +659,11 @@ def lugares_nuevos(calles, quebrada, lejos_carretera, y_ruta32):
     elem.append({"tipo": "cebra", "id": None, "giro": -0.95, "ancho": 3.0,
                  "franjas": [[138.53, 114.69], [137.8, 115.21], [137.07, 115.74],
                              [136.33, 116.26], [135.6, 116.79], [134.87, 117.31]]})
-    # (anotaciones) acera por la franja de la entrada, del lado de la calle interna: corre junto a la cerca desde el
-    # portón, pasa el portón peatonal y sigue por la isla hasta el paso de cebra frente al pórtico
+    # (anotaciones) acera por la franja de la entrada, por afuera de la malla (del lado del acceso): corre junto a
+    # la cerca desde el portón, pasa a la par del portón peatonal y sigue por la isla hasta el paso de cebra del oeste
     elem.append({"tipo": "acera", "id": None, "ancho": 1.4,
-                 "puntos": [[-1.19, -111.77], [-3.2, -108.17], [-5.46, -104.81], [-7.97, -101.64],
-                            [-10.09, -98.32], [-12.02, -95.98], [-16.98, -77.73]]})
+                 "puntos": [[-2.93, -112.75], [-4.82, -109.35], [-7.04, -106.05], [-9.53, -102.9],
+                            [-11.69, -99.52], [-13.56, -97.24], [-24.06, -83.19]]})
     # ruedas de tren (fotos): monumento en el zacate entre el parqueo de la piscina y la calle de la Biblioteca
     elem.append({"tipo": "ruedas_tren", "id": None, "p": [90.0, -69.0], "giro": 2.88})
     cv2.circle(despejar, a_px(90.0, -69.0), int(6 / ESCALA), 1, -1)
