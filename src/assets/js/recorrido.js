@@ -1331,13 +1331,57 @@ if (datos.campus.parqueo) {
   function cebra({ franjas, giro, ancho = 3 }) {
     const g = new THREE.Group(); g.add(cajas(blanco, franjas.map(([x, z]) => [x, 0.1, z, ancho, 0.04, 0.5, giro]))); registrar(g, null);
   }
+  // ruedas de tren (fotos): monumento de juegos de ruedas oxidados, apilados en cuatro hileras con el eje hacia el
+  // frente, una rueda grande de rayos parada adelante y un carretón pequeño en el zacate, frente al parqueo
+  function ruedasTren({ p, giro }) {
+    const g = new THREE.Group();
+    const oxido = mate(0x5b4434, { roughness: 0.95, metalness: 0.15 }), oscuro = mate(0x3b3029, { roughness: 0.95, metalness: 0.2 });
+    const musgo = mate(0x58573d, { roughness: 1 });
+    const rueda = new THREE.CylinderGeometry(0.45, 0.45, 0.14, 18), pestana = new THREE.CylinderGeometry(0.5, 0.5, 0.04, 18);
+    const eje = new THREE.CylinderGeometry(0.08, 0.08, 1.7, 8), cubo = new THREE.CylinderGeometry(0.16, 0.16, 0.2, 10);
+    // juego de ruedas: dos ruedas unidas por el eje, con el eje a lo largo de z local (se ve la cara de la rueda)
+    const juego = (x, y, z, tono) => {
+      for (const lado of [-1, 1]) {
+        const r = new THREE.Mesh(rueda, tono); r.rotation.x = Math.PI / 2; r.position.set(x, y, z + lado * 0.75); g.add(r);
+        const f = new THREE.Mesh(pestana, oscuro); f.rotation.x = Math.PI / 2; f.position.set(x, y, z + lado * 0.66); g.add(f);
+        const c = new THREE.Mesh(cubo, oscuro); c.rotation.x = Math.PI / 2; c.position.set(x, y, z + lado * 0.88); g.add(c);
+      }
+      const e = new THREE.Mesh(eje, oscuro); e.rotation.x = Math.PI / 2; e.position.set(x, y, z); g.add(e);
+    };
+    // hileras de abajo hacia arriba (más angostas arriba), algunas con musgo
+    const hileras = [[8, 0.45], [8, 1.28], [7, 2.11], [6, 2.94]];
+    hileras.forEach(([n, y], h) => {
+      for (let i = 0; i < n; i++) juego((i - (n - 1) / 2) * 0.95, y, 0, (i + h) % 4 === 0 ? musgo : oxido);
+    });
+    // carretones de base: largueros bajo la hilera de abajo
+    for (const x of [-2.2, 2.2]) for (const z of [-0.75, 0.75]) {
+      const l = new THREE.Mesh(new THREE.BoxGeometry(2.6, 0.22, 0.16), oscuro); l.position.set(x, 0.32, z + Math.sign(z) * 0.32); g.add(l);
+    }
+    // rueda grande de rayos, parada adelante, al centro
+    const R = 1.2, zR = 1.25;
+    const aro = new THREE.Mesh(new THREE.TorusGeometry(R, 0.1, 8, 32), oxido); aro.position.set(0, R + 0.02, zR); g.add(aro);
+    const llanta = new THREE.Mesh(new THREE.TorusGeometry(R - 0.12, 0.05, 6, 32), oscuro); llanta.position.set(0, R + 0.02, zR); g.add(llanta);
+    const centro = new THREE.Mesh(new THREE.CylinderGeometry(0.22, 0.22, 0.3, 14), oscuro); centro.rotation.x = Math.PI / 2; centro.position.set(0, R + 0.02, zR); g.add(centro);
+    for (let k = 0; k < 12; k++) {
+      const a = (k / 12) * Math.PI * 2, rayo = new THREE.Mesh(new THREE.BoxGeometry(0.08, R - 0.2, 0.06), oxido);
+      rayo.position.set(Math.sin(a) * (R / 2), R + 0.02 + Math.cos(a) * (R / 2), zR); rayo.rotation.z = -a; g.add(rayo);
+    }
+    // carretón pequeño adelante: dos juegos de ruedas con su bastidor
+    const zC = 3.0, xC = -0.6;
+    for (const dx of [-0.75, 0.75]) juego(xC + dx, 0.45, zC, musgo);
+    const bastidor = new THREE.Mesh(new THREE.BoxGeometry(2.2, 0.3, 0.9), oscuro); bastidor.position.set(xC, 0.6, zC); g.add(bastidor);
+    const caja_ = new THREE.Mesh(new THREE.BoxGeometry(0.6, 0.45, 0.6), oxido); caja_.position.set(xC, 0.95, zC); g.add(caja_);
+    g.position.set(p[0], 0, p[1]); g.rotation.y = giro;
+    registrar(g, null);
+  }
   // portón peatonal (anotaciones): dos hojas angostas como las del portón grande, al final de la cerca
   function portonPeatonal({ p, giro, ancho = 1.4 }) {
     const g = portonVerde(false, ancho / 2); g.position.set(p[0], 0, p[1]); g.rotation.y = giro; escena.add(g);
   }
   for (const el of datos.campus.elementos || []) {
     const hacer = { pasillo, caseta, parqueo, bancas, escalera, rampa, descanso, mesas, explanada, alcantarilla, jardin, pluma, comedor, tanque,
-      acera, cebra, porton_peatonal: portonPeatonal, puente_peatonal: puentePeatonal, arbol_grande: arbolGrande }[el.tipo];
+      acera, cebra, porton_peatonal: portonPeatonal, puente_peatonal: puentePeatonal, arbol_grande: arbolGrande,
+      ruedas_tren: ruedasTren }[el.tipo];
     if (hacer) hacer(el);
     else if (el.tipo === "porton") {   // acceso cerrado con portón (sin faroles)
       const g = portonVerde(false, el.hoja || 4.2); g.position.set(el.p[0], 0, el.p[1]); g.rotation.y = el.giro; escena.add(g);

@@ -434,7 +434,7 @@ def lugares_nuevos(calles, quebrada, lejos_carretera, y_ruta32):
     """Elementos sin edificio (pasillos techados, casetas, parqueos, etc.) y las máscaras para pintarlos
     en el suelo y para que no les caigan árboles encima. Todo sale en metros para la maqueta."""
     forma = calles.shape
-    asfalto, lastre, claro, despejar, claro_plaza = (np.zeros(forma, np.uint8) for _ in range(5))
+    asfalto, lastre, claro, despejar, claro_plaza, calles_extra = (np.zeros(forma, np.uint8) for _ in range(6))
     rayas = np.zeros((forma[0] * 2, forma[1] * 2), np.uint8)   # al doble, para líneas finas
     elem = []
     M = lambda pts: [a_metros(float(x), float(y)) for x, y in pts]
@@ -626,7 +626,7 @@ def lugares_nuevos(calles, quebrada, lejos_carretera, y_ruta32):
     # Pasa pegada a la malla de la piscina (a unos 2,4 m), de modo que los vestidores, el toldo y las mesas quedan
     # detrás de ella, del lado de la quebrada (ver vestidores en recorrido.js)
     elem.append({"tipo": "acera", "id": None, "ancho": 1.8,
-                 "puntos": [[107.0, -11.5], [98.0, -14.6], [86.56, -19.89], [67.24, -25.07], [56.13, -28.04], [41.4, -29.5]]})
+                 "puntos": [[106.1, -11.8], [98.0, -14.6], [86.56, -19.89], [67.24, -25.07], [56.13, -28.04], [41.4, -29.5]]})
     # (anotaciones) acera en la zona verde al norte del 9: sale del pasillo de los extremos de las aulas, bordea la
     # calle de arriba hasta la esquina y baja junto al camino de la entrada hasta la acera que ya estaba; otra
     # corta llega a ella desde el extremo oeste del 9
@@ -651,6 +651,31 @@ def lugares_nuevos(calles, quebrada, lejos_carretera, y_ruta32):
     elem.append({"tipo": "acera", "id": None, "ancho": 1.8, "puntos": [[56.0, -85.2], [50.0, -81.0], [43.2, -79.0]]})
     # (anotaciones) tramo corto que sigue la acera de los baños de la piscina hasta la acera que bordea la malla
     elem.append({"tipo": "acera", "id": None, "ancho": 1.6, "puntos": [[53.01, -35.32], [51.19, -28.53]]})
+    # (anotaciones) acera del lado oeste de la calle de residencias: arranca pasando el portón (33) y llega a un paso
+    # de cebra que cruza a la acera del lado de las residencias
+    elem.append({"tipo": "acera", "id": None, "ancho": 1.8,
+                 "puntos": [[148.42, 145.81], [146.73, 141.92], [145.2, 138.04], [143.57, 133.97],
+                            [141.45, 129.87], [138.72, 125.68], [136.16, 121.81], [134.02, 117.92]]})
+    elem.append({"tipo": "cebra", "id": None, "giro": -0.95, "ancho": 3.0,
+                 "franjas": [[138.53, 114.69], [137.8, 115.21], [137.07, 115.74],
+                             [136.33, 116.26], [135.6, 116.79], [134.87, 117.31]]})
+    # (anotaciones) acera por la franja de la entrada, del lado de la calle interna: corre junto a la cerca desde el
+    # portón, pasa el portón peatonal y sigue por la isla hasta el paso de cebra frente al pórtico
+    elem.append({"tipo": "acera", "id": None, "ancho": 1.4,
+                 "puntos": [[-1.19, -111.77], [-3.2, -108.17], [-5.46, -104.81], [-7.97, -101.64],
+                            [-10.09, -98.32], [-12.02, -95.98], [-16.98, -77.73]]})
+    # ruedas de tren (fotos): monumento en el zacate entre el parqueo de la piscina y la calle de la Biblioteca
+    elem.append({"tipo": "ruedas_tren", "id": None, "p": [90.0, -69.0], "giro": 2.88})
+    cv2.circle(despejar, a_px(90.0, -69.0), int(6 / ESCALA), 1, -1)
+    # (anotaciones) calles nuevas: entrada asfaltada del gimnasio a la Bodega de Acción Social (sin los árboles que
+    # había en el camino) y, en la entrada principal, la continuación de la calle hasta el portón (antes zacate)
+    def tira_(a, b, wa, wb):
+        L_ = math.dist(a, b); ux_, uz_ = (b[0] - a[0]) / L_, (b[1] - a[1]) / L_; nx_, nz_ = -uz_, ux_
+        return [(a[0] + nx_ * wa / 2, a[1] + nz_ * wa / 2), (b[0] + nx_ * wb / 2, b[1] + nz_ * wb / 2),
+                (b[0] - nx_ * wb / 2, b[1] - nz_ * wb / 2), (a[0] - nx_ * wa / 2, a[1] - nz_ * wa / 2)]
+    for pol_ in (tira_((110.5, -16.6), (158.6, -12.5), 6.4, 5.0), [(-2.6, -111.9), (4.12, -115.38), (4.75, -121.8), (-1.6, -121.8)]):
+        cv2.fillPoly(calles_extra, [np.array([a_px(x, z) for x, z in pol_], np.int32)], 255)
+    cv2.line(despejar, a_px(110.5, -16.6), a_px(158.6, -12.5), 1, int(12 / ESCALA))
     elem.append({"tipo": "acera", "id": None, "ancho": 1.8,
                  "puntos": [[127.42, -86.52], [125.48, -86.38], [121.37, -85.51], [118.17, -84.89], [114.09, -84.28],
                             [109.52, -83.53], [104.0, -83.24], [100.0, -83.24], [96.0, -83.24], [92.0, -83.24], [88.0, -83.49],
@@ -762,7 +787,7 @@ def lugares_nuevos(calles, quebrada, lejos_carretera, y_ruta32):
     cv2.circle(despejar, (int(xp), int(yp)), 70, 1, -1)
     # (fotos) sin techo; las rampas corren junto a la carretera, fuera de la cerca de la UCR
     elem.append({"tipo": "puente_peatonal", "id": 32, "p": a_metros(xp, yp), "giro": round(giro_calle, 3), "semiancho": round(semi, 2)})
-    return elem, {"asfalto": asfalto, "rayas": rayas, "lastre": lastre, "claro": claro, "despejar": despejar, "cerca": cerca_extra,
+    return elem, {"calles_extra": calles_extra, "asfalto": asfalto, "rayas": rayas, "lastre": lastre, "claro": claro, "despejar": despejar, "cerca": cerca_extra,
                   "plaza": claro_plaza}
 
 
@@ -979,7 +1004,7 @@ def main(pdf, sat=None):
     cv2.circle(picnic, PICNIC["centro"], PICNIC["radio"], 255, -1)
     pintar(cv2.GaussianBlur(picnic, (0, 0), 6), (166, 208, 120))
     # dentro de la U todo está asfaltado (fotos), también el camino a la pista; cordón de concreto claro
-    pintar(cv2.bitwise_or(calles, acceso), (84, 88, 94), borde=(214, 212, 204))
+    pintar(cv2.bitwise_or(cv2.bitwise_or(calles, acceso), extra["calles_extra"]), (84, 88, 94), borde=(214, 212, 204))
     pintar(extra["lastre"], (176, 160, 128))
     pintar(extra["plaza"], (200, 198, 190), borde=(170, 168, 160))
     pintar(extra["asfalto"], (80, 84, 90), borde=(200, 198, 190))
