@@ -64,7 +64,7 @@
 :root[data-quieto] * { animation: none !important; transition: none !important; }
 
 *, *::before, *::after { box-sizing: border-box; }
-html { font-size: calc(100% * var(--escala)); -webkit-text-size-adjust: 100%; scroll-padding-top: 24px; }
+html { font-size: calc(100% * var(--escala)); -webkit-text-size-adjust: 100%; scroll-padding-top: 120px; }
 body { margin: 0; font-family: var(--f); font-size: var(--t-base); line-height: 1.6; color: var(--tinta); background: var(--papel); }
 img { max-width: 100%; height: auto; display: block; }
 a { color: var(--enlace); text-underline-offset: .18em; text-decoration-thickness: 1px; }
@@ -101,7 +101,8 @@ main:focus { outline: none; }
 .util__ucr { margin-right: auto; }
 @media (max-width: 600px) { .util a:not(.util__ucr):not(:last-of-type) { display: none; } }
 
-.cabecera { background: var(--cab-fondo); color: var(--cab-texto); border-bottom: 1px solid var(--cab-linea); position: relative; z-index: 20; }
+/* la barra blanca con los logos y el menú queda fija arriba al bajar por la página */
+.cabecera { background: var(--cab-fondo); color: var(--cab-texto); border-bottom: 1px solid var(--cab-linea); position: sticky; top: 0; z-index: 20; }
 .cabecera__fila { display: flex; align-items: center; gap: 18px; min-height: 92px; }
 .firma { display: flex; align-items: center; gap: 18px; text-decoration: none; flex-shrink: 0; }
 /* Firma con escudo (Manual UCR 3.1): escudo + «Universidad de Costa Rica», y a la derecha el nombre de la unidad */
@@ -142,7 +143,7 @@ main:focus { outline: none; }
   .menu-boton__icono::before, .menu-boton__icono::after { content: ""; position: absolute; }
   .menu-boton__icono::before { top: -6px; } .menu-boton__icono::after { top: 6px; }
   .menu { display: none; order: 5; width: 100%; margin: 0; }
-  .menu.abierto { display: block; }
+  .menu.abierto { display: block; max-height: calc(100dvh - 92px); overflow-y: auto; overscroll-behavior: contain; }
   .menu > ul { flex-direction: column; gap: 0; border-top: 1px solid var(--cab-linea); }
   .menu__enlace { width: 100%; text-align: left; padding: 14px 0; border-bottom: 1px solid var(--cab-linea); }
   .menu__sub { position: static; box-shadow: none; border: 0; padding: 0 0 8px 16px; }
@@ -649,11 +650,14 @@ html.sin-desplazar, html.sin-desplazar body { overflow: hidden; }
 .portada__recorrido-boton svg { width: 22px; height: 22px; flex: none; }
 .portada__recorrido-boton:hover { background: #fff; text-decoration: underline; }
 .portada__recorrido-boton:focus-visible { outline: 3px solid var(--foco); outline-offset: 3px; }
-@media (max-width: 760px) { .portada__recorrido-boton { top: 12px; bottom: auto; right: var(--gutter); padding: 8px 14px; font-size: var(--t-sm); } }
-/* congo de la portada (congo.js): cuelga del borde de la cabecera, sobre la maqueta; decorativo, no recibe toques */
-.congo { position: absolute; top: 0; left: 0; z-index: 1; pointer-events: none; opacity: 0; transition: opacity .6s ease; }
+@media (max-width: 760px) { .portada__recorrido-boton { top: calc(75vw - 84px); bottom: auto; right: var(--gutter); padding: 8px 14px; font-size: var(--t-sm); } }
+/* congo de la portada (congo.js): anda colgado de una varita que cruza la portada; decorativo, no recibe toques.
+   En el celular el botón del recorrido baja al pie de la maqueta para dejarle la varita libre. */
+.congo, .congo-vara { position: absolute; left: 0; z-index: 1; pointer-events: none; }
+.congo { top: 0; opacity: 0; transition: opacity .6s ease; }
 .congo--listo { opacity: 1; }
-.congo svg { display: block; height: clamp(140px, 17vw, 210px); overflow: visible; }
+.congo svg { display: block; overflow: visible; }
+.congo-vara { right: 0; border-radius: 4px; box-shadow: 0 2px 3px rgba(0,0,0,.28); }
 
 /* -------- carrusel de fotos (ficha del recorrido y visor en grande) -------- */
 .carrusel { position: relative; margin: -16px -18px 12px; }
