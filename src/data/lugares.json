@@ -142,8 +142,8 @@
  {
   "id": 18,
   "zona": 2,
-  "nombre": "Camino techado de la entrada",
-  "texto": "Pasillo techado que baja desde la entrada principal junto a la calle interna; de él sale el pasillo que va a las aulas 8 a 17.",
+  "nombre": "Camino techado a la entrada",
+  "texto": "Camino que baja desde la entrada principal junto a la calle interna: el primer tramo es una acera sin techo y, desde donde llega el pasillo de las aulas 8 a 17, sigue techado.",
   "fotos": "lugar-18-1.jpg, lugar-18-2.jpg, lugar-18-3.jpg",
   "fotos_alt": "Inicio del camino techado junto a la calle, frente al Miniauditorio|Camino techado junto a la calle, con el parqueo de motos y bicicletas al lado|El camino techado bajando en curva junto a la calle interna"
  },

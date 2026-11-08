@@ -1211,10 +1211,10 @@ if (datos.campus.parqueo) {
 
   // paso de la quebrada (28): la calle pasa sobre un tubo con cabezales de concreto, y encima la cruza una
   // plataforma de concreto rayado de lado a lado, con guía táctil, que une los dos pasillos techados
-  function alcantarilla({ id, p, giro, ancho }) {
+  function alcantarilla({ id, p, giro, ancho, cabezales = true }) {
     const g = new THREE.Group(), concreto = mate(0xbfbdb5, { roughness: 0.95 });
     const boca = new THREE.MeshBasicMaterial({ color: 0x1d2326 });
-    for (const lado of [-1, 1]) {   // local x: de lado a lado de la calle; local z: a lo largo de la calle
+    for (const lado of cabezales ? [-1, 1] : []) {   // sin cabezales: paso de concreto sobre la calle, sin quebrada   // local x: de lado a lado de la calle; local z: a lo largo de la calle
       const x = lado * (ancho / 2 + 0.9);
       const cabezal = new THREE.Mesh(new THREE.BoxGeometry(0.5, 1.5, 4.2), concreto); cabezal.position.set(x, 0.15, 0); g.add(cabezal);
       const ojo = new THREE.Mesh(new THREE.CircleGeometry(0.75, 18), boca); ojo.position.set(x + lado * 0.26, 0.1, 0); ojo.rotation.y = lado * Math.PI / 2; g.add(ojo);

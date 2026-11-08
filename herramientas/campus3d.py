@@ -537,7 +537,8 @@ def lugares_nuevos(calles, quebrada, lejos_carretera, y_ruta32):
     pasillo([(705, 1577), (688, 1531)])
     # baño del pabellón 7 (fotos y anotaciones): casita aparte con techo a dos aguas, alero celeste y un mural,
     # pasando el extremo oeste del 7, junto al pasillo techado que llega del camino de la entrada
-    caja(None, "caseta", marco(7, -94, -21), 5.5, 9.0, 6.0, alto=3.0, uso="banos_mural")
+    # (anotaciones) 2,5 m más al sur: el techo quedaba encima del pasillo que llega del camino de la entrada
+    caja(None, "caseta", marco(7, -94, -31), 5.5, 9.0, 6.0, alto=3.0, uso="banos_mural")
 
     # --- parqueos: frente a Docencia (25) y el administrativo al final de la calle, junto al 2 (34)
     # (anotaciones y fotos) no hay calle hacia el 25: entre el final de la calle, el 25 y el 34 todo es una
@@ -618,6 +619,25 @@ def lugares_nuevos(calles, quebrada, lejos_carretera, y_ruta32):
         return [round(x + ux_ * (izq - 0.6), 2), round(z + uz_ * (izq - 0.6), 2)], [round(x + ux_ * (der + 0.6), 2), round(z + uz_ * (der + 0.6), 2)]
     oeste_a, oeste_b = cebra_en(-26.0, -84.0)
     este_a, este_b = cebra_en(-12.5, -76.0)
+    # (anotaciones) pasos de concreto rayado, iguales al de la alcantarilla (19) pero sin cabezales: frente al 12,
+    # donde la acera llega al pasillo techado, y en la calle al este de la caseta del guarda (21)
+    for sx_, sz_ in ((-33.5, -29.0), (-30.0, -78.0)):
+        cx_, cy_ = a_px(sx_, sz_)
+        R = int(7 / ESCALA)
+        yy, xx = np.nonzero(calles[cy_ - R:cy_ + R, cx_ - R:cx_ + R])
+        _, vecs_ = np.linalg.eigh(np.cov(np.vstack([xx, yy])))
+        rx_, ry_ = vecs_[:, -1]
+        ux_, uz_ = -ry_, rx_                        # de lado a lado de la calle
+        ds = np.round(np.arange(-12.0, 12.01, 0.3), 2)
+        sobre = [bool(calles[a_px(sx_ + ux_ * d, sz_ + uz_ * d)[::-1]]) for d in ds]
+        k0 = min((k for k, s in enumerate(sobre) if s), key=lambda k: abs(ds[k]))
+        ki = k0
+        while ki > 0 and sobre[ki - 1]: ki -= 1
+        kd = k0
+        while kd < len(ds) - 1 and sobre[kd + 1]: kd += 1
+        m_ = (ds[ki] + ds[kd]) / 2
+        elem.append({"tipo": "alcantarilla", "id": None, "p": [round(sx_ + ux_ * m_, 2), round(sz_ + uz_ * m_, 2)],
+                     "giro": round(math.atan2(rx_, ry_), 3), "ancho": round(float(ds[kd] - ds[ki]), 2), "cabezales": False})
     lados_ = sorted([oeste_a, oeste_b], key=lambda q: q[0])        # el extremo de más al oeste llega al zacate del guarda
     isla_ = sorted([este_a, este_b], key=lambda q: q[0])
     elem.append({"tipo": "acera", "id": None, "ancho": 1.8, "puntos": [lados_[1], isla_[0]]})          # por la isla
