@@ -37,6 +37,8 @@ function crearRenderer() {
 const renderer = crearRenderer();
 if (!renderer) {
   raiz.classList.add("mapa3d--sin-3d");
+  const nota = raiz.querySelector(".mapa3d__nota");
+  if (nota) nota.textContent = "Este navegador no permitió abrir la maqueta 3D (WebGL); se muestra la versión sin 3D.";
   // maqueta giratoria con imágenes (pesa poco y funciona en cualquier teléfono); en la portada, vistas que giran solas
   import(PORTADA ? "./portada-giro.js" : "./recorrido-giro.js");
 }

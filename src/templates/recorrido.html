@@ -28,6 +28,9 @@
   const js = (ruta) => new URL(ruta, document.baseURI).href;
   import(js("{{ raiz }}assets/js/recorrido.js")).catch((e) => {
     console.warn("Maqueta 3D: no cargó", e);
+    // el motivo queda a la vista (en la nota bajo la maqueta), para poder reportarlo desde el teléfono
+    const nota = document.querySelector(".mapa3d__nota");
+    if (nota) nota.textContent = `No se pudo cargar la maqueta 3D (${navigator.userAgent.match(/(iPhone OS|Android|Chrome|Version)[ \/][\d._]+/g)?.join(", ") || "navegador"}): ${e && (e.message || e)}`;
     document.querySelector("[data-recorrido]").classList.add("mapa3d--sin-3d");
     import(js("{{ raiz }}assets/js/recorrido-giro.js"));
   });
