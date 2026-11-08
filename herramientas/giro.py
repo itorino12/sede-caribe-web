@@ -26,8 +26,10 @@ CUADROS, ANCHO, ALTO = 24, 1200, 700
 
 def main():
     SALIDA.mkdir(parents=True, exist_ok=True)
-    manejador = functools.partial(http.server.SimpleHTTPRequestHandler, directory=str(RAIZ / "dist"))
-    manejador.log_message = lambda *a: None
+    class Silencioso(http.server.SimpleHTTPRequestHandler):
+        def log_message(self, *a):
+            pass
+    manejador = functools.partial(Silencioso, directory=str(RAIZ / "dist"))
     servidor = http.server.ThreadingHTTPServer(("127.0.0.1", 0), manejador)
     threading.Thread(target=servidor.serve_forever, daemon=True).start()
     url = f"http://127.0.0.1:{servidor.server_address[1]}/recorrido.html#captura-giro"
