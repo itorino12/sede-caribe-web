@@ -333,6 +333,13 @@ def main():
         if f.is_file():
             huella.update(f.read_bytes())
     version = huella.hexdigest()[:10]
+    # los scripts que se cargan entre sí también llevan la versión: si no, el navegador puede juntar un script
+    # nuevo con otro viejo guardado en caché y la maqueta 3D no arranca
+    for js in (DIST / "assets" / "js").rglob("*.js"):
+        texto_js = js.read_text(encoding="utf-8")
+        nuevo_js = re.sub(r'(["\'])(\./(?:vendor/)?[\w.-]+\.js)\1', rf'\1\2?v={version}\1', texto_js)
+        if nuevo_js != texto_js:
+            js.write_text(nuevo_js, encoding="utf-8")
 
     env = Environment(loader=FileSystemLoader(SRC / "templates"), autoescape=select_autoescape(["html"]),
                       trim_blocks=True, lstrip_blocks=True)

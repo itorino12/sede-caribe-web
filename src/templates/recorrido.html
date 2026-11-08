@@ -23,5 +23,13 @@
   </section>
 </div>
 <script type="application/json" id="datos-campus">{{ {"campus": campus3d, "lugares": lugares}|tojson }}</script>
-<script type="module" src="{{ raiz }}assets/js/recorrido.js"></script>
+<script type="module">
+  // si la maqueta 3D no llega a cargar (red o caché del navegador), queda la maqueta giratoria y no un cuadro vacío
+  const js = (ruta) => new URL(ruta, document.baseURI).href;
+  import(js("{{ raiz }}assets/js/recorrido.js")).catch((e) => {
+    console.warn("Maqueta 3D: no cargó", e);
+    document.querySelector("[data-recorrido]").classList.add("mapa3d--sin-3d");
+    import(js("{{ raiz }}assets/js/recorrido-giro.js"));
+  });
+</script>
 {% endblock %}
