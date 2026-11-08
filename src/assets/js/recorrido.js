@@ -3,7 +3,7 @@
 import * as THREE from "./vendor/three.module.min.js";
 import { OrbitControls } from "./vendor/OrbitControls.js";
 import { ficha, sinMovimiento, rellenarFicha } from "./recorrido-ficha.js";
-import { MARCAS, prioridadDe, compararRango, FRENTE_PORTADA } from "./recorrido-config.js";
+import { MARCAS, prioridadDe, compararRango, FRENTE_PORTADA, CONGOS } from "./recorrido-config.js";
 import { armarEntorno } from "./recorrido-entorno.js";
 
 const raiz = document.querySelector("[data-recorrido]");
@@ -84,6 +84,7 @@ const colores = { pared: 0xfbfaf6, techo: 0x66756b, losa: 0xe3e6ea, celosia: 0x7
 // La maqueta exagera un poco las alturas para que los edificios se lean desde arriba
 const EXAGERAR = 1.4;
 const edificios = [];
+let grupoCongos = null;   // los congos se tocan aparte de los edificios
 function prisma(contorno, alto, desde, material, crecer = 0) {
   const cx = contorno.reduce((s, p) => s + p[0], 0) / contorno.length;
   const cz = contorno.reduce((s, p) => s + p[1], 0) / contorno.length;
@@ -1186,6 +1187,40 @@ if (datos.campus.parqueo) {
   }
   function arbolGrande({ p, escala }) { escena.add(higueron(p[0], 0, p[1], escala)); }
 
+  // congos (anotaciones): manada de monos aulladores negros, con los costados dorados, sentados en la copa del árbol
+  // grande junto a la caseta de arriba. Van exagerados (como los edificios) para que se vean en la maqueta. No se
+  // funden con el resto: se tocan aparte (ver «congos» más abajo)
+  function congos({ p, escala }) {
+    escena.add(higueron(p[0], 0, p[1], escala));
+    const g = new THREE.Group(), pelo = mate(0x1d1714, { roughness: 1 }), dorado = mate(0x7a5a2c, { roughness: 1 }), cara = mate(0x0d0b0a);
+    const copa = 6 * escala + 1.2 * escala;   // altura del centro de la copa (higueron)
+    const lugaresMono = [[0, 0.95, 0, 0], [0.55, 0.62, 0.2, 1.4], [-0.5, 0.6, 0.25, 2.6], [0.1, 0.55, -0.6, 4], [-0.2, 0.62, 0.6, 5.2], [0.62, 0.42, -0.45, 0.8]];
+    const ES = 1.5;   // exageración
+    lugaresMono.forEach(([dx, dy, dz, giro]) => {
+      const m = new THREE.Group();
+      const cuerpo = new THREE.Mesh(new THREE.SphereGeometry(0.42 * ES, 10, 8), pelo); cuerpo.scale.set(1, 1.15, 0.9); cuerpo.position.y = 0.5 * ES; m.add(cuerpo);
+      const flanco = new THREE.Mesh(new THREE.SphereGeometry(0.43 * ES, 10, 8, 0, Math.PI * 2, Math.PI * 0.45, Math.PI * 0.3), dorado);
+      flanco.scale.set(1.02, 1.1, 0.95); flanco.position.y = 0.5 * ES; m.add(flanco);
+      const cabeza = new THREE.Mesh(new THREE.SphereGeometry(0.24 * ES, 10, 8), pelo); cabeza.position.set(0, 1.05 * ES, 0.18 * ES); m.add(cabeza);
+      const rostro = new THREE.Mesh(new THREE.SphereGeometry(0.15 * ES, 8, 6), cara); rostro.scale.z = 0.6; rostro.position.set(0, 1.0 * ES, 0.36 * ES); m.add(rostro);
+      for (const lado of [-1, 1]) {
+        const brazo = new THREE.Mesh(new THREE.CylinderGeometry(0.07 * ES, 0.07 * ES, 0.7 * ES, 6), pelo);
+        brazo.position.set(lado * 0.38 * ES, 0.35 * ES, 0.15 * ES); brazo.rotation.set(0.5, 0, lado * 0.35); m.add(brazo);
+      }
+      // cola prensil larga que cuelga y se enrosca en la punta
+      const curva = new THREE.CatmullRomCurve3([[0, 0.25, -0.35], [0, -0.3, -0.55], [0, -0.9, -0.5], [0, -1.3, -0.3], [0.12, -1.4, -0.1]].map(([x, y, z]) => new THREE.Vector3(x * ES, y * ES, z * ES)));
+      m.add(new THREE.Mesh(new THREE.TubeGeometry(curva, 16, 0.05 * ES, 5), pelo));
+      m.position.set(p[0] + dx * 5.6 * escala, copa + dy * 2.4 * escala, p[1] + dz * 5.6 * escala); m.rotation.y = giro;
+      g.add(m);
+    });
+    // zona de toque más grande que los monos (invisible), para que sea fácil darles en el teléfono
+    const toque = new THREE.Mesh(new THREE.SphereGeometry(5.2 * escala, 12, 8), new THREE.MeshBasicMaterial({ transparent: true, opacity: 0, depthWrite: false }));
+    toque.scale.y = 0.55; toque.position.set(p[0], copa + 1.2 * escala, p[1]); g.add(toque);
+    g.traverse((o) => { o.userData.noFundir = true; if (o.isMesh && o !== toque) o.castShadow = !liviano; });
+    escena.add(g);
+    grupoCongos = g;
+  }
+
   // explanada (fotos): una gran planicie en lo alto, con taludes de zacate, bancas de concreto celeste en el borde
   // y un higuerón enorme (unas tres veces más grande que los árboles comunes)
   function explanada({ id, contorno, centro, alto, arbol }) {
@@ -1381,7 +1416,7 @@ if (datos.campus.parqueo) {
   for (const el of datos.campus.elementos || []) {
     const hacer = { pasillo, caseta, parqueo, bancas, escalera, rampa, descanso, mesas, explanada, alcantarilla, jardin, pluma, comedor, tanque,
       acera, cebra, porton_peatonal: portonPeatonal, puente_peatonal: puentePeatonal, arbol_grande: arbolGrande,
-      ruedas_tren: ruedasTren }[el.tipo];
+      ruedas_tren: ruedasTren, congos }[el.tipo];
     if (hacer) hacer(el);
     else if (el.tipo === "porton") {   // acceso cerrado con portón (sin faroles)
       const g = portonVerde(false, el.hoja || 4.2); g.position.set(el.p[0], 0, el.p[1]); g.rotation.y = el.giro; escena.add(g);
@@ -1437,7 +1472,7 @@ if (datos.campus.parqueo) {
   for (const g of edificios) g.traverse((o) => { if (o.isMesh) dueno.set(o, g); });
   const lotes = new Map();
   escena.traverse((o) => {
-    if (!o.isMesh || o.isInstancedMesh || Array.isArray(o.material) || o.material.transparent || !o.visible) return;
+    if (!o.isMesh || o.isInstancedMesh || Array.isArray(o.material) || o.material.transparent || !o.visible || o.userData.noFundir) return;
     const atributos = Object.entries(o.geometry.attributes);
     if (atributos.some(([, a]) => a.isInterleavedBufferAttribute) || Object.keys(o.geometry.morphAttributes).length) return;
     if (o.matrixWorld.determinant() < 0) return;   // una pieza reflejada quedaría con las caras al revés
@@ -1698,10 +1733,44 @@ lienzo.addEventListener("pointerup", (e) => {
   const r = lienzo.getBoundingClientRect();
   puntero.set(((e.clientX - r.left) / r.width) * 2 - 1, -((e.clientY - r.top) / r.height) * 2 + 1);
   rayo.setFromCamera(puntero, camara);
+  if (!PORTADA && grupoCongos && rayo.intersectObject(grupoCongos, true).length) { tocarCongos(); return; }
   const golpe = rayo.intersectObjects(edificios, true)[0];
   if (PORTADA) { location.href = raiz.dataset.raiz + "recorrido.html" + (golpe ? `#lugar-${golpe.object.userData.edificio.userData.id}` : ""); return; }
   if (golpe) elegir(golpe.object.userData.edificio.userData.id, false);
 });
+
+// ---------- congos: un toque suena el aullido (solo la parte de los congos); dos toques seguidos abren los videos
+let aullido = null, ultimoToqueCongos = 0;
+const visorVideo = document.querySelector(".visor-video");
+function tocarCongos() {
+  const ahora = performance.now();
+  if (ahora - ultimoToqueCongos < CONGOS.dobleToqueMs) {   // segundo toque: videos
+    ultimoToqueCongos = 0;
+    aullido?.pause();
+    abrirVideos();
+    return;
+  }
+  ultimoToqueCongos = ahora;
+  aullido ??= new Audio(raiz.dataset.raiz + CONGOS.audio);
+  aullido.currentTime = 0;
+  aullido.play().catch(() => {});
+}
+function abrirVideos() {
+  if (!visorVideo) return;
+  const lista = visorVideo.querySelector(".visor-video__lista");
+  lista.replaceChildren(...CONGOS.videos.map((v) => {
+    const fig = document.createElement("figure"), vid = document.createElement("video");
+    Object.assign(vid, { src: raiz.dataset.raiz + v.src, poster: raiz.dataset.raiz + v.poster, controls: true, playsInline: true, preload: "metadata" });
+    vid.setAttribute("aria-label", v.titulo);
+    fig.append(vid);
+    return fig;
+  }));
+  visorVideo.showModal();
+  lista.querySelector("video")?.play().catch(() => {});
+}
+visorVideo?.querySelector(".visor-video__cerrar").addEventListener("click", () => visorVideo.close());
+visorVideo?.addEventListener("click", (e) => { if (e.target === visorVideo) visorVideo.close(); });
+visorVideo?.addEventListener("close", () => visorVideo.querySelectorAll("video").forEach((v) => v.pause()));
 
 // ---------- animación de cámara
 let viaje = null;

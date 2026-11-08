@@ -52,6 +52,12 @@
     {% if not portada %}<p class="mapa3d__nota">Vista preliminar: el croquis es esquemático, así que la forma y la altura de los edificios son aproximadas. Las fotos 360° de cada lugar se agregarán cuando estén listas.</p>{% endif %}
   </section>
 
+  {% if not portada %}
+  <dialog class="visor-video" aria-label="Videos de los congos">
+    <div class="visor-video__lista"></div>
+    <button type="button" class="visor-video__cerrar" aria-label="Cerrar videos">×</button>
+  </dialog>
+  {% endif %}
   <dialog class="visor-fotos" aria-label="Fotos en grande">
     <div class="carrusel carrusel--grande" data-carrusel role="group" aria-roledescription="carrusel">
       <ul class="carrusel__pista" tabindex="0"></ul>

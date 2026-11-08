@@ -619,9 +619,10 @@ def lugares_nuevos(calles, quebrada, lejos_carretera, y_ruta32):
         return [round(x + ux_ * (izq - 0.6), 2), round(z + uz_ * (izq - 0.6), 2)], [round(x + ux_ * (der + 0.6), 2), round(z + uz_ * (der + 0.6), 2)]
     oeste_a, oeste_b = cebra_en(-26.0, -84.0)
     este_a, este_b = cebra_en(-12.5, -76.0)
-    # (anotaciones) pasos de concreto rayado, iguales al de la alcantarilla (19) pero sin cabezales: frente al 12,
-    # donde la acera llega al pasillo techado, y en la calle al este de la caseta del guarda (21)
-    for sx_, sz_ in ((-33.5, -29.0), (-30.0, -78.0)):
+    # (anotaciones) agujas (plumas) como la de la caseta del guarda, que se levantan para dar paso a los vehículos:
+    # frente al 12, a la altura de donde la acera llega al pasillo techado, con el poste del lado del 12; y en la
+    # calle al este de la caseta del guarda (21), con el poste del lado de la caseta
+    for sx_, sz_, ref_ in ((-33.5, -29.0, (-52.75, -52.0)), (-30.0, -78.0, (-38.75, -75.75))):
         cx_, cy_ = a_px(sx_, sz_)
         R = int(7 / ESCALA)
         yy, xx = np.nonzero(calles[cy_ - R:cy_ + R, cx_ - R:cx_ + R])
@@ -635,9 +636,10 @@ def lugares_nuevos(calles, quebrada, lejos_carretera, y_ruta32):
         while ki > 0 and sobre[ki - 1]: ki -= 1
         kd = k0
         while kd < len(ds) - 1 and sobre[kd + 1]: kd += 1
-        m_ = (ds[ki] + ds[kd]) / 2
-        elem.append({"tipo": "alcantarilla", "id": None, "p": [round(sx_ + ux_ * m_, 2), round(sz_ + uz_ * m_, 2)],
-                     "giro": round(math.atan2(rx_, ry_), 3), "ancho": round(float(ds[kd] - ds[ki]), 2), "cabezales": False})
+        bordes_ = [(float(ds[ki]) - 0.4, 1), (float(ds[kd]) + 0.4, -1)]   # poste 0,4 m afuera del asfalto; s = hacia la calle
+        d_p, s_p = min(bordes_, key=lambda b: math.dist((sx_ + ux_ * b[0], sz_ + uz_ * b[0]), ref_))
+        elem.append({"tipo": "pluma", "id": None, "p": [round(sx_ + ux_ * d_p, 2), round(sz_ + uz_ * d_p, 2)],
+                     "giro": round(math.atan2(ux_ * s_p, uz_ * s_p), 3), "largo": round(float(ds[kd] - ds[ki]) + 0.2, 2)})
     lados_ = sorted([oeste_a, oeste_b], key=lambda q: q[0])        # el extremo de más al oeste llega al zacate del guarda
     isla_ = sorted([este_a, este_b], key=lambda q: q[0])
     elem.append({"tipo": "acera", "id": None, "ancho": 1.8, "puntos": [lados_[1], isla_[0]]})          # por la isla
@@ -1122,6 +1124,13 @@ def main(pdf, sat=None):
     a_px_ = lambda x, z: (int(round(x / ESCALA + ORIGEN[0])), int(round(z / ESCALA + ORIGEN[1])))
     arboles = [a for a in arboles if lejos_pista[a_px_(*a["p"])[1], a_px_(*a["p"])[0]] * ESCALA >= a["r"] + 0.5
                and not lleno[a_px_(*a["p"])[1], a_px_(*a["p"])[0]]]   # ni dentro de la cancha
+    # (anotaciones) el árbol junto a la caseta de arriba (11) es grande y en él vive una manada de congos: se cambia
+    # el árbol común más cercano a la caseta por un árbol grande con los congos (recorrido.js: congos)
+    torre_ = next((e for e in elementos if e.get("uso") == "torre"), None)
+    if torre_:
+        arbol_c = min((a for a in arboles if not a["palma"]), key=lambda a: math.dist(a["p"], torre_["p"]))
+        arboles.remove(arbol_c)
+        elementos.append({"tipo": "congos", "id": None, "p": arbol_c["p"], "escala": 2.0})
 
     # --- cerca perimetral (fotos): malla verde con alambre de púas a lo largo de las carreteras que
     # rodean la U. Se toma la zona del campus (lo que queda de este lado de la carretera, empezando en la

@@ -45,3 +45,10 @@ export function compararRango(a, b) {
 
 // Portada: número del lugar que queda de frente a la cámara cuando la maqueta empieza a girar (13 = Entrada principal).
 export const FRENTE_PORTADA = 13;
+
+// Congos del árbol junto a la caseta de arriba (11): un toque suena su aullido; dos toques seguidos abren los videos.
+export const CONGOS = {
+  audio: "assets/media/congos.m4a",
+  videos: [{ src: "assets/media/congos.mp4", poster: "assets/media/congos.jpg", titulo: "Congos en el árbol junto a la caseta de arriba" }],
+  dobleToqueMs: 350,
+};
