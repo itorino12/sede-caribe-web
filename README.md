@@ -96,6 +96,16 @@ python3 build.py --ejemplos --servir   # con actividades y aviso de ejemplo marc
 
 `herramientas/semilla.py` y `herramientas/semilla_paginas.py` regeneran el contenido de respaldo migrado del sitio anterior.
 
+## Asistente (el congo)
+
+En la portada, un congo anda colgado de una rama. Al tocarlo se baja y abre un chat: el asistente de la Sede.
+
+- **Sitio:** `src/assets/js/congo.js` (dibujo y animación del congo y la rama) y `src/assets/js/asistente.js` (el chat). Pide las respuestas a `api/asistente`; si no hay servidor (la vista previa de GitHub Pages) o falla, lo dice y responde con enlaces del propio sitio, usando el índice del buscador.
+- **Servidor:** `servidor/asistente.py`, solo con la biblioteca estándar de Python, como servicio `sede-asistente`. En cada pregunta busca las páginas del sitio más parecidas (en `assets/js/indice.js`) y se las da a Claude con el mapa del sitio y el directorio, así que responde con lo que esté publicado. No guarda las conversaciones.
+- **Llave:** `ANTHROPIC_API_KEY` en `/etc/sede-web/sede.env` (se saca en console.anthropic.com, con la cuenta que pague el uso). Modelo por omisión: `claude-haiku-5-5`, con esfuerzo bajo. Topes: 30 preguntas por hora por persona y 3000 por día en total (`SEDE_ASISTENTE_POR_HORA`, `SEDE_ASISTENTE_POR_DIA`), además del límite de nginx.
+- **En un servidor ya preparado:** copiar `servidor/nginx-sede.conf` a `/etc/nginx/sites-available/sede` y `servidor/sede-asistente.service` a `/etc/systemd/system/`; luego `systemctl daemon-reload`, `systemctl enable --now sede-asistente` y `nginx -t && systemctl reload nginx`. Para revisar: `curl localhost:8787/api/asistente/salud`.
+- **Probar sin gastar:** `python3 herramientas/probar_asistente.py` (usa una API falsa).
+
 ## Poner en marcha el servidor
 
 1. Pedir al CDI una máquina virtual Ubuntu 24.04 con salida a internet (GitHub y googleapis.com) y el DNS de sedecaribe.ucr.ac.cr.

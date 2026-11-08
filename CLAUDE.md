@@ -20,6 +20,10 @@ Sitio estático (Python + Jinja2). El contenido sale de Google Drive; la vista p
 - Coordenadas en metros: x crece hacia el este y z hacia el sur. Zonas: 1 cian, 2 amarillo, 3 magenta, 4 negro.
 - Si se cambia la maqueta y no se rehacen las imágenes de respaldo, la portada y la versión sin 3D quedan desactualizadas.
 
+## Asistente (el congo)
+- `src/assets/js/congo.js`: el congo y su rama (portada y panel); `src/assets/js/asistente.js`: el chat. Servidor: `servidor/asistente.py`.
+- Probar el servidor sin gastar: `python3 herramientas/probar_asistente.py`. Las pruebas `--completa` incluyen el chat.
+
 ## Reglas
 - JorjaniEsp también sube cambios. Antes de hacer push: `git fetch`; si hay cambios, `git pull --rebase` y, si hay conflicto en `campus3d.json`, regenerarlo en vez de fusionarlo a mano.
 - No subir capturas ni scripts temporales. Las pruebas que se repiten van en `herramientas/`.

@@ -4,9 +4,9 @@
 // para que manos y pies queden fijos en la varita mientras el cuerpo avanza.
 // Coordenadas internas en «unidades»: x=0 es el origen del cuerpo, y=0 el centro de la varita; el congo mira hacia +x.
 // Con «reducir movimiento» queda quieto, colgando. Se detiene cuando la portada no está a la vista.
+// Al tocarlo se baja de la rama y atiende el asistente (asistente.js), donde vive otra copia (montar con panel: true).
 
 const portada = document.querySelector(".portada");
-const caja = portada?.querySelector(".congo");
 
 // ---------- utilidades de dibujo ----------
 function azar(semilla) {
@@ -130,8 +130,51 @@ function ojo(x, y, r, id) {
     + `<ellipse data-parpado="${id}" rx="${f(r + 0.6)}" ry="${f(r + 0.6)}" fill="#171210" transform="scale(1,0)"/></g>`;
 }
 
-// la varita es un div que cruza la portada, entre la capa de atrás y la de adelante del congo
+// la rama cruza la portada entre la capa de atrás y la de adelante del congo
 const VARA = [["0", "#a8835a"], [".35", "#7d5835"], [".75", "#583a20"], ["1", "#3a2614"]];
+
+// hoja tropical alargada que cuelga desde (x, y): punta fina y nervadura central
+function hoja(x, y, giro, largo, tono) {
+  const a = largo * 0.34;
+  return `<g transform="translate(${f(x)},${f(y)}) rotate(${f(giro)})">`
+    + `<path d="M0,0C${f(a)},${f(largo * 0.2)} ${f(a * 1.05)},${f(largo * 0.66)} 0,${f(largo)}C${f(-a * 1.05)},${f(largo * 0.66)} ${f(-a)},${f(largo * 0.2)} 0,0Z" fill="${tono}"/>`
+    + `<path d="M0,0C${f(-a)},${f(largo * 0.2)} ${f(-a * 1.05)},${f(largo * 0.66)} 0,${f(largo)}Z" fill="#000" opacity=".12"/>`
+    + `<path d="M0,${f(largo * 0.05)}Q${f(a * 0.12)},${f(largo * 0.5)} 0,${f(largo * 0.93)}" stroke="#24461f" stroke-width="${f(largo * 0.035)}" fill="none" opacity=".75"/></g>`;
+}
+
+// la rama, en px y a todo lo ancho: grosor algo irregular, corteza, nudos, un par de ramitas y muy pocas hojas
+function rama(ancho, escala, y0, id) {
+  const r = azar(Math.round(ancho) + 7), R = 4 * escala, arriba = [], abajo = [], fase = r() * 6;
+  for (let x = -20; x <= ancho + 20; x += 16) {
+    const g = R * (1 + 0.1 * Math.sin(x / 95 + fase) + 0.05 * Math.sin(x / 21 + fase * 2));
+    arriba.push([x, y0 - g + 0.4 * escala * Math.sin(x / 140)]); abajo.push([x, y0 + g + 0.4 * escala * Math.sin(x / 140)]);
+  }
+  const linea = (pts) => pts.map(([x, y]) => f(x) + "," + f(y)).join("L");
+  let corteza = "", nudos = "", ramitas = "", hojas = "";
+  for (let i = 0; i < ancho / 12; i++) {
+    const x = r() * ancho, l = (5 + r() * 12) * escala, y = y0 + (r() - 0.4) * R * 1.4;
+    corteza += `M${f(x)},${f(y)}q${f(l / 2)},${f((r() - 0.5) * escala)} ${f(l)},${f((r() - 0.5) * escala)}`;
+  }
+  for (let i = 0; i < Math.max(2, Math.round(ancho / 320)); i++) {
+    nudos += `<ellipse cx="${f(r() * ancho)}" cy="${f(y0 + R * 0.15)}" rx="${f(R * 0.8)}" ry="${f(R * 0.42)}" fill="#5b3d22" stroke="#2f1f10" stroke-width="${f(escala * 0.7)}"/>`;
+  }
+  const tonos = ["#3f7d3a", "#4f8f42", "#5a9c4b", "#36703a"], n = Math.max(3, Math.min(7, Math.round(ancho / 220)));
+  for (let i = 0; i < n; i++) {
+    const x = (ancho * (i + 0.2 + r() * 0.6)) / n, lado = r() < 0.5 ? -1 : 1;
+    const ang = (90 - lado * (30 + r() * 35)) * Math.PI / 180, l = (9 + r() * 12) * escala;
+    const x1 = x + Math.cos(ang) * l, y1 = y0 + R * 0.5 + Math.sin(ang) * l;
+    ramitas += `<path d="M${f(x)},${f(y0 + R * 0.4)}Q${f((x + x1) / 2 + lado * escala)},${f((y0 + y1) / 2)} ${f(x1)},${f(y1)}" stroke="#4a321c" stroke-width="${f(1.5 * escala)}" fill="none" stroke-linecap="round"/>`;
+    hojas += hoja(x1, y1, lado * (15 + r() * 30), (26 + r() * 10) * escala, tonos[i % 4]);
+    if (r() < 0.55) hojas += hoja(x1, y1, -lado * (25 + r() * 25), (19 + r() * 8) * escala, tonos[(i + 2) % 4]);
+  }
+  const alto = y0 + 70 * escala;
+  return `<svg width="${f(ancho)}" height="${f(alto)}" viewBox="0 0 ${f(ancho)} ${f(alto)}" aria-hidden="true" focusable="false">`
+    + `<defs><linearGradient id="${id}" gradientUnits="userSpaceOnUse" x1="0" y1="${f(y0 - R)}" x2="0" y2="${f(y0 + R)}">`
+    + VARA.map(([o, c]) => `<stop offset="${o}" stop-color="${c}"/>`).join("") + `</linearGradient></defs>`
+    + ramitas + `<path d="M${linea(arriba)}L${linea(abajo.reverse())}Z" fill="url(#${id})"/>`
+    + `<path d="${corteza}" stroke="#3a2614" stroke-width="${f(0.6 * escala)}" fill="none" opacity=".55" stroke-linecap="round"/>`
+    + nudos + hojas + `</svg>`;
+}
 const VB = { x: -130, y: -14, w: 260, h: 264 };
 
 const SVG_ATRAS = `<svg viewBox="${VB.x} ${VB.y} ${VB.w} ${VB.h}" aria-hidden="true" focusable="false">
@@ -220,16 +263,42 @@ function ik([sx, sy], [px, py], a, b, signo) {
   return [grados(u), grados(Math.atan2(sy + dy - ey, sx + dx - ex))];
 }
 
-if (caja) iniciar();
+let instancias = 0;
 
-function iniciar() {
-  caja.innerHTML = SVG_ATRAS;
+if (portada && !portada.dataset.congo) { // una sola vez, aunque el módulo se cargue con otra versión en la dirección
+  portada.dataset.congo = "1";
+  const congo = montar(portada, { antes: portada.querySelector(".portada__recorrido-boton") });
+  // el botón va sobre el cuerpo del congo: al tocarlo, se baja de la rama y atiende el asistente
+  congo.boton.addEventListener("click", () => {
+    import("./asistente.js").then((m) => m.abrir(congo)).catch(() => congo.mostrar());
+  });
+}
+
+// Monta un congo con su rama dentro de «contenedor».
+//   op.panel: en el asistente, quieto en su rama (no anda ni da vueltas); si no, anda por la portada.
+//   op.antes: elemento antes del cual se insertan las capas.
+export function montar(contenedor, op = {}) {
+  const panel = !!op.panel, pref = `cg${++instancias}-`;
+  const caja = document.createElement("div");
+  caja.className = "congo";
+  caja.setAttribute("aria-hidden", "true");
+  caja.innerHTML = SVG_ATRAS.replaceAll("cg-", pref);
   const vara = document.createElement("div"), frente = caja.cloneNode();
   vara.className = "congo-vara";
   vara.setAttribute("aria-hidden", "true");
-  vara.style.background = `linear-gradient(${VARA.map(([o, c]) => `${c} ${o * 100}%`).join(",")})`;
-  frente.innerHTML = SVG_FRENTE;
+  frente.innerHTML = SVG_FRENTE.replaceAll("cg-", pref);
+  contenedor.insertBefore(caja, op.antes || null);
   caja.after(vara, frente);
+  let boton = null;
+  if (!panel) {
+    boton = document.createElement("button");
+    boton.type = "button";
+    boton.className = "congo-boton";
+    boton.setAttribute("aria-label", "Hablar con el congo, el asistente de la Sede");
+    boton.setAttribute("aria-haspopup", "dialog");
+    boton.innerHTML = `<span class="congo-boton__globo" aria-hidden="true">¿Una duda? ¡Pregúnteme!</span>`;
+    frente.after(boton);
+  }
   const cajas = [caja, frente], svgs = cajas.map((c) => c.firstElementChild);
   const q = (s) => caja.querySelector(s) || frente.querySelector(s), todos = (s) => cajas.flatMap((c) => [...c.querySelectorAll(s)]);
   const el = {
@@ -240,27 +309,33 @@ function iniciar() {
   for (const l of ["n", "f"]) for (const k of ["hombro", "codo", "muneca", "cadera", "rodilla", "tobillo"]) el[k + l] = q(`[data-${k}="${l}"]`);
 
   const quieto = matchMedia("(prefers-reduced-motion: reduce)").matches;
-  let escala = 0.55, pista = [0, 0];
+  let escala = 0.55, pista = [0, 0], y0 = 2, anchoRama = 0;
 
-  // tamaño y pista (en unidades): la varita cruza toda la portada; el congo anda sobre la parte clara de la maqueta
+  // tamaño y pista (en unidades). La rama va pegada al borde de arriba; en la portada el congo anda
+  // sobre la parte clara de la maqueta; en el panel se queda en su sitio.
   function medir() {
-    const r = portada.getBoundingClientRect();
-    escala = (0.9 * Math.min(210, Math.max(140, innerWidth * 0.17))) / 226;
-    const y0 = innerWidth <= 760 ? 14 : 18; // centro de la varita, bajo la cabecera
+    const r = contenedor.getBoundingClientRect();
+    if (panel) {
+      escala = op.escala || 0.62;
+      pista = [op.x / escala, op.x / escala];
+    } else {
+      escala = (0.9 * Math.min(210, Math.max(140, innerWidth * 0.17))) / 226;
+      const gutter = parseFloat(getComputedStyle(contenedor.querySelector(".portada__texto")).paddingRight) || 16;
+      const form = contenedor.querySelector(".portada__buscar")?.getBoundingClientRect();
+      const izq = innerWidth <= 760 ? gutter + 85 * escala : Math.max(r.width * 0.56, (form ? form.right - r.left : 0) + 40) + 70 * escala;
+      const der = r.width - gutter - 85 * escala;
+      pista = [izq / escala, Math.max(izq, der) / escala];
+    }
+    y0 = 4 * escala; // el canto de arriba de la rama queda en el borde
     for (const s of svgs) { s.style.width = f(VB.w * escala) + "px"; s.style.height = f(VB.h * escala) + "px"; }
     for (const c of cajas) c.style.top = f(y0 + VB.y * escala) + "px";
-    vara.style.top = f(y0 - 4 * escala) + "px";
-    vara.style.height = f(8 * escala) + "px";
-    const gutter = parseFloat(getComputedStyle(portada.querySelector(".portada__texto")).paddingRight) || 16;
-    const form = portada.querySelector(".portada__buscar")?.getBoundingClientRect();
-    const izq = innerWidth <= 760 ? gutter + 85 * escala : Math.max(r.width * 0.56, (form ? form.right - r.left : 0) + 40) + 70 * escala;
-    const der = r.width - gutter - 85 * escala;
-    pista = [izq / escala, Math.max(izq, der) / escala];
+    if (Math.abs(r.width - anchoRama) > 1) { anchoRama = r.width; vara.innerHTML = rama(r.width, escala, y0, pref + "rama"); }
+    if (boton) { boton.style.width = f(120 * escala) + "px"; boton.style.height = f(92 * escala) + "px"; boton.style.top = f(y0 + 8 * escala) + "px"; }
   }
 
   // ---------- estado ----------
   const e = { modo: "paso", dir: 1, x: 0, p: 0, t: 0, espera: 0, parando: false, agarre: {}, vuelo: {}, giro: null,
-    aullido: -1, parpadeo: 3, reloj: 0 };
+    aullido: -1, parpadeo: 3, reloj: 0, habla: false, piensa: false };
   const rel = (w) => (w - e.x) * e.dir;
   function plantar(p) {
     for (const k in MIEMBROS) { e.agarre[k] = e.x + e.dir * enFase(MIEMBROS[k], p); e.vuelo[k] = null; }
@@ -317,6 +392,8 @@ function iniciar() {
         pose.mandibula = env * (20 + 2 * Math.sin(e.reloj * 38));
         pose.cabeza -= 16 * env;
       }
+      if (e.habla) { pose.mandibula = 2 + 9 * Math.abs(Math.sin(e.reloj * 9)); pose.cabeza += 2 * Math.sin(e.reloj * 4.5); }
+      if (e.piensa) { pose.cabeza -= 10 + 3 * Math.sin(e.reloj * 1.7); } // mira para arriba, pensando
       if (e.t >= e.espera) {
         const lider = rel(e.agarre.an) >= rel(e.agarre.af) ? "an" : "af";
         e.modo = "giro"; e.giro = { t: 0, lider, libre: lider === "an" ? "af" : "an", hecho: false };
@@ -382,6 +459,11 @@ function iniciar() {
 
   function dibujar(o) {
     for (const c of cajas) c.style.transform = `translate3d(${f((e.x + VB.x) * escala)}px,0,0)`;
+    if (boton) {
+      boton.style.transform = `translate3d(${f((e.x - 5 * e.dir - 60) * escala)}px,0,0)`;
+      const globo = (e.modo === "descanso" && e.t > 0.5 && e.t < 3.4) || (e.reloj > 2 && e.reloj < 7);
+      boton.classList.toggle("congo-boton--globo", globo);
+    }
     const espejo = `translate(${f(e.dir * o.eje)},0) scale(${(e.dir * o.s).toFixed(3)},1) translate(${f(-o.eje)},0)`;
     pon(el.atras, espejo); pon(el.frente, espejo);
     const cuerpo = `translate(${f(o.P[0])},${f(o.P[1])}) rotate(${f(o.giro)}) translate(${-S0[0]},${-S0[1]})`;
@@ -449,9 +531,10 @@ function iniciar() {
   medir();
   e.x = pista[0] + (pista[1] - pista[0]) * 0.3;
   plantar(0);
-  if (quieto) { e.modo = "descanso"; e.espera = Infinity; dibujar(paso(0)); cajas.forEach((c) => c.classList.add("congo--listo")); return; }
+  if (panel) { e.modo = "descanso"; e.espera = Infinity; }
+  if (quieto) { e.modo = "descanso"; e.espera = Infinity; }
 
-  let ultimo = 0, acumulado = 0, activo = false, cuadro = 0;
+  let ultimo = 0, acumulado = 0, activo = false, cuadro = 0, visible = true;
   function ciclo(ahora) {
     if (!activo) return;
     const dt = Math.min(0.1, (ahora - (ultimo || ahora)) / 1000);
@@ -460,9 +543,12 @@ function iniciar() {
     if (acumulado >= 1 / 30) { acumulado = 0; dibujar(pose); } // basta con 30 cuadros por segundo
     cuadro = requestAnimationFrame(ciclo);
   }
-  const arrancar = () => { if (!activo) { activo = true; ultimo = 0; cuadro = requestAnimationFrame(ciclo); } };
+  const arrancar = () => {
+    if (quieto) { dibujar(paso(0)); return; }
+    if (!activo && visible) { activo = true; ultimo = 0; cuadro = requestAnimationFrame(ciclo); }
+  };
   const parar = () => { activo = false; cancelAnimationFrame(cuadro); };
-  new IntersectionObserver(([v]) => (v.isIntersecting ? arrancar() : parar())).observe(portada);
+  if (!panel) new IntersectionObserver(([v]) => (v.isIntersecting ? arrancar() : parar())).observe(contenedor);
   let espera;
   addEventListener("resize", () => {
     clearTimeout(espera);
@@ -470,9 +556,23 @@ function iniciar() {
       medir();
       if (e.modo === "giro") return;
       e.x = Math.min(pista[1], Math.max(pista[0], e.x));
+      if (panel) return;
       e.modo = "paso"; e.parando = false; e.p = 0; plantar(0);
     }, 200);
   });
   dibujar(paso(0));
   cajas.forEach((c) => c.classList.add("congo--listo"));
+
+  const capas = boton ? [...cajas, boton] : cajas;
+  return {
+    boton,
+    // se baja de la rama (la portada lo esconde mientras el asistente está abierto) y vuelve
+    esconder() { capas.forEach((c) => c.classList.add("congo--fuera")); setTimeout(() => { if (!visible) parar(); }, 600); visible = false; },
+    mostrar() { visible = true; capas.forEach((c) => c.classList.remove("congo--fuera")); arrancar(); },
+    seguir() { visible = true; medir(); arrancar(); },
+    pausar() { visible = false; parar(); },
+    hablar(si) { e.habla = si; },
+    pensar(si) { e.piensa = si; },
+    aullar(dentro = 0.2) { if (e.modo === "descanso") e.aullido = e.t + dentro; },
+  };
 }

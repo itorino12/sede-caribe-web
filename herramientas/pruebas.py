@@ -5,7 +5,7 @@ Uso (después de python3 build.py --vista-previa):
     python3 herramientas/pruebas.py                 rápida: portada y recorrido en PC, sin errores, 3D listo
     python3 herramientas/pruebas.py --completa      además: celular, ficha, pantalla completa, botones de zona,
                                                     respaldos sin 3D (sin WebGL, 2 GB de memoria, ahorro de datos)
-                                                    y accesibilidad (axe, WCAG 2.2 AA, tema claro y oscuro)
+                                                    el asistente (el congo) y accesibilidad (axe, WCAG 2.2 AA, tema claro y oscuro)
     python3 herramientas/pruebas.py --vista=X,Z,ALTO  además guarda una vista cenital de la maqueta centrada en
                                                     (X, Z) a ALTO metros (coordenadas de campus3d.json)
 Las capturas quedan en .cache/pruebas/. Sale con código 1 si algo falla.
@@ -73,6 +73,50 @@ def rapida(nav, base):
     c.close()
 
 
+def leer_axe():
+    axe_js = RAIZ / ".cache" / "axe" / "package" / "axe.min.js"
+    if not axe_js.exists():
+        axe_js.parent.parent.mkdir(parents=True, exist_ok=True)
+        with tarfile.open(RAIZ / "herramientas" / "fuentes" / "axe-core-4.14.0.tgz") as t:
+            t.extractall(axe_js.parent.parent, filter="data")
+    return axe_js.read_text(encoding="utf-8")
+
+
+def asistente(nav, base):
+    """El congo de la portada abre el asistente; sin servidor responde buscando en el sitio."""
+    print("Asistente (el congo)")
+    for nombre, vp, mov in (("celular", {"width": 390, "height": 844}, True), ("pc", {"width": 1366, "height": 900}, False)):
+        for esquema in ("light", "dark"):
+            c, p, e = pagina(nav, base + "index.html", vp, is_mobile=mov, has_touch=mov, color_scheme=esquema)
+            p.wait_for_selector(".congo-boton", timeout=20000)
+            p.locator(".congo-boton").click(force=True)  # el congo se mueve: no se espera a que se quede quieto
+            p.wait_for_selector("dialog.asistente[open]")
+            p.wait_for_timeout(900)
+            if esquema == "light":
+                revisar(p.evaluate("document.querySelectorAll('.asistente__selva .congo').length") == 2, f"{nombre}: el congo pasa al asistente")
+                revisar(p.evaluate("document.querySelector('.portada > .congo').classList.contains('congo--fuera')"), f"{nombre}: y se baja de la rama de la portada")
+                p.fill("#asistente-campo", "becas")
+                p.keyboard.press("Enter")
+                p.wait_for_function("document.querySelectorAll('.mensaje--congo').length >= 2 && !document.querySelector('.mensaje--escribiendo')")
+                revisar(p.evaluate("!!document.querySelector('.mensaje--congo:last-child a[href]')"), f"{nombre}: sin servidor, responde con enlaces del sitio")
+                p.route("**/api/asistente", lambda r: r.fulfill(status=200, headers={"Content-Type": "text/plain; charset=utf-8"},
+                                                                  body="Con **gusto**. Vea el [Directorio](/directorio.html)."))
+                p.fill("#asistente-campo", "¿Dónde queda Registro?")
+                p.click(".asistente__enviar")
+                p.wait_for_function("document.querySelectorAll('.mensaje--congo').length >= 3 && !document.querySelector('.mensaje--escribiendo')")
+                revisar(p.evaluate("!!document.querySelector('.mensaje--congo:last-child strong') && document.querySelector('.mensaje--congo:last-child a').getAttribute('href') === 'directorio.html'"),
+                        f"{nombre}: con servidor, muestra la respuesta con formato y enlaces")
+                p.screenshot(path=str(SALIDA / f"asistente-{nombre}.png"))
+            p.add_script_tag(content=leer_axe())
+            v = p.evaluate("axe.run(document.querySelector('dialog.asistente'), {runOnly:['wcag2a','wcag2aa','wcag21aa','wcag22aa']}).then(r=>r.violations.map(v=>v.id+' ('+v.nodes.length+')'))")
+            revisar(not v, f"{nombre} {esquema}: axe en el asistente {', '.join(v)}")
+            p.keyboard.press("Escape"); p.wait_for_timeout(700)
+            revisar(p.evaluate("!document.querySelector('dialog.asistente').open && !document.querySelector('.portada > .congo').classList.contains('congo--fuera')"),
+                    f"{nombre} {esquema}: al cerrar, el congo vuelve a la rama")
+            revisar(not e, f"{nombre} {esquema}: sin errores {e[:1]}")
+            c.close()
+
+
 def completa(nav, base):
     print("Recorrido: ficha, pantalla completa y zonas")
     c, p, e = pagina(nav, base + "recorrido.html#lugar-1")
@@ -117,13 +161,10 @@ def completa(nav, base):
     revisar(p.evaluate("document.querySelector('.mapa3d').classList.contains('mapa3d--giro')"), "recorrido sin WebGL → maqueta giratoria")
     c.close(); sin3d.close()
 
+    asistente(nav, base)
+
     print("Accesibilidad (axe)")
-    axe_js = RAIZ / ".cache" / "axe" / "package" / "axe.min.js"
-    if not axe_js.exists():
-        axe_js.parent.parent.mkdir(parents=True, exist_ok=True)
-        with tarfile.open(RAIZ / "herramientas" / "fuentes" / "axe-core-4.14.0.tgz") as t:
-            t.extractall(axe_js.parent.parent, filter="data")
-    axe = axe_js.read_text(encoding="utf-8")
+    axe = leer_axe()
     for esquema in ("light", "dark"):
         c = nav.new_context(color_scheme=esquema, viewport={"width": 1280, "height": 900})
         for url in PAGINAS_AXE:

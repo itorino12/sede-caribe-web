@@ -23,6 +23,8 @@ sudo -u sedeweb /opt/sede-web/.venv/bin/pip install --quiet -r /opt/sede-web/req
 # ID de la carpeta raíz del sitio en Google Drive (lo que va después de /folders/ en el enlace)
 SEDE_DRIVE_CARPETA=
 SEDE_CREDENCIALES=/etc/sede-web/cuenta-servicio.json
+# Llave de la API de Claude para el asistente (el congo). Sin ella, el congo solo busca en el sitio.
+ANTHROPIC_API_KEY=
 EOF
 chown root:sedeweb /etc/sede-web/sede.env && chmod 640 /etc/sede-web/sede.env
 
@@ -32,9 +34,9 @@ ln -sf /etc/nginx/sites-available/sede /etc/nginx/sites-enabled/sede
 rm -f /etc/nginx/sites-enabled/default
 nginx -t && systemctl reload nginx
 
-cp /opt/sede-web/servidor/sede-actualizar.{service,timer} /etc/systemd/system/
+cp /opt/sede-web/servidor/sede-actualizar.{service,timer} /opt/sede-web/servidor/sede-asistente.service /etc/systemd/system/
 systemctl daemon-reload
-systemctl enable --now sede-actualizar.timer
+systemctl enable --now sede-actualizar.timer sede-asistente.service
 
 ufw allow OpenSSH && ufw allow 'Nginx Full' && ufw --force enable
 systemctl enable --now fail2ban
@@ -45,3 +47,4 @@ echo "  1. Copiar la llave JSON de la cuenta de servicio a /etc/sede-web/cuenta-
 echo "  2. Escribir SEDE_DRIVE_CARPETA en /etc/sede-web/sede.env"
 echo "  3. Cuando el DNS de sedecaribe.ucr.ac.cr apunte aquí: certbot --nginx -d sedecaribe.ucr.ac.cr"
 echo "  4. Probar: sudo systemctl start sede-actualizar && journalctl -u sede-actualizar -n 30 --no-pager"
+echo "  5. Asistente: escribir ANTHROPIC_API_KEY en /etc/sede-web/sede.env y: sudo systemctl restart sede-asistente"
