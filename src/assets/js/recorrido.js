@@ -87,6 +87,7 @@ const colores = { pared: 0xfbfaf6, techo: 0x66756b, losa: 0xe3e6ea, celosia: 0x7
 const EXAGERAR = 1.4;
 const edificios = [];
 let grupoCongos = null;   // los congos se tocan aparte de los edificios
+const congosVivos = [], centroCongos = new THREE.Vector3();
 function prisma(contorno, alto, desde, material, crecer = 0) {
   const cx = contorno.reduce((s, p) => s + p[0], 0) / contorno.length;
   const cz = contorno.reduce((s, p) => s + p[1], 0) / contorno.length;
@@ -1189,38 +1190,102 @@ if (datos.campus.parqueo) {
   }
   function arbolGrande({ p, escala }) { escena.add(higueron(p[0], 0, p[1], escala)); }
 
-  // congos (anotaciones): manada de monos aulladores negros, con los costados dorados, sentados en la copa del árbol
-  // grande junto a la caseta de arriba. Van exagerados (como los edificios) para que se vean en la maqueta. No se
-  // funden con el resto: se tocan aparte (ver «congos» más abajo)
+  // congos (fotos de la Sede): monos aulladores de manto (Alouatta palliata). Pelaje negro con el manto rojizo
+  // en el costado, cara negra desnuda con barba bajo la quijada y una cola larga y gruesa. Van un poco exagerados
+  // (como los edificios) para que se vean en la maqueta. Hay tres posturas: caminando en cuatro patas sobre la copa,
+  // sentado encorvado y una madre con su cría en la espalda. Se mueven poco: cabeza, cola, respiración, y uno
+  // camina despacio de un lado a otro (ver animarCongos). No se funden con el resto: se tocan aparte.
+  function congoModelo(pose) {
+    const ES = 2.2;   // exageración: todo el mono se arma en metros reales y al final se escala
+    const pelo = mate(0x17120f, { roughness: 1 }), manto = mate(0x7b4523, { roughness: 1 }), piel = mate(0x2b2522, { roughness: 0.8 });
+    const ojo = new THREE.MeshBasicMaterial({ color: 0x1a0d06 });
+    const m = new THREE.Group(), cuerpo = new THREE.Group(), cabeza = new THREE.Group(), cola = new THREE.Group();
+    m.add(cuerpo); cuerpo.add(cabeza); cuerpo.add(cola);
+    const malla = (geo, mat, x, y, z, padre = cuerpo) => { const o = new THREE.Mesh(geo, mat); o.position.set(x, y, z); padre.add(o); return o; };
+    const hueso = (a, b, r, mat, padre = cuerpo) => {   // extremidad de a a b (cápsula)
+      const va = new THREE.Vector3(...a), vb = new THREE.Vector3(...b), d = vb.clone().sub(va);
+      const o = new THREE.Mesh(new THREE.CapsuleGeometry(r, Math.max(d.length() - 2 * r, 0.01), 3, 6), mat);
+      o.position.copy(va).add(vb).multiplyScalar(0.5); o.quaternion.setFromUnitVectors(new THREE.Vector3(0, 1, 0), d.normalize()); padre.add(o); return o;
+    };
+    // cabeza: cráneo, hocico, barba (garganta abultada), orejas pequeñas y ojos
+    const craneo = malla(new THREE.SphereGeometry(0.13, 10, 8), pelo, 0, 0, 0, cabeza); craneo.scale.set(1, 0.95, 1.05);
+    const hocico = malla(new THREE.SphereGeometry(0.08, 8, 6), piel, 0, -0.04, 0.11, cabeza); hocico.scale.set(1, 0.85, 1);
+    const barba = malla(new THREE.SphereGeometry(0.1, 8, 6), pelo, 0, -0.11, 0.05, cabeza); barba.scale.set(0.9, 1.1, 0.9);
+    for (const lado of [-1, 1]) {
+      malla(new THREE.SphereGeometry(0.035, 6, 4), pelo, lado * 0.12, 0.02, -0.01, cabeza);
+      malla(new THREE.SphereGeometry(0.016, 6, 4), ojo, lado * 0.045, 0.02, 0.135, cabeza);
+    }
+    let colaPuntos;
+    if (pose === "sentado") {   // encorvado, con los brazos al frente y la cola enroscada en la rama
+      const torso = malla(new THREE.SphereGeometry(0.22, 12, 10), pelo, 0, 0.3, 0); torso.scale.set(0.95, 1.25, 0.9); torso.rotation.x = 0.35;
+      for (const lado of [-1, 1]) { const f = malla(new THREE.SphereGeometry(0.2, 10, 8), manto, lado * 0.1, 0.28, -0.04); f.scale.set(0.5, 0.95, 0.75); f.rotation.x = 0.35; }
+      cabeza.position.set(0, 0.6, 0.12);
+      for (const lado of [-1, 1]) {
+        hueso([lado * 0.15, 0.42, 0.06], [lado * 0.11, 0.06, 0.2], 0.045, pelo);       // brazo hacia la rama
+        hueso([lado * 0.12, 0.14, 0.02], [lado * 0.14, 0.06, 0.22], 0.06, pelo);       // muslo doblado
+        hueso([lado * 0.14, 0.06, 0.22], [lado * 0.12, 0.0, 0.05], 0.045, pelo);       // pierna
+      }
+      colaPuntos = [[0, 0.1, -0.18], [0, -0.1, -0.3], [0, -0.35, -0.28], [0, -0.55, -0.12], [0.06, -0.62, 0.06], [0.1, -0.55, 0.14]];
+    } else {   // en cuatro patas, el cuerpo horizontal, como en la foto de la madre
+      const torso = malla(new THREE.SphereGeometry(0.2, 12, 10), pelo, 0, 0.42, 0); torso.scale.set(0.9, 0.95, 1.65);
+      for (const lado of [-1, 1]) { const f = malla(new THREE.SphereGeometry(0.2, 10, 8), manto, lado * 0.075, 0.41, -0.04); f.scale.set(0.55, 0.8, 1.3); }
+      malla(new THREE.SphereGeometry(0.17, 10, 8), pelo, 0, 0.47, 0.22);   // hombros (negros, sobre el manto)
+      cabeza.position.set(0, 0.55, 0.42);
+      for (const lado of [-1, 1]) {
+        hueso([lado * 0.12, 0.42, 0.22], [lado * 0.13, 0.0, 0.3], 0.045, pelo);        // brazos
+        hueso([lado * 0.12, 0.38, -0.2], [lado * 0.14, 0.2, -0.08], 0.06, pelo);       // muslos
+        hueso([lado * 0.14, 0.2, -0.08], [lado * 0.13, 0.0, -0.24], 0.045, pelo);      // piernas
+      }
+      colaPuntos = [[0, 0.42, -0.32], [0, 0.4, -0.55], [0, 0.18, -0.72], [0, -0.15, -0.74], [0, -0.42, -0.62], [0.05, -0.55, -0.45]];
+      if (pose === "madre") {   // cría aferrada al lomo
+        const cria = new THREE.Group(); cuerpo.add(cria);
+        const cc = malla(new THREE.SphereGeometry(0.09, 10, 8), pelo, 0, 0.66, -0.04, cria); cc.scale.set(1, 0.8, 1.5);
+        malla(new THREE.SphereGeometry(0.065, 8, 6), pelo, 0, 0.7, 0.13, cria);
+        malla(new THREE.SphereGeometry(0.035, 6, 4), piel, 0, 0.68, 0.18, cria);
+        cria.userData.cria = true;
+      }
+    }
+    // cola: tubo que sale de la base de la espalda y cuelga con la punta enroscada (el giro es en su base)
+    const base = new THREE.Vector3(...colaPuntos[0]);
+    cola.position.copy(base);
+    const curva = new THREE.CatmullRomCurve3(colaPuntos.map(([x, y, z]) => new THREE.Vector3(x, y, z).sub(base)));
+    cola.add(new THREE.Mesh(new THREE.TubeGeometry(curva, 18, 0.045, 6), pelo));
+    m.scale.setScalar(ES);
+    return { m, cuerpo, cabeza, cola };
+  }
   function congos({ p, escala }) {
     escena.add(higueron(p[0], 0, p[1], escala));
-    const g = new THREE.Group(), pelo = mate(0x1d1714, { roughness: 1 }), dorado = mate(0x7a5a2c, { roughness: 1 }), cara = mate(0x0d0b0a);
-    const copa = 6 * escala + 1.2 * escala;   // altura del centro de la copa (higueron)
-    const lugaresMono = [[0, 0.95, 0, 0], [0.55, 0.62, 0.2, 1.4], [-0.5, 0.6, 0.25, 2.6], [0.1, 0.55, -0.6, 4], [-0.2, 0.62, 0.6, 5.2], [0.62, 0.42, -0.45, 0.8]];
-    const ES = 1.5;   // exageración
-    lugaresMono.forEach(([dx, dy, dz, giro]) => {
-      const m = new THREE.Group();
-      const cuerpo = new THREE.Mesh(new THREE.SphereGeometry(0.42 * ES, 10, 8), pelo); cuerpo.scale.set(1, 1.15, 0.9); cuerpo.position.y = 0.5 * ES; m.add(cuerpo);
-      const flanco = new THREE.Mesh(new THREE.SphereGeometry(0.43 * ES, 10, 8, 0, Math.PI * 2, Math.PI * 0.45, Math.PI * 0.3), dorado);
-      flanco.scale.set(1.02, 1.1, 0.95); flanco.position.y = 0.5 * ES; m.add(flanco);
-      const cabeza = new THREE.Mesh(new THREE.SphereGeometry(0.24 * ES, 10, 8), pelo); cabeza.position.set(0, 1.05 * ES, 0.18 * ES); m.add(cabeza);
-      const rostro = new THREE.Mesh(new THREE.SphereGeometry(0.15 * ES, 8, 6), cara); rostro.scale.z = 0.6; rostro.position.set(0, 1.0 * ES, 0.36 * ES); m.add(rostro);
-      for (const lado of [-1, 1]) {
-        const brazo = new THREE.Mesh(new THREE.CylinderGeometry(0.07 * ES, 0.07 * ES, 0.7 * ES, 6), pelo);
-        brazo.position.set(lado * 0.38 * ES, 0.35 * ES, 0.15 * ES); brazo.rotation.set(0.5, 0, lado * 0.35); m.add(brazo);
-      }
-      // cola prensil larga que cuelga y se enrosca en la punta
-      const curva = new THREE.CatmullRomCurve3([[0, 0.25, -0.35], [0, -0.3, -0.55], [0, -0.9, -0.5], [0, -1.3, -0.3], [0.12, -1.4, -0.1]].map(([x, y, z]) => new THREE.Vector3(x * ES, y * ES, z * ES)));
-      m.add(new THREE.Mesh(new THREE.TubeGeometry(curva, 16, 0.05 * ES, 5), pelo));
-      m.position.set(p[0] + dx * 5.6 * escala, copa + dy * 2.4 * escala, p[1] + dz * 5.6 * escala); m.rotation.y = giro;
-      g.add(m);
+    const g = new THREE.Group();
+    // las mismas copas que higueron(): [dx, dy, dz, radio]; cada mono va sobre la superficie de una de ellas
+    const copasH = [[0, 0, 0, 1], [0.55, -0.1, 0.2, 0.75], [-0.5, -0.12, 0.25, 0.72], [0.1, -0.15, -0.6, 0.7], [-0.2, -0.05, 0.6, 0.68]];
+    const sobreCopa = (k, fx, fz) => {   // punto de la superficie superior de la copa k, a una fracción del radio
+      const [dx, dy, dz, r] = copasH[k], R = 5.2 * escala * r, f = Math.min(Math.hypot(fx, fz), 0.9);
+      return new THREE.Vector3(p[0] + dx * 5.6 * escala + fx * R, 6 * escala + 1.2 * escala + dy * 4 * escala + R * 0.42 * Math.sqrt(1 - f * f) - 0.15, p[1] + dz * 5.6 * escala + fz * R);
+    };
+    const manada = [
+      { pose: "caminando", k: 0, fx: -0.15, fz: 0.1, giro: 0.4, camina: true },
+      { pose: "madre", k: 1, fx: 0.15, fz: -0.1, giro: 2.2 },
+      { pose: "sentado", k: 0, fx: 0.35, fz: -0.25, giro: 1.1 },
+      { pose: "sentado", k: 2, fx: -0.2, fz: 0.15, giro: -0.6 },
+      { pose: "sentado", k: 3, fx: 0.1, fz: -0.2, giro: 3.0 },
+      { pose: "caminando", k: 4, fx: 0.1, fz: 0.2, giro: -2.4 },
+    ];
+    congosVivos.length = 0;
+    manada.forEach((d, i) => {
+      const c = congoModelo(d.pose);
+      c.base = sobreCopa(d.k, d.fx, d.fz); c.giro = d.giro; c.fase = i * 1.7; c.camina = !!d.camina;
+      c.m.position.copy(c.base); c.m.rotation.y = d.giro;
+      g.add(c.m); congosVivos.push(c);
     });
     // zona de toque más grande que los monos (invisible), para que sea fácil darles en el teléfono
+    const copa = 6 * escala + 1.2 * escala;
     const toque = new THREE.Mesh(new THREE.SphereGeometry(5.2 * escala, 12, 8), new THREE.MeshBasicMaterial({ transparent: true, opacity: 0, depthWrite: false }));
     toque.scale.y = 0.55; toque.position.set(p[0], copa + 1.2 * escala, p[1]); g.add(toque);
-    g.traverse((o) => { o.userData.noFundir = true; if (o.isMesh && o !== toque) o.castShadow = !liviano; });
+    // sin sombra: las sombras se calculan una sola vez y no seguirían a los monos cuando se mueven
+    g.traverse((o) => { o.userData.noFundir = true; if (o.isMesh) o.castShadow = false; });
     escena.add(g);
     grupoCongos = g;
+    centroCongos.set(p[0], copa, p[1]);
   }
 
   // explanada (fotos): una gran planicie en lo alto, con taludes de zacate, bancas de concreto celeste en el borde
@@ -1741,6 +1806,30 @@ lienzo.addEventListener("pointerup", (e) => {
   if (golpe) elegir(golpe.object.userData.edificio.userData.id, false);
 });
 
+// Movimiento leve de los congos: solo si la copa está a la vista y a menos de ~260 m (de lejos no se nota y se
+// ahorra batería), y nunca con «reducir movimiento»
+const vista = new THREE.Frustum(), mvp = new THREE.Matrix4(), esferaCongos = new THREE.Sphere(new THREE.Vector3(), 14);
+function animarCongos(ahora) {
+  if (!congosVivos.length || sinMovimiento || document.hidden || (PORTADA && !enPantalla)) return false;
+  esferaCongos.center.copy(centroCongos);
+  vista.setFromProjectionMatrix(mvp.multiplyMatrices(camara.projectionMatrix, camara.matrixWorldInverse));
+  if (!vista.intersectsSphere(esferaCongos) || camara.position.distanceTo(centroCongos) > 260) return false;
+  const s = ahora / 1000;
+  for (const c of congosVivos) {
+    c.cabeza.rotation.y = 0.45 * Math.sin(s * 0.5 + c.fase);
+    c.cabeza.rotation.x = 0.12 * Math.sin(s * 0.37 + c.fase * 2);
+    c.cola.rotation.x = 0.15 * Math.sin(s * 0.8 + c.fase);
+    c.cola.rotation.z = 0.12 * Math.sin(s * 0.55 + c.fase);
+    c.cuerpo.scale.y = 1 + 0.015 * Math.sin(s * 2.2 + c.fase);   // respiración
+    if (c.camina) {   // camina despacio un par de metros de ida y vuelta, mirando hacia donde va
+      const k = Math.sin(s * 0.22 + c.fase), dir = Math.cos(s * 0.22 + c.fase) >= 0 ? 0 : Math.PI;
+      c.m.position.set(c.base.x + Math.sin(c.giro) * k * 1.4, c.base.y + Math.abs(Math.sin(s * 3)) * 0.04, c.base.z + Math.cos(c.giro) * k * 1.4);
+      c.m.rotation.y = c.giro + dir;
+    }
+  }
+  return true;
+}
+
 // ---------- congos: un toque suena el aullido (solo la parte de los congos); dos toques seguidos abren los videos
 let aullido = null, ultimoToqueCongos = 0;
 const visorVideo = document.querySelector(".visor-video");
@@ -1852,7 +1941,9 @@ function dibujar(ahora) {
   moverMarcas();   // en el mismo fotograma que el dibujo: los números no se atrasan respecto a la escena
   if (seguir) camaraEnMovimiento(); else camaraQuieta();
   brujula.style.transform = `rotate(${THREE.MathUtils.radToDeg(controles.getAzimuthalAngle())}deg)`;
+  const congosEnMovimiento = animarCongos(ahora);
   if (seguir && (!PORTADA || (enPantalla && !document.hidden))) pedirDibujo();
+  else if (congosEnMovimiento) setTimeout(pedirDibujo, 40);   // los congos se mueven a ~25 cuadros por segundo
 }
 new ResizeObserver(pedirDibujo).observe(lienzo);
 if (PORTADA && raiz.closest(".portada__foto")?.dataset.giro) rendirse("llegó tarde");

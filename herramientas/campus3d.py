@@ -1130,7 +1130,15 @@ def main(pdf, sat=None):
     if torre_:
         arbol_c = min((a for a in arboles if not a["palma"]), key=lambda a: math.dist(a["p"], torre_["p"]))
         arboles.remove(arbol_c)
-        elementos.append({"tipo": "congos", "id": None, "p": arbol_c["p"], "escala": 2.0})
+        # (anotaciones) un poco más lejos del pabellón 1: 8 m en la dirección que se aleja de su centro; los árboles
+        # comunes que quedan bajo la copa grande se quitan
+        e1 = next(e for e in EDIFICIOS if e["id"] == 1)
+        c1 = a_metros(*e1["rect"][:2])
+        dx_, dz_ = arbol_c["p"][0] - c1[0], arbol_c["p"][1] - c1[1]
+        n_ = math.hypot(dx_, dz_) or 1
+        p_c = [round(arbol_c["p"][0] + dx_ / n_ * 8, 2), round(arbol_c["p"][1] + dz_ / n_ * 8, 2)]
+        arboles[:] = [a for a in arboles if math.dist(a["p"], p_c) > 12 + a["r"] * 0.5]
+        elementos.append({"tipo": "congos", "id": None, "p": p_c, "escala": 2.0})
 
     # --- cerca perimetral (fotos): malla verde con alambre de púas a lo largo de las carreteras que
     # rodean la U. Se toma la zona del campus (lo que queda de este lado de la carretera, empezando en la
