@@ -39,7 +39,7 @@ La fila 1 son los encabezados (se pueden escribir con tildes y mayúsculas). Las
 |---|---|---|
 | config | Datos generales | clave, valor |
 | avisos | Franja de aviso urgente o aviso en «Hoy en la Sede» | publicar, tipo (urgente o informativo), titulo, texto, enlace_texto, enlace, desde, hasta |
-| noticias | Noticias | publicar, id, fecha, categoria, titulo, resumen, cuerpo, documento, imagen, imagen_alt, autor, destacada |
+| noticias | Noticias | publicar, id, fecha, categoria, titulo, resumen, cuerpo, documento, imagen, imagen_alt, autor, destacada, fotos (galería: archivos de Imágenes separados por comas), fotos_alt (separadas por \|) |
 | eventos | Agenda | publicar, id, fecha, hora, fecha_fin, titulo, lugar, categoria, descripcion, enlace, enlace_texto, organiza |
 | carreras | Oferta académica | publicar, id, nombre, grados, codigo, area, recintos, coordinacion, correo, extension, resumen, plan_url, documento |
 | unidades | Coordinaciones, recintos y servicios | publicar, id, nombre, grupo (Gobierno, Coordinaciones, Recintos o Servicios), responsable, cargo, correo, extension, edificio, resumen, documento |

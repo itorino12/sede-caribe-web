@@ -173,7 +173,7 @@ def fotos_de(fila, carpeta):
     for i, nombre in enumerate(nombres):
         f = imagen(nombre)
         if f:
-            fotos.append({**f, "alt": alts[i] if i < len(alts) and alts[i] else f"{fila['nombre']}, foto {i + 1}"})
+            fotos.append({**f, "alt": alts[i] if i < len(alts) and alts[i] else f"{fila.get('nombre') or fila.get('titulo')}, foto {i + 1}"})
     return fotos
 
 
@@ -290,7 +290,7 @@ def preparar(sitio, d):
             continue
         cuerpo = leer_pagina(n.get("documento")) or n.get("cuerpo", "")
         noticias.append({**n, "id": n.get("id") or slug(n["titulo"]), "f": f, "html": md(cuerpo),
-                         "img": imagen(n.get("imagen")), "destacada": str(n.get("destacada", "")).lower() in SI})
+                         "img": imagen(n.get("imagen")), "fotos": fotos_de({**n, "id": n.get("id") or slug(n["titulo"])}, "noticias"), "destacada": str(n.get("destacada", "")).lower() in SI})
     noticias.sort(key=lambda n: (n["f"], n["destacada"]), reverse=True)
 
     eventos, pasados = [], []

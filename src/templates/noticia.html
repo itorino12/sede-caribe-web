@@ -18,6 +18,12 @@
   {% endif %}
   <div class="ancho articulo__cuerpo">
     <div class="prosa">{{ n.html|safe }}</div>
+    {% if n.fotos %}
+    <h2 class="proyectos__titulo">Galería</h2>
+    <ul class="galeria">
+      {% for f in n.fotos %}<li><a href="{{ raiz }}{{ f[1920] }}"><img src="{{ raiz }}{{ f[640] }}" alt="{{ f.alt }}" width="{{ f.w }}" height="{{ f.h }}" loading="lazy"></a></li>{% endfor %}
+    </ul>
+    {% endif %}
     <footer class="articulo__pie">
       {% if n.autor %}<p>{{ n.autor }}</p>{% endif %}
       <p class="compartir">Compartir:
