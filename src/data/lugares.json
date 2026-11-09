@@ -183,7 +183,9 @@
   "id": 23,
   "zona": 2,
   "nombre": "Parqueo de la piscina",
-  "texto": "Parqueo asfaltado e iluminado al costado de la piscina que da al gimnasio."
+  "texto": "Parqueo asfaltado e iluminado al costado de la piscina que da al gimnasio.",
+  "fotos": "lugar-23-1.jpg, lugar-23-2.jpg",
+  "fotos_alt": "Parqueo asfaltado de la piscina, con postes de luz verdes y carros estacionados en batería; al fondo, el edificio de techo celeste y palmeras.|El parqueo visto desde la acera con guía táctil, detrás de la malla verde, con los techos de la Sede al fondo."
  },
  {
   "id": 24,
