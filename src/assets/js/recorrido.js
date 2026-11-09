@@ -413,8 +413,8 @@ for (const e of datos.campus.edificios) {
       const ventanal = estilo.ventanas === "vidrio" || estilo.ventanas === "vidrio_verde";
       const cristal = estilo.ventanas === "vidrio_verde" ? vidrioVerde : vidrio;
       if (estilo.franja) grupo.add(prisma(vol.contorno, 0.6, altoPiso * 0.27, new THREE.MeshStandardMaterial({ color: estilo.franja, roughness: 0.8 }), 0.06));
-      if (estilo.porton) {   // portón de lámina oscura en la fachada que mira a la calle
-        const f = fachadaSur(vol.contorno), ang = Math.atan2(-(f.b[1] - f.a[1]), f.b[0] - f.a[0]);
+      if (estilo.porton) {   // portón de lámina oscura en la fachada que mira a la calle (o la que diga porton_frente)
+        const f = fachadaSur(vol.contorno, estilo.porton_frente), ang = Math.atan2(-(f.b[1] - f.a[1]), f.b[0] - f.a[0]);
         const p = new THREE.Mesh(new THREE.BoxGeometry(f.largo * 0.45, altoPiso * 0.78, 0.12), new THREE.MeshStandardMaterial({ color: estilo.porton, roughness: 0.6 }));
         p.position.set((f.a[0] + f.b[0]) / 2 + f.nx * 0.08, altoPiso * 0.39, (f.a[1] + f.b[1]) / 2 + f.nz * 0.08); p.rotation.y = ang; grupo.add(p);
       }

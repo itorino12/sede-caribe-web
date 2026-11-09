@@ -50,7 +50,9 @@ def piscina_a_px(u, v):
     cx, cy, _, _, g = PISCINA_RECT
     c, s_ = math.cos(math.radians(g)), math.sin(math.radians(g))
     return cx + (c * u - s_ * v) / ESCALA, cy + (s_ * u + c * v) / ESCALA
-PLANTA = {"centro": (1486, 1566), "giro": 74}        # planta de tratamiento, al oeste de la calle, pasando el puente
+PLANTA = {"centro": (1517, 1576), "giro": 76}        # planta de tratamiento, al oeste de la calle, pasando el puente
+# (anotaciones) más cerca de la calle de residencias, en el zacate entre la calle y donde estaba
+PLANTA_ARBOLES = {"centro": (1486, 1566)}            # donde estaba: el despeje de árboles sigue ahí (ver arriba)
 
 # Numeración publicada (por zonas, edificios primero). Aquí adentro los edificios conservan el número del
 # croquis oficial (1–18) y los lugares agregados, el número con que se crearon (19–37); al escribir
@@ -138,7 +140,8 @@ EDIFICIOS = [
      "estilo": {"techo": "#8db38a", "corredor": True, "franja": "#4fa8e8", "rotulo": [-1, 0]}},
     # Bodega de Acción Social (foto): casita blanca de techo a dos aguas gris oscuro con alero blanco y portón negro
     {"id": 15, "rect": (1770, 1450, 59, 41, 0), "pisos": 1, "alto": 3.4,
-     "estilo": {"forma_techo": "dos_aguas", "techo": "#4a5056", "ventanas": "ninguna", "porton": "#2b2f33"}},
+     # (anotaciones) la entrada (el portón) está en la fachada oeste, la que da a la calle que viene del gimnasio
+     "estilo": {"forma_techo": "dos_aguas", "techo": "#4a5056", "ventanas": "ninguna", "porton": "#2b2f33", "porton_frente": [-1, 0]}},
     # Residencias: barra doblada del croquis, en dos alas; en la foto, techo de dos niveles con linternilla
     # el ala sur del croquis llega hasta la carretera: se acorta y se corre hacia adentro para que quede
     # dentro de la cerca, como en el campus real
@@ -190,7 +193,7 @@ def ensanchar_constantes():
             e["poli"] = [(ensanchar(x), y) for x, y in e["poli"]]
     global PISCINA_RECT, RECORTE
     PISCINA_RECT = (ensanchar(PISCINA_RECT[0]), *PISCINA_RECT[1:])
-    for d in (PICNIC, PUENTE, PLANTA):
+    for d in (PICNIC, PUENTE, PLANTA, PLANTA_ARBOLES):
         x, y = d["centro"]; d["centro"] = (int(round(ensanchar(x))), y)
     RECORTE = (RECORTE[0], RECORTE[1], RECORTE[2] + ENSANCHE_TOTAL, RECORTE[3])
 
@@ -228,7 +231,13 @@ PUENTE_PEATONAL_X = 1775          # sobre la ruta 32, al norte de los edificios 
 CASETA_GUARDA = (1045, 1197)      # en la isla de zacate entre las calles, al sur de la entrada
 BANO_MINIAUDITORIO = (925, 1361)  # al suroeste del miniauditorio, entre él y el sendero
 # sendero techado que sube desde la calle (cerca del paso de la quebrada) hasta la explanada
-SENDERO_EXPLANADA = [(948, 1466), (912, 1439), (883, 1417), (863, 1384), (862, 1351), (878, 1317), (908, 1283),
+# (anotaciones) el tramo de abajo sale de la calle más al este y sube derecho hasta donde el sendero da la vuelta
+# Los árboles se colocan con números al azar que dependen de qué puntos quedan libres: si cambia un despeje, se
+# reacomodan todos. Por eso el despeje para los árboles sigue usando la posición anterior de lo que se movió
+# (SENDERO_ANTERIOR, PLANTA_ARBOLES, baño de Docencia) y lo nuevo se despeja quitando árboles al final (despejar_post).
+SENDERO_ANTERIOR = [(948, 1466), (912, 1439), (883, 1417), (863, 1384), (862, 1351), (878, 1317), (908, 1283),
+                    (934, 1245), (945, 1212), (925, 1188), (899, 1157), (887, 1141)]
+SENDERO_EXPLANADA = [(974, 1443), (922, 1401), (868, 1339), (878, 1317), (908, 1283),
                      (934, 1245), (945, 1212), (925, 1188), (899, 1157), (887, 1141)]
 # explanada (anotaciones): todo el zacate abierto dentro de la vuelta del sendero, que la delimita al este
 EXPLANADA = [(910, 1240), (840, 1362), (794, 1353), (722, 1302), (676, 1254), (702, 1186), (745, 1136), (796, 1147), (885, 1201)]
@@ -434,25 +443,25 @@ def lugares_nuevos(calles, quebrada, lejos_carretera, y_ruta32):
     """Elementos sin edificio (pasillos techados, casetas, parqueos, etc.) y las máscaras para pintarlos
     en el suelo y para que no les caigan árboles encima. Todo sale en metros para la maqueta."""
     forma = calles.shape
-    asfalto, lastre, claro, despejar, claro_plaza, calles_extra = (np.zeros(forma, np.uint8) for _ in range(6))
+    asfalto, lastre, claro, despejar, claro_plaza, calles_extra, despejar_post = (np.zeros(forma, np.uint8) for _ in range(7))
     rayas = np.zeros((forma[0] * 2, forma[1] * 2), np.uint8)   # al doble, para líneas finas
     elem = []
     M = lambda pts: [a_metros(float(x), float(y)) for x, y in pts]
 
-    def pasillo(pts, id_=None, ancho=2.6, techo=True, cruces=(), subida=0.0, cima=None):
+    def pasillo(pts, id_=None, ancho=2.6, techo=True, cruces=(), subida=0.0, cima=None, limpiar=None):
         pts = suavizar(pts)
         largo_ = np.concatenate([[0], np.cumsum(np.hypot(*np.diff(np.array(pts), axis=0).T))])
         # sube parejo hasta el punto «cima» (o hasta el final) y de ahí sigue plano
         fin_ = largo_[int(np.argmin([math.dist(q, cima) for q in pts]))] if cima else largo_[-1]
         alturas = [round(float(subida * min(1.0, d / fin_)), 2) for d in largo_] if subida else []
-        cv2.polylines(despejar, [np.array(pts, np.int32)], False, 1, 34)
+        cv2.polylines(despejar if limpiar is None else limpiar, [np.array(pts, np.int32)], False, 1, 34)
         en_calle = [bool(calles[int(y), int(x)]) for x, y in pts]   # donde cruza una calle no lleva losa, columnas ni techo
         elem.append({"tipo": "pasillo", "id": id_, "puntos": M(pts), "ancho": ancho, "techo": techo, "en_calle": en_calle, "alturas": alturas,
                      "cruces": [M([c])[0] for c in cruces]})
         return pts
 
-    def caja(id_, tipo, p, giro, largo, ancho, **extra):
-        cv2.fillPoly(despejar, [np.array(rect_contorno(p[0], p[1], largo / ESCALA + 56, ancho / ESCALA + 56, giro), np.int32)], 1)
+    def caja(id_, tipo, p, giro, largo, ancho, limpiar=None, **extra):
+        cv2.fillPoly(despejar if limpiar is None else limpiar, [np.array(rect_contorno(p[0], p[1], largo / ESCALA + 56, ancho / ESCALA + 56, giro), np.int32)], 1)
         elem.append({"tipo": tipo, "id": id_, "p": a_metros(*p), "giro": round(math.radians(giro), 3), "largo": largo, "ancho": ancho, **extra})
 
     def parqueo(id_, centro, largo, ancho, giro, filas, conexion=None, techado=False):
@@ -499,7 +508,9 @@ def lugares_nuevos(calles, quebrada, lejos_carretera, y_ruta32):
     # sendero techado que sube de la calle a la explanada (29), pasando junto al baño del miniauditorio (31)
     # (fotos) el sendero sube a la explanada entre muros celestes, con baranda gris, y entra a ella por el norte
     pasillo(junto_calle(SENDERO_EXPLANADA[:1], 9, calles) + SENDERO_EXPLANADA[1:] + [(856, 1170)], techo=False, ancho=2.0, subida=3.5,
-            cima=(945, 1212))
+            cima=(945, 1212), limpiar=despejar_post)
+    viejo_ = suavizar(junto_calle(SENDERO_ANTERIOR[:1], 9, calles) + SENDERO_ANTERIOR[1:] + [(856, 1170)])
+    cv2.polylines(despejar, [np.array(viejo_, np.int32)], False, 1, 34)
 
     # --- explanada (29): zacate abierto y parejo, sin árboles
     cv2.fillPoly(claro, [np.array(EXPLANADA, np.int32)], 255)
@@ -532,7 +543,9 @@ def lugares_nuevos(calles, quebrada, lejos_carretera, y_ruta32):
     caja(37, "caseta", marco(2, -157, 0), 51, 5.0, 4.0, alto=2.8, uso="torre", elevada=2.8)
     # baño de Docencia (24): casita crema de techo verde a una agua, justo detrás de la Coordinación (4)
     # (anotaciones) justo detrás de Docencia, del lado contrario a la calle
-    caja(24, "caseta", (684, 1426), -20, 6.0, 4.5, alto=2.8, uso="banos_crema")
+    # (anotaciones) se corre junto a la esquina noreste de Docencia, con las puertas hacia el edificio
+    caja(24, "caseta", (703, 1444), 30, 6.0, 4.5, alto=2.8, uso="banos_crema", limpiar=despejar_post)
+    cv2.fillPoly(despejar, [np.array(rect_contorno(684, 1426, 6.0 / ESCALA + 56, 4.5 / ESCALA + 56, -20), np.int32)], 1)   # donde estaba
     # pasillo techado corto que une la puerta de Docencia con el pasillo 27 (anotaciones)
     pasillo([(705, 1577), (688, 1531)])
     # baño del pabellón 7 (fotos y anotaciones): casita aparte con techo a dos aguas, alero celeste y un mural,
@@ -586,7 +599,7 @@ def lugares_nuevos(calles, quebrada, lejos_carretera, y_ruta32):
             mesas.append(((p[0] + q[0]) / 2, (p[1] + q[1]) / 2))
     # (anotaciones) las dos mesas de la isla de zacate frente al pórtico de la entrada se quitaron
     # alrededor de Docencia (4) hay varias mesas redondas de concreto en el zacate (fotos)
-    mesas += [(672 + 64 * math.cos(math.radians(a)), 1490 + 64 * math.sin(math.radians(a))) for a in (205, 232)]   # la del noreste se quitó (anotaciones)
+    # (anotaciones) las dos mesas al norte de Docencia se quitaron; van cuatro al sur y al este del edificio (abajo)
     # (anotaciones) mesas nuevas: junto al camino de la entrada, al sur de la unión con el pasillo del 7; tres entre
     # el pasillo de las aulas y los baños de la piscina; (anotaciones) tres detrás de la acera, entre ella y la
     # quebrada, pasando el toldo de los vestidores
@@ -594,7 +607,12 @@ def lugares_nuevos(calles, quebrada, lejos_carretera, y_ruta32):
     a_px = lambda x, z: (int(round(x / ESCALA + ORIGEN[0])), int(round(z / ESCALA + ORIGEN[1])))
     for x, z in nuevas:   # sin árboles encima de las mesas nuevas
         cv2.circle(despejar, a_px(x, z), int(4.5 / ESCALA), 1, -1)
-    elem.append({"tipo": "mesas", "id": None, "puntos": M(mesas) + nuevas})
+    # (anotaciones) mesas redondas de concreto alrededor de Docencia (4): al sur, junto al camino techado, y al este,
+    # hacia la quebrada; dos quedan bajo la copa de un árbol, que se conserva
+    docencia_ = [[-147.0, 20.7], [-131.3, 15.2], [-118.4, 10.7], [-112.7, -8.0]]
+    for x, z in docencia_:
+        cv2.circle(despejar_post, a_px(x, z), int(1.8 / ESCALA), 1, -1)
+    elem.append({"tipo": "mesas", "id": None, "puntos": M(mesas) + nuevas + docencia_})
     # (anotaciones y revisión) paso de cebra frente al pórtico: cruza las dos calles que rodean la isla de zacate,
     # cada una en ángulo recto (no en diagonal, que lo llevaba debajo del alero del 13), y una acera une los dos
     # cruces por la isla. Del lado oeste llega al zacate frente a la caseta del guarda, con una acera corta hasta
@@ -810,7 +828,8 @@ def lugares_nuevos(calles, quebrada, lejos_carretera, y_ruta32):
     cv2.circle(despejar, (int(xp), int(yp)), 70, 1, -1)
     # (fotos) sin techo; las rampas corren junto a la carretera, fuera de la cerca de la UCR
     elem.append({"tipo": "puente_peatonal", "id": 32, "p": a_metros(xp, yp), "giro": round(giro_calle, 3), "semiancho": round(semi, 2)})
-    return elem, {"calles_extra": calles_extra, "asfalto": asfalto, "rayas": rayas, "lastre": lastre, "claro": claro, "despejar": despejar, "cerca": cerca_extra,
+    cv2.circle(despejar_post, PLANTA["centro"], int(12 / ESCALA), 1, -1)
+    return elem, {"despejar_post": despejar_post, "calles_extra": calles_extra, "asfalto": asfalto, "rayas": rayas, "lastre": lastre, "claro": claro, "despejar": despejar, "cerca": cerca_extra,
                   "plaza": claro_plaza}
 
 
@@ -1084,7 +1103,7 @@ def main(pdf, sat=None):
     pcx_, pcy_, pl_, pa_, pg_ = PISCINA_RECT
     cv2.fillPoly(lejos_edificios, [np.array(rect_contorno(pcx_, pcy_, pl_ + 150, pa_ + 150, pg_), np.int32)], 1)
     lejos_edificios |= cv2.dilate((quebrada > 0).astype(np.uint8), np.ones((25, 25), np.uint8))   # sin árboles en el cauce
-    cv2.circle(lejos_edificios, PLANTA["centro"], 115, 1, -1)
+    cv2.circle(lejos_edificios, PLANTA_ARBOLES["centro"], 115, 1, -1)
     cv2.fillPoly(lejos_edificios, [np.array(rect_contorno(*PARQUEO["rect"]), np.int32)], 1)
     lejos_edificios |= extra["despejar"]
     satelital = arboles_satelitales(sat, rng, ocupado | lejos_edificios) if sat else None
@@ -1123,6 +1142,7 @@ def main(pdf, sat=None):
     # (revisión) ningún árbol con la copa sobre los carriles de la pista
     lejos_pista = cv2.distanceTransform((pista == 0).astype(np.uint8), cv2.DIST_L2, 5)
     a_px_ = lambda x, z: (int(round(x / ESCALA + ORIGEN[0])), int(round(z / ESCALA + ORIGEN[1])))
+    arboles = [a for a in arboles if not extra["despejar_post"][a_px_(*a["p"])[1], a_px_(*a["p"])[0]]]
     arboles = [a for a in arboles if lejos_pista[a_px_(*a["p"])[1], a_px_(*a["p"])[0]] * ESCALA >= a["r"] + 0.5
                and not lleno[a_px_(*a["p"])[1], a_px_(*a["p"])[0]]]   # ni dentro de la cancha
     # (anotaciones) el árbol junto a la caseta de arriba (11) es grande y en él vive una manada de congos: se cambia
