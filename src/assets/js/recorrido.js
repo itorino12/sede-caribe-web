@@ -1438,6 +1438,41 @@ if (datos.campus.parqueo) {
   function cebra({ franjas, giro, ancho = 3 }) {
     const g = new THREE.Group(); g.add(cajas(blanco, franjas.map(([x, z]) => [x, 0.1, z, ancho, 0.04, 0.5, giro]))); registrar(g, null);
   }
+  // parqueo techado (fotos): techo de lámina de una sola agua con canoa blanca y borde verde, sobre una viga de
+  // celosía de acero gris oscuro que se apoya en dos columnas en V; debajo, los espacios con su tope de concreto
+  function carport({ p, giro, largo, fondo, espacios = 3 }) {
+    const g = new THREE.Group();
+    const acero = mate(0x3d4247, { roughness: 0.5, metalness: 0.5 }), lamina = mate(0xc9ccd0, { roughness: 0.6, metalness: 0.3 });
+    const canoa = mate(0xe6e6e1, { roughness: 0.7 }), verdeBorde = mate(0x2f6b4f, { roughness: 0.6 });
+    const H = 3.6, caida = 0.5;   // altura de la viga y caída del techo hacia atrás
+    const pieza = (w, h, d, mat, x, y, z, rz = 0, rx = 0) => {
+      const m = new THREE.Mesh(new THREE.BoxGeometry(w, h, d), mat); m.position.set(x, y, z); m.rotation.set(rx, 0, rz); g.add(m); return m;
+    };
+    // techo inclinado (sube hacia la calle, +z local) con canoa al frente y borde verde arriba
+    const pend = Math.atan2(caida, fondo);
+    pieza(largo + 1.6, 0.1, fondo + 1.2, lamina, 0, H + 0.45, 0, 0, -pend);
+    pieza(largo + 1.6, 0.55, 0.14, canoa, 0, H + 0.45 + caida / 2 + 0.1, (fondo + 1.2) / 2);
+    pieza(largo + 1.6, 0.1, 0.18, verdeBorde, 0, H + 0.45 + caida / 2 + 0.42, (fondo + 1.2) / 2);
+    for (let k = -2; k <= 2; k++) pieza(largo + 1.4, 0.12, 0.1, acero, 0, H + 0.3 + (k * caida) / 5, (k * (fondo + 1)) / 5);   // largueros
+    // viga de celosía a lo largo, a media profundidad
+    pieza(largo + 1.2, 0.14, 0.14, acero, 0, H + 0.25, 0);
+    pieza(largo + 1.2, 0.14, 0.14, acero, 0, H - 0.55, 0);
+    const n = 10, paso = (largo + 1.2) / n;
+    for (let i = 0; i < n; i++) pieza(0.08, Math.hypot(paso, 0.8), 0.08, acero, -(largo + 1.2) / 2 + paso * (i + 0.5), H - 0.15, 0, (i % 2 ? 1 : -1) * Math.atan2(paso, 0.8));
+    // dos columnas en V, una en cada extremo
+    for (const lado of [-1, 1]) {
+      const xb = lado * (largo / 2 - 1.2);
+      pieza(0.5, 0.35, 0.5, concretoClaro, xb, 0.17, 0);
+      for (const abre of [-1, 1]) {
+        const dx = abre * 1.1, L = Math.hypot(dx, H - 0.55);
+        pieza(0.18, L, 0.18, acero, xb + dx / 2, (H - 0.55) / 2 + 0.3, 0, -Math.atan2(dx, H - 0.55));
+      }
+    }
+    // topes de concreto al fondo de cada espacio
+    for (let i = 0; i < espacios; i++) pieza(1.6, 0.15, 0.25, concretoClaro, (-espacios / 2 + i + 0.5) * (largo / espacios), 0.08, -fondo / 2 + 0.8);
+    g.position.set(p[0], 0, p[1]); g.rotation.y = -giro;
+    registrar(g, null);
+  }
   // ruedas de tren (fotos): monumento de juegos de ruedas oxidados, apilados en cuatro hileras con el eje hacia el
   // frente, una rueda grande de rayos parada adelante y un carretón pequeño en el zacate, frente al parqueo
   function ruedasTren({ p, giro }) {
@@ -1488,7 +1523,7 @@ if (datos.campus.parqueo) {
   for (const el of datos.campus.elementos || []) {
     const hacer = { pasillo, caseta, parqueo, bancas, escalera, rampa, descanso, mesas, explanada, alcantarilla, jardin, pluma, comedor, tanque,
       acera, cebra, porton_peatonal: portonPeatonal, puente_peatonal: puentePeatonal, arbol_grande: arbolGrande,
-      ruedas_tren: ruedasTren, congos }[el.tipo];
+      ruedas_tren: ruedasTren, congos, carport }[el.tipo];
     if (hacer) hacer(el);
     else if (el.tipo === "porton") {   // acceso cerrado con portón (sin faroles)
       const g = portonVerde(false, el.hoja || 4.2); g.position.set(el.p[0], 0, el.p[1]); g.rotation.y = el.giro; escena.add(g);

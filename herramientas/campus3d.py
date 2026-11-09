@@ -126,11 +126,14 @@ EDIFICIOS = [
     {"id": 10, "rect": (1453, 1310, 60, 109, 15), "pisos": 0, "tipo": "piscina"},
     # Biblioteca (fotos): un piso, lámina verde, cuerpo central más alto, torrecita de ventilación,
     # ventanales corridos y zócalo azul claro
-    {"id": 11, "rect": (1510, 1113, 128, 78, -6), "pisos": 1, "linterna": 0.55,
+    # (anotaciones) la biblioteca es más grande: un cuerpo ancho hacia la ruta 32 y otro más angosto hacia la calle
+    {"id": 11, "rect": (1510, 1113, 128, 78, -6), "rect_arboles": (1510, 1113, 128, 78, -6),
+     "alas": [(1516.6, 1061.5, 174.9, 81.8, -6), (1523.2, 1120.6, 86.2, 53.6, -6)], "pisos": 1, "linterna": 0.55,
      "estilo": {"techo": "#5f9a58", "zocalo": "#a9d4ef", "ventanas": "vidrio", "cupula": True}},
     # 12 y 13 (fotos): el edificio nuevo de dos pisos. Aulas con losa plana volada, galerías y escaleras
     # exteriores; laboratorios con techo de una sola agua, ventanales verdes y parasoles curvos blancos.
-    {"id": 12, "rect": (1726, 1072, 128, 39, -2), "pisos": 2,
+    # (anotaciones) las aulas 18 a 23 siguen hacia el oeste hasta cerca de la biblioteca
+    {"id": 12, "rect": (1703.5, 1072.8, 173, 39, -2), "rect_arboles": (1726, 1072, 128, 39, -2), "pisos": 2,
      "estilo": {"forma_techo": "plano", "galeria": True, "techo": "#dcdfe2"}},
     {"id": 13, "rect": (1786, 1130, 113, 51, -10), "pisos": 2,
      "estilo": {"forma_techo": "una_agua", "parasoles": True, "ventanas": "vidrio_verde", "techo": "#d6dadd"}},
@@ -183,8 +186,9 @@ def angostar(xw):
 
 def ensanchar_constantes():
     for e in EDIFICIOS:
-        if "rect" in e:
-            cx, cy, *rest = e["rect"]; e["rect"] = (ensanchar(cx), cy, *rest)
+        for k_ in ("rect", "rect_arboles"):
+            if k_ in e:
+                cx, cy, *rest = e[k_]; e[k_] = (ensanchar(cx), cy, *rest)
         if "alas" in e:
             e["alas"] = [(ensanchar(cx), cy, *rest) for cx, cy, *rest in e["alas"]]
         if "hex" in e:
@@ -245,6 +249,11 @@ EXPLANADA = [(910, 1240), (840, 1362), (794, 1353), (722, 1302), (676, 1254), (7
 
 def contornos_px(e):
     return [rect_contorno(*al) for al in e["alas"]] if "alas" in e else [contorno(e)]
+
+
+def contornos_arboles(e):
+    """Forma con que se despejan los árboles: la anterior si el edificio cambió (ver SENDERO_ANTERIOR)."""
+    return [rect_contorno(*e["rect_arboles"])] if "rect_arboles" in e else contornos_px(e)
 
 
 def rasterizar(pdf):
@@ -717,6 +726,37 @@ def lugares_nuevos(calles, quebrada, lejos_carretera, y_ruta32):
     for pol_ in (tira_((110.5, -16.6), (158.6, -12.5), 6.4, 5.0), [(-2.6, -111.9), (4.12, -115.38), (4.75, -121.8), (-1.6, -121.8)]):
         cv2.fillPoly(calles_extra, [np.array([a_px(x, z) for x, z in pol_], np.int32)], 255)
     cv2.line(despejar, a_px(110.5, -16.6), a_px(158.6, -12.5), 1, int(12 / ESCALA))
+    raya_ = lambda a, b: cv2.line(rayas, tuple(int(round(k * 2)) for k in a_px(*a)), tuple(int(round(k * 2)) for k in a_px(*b)), 255, 2)
+    # (anotaciones) entrada asfaltada desde la calle hasta las aulas 18 a 23 (25)
+    entrada25 = [(127.6, -101.4), (133.6, -101.6), (133.6, -85.0), (127.6, -85.0)]
+    cv2.fillPoly(calles_extra, [np.array([a_px(x, z) for x, z in entrada25], np.int32)], 255)
+    cv2.fillPoly(despejar_post, [np.array([a_px(x, z) for x, z in entrada25], np.int32)], 1)
+    # (anotaciones y fotos) parqueo techado entre la biblioteca y esa entrada: losa de asfalto desde la acera de la
+    # calle, tres espacios al fondo bajo un techo de una agua sobre columnas de acero en V (recorrido.js: carport)
+    g_c = -6.0
+    cu_, su_ = math.cos(math.radians(g_c)), math.sin(math.radians(g_c))
+    en_c = lambda u, v: (120.6 + cu_ * u - su_ * v, -93.0 + su_ * u + cu_ * v)   # u a lo largo, v hacia la calle
+    losa_c = [en_c(-4.2, -7.7), en_c(4.2, -7.7), en_c(4.2, 7.9), en_c(-4.2, 7.9)]
+    cv2.fillPoly(calles_extra, [np.array([a_px(x, z) for x, z in losa_c], np.int32)], 255)
+    cv2.fillPoly(despejar_post, [np.array([a_px(x, z) for x, z in losa_c], np.int32)], 1)
+    for u in (-3.9, -1.3, 1.3, 3.9):
+        raya_(en_c(u, -7.4), en_c(u, -1.9))
+    c_t = en_c(0, -4.6)
+    elem.append({"tipo": "carport", "id": None, "p": [round(c_t[0], 2), round(c_t[1], 2)], "giro": round(math.radians(g_c), 3),
+                 "largo": 8.4, "fondo": 6.6, "espacios": 3})
+    # (anotaciones) parqueo de busetas al oeste de la biblioteca, entre la calle y la cerca de la ruta 32: espacios
+    # de 4,5 m de frente y 7,5 m de fondo con la trompa hacia la cerca
+    t0_, t1_ = (26.0, -116.0), (60.5, -111.1)
+    Lt_ = math.dist(t0_, t1_); ut_ = ((t1_[0] - t0_[0]) / Lt_, (t1_[1] - t0_[1]) / Lt_); nt_ = (-ut_[1], ut_[0])
+    if nt_[1] < 0: nt_ = (-nt_[0], -nt_[1])   # hacia la calle (al sur)
+    busetas = [t0_, t1_, (57.6, -93.0), (54.0, -94.5), (50.0, -96.8), (46.0, -97.5), (42.0, -98.0), (38.0, -98.8),
+               (34.0, -100.8), (30.0, -102.5), (26.0, -104.5)]
+    cv2.fillPoly(calles_extra, [np.array([a_px(x, z) for x, z in busetas], np.int32)], 255)
+    cv2.fillPoly(despejar_post, [np.array([a_px(x, z) for x, z in busetas], np.int32)], 1)
+    raya_((t0_[0] + nt_[0] * 0.4, t0_[1] + nt_[1] * 0.4), (t1_[0] + nt_[0] * 0.4 - ut_[0] * 1.5, t1_[1] + nt_[1] * 0.4 - ut_[1] * 1.5))
+    for t_ in np.arange(2.0, Lt_ - 1.0, 4.5):
+        a_ = (t0_[0] + ut_[0] * t_ + nt_[0] * 0.4, t0_[1] + ut_[1] * t_ + nt_[1] * 0.4)
+        raya_(a_, (a_[0] + nt_[0] * 7.5, a_[1] + nt_[1] * 7.5))
     elem.append({"tipo": "acera", "id": None, "ancho": 1.8,
                  "puntos": [[127.42, -86.52], [125.48, -86.38], [121.37, -85.51], [118.17, -84.89], [114.09, -84.28],
                             [109.52, -83.53], [104.0, -83.24], [100.0, -83.24], [96.0, -83.24], [92.0, -83.24], [88.0, -83.49],
@@ -1087,14 +1127,14 @@ def main(pdf, sat=None):
     verde = cv2.morphologyEx(verde, cv2.MORPH_CLOSE, cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (15, 15)))
     ocupado = cv2.dilate(((calles > 0) | (carretera > 0) | (pista > 0)).astype(np.uint8), np.ones((15, 15), np.uint8))
     for e in EDIFICIOS:
-        for pol in contornos_px(e):
+        for pol in contornos_arboles(e):
             cv2.fillPoly(ocupado, [np.array(pol, np.int32)], 1)
     n, lab, st, cen = cv2.connectedComponentsWithStats(verde)
     arboles = []
     # distancia mínima entre árboles y edificios (≈ 9 m), para que la maqueta respire y se vean las fachadas
     lejos_edificios = np.zeros_like(ocupado)
     for e in EDIFICIOS:
-        for pol in contornos_px(e):
+        for pol in contornos_arboles(e):
             cv2.fillPoly(lejos_edificios, [np.array(pol, np.int32)], 1)
     lejos_edificios = cv2.dilate(lejos_edificios, cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (73, 73)))
     cv2.circle(lejos_edificios, PICNIC["centro"], PICNIC["radio"] + 18, 1, -1)
@@ -1142,7 +1182,14 @@ def main(pdf, sat=None):
     # (revisión) ningún árbol con la copa sobre los carriles de la pista
     lejos_pista = cv2.distanceTransform((pista == 0).astype(np.uint8), cv2.DIST_L2, 5)
     a_px_ = lambda x, z: (int(round(x / ESCALA + ORIGEN[0])), int(round(z / ESCALA + ORIGEN[1])))
-    arboles = [a for a in arboles if not extra["despejar_post"][a_px_(*a["p"])[1], a_px_(*a["p"])[0]]]
+    nuevos_ = np.zeros_like(lejos_edificios)   # edificios que cambiaron de forma: sin árboles a menos de ~9 m
+    for e in EDIFICIOS:
+        if "rect_arboles" in e:
+            for pol in contornos_px(e):
+                cv2.fillPoly(nuevos_, [np.array(pol, np.int32)], 1)
+    nuevos_ = cv2.dilate(nuevos_, cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (73, 73)))
+    arboles = [a for a in arboles if not extra["despejar_post"][a_px_(*a["p"])[1], a_px_(*a["p"])[0]]
+               and not nuevos_[a_px_(*a["p"])[1], a_px_(*a["p"])[0]]]
     arboles = [a for a in arboles if lejos_pista[a_px_(*a["p"])[1], a_px_(*a["p"])[0]] * ESCALA >= a["r"] + 0.5
                and not lleno[a_px_(*a["p"])[1], a_px_(*a["p"])[0]]]   # ni dentro de la cancha
     # (anotaciones) el árbol junto a la caseta de arriba (11) es grande y en él vive una manada de congos: se cambia
