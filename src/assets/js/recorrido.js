@@ -877,7 +877,8 @@ if (datos.campus.parqueo) {
     }
   }
   // rayas blancas, todas iguales (anotaciones): las de las dos filas del centro, la línea del divisor y, a la par,
-  // una fila de espacios a lo largo de cada borde (norte y sur). Ya no van pintadas en la textura del suelo
+  // una fila de espacios a lo largo del borde sur. Ya no van pintadas en la textura del suelo.
+  // (anotaciones) en el borde norte no hay fila de espacios, y las rayas de la mitad norte del centro son más largas
   const blancoRaya = new THREE.MeshLambertMaterial({ color: 0xececE8 });
   const { rayas_bordes: fondoBorde, discapacidad } = datos.campus.parqueo;
   const xsRaya = [];
@@ -885,13 +886,17 @@ if (datos.campus.parqueo) {
   const raya = (x, z, ancho_, largo_) => {
     const m = new THREE.Mesh(new THREE.BoxGeometry(ancho_, 0.02, largo_), blancoRaya); m.position.set(x, 0.03, z); m.receiveShadow = true; g.add(m);
   };
-  for (const x of xsRaya) raya(x, divisor, 0.15, 10);   // filas del centro, espalda con espalda
+  const LARGO_NORTE = 6.5;
+  for (const x of xsRaya) {   // filas del centro, espalda con espalda
+    raya(x, divisor + 2.5, 0.15, 5);
+    raya(x, divisor - LARGO_NORTE / 2, 0.15, LARGO_NORTE);
+  }
   raya(0, divisor, largo - 2, 0.15);                    // línea del divisor
   if (fondoBorde) {
-    for (const borde of [-1, 1]) for (const x of xsRaya) raya(x, borde * (ancho / 2 - 0.3 - fondoBorde / 2), 0.15, fondoBorde);
+    for (const x of xsRaya) raya(x, ancho / 2 - 0.3 - fondoBorde / 2, 0.15, fondoBorde);
   }
-  // (anotaciones) espacio para personas con discapacidad: el del extremo este de la fila sur, con el símbolo
-  // internacional de accesibilidad pintado en el suelo (blanco sobre azul)
+  // (anotaciones) espacio para personas con discapacidad: el del extremo este de la mitad norte del centro, con el
+  // símbolo internacional de accesibilidad pintado en el suelo (blanco sobre azul)
   if (discapacidad) {
     const lienzo = document.createElement("canvas"); lienzo.width = lienzo.height = 128;
     const c2 = lienzo.getContext("2d");
@@ -905,8 +910,8 @@ if (datos.campus.parqueo) {
     if ("colorSpace" in textura) textura.colorSpace = THREE.SRGBColorSpace;
     const logo = new THREE.Mesh(new THREE.PlaneGeometry(1.7, 1.7), new THREE.MeshLambertMaterial({ map: textura }));
     const xEste = xsRaya[xsRaya.length - 1];
-    logo.rotation.x = -Math.PI / 2;   // acostado en el suelo, se lee desde el pasillo sur
-    logo.position.set((xEste + largo / 2) / 2, 0.035, divisor + 2.8); logo.receiveShadow = true; g.add(logo);
+    logo.rotation.set(-Math.PI / 2, 0, Math.PI);   // acostado en el suelo, se lee desde el pasillo norte
+    logo.position.set((xEste + largo / 2) / 2, 0.035, divisor - 3.0); logo.receiveShadow = true; g.add(logo);
   }
   // alumbrado: postes en el divisor y en el borde sur, cada uno con dos luminarias
   for (const [x, z] of [[-largo / 2 + 1.2, divisor], [largo / 2 - 1.2, divisor], [-largo / 2 + 1.2, ancho / 2 - 1], [largo / 2 - 1.2, ancho / 2 - 1]]) {

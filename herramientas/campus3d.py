@@ -687,8 +687,9 @@ def lugares_nuevos(calles, quebrada, lejos_carretera, y_ruta32):
                  "puntos": [[-2.93, -112.75], [-4.82, -109.35], [-7.04, -106.05], [-9.53, -102.9],
                             [-11.69, -99.52], [-13.56, -97.24], [-24.06, -83.19]]})
     # ruedas de tren (fotos): monumento en el zacate entre el parqueo de la piscina y la calle de la Biblioteca
-    elem.append({"tipo": "ruedas_tren", "id": None, "p": [90.0, -69.0], "giro": 2.88})
-    cv2.circle(despejar, a_px(90.0, -69.0), int(6 / ESCALA), 1, -1)
+    # (anotaciones) frente al parqueo, más al este y cerca de la acera
+    elem.append({"tipo": "ruedas_tren", "id": None, "p": [96.4, -70.5], "giro": 2.88})
+    cv2.circle(despejar, a_px(96.4, -70.5), int(6 / ESCALA), 1, -1)
     # (anotaciones) calles nuevas: entrada asfaltada del gimnasio a la Bodega de Acción Social (sin los árboles que
     # había en el camino) y, en la entrada principal, la continuación de la calle hasta el portón (antes zacate)
     def tira_(a, b, wa, wb):
@@ -1272,6 +1273,39 @@ def main(pdf, sat=None):
             porton_n["p"] = [round((E_[0] + M_[0]) / 2, 2), round((E_[1] + M_[1]) / 2, 2)]
             porton_n["giro"] = round(math.atan2(-uz_p, ux_p), 3)
             porton_n["hoja"] = round(L_p / 2 - 0.1, 2)
+    # (anotaciones) mallas de la zona de residencias, iguales a la perimetral. Las dos que bordean la quebrada
+    # arrancan pegadas a la baranda este del puente (36); la del norte sube luego hasta la cerca de la ruta 32 y la
+    # del sur cierra con la que baja hasta la cerca del sur. Otra rodea las residencias por el norte, llega a un
+    # portón en la calle de residencias y sigue junto a la calle, por detrás de la acera, hasta el portón (33)
+    mallas = [
+        [[114.72, -7.26], [116.0, -6.25], [124.0, -3.5], [132.0, -1.0], [140.0, 1.25], [148.0, 2.0], [156.0, 2.5],
+         [164.0, 2.0], [172.0, 1.25], [180.0, 0.0], [188.0, -1.25], [196.0, -2.25], [204.0, -2.5], [209.0, -2.6],
+         [209.0, -129.94]],
+        [[115.73, -2.17], [118.3, 2.55], [122.8, 9.06], [133.7, 10.04], [144.1, 10.58], [157.8, 12.2], [169.0, 17.06],
+         [180.78, 22.49], [185.24, 35.48], [187.9, 45.31], [193.16, 62.83], [196.52, 77.13], [200.05, 92.14],
+         [202.84, 100.48], [206.28, 109.77]],
+        [[183.9, 31.56], [174.26, 42.06], [164.38, 52.5], [149.13, 54.5], [129.64, 54.0]],
+        [[130.15, 59.5], [130.32, 61.97], [130.84, 66.0], [131.19, 70.03], [132.03, 74.01], [132.52, 77.96],
+         [133.12, 81.98], [133.73, 85.9], [134.31, 89.94], [135.29, 93.97], [136.2, 98.1], [137.52, 101.99],
+         [138.52, 105.98], [139.66, 110.08], [142.03, 113.97], [144.68, 117.72], [147.52, 121.85], [150.15, 125.65],
+         [152.32, 130.1], [153.96, 133.99], [155.56, 138.07], [157.32, 141.96], [157.09, 147.61]],
+    ]
+    cerca += mallas
+    # portón de la malla de residencias, en la calle, entre el final de la malla del norte y la que sigue la calle
+    pa_, pb_ = mallas[2][-1], mallas[3][0]
+    L_r = math.dist(pa_, pb_)
+    elementos.append({"tipo": "porton", "id": None, "p": [round((pa_[0] + pb_[0]) / 2, 2), round((pa_[1] + pb_[1]) / 2, 2)],
+                      "giro": round(math.atan2(-(pb_[1] - pa_[1]) / L_r, (pb_[0] - pa_[0]) / L_r), 3), "hoja": round(L_r / 2 - 0.25, 2)})
+    # sin troncos sobre las mallas nuevas
+    def lejos_malla(q):
+        for t_ in mallas:
+            for (ax_, az_), (bx_, bz_) in zip(t_, t_[1:]):
+                L2 = (bx_ - ax_) ** 2 + (bz_ - az_) ** 2
+                u_ = max(0.0, min(1.0, ((q[0] - ax_) * (bx_ - ax_) + (q[1] - az_) * (bz_ - az_)) / L2))
+                if math.dist(q, (ax_ + u_ * (bx_ - ax_), az_ + u_ * (bz_ - az_))) < 1.0:
+                    return False
+        return True
+    arboles = [a for a in arboles if lejos_malla(a["p"])]
     cy_pista, cx_pista = np.mean(np.nonzero(pista), axis=1)
 
     ys_c, xs_c = np.nonzero(calles)
