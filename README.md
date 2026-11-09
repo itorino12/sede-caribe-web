@@ -71,9 +71,28 @@ La fila 1 son los encabezados (se pueden escribir con tildes y mayúsculas). Las
 | `directorio.html` | Extensiones con buscador |
 | `enlaces.html`, `contacto.html`, `accesibilidad.html`, `404.html` | |
 
+### Página de una carrera (molde)
+
+`carreras/informatica-empresarial.html` es el ejemplo completo. Cada carrera tiene, como mínimo, su fila en la pestaña «carreras» y su documento en Páginas. El resto es opcional y sale de `src/data/carreras/<id>.json`; cada sección aparece solo si su clave existe:
+
+| Clave | Qué muestra |
+|---|---|
+| `lema` | Bajada bajo el título |
+| `cifras` | Tarjetas de datos sobre el texto (`valor`, `etiqueta`) |
+| `planes` | Botones de las mallas en PDF en la ficha (`nombre`, `detalle`, `url`, `principal`). Si no existe, se usa `plan_url` |
+| `malla` | Malla interactiva: `areas` (con `color` y `oscuro` para el modo oscuro), `ciclos`, `cursos` (`sigla`, `nombre`, `ciclo`, `area`, `creditos`, `req`, `req_texto`, `desc`, `horas`, `optativo`, `nota`, `programa`) y `optativos` por área |
+| `actualizacion` | Plan vigente: resumen, `apertura`, `aprobacion`, `comparacion` con el plan anterior y reglas de `transicion` |
+| `acreditacion` | Estado, avance del plan de mejora (`pem`) e `hitos` |
+| `historia`, `sedes`, `intersedes` | Línea de tiempo y cifras por recinto |
+
+- `req` lista las siglas de la malla que son requisito; con eso se dibuja la ruta. `req_texto` es el requisito oficial tal como lo escribe el plan, con las equivalencias del plan anterior.
+- `programa` apunta al PDF vigente en `src/assets/programas/<id>/` (`archivo`, `ciclo`, `kb`). Al subir un programa nuevo, se reemplaza el PDF y se actualizan `ciclo` y `kb`.
+- La malla en PDF del plan vigente va en `src/assets/docs/`.
+- `malla.js` dibuja la ruta. Sin JavaScript queda la lista por ciclo con requisitos y programas.
+
 En todas: buscador interno (tecla `/` o Ctrl+K), panel de accesibilidad (texto, tema claro u oscuro, alto contraste, subrayado, animaciones), RSS de noticias, mapa del sitio y datos estructurados para buscadores.
 
-**Calidad verificada:** 0 incumplimientos WCAG 2.2 A/AA (axe-core 4.14) en 13 páginas, en modo claro y oscuro. Sin desbordamiento horizontal a 390 px. Sin enlaces internos rotos ni errores de JavaScript.
+**Calidad verificada:** 0 incumplimientos WCAG 2.2 A/AA (axe-core 4.14) en 17 páginas, en modo claro y oscuro. Sin desbordamiento horizontal a 390 px. Sin enlaces internos rotos ni errores de JavaScript.
 
 ## Recorrido 3D del campus
 

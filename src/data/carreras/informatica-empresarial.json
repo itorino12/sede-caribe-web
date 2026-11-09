@@ -1,0 +1,1090 @@
+{
+ "fuente": "Estructura curricular del plan de estudios, código 600002, Plan 07 (Informe curricular CEA-46-2025, Resolución VD-13456-2025). Programas de curso del Consejo de Carrera Intersedes.",
+ "lema": "Tecnología y gestión para las organizaciones del Caribe",
+ "planes": [
+  {
+   "nombre": "Malla del Plan 07",
+   "detalle": "Vigente desde el III ciclo 2025 · PDF",
+   "url": "assets/docs/informatica-empresarial-plan-07.pdf",
+   "principal": true
+  },
+  {
+   "nombre": "Malla del Plan 01",
+   "detalle": "En cierre: se ofrece hasta el III ciclo 2029",
+   "url": "https://sedecaribe.ucr.ac.cr/images/Carreras/Planesdeestudios2025/600002_BACH_EN_INFORMATICA_EMPRESARIAL"
+  }
+ ],
+ "cifras": [
+  {
+   "valor": "144",
+   "etiqueta": "créditos en el Plan 07"
+  },
+  {
+   "valor": "4 años",
+   "etiqueta": "en 10 ciclos, dos de ellos de verano"
+  },
+  {
+   "valor": "300 h",
+   "etiqueta": "de Trabajo Comunal Universitario"
+  },
+  {
+   "valor": "SINAES",
+   "etiqueta": "carrera acreditada desde 2019"
+  }
+ ],
+ "sedes": {
+  "fuente": "Población 2026 según el sitio de la Carrera Intersedes.",
+  "lugares": [
+   {
+    "nombre": "Limón",
+    "desde": "1998",
+    "activos": 268,
+    "graduados": 385,
+    "admision": 109
+   },
+   {
+    "nombre": "Siquirres",
+    "desde": "2013",
+    "activos": 194,
+    "graduados": 108,
+    "admision": 76
+   }
+  ]
+ },
+ "malla": {
+  "plan": "Plan 07",
+  "total": 144,
+  "tcu": 300,
+  "areas": [
+   {
+    "id": "DS",
+    "nombre": "Desarrollo de Software",
+    "corto": "Desarrollo de Software",
+    "color": "#0A6AA6",
+    "oscuro": "#5AAEE0",
+    "descripcion": "Lógica computacional, programación estructurada y orientada a objetos, aplicaciones web y servicios, ingeniería y calidad del software.",
+    "creditos": 28
+   },
+   {
+    "id": "ID",
+    "nombre": "Ingeniería de Datos",
+    "corto": "Ingeniería de Datos",
+    "color": "#00796B",
+    "oscuro": "#4DB6A8",
+    "descripcion": "Diseño, administración y análisis de bases de datos y grandes volúmenes de información, inteligencia de negocios y minería de datos.",
+    "creditos": 16
+   },
+   {
+    "id": "AISC",
+    "nombre": "Arquitectura e Infraestructura de Sistemas Computacionales",
+    "corto": "Arquitectura e Infraestructura",
+    "color": "#5A47A6",
+    "oscuro": "#A595E6",
+    "descripcion": "Hardware y software de los sistemas, redes y comunicación de datos, sistemas operativos y distribuidos, automatización y seguridad de la información.",
+    "creditos": 16
+   },
+   {
+    "id": "GIO",
+    "nombre": "Gestión de la Informática en las Organizaciones",
+    "corto": "Gestión de la Informática",
+    "color": "#A8550A",
+    "oscuro": "#E8A060",
+    "descripcion": "Ciclo de vida del software en la empresa, gestión de proyectos, alineación de la tecnología con la estrategia del negocio, emprendimiento y ética profesional.",
+    "creditos": 29
+   },
+   {
+    "id": "CBI",
+    "nombre": "Conocimientos Básicos para la Informática",
+    "corto": "Conocimientos básicos",
+    "color": "#3B6E2C",
+    "oscuro": "#8CC27A",
+    "descripcion": "Fundamentos matemáticos y algorítmicos, y comunicación en inglés para un contexto profesional globalizado.",
+    "creditos": 34
+   },
+   {
+    "id": "FG",
+    "nombre": "Formación general",
+    "corto": "Formación general",
+    "color": "#5F6B78",
+    "oscuro": "#A9B4BF",
+    "descripcion": "Humanidades, Seminarios de Realidad Nacional, Arte, Actividad Deportiva y Repertorio.",
+    "creditos": 21
+   }
+  ],
+  "ciclos": [
+   {
+    "n": "I",
+    "anio": 1,
+    "nombre": "I ciclo",
+    "verano": false,
+    "creditos": 16
+   },
+   {
+    "n": "II",
+    "anio": 1,
+    "nombre": "II ciclo",
+    "verano": false,
+    "creditos": 16
+   },
+   {
+    "n": "III",
+    "anio": 2,
+    "nombre": "III ciclo",
+    "verano": false,
+    "creditos": 18
+   },
+   {
+    "n": "IV",
+    "anio": 2,
+    "nombre": "IV ciclo",
+    "verano": false,
+    "creditos": 18
+   },
+   {
+    "n": "V",
+    "anio": 2,
+    "nombre": "V ciclo (verano)",
+    "verano": true,
+    "creditos": 4
+   },
+   {
+    "n": "VI",
+    "anio": 3,
+    "nombre": "VI ciclo",
+    "verano": false,
+    "creditos": 19
+   },
+   {
+    "n": "VII",
+    "anio": 3,
+    "nombre": "VII ciclo",
+    "verano": false,
+    "creditos": 16
+   },
+   {
+    "n": "VIII",
+    "anio": 3,
+    "nombre": "VIII ciclo (verano)",
+    "verano": true,
+    "creditos": 4
+   },
+   {
+    "n": "IX",
+    "anio": 4,
+    "nombre": "IX ciclo",
+    "verano": false,
+    "creditos": 17
+   },
+   {
+    "n": "X",
+    "anio": 4,
+    "nombre": "X ciclo",
+    "verano": false,
+    "creditos": 16
+   }
+  ],
+  "cursos": [
+   {
+    "sigla": "EG-I",
+    "nombre": "Curso Integrado de Humanidades I",
+    "ciclo": "I",
+    "area": "FG",
+    "creditos": 6,
+    "req": []
+   },
+   {
+    "sigla": "IF-0001",
+    "nombre": "Desarrollo de Software I",
+    "ciclo": "I",
+    "area": "DS",
+    "creditos": 4,
+    "req": [],
+    "horas": {
+     "teoria": 4,
+     "practica": 4
+    },
+    "desc": "Introduce los conceptos fundamentales de la programación de computadoras, con un enfoque inicial en la algoritmia y la resolución de problemas: estructuras básicas de control, tipos de datos y el paradigma de programación estructurada.",
+    "programa": {
+     "archivo": "assets/programas/informatica-empresarial/IF0001_programa_II-2026.pdf",
+     "ciclo": "II ciclo 2026",
+     "kb": 577
+    }
+   },
+   {
+    "sigla": "IF-0002",
+    "nombre": "Introducción a la Informática Empresarial",
+    "ciclo": "I",
+    "area": "GIO",
+    "creditos": 3,
+    "req": [],
+    "horas": {
+     "teoria": 4,
+     "practica": 2
+    },
+    "desc": "Panorama de la carrera y del rol del profesional de TI en las organizaciones: sistemas de información, relación entre tecnología y estrategia de negocio, transformación digital e impacto de las TI en la sociedad.",
+    "programa": {
+     "archivo": "assets/programas/informatica-empresarial/IF0002_programa_I-2026.pdf",
+     "ciclo": "I ciclo 2026",
+     "kb": 590
+    }
+   },
+   {
+    "sigla": "IF-0003",
+    "nombre": "Matemática Básica para Informática Empresarial",
+    "ciclo": "I",
+    "area": "CBI",
+    "creditos": 3,
+    "req": [],
+    "horas": {
+     "teoria": 3,
+     "practica": 3
+    },
+    "desc": "Lógica proposicional, teoría de conjuntos, relaciones, funciones y técnicas de conteo, como base para los cursos de matemática más avanzados.",
+    "programa": {
+     "archivo": "assets/programas/informatica-empresarial/IF0003_programa_II-2026.pdf",
+     "ciclo": "II ciclo 2026",
+     "kb": 597
+    }
+   },
+   {
+    "sigla": "EG-II",
+    "nombre": "Curso Integrado de Humanidades II",
+    "ciclo": "II",
+    "area": "FG",
+    "creditos": 6,
+    "req": [
+     "EG-I"
+    ]
+   },
+   {
+    "sigla": "EG-",
+    "nombre": "Curso de Arte",
+    "ciclo": "II",
+    "area": "FG",
+    "creditos": 2,
+    "req": [],
+    "nota": "Se elige entre la oferta de la Sede para cada ciclo."
+   },
+   {
+    "sigla": "EF-",
+    "nombre": "Actividad Deportiva",
+    "ciclo": "II",
+    "area": "FG",
+    "creditos": 0,
+    "req": [],
+    "nota": "Se elige entre la oferta de la Sede para cada ciclo."
+   },
+   {
+    "sigla": "IF-0004",
+    "nombre": "Desarrollo de Software II",
+    "ciclo": "II",
+    "area": "DS",
+    "creditos": 4,
+    "req": [
+     "IF-0001"
+    ],
+    "horas": {
+     "teoria": 4,
+     "practica": 4
+    },
+    "req_texto": "IF-0001 o IF-2000",
+    "desc": "Programación orientada a objetos: clases, objetos, herencia, polimorfismo y encapsulamiento, junto con manejo de excepciones, archivos y colecciones de datos.",
+    "programa": {
+     "archivo": "assets/programas/informatica-empresarial/IF0004_programa_II-2026.pdf",
+     "ciclo": "II ciclo 2026",
+     "kb": 577
+    }
+   },
+   {
+    "sigla": "IF-0005",
+    "nombre": "Matemáticas Discretas para Informática Empresarial",
+    "ciclo": "II",
+    "area": "CBI",
+    "creditos": 4,
+    "req": [
+     "IF-0003"
+    ],
+    "horas": {
+     "teoria": 3,
+     "practica": 2
+    },
+    "req_texto": "IF-0003 o IF-1400",
+    "desc": "Lógica y demostraciones, teoría de grafos, árboles, inducción matemática, recurrencia y nociones de autómatas.",
+    "programa": {
+     "archivo": "assets/programas/informatica-empresarial/IF0005_programa_II-2026.pdf",
+     "ciclo": "II ciclo 2026",
+     "kb": 582
+    }
+   },
+   {
+    "sigla": "SR-I",
+    "nombre": "Seminario de Realidad Nacional I",
+    "ciclo": "III",
+    "area": "FG",
+    "creditos": 2,
+    "req": [
+     "EG-II"
+    ]
+   },
+   {
+    "sigla": "IF-0006",
+    "nombre": "Desarrollo de Software III",
+    "ciclo": "III",
+    "area": "DS",
+    "creditos": 4,
+    "req": [
+     "IF-0004"
+    ],
+    "horas": {
+     "teoria": 4,
+     "practica": 4
+    },
+    "desc": "Aplicaciones con interfaces gráficas de usuario y persistencia en bases de datos, patrones de diseño arquitectónicos como MVC y uso de bibliotecas o frameworks.",
+    "programa": {
+     "archivo": "assets/programas/informatica-empresarial/IF0006_programa_I-2026.pdf",
+     "ciclo": "I ciclo 2026",
+     "kb": 604
+    }
+   },
+   {
+    "sigla": "IF-0007",
+    "nombre": "Bases de Datos I",
+    "ciclo": "III",
+    "area": "ID",
+    "creditos": 4,
+    "req": [
+     "IF-0004"
+    ],
+    "horas": {
+     "teoria": 4,
+     "practica": 4
+    },
+    "desc": "Modelo relacional, diseño conceptual y lógico con el modelo entidad-relación, normalización y SQL para la definición y manipulación de datos.",
+    "programa": {
+     "archivo": "assets/programas/informatica-empresarial/IF0007_programa_I-2026.pdf",
+     "ciclo": "I ciclo 2026",
+     "kb": 602
+    }
+   },
+   {
+    "sigla": "IF-0008",
+    "nombre": "Cálculo I para Informática Empresarial",
+    "ciclo": "III",
+    "area": "CBI",
+    "creditos": 4,
+    "req": [
+     "IF-0003"
+    ],
+    "horas": {
+     "teoria": 3,
+     "practica": 2
+    },
+    "req_texto": "IF-0003 o IF-1400",
+    "desc": "Cálculo diferencial e integral en una variable aplicado a la informática: análisis de funciones, optimización y nociones de crecimiento algorítmico.",
+    "programa": {
+     "archivo": "assets/programas/informatica-empresarial/IF0008_programa_II-2026.pdf",
+     "ciclo": "II ciclo 2026",
+     "kb": 534
+    }
+   },
+   {
+    "sigla": "IF-3001",
+    "nombre": "Algoritmos y Estructuras de Datos",
+    "ciclo": "III",
+    "area": "DS",
+    "creditos": 4,
+    "req": [
+     "IF-0004"
+    ],
+    "horas": {
+     "teoria": 4,
+     "practica": 4
+    },
+    "req_texto": "IF-0004 o IF-2000",
+    "desc": "Estructuras avanzadas (listas, pilas, colas, árboles, grafos, tablas hash), técnicas de diseño de algoritmos y análisis de complejidad.",
+    "programa": {
+     "archivo": "assets/programas/informatica-empresarial/IF3001_programa_I-2026.pdf",
+     "ciclo": "I ciclo 2026",
+     "kb": 571
+    }
+   },
+   {
+    "sigla": "SR-II",
+    "nombre": "Seminario de Realidad Nacional II",
+    "ciclo": "IV",
+    "area": "FG",
+    "creditos": 2,
+    "req": [
+     "SR-I"
+    ]
+   },
+   {
+    "sigla": "IF-0009",
+    "nombre": "Desarrollo de Software IV",
+    "ciclo": "IV",
+    "area": "DS",
+    "creditos": 4,
+    "req": [
+     "IF-0006"
+    ],
+    "horas": {
+     "teoria": 3,
+     "practica": 5
+    },
+    "req_texto": "IF-0006 o IF-3000",
+    "desc": "Aplicaciones web y servicios: tecnologías del lado del cliente y del servidor, y diseño e implementación de API REST para la comunicación entre sistemas.",
+    "programa": {
+     "archivo": "assets/programas/informatica-empresarial/IF0009_programa_II-2026.pdf",
+     "ciclo": "II ciclo 2026",
+     "kb": 583
+    }
+   },
+   {
+    "sigla": "IF-0010",
+    "nombre": "Bases de Datos II",
+    "ciclo": "IV",
+    "area": "ID",
+    "creditos": 4,
+    "req": [
+     "IF-0007"
+    ],
+    "horas": {
+     "teoria": 4,
+     "practica": 4
+    },
+    "req_texto": "IF-0007 o IF-4100",
+    "desc": "Optimización de consultas, transacciones, concurrencia, seguridad y lógica de negocio dentro del gestor (procedimientos almacenados y disparadores).",
+    "programa": {
+     "archivo": "assets/programas/informatica-empresarial/IF0010_programa_II-2026.pdf",
+     "ciclo": "II ciclo 2026",
+     "kb": 548
+    }
+   },
+   {
+    "sigla": "IF-0011",
+    "nombre": "Redes de Computadoras",
+    "ciclo": "IV",
+    "area": "AISC",
+    "creditos": 4,
+    "req": [
+     "IF-0006"
+    ],
+    "horas": {
+     "teoria": 3,
+     "practica": 3
+    },
+    "req_texto": "IF-0006 o IF-3000",
+    "desc": "Arquitecturas de red, modelos OSI y TCP/IP, protocolos de comunicación, tecnologías LAN y WAN y configuración básica de dispositivos.",
+    "programa": {
+     "archivo": "assets/programas/informatica-empresarial/IF0011_programa_II-2026.pdf",
+     "ciclo": "II ciclo 2026",
+     "kb": 540
+    }
+   },
+   {
+    "sigla": "IF-0012",
+    "nombre": "Álgebra Lineal para Informática Empresarial",
+    "ciclo": "IV",
+    "area": "CBI",
+    "creditos": 4,
+    "req": [
+     "IF-0008"
+    ],
+    "horas": {
+     "teoria": 3,
+     "practica": 2
+    },
+    "req_texto": "IF-0008 o MA-0321",
+    "desc": "Matrices, sistemas de ecuaciones, espacios vectoriales, transformaciones lineales y valores propios, con aplicaciones en gráficos, aprendizaje automático y análisis de datos.",
+    "programa": {
+     "archivo": "assets/programas/informatica-empresarial/IF0012_programa_II-2026.pdf",
+     "ciclo": "II ciclo 2026",
+     "kb": 569
+    }
+   },
+   {
+    "sigla": "IF-0013",
+    "nombre": "Inglés I para Informática Empresarial",
+    "ciclo": "V",
+    "area": "CBI",
+    "creditos": 4,
+    "req": [],
+    "horas": {
+     "teoria": 3,
+     "practica": 3
+    },
+    "desc": "Desarrollo integrado de las cuatro habilidades lingüísticas hacia el nivel A2 del Marco Común Europeo, en contextos técnicos y empresariales básicos."
+   },
+   {
+    "sigla": "IF-0014",
+    "nombre": "Inglés II para Informática Empresarial",
+    "ciclo": "VI",
+    "area": "CBI",
+    "creditos": 4,
+    "req": [
+     "IF-0013"
+    ],
+    "horas": {
+     "teoria": 3,
+     "practica": 3
+    },
+    "desc": "Consolidación hacia el nivel B1: comprensión de textos técnicos, redacción de correos y participación en discusiones de negocios.",
+    "programa": {
+     "archivo": "assets/programas/informatica-empresarial/IF0014_programa_II-2026.pdf",
+     "ciclo": "II ciclo 2026",
+     "kb": 507
+    }
+   },
+   {
+    "sigla": "IF-0015",
+    "nombre": "Introducción a la Administración de Negocios",
+    "ciclo": "VI",
+    "area": "GIO",
+    "creditos": 4,
+    "req": [
+     "IF-0002"
+    ],
+    "horas": {
+     "teoria": 4,
+     "practica": 2
+    },
+    "req_texto": "IF-0002 o IF-1300",
+    "desc": "Teorías administrativas, proceso administrativo y áreas funcionales de la empresa: finanzas, mercadeo, operaciones y talento humano."
+   },
+   {
+    "sigla": "IF-0016",
+    "nombre": "Introducción a la Estadística y Análisis de Datos",
+    "ciclo": "VI",
+    "area": "ID",
+    "creditos": 4,
+    "req": [
+     "IF-0010"
+    ],
+    "horas": {
+     "teoria": 2,
+     "practica": 4
+    },
+    "req_texto": "IF-0010 o IF-5100",
+    "desc": "Estadística descriptiva, probabilidad, distribuciones, inferencia estadística y regresión lineal simple aplicadas al análisis de datos."
+   },
+   {
+    "sigla": "IF-0017",
+    "nombre": "Métodos Numéricos y Análisis Computacional",
+    "ciclo": "VI",
+    "area": "CBI",
+    "creditos": 3,
+    "req": [
+     "IF-0012"
+    ],
+    "horas": {
+     "teoria": 3,
+     "practica": 2
+    },
+    "req_texto": "IF-0012 o MA-0322",
+    "desc": "Solución numérica de ecuaciones no lineales, interpolación, integración numérica y ecuaciones diferenciales ordinarias, considerando la aritmética de punto flotante.",
+    "programa": {
+     "archivo": "assets/programas/informatica-empresarial/IF0017_programa_II-2026.pdf",
+     "ciclo": "II ciclo 2026",
+     "kb": 534
+    }
+   },
+   {
+    "sigla": "OPT-AISC-1",
+    "nombre": "Optativo del área de Arquitectura e Infraestructura",
+    "ciclo": "VI",
+    "area": "AISC",
+    "creditos": 4,
+    "req": [
+     "IF-0011"
+    ],
+    "optativo": true,
+    "nota": "IF-0030 tiene como requisito IF-0019, que se lleva en el VII ciclo; por eso, en el VI ciclo el optativo de esta área es IF-0029 Sistemas Operativos y Distribuidos."
+   },
+   {
+    "sigla": "IF-0018",
+    "nombre": "Inglés III para Informática Empresarial",
+    "ciclo": "VII",
+    "area": "CBI",
+    "creditos": 4,
+    "req": [
+     "IF-0014"
+    ],
+    "horas": {
+     "teoria": 3,
+     "practica": 3
+    },
+    "desc": "Avance hacia el nivel B2: lectura de documentación técnica compleja, redacción de informes y presentaciones sobre temas de TI."
+   },
+   {
+    "sigla": "IF-0019",
+    "nombre": "Seguridad en Sistemas Informáticos",
+    "ciclo": "VII",
+    "area": "AISC",
+    "creditos": 4,
+    "req": [
+     "OPT-AISC-1"
+    ],
+    "horas": {
+     "teoria": 3,
+     "practica": 3
+    },
+    "req_texto": "IF-0029 o IF-0030",
+    "desc": "Principios de seguridad de la información, criptografía, seguridad en redes y en software, análisis de vulnerabilidades y gestión de riesgos.",
+    "programa": {
+     "archivo": "assets/programas/informatica-empresarial/IF0019_programa_II-2026.pdf",
+     "ciclo": "II ciclo 2026",
+     "kb": 598
+    }
+   },
+   {
+    "sigla": "OPT-DS-1",
+    "nombre": "Optativo del área de Desarrollo de Software",
+    "ciclo": "VII",
+    "area": "DS",
+    "creditos": 4,
+    "req": [
+     "IF-0009"
+    ],
+    "optativo": true
+   },
+   {
+    "sigla": "OPT-ID-1",
+    "nombre": "Optativo del área de Ingeniería de Datos",
+    "ciclo": "VII",
+    "area": "ID",
+    "creditos": 4,
+    "req": [
+     "IF-0016"
+    ],
+    "optativo": true
+   },
+   {
+    "sigla": "IF-0020",
+    "nombre": "Inglés IV para Informática Empresarial",
+    "ciclo": "VIII",
+    "area": "CBI",
+    "creditos": 4,
+    "req": [
+     "IF-0018"
+    ],
+    "horas": {
+     "teoria": 3,
+     "practica": 3
+    },
+    "desc": "Consolidación en nivel B2+: negociación, gestión de reuniones de proyectos de TI y comprensión de artículos de investigación."
+   },
+   {
+    "sigla": "RP-",
+    "nombre": "Repertorio",
+    "ciclo": "IX",
+    "area": "FG",
+    "creditos": 3,
+    "req": [],
+    "nota": "Se elige entre la oferta de la Sede para cada ciclo."
+   },
+   {
+    "sigla": "IF-7201",
+    "nombre": "Gestión de Proyectos",
+    "ciclo": "IX",
+    "area": "GIO",
+    "creditos": 3,
+    "req": [
+     "IF-0015"
+    ],
+    "horas": {
+     "teoria": 2,
+     "practica": 4
+    },
+    "req_texto": "IF-0015 o IF-6200",
+    "desc": "Herramientas y técnicas para gestionar proyectos de tecnologías de información con base en el PMBOK y en metodologías ágiles, desde la iniciación hasta el cierre.",
+    "programa": {
+     "archivo": "assets/programas/informatica-empresarial/IF7201_programa_I-2026.pdf",
+     "ciclo": "I ciclo 2026",
+     "kb": 579
+    }
+   },
+   {
+    "sigla": "OPT-GIO-1",
+    "nombre": "Optativo del área de Gestión de la Informática",
+    "ciclo": "IX",
+    "area": "GIO",
+    "creditos": 3,
+    "req": [
+     "IF-0015"
+    ],
+    "optativo": true
+   },
+   {
+    "sigla": "OPT-AISC-2",
+    "nombre": "Optativo del área de Arquitectura e Infraestructura",
+    "ciclo": "IX",
+    "area": "AISC",
+    "creditos": 4,
+    "req": [
+     "IF-0019"
+    ],
+    "optativo": true
+   },
+   {
+    "sigla": "OPT-DS-2",
+    "nombre": "Optativo del área de Desarrollo de Software",
+    "ciclo": "IX",
+    "area": "DS",
+    "creditos": 4,
+    "req": [
+     "IF-0009"
+    ],
+    "optativo": true
+   },
+   {
+    "sigla": "IF-0021",
+    "nombre": "Ética y Responsabilidad Profesional",
+    "ciclo": "X",
+    "area": "GIO",
+    "creditos": 2,
+    "req": [
+     "OPT-GIO-1"
+    ],
+    "horas": {
+     "teoria": 4,
+     "practica": 0
+    },
+    "req_texto": "IF-0023 o IF-0024 o IF-6201",
+    "desc": "Dilemas éticos y responsabilidades legales y sociales del profesional en informática: privacidad, propiedad intelectual, impacto de la inteligencia artificial y brecha digital."
+   },
+   {
+    "sigla": "IF-0022",
+    "nombre": "Práctica Empresarial Supervisada",
+    "ciclo": "X",
+    "area": "GIO",
+    "creditos": 11,
+    "req": [
+     "IF-0016",
+     "IF-0020",
+     "IF-7201",
+     "OPT-DS-1",
+     "OPT-AISC-2"
+    ],
+    "horas": {
+     "teoria": 1,
+     "practica": 32
+    },
+    "req_texto": "IF-0016, IF-0020, IF-7201, IF-0025 o IF-0026 o IF-7100, IF-0029 o IF-0030",
+    "desc": "Situación profesional real que integra los saberes de la carrera, con la metodología elegida por cada estudiante y bajo supervisión docente."
+   },
+   {
+    "sigla": "OPT-GIO-2",
+    "nombre": "Optativo del área de Gestión de la Informática",
+    "ciclo": "X",
+    "area": "GIO",
+    "creditos": 3,
+    "req": [
+     "IF-0015"
+    ],
+    "optativo": true
+   }
+  ],
+  "optativos": {
+   "GIO": [
+    {
+     "sigla": "IF-0023",
+     "nombre": "Gobernanza de Tecnologías de Información",
+     "creditos": 3,
+     "desc": "Marcos como COBIT e ITIL para alinear las TI con la estrategia, gestionar riesgos tecnológicos y asegurar el cumplimiento normativo.",
+     "req_texto": "IF-0015 o IF-5200"
+    },
+    {
+     "sigla": "IF-0024",
+     "nombre": "Emprendimiento y Desarrollo de Negocios",
+     "creditos": 3,
+     "desc": "Creación de emprendimientos de base tecnológica: ideación, modelo de negocio, producto mínimo viable y financiamiento.",
+     "req_texto": "IF-7201"
+    },
+    {
+     "sigla": "IF-6201",
+     "nombre": "Informática Aplicada a los Negocios",
+     "creditos": 3,
+     "desc": "Sistemas empresariales como ERP, CRM y SCM, y comercio electrónico para optimizar los procesos de negocio.",
+     "req_texto": "IF-0015 o IF-5200",
+     "programa": {
+      "archivo": "assets/programas/informatica-empresarial/IF6201_programa_II-2026.pdf",
+      "ciclo": "II ciclo 2026",
+      "kb": 578
+     }
+    }
+   ],
+   "DS": [
+    {
+     "sigla": "IF-0025",
+     "nombre": "Aseguramiento de la Calidad en la Ingeniería del Software",
+     "creditos": 4,
+     "desc": "Modelos de calidad, pruebas manuales y automatizadas, gestión de defectos y estándares como ISO/IEC 25000.",
+     "req_texto": "IF-0009 o IF-4101"
+    },
+    {
+     "sigla": "IF-0026",
+     "nombre": "Interacción Humano Computador",
+     "creditos": 4,
+     "desc": "Usabilidad, experiencia de usuario, accesibilidad y diseño centrado en las personas usuarias.",
+     "req_texto": "IF-0009 o IF-4101",
+     "programa": {
+      "archivo": "assets/programas/informatica-empresarial/IF0026_programa_II-2026.pdf",
+      "ciclo": "II ciclo 2026",
+      "kb": 534
+     }
+    },
+    {
+     "sigla": "IF-7100",
+     "nombre": "Ingeniería de Software",
+     "creditos": 4,
+     "desc": "Ciclo de vida del software con metodologías ágiles y tradicionales, ingeniería de requisitos, modelado UML y gestión de la configuración.",
+     "req_texto": "IF-0009 o IF-6100",
+     "programa": {
+      "archivo": "assets/programas/informatica-empresarial/IF7100_programa_I-2026.pdf",
+      "ciclo": "I ciclo 2026",
+      "kb": 621
+     }
+    }
+   ],
+   "ID": [
+    {
+     "sigla": "IF-0027",
+     "nombre": "Inteligencia de Negocios",
+     "creditos": 4,
+     "desc": "Bodegas de datos, procesos ETL y visualización para transformar datos en información útil para decidir.",
+     "req_texto": "IF-0016 o XS-0105",
+     "programa": {
+      "archivo": "assets/programas/informatica-empresarial/IF0027_programa_II-2026.pdf",
+      "ciclo": "II ciclo 2026",
+      "kb": 568
+     }
+    },
+    {
+     "sigla": "IF-0028",
+     "nombre": "Minería de Datos",
+     "creditos": 4,
+     "desc": "Clasificación, regresión, agrupamiento y reglas de asociación para descubrir patrones y construir modelos predictivos.",
+     "req_texto": "IF-0016 o XS-0105"
+    }
+   ],
+   "AISC": [
+    {
+     "sigla": "IF-0029",
+     "nombre": "Sistemas Operativos y Distribuidos",
+     "creditos": 4,
+     "desc": "Procesos, hilos, memoria, sistemas de archivos y entrada/salida, más principios de sistemas distribuidos, virtualización y computación en la nube.",
+     "req_texto": "IF-0011 o IF-6000"
+    },
+    {
+     "sigla": "IF-0030",
+     "nombre": "Diseño de Sistemas Automatizados",
+     "creditos": 4,
+     "desc": "Integración de hardware y software para control y automatización: sistemas embebidos, sensores, actuadores y controladores lógicos programables.",
+     "req_texto": "IF-0019"
+    }
+   ]
+  }
+ },
+ "actualizacion": {
+  "titulo": "Plan 07: la malla se renovó por completo",
+  "resumen": "Es la primera actualización integral de un plan que tenía más de 20 años. Suma cuatro niveles de inglés, análisis de datos, seguridad y gobernanza de las tecnologías de información, y optativos por áreas de tendencia. Entró en vigor en el III ciclo 2025.",
+  "aprobacion": [
+   {
+    "instancia": "Asamblea de la Sede del Caribe",
+    "detalle": "Sesión 305-2025, 23 de mayo de 2025"
+   },
+   {
+    "instancia": "Vicerrectoría de Docencia",
+    "detalle": "Resolución VD-13456-2025"
+   },
+   {
+    "instancia": "CONARE y OPES",
+    "detalle": "CNR-367-2025 y OPES 28-2025"
+   }
+  ],
+  "apertura": [
+   {
+    "anio": "2026",
+    "texto": "Primero y segundo año"
+   },
+   {
+    "anio": "2027",
+    "texto": "Hasta tercer año"
+   },
+   {
+    "anio": "2028",
+    "texto": "Los cuatro años"
+   }
+  ],
+  "comparacion": [
+   {
+    "aspecto": "Créditos totales",
+    "p01": "140 créditos",
+    "p07": "144 créditos"
+   },
+   {
+    "aspecto": "Matemática",
+    "p01": "Lógica para informáticos, Estructuras matemáticas discretas, Cálculo diferencial e integral, Álgebra lineal, Métodos numéricos y Estadística para informáticos, en su mayoría cursos de la Escuela de Matemática",
+    "p07": "Matemática Básica, Matemáticas Discretas, Cálculo I, Álgebra Lineal y Métodos Numéricos y Análisis Computacional, todos propios de la carrera y orientados a la informática; la estadística pasa al área de Ingeniería de Datos"
+   },
+   {
+    "aspecto": "Inglés",
+    "p01": "Dos cursos de estrategias de lectura",
+    "p07": "Inglés I, II, III y IV obligatorios, del nivel A2 al B2+"
+   },
+   {
+    "aspecto": "Desarrollo de software",
+    "p01": "Programación I y II, Algoritmos, Lenguajes para aplicaciones comerciales",
+    "p07": "Desarrollo de Software I a IV, Ingeniería de Software, Aseguramiento de la Calidad, Interacción Humano Computador"
+   },
+   {
+    "aspecto": "Datos y análisis",
+    "p01": "Bases de datos, administración de bases de datos, métodos cuantitativos",
+    "p07": "Bases de Datos I y II, Estadística y Análisis de Datos, Inteligencia de Negocios, Minería de Datos"
+   },
+   {
+    "aspecto": "Redes y sistemas",
+    "p01": "Arquitectura de computadores, redes y comunicaciones, sistemas operativos",
+    "p07": "Redes, Seguridad en Sistemas Informáticos, Sistemas Operativos y Distribuidos, Sistemas Automatizados"
+   },
+   {
+    "aspecto": "Negocios",
+    "p01": "Fundamentos de las organizaciones, Economía de la computación, Informática aplicada a los negocios",
+    "p07": "Administración de Negocios, Gobernanza de TI, Emprendimiento, Informática aplicada a los negocios"
+   },
+   {
+    "aspecto": "Optativos",
+    "p01": "Dos optativos: Multimedios y Sistemas expertos",
+    "p07": "Optativos por áreas de tendencia en las cuatro áreas disciplinares"
+   },
+   {
+    "aspecto": "Formación humanista",
+    "p01": "Humanidades, Seminarios de Realidad Nacional, Arte, Deporte",
+    "p07": "Se mantiene y se suma Ética y Responsabilidad Profesional"
+   },
+   {
+    "aspecto": "Práctica profesional",
+    "p01": "Práctica Empresarial Supervisada al final del plan",
+    "p07": "Práctica Empresarial Supervisada de 11 créditos con requisitos más robustos"
+   }
+  ],
+  "transicion": [
+   {
+    "titulo": "Nuevo ingreso y traslados",
+    "texto": "Quien ingresa a la carrera o se traslada desde otra queda inscrito en el Plan 07."
+   },
+   {
+    "titulo": "Estudiantes de primer año del Plan 01",
+    "texto": "Quien no ha completado el primer año y no tiene cursos de segundo año aprobados, o quien aprobó todo el primer año, puede trasladarse al Plan 07 desde el III ciclo 2025, previa firma del consentimiento informado."
+   },
+   {
+    "titulo": "Casos mixtos",
+    "texto": "Quien debe cursos de primer año y tiene cursos de segundo año aprobados puede trasladarse, previo estudio del expediente por la unidad académica."
+   },
+   {
+    "titulo": "Avance desde segundo año",
+    "texto": "A quien debe materias de segundo año en adelante no se le recomienda el traslado. Si lo solicita, la unidad académica estudia el expediente y firma el consentimiento informado."
+   },
+   {
+    "titulo": "Cierre del Plan 01",
+    "texto": "El Plan 01 se ofrece hasta el III ciclo 2029. En el I ciclo 2030, quien siga en el Plan 01 con materias pendientes pasará al Plan 07 con las convalidaciones correspondientes. Se exceptúa a quien solo deba el Trabajo Comunal Universitario (circular VD-18-2015)."
+   },
+   {
+    "titulo": "Apertura gradual",
+    "texto": "2026: primero y segundo año. 2027: hasta tercer año. 2028 en adelante: los cuatro años."
+   }
+  ]
+ },
+ "acreditacion": {
+  "estado": "Acreditada por SINAES desde el 10 de diciembre de 2019",
+  "detalle": "La reacreditación está en trámite. La carrera cerró en 2026 su Proyecto Especial de Mejora y recibió la visita de pares evaluadores del 21 al 25 de septiembre. Espera la resolución de SINAES.",
+  "pem": {
+   "completos": 9,
+   "total": 10
+  },
+  "hitos": [
+   {
+    "fecha": "2018–2022",
+    "titulo": "Autoevaluación",
+    "texto": "Informe de autoevaluación de la carrera, Proceso 187 de SINAES."
+   },
+   {
+    "fecha": "10 dic 2019",
+    "titulo": "Primera acreditación",
+    "texto": "Con un Compromiso de Mejoramiento 2019–2023 de 14 objetivos y 57 actividades."
+   },
+   {
+    "fecha": "may 2022",
+    "titulo": "Revisión de avance",
+    "texto": "SINAES revisa el avance de medio período del compromiso (ACUERDO-CNA-139-2022)."
+   },
+   {
+    "fecha": "nov 2024",
+    "titulo": "Decisión diferida",
+    "texto": "El ACUERDO-CNA-410-2024 ordena un Proyecto Especial de Mejora de 18 meses con cinco acciones."
+   },
+   {
+    "fecha": "21 abr 2026",
+    "titulo": "Aprobación del ILPEM",
+    "texto": "El Consejo aprueba el Informe de Logros y el Compromiso de Mejora 2027–2030 (sesión extraordinaria 07-2026)."
+   },
+   {
+    "fecha": "4 may 2026",
+    "titulo": "Presentación ante el CASR",
+    "texto": "El Consejo de Área de Sedes Regionales conoce el informe."
+   },
+   {
+    "fecha": "may 2026",
+    "titulo": "Entrega a SINAES",
+    "texto": "Envío por medio del Centro de Evaluación Académica, la Vicerrectoría de Docencia y la Rectoría."
+   },
+   {
+    "fecha": "21–25 sep 2026",
+    "titulo": "Visita de pares",
+    "texto": "Evaluación externa de SINAES en las sedes y recintos."
+   },
+   {
+    "fecha": "II ciclo 2026",
+    "titulo": "En espera de resolución",
+    "texto": "La carrera espera la resolución de SINAES sobre la reacreditación.",
+    "futuro": true
+   }
+  ],
+  "enlace": "https://informaticaempresarial.ucr.ac.cr/acreditacion.html"
+ },
+ "historia": [
+  {
+   "fecha": "1986",
+   "texto": "Las Sedes Regionales comienzan a ofrecer diplomados en computación e informática."
+  },
+  {
+   "fecha": "1997",
+   "texto": "La Resolución VD-R-6426-97, del 17 de noviembre, crea el Bachillerato en Informática Empresarial como carrera propia de las Sedes de Guanacaste, del Atlántico, de Limón (hoy Sede del Caribe) y del Pacífico."
+  },
+  {
+   "fecha": "1998",
+   "texto": "La carrera abre su primer ciclo lectivo en Limón."
+  },
+  {
+   "fecha": "2013",
+   "texto": "La Sede del Caribe la lleva al Aula Desconcentrada de Siquirres."
+  },
+  {
+   "fecha": "2019",
+   "texto": "Primera acreditación ante SINAES y primer Plan Estratégico de la carrera."
+  },
+  {
+   "fecha": "2025",
+   "texto": "La Asamblea de la Sede del Caribe aprueba el Plan 07, que entra en vigor en el III ciclo."
+  },
+  {
+   "fecha": "2026",
+   "texto": "Visita de pares evaluadores de SINAES para la reacreditación."
+  }
+ ],
+ "intersedes": {
+  "texto": "La carrera se imparte en diez sedes y recintos de la UCR y la coordina el Consejo de Carrera Intersedes.",
+  "url": "https://informaticaempresarial.ucr.ac.cr/",
+  "nombre": "informaticaempresarial.ucr.ac.cr"
+ }
+}

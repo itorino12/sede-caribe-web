@@ -311,7 +311,11 @@ def preparar(sitio, d):
 
     carreras = []
     for c in filter(publicable, d["carreras"]):
-        carreras.append({**c, "html": md(leer_pagina(c.get("documento")) or c.get("resumen", ""))})
+        # src/data/carreras/<id>.json (opcional): mallas en PDF, malla interactiva, actualización del plan,
+        # acreditación, historia y cifras por recinto. Es el molde para que cada carrera complete su página.
+        ficha = SRC / "data" / "carreras" / f"{c['id']}.json"
+        carreras.append({**c, "html": md(leer_pagina(c.get("documento")) or c.get("resumen", "")),
+                         "ficha": json.loads(ficha.read_text(encoding="utf-8")) if ficha.exists() else {}})
 
     unidades = []
     for u in filter(publicable, d["unidades"]):

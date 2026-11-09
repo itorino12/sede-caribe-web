@@ -1,11 +1,17 @@
 {% extends "base.html" %}
 {% from "_macros.html" import encabezado, contacto with context %}
+{# Página de carrera. Lo básico sale de la pestaña «carreras» y del documento de la carrera.
+   Lo demás es opcional y sale de src/data/carreras/<id>.json (ver README, «Página de una carrera»). #}
+{% set f = carrera.ficha %}
+{% macro url(u) %}{{ u if u.startswith('http') else raiz ~ u }}{% endmacro %}
 {% block contenido %}
-{{ encabezado(carrera.nombre, [("Carreras", "estudiar.html")], raiz, carrera.grados) }}
+{{ encabezado(carrera.nombre, [("Carreras", "estudiar.html")], raiz, f.lema or carrera.grados) }}
 <div class="ancho pagina pagina--con-ficha">
   <div class="prosa">
+    {% if f.cifras %}<ul class="cifras cifras--carrera">{% for x in f.cifras %}<li><strong>{{ x.valor }}</strong><span>{{ x.etiqueta }}</span></li>{% endfor %}</ul>{% endif %}
     {% if carrera.html %}{{ carrera.html|safe }}
     {% else %}<p>La coordinación de la carrera está preparando la descripción de esta página. Mientras tanto, el plan de estudios detalla los cursos y el grado que se obtiene.</p>{% endif %}
+    {% if f.malla %}<p class="carrera-saltos"><a href="#malla">Recorrer la malla curso por curso</a>{% if f.actualizacion %} · <a href="#plan">El Plan 07</a>{% endif %}{% if f.acreditacion %} · <a href="#acreditacion">Acreditación</a>{% endif %}{% if f.historia %} · <a href="#historia">Historia</a>{% endif %}</p>{% endif %}
   </div>
   <div class="columna-ficha">
     <aside class="ficha" aria-label="Datos de la carrera">
@@ -16,10 +22,179 @@
         {% if carrera.codigo %}<dt>Código de carrera</dt><dd>{{ carrera.codigo }}</dd>{% endif %}
         <dt>Área</dt><dd>{{ carrera.area }}</dd>
       </dl>
-      {% if carrera.plan_url %}<a class="boton boton--bloque" href="{{ carrera.plan_url }}">Plan de estudios</a>{% endif %}
+      {% if f.planes %}
+      <div class="ficha__planes">
+        {% for p in f.planes %}<a class="boton boton--bloque{% if not p.principal %} boton--secundario{% endif %}" href="{{ url(p.url) }}"{% if p.url.startswith('http') %} rel="noopener"{% endif %}><span>{{ p.nombre }}<small>{{ p.detalle }}</small></span></a>{% endfor %}
+      </div>
+      {% elif carrera.plan_url %}<a class="boton boton--bloque" href="{{ carrera.plan_url }}">Plan de estudios</a>{% endif %}
       <a class="ficha__enlace" href="{{ raiz }}admision.html">Cómo ingresar</a>
     </aside>
     {{ contacto(carrera, raiz) }}
   </div>
 </div>
+
+{% if f.malla %}{% set m = f.malla %}
+<section class="malla-seccion" id="malla" aria-labelledby="malla-t">
+  <div class="ancho">
+    <h2 id="malla-t">La malla curricular, curso por curso</h2>
+    <p class="malla-seccion__intro">Elija un curso para ver la ruta: <span class="marca marca--req">los cursos que lo anteceden</span> y <span class="marca marca--abre">los que se abren al aprobarlo</span>. En cada curso puede descargar su programa vigente.</p>
+
+    <div class="malla-areas">
+      <div class="malla-areas__barra" aria-hidden="true">{% for a in m.areas %}<span style="--c:{{ a.color }};--c-o:{{ a.oscuro }};flex-grow:{{ a.creditos }}"></span>{% endfor %}</div>
+      <div class="malla-areas__botones" role="group" aria-label="Resaltar un área de la malla">
+        {% for a in m.areas %}<button type="button" class="malla-area" aria-pressed="false" data-area="{{ a.id }}" style="--c:{{ a.color }};--c-o:{{ a.oscuro }}" title="{{ a.descripcion }}"><span class="malla-area__muestra"></span>{{ a.corto }} <b>{{ a.creditos }}</b></button>{% endfor %}
+      </div>
+      <p class="malla-areas__total">{{ m.total }} créditos en total, con optativos por área. Además, {{ m.tcu }} horas de Trabajo Comunal Universitario.</p>
+    </div>
+
+    <div class="malla-cuerpo">
+      <div class="malla" data-malla>
+        <svg class="malla__lineas" aria-hidden="true"><defs>
+          <marker id="flecha-req" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z"/></marker>
+          <marker id="flecha-abre" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z"/></marker>
+        </defs></svg>
+        {% set nombres_anio = ["Primer año", "Segundo año", "Tercer año", "Cuarto año", "Quinto año", "Sexto año"] %}
+        {% for anio, ciclos in m.ciclos|groupby("anio") %}
+        <div class="malla__anio">
+          <h3 class="malla__anio-t">{{ nombres_anio[anio - 1] }}</h3>
+          {% set regulares = ciclos|rejectattr("verano")|list %}
+          {% for c in regulares + [None] * (2 - regulares|length) + (ciclos|selectattr("verano")|list or [None]) %}
+          {% if c %}
+          <div class="malla__ciclo{% if c.verano %} malla__ciclo--verano{% endif %}">
+            <h4>{{ c.nombre }} <span>{{ c.creditos }} cr.</span></h4>
+            <ul>
+              {% for x in m.cursos if x.ciclo == c.n %}{% set a = m.areas|selectattr("id", "equalto", x.area)|first %}
+              <li><button type="button" class="curso{% if x.optativo %} curso--optativo{% endif %}" data-sigla="{{ x.sigla }}" data-area="{{ x.area }}" style="--c:{{ a.color }};--c-o:{{ a.oscuro }}" aria-pressed="false" aria-describedby="malla-ayuda">
+                <span class="curso__sigla">{{ 'Optativo' if x.optativo else x.sigla }}</span>
+                <span class="curso__nombre">{{ x.nombre|replace('Optativo del área de ', '') }}</span>
+                <span class="curso__cr">{{ x.creditos }} cr.</span>
+              </button></li>
+              {% endfor %}
+            </ul>
+          </div>
+          {% else %}<div class="malla__ciclo malla__ciclo--vacio" aria-hidden="true"></div>{% endif %}
+          {% endfor %}
+        </div>
+        {% endfor %}
+      </div>
+      <aside class="malla-panel" aria-labelledby="malla-panel-t" tabindex="-1" data-malla-panel>
+        <button type="button" class="malla-panel__cerrar" data-malla-cerrar hidden aria-label="Cerrar el detalle del curso">×</button>
+        <div aria-live="polite" data-malla-detalle>
+          <h3 id="malla-panel-t">Cómo leer la malla</h3>
+          <p id="malla-ayuda">Cada tarjeta es un curso. El color indica su área y el número, sus créditos. Al elegir uno, las flechas muestran qué cursos lo anteceden y cuáles se abren al aprobarlo.</p>
+          <p class="malla-panel__leyenda"><span class="marca marca--req">Requisito</span> <span class="marca marca--abre">Se abre al aprobarlo</span></p>
+          <p>Los optativos, con borde punteado, se eligen entre los cursos de cada área de tendencia.</p>
+        </div>
+      </aside>
+    </div>
+
+    <details class="malla-lista">
+      <summary>Ver la malla como lista, con requisitos y programas</summary>
+      {% for c in m.ciclos %}
+      <table>
+        <caption>{{ c.nombre }} · {{ c.creditos }} créditos</caption>
+        <thead><tr><th scope="col">Sigla</th><th scope="col">Curso</th><th scope="col">Créditos</th><th scope="col">Requisitos</th><th scope="col">Programa</th></tr></thead>
+        <tbody>{% for x in m.cursos if x.ciclo == c.n %}<tr><td>{{ '—' if x.optativo else x.sigla }}</td><td>{{ x.nombre }}</td><td>{{ x.creditos }}</td><td>{{ x.req_texto or ('Según el optativo elegido' if x.optativo else (x.req|join(', ') or 'Ninguno')) }}</td><td>{% if x.programa %}<a href="{{ raiz }}{{ x.programa.archivo }}">PDF, {{ x.programa.ciclo }}</a>{% else %}—{% endif %}</td></tr>{% endfor %}</tbody>
+      </table>
+      {% endfor %}
+    </details>
+
+    <h3 class="malla-opt-t">Cursos optativos por área de tendencia</h3>
+    <div class="malla-optativos">
+      {% for a in m.areas if m.optativos[a.id] %}
+      <section class="optativos" style="--c:{{ a.color }};--c-o:{{ a.oscuro }}" aria-labelledby="opt-{{ a.id }}">
+        <h4 id="opt-{{ a.id }}">{{ a.nombre }}</h4>
+        <ul>{% for o in m.optativos[a.id] %}<li><b>{{ o.sigla }}</b> {{ o.nombre }} <span class="optativos__meta">{{ o.creditos }} cr.{% if o.req_texto %} · Requisito: {{ o.req_texto }}{% endif %}</span>{% if o.programa %} <a href="{{ raiz }}{{ o.programa.archivo }}">Programa<span class="oculto"> de {{ o.nombre }}</span> (PDF, {{ o.programa.ciclo }})</a>{% endif %}</li>{% endfor %}</ul>
+      </section>
+      {% endfor %}
+    </div>
+    <p class="malla-fuente">{{ f.fuente }} Las siglas que siguen a «o» en los requisitos son los cursos equivalentes del plan anterior.</p>
+  </div>
+  <script type="application/json" id="malla-datos">{{ m|tojson }}</script>
+  <script src="{{ raiz }}assets/js/malla.js" defer data-raiz="{{ raiz }}"></script>
+</section>
+{% endif %}
+
+{% if f.actualizacion or f.acreditacion or f.historia or f.sedes %}
+<div class="ancho carrera-secciones">
+  {% if f.actualizacion %}{% set u = f.actualizacion %}
+  <section class="seccion carrera-plan" id="plan" aria-labelledby="plan-t">
+    <h2 id="plan-t">{{ u.titulo }}</h2>
+    <p class="carrera-plan__resumen">{{ u.resumen }}</p>
+    <div class="carrera-plan__grid">
+      <div>
+        <h3>Apertura gradual</h3>
+        <ol class="apertura">{% for x in u.apertura %}<li><b>{{ x.anio }}</b><span>{{ x.texto }}</span></li>{% endfor %}</ol>
+      </div>
+      <div>
+        <h3>Aprobación</h3>
+        <dl class="aprobacion">{% for x in u.aprobacion %}<dt>{{ x.instancia }}</dt><dd>{{ x.detalle }}</dd>{% endfor %}</dl>
+      </div>
+    </div>
+    {% if u.comparacion %}
+    <details class="desplegable">
+      <summary>Qué cambió del Plan 01 al Plan 07</summary>
+      <div class="tabla-desplazable"><table class="comparacion">
+        <thead><tr><th scope="col">Aspecto</th><th scope="col">Plan 01</th><th scope="col">Plan 07</th></tr></thead>
+        <tbody>{% for x in u.comparacion %}<tr><th scope="row">{{ x.aspecto }}</th><td>{{ x.p01 }}</td><td>{{ x.p07 }}</td></tr>{% endfor %}</tbody>
+      </table></div>
+    </details>
+    {% endif %}
+    {% if u.transicion %}
+    <details class="desplegable">
+      <summary>Si usted está en el Plan 01: reglas de transición</summary>
+      <dl class="transicion">{% for x in u.transicion %}<dt>{{ x.titulo }}</dt><dd>{{ x.texto }}</dd>{% endfor %}</dl>
+    </details>
+    {% endif %}
+  </section>
+  {% endif %}
+
+  {% if f.acreditacion %}{% set ac = f.acreditacion %}
+  <section class="seccion carrera-acred" id="acreditacion" aria-labelledby="acred-t">
+    <h2 id="acred-t">Acreditación</h2>
+    <div class="acred">
+      <div class="acred__sello">
+        <p class="acred__estado">{{ ac.estado }}</p>
+        <p>{{ ac.detalle }}</p>
+        {% if ac.pem %}
+        <p class="acred__pem"><b>{{ ac.pem.completos }} de {{ ac.pem.total }}</b> objetivos del Proyecto Especial de Mejora cumplidos</p>
+        <div class="medidor" role="img" aria-label="{{ ac.pem.completos }} de {{ ac.pem.total }} objetivos cumplidos"><span style="width: {{ (100 * ac.pem.completos / ac.pem.total)|round|int }}%"></span></div>
+        {% endif %}
+        {% if ac.enlace %}<p><a href="{{ ac.enlace }}">El proceso completo, en el sitio de la carrera</a></p>{% endif %}
+      </div>
+      <ol class="linea-tiempo linea-tiempo--fechas acred__hitos">
+        {% for h in ac.hitos %}<li{% if h.futuro %} class="linea-tiempo__futuro"{% endif %}><span class="linea-tiempo__anio">{{ h.fecha }}</span><p><b>{{ h.titulo }}.</b> {{ h.texto }}</p></li>{% endfor %}
+      </ol>
+    </div>
+  </section>
+  {% endif %}
+
+  {% if f.historia or f.sedes %}
+  <section class="seccion carrera-historia" id="historia" aria-labelledby="hist-t">
+    <h2 id="hist-t">Historia y presencia en el Caribe</h2>
+    <div class="carrera-historia__grid">
+      {% if f.historia %}<ol class="linea-tiempo linea-tiempo--vertical">{% for h in f.historia %}<li><span class="linea-tiempo__anio">{{ h.fecha }}</span><p>{{ h.texto }}</p></li>{% endfor %}</ol>{% endif %}
+      {% if f.sedes %}
+      <div>
+        <div class="recintos">
+          {% for r in f.sedes.lugares %}
+          <article class="recinto">
+            <h3>{{ r.nombre }} <span>desde {{ r.desde }}</span></h3>
+            <ul class="recinto__datos">
+              <li><strong>{{ r.activos }}</strong> estudiantes activos</li>
+              <li><strong>{{ r.graduados }}</strong> personas graduadas</li>
+              <li><strong>{{ r.admision }}</strong> ingresos en 2026</li>
+            </ul>
+          </article>
+          {% endfor %}
+        </div>
+        <p class="cifras__fuente">{{ f.sedes.fuente }}</p>
+        {% if f.intersedes %}<p class="intersedes">{{ f.intersedes.texto }} <a href="{{ f.intersedes.url }}">{{ f.intersedes.nombre }}</a></p>{% endif %}
+      </div>
+      {% endif %}
+    </div>
+  </section>
+  {% endif %}
+</div>
+{% endif %}
 {% endblock %}
