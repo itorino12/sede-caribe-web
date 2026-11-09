@@ -1,5 +1,5 @@
 // Asistente de la Sede: al tocar el congo de la portada, se baja de la rama y atiende un chat con IA.
-// Las respuestas vienen del servidor de la Sede (servidor/asistente.py, en api/asistente), que va
+// Las respuestas vienen del servidor de la Sede (CONGO 2.0, servidor/congo, en api/asistente), que va
 // escribiendo la respuesta por partes. Donde no hay servidor (la vista previa en GitHub Pages) o si falla,
 // el congo lo dice y responde buscando en el propio sitio (el mismo índice del buscador).
 import { montar } from "./congo.js";

@@ -1,0 +1,28 @@
+[Unit]
+Description=CONGO 2.0: asistente de la Sede del Caribe con respuestas basadas en documentos oficiales
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+User=sedeweb
+Group=sedeweb
+EnvironmentFile=/etc/sede-web/sede.env
+Environment=CONGO_DATOS=/var/lib/sede-congo
+WorkingDirectory=/opt/sede-web/servidor/congo
+ExecStart=/opt/sede-web/servidor/congo/.venv/bin/python -m congo
+# congo sale solo cuando su código cambia (git pull); systemd lo vuelve a arrancar
+Restart=always
+RestartSec=3
+# Datos (registro, vectores, originales y el modelo de búsqueda) en /var/lib/sede-congo
+StateDirectory=sede-congo
+StateDirectoryMode=0750
+# Endurecimiento: solo escribe en su carpeta de datos
+NoNewPrivileges=yes
+ProtectSystem=strict
+ProtectHome=yes
+PrivateTmp=yes
+PrivateDevices=yes
+MemoryMax=1500M
+
+[Install]
+WantedBy=multi-user.target

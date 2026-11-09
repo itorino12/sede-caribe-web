@@ -21,8 +21,10 @@ Sitio estático (Python + Jinja2). El contenido sale de Google Drive; la vista p
 - Si se cambia la maqueta y no se rehacen las imágenes de respaldo, la portada y la versión sin 3D quedan desactualizadas.
 
 ## Asistente (el congo)
-- `src/assets/js/congo.js`: el congo y su rama (portada y panel); `src/assets/js/asistente.js`: el chat. Servidor: `servidor/asistente.py`.
-- Probar el servidor sin gastar: `python3 herramientas/probar_asistente.py`. Las pruebas `--completa` incluyen el chat.
+- `src/assets/js/congo.js`: el congo y su rama (portada y panel); `src/assets/js/asistente.js`: el chat. Su contrato (`POST api/asistente`, texto por partes) no se cambia.
+- Servidor CONGO 2.0: `servidor/congo/` (FastAPI, RAG, Gemini). Ver README, sección «Asistente».
+  - Capas: `proveedores/` (IA), `documentos/` (extracción, fragmentos, registro), `busqueda/` (embeddings, Chroma), `servicios/` (recuperación, prompts, citas, chat), `rutas/` (API).
+- Probar sin gastar: `bash herramientas/probar_congo.sh` (pytest, con proveedor y embeddings de prueba). Las pruebas `--completa` del sitio incluyen el chat.
 
 ## Reglas
 - JorjaniEsp también sube cambios. Antes de hacer push: `git fetch`; si hay cambios, `git pull --rebase` y, si hay conflicto en `campus3d.json`, regenerarlo en vez de fusionarlo a mano.

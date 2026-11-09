@@ -1,0 +1,14 @@
+# CONGO 2.0 — se instala en su propio entorno: servidor/congo/.venv (Python 3.12 de Ubuntu 24.04)
+fastapi>=0.115
+uvicorn>=0.30
+python-multipart>=0.0.9
+httpx>=0.27
+chromadb>=1.0
+fastembed>=0.7
+pymupdf>=1.24          # licencia AGPL: aceptable con el repositorio público; si pasa a privado, cambiar por pypdf
+python-docx>=1.1
+openpyxl>=3.1
+beautifulsoup4>=4.12
+google-api-python-client>=2.100
+google-auth>=2.23
+pytest>=8

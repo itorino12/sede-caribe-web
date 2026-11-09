@@ -101,20 +101,39 @@ python3 build.py --ejemplos --servir   # con actividades y aviso de ejemplo marc
 En la portada, un congo anda colgado de una rama. Al tocarlo se baja y abre un chat: el asistente de la Sede.
 
 - **Sitio:** `src/assets/js/congo.js` (dibujo y animación del congo y la rama) y `src/assets/js/asistente.js` (el chat). Pide las respuestas a `api/asistente`; si no hay servidor (la vista previa de GitHub Pages) o falla, lo dice y responde con enlaces del propio sitio, usando el índice del buscador.
-- **Servidor:** `servidor/asistente.py`, solo con la biblioteca estándar de Python, como servicio `sede-asistente`. En cada pregunta busca las páginas del sitio más parecidas (en `assets/js/indice.js`) y se las da a Claude con el mapa del sitio y el directorio, así que responde con lo que esté publicado. No guarda las conversaciones.
-- **Llave:** `ANTHROPIC_API_KEY` en `/etc/sede-web/sede.env` (se saca en console.anthropic.com, con la cuenta que pague el uso). Modelo por omisión: `claude-haiku-5-5`, con esfuerzo bajo. Topes: 30 preguntas por hora por persona y 3000 por día en total (`SEDE_ASISTENTE_POR_HORA`, `SEDE_ASISTENTE_POR_DIA`), además del límite de nginx.
-- **En un servidor ya preparado:** copiar `servidor/nginx-sede.conf` a `/etc/nginx/sites-available/sede` y `servidor/sede-asistente.service` a `/etc/systemd/system/`; luego `systemctl daemon-reload`, `systemctl enable --now sede-asistente` y `nginx -t && systemctl reload nginx`. Para revisar: `curl localhost:8787/api/asistente/salud`.
-- **Probar sin gastar:** `python3 herramientas/probar_asistente.py` (usa una API falsa).
+- **Servidor: CONGO 2.0** (`servidor/congo/`, servicio `sede-congo`, FastAPI en 127.0.0.1:8787). Responde con base en documentos oficiales (RAG) y cita las fuentes reales:
+  1. Oculta datos personales de la pregunta (cédula, carné, teléfono, correo).
+  2. Busca fragmentos vigentes por significado (fastembed, modelo multilingüe local) y por palabras (SQLite FTS5).
+  3. Si ningún fragmento pasa el umbral, responde que no tiene la información, sin llamar al modelo.
+  4. Si hay fragmentos, se los da a Gemini numerados. El código quita las marcas `[F#]` y agrega al final la lista «Fuentes» con documento, artículo o sección, página y enlace reales.
+- **Qué sabe:** las páginas publicadas del sitio (se indexan solas) y los documentos de la carpeta de Drive «Documentos del congo». Esa carpeta lleva una hoja «Metadatos» con una fila por archivo: `archivo, id, nombre, categoria (institucional|normativa), subcategoria, version, vigencia (vigente|derogado|reemplazado|retirado), fecha_publicacion, fecha_actualizacion, url, confidencial`. Sin fila, el archivo no se usa. Si está marcado confidencial, no se incorpora. Un documento no vigente sale de la búsqueda, pero queda su historial. Se revisa cada 10 minutos.
+- **Contrato con el sitio:** el mismo de antes. `POST /api/asistente` recibe `{"mensajes":[{"rol","texto"}]}` y devuelve texto por partes. El frontend no cambió. Si el proveedor falla o se agota la cuota, devuelve 503 y el sitio busca por su cuenta.
+- **Otros endpoints:**
+  - `POST /api/chat`: JSON con `answer`, `sources`, `confidence` y `requires_human_review`.
+  - `POST /api/search` y `GET /api/health`.
+  - Administración, que exige la cabecera `X-Congo-Clave` y nginx solo la deja pasar desde la red de la UCR:
+    - `POST /api/documents/upload`, `GET /api/documents[/{id}]`, `PATCH /api/documents/{id}` (vigencia), `DELETE /api/documents/{id}` y `POST /api/documents/{id}/reprocess`.
+    - `GET /api/admin/stats`, `GET /api/admin/unanswered`, `GET /api/admin/categories` y `POST /api/admin/sync`.
+  - Documentación OpenAPI en `/api/docs` con `CONGO_DOCS=1`.
+- **Llave y privacidad:** `GEMINI_API_KEY` en `/etc/sede-web/sede.env`. Se saca en aistudio.google.com/apikey, sin activar facturación. En el nivel gratuito, Google puede usar y revisar lo que recibe: por eso se ocultan los datos personales y solo se indexan documentos públicos. Con `CONGO_PROVEEDOR=claude` y `ANTHROPIC_API_KEY` se usa Claude, que es de pago. Todas las variables están en `servidor/congo/congo/config.py`.
+- **Topes:** 30 preguntas por hora por persona y 1000 por día en total, además del límite de nginx.
+- **Datos:** `/var/lib/sede-congo` (registro SQLite, vectores de Chroma, originales y el modelo). No guarda conversaciones. Las preguntas sin respuesta se guardan con los datos personales ocultos y se borran a los 30 días.
+- **Probar:**
+  - `bash herramientas/probar_congo.sh` corre las pruebas automáticas sin gastar cuota.
+  - En la VM, `bash herramientas/probar_congo.sh --en-vivo` revisa el servicio y hace una pregunta real.
+- **Requisitos de la VM:** unos 1,5 GB de RAM para el servicio. Salida HTTPS a `generativelanguage.googleapis.com` y `pypi.org`, y a `huggingface.co` la primera vez, para bajar el modelo de búsqueda (~220 MB).
 
 ## Poner en marcha el servidor
 
-1. Pedir al CDI una máquina virtual Ubuntu 24.04 con salida a internet (GitHub y googleapis.com) y el DNS de sedecaribe.ucr.ac.cr.
+1. Pedir al CDI una máquina virtual Ubuntu 24.04 (2 vCPU, 4 GB de RAM) con salida HTTPS a GitHub, googleapis.com, generativelanguage.googleapis.com, pypi.org y huggingface.co, y el DNS de sedecaribe.ucr.ac.cr.
 2. `sudo bash servidor/preparar-servidor.sh https://github.com/USUARIO/sede-caribe-web.git`
 3. En Google Cloud: crear un proyecto, habilitar las API de Drive y de Sheets, crear una **cuenta de servicio** y descargar su llave JSON. Copiarla a `/etc/sede-web/cuenta-servicio.json` (`chmod 640`, grupo `sedeweb`).
 4. Compartir la carpeta raíz del Drive con el correo de la cuenta de servicio, como **Lector**.
 5. Escribir el ID de la carpeta en `/etc/sede-web/sede.env`.
 6. `sudo certbot --nginx -d sedecaribe.ucr.ac.cr`
 7. Probar: `sudo systemctl start sede-actualizar && journalctl -u sede-actualizar -n 30 --no-pager`
+8. Asistente: escribir `GEMINI_API_KEY`, `CONGO_CLAVE_ADMIN` (`openssl rand -hex 24`) y `CONGO_DRIVE_CARPETA` en `/etc/sede-web/sede.env`. Compartir la carpeta «Documentos del congo» con la cuenta de servicio, como Lector. Luego ejecutar `sudo systemctl restart sede-congo` y `bash herramientas/probar_congo.sh --en-vivo`.
+9. Calibrar `CONGO_UMBRAL` con preguntas reales. El valor por omisión (0,45) es un punto de partida: no se ha medido con los documentos de la Sede.
 
 `servidor/nginx-sede.conf` ya redirige las direcciones del sitio Joomla anterior (`/index.php/...`) a sus equivalentes nuevas, para no romper enlaces compartidos.
 

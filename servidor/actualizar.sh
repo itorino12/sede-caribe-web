@@ -20,6 +20,7 @@ if git fetch --quiet origin "$RAMA"; then
   if [ "$(git rev-parse HEAD)" != "$(git rev-parse "origin/$RAMA")" ]; then
     git pull --ff-only --quiet
     "$REPO/.venv/bin/pip" install --quiet -r requirements.txt
+    [ -x servidor/congo/.venv/bin/pip ] && servidor/congo/.venv/bin/pip install --quiet -r servidor/congo/requirements.txt
     motivo+=("código")
   fi
 else
