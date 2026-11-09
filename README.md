@@ -53,7 +53,7 @@ La fila 1 son los encabezados (se pueden escribir con tildes y mayúsculas). Las
 - Una fila sale en el sitio solo si **publicar** dice `sí`. Así, la columna funciona como aprobación.
 - Una noticia con **fecha futura** queda programada y aparece ese día.
 - Un aviso se muestra solo entre su fecha **desde** y su fecha **hasta**, y luego desaparece sin que nadie lo borre.
-- Las actividades pasadas salen de la agenda y quedan 30 días en «Del último mes».
+- La agenda muestra arriba los plazos en curso, luego las próximas actividades por mes (con minicalendario y filtro por tema) y, plegadas al final, las anteriores. En «Esta semana», un plazo de más de una semana aparece solo el día que abre y el día que cierra.
 - La columna **documento** apunta a un Documento de Google de la carpeta «Páginas» por su nombre (por ejemplo, `historia`). Si una noticia tiene documento, se usa en lugar de la columna «cuerpo».
 - La columna **imagen** lleva el nombre exacto de un archivo de la carpeta «Imágenes». El servidor lo convierte a WebP en dos tamaños.
 

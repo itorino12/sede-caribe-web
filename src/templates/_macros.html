@@ -1,13 +1,22 @@
-{% macro evento(e, raiz, compacto=false) %}
-<li class="evento{% if compacto %} evento--compacto{% endif %}" id="{{ e.id }}">
+{% macro evento(e, raiz, compacto=false, cierre=false) %}
+<li class="evento{% if compacto %} evento--compacto{% endif %}" id="{{ e.id }}"{% if e.categoria %} data-area="{{ e.categoria }}"{% endif %}>
+  {% if cierre %}
+  <time class="evento__fecha evento__fecha--cierre" datetime="{{ e.fin.isoformat() }}">
+    <span class="evento__hasta">hasta</span>
+    <span class="evento__dia">{{ e.fin.day }}</span>
+    <span class="evento__mes">{{ (e.fin|mes)[:3] }}{% if e.fin.year != hoy.year %} {{ e.fin.year }}{% endif %}</span>
+  </time>
+  {% else %}
   <time class="evento__fecha" datetime="{{ e.f.isoformat() }}">
     <span class="evento__dia">{{ e.f.day }}</span>
-    <span class="evento__mes">{{ (e.f|mes)[:3] }}</span>
+    <span class="evento__mes">{{ (e.f|mes)[:3] }}{% if e.f.year != hoy.year %} {{ e.f.year }}{% endif %}</span>
   </time>
+  {% endif %}
   <div class="evento__texto">
     <h3 class="evento__titulo">{{ e.titulo }}{% if e.ejemplo %} <span class="marca-ejemplo">Ejemplo</span>{% endif %}</h3>
     <p class="evento__meta">
-      {{ e.f|dia_semana|capitalize }}{% if e.fin != e.f %} al {{ e.fin|dia_semana }} {{ e.fin.day }} de {{ e.fin|mes }}{% endif %}{% if e.hora %}, {{ e.hora }}{% endif %}{% if e.lugar %}. {{ e.lugar }}{% endif %}
+      {% if cierre %}Abrió el {{ e.f|dia_semana }} {{ e.f.day }} de {{ e.f|mes }}{% if e.f.year != e.fin.year %} de {{ e.f.year }}{% endif %} y cierra el {{ e.fin|dia_semana }} {{ e.fin.day }} de {{ e.fin|mes }}{% if e.categoria %} · {{ e.categoria }}{% endif %}{% if e.lugar %}. {{ e.lugar }}{% endif %}{% else %}
+      {{ e.f|dia_semana|capitalize }}{% if e.fin != e.f %} al {{ e.fin|dia_semana }} {{ e.fin.day }} de {{ e.fin|mes }}{% if e.fin.year != e.f.year %} de {{ e.fin.year }}{% endif %}{% endif %}{% if e.categoria and not compacto %} · {{ e.categoria }}{% endif %}{% if e.hora %}, {{ e.hora }}{% endif %}{% if e.lugar %}. {{ e.lugar }}{% endif %}{% endif %}
     </p>
     {% if not compacto %}
       {% if e.html %}<div class="evento__desc">{{ e.html|safe }}</div>{% endif %}
@@ -16,6 +25,21 @@
     {% endif %}
   </div>
 </li>
+{% endmacro %}
+
+{# Un mes de la agenda: minicalendario (lunes a domingo) y la lista de sus actividades #}
+{% macro mes_agenda(m, raiz, pasado=false) %}
+<section class="agenda-mes{% if pasado %} agenda-mes--pasado{% endif %}" id="{{ m.id }}" data-grupo-filtro aria-labelledby="{{ m.id }}-t">
+  <h2 id="{{ m.id }}-t">{{ MESES[m.mes - 1]|capitalize }} de {{ m.anio }}</h2>
+  <div class="agenda-mes__cuerpo">
+    <table class="minical">
+      <caption class="oculto">Días con actividades en {{ MESES[m.mes - 1] }} de {{ m.anio }}</caption>
+      <thead><tr>{% for d in ["L", "M", "X", "J", "V", "S", "D"] %}<th scope="col" abbr="{{ ["lunes","martes","miércoles","jueves","viernes","sábado","domingo"][loop.index0] }}">{{ d }}</th>{% endfor %}</tr></thead>
+      <tbody>{% for s in m.semanas %}<tr>{% for c in s %}<td class="{{ 'fuera' if c.fuera }}{{ ' es-hoy' if c.hoy }}{{ ' con' if c.ev }}">{% if c.fuera %}{% elif c.ev %}<a href="#{{ c.ev[0].id }}" aria-label="{{ c.d.day }} de {{ MESES[m.mes - 1] }}: {{ c.ev|length }} {{ 'actividad' if c.ev|length == 1 else 'actividades' }}"{% if c.hoy %} aria-current="date"{% endif %}>{{ c.d.day }}</a>{% else %}<span{% if c.hoy %} aria-current="date"{% endif %}>{{ c.d.day }}</span>{% endif %}</td>{% endfor %}</tr>{% endfor %}</tbody>
+    </table>
+    <ul class="agenda">{% for e in m.eventos %}{{ evento(e, raiz, compacto=pasado) }}{% endfor %}</ul>
+  </div>
+</section>
 {% endmacro %}
 
 {% macro tarjeta_noticia(n, raiz, grande=false) %}

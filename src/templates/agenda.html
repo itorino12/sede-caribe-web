@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% from "_macros.html" import encabezado, evento with context %}
+{% from "_macros.html" import encabezado, evento, mes_agenda with context %}
 {% block cabeza %}
 {% if eventos %}
 {% set grafo = [] %}
@@ -14,21 +14,38 @@
     <a class="boton boton--secundario" href="{{ raiz }}agenda.ics">Agregar la agenda a mi calendario</a>
     <span>Funciona con Google Calendar, Outlook y el calendario del teléfono. Las actividades nuevas aparecen solas.</span>
   </p>
-  {% if eventos %}
-    {% for grupo in eventos|groupby('f.month') %}
-    <section class="agenda-mes">
-      <h2>{{ grupo.list[0].f|mes|capitalize }} de {{ grupo.list[0].f.year }}</h2>
-      <ul class="agenda">{% for e in grupo.list %}{{ evento(e, raiz) }}{% endfor %}</ul>
+  {% if sitio.agenda_nota %}<p class="agenda-nota">{{ sitio.agenda_nota }}</p>{% endif %}
+  {% if eventos or recientes or agenda.pasados %}
+  {% if agenda.categorias|length > 1 %}
+  <div class="filtros" role="group" aria-label="Filtrar por tema" data-filtro="agenda">
+    <button type="button" aria-pressed="true" data-valor="">Todo</button>
+    {% for cat in agenda.categorias %}<button type="button" aria-pressed="false" data-valor="{{ cat }}">{{ cat }}</button>{% endfor %}
+  </div>
+  {% endif %}
+  {% if agenda.proximos|length > 2 %}
+  <nav class="agenda-meses" aria-label="Ir a un mes">
+    {% for m in agenda.proximos %}<a href="#{{ m.id }}">{{ MESES[m.mes - 1][:3]|capitalize }}{% if loop.first or m.mes == 1 %} {{ m.anio }}{% endif %}</a>{% endfor %}
+  </nav>
+  {% endif %}
+  <div id="agenda">
+    {% if agenda.en_curso %}
+    <section class="agenda-mes agenda-mes--curso" data-grupo-filtro aria-labelledby="en-curso">
+      <h2 id="en-curso">En curso</h2>
+      <p class="agenda-mes__nota">Plazos que ya abrieron y siguen vigentes hoy, {{ hoy|fecha_larga }}.</p>
+      <ul class="agenda">{% for e in agenda.en_curso %}{{ evento(e, raiz, cierre=true) }}{% endfor %}</ul>
     </section>
-    {% endfor %}
+    {% endif %}
+    {% for m in agenda.proximos %}{{ mes_agenda(m, raiz) }}{% endfor %}
+    {% if not agenda.proximos and not agenda.en_curso %}<p class="vacio">No hay actividades programadas por ahora.</p>{% endif %}
+    {% if agenda.pasados %}
+    <details class="agenda-pasado" data-grupo-filtro>
+      <summary>Actividades anteriores ({{ agenda.pasados|sum(attribute='eventos', start=[])|length }})</summary>
+      {% for m in agenda.pasados %}{{ mes_agenda(m, raiz, pasado=true) }}{% endfor %}
+    </details>
+    {% endif %}
+  </div>
   {% else %}
     <p class="vacio">No hay actividades programadas por ahora. Las coordinaciones publican aquí sus actividades en cuanto las confirman.</p>
-  {% endif %}
-  {% if recientes %}
-  <section class="agenda-mes agenda-mes--pasado">
-    <h2>Del último mes</h2>
-    <ul class="agenda">{% for e in recientes %}{{ evento(e, raiz, compacto=true) }}{% endfor %}</ul>
-  </section>
   {% endif %}
 </div>
 {% endblock %}

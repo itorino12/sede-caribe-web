@@ -95,11 +95,23 @@
     function aplicar(valor) {
       botones.forEach(function (b) { b.setAttribute("aria-pressed", b.dataset.valor === valor); });
       $$("[data-area]", objetivo).forEach(function (el) { el.hidden = !!valor && el.dataset.area !== valor; });
+      // agenda: un mes (o el bloque de anteriores) sin nada visible se oculta entero
+      $$("[data-grupo-filtro]", objetivo).reverse().forEach(function (g) {
+        g.hidden = !!valor && !$$("[data-area]", g).some(function (el) { return !el.hidden; });
+      });
     }
     botones.forEach(function (b) { b.addEventListener("click", function () { aplicar(b.dataset.valor); }); });
     var inicial = new URLSearchParams(location.search).get("categoria");
     if (inicial && botones.some(function (b) { return b.dataset.valor === inicial; })) aplicar(inicial);
   });
+
+  // ---------- un enlace a una actividad anterior abre el bloque plegado que la contiene
+  function abrirDestino() {
+    var id = decodeURIComponent(location.hash.slice(1)), el = id && document.getElementById(id), d = el && el.closest("details");
+    if (d && !d.open) { d.open = true; el.scrollIntoView(); }
+  }
+  window.addEventListener("hashchange", abrirDestino);
+  abrirDestino();
 
   // ---------- filtro de texto del directorio
   $$("[data-filtrar-tabla]").forEach(function (input) {

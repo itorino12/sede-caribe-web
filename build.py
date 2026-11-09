@@ -16,9 +16,10 @@ Reglas que se aplican al compilar (las mismas que se explican a quienes editan e
     - Solo se publica una fila si la columna «publicar» dice sí.
     - Una noticia con fecha futura queda programada: aparece el día de su fecha.
     - Un aviso solo se muestra entre su fecha «desde» y su fecha «hasta».
-    - Las actividades pasadas salen de la agenda (quedan 30 días en «recientes»).
+    - La agenda muestra lo que está en curso, lo próximo y, plegado, lo anterior. En «Esta semana», un plazo de
+      más de una semana aparece solo el día que abre y el día que cierra.
 """
-import hashlib, html, json, re, shutil, sys, unicodedata
+import calendar, hashlib, html, json, re, shutil, sys, unicodedata
 from datetime import date, datetime, timedelta, timezone
 from pathlib import Path
 
@@ -252,6 +253,27 @@ def cargar():
     return sitio, datos, "Drive" if origen == {"Drive"} else ("respaldo" if origen == {"respaldo"} else "mixto")
 
 
+def meses_agenda(lista, todos, prefijo="mes"):
+    """Agrupa por año y mes de inicio. Cada mes lleva su minicalendario: semanas de lunes a domingo y,
+    por día, las actividades de «todos» que empiezan ese día (el enlace va a la primera)."""
+    inicios = {}
+    for e in todos:
+        inicios.setdefault(e["f"], []).append(e)
+    meses = {}
+    for e in lista:
+        meses.setdefault((e["f"].year, e["f"].month), []).append(e)
+    salida = []
+    for (a, m), evs in meses.items():
+        semanas = [[{"d": x, "fuera": x.month != m, "hoy": x == HOY, "ev": inicios.get(x, []) if x.month == m else []} for x in s]
+                   for s in calendar.Calendar(0).monthdatescalendar(a, m)]
+        salida.append({"anio": a, "mes": m, "id": f"{prefijo}-{a}-{m:02d}", "eventos": evs, "semanas": semanas})
+    return salida
+
+
+def normal(t):
+    return unicodedata.normalize("NFD", t.lower()).encode("ascii", "ignore").decode()
+
+
 def preparar(sitio, d):
     """Filtra lo no publicable y convierte texto en fechas, HTML e imágenes."""
     avisos = []
@@ -271,19 +293,21 @@ def preparar(sitio, d):
                          "img": imagen(n.get("imagen")), "destacada": str(n.get("destacada", "")).lower() in SI})
     noticias.sort(key=lambda n: (n["f"], n["destacada"]), reverse=True)
 
-    eventos, recientes = [], []
+    eventos, pasados = [], []
     for e in filter(publicable, d["eventos"]):
         ini = fecha(e.get("fecha"))
         if not ini:
             continue
-        fin = fecha(e.get("fecha_fin")) or ini
+        fin = max(fecha(e.get("fecha_fin")) or ini, ini)
         ev = {**e, "id": e.get("id") or slug(f"{ini}-{e['titulo']}"), "f": ini, "fin": fin, "html": parrafos(e.get("descripcion", ""))}
-        if fin >= HOY:
-            eventos.append(ev)
-        elif fin >= HOY - timedelta(days=30):
-            recientes.append(ev)
+        (eventos if fin >= HOY else pasados).append(ev)
     eventos.sort(key=lambda e: (e["f"], e.get("hora", "")))
-    recientes.sort(key=lambda e: e["f"], reverse=True)
+    pasados.sort(key=lambda e: (e["f"], e.get("hora", "")))
+    recientes = [e for e in reversed(pasados) if e["fin"] >= HOY - timedelta(days=30)]
+    agenda = {"en_curso": sorted((e for e in eventos if e["f"] < HOY), key=lambda e: e["fin"]),
+              "proximos": meses_agenda([e for e in eventos if e["f"] >= HOY], eventos),
+              "pasados": meses_agenda(pasados, pasados, "antes")[::-1],
+              "categorias": sorted({e["categoria"] for e in eventos + pasados if e.get("categoria")}, key=normal)}
 
     carreras = []
     for c in filter(publicable, d["carreras"]):
@@ -320,14 +344,24 @@ def preparar(sitio, d):
 
     # «Esta semana en la Sede»: lunes a viernes de la semana en curso (el fin de semana, la siguiente)
     lunes = HOY - timedelta(days=HOY.weekday()) + (timedelta(days=7) if HOY.weekday() >= 5 else timedelta())
+    # Un plazo de más de una semana (p. ej. la interrupción de estudios) sale solo el día que abre y el día que cierra.
+    def del_dia(x):
+        salida = []
+        for e in eventos + recientes:
+            if not e["f"] <= x <= e["fin"]:
+                continue
+            largo = (e["fin"] - e["f"]).days >= 7
+            if not largo or x in (e["f"], e["fin"]):
+                salida.append({**e, "marca": ("abre" if x == e["f"] else "cierra") if largo else ""})
+        return salida
     semana = [{"f": lunes + timedelta(days=i), "hoy": lunes + timedelta(days=i) == HOY, "pasado": lunes + timedelta(days=i) < HOY,
-               "eventos": [e for e in eventos + recientes if e["f"] <= lunes + timedelta(days=i) <= e["fin"]]} for i in range(5)]
+               "eventos": del_dia(lunes + timedelta(days=i))} for i in range(5)]
 
     # Fotos de la portada y de las páginas: se cambian en la pestaña config del Drive
     fotos = {k: imagen(sitio.get(f"foto_{k}") or por_defecto) for k, por_defecto in
              [("portada", "entrada.jpg"), ("portada_noche", "entrada-noche.jpg"), ("carreras", "auditorio.jpg"), ("historia", "edificio-aulas.jpg")]}
 
-    return {"semana": semana, "fotos": fotos, "avisos": avisos, "noticias": noticias, "eventos": eventos, "recientes": recientes,
+    return {"semana": semana, "fotos": fotos, "avisos": avisos, "noticias": noticias, "eventos": eventos, "recientes": recientes, "agenda": agenda,
             "carreras": carreras, "unidades": unidades, "unidad": {u["id"]: u for u in unidades},
             "directorio": grupos_dir, "enlaces": enlaces, "hitos": d["hitos"], "cifras": d["cifras"], "modalidades": modalidades,
             "categorias": sorted({n["categoria"] for n in noticias if n.get("categoria")}),
@@ -390,7 +424,7 @@ def main():
                       trim_blocks=True, lstrip_blocks=True)
     env.filters.update(fecha_larga=fecha_larga, fecha_corta=fecha_corta, dia_semana=dia_semana, mes=mes,
                        tel=lambda t: "tel:+506" + re.sub(r"\D", "", t or ""))
-    env.globals.update(sitio=sitio, hoy=HOY, ahora=AHORA, ejemplos=EJEMPLOS, vista_previa=VISTA_PREVIA, origen=origen,
+    env.globals.update(sitio=sitio, hoy=HOY, MESES=MESES, ahora=AHORA, ejemplos=EJEMPLOS, vista_previa=VISTA_PREVIA, origen=origen,
                        unidades_publicadas={u["id"] for u in c["unidades"]})  # el menú omite las que no tienen página
 
     # datos de la maqueta 3D: van dentro de recorrido.html y, aparte, en un archivo que la portada pide después de cargar

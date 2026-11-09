@@ -58,5 +58,9 @@
  {
   "clave": "correo_comunicacion",
   "valor": ""
+ },
+ {
+  "clave": "agenda_nota",
+  "valor": "Las fechas de matrícula, becas, pagos, lecciones y trámites provienen de los calendarios estudiantiles universitarios 2026 (Resolución ViVE-235-2025) y 2027 (Resolución ViVE-169-2026) de la Vicerrectoría de Vida Estudiantil, y las de Marina Civil en 2027, también de la Resolución ViVE-176-2026. Ante cualquier diferencia, rige el documento oficial."
  }
 ]

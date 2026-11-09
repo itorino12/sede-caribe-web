@@ -46,7 +46,7 @@
         <span class="dia__nombre">{{ d.f|dia_semana }}</span>
         <time class="dia__num" datetime="{{ d.f.isoformat() }}">{{ d.f.day }}</time>
         {% if d.eventos %}
-        <ul>{% for e in d.eventos %}<li><a href="agenda.html#{{ e.id }}"><b>{{ e.titulo }}</b></a>{{ e.hora ~ '. ' if e.hora }}{{ e.lugar }}{% if e.ejemplo %} <span class="marca-ejemplo">Ejemplo</span>{% endif %}</li>{% endfor %}</ul>
+        <ul>{% for e in d.eventos %}<li><a href="agenda.html#{{ e.id }}"><b>{{ e.titulo }}</b></a>{% if e.marca %} <span class="dia__marca">{{ e.marca }}</span>{% endif %}{{ e.hora ~ '. ' if e.hora }}{{ e.lugar }}{% if e.ejemplo %} <span class="marca-ejemplo">Ejemplo</span>{% endif %}</li>{% endfor %}</ul>
         {% else %}
         <p class="dia__vacio">Sin actividades registradas.</p>
         {% endif %}
