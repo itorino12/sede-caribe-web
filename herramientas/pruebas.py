@@ -59,7 +59,31 @@ def estado_portada(p):
     return p.evaluate("(() => { const f = document.querySelector('.portada__foto--3d'); return { respaldo: !!f.dataset.giro, listo: !!f.querySelector('.mapa3d--listo') }; })()")
 
 
+def menu(nav, base):
+    print("Menú principal")
+    for ancho in (1300, 1920):  # el menú horizontal empieza en 1281 px
+        c, p, e = pagina(nav, base + "directorio.html", {"width": ancho, "height": 900})
+        filas = p.evaluate("[...new Set([...document.querySelectorAll('.menu > ul > li:not(.menu__buscar)')].map(li => Math.round(li.getBoundingClientRect().top)))].length")
+        revisar(filas == 1, f"{ancho} px: todas las entradas caben en una fila")
+        revisar(p.evaluate("document.documentElement.scrollWidth <= innerWidth"), f"{ancho} px: sin desborde horizontal")
+        for b in p.locator(".menu__item--sub > .menu__enlace").all():
+            b.click()
+            caja = b.locator("xpath=following-sibling::ul").bounding_box()
+            revisar(caja["x"] >= 0 and caja["x"] + caja["width"] <= ancho, f"{ancho} px: el submenú «{b.inner_text()}» cabe en la pantalla")
+            b.click()
+        if ancho == 1300:
+            p.locator(".cabecera").screenshot(path=str(SALIDA / "menu.png"))
+        c.close()
+    c, p, e = pagina(nav, base + "directorio.html?buscar=Recursos+humanos")
+    p.wait_for_timeout(300)
+    visibles = p.evaluate("[...document.querySelectorAll('[data-fila]')].filter(f => !f.hidden).map(f => f.textContent)")
+    revisar(visibles and all("ecursos humanos" in v for v in visibles), f"directorio?buscar= llega filtrado ({len(visibles)} filas)")
+    revisar(not e, f"directorio sin errores {e[:1]}")
+    c.close()
+
+
 def rapida(nav, base):
+    menu(nav, base)
     print("Portada y recorrido (PC)")
     c, p, e = pagina(nav, base + "index.html")
     p.wait_for_selector(".mapa3d--listo", timeout=120000)

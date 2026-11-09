@@ -53,24 +53,22 @@
         <ul>
           <li class="menu__item menu__buscar"><button type="button" class="menu__enlace" data-abrir="buscador" aria-controls="buscador" aria-expanded="false">Buscar en el sitio</button></li>
           {% set secciones = [
-            ("Estudiar", "estudiar.html", [("Carreras", "estudiar.html"), ("Cómo ingresar", "admision.html"), ("Becas y vida estudiantil", "unidades/vida-estudiantil.html"), ("Aula de Siquirres", "unidades/siquirres.html")]),
-            ("La Sede", "la-sede.html", [("Historia", "la-sede.html#historia"), ("Misión y visión", "la-sede.html#mision"), ("Coordinaciones", "la-sede.html#coordinaciones"), ("Recorrido 3D del campus", "recorrido.html"), ("Directorio", "directorio.html")]),
-            ("Campus y servicios", "la-sede.html#servicios", []),
-            ("Investigación y acción social", "unidades/investigacion.html", [("Investigación", "unidades/investigacion.html"), ("Acción social", "unidades/accion-social.html"), ("Educación continua", "unidades/educacion-continua.html")]),
-            ("Noticias", "noticias.html", []),
-            ("Agenda", "agenda.html", []),
+            ("Estudiar", "estudiar.html", [("Carreras", "estudiar.html"), ("Cómo ingresar", "admision.html"), ("Becas", "unidades/vida-estudiantil.html"), ("Servicios en línea", "enlaces.html#estudiantes"), ("Aula de Siquirres", "unidades/siquirres.html")]),
+            ("Vida estudiantil", "unidades/vida-estudiantil.html", [("Residencias estudiantiles", "unidades/residencias.html"), ("Gimnasio", "unidades/gimnasio.html"), ("Piscina", "unidades/piscina.html"), ("Coordinación de Vida Estudiantil", "unidades/vida-estudiantil.html")]),
+            ("Docencia", "unidades/docencia.html", [("Laboratorios", "unidades/laboratorios.html"), ("Recursos para el personal", "enlaces.html#personal-universitario"), ("Coordinación de Docencia", "unidades/docencia.html")]),
+            ("Investigación", "unidades/investigacion.html", [("Biblioteca", "unidades/biblioteca.html"), ("Editorial", "unidades/editorial.html"), ("Observatorio del Turismo del Caribe", "http://obturcaribe.ucr.ac.cr/"), ("Coordinación de Investigación", "unidades/investigacion.html")]),
+            ("Acción social", "unidades/accion-social.html", [("Educación continua", "unidades/educacion-continua.html"), ("Centro Infantil Universitario Bilingüe", "unidades/ciub.html"), ("Coordinación de Acción Social", "unidades/accion-social.html")]),
+            ("Administración", "unidades/administracion.html", [("Coordinación de Administración", "unidades/administracion.html"), ("Administración Financiera", "directorio.html?buscar=Administraci%C3%B3n+Financiera"), ("Recursos Humanos", "directorio.html?buscar=Recursos+humanos"), ("Compras Especializadas", "directorio.html?buscar=Compras+Especializadas"), ("Activos fijos", "directorio.html?buscar=Activos+fijos"), ("Servicios generales", "directorio.html?buscar=Servicios+generales"), ("Mantenimiento", "directorio.html?buscar=Mantenimiento"), ("Administración de red", "directorio.html?buscar=Administraci%C3%B3n+de+red")]),
+            ("La Sede", "la-sede.html", [("Historia", "la-sede.html#historia"), ("Misión y visión", "la-sede.html#mision"), ("Dirección de la Sede", "unidades/direccion.html"), ("Coordinaciones", "la-sede.html#coordinaciones"), ("Campus y servicios", "la-sede.html#servicios"), ("Recorrido 3D del campus", "recorrido.html"), ("Directorio", "directorio.html"), ("Contacto", "contacto.html")]),
+            ("Actualidad", "noticias.html", [("Noticias", "noticias.html"), ("Agenda", "agenda.html")]),
           ] %}
           {% for nombre, url, hijos in secciones %}
           {% set activo = pagina == url or (pagina.startswith('carreras/') and url == 'estudiar.html') or (pagina.startswith('noticias/') and url == 'noticias.html') %}
-          <li class="menu__item{% if hijos or nombre == 'Campus y servicios' %} menu__item--sub{% endif %}">
-            {% if hijos or nombre == 'Campus y servicios' %}
+          <li class="menu__item{% if hijos %} menu__item--sub{% endif %}">
+            {% if hijos %}
             <button type="button" class="menu__enlace" aria-expanded="false" data-sub>{{ nombre }}</button>
             <ul class="menu__sub">
-              {% if nombre == 'Campus y servicios' %}
-              {% for u in nav_unidades %}<li><a href="{{ raiz }}unidades/{{ u.id }}.html">{{ u.nombre }}</a></li>{% endfor %}
-              {% else %}
-              {% for t, h in hijos %}<li><a href="{{ raiz }}{{ h }}">{{ t }}</a></li>{% endfor %}
-              {% endif %}
+              {% for t, h in hijos if not (h.startswith('unidades/') and h[9:-5] not in unidades_publicadas) %}<li><a href="{{ h if h.startswith('http') else raiz ~ h }}"{% if pagina == h %} aria-current="page"{% endif %}>{{ t }}</a></li>{% endfor %}
             </ul>
             {% else %}
             <a class="menu__enlace" href="{{ raiz }}{{ url }}"{% if activo %} aria-current="page"{% endif %}>{{ nombre }}</a>
@@ -118,8 +116,8 @@
         <ul><li><a href="{{ raiz }}la-sede.html">Historia y misión</a></li><li><a href="{{ raiz }}la-sede.html#coordinaciones">Coordinaciones</a></li>
             <li><a href="{{ raiz }}directorio.html">Directorio</a></li><li><a href="{{ raiz }}contacto.html">Contacto</a></li></ul>
       </nav>
-      <nav aria-label="Al día">
-        <h2>Al día</h2>
+      <nav aria-label="Actualidad">
+        <h2>Actualidad</h2>
         <ul><li><a href="{{ raiz }}noticias.html">Noticias</a></li><li><a href="{{ raiz }}agenda.html">Agenda</a></li>
             <li><a href="{{ raiz }}agenda.ics">Agregar la agenda a su calendario</a></li><li><a href="{{ raiz }}noticias.xml">Noticias por RSS</a></li></ul>
       </nav>

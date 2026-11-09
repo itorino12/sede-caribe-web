@@ -130,11 +130,21 @@ main:focus { outline: none; }
 .menu__sub a { display: block; padding: 9px 18px; color: var(--tinta); text-decoration: none; }
 .menu__sub a:hover { background: var(--niebla); color: var(--enlace); }
 .menu__enlace[aria-expanded="true"] + .menu__sub { display: block; }
+.menu__item:nth-last-child(-n+2) > .menu__sub { left: auto; right: 0; }  /* los dos últimos abren hacia la izquierda para no salirse de la pantalla */
+.menu__sub a[aria-current="page"] { color: var(--enlace); font-weight: 700; }
 .buscar-boton { display: inline-flex; align-items: center; gap: 8px; min-height: 44px; padding: 8px 16px; background: none; color: var(--cab-boton); border: 2px solid var(--cab-boton); border-radius: 4px; cursor: pointer; font-weight: 700; }
 .buscar-boton:hover { background: var(--niebla); }
 .buscar-boton span { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }  /* solo la lupa; el texto queda para lectores de pantalla */
 .buscar-boton { padding: 8px 11px; }
 .menu-boton { display: none; }
+/* PC: las ocho entradas no caben junto al logo; el menú va en su propia fila, debajo */
+@media (min-width: 1281px) {
+  .cabecera__fila { flex-wrap: wrap; row-gap: 0; padding-top: 10px; min-height: 0; }
+  .buscar-boton { margin-left: auto; }
+  .menu { order: 3; width: 100%; margin-left: 0; border-top: 1px solid var(--cab-linea); }
+  .menu > ul { gap: 6px; }
+  .menu > ul > li:nth-child(2) > .menu__enlace { padding-left: 0; }  /* alinea «Estudiar» con el escudo */
+}
 @media (max-width: 1280px) {
   .cabecera__fila { flex-wrap: wrap; gap: 10px; padding-block: 12px; min-height: 0; }
   .buscar-boton { order: 2; margin-left: auto; }

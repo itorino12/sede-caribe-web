@@ -107,6 +107,9 @@
       });
       est.textContent = q ? (total ? total + " coincidencias" : "Nada coincide. Llame a la central, 2511-7300, y le comunican.") : "";
     });
+    // directorio.html?buscar=... llega ya filtrado (lo usan los enlaces del menú Administración)
+    var pedido = new URLSearchParams(location.search).get("buscar");
+    if (pedido) { input.value = pedido; input.dispatchEvent(new Event("input")); }
   });
 
   // ---------- panel de accesibilidad

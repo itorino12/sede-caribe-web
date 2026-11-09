@@ -346,7 +346,7 @@ def main():
     env.filters.update(fecha_larga=fecha_larga, fecha_corta=fecha_corta, dia_semana=dia_semana, mes=mes,
                        tel=lambda t: "tel:+506" + re.sub(r"\D", "", t or ""))
     env.globals.update(sitio=sitio, hoy=HOY, ahora=AHORA, ejemplos=EJEMPLOS, vista_previa=VISTA_PREVIA, origen=origen,
-                       nav_unidades=[u for u in c["unidades"] if u["grupo"] == "Servicios"])
+                       unidades_publicadas={u["id"] for u in c["unidades"]})  # el menú omite las que no tienen página
 
     # datos de la maqueta 3D: van dentro de recorrido.html y, aparte, en un archivo que la portada pide después de cargar
     recorrido = {"campus": json.loads((SRC / "data" / "campus3d.json").read_text(encoding="utf-8")), "lugares": lugares_campus()}
