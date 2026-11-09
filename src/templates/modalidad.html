@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+{% from "_macros.html" import encabezado, contacto with context %}
+{% block contenido %}
+{% set coord = unidad.get("accion-social") %}
+{{ encabezado(m.nombre, [("Acción Social", "unidades/accion-social.html")], raiz, m.resumen) }}
+<div class="ancho pagina pagina--con-ficha">
+  <div>
+    <div class="prosa">{{ m.html|safe }}</div>
+    <h2 class="proyectos__titulo" id="proyectos">Proyectos de la Sede <span>({{ m.proyectos|length }})</span></h2>
+    <ul class="proyectos">
+      {% for p in m.proyectos %}
+      <li class="proyecto-tarjeta">
+        {% if p.fotos %}{% set f = p.fotos[0] %}<img class="proyecto-tarjeta__foto" src="{{ raiz }}{{ f[640] }}" alt="" width="{{ f.w }}" height="{{ f.h }}" loading="lazy">{% endif %}
+        <div class="proyecto-tarjeta__texto">
+          {% if p.codigo %}<p class="proyecto-tarjeta__codigo">{{ p.codigo }}</p>{% endif %}
+          <h3><a href="proyectos/{{ p.id }}.html">{{ p.nombre }}</a></h3>
+          <p>{{ p.resumen }}</p>
+          {% if p.lugares %}<p class="proyecto-tarjeta__lugar">{{ p.lugares }}</p>{% endif %}
+        </div>
+      </li>
+      {% endfor %}
+    </ul>
+  </div>
+  <div class="columna-ficha">
+    <nav class="ficha" aria-label="Modalidades">
+      <h2 class="ficha__titulo">Modalidades</h2>
+      <ul class="ficha__lista">
+        {% for x in modalidades %}<li><a href="{{ raiz }}accion-social/{{ x.id }}.html"{% if x.id == m.id %} aria-current="page"{% endif %}>{{ x.nombre }}</a></li>{% endfor %}
+      </ul>
+    </nav>
+    {% if coord %}{{ contacto(coord, raiz) }}{% endif %}
+  </div>
+</div>
+{% endblock %}

@@ -217,8 +217,6 @@ main:focus { outline: none; }
 /* -------- esta semana -------- */
 .semana { position: relative; color: var(--sobre-banda); padding-block: 30px 36px; background: var(--banda); border-top: 1px solid var(--linea-banda); }
 .semana .ancho { position: relative; }
-.wapin { margin: 0 0 2px; font-size: var(--t-sm); color: var(--sobre-banda-2); }
-.wapin b { font-size: var(--t-md); font-weight: 900; color: var(--sobre-banda); letter-spacing: .01em; margin-right: 6px; }
 .semana a { color: var(--sobre-banda); }
 .semana__cabeza { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: baseline; gap: 8px 24px; margin-bottom: 16px; }
 .semana__cabeza h2 { color: var(--sobre-banda); font-size: var(--t-lg); margin: 0; }
@@ -384,6 +382,35 @@ main:focus { outline: none; }
 .lista-carreras__grado { margin: 0; color: var(--tinta-2); }
 .lista-carreras__datos { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 4px 18px; margin: 0; font-size: var(--t-sm); color: var(--tinta-2); }
 @media (max-width: 700px) { .lista-carreras__item { grid-template-columns: 1fr; } .lista-carreras__datos { justify-content: flex-start; } }
+
+/* -------- acción social: modalidades y proyectos -------- */
+.modalidades { list-style: none; padding: 0; margin: 20px 0 8px; display: grid; gap: 12px; }
+.modalidades li { margin: 0; }
+.modalidades a { display: grid; gap: 4px; padding: 18px 20px; border: 1px solid var(--linea); border-left: 6px solid var(--azul); background: var(--papel); color: var(--tinta); text-decoration: none; }
+.modalidades a:hover { background: var(--niebla); }
+.modalidades strong { font-size: var(--t-md); color: var(--enlace); }
+.modalidades span { font-size: var(--t-sm); color: var(--tinta-2); }
+.modalidades .modalidades__cantidad { font-weight: 700; color: var(--tinta); }
+.proyectos__titulo { font-size: var(--t-lg); color: var(--azul); margin: 40px 0 16px; }
+.proyectos__titulo span { color: var(--tinta-2); font-weight: 400; }
+.proyectos { list-style: none; padding: 0; margin: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 20px; }
+.proyecto-tarjeta { margin: 0; display: flex; flex-direction: column; border: 1px solid var(--linea); border-top: 4px solid var(--azul); background: var(--papel); }
+.proyecto-tarjeta__foto { width: 100%; aspect-ratio: 3 / 2; object-fit: cover; display: block; }
+.proyecto-tarjeta__texto { padding: 16px 18px 18px; }
+.proyecto-tarjeta h3 { font-size: var(--t-md); margin: 0 0 8px; line-height: 1.3; }
+.proyecto-tarjeta h3 a { color: var(--tinta); text-decoration: none; }
+.proyecto-tarjeta h3 a:hover { color: var(--enlace); text-decoration: underline; }
+.proyecto-tarjeta p { font-size: var(--t-sm); color: var(--tinta-2); margin: 0 0 8px; }
+.proyecto-tarjeta .proyecto-tarjeta__codigo { font-weight: 700; color: var(--azul); letter-spacing: .03em; margin-bottom: 4px; }
+.proyecto-tarjeta .proyecto-tarjeta__lugar { margin: 0; }
+.ficha__lista { list-style: none; padding: 0; margin: 0; font-size: var(--t-sm); }
+.ficha__lista li { padding: 6px 0; border-bottom: 1px solid var(--linea); margin: 0; }
+.ficha__lista [aria-current] { font-weight: 700; color: var(--tinta); text-decoration: none; }
+.galeria-principal { margin: 0 0 28px; }
+.galeria-principal img { width: 100%; height: auto; display: block; }
+.galeria { list-style: none; padding: 0; margin: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 10px; }
+.galeria li { margin: 0; }
+.galeria img { width: 100%; aspect-ratio: 4 / 3; object-fit: cover; display: block; }
 
 .llamado { border-left: 6px solid var(--verde); background: var(--niebla); padding: clamp(22px, 4vw, 36px); margin-top: 48px; }
 .llamado h2 { font-size: var(--t-lg); color: var(--azul); }

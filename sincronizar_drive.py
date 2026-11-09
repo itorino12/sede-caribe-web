@@ -3,16 +3,18 @@
 
 Qué lee (todo dentro de la carpeta raíz del sitio en Drive):
     «Contenido del sitio»  Hoja de cálculo. Una pestaña por tabla: config, avisos, noticias, eventos,
-                           carreras, unidades, directorio, enlaces, hitos, cifras, lugares. La fila 1 son los encabezados.
+                           carreras, unidades, directorio, enlaces, hitos, cifras, lugares, proyectos (opcional). La fila 1 son los encabezados.
     Páginas/               Documentos de Google. Cada uno es el texto largo de una página; su nombre
                            es el identificador que se escribe en la columna «documento» (p. ej. «historia»).
     Imágenes/              Fotos que se citan por nombre de archivo en la columna «imagen».
     Imágenes/Recorrido/    Una carpeta por lugar del recorrido 3D, que empieza con su número
                            («37 - Pista Atlética»). Sus fotos salen en el carrusel de ese lugar.
+    Imágenes/Proyectos/    Una carpeta por proyecto de acción social que empieza con su id de la pestaña
+                           «proyectos» («tc-479 - Ambiente y cultura»). Sus fotos salen en la página del proyecto.
 
 Escribe:
     contenido/datos/<pestaña>.json, contenido/paginas/<nombre>.md, contenido/imagenes/<archivo>
-    contenido/imagenes/recorrido/<número>/<archivo>
+    contenido/imagenes/recorrido/<número>/<archivo>, contenido/imagenes/proyectos/<id>/<archivo>
     contenido/.huella   resumen de todo lo descargado; si no cambia, no hace falta recompilar.
 
 Salida: código 0 si no hubo cambios, 10 si hubo cambios, 1 si falló (el sitio en línea no se toca).
@@ -35,12 +37,14 @@ RAIZ = Path(__file__).resolve().parent
 DESTINO = RAIZ / "contenido"
 ALCANCES = ["https://www.googleapis.com/auth/drive.readonly", "https://www.googleapis.com/auth/spreadsheets.readonly"]
 HOJA = "Contenido del sitio"
-PESTANAS = ["config", "avisos", "noticias", "eventos", "carreras", "unidades", "directorio", "enlaces", "hitos", "cifras", "lugares"]
+PESTANAS = ["config", "avisos", "noticias", "eventos", "carreras", "unidades", "directorio", "enlaces", "hitos", "cifras", "lugares", "proyectos"]
+# Si una de estas no existe en la hoja, no se escribe y el sitio usa el respaldo del repositorio (src/data/)
+OPCIONALES = {"proyectos"}
 # Columnas mínimas: si una pestaña no las tiene, se conserva la versión anterior y se avisa.
 REQUERIDAS = {"config": {"clave", "valor"}, "noticias": {"publicar", "fecha", "titulo"}, "eventos": {"publicar", "fecha", "titulo"},
               "avisos": {"publicar", "titulo", "texto"}, "carreras": {"publicar", "id", "nombre"}, "unidades": {"publicar", "id", "nombre"},
               "directorio": {"unidad", "oficina", "extension"}, "enlaces": {"grupo", "titulo", "url"}, "hitos": {"anio", "texto"},
-              "lugares": {"id", "zona", "nombre"}}
+              "lugares": {"id", "zona", "nombre"}, "proyectos": {"publicar", "id", "nombre", "modalidad"}}
 IMAGEN_MAX = 25 * 1024 * 1024
 DOC = "application/vnd.google-apps.document"
 CARPETA = "application/vnd.google-apps.folder"
@@ -110,6 +114,8 @@ def leer_hoja(sheets, hoja_id, anterior):
                 datos.append(fila)
         salida[nombre] = datos
     for p in PESTANAS:
+        if p not in salida and p in OPCIONALES and p not in anterior:
+            continue
         if p not in salida:
             avisos.append(f"No existe la pestaña «{p}»: se usa la versión anterior.")
             salida[p] = anterior.get(p, [])
@@ -189,6 +195,13 @@ def main():
         if lugar["mimeType"] != CARPETA or not numero:
             continue
         traer_imagenes(sorted(hijos(drive, lugar["id"]), key=lambda a: a["name"].lower()), f"recorrido/{numero.group(1)}")
+    # Imágenes/Proyectos/<id> - <nombre>/: fotos de cada proyecto de acción social (id como en la pestaña «proyectos», p. ej. tc-479)
+    proyectos = next((c for c in hijos_img if c["mimeType"] == CARPETA and c["name"].strip().lower() == "proyectos"), None)
+    for carpeta in hijos(drive, proyectos["id"]) if proyectos else []:
+        ident = re.sub(r"[^a-z0-9-]+", "-", carpeta["name"].split(" - ")[0].strip().lower()).strip("-")
+        if carpeta["mimeType"] != CARPETA or not ident:
+            continue
+        traer_imagenes(sorted(hijos(drive, carpeta["id"]), key=lambda a: a["name"].lower()), f"proyectos/{ident}")
 
     nueva = huella.hexdigest()
     vieja = (DESTINO / ".huella").read_text() if (DESTINO / ".huella").exists() else ""

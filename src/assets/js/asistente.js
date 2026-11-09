@@ -6,7 +6,7 @@ import { montar } from "./congo.js";
 
 const API = "api/asistente";
 const GUARDADO = "congo-chat";
-const SALUDO = "¡Wapin! Soy el congo de la Sede del Caribe. Pregúnteme lo que necesite: carreras, admisión, becas, "
+const SALUDO = "¡Hola! Soy el congo de la Sede del Caribe. Pregúnteme lo que necesite: carreras, admisión, becas, "
   + "trámites, horarios o cómo llegar. Y si es otra cosa, igual pruebe: hago lo posible.";
 const SUGERENCIAS = ["¿Qué carreras ofrece la Sede?", "¿Cómo solicito una beca?", "¿Cómo llego al campus?", "¿Cuál es la extensión de Registro?"];
 const NOTA = "Respuestas generadas con inteligencia artificial: pueden tener errores. Confirme lo importante con la oficina "

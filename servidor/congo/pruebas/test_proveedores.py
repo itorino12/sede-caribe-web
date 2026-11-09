@@ -8,7 +8,7 @@ from congo.proveedores import CuotaAgotada, ProveedorError, ProveedorNoDisponibl
 from congo.proveedores.claude import Claude
 from congo.proveedores.gemini import Gemini
 
-MENSAJES = [{"role": "user", "content": "hola"}, {"role": "assistant", "content": "¡Wapin!"},
+MENSAJES = [{"role": "user", "content": "hola"}, {"role": "assistant", "content": "¡Hola!"},
             {"role": "user", "content": "¿becas?"}]
 
 

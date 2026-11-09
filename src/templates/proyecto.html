@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% from "_macros.html" import encabezado, contacto with context %}
+{% block contenido %}
+{% set coord = unidad.get("accion-social") %}
+{{ encabezado(p.nombre, [("Acción Social", "unidades/accion-social.html"), (m.nombre, "accion-social/" ~ m.id ~ ".html")], raiz, p.resumen) }}
+<div class="ancho pagina pagina--con-ficha">
+  <div>
+    {% if p.fotos %}
+    <figure class="galeria-principal">
+      {% set f = p.fotos[0] %}
+      <img src="{{ raiz }}{{ f[1280] }}" srcset="{{ raiz }}{{ f[640] }} 640w, {{ raiz }}{{ f[1280] }} 1280w" sizes="(min-width: 1100px) 700px, 100vw" alt="{{ f.alt }}" width="{{ f.w }}" height="{{ f.h }}">
+    </figure>
+    {% endif %}
+    <div class="prosa">{{ p.html|safe }}</div>
+    {% if p.fotos|length > 1 %}
+    <h2 class="proyectos__titulo">Galería</h2>
+    <ul class="galeria">
+      {% for f in p.fotos[1:] %}<li><a href="{{ raiz }}{{ f[1920] }}"><img src="{{ raiz }}{{ f[640] }}" alt="{{ f.alt }}" width="{{ f.w }}" height="{{ f.h }}" loading="lazy"></a></li>{% endfor %}
+    </ul>
+    {% endif %}
+  </div>
+  <div class="columna-ficha">
+    <aside class="ficha" aria-label="Datos del proyecto">
+      <h2 class="ficha__titulo">El proyecto en datos</h2>
+      <dl>
+        {% if p.codigo %}<dt>Código</dt><dd>{{ p.codigo }}</dd>{% endif %}
+        <dt>Modalidad</dt><dd><a href="{{ raiz }}accion-social/{{ m.id }}.html">{{ m.nombre }}</a></dd>
+        {% if p.lugares %}<dt>Dónde</dt><dd>{{ p.lugares }}</dd>{% endif %}
+        {% if p.poblacion %}<dt>Con quién</dt><dd>{{ p.poblacion }}</dd>{% endif %}
+        {% if p.aliados %}<dt>Aliados</dt><dd>{{ p.aliados }}</dd>{% endif %}
+        {% if p.carreras %}<dt>Carreras</dt><dd>{{ p.carreras }}</dd>{% endif %}
+        {% if p.temas %}<dt>Temas</dt><dd>{{ p.temas }}</dd>{% endif %}
+      </dl>
+      <a class="ficha__enlace" href="{{ raiz }}accion-social/{{ m.id }}.html">Otros proyectos de {{ m.nombre }}</a>
+    </aside>
+    {% if coord %}{{ contacto(coord, raiz) }}{% endif %}
+  </div>
+</div>
+{% endblock %}

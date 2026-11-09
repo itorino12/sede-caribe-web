@@ -78,7 +78,7 @@ def test_contradiccion_requiere_revision(entorno):
 def test_saludo_sin_modelo(entorno):
     cliente, _, prov = entorno
     r = cliente.post("/api/asistente", json=pregunta("Hola!"))
-    assert r.status_code == 200 and "Wapin" in r.text and prov.llamadas == []
+    assert r.status_code == 200 and "Con gusto le ayudo" in r.text and prov.llamadas == []
 
 
 def test_datos_personales_no_llegan_al_proveedor(entorno):

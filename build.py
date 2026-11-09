@@ -37,7 +37,19 @@ VISTA_PREVIA = EJEMPLOS or "--vista-previa" in sys.argv
 
 MESES = ["enero", "febrero", "marzo", "abril", "mayo", "junio", "julio", "agosto", "septiembre", "octubre", "noviembre", "diciembre"]
 DIAS = ["lunes", "martes", "miércoles", "jueves", "viernes", "sábado", "domingo"]
-TABLAS = ["config", "avisos", "noticias", "eventos", "carreras", "unidades", "directorio", "enlaces", "hitos", "cifras"]
+TABLAS = ["config", "avisos", "noticias", "eventos", "carreras", "unidades", "directorio", "enlaces", "hitos", "cifras", "proyectos"]
+
+# Modalidades de los proyectos de acción social (secciones de la Vicerrectoría de Acción Social).
+# La columna «modalidad» de la pestaña «proyectos» usa estos identificadores; cada una tiene su página
+# accion-social/<id>.html, con el texto del documento «modalidad-<id>» de la carpeta Páginas.
+MODALIDADES = [
+    {"id": "tcu", "nombre": "Trabajo Comunal Universitario",
+     "resumen": "Estudiantes de distintas carreras trabajan 300 horas con comunidades e instituciones. Es requisito de graduación."},
+    {"id": "cultura-y-patrimonio", "nombre": "Cultura y Patrimonio",
+     "resumen": "Música, danza, lengua, cocina, memoria y tradiciones de los pueblos de la provincia."},
+    {"id": "educacion-permanente", "nombre": "Educación Permanente y Servicios",
+     "resumen": "Cursos libres, educación continua, capacitación y acompañamiento técnico para la comunidad."},
+]
 SI = {"sí", "si", "x", "true", "verdadero", "1", "publicar", "yes"}
 
 # Qué grupo del directorio corresponde a cada unidad (para listar sus extensiones en su página)
@@ -145,6 +157,23 @@ def lugares_campus():
         except (KeyError, ValueError):
             continue
     return sorted(salida, key=lambda l: l["id"])
+
+
+def fotos_de(fila, carpeta):
+    """Fotos de una fila: la columna «fotos» (nombres separados por comas, de la carpeta Imágenes) y, además,
+    las de Imágenes/<carpeta>/<id>/ del Drive, en orden de nombre. «fotos_alt» describe cada una, separadas por «|»."""
+    nombres = [x.strip() for x in (fila.get("fotos") or "").split(",") if x.strip()]
+    sub = CONT / "imagenes" / carpeta / fila["id"]
+    if sub.is_dir():
+        nombres += [f"{carpeta}/{fila['id']}/{f.name}" for f in sorted(sub.iterdir(), key=lambda f: f.name.lower())
+                    if f.is_file() and not f.name.startswith(".")]
+    alts = [x.strip() for x in (fila.get("fotos_alt") or "").split("|")]
+    fotos = []
+    for i, nombre in enumerate(nombres):
+        f = imagen(nombre)
+        if f:
+            fotos.append({**f, "alt": alts[i] if i < len(alts) and alts[i] else f"{fila['nombre']}, foto {i + 1}"})
+    return fotos
 
 
 def leer_pagina(nombre):
@@ -265,6 +294,15 @@ def preparar(sitio, d):
         ext = [f for f in d["directorio"] if f["unidad"] == DIRECTORIO_DE.get(u["id"])]
         unidades.append({**u, "html": md(leer_pagina(u.get("documento"))), "extensiones": ext})
 
+    proyectos = []
+    for p in filter(publicable, d["proyectos"]):
+        if p.get("modalidad") not in {m["id"] for m in MODALIDADES} or not p.get("id"):
+            print(f"  ! proyecto sin modalidad válida: {p.get('nombre')!r}")
+            continue
+        proyectos.append({**p, "html": md(leer_pagina(p.get("documento"))), "fotos": fotos_de(p, "proyectos")})
+    modalidades = [{**m, "html": md(leer_pagina(f"modalidad-{m['id']}")), "proyectos": [p for p in proyectos if p["modalidad"] == m["id"]]}
+                   for m in MODALIDADES]
+
     grupos_dir = {}
     for f in d["directorio"]:
         grupos_dir.setdefault(f["unidad"], []).append(f)
@@ -284,7 +322,7 @@ def preparar(sitio, d):
 
     return {"semana": semana, "fotos": fotos, "avisos": avisos, "noticias": noticias, "eventos": eventos, "recientes": recientes,
             "carreras": carreras, "unidades": unidades, "unidad": {u["id"]: u for u in unidades},
-            "directorio": grupos_dir, "enlaces": enlaces, "hitos": d["hitos"], "cifras": d["cifras"],
+            "directorio": grupos_dir, "enlaces": enlaces, "hitos": d["hitos"], "cifras": d["cifras"], "modalidades": modalidades,
             "categorias": sorted({n["categoria"] for n in noticias if n.get("categoria")}),
             "areas": list(dict.fromkeys(c["area"] for c in carreras))}
 
@@ -378,6 +416,10 @@ def main():
                 for x in c["carreras"]]
     paginas += [(f"unidades/{u['id']}.html", "unidad.html", u["nombre"], u["resumen"], {"u": u}) for u in c["unidades"]]
     paginas += [(f"noticias/{n['id']}.html", "noticia.html", n["titulo"], n.get("resumen", ""), {"n": n}) for n in c["noticias"]]
+    paginas += [(f"accion-social/{m['id']}.html", "modalidad.html", m["nombre"], m["resumen"], {"m": m}) for m in c["modalidades"]]
+    paginas += [(f"accion-social/proyectos/{p['id']}.html", "proyecto.html", p["nombre"], p["resumen"],
+                 {"p": p, "m": next(m for m in c["modalidades"] if m["id"] == p["modalidad"])})
+                for m in c["modalidades"] for p in m["proyectos"]]
 
     indice = []
     for salida, plantilla, titulo, desc, extra in paginas:

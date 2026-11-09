@@ -6,6 +6,18 @@
 <div class="ancho pagina pagina--con-ficha">
   <div class="prosa">
     {{ u.html|safe }}
+    {% if u.id == "accion-social" and modalidades %}
+    <ul class="modalidades">
+      {% for m in modalidades %}
+      <li><a href="{{ raiz }}accion-social/{{ m.id }}.html"><strong>{{ m.nombre }}</strong><span>{{ m.resumen }}</span><span class="modalidades__cantidad">{{ m.proyectos|length }} proyectos</span></a></li>
+      {% endfor %}
+    </ul>
+    <h2>Otros servicios</h2>
+    <ul>
+      <li><a href="educacion-continua.html">Educación Continua</a>: cursos de capacitación y actualización abiertos al público.</li>
+      <li><a href="ciub.html">Centro Infantil Universitario Bilingüe</a>: formación integral para niñas y niños menores de seis años.</li>
+    </ul>
+    {% endif %}
     {% if u.extensiones %}
     <h2>Extensiones</h2>
     <table class="tabla">

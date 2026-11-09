@@ -20,7 +20,7 @@ SALUDO = re.compile(r"^\s*(hola|buenas|buenos d[ií]as|buenas tardes|buenas noch
                     r"listo|adi[oó]s|chao|pura vida)\W*$", re.IGNORECASE)
 SIN_INFORMACION = ("No tengo esa información en los documentos oficiales que consulto. Le recomiendo revisar el "
                    "[directorio](directorio.html) para ubicar la oficina correspondiente, o preguntarme de otra forma.")
-RESPUESTA_SALUDO = ("¡Wapin! Con gusto le ayudo. Pregúnteme sobre carreras, admisión, becas, trámites, reglamentos, "
+RESPUESTA_SALUDO = ("¡Hola! Con gusto le ayudo. Pregúnteme sobre carreras, admisión, becas, trámites, reglamentos, "
                     "horarios o cómo llegar a la Sede.")
 CONTRADICCION = re.compile(r"fuentes no coinciden|se contradicen|contradicci[oó]n", re.IGNORECASE)
 
