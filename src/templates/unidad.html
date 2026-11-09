@@ -6,6 +6,11 @@
 <div class="ancho pagina pagina--con-ficha">
   <div class="prosa">
     {{ u.html|safe }}
+    {% if u.cifras %}
+    <ul class="cifras">{% for x in u.cifras %}<li><strong>{{ x.valor }}</strong><span>{{ x.etiqueta }}</span></li>{% endfor %}</ul>
+    {% if u.cifras[0].fuente %}<p class="cifras__fuente">{{ u.cifras[0].fuente }}</p>{% endif %}
+    {% endif %}
+    {{ u.html_despues|safe }}
     {% if u.id == "accion-social" and modalidades %}
     <ul class="modalidades">
       {% for m in modalidades %}

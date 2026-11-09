@@ -391,6 +391,11 @@ main:focus { outline: none; }
 .modalidades strong { font-size: var(--t-md); color: var(--enlace); }
 .modalidades span { font-size: var(--t-sm); color: var(--tinta-2); }
 .modalidades .modalidades__cantidad { font-weight: 700; color: var(--tinta); }
+.cifras { list-style: none; padding: 0; margin: 28px 0 8px; display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 12px; }
+.cifras li { margin: 0; padding: 16px 16px 14px; border: 1px solid var(--linea); border-top: 4px solid var(--azul); background: var(--papel); display: grid; gap: 4px; align-content: start; }
+.cifras strong { font-size: var(--t-xl, 2rem); line-height: 1.1; color: var(--azul); }
+.cifras span { font-size: var(--t-sm); color: var(--tinta-2); line-height: 1.35; }
+.cifras__fuente { font-size: var(--t-xs, .8rem); color: var(--tinta-2); margin: 0 0 28px; }
 .proyectos__titulo { font-size: var(--t-lg); color: var(--azul); margin: 40px 0 16px; }
 .proyectos__titulo span { color: var(--tinta-2); font-weight: 400; }
 .proyectos { list-style: none; padding: 0; margin: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 20px; }

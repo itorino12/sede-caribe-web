@@ -292,7 +292,11 @@ def preparar(sitio, d):
     unidades = []
     for u in filter(publicable, d["unidades"]):
         ext = [f for f in d["directorio"] if f["unidad"] == DIRECTORIO_DE.get(u["id"])]
-        unidades.append({**u, "html": md(leer_pagina(u.get("documento"))), "extensiones": ext})
+        # «cifras-<id>»: datos destacados opcionales; el documento los ubica con un párrafo que diga solo [[cifras]]
+        html = md(leer_pagina(u.get("documento")))
+        antes, _, despues = html.partition("<p>[[cifras]]</p>")
+        unidades.append({**u, "html": antes, "html_despues": despues, "extensiones": ext,
+                         "cifras": leer_tabla(f"cifras-{u['id']}")[0]})
 
     proyectos = []
     for p in filter(publicable, d["proyectos"]):
