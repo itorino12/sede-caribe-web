@@ -26,7 +26,7 @@ SALIDA = RAIZ / ".cache" / "pruebas"
 GL = ["--use-gl=angle", "--use-angle=swiftshader", "--enable-unsafe-swiftshader"]
 PAGINAS_AXE = ["index.html", "estudiar.html", "admision.html", "la-sede.html", "noticias.html", "agenda.html", "directorio.html",
                "enlaces.html", "contacto.html", "accesibilidad.html", "recorrido.html",
-               "unidades/accion-social.html", "accion-social/tcu.html", "accion-social/proyectos/tc-479.html",
+               "unidades/accion-social.html", "accion-social/tcu.html", "accion-social/extension-docente.html", "accion-social/proyectos/tc-479.html",
                "unidades/educacion-continua.html"]
 fallas = []
 

@@ -45,9 +45,9 @@ TABLAS = ["config", "avisos", "noticias", "eventos", "carreras", "unidades", "di
 MODALIDADES = [
     {"id": "tcu", "nombre": "Trabajo Comunal Universitario",
      "resumen": "Estudiantes de distintas carreras trabajan 300 horas con comunidades e instituciones. Es requisito de graduación."},
-    {"id": "cultura-y-patrimonio", "nombre": "Cultura y Patrimonio",
+    {"id": "extension-cultural", "nombre": "Extensión Cultural",
      "resumen": "Música, danza, lengua, cocina, memoria y tradiciones de los pueblos de la provincia."},
-    {"id": "educacion-permanente", "nombre": "Educación Permanente y Servicios",
+    {"id": "extension-docente", "nombre": "Extensión Docente",
      "resumen": "Cursos libres, educación continua, capacitación y acompañamiento técnico para la comunidad."},
 ]
 SI = {"sí", "si", "x", "true", "verdadero", "1", "publicar", "yes"}
@@ -306,6 +306,9 @@ def preparar(sitio, d):
         proyectos.append({**p, "html": md(leer_pagina(p.get("documento"))), "fotos": fotos_de(p, "proyectos")})
     modalidades = [{**m, "html": md(leer_pagina(f"modalidad-{m['id']}")), "proyectos": [p for p in proyectos if p["modalidad"] == m["id"]]}
                    for m in MODALIDADES]
+    for m in modalidades:  # entrada del menú «Acción social»: la agrupación y, dentro, sus proyectos
+        m["menu"] = (m["nombre"], f"accion-social/{m['id']}.html",
+                     [(p["nombre"], p.get("enlace") or f"accion-social/proyectos/{p['id']}.html") for p in m["proyectos"]])
 
     grupos_dir = {}
     for f in d["directorio"]:
@@ -423,7 +426,7 @@ def main():
     paginas += [(f"accion-social/{m['id']}.html", "modalidad.html", m["nombre"], m["resumen"], {"m": m}) for m in c["modalidades"]]
     paginas += [(f"accion-social/proyectos/{p['id']}.html", "proyecto.html", p["nombre"], p["resumen"],
                  {"p": p, "m": next(m for m in c["modalidades"] if m["id"] == p["modalidad"])})
-                for m in c["modalidades"] for p in m["proyectos"]]
+                for m in c["modalidades"] for p in m["proyectos"] if not p.get("enlace")]
 
     indice = []
     for salida, plantilla, titulo, desc, extra in paginas:

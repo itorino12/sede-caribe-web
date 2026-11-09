@@ -13,12 +13,21 @@
     botonMenu.setAttribute("aria-expanded", abierto);
   });
   var subs = $$("[data-sub]");
-  var cerrarSubs = function (excepto) { subs.forEach(function (b) { if (b !== excepto) b.setAttribute("aria-expanded", "false"); }); };
+  var cerrarSubs = function (excepto) { subs.forEach(function (b) { if (b !== excepto) b.setAttribute("aria-expanded", "false"); }); $$("[data-sub2]").forEach(function (b) { b.setAttribute("aria-expanded", "false"); }); };
   subs.forEach(function (b) {
     b.addEventListener("click", function (e) {
       e.stopPropagation();
       cerrarSubs(b);
       b.setAttribute("aria-expanded", b.getAttribute("aria-expanded") !== "true");
+    });
+  });
+  var subs2 = $$("[data-sub2]");
+  subs2.forEach(function (b) {
+    b.addEventListener("click", function (e) {
+      e.stopPropagation();
+      var abrir = b.getAttribute("aria-expanded") !== "true";
+      subs2.forEach(function (o) { o.setAttribute("aria-expanded", "false"); });
+      b.setAttribute("aria-expanded", abrir);
     });
   });
   document.addEventListener("click", function (e) { if (!e.target.closest(".menu__item--sub")) cerrarSubs(); });

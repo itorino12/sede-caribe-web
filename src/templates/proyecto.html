@@ -33,7 +33,16 @@
       </dl>
       <a class="ficha__enlace" href="{{ raiz }}accion-social/{{ m.id }}.html">Otros proyectos de {{ m.nombre }}</a>
     </aside>
-    {% if coord %}{{ contacto(coord, raiz) }}{% endif %}
+    {% if p.coordinador %}
+    <aside class="ficha" aria-label="Contacto del proyecto">
+      <h2 class="ficha__titulo">Contacto</h2>
+      <dl>
+        <dt>Coordina</dt><dd>{{ p.coordinador }}</dd>
+        {% if p.correo %}<dt>Correo</dt><dd><a href="mailto:{{ p.correo }}">{{ p.correo }}</a></dd>
+        {% elif coord %}<dt>Información</dt><dd>Coordinación de Acción Social, <a href="mailto:{{ coord.correo }}">{{ coord.correo }}</a></dd>{% endif %}
+      </dl>
+    </aside>
+    {% elif coord %}{{ contacto(coord, raiz) }}{% endif %}
   </div>
 </div>
 {% endblock %}

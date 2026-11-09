@@ -13,7 +13,7 @@
         {% if p.fotos %}{% set f = p.fotos[0] %}<img class="proyecto-tarjeta__foto" src="{{ raiz }}{{ f[640] }}" alt="" width="{{ f.w }}" height="{{ f.h }}" loading="lazy">{% endif %}
         <div class="proyecto-tarjeta__texto">
           {% if p.codigo %}<p class="proyecto-tarjeta__codigo">{{ p.codigo }}</p>{% endif %}
-          <h3><a href="proyectos/{{ p.id }}.html">{{ p.nombre }}</a></h3>
+          <h3><a href="{{ raiz ~ p.enlace if p.enlace else 'proyectos/' ~ p.id ~ '.html' }}">{{ p.nombre }}</a></h3>
           <p>{{ p.resumen }}</p>
           {% if p.lugares %}<p class="proyecto-tarjeta__lugar">{{ p.lugares }}</p>{% endif %}
         </div>

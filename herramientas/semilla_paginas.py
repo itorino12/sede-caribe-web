@@ -119,7 +119,7 @@ El Centro Infantil Universitario Bilingüe es un centro de estimulación y forma
 Parte de una idea sencilla: cada niña y cada niño tiene capacidades propias que se desarrollan con estímulo y con respeto por su individualidad.
 """,
 "educacion-continua": """
-Educación Continua, a la que en la Sede muchos conocen como «cursos cortos», abre las aulas de la Universidad de Costa Rica a cualquier persona que quiera aprender algo nuevo, ponerse al día en su trabajo o prepararse para conseguir uno. Es el proyecto ED-204 de la Coordinación de Acción Social y ofrece cursos de 40 horas, presenciales y virtuales, en Limón, Siquirres y Talamanca.
+Educación Continua, a la que en la Sede muchos conocen como «cursos cortos», abre las aulas de la Universidad de Costa Rica a cualquier persona que quiera aprender algo nuevo, ponerse al día en su trabajo o prepararse para conseguir uno. Es el proyecto ED-204 de [Extensión Docente](../accion-social/extension-docente.html), en la Coordinación de Acción Social, y ofrece cursos de 40 horas, presenciales y virtuales, en Limón, Siquirres y Talamanca.
 
 La oferta no se decide en una oficina. Antes de cada periodo se abre una prematrícula, y los cursos que se imparten son los que la comunidad pide. En 2025 se inscribieron más de 200 personas interesadas en cada ciclo, con picos de 285.
 

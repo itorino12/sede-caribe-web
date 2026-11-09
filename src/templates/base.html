@@ -57,7 +57,7 @@
             ("Vida estudiantil", "unidades/vida-estudiantil.html", [("Coordinación de Vida Estudiantil", "unidades/vida-estudiantil.html"), ("Residencias estudiantiles", "unidades/residencias.html"), ("Gimnasio", "unidades/gimnasio.html"), ("Piscina", "unidades/piscina.html")]),
             ("Docencia", "unidades/docencia.html", [("Coordinación de Docencia", "unidades/docencia.html"), ("Laboratorios", "unidades/laboratorios.html"), ("Recursos para el personal", "enlaces.html#personal-universitario")]),
             ("Investigación", "unidades/investigacion.html", [("Coordinación de Investigación", "unidades/investigacion.html"), ("Biblioteca", "unidades/biblioteca.html"), ("Editorial", "unidades/editorial.html"), ("Observatorio del Turismo del Caribe", "http://obturcaribe.ucr.ac.cr/")]),
-            ("Acción social", "unidades/accion-social.html", [("Coordinación de Acción Social", "unidades/accion-social.html"), ("Trabajo Comunal Universitario", "accion-social/tcu.html"), ("Cultura y Patrimonio", "accion-social/cultura-y-patrimonio.html"), ("Educación Permanente y Servicios", "accion-social/educacion-permanente.html"), ("Educación continua", "unidades/educacion-continua.html"), ("Centro Infantil Universitario Bilingüe", "unidades/ciub.html")]),
+            ("Acción social", "unidades/accion-social.html", [("Coordinación de Acción Social", "unidades/accion-social.html")] + ((modalidades or [])|map(attribute="menu")|list)),
             ("Administración", "unidades/administracion.html", [("Coordinación de Administración", "unidades/administracion.html"), ("Administración Financiera", "directorio.html?buscar=Administraci%C3%B3n+Financiera"), ("Recursos Humanos", "directorio.html?buscar=Recursos+humanos"), ("Compras Especializadas", "directorio.html?buscar=Compras+Especializadas"), ("Activos fijos", "directorio.html?buscar=Activos+fijos"), ("Servicios generales", "directorio.html?buscar=Servicios+generales"), ("Mantenimiento", "directorio.html?buscar=Mantenimiento"), ("Administración de red", "directorio.html?buscar=Administraci%C3%B3n+de+red")]),
             ("La Sede", "la-sede.html", [("Historia", "la-sede.html#historia"), ("Misión y visión", "la-sede.html#mision"), ("Dirección de la Sede", "unidades/direccion.html"), ("Coordinaciones", "la-sede.html#coordinaciones"), ("Campus y servicios", "la-sede.html#servicios"), ("Recorrido 3D del campus", "recorrido.html"), ("Directorio", "directorio.html"), ("Contacto", "contacto.html")]),
             ("Actualidad", "noticias.html", [("Noticias", "noticias.html"), ("Agenda", "agenda.html")]),
@@ -68,7 +68,11 @@
             {% if hijos %}
             <button type="button" class="menu__enlace" aria-expanded="false" data-sub>{{ nombre }}</button>
             <ul class="menu__sub">
-              {% for t, h in hijos if not (h.startswith('unidades/') and h[9:-5] not in unidades_publicadas) %}<li><a href="{{ h if h.startswith('http') else raiz ~ h }}"{% if pagina == h %} aria-current="page"{% endif %}>{{ t }}</a></li>{% endfor %}
+              {% for item in hijos if not (item[1].startswith('unidades/') and item[1][9:-5] not in unidades_publicadas) %}{% set t, h = item[0], item[1] %}
+              {% if item|length > 2 and item[2] %}<li class="menu__grupo">
+                <div class="menu__fila"><a href="{{ raiz ~ h }}"{% if pagina == h %} aria-current="page"{% endif %}>{{ t }}</a><button type="button" class="menu__abrir" aria-expanded="false" data-sub2><span>Proyectos de {{ t }}</span></button></div>
+                <ul class="menu__sub2">{% for t2, h2 in item[2] %}<li><a href="{{ raiz ~ h2 }}"{% if pagina == h2 %} aria-current="page"{% endif %}>{{ t2 }}</a></li>{% endfor %}</ul>
+              </li>{% else %}<li><a href="{{ h if h.startswith('http') else raiz ~ h }}"{% if pagina == h %} aria-current="page"{% endif %}>{{ t }}</a></li>{% endif %}{% endfor %}
             </ul>
             {% else %}
             <a class="menu__enlace" href="{{ raiz }}{{ url }}"{% if activo %} aria-current="page"{% endif %}>{{ nombre }}</a>
