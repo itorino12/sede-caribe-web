@@ -121,7 +121,7 @@ unidades = [
       resumen="Desde 2013 acerca la universidad al cantón de Siquirres, gracias a un convenio con la Municipalidad."),
     U(id="ciub", nombre="Centro Infantil Universitario Bilingüe (CIUB)", grupo="Servicios", extension="2511-7331", edificio="Residencias estudiantiles",
       resumen="Centro de estimulación y formación integral para niñas y niños menores de 6 años; es un proyecto de acción social de la Sede."),
-    U(id="educacion-continua", nombre="Educación Continua", grupo="Servicios", extension="2511-7330", edificio="Aula 6",
+    U(id="educacion-continua", nombre="Educación Continua", grupo="Servicios", extension="2511-7330", edificio="Edificio de Docencia",
       resumen="Cursos libres y de actualización abiertos a la comunidad, con matrícula en distintos períodos del año."),
     U(id="biblioteca", nombre="Biblioteca", grupo="Servicios", extension="2511-7309", edificio="Biblioteca",
       resumen="Parte del Sistema de Bibliotecas, Documentación e Información (SIBDI) de la UCR. Apoya la docencia, la investigación y la acción social."),
@@ -142,7 +142,7 @@ directorio = (
     D("Dirección", [("2511-7303", "Dirección, secretaría ejecutiva", "Administrativo"), ("2511-7338", "Dirección, asistente", "Administrativo")]) +
     D("Acción Social", [("2511-7349", "Coordinación de Acción Social", "Administrativo"), ("2511-7307", "Coordinación de Acción Social, asistente", "Administrativo"),
                         ("2511-7313", "Extensión docente, extensión cultural y TCU", "Pabellón 1"), ("2511-7331", "Centro Infantil Universitario Bilingüe", "Residencias estudiantiles"),
-                        ("2511-7330", "Educación Continua (cursos cortos)", "Aula 6")]) +
+                        ("2511-7330", "Educación Continua (cursos cortos)", "Edificio de Docencia")]) +
     D("Administración", [("2511-7321", "Coordinación de Administración", "Administrativo"), ("2511-7353", "Asistente administrativa", "Administrativo"),
                          ("2511-7322", "Unidad de Compras Especializadas, encargado", "Administrativo"), ("2511-7306", "Unidad de Compras Especializadas, asistente", "Administrativo"),
                          ("2511-7305", "Administración de red", "Administrativo"), ("2511-7327", "Activos fijos", "Gimnasio"), ("2511-7345", "Bodega", "Gimnasio"),

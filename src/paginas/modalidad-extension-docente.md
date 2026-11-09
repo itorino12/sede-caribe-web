@@ -1,6 +1,6 @@
 Extensión Docente reúne los proyectos que llevan capacitación, actualización y acompañamiento técnico a la comunidad. Sus proyectos llevan el código ED (algunos más recientes, EPS).
 
-Aquí están los cursos libres, la [Educación Continua](../unidades/educacion-continua.html) y proyectos de formación para el empleo, el turismo, el ambiente, las personas adultas mayores y el sector marítimo.
+Aquí están los cursos libres, la Educación Continua y proyectos de formación para el empleo, el turismo, el ambiente, las personas adultas mayores y el sector marítimo.
 
 ## Cómo participar
 
