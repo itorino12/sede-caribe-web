@@ -259,13 +259,12 @@ main:focus { outline: none; }
 .dia li { font-size: var(--t-sm); line-height: 1.35; padding: 6px 0; border-top: 1px dotted var(--linea-banda); }
 .dia li:first-child { border-top: 0; padding-top: 0; }
 .dia li b { display: block; }
-.dia__vacio { font-size: var(--t-sm); color: var(--sobre-banda-2); margin: 0; }
 @media (max-width: 860px) {
   .dias { grid-template-columns: 1fr; }
   .dia, .dia + .dia { display: grid; grid-template-columns: 76px 1fr; gap: 0 14px; border-left: 0; padding: 12px 0; border-bottom: 1px solid var(--linea-banda); }
   .dia__nombre { grid-column: 1; font-size: var(--t-sm); }
   .dia__num { grid-column: 1; grid-row: 2; font-size: 2.2rem; margin: 0; }
-  .dia ul, .dia__vacio { grid-column: 2; grid-row: 1 / span 2; }
+  .dia ul { grid-column: 2; grid-row: 1 / span 2; }
 }
 
 /* -------- eventos (agenda y unidades) -------- */
