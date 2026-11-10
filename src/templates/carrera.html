@@ -97,7 +97,7 @@
       <table>
         <caption>{{ c.nombre }} · {{ c.creditos }} créditos</caption>
         <thead><tr><th scope="col">Sigla</th><th scope="col">Curso</th><th scope="col">Créditos</th><th scope="col">Requisitos</th>{% if m.cursos|selectattr("coreq_texto")|list %}<th scope="col">Correquisitos</th>{% endif %}<th scope="col">Programa</th></tr></thead>
-        <tbody>{% for x in m.cursos if x.ciclo == c.n %}<tr><td>{{ '—' if x.optativo else x.sigla }}</td><td>{{ x.nombre }}</td><td>{{ x.creditos }}</td><td>{{ x.req_texto or ('Según el optativo elegido' if x.optativo else (x.req|join(', ') or 'Ninguno')) }}</td>{% if m.cursos|selectattr("coreq_texto")|list %}<td>{{ x.coreq_texto or '—' }}</td>{% endif %}<td>{% if x.programa %}<a href="{{ raiz }}{{ x.programa.archivo }}">PDF, {{ x.programa.ciclo }}</a>{% else %}—{% endif %}</td></tr>{% endfor %}</tbody>
+        <tbody>{% for x in m.cursos if x.ciclo == c.n %}<tr><td>{{ '—' if x.optativo else x.sigla }}</td><td>{{ x.nombre }}</td><td>{{ x.creditos }}</td><td>{{ x.req_texto or ('Según el optativo elegido' if x.optativo else (x.req|join(', ') or 'Ninguno')) }}</td>{% if m.cursos|selectattr("coreq_texto")|list %}<td>{{ x.coreq_texto or '—' }}</td>{% endif %}<td>{% if x.programa %}<a href="{{ raiz }}{{ x.programa.archivo }}" target="_blank" rel="noopener">Ver programa ({{ x.programa.ciclo }})<span class="oculto">, se abre en otra pestaña</span></a>{% else %}—{% endif %}</td></tr>{% endfor %}</tbody>
       </table>
       {% endfor %}
     </details>
@@ -109,7 +109,7 @@
       <section class="optativos" style="--c:{{ ar.color if ar else '#5F6B78' }};--c-o:{{ ar.oscuro if ar else '#A9B4BF' }}" aria-labelledby="opt-{{ a.id }}">
         <h4 id="opt-{{ a.id }}">{{ a.titulo or a.nombre }}</h4>
         {% if a.nota %}<p class="optativos__meta">{{ a.nota }}</p>{% endif %}
-        <ul>{% for o in m.optativos[a.id] %}<li><b>{{ o.sigla }}</b> {{ o.nombre }} <span class="optativos__meta">{{ o.creditos }} cr.{% if o.req_texto %} · Requisito: {{ o.req_texto }}{% endif %}</span>{% if o.programa %} <a href="{{ raiz }}{{ o.programa.archivo }}">Programa<span class="oculto"> de {{ o.nombre }}</span> (PDF, {{ o.programa.ciclo }})</a>{% endif %}</li>{% endfor %}</ul>
+        <ul>{% for o in m.optativos[a.id] %}<li><b>{{ o.sigla }}</b> {{ o.nombre }} <span class="optativos__meta">{{ o.creditos }} cr.{% if o.req_texto %} · Requisito: {{ o.req_texto }}{% endif %}</span>{% if o.programa %} <a href="{{ raiz }}{{ o.programa.archivo }}" target="_blank" rel="noopener">Ver programa<span class="oculto">, se abre en otra pestaña</span><span class="oculto"> de {{ o.nombre }}</span> (PDF, {{ o.programa.ciclo }})</a>{% endif %}</li>{% endfor %}</ul>
       </section>
       {% endfor %}
     </div>

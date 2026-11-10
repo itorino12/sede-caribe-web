@@ -1,16 +1,11 @@
 {% extends "base.html" %}
-{% from "_macros.html" import encabezado, contacto, evento with context %}
+{% from "_macros.html" import encabezado, contacto, evento, galeria with context %}
 {% block contenido %}
 {% set padre = ("Docencia", "unidades/docencia.html") if u.id in ["auditorio", "laboratorios"] else ("La Sede", "la-sede.html#coordinaciones") if u.grupo in ["Coordinaciones", "Gobierno", "Recintos"] else ("Campus y servicios", "la-sede.html#servicios") %}
 {{ encabezado(u.nombre, [padre], raiz, u.resumen) }}
 <div class="ancho pagina pagina--con-ficha">
   <div>
-  {% if u.fotos %}
-  <figure class="galeria-principal">
-    {% set f = u.fotos[0] %}
-    <img src="{{ raiz }}{{ f[1280] }}" srcset="{{ raiz }}{{ f[640] }} 640w, {{ raiz }}{{ f[1280] }} 1280w" sizes="(min-width: 1100px) 700px, 100vw" alt="{{ f.alt }}" width="{{ f.w }}" height="{{ f.h }}">
-  </figure>
-  {% endif %}
+  {{ galeria(u.fotos, raiz, "Fotos de " ~ u.nombre) }}
   <div class="prosa">
     {{ u.html|safe }}
     {% if u.cifras %}
@@ -60,12 +55,6 @@
     <ul class="agenda">{% for e in propios %}{{ evento(e, raiz) }}{% endfor %}</ul>
     {% endif %}
   </div>
-  {% if u.fotos|length > 1 %}
-  <h2 class="proyectos__titulo">Galería</h2>
-  <ul class="galeria">
-    {% for f in u.fotos[1:] %}<li><a href="{{ raiz }}{{ f[1920] }}"><img src="{{ raiz }}{{ f[640] }}" alt="{{ f.alt }}" width="{{ f.w }}" height="{{ f.h }}" loading="lazy"></a></li>{% endfor %}
-  </ul>
-  {% endif %}
   </div>
   <div class="columna-ficha">{{ contacto(u, raiz) }}</div>
 </div>

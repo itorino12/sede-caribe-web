@@ -167,4 +167,85 @@
       $("[data-hace]").textContent = txt;
     }
   }
+  // ---------- galerías: carrusel en la página y visor en grande en la misma pantalla
+  // (flechas, deslizar, teclado; se cierra con la X, con Esc o tocando fuera de la foto)
+  var mover = !matchMedia("(prefers-reduced-motion: reduce)").matches && document.documentElement.dataset.movimiento !== "no";
+  function carrusel(nodo) {
+    var pista = nodo.querySelector(".carrusel__pista"), cuenta = nodo.querySelector(".carrusel__cuenta"), c = { actual: 0 };
+    var total = function () { return pista.children.length; };
+    var marcar = function () { cuenta.textContent = total() > 1 ? (c.actual + 1) + " / " + total() : ""; };
+    c.ir = function (i, ya) {
+      if (!total()) return;
+      c.actual = (i + total()) % total();
+      pista.scrollTo({ left: c.actual * pista.clientWidth, behavior: ya || !mover ? "auto" : "smooth" });
+      marcar();
+    };
+    nodo.querySelector("[data-antes]").addEventListener("click", function () { c.ir(c.actual - 1); });
+    nodo.querySelector("[data-despues]").addEventListener("click", function () { c.ir(c.actual + 1); });
+    pista.addEventListener("keydown", function (e) {
+      if (e.key === "ArrowLeft") { e.preventDefault(); c.ir(c.actual - 1); }
+      if (e.key === "ArrowRight") { e.preventDefault(); c.ir(c.actual + 1); }
+    });
+    var espera;
+    pista.addEventListener("scroll", function () {
+      clearTimeout(espera);
+      espera = setTimeout(function () {
+        var i = Math.round(pista.scrollLeft / Math.max(pista.clientWidth, 1));
+        if (i !== c.actual) { c.actual = i; marcar(); }
+      }, 80);
+    }, { passive: true });
+    c.pista = pista; c.marcar = marcar;
+    return c;
+  }
+  var galerias = Array.prototype.slice.call(document.querySelectorAll("[data-galeria]"));
+  if (galerias.length) {
+    var visor = document.createElement("dialog");
+    visor.className = "visor-fotos";
+    visor.setAttribute("aria-label", "Fotos en grande");
+    visor.innerHTML = '<div class="carrusel carrusel--grande" role="group" aria-roledescription="carrusel">' +
+      '<ul class="carrusel__pista" tabindex="0"></ul>' +
+      '<button type="button" class="carrusel__boton carrusel__boton--antes" data-antes aria-label="Foto anterior">‹</button>' +
+      '<button type="button" class="carrusel__boton carrusel__boton--despues" data-despues aria-label="Foto siguiente">›</button>' +
+      '<p class="carrusel__cuenta" aria-live="polite"></p></div>' +
+      '<button type="button" class="visor-fotos__cerrar" aria-label="Cerrar fotos">×</button>';
+    document.body.appendChild(visor);
+    var grande = carrusel(visor.querySelector(".carrusel"));
+    var origen = null;
+    var cerrar = function () { if (visor.open) visor.close(); };
+    visor.querySelector(".visor-fotos__cerrar").addEventListener("click", cerrar);
+    visor.addEventListener("click", function (e) { if (e.target === visor || e.target.classList.contains("carrusel__foto")) cerrar(); });
+    visor.addEventListener("close", function () {
+      document.documentElement.classList.remove("sin-desplazar");
+      if (origen) { origen.c.ir(grande.actual, true); var a = origen.enlaces[grande.actual]; if (a) a.focus({ preventScroll: true }); }
+    });
+    galerias.forEach(function (nodo) {
+      var c = carrusel(nodo), enlaces = Array.prototype.slice.call(nodo.querySelectorAll(".carrusel__foto a"));
+      enlaces.forEach(function (a, i) {
+        a.addEventListener("click", function (e) {
+          e.preventDefault();
+          origen = { c: c, enlaces: enlaces };
+          grande.pista.innerHTML = "";
+          enlaces.forEach(function (b, j) {
+            var li = document.createElement("li"), img = document.createElement("img"), chica = b.querySelector("img");
+            li.className = "carrusel__foto";
+            li.setAttribute("aria-label", (j + 1) + " de " + enlaces.length);
+            img.src = b.dataset.m;
+            img.srcset = b.dataset.s + " 640w, " + b.dataset.m + " 1280w, " + b.href + " 1920w";
+            img.sizes = "100vw";
+            img.alt = chica ? chica.alt : "";
+            img.decoding = "async";
+            li.appendChild(img);
+            grande.pista.appendChild(li);
+          });
+          visor.querySelector(".carrusel").classList.toggle("carrusel--una", enlaces.length < 2);
+          visor.querySelector(".carrusel").setAttribute("aria-label", nodo.getAttribute("aria-label") || "Fotos");
+          document.documentElement.classList.add("sin-desplazar");
+          visor.showModal();
+          grande.ir(i, true);
+          grande.pista.focus();
+        });
+      });
+    });
+    addEventListener("resize", function () { if (visor.open) grande.ir(grande.actual, true); });
+  }
 })();

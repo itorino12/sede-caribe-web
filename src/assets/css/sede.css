@@ -821,6 +821,11 @@ html.sin-desplazar, html.sin-desplazar body { overflow: hidden; }
 .carrusel__cuenta { position: absolute; left: 10px; bottom: 8px; margin: 0; padding: 2px 8px; border-radius: 10px; background: rgba(0,0,0,.6); color: #fff; font-size: var(--t-xs); font-weight: 700; }
 .carrusel__cuenta:empty { display: none; }
 .mapa3d__ficha .carrusel + .mapa3d__ficha-zona { margin-top: 0; }
+/* galerías de las páginas (noticias, proyectos, unidades): carrusel; al tocar una foto se abre el visor en grande */
+.carrusel--pagina { margin: 0 0 28px; background: var(--niebla); }
+.carrusel--pagina .carrusel__foto a { display: block; cursor: zoom-in; }
+.carrusel--pagina .carrusel__foto a:focus-visible { outline: 3px solid var(--foco); outline-offset: -3px; }
+.carrusel--pagina .carrusel__cuenta { font-size: var(--t-sm); }
 .visor-fotos { width: 100vw; height: 100vh; max-width: none; max-height: none; margin: 0; padding: 0; background: rgba(4,14,24,.96); }
 .visor-video { width: 100vw; height: 100vh; max-width: none; max-height: none; margin: 0; padding: 16px; background: rgba(4,14,24,.96); border: 0; }
 .visor-video::backdrop { background: rgba(4,14,24,.9); }

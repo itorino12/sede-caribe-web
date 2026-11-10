@@ -81,3 +81,17 @@
 </header>
 {% include "_avisos.html" %}
 {% endmacro %}
+
+{# Galería de fotos como carrusel. Al tocar una foto se abre en grande en la misma página (sede.js); sin JavaScript, el enlace abre la foto. #}
+{% macro galeria(fotos, raiz, titulo='Galería de fotos') %}
+{% if fotos %}
+<div class="carrusel carrusel--pagina{% if fotos|length < 2 %} carrusel--una{% endif %}" data-galeria role="group" aria-roledescription="carrusel" aria-label="{{ titulo }}">
+  <ul class="carrusel__pista" tabindex="0">
+    {% for f in fotos %}<li class="carrusel__foto" aria-label="{{ loop.index }} de {{ fotos|length }}"><a href="{{ raiz }}{{ f[1920] }}" data-m="{{ raiz }}{{ f[1280] }}" data-s="{{ raiz }}{{ f[640] }}"><img src="{{ raiz }}{{ f[1280] }}" srcset="{{ raiz }}{{ f[640] }} 640w, {{ raiz }}{{ f[1280] }} 1280w" sizes="(min-width: 1100px) 700px, 100vw" alt="{{ f.alt }}" width="{{ f.w }}" height="{{ f.h }}"{% if not loop.first %} loading="lazy"{% endif %}></a></li>{% endfor %}
+  </ul>
+  <button type="button" class="carrusel__boton carrusel__boton--antes" data-antes aria-label="Foto anterior">‹</button>
+  <button type="button" class="carrusel__boton carrusel__boton--despues" data-despues aria-label="Foto siguiente">›</button>
+  <p class="carrusel__cuenta" aria-live="polite">{% if fotos|length > 1 %}1 / {{ fotos|length }}{% endif %}</p>
+</div>
+{% endif %}
+{% endmacro %}

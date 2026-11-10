@@ -43,7 +43,7 @@
   function nombreCorto(c) { return c.optativo ? c.nombre + " (" + ciclo[c.ciclo] + ")" : c.sigla + " " + c.nombre; }
   function enlaceCurso(s) { var c = cursos[s]; return '<button type="button" class="malla-ir" data-ir="' + esc(s) + '">' + esc(nombreCorto(c)) + "</button>"; }
   function programa(p, nombre) {
-    return p ? '<a class="boton malla-programa" href="' + raiz + esc(p.archivo) + '" download>Descargar el programa<span class="oculto"> de ' + esc(nombre) + "</span></a>" +
+    return p ? '<a class="boton malla-programa" href="' + raiz + esc(p.archivo) + '" target="_blank" rel="noopener">Ver programa<span class="oculto"> de ' + esc(nombre) + " (se abre en otra pestaña)</span></a>" +
       '<span class="malla-programa__meta">Versión vigente: ' + esc(p.ciclo) + " · PDF de " + p.kb + " kB</span>" : "";
   }
 
@@ -80,7 +80,7 @@
       var lista = datos.optativos[c.lista || c.area] || [];
       h += "<h4>Cursos que puede elegir</h4><ul class=\"malla-panel__opt\">" + lista.map(function (o) {
         return "<li><b>" + esc(o.sigla) + "</b> " + esc(o.nombre) + ' <span class="optativos__meta">Requisito: ' + esc(o.req_texto || "ninguno") + "</span>" +
-          (o.programa ? ' <a href="' + raiz + esc(o.programa.archivo) + '" download>Programa (PDF, ' + esc(o.programa.ciclo) + ")</a>" : "") + "</li>";
+          (o.programa ? ' <a href="' + raiz + esc(o.programa.archivo) + '" target="_blank" rel="noopener">Ver programa (PDF, ' + esc(o.programa.ciclo) + ")<span class=\"oculto\">, se abre en otra pestaña</span></a>" : "") + "</li>";
       }).join("") + "</ul>";
     } else {
       h += c.programa ? programa(c.programa, c.nombre) : '<p class="malla-panel__nota">' + esc(datos.sin_programa || "El programa de este curso todavía no está publicado en el sitio.") + "</p>";

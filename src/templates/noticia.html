@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% from "_macros.html" import tarjeta_noticia with context %}
+{% from "_macros.html" import tarjeta_noticia, galeria with context %}
 {% block og %}<meta property="og:type" content="article">{% if n.img %}<meta property="og:image" content="{{ sitio.base_url }}/{{ n.img[1280] }}">{% endif %}{% endblock %}
 {% block cabeza %}<script type="application/ld+json">{{ {"@context": "https://schema.org", "@type": "NewsArticle", "headline": n.titulo, "datePublished": n.f.isoformat(), "author": {"@type": "Organization", "name": n.autor or "UCR Sede del Caribe"}, "publisher": {"@type": "CollegeOrUniversity", "name": "Universidad de Costa Rica, Sede del Caribe"}}|tojson }}</script>{% endblock %}
 {% block contenido %}
@@ -20,9 +20,7 @@
     <div class="prosa">{{ n.html|safe }}</div>
     {% if n.fotos %}
     <h2 class="proyectos__titulo">Galería</h2>
-    <ul class="galeria">
-      {% for f in n.fotos %}<li><a href="{{ raiz }}{{ f[1920] }}"><img src="{{ raiz }}{{ f[640] }}" alt="{{ f.alt }}" width="{{ f.w }}" height="{{ f.h }}" loading="lazy"></a></li>{% endfor %}
-    </ul>
+    {{ galeria(n.fotos, raiz, "Galería de " ~ n.titulo) }}
     {% endif %}
     <footer class="articulo__pie">
       {% if n.autor %}<p>{{ n.autor }}</p>{% endif %}
