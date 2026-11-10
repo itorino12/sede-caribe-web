@@ -4,7 +4,7 @@ Para estudiar en la Sede del Caribe se participa en el proceso de admisión de l
 
 1. **Inscríbase en el proceso de admisión** dentro del plazo que anuncia la Oficina de Registro e Información, normalmente durante el último año de colegio.
 2. **Presente la Prueba de Aptitud Académica.** Con ella y su promedio de colegio se calcula su nota de admisión.
-3. **Concurse por carrera y recinto.** Al elegir, indique la Sede del Caribe (Limón) o el Aula Desconcentrada de Siquirres. Algunas carreras, como Marina Civil, piden requisitos especiales.
+3. **Concurse por carrera y recinto.** Al elegir, indique la Sede del Caribe (Limón) o el Aula Desconcentrada de Siquirres. Algunas carreras, como Ingeniería Marítima, piden requisitos especiales.
 4. **Solicite beca** si la necesita: el trámite es independiente de la admisión y conviene hacerlo a tiempo.
 5. **Matricule** sus primeros cursos en las fechas del calendario universitario.
 

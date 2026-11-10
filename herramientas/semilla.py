@@ -31,8 +31,8 @@ config = [
 
 avisos = [
     {"publicar": "sí", "tipo": "informativo",
-     "titulo": "Ingreso a Marina Civil 2027",
-     "texto": "Quienes deseen ingresar o trasladarse a Marina Civil en 2027 deben enviar la Declaración Jurada de ingreso, según la resolución VD-13714-2026.",
+     "titulo": "Ingreso a Ingeniería Marítima 2027",
+     "texto": "Quienes deseen ingresar o trasladarse a Ingeniería Marítima en 2027 deben enviar la Declaración Jurada de ingreso, según la resolución VD-13714-2026.",
      "enlace_texto": "Descargar la declaración jurada",
      "enlace": "https://sedecaribe.ucr.ac.cr/images/ucr/ucr_pdf/DECLARACION_JURADA.pdf",
      "desde": "2026-07-06", "hasta": "2026-10-16"},
@@ -80,7 +80,7 @@ carreras = [
     ("direccion-de-empresas", "Dirección de Empresas", "Bachillerato y Licenciatura", "330102", "Ciencias económicas", "Limón", "", "", "2511-7310", PLAN + "330102_BACH_Y_LIC_EN_DIRECCION_DE_EMPRESAS"),
     ("informatica-empresarial", "Informática Empresarial", "Bachillerato", "600002", "Ingeniería y tecnología", "Limón y Siquirres", "MSc. Itorino Espinoza Torres", "", "2511-7330", PLAN + "600002_BACH_EN_INFORMATICA_EMPRESARIAL"),
     ("ingenieria-quimica", "Ingeniería Química", "Licenciatura", "420501", "Ingeniería y tecnología", "Limón", "", "", "2511-7348", PLAN + "420501_LIC_EN_INGENIERIA_QUIMICA"),
-    ("marina-civil", "Marina Civil", "Licenciatura con énfasis en Ingeniería Náutica y Transporte Marítimo", "600004", "Ingeniería y tecnología", "Limón", "", "", "", PLAN + "600004_LIC_MARINA_CIVIL_ENF_ING_NAUTICA_Y_TRANSP_MARITIMO"),
+    ("marina-civil", "Ingeniería Marítima", "Licenciatura con énfasis en Ingeniería Náutica y Transporte Marítimo", "600004", "Ingeniería y tecnología", "Limón", "", "", "", PLAN + "600004_LIC_MARINA_CIVIL_ENF_ING_NAUTICA_Y_TRANSP_MARITIMO"),
     ("ingles", "Inglés", "Bachillerato", "120303", "Lenguas y educación", "Limón", "", "", "2511-7315", PLAN + "120303_BACH_EN_INGLES"),
     ("ensenanza-del-ingles", "Enseñanza del Inglés", "Bachillerato y Licenciatura", "600113", "Lenguas y educación", "Limón", "", "", "2511-7315", PLAN + "600113_BACH_Y_LIC_EN_LA_ENS_DEL_INGLES"),
     ("educacion-inicial-ingles", "Educación Inicial en Inglés", "Bachillerato", "600135", "Lenguas y educación", "Limón", "", "", "2511-7331", PLAN + "600135_BACH_EN_EDUC_INICIAL_EN_INGLES"),

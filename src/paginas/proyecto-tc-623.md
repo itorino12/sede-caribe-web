@@ -18,4 +18,4 @@ En esta etapa el proyecto empieza a trabajar en el Caribe Norte con un diagnóst
 
 ## Quiénes pueden matricularlo
 
-Estudiantes de muchas carreras de la Sede: Turismo Ecológico, Inglés, Preescolar, Dirección de Empresas, Contaduría, Trabajo Social, Psicología, Informática Empresarial, Aduanas, Marina Civil e Ingeniería Química.
+Estudiantes de muchas carreras de la Sede: Turismo Ecológico, Inglés, Preescolar, Dirección de Empresas, Contaduría, Trabajo Social, Psicología, Informática Empresarial, Aduanas, Ingeniería Marítima e Ingeniería Química.

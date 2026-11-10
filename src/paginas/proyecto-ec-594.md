@@ -8,7 +8,7 @@ Salvaguardar la cultura gastronómica de Limón y valorar su papel en la identid
 
 ## Qué hace
 
-- **Articulación:** suma a grupos, asociaciones, centros educativos, instituciones, restaurantes y comercios interesados en la cocina limonense.
+- **Articulación:** suma a grupos, centros educativos, instituciones, restaurantes y comercios interesados en la cocina limonense.
 - **Procesos participativos:** al menos una actividad al mes entre talleres, charlas, encuentros comunitarios y conversatorios, donde las personas participantes comparten recetas, ingredientes y experiencias, y cocinan juntas.
 - **Divulgación:** publicaciones mensuales en redes, materiales educativos impresos para las comunidades y un espacio web con lo aprendido.
 

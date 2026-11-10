@@ -18,4 +18,4 @@ La Universidad otorga becas para las hijas y los hijos de estudiantes de la Sede
 
 ## Matrícula
 
-El CIUB divulga su proceso de inscripción en las redes de la Sede y en la radio local. Las familias interesadas pasan por una entrevista y un periodo de adaptación. Más información en la [página del CIUB](../../unidades/ciub.html).
+El CIUB divulga su proceso de inscripción en las redes de la Sede y en la radio local. Las familias interesadas pasan por una entrevista y un periodo de adaptación. Para más información, escriba a la coordinación del CIUB.

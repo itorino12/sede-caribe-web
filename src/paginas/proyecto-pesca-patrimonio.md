@@ -4,7 +4,7 @@ Las personas pescadoras no son solo beneficiarias: son protagonistas del proceso
 
 ## Qué busca
 
-Promover las prácticas, conocimientos y tradiciones de la pesca artesanal para fortalecer a las asociaciones de pescadores de Cahuita y de Puerto Viejo–Manzanillo mediante el turismo vivencial sostenible.
+Promover las prácticas, conocimientos y tradiciones de la pesca artesanal para fortalecer a las personas pescadoras de Cahuita y de Puerto Viejo–Manzanillo mediante el turismo vivencial sostenible.
 
 ## Qué hace
 

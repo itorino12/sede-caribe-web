@@ -1,4 +1,4 @@
-Desde 2021 este proyecto trabaja con personas con discapacidad del cantón Central de Limón y sus familias. Empezó con capacitaciones a la Asociación de Sordos de Limón, siguió con formación para el empleo y en 2024 llegó a 650 personas, con actividades sobre finanzas familiares, autocuidado e inclusión educativa.
+Desde 2021 este proyecto trabaja con personas con discapacidad del cantón Central de Limón y sus familias. Empezó con capacitaciones a personas sordas, siguió con formación para el empleo y en 2024 llegó a 650 personas, con actividades sobre finanzas familiares, autocuidado e inclusión educativa.
 
 En esta etapa da un paso más: reconoce a las personas con discapacidad como protagonistas de la vida cultural de Limón y portadoras de saberes del patrimonio caribeño, no solo como participantes de actividades recreativas.
 
@@ -16,4 +16,4 @@ Las actividades cuentan con apoyos como interpretación en LESCO y materiales ad
 
 ## Con quién trabaja
 
-Con CONAPDIS, el MEP, la Asociación de Sordos de Limón (ASORLI), el Centro Comunitario de Atención a la Persona Mayor (CECUIDAM) y asociaciones de desarrollo de los barrios.
+Con CONAPDIS, el MEP y el Centro Comunitario de Atención a la Persona Mayor (CECUIDAM).

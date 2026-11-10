@@ -1,4 +1,4 @@
-Este proyecto acerca la gestión ambiental a las comunidades de toda la provincia. Ha trabajado con asociaciones de desarrollo, acueductos comunales, organizaciones de ecoturismo, centros educativos y empresas, en temas como los residuos sólidos, el agua y los conflictos ambientales de la región.
+Este proyecto acerca la gestión ambiental a las comunidades de toda la provincia. Ha trabajado con acueductos comunales, organizaciones de ecoturismo, centros educativos y empresas, en temas como los residuos sólidos, el agua y los conflictos ambientales de la región.
 
 ## Qué busca
 
