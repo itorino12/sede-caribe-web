@@ -316,11 +316,11 @@ main:focus { outline: none; }
 @media (max-width: 900px) { .noticias-portada, .noticias-portada__lista { grid-template-columns: 1fr; } }
 
 .carreras-portada { background: var(--niebla); padding-block: clamp(44px, 6vw, 76px); }
-.carreras-portada__rejilla { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 2.1fr); gap: clamp(28px, 4vw, 56px); align-items: start; }
+.carreras-portada__rejilla { display: grid; grid-template-columns: minmax(0, 1fr); gap: clamp(28px, 4vw, 56px); align-items: start; }
 .sin-foto { grid-template-columns: 1fr !important; }
 .carreras-portada__rejilla.sin-foto .carreras-portada__areas { grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); }
-.carreras-portada__foto { margin: 0; position: sticky; top: 24px; }
-.carreras-portada__foto img { width: 100%; aspect-ratio: 4 / 5; object-fit: cover; }
+.carreras-portada__foto { margin: 0; }
+.carreras-portada__foto img { width: 100%; aspect-ratio: 21 / 9; object-fit: cover; object-position: center 55%; }
 .carreras-portada__foto figcaption { font-size: var(--t-xs); color: var(--tinta-2); margin-top: 8px; }
 .carreras-portada__areas { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 32px 40px; }
 .area__titulo { font-size: var(--t-sm); font-weight: 700; color: var(--tinta-2); margin-bottom: 4px; letter-spacing: 0; }
@@ -329,7 +329,7 @@ main:focus { outline: none; }
 .area li a { display: block; font-weight: 700; font-size: var(--t-md); line-height: 1.25; text-decoration: none; color: var(--tinta); }
 .area li a:hover { color: var(--enlace); text-decoration: underline; }
 .area li span { font-size: var(--t-sm); color: var(--tinta-2); }
-@media (max-width: 900px) { .carreras-portada__rejilla, .carreras-portada__areas { grid-template-columns: 1fr; } .carreras-portada__foto { position: static; } .carreras-portada__foto img { aspect-ratio: 3 / 2; } }
+@media (max-width: 900px) { .carreras-portada__rejilla, .carreras-portada__areas { grid-template-columns: 1fr; } .carreras-portada__foto img { aspect-ratio: 3 / 2; } }
 
 .historia-portada__rejilla { display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr); gap: clamp(28px, 4vw, 56px); align-items: start; }
 .historia-portada__foto { margin: 0; }

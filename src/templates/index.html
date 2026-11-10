@@ -91,9 +91,9 @@
       <h2 id="carreras-titulo">¿Qué se estudia en el Caribe?</h2>
       <a href="estudiar.html">Todas las carreras con sus planes</a>
     </div>
-    <div class="carreras-portada__rejilla{% if not fotos.carreras %} sin-foto{% endif %}">
-      {% if fotos.carreras %}
-      <figure class="carreras-portada__foto">{{ foto(fotos.carreras, "Escenario de madera del auditorio de la Sede del Caribe, con la pantalla de proyección, frente a las butacas negras", "(min-width: 900px) 30vw, 100vw") }}<figcaption>Auditorio de la Sede.</figcaption></figure>
+    <div class="carreras-portada__rejilla{% if not fotos.portada %} sin-foto{% endif %}">
+      {% if fotos.portada %}
+      <figure class="carreras-portada__foto">{{ foto(fotos.portada, "Entrada principal de la Sede del Caribe de día, con las banderas y el rótulo de la Universidad de Costa Rica", "(min-width: 1200px) 1160px, 100vw") }}<figcaption>Entrada principal de la Sede.</figcaption></figure>
       {% endif %}
       <div class="carreras-portada__areas">
         {% set colores = ["var(--azul)", "var(--celeste)", "var(--musgo)", "var(--azul)", "var(--celeste)"] %}
