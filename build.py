@@ -363,7 +363,7 @@ def preparar(sitio, d):
 
     # Fotos de la portada y de las páginas: se cambian en la pestaña config del Drive
     fotos = {k: imagen(sitio.get(f"foto_{k}") or por_defecto) for k, por_defecto in
-             [("portada", "entrada.jpg"), ("portada_noche", "entrada-noche.jpg"), ("carreras", "auditorio.jpg"), ("historia", "edificio-aulas.jpg")]}
+             [("portada", "entrada.jpg"), ("portada_noche", "entrada-noche.jpg"), ("carreras", "auditorio-escenario.jpg"), ("historia", "edificio-aulas.jpg")]}
 
     return {"semana": semana, "fotos": fotos, "avisos": avisos, "noticias": noticias, "eventos": eventos, "recientes": recientes, "agenda": agenda,
             "carreras": carreras, "unidades": unidades, "aulas": json.loads((SRC / "data" / "aulas.json").read_text(encoding="utf-8")), "unidad": {u["id"]: u for u in unidades},
