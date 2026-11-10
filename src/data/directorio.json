@@ -1,10 +1,24 @@
 [
  {
   "unidad": "Dirección",
+  "oficina": "Dirección de la Sede",
+  "extension": "2511-7302",
+  "edificio": "Administrativo",
+  "correo": "digital.sedecaribe@ucr.ac.cr"
+ },
+ {
+  "unidad": "Dirección",
   "oficina": "Dirección, secretaría ejecutiva",
   "extension": "2511-7303",
   "edificio": "Administrativo",
-  "correo": "sedecaribe@ucr.ac.cr"
+  "correo": ""
+ },
+ {
+  "unidad": "Dirección",
+  "oficina": "Dirección, asistente archivista",
+  "extension": "2511-7319",
+  "edificio": "Administrativo",
+  "correo": ""
  },
  {
   "unidad": "Dirección",
@@ -24,7 +38,14 @@
   "unidad": "Acción Social",
   "oficina": "Educación Continua (cursos cortos)",
   "extension": "2511-7330",
-  "edificio": "Edificio de Docencia",
+  "edificio": "Pabellón II",
+  "correo": "cursoscortos.sedecaribe@ucr.ac.cr"
+ },
+ {
+  "unidad": "Acción Social",
+  "oficina": "Preuniversitario en Artes Musicales",
+  "extension": "2511-7355",
+  "edificio": "Administrativo",
   "correo": ""
  },
  {
@@ -32,61 +53,33 @@
   "oficina": "Coordinación de Administración",
   "extension": "2511-7321",
   "edificio": "Administrativo",
-  "correo": "jefaturaadministrativa.sedecaribe@ucr.ac.cr"
+  "correo": "administracion.sedecaribe@ucr.ac.cr"
  },
  {
   "unidad": "Administración",
-  "oficina": "Asistente administrativa",
-  "extension": "2511-7353",
+  "oficina": "Coordinación de Administración, asistente ejecutiva",
+  "extension": "2511-7301",
   "edificio": "Administrativo",
   "correo": ""
  },
  {
   "unidad": "Administración",
-  "oficina": "Unidad de Compras Especializadas, encargado",
+  "oficina": "Recepción e Información",
+  "extension": "2511-7300",
+  "edificio": "Administrativo",
+  "correo": ""
+ },
+ {
+  "unidad": "Administración",
+  "oficina": "Unidad de Compras Especializadas, encargada",
   "extension": "2511-7322",
   "edificio": "Administrativo",
   "correo": ""
  },
  {
   "unidad": "Administración",
-  "oficina": "Unidad de Compras Especializadas, asistente",
-  "extension": "2511-7306",
-  "edificio": "Administrativo",
-  "correo": ""
- },
- {
-  "unidad": "Administración",
-  "oficina": "Administración de red",
-  "extension": "2511-7305",
-  "edificio": "Administrativo",
-  "correo": ""
- },
- {
-  "unidad": "Administración",
-  "oficina": "Activos fijos",
-  "extension": "2511-7327",
-  "edificio": "Gimnasio",
-  "correo": ""
- },
- {
-  "unidad": "Administración",
-  "oficina": "Bodega",
-  "extension": "2511-7345",
-  "edificio": "Gimnasio",
-  "correo": ""
- },
- {
-  "unidad": "Administración",
-  "oficina": "Servicios generales",
-  "extension": "2511-7329",
-  "edificio": "Pabellón 1",
-  "correo": ""
- },
- {
-  "unidad": "Administración",
-  "oficina": "Oficina de Administración Financiera",
-  "extension": "2511-7328",
+  "oficina": "Unidad de Compras Especializadas, Fondo de Trabajo",
+  "extension": "2511-7353",
   "edificio": "Administrativo",
   "correo": ""
  },
@@ -106,6 +99,34 @@
  },
  {
   "unidad": "Administración",
+  "oficina": "Oficina de Administración Financiera",
+  "extension": "2511-7328",
+  "edificio": "Administrativo",
+  "correo": ""
+ },
+ {
+  "unidad": "Administración",
+  "oficina": "Servicios generales",
+  "extension": "2511-7329",
+  "edificio": "Administrativo",
+  "correo": ""
+ },
+ {
+  "unidad": "Administración",
+  "oficina": "Administración de red",
+  "extension": "2511-7305",
+  "edificio": "Gimnasio",
+  "correo": ""
+ },
+ {
+  "unidad": "Administración",
+  "oficina": "Activos fijos",
+  "extension": "2511-7327",
+  "edificio": "Gimnasio",
+  "correo": ""
+ },
+ {
+  "unidad": "Administración",
   "oficina": "Mantenimiento",
   "extension": "2511-7352",
   "edificio": "Gimnasio",
@@ -113,51 +134,16 @@
  },
  {
   "unidad": "Administración",
-  "oficina": "Central telefónica",
-  "extension": "2511-7300",
-  "edificio": "Administrativo",
+  "oficina": "Bodega",
+  "extension": "2511-7345",
+  "edificio": "Pabellón 1",
   "correo": ""
  },
  {
   "unidad": "Carreras",
-  "oficina": "Coordinación de Inglés, Enseñanza del Inglés y Contaduría Pública",
+  "oficina": "Coordinación de Inglés y Enseñanza del Inglés",
   "extension": "2511-7315",
   "edificio": "Pabellón 1",
-  "correo": ""
- },
- {
-  "unidad": "Carreras",
-  "oficina": "Coordinación de Dirección de Empresas",
-  "extension": "2511-7310",
-  "edificio": "Pabellón 1",
-  "correo": ""
- },
- {
-  "unidad": "Carreras",
-  "oficina": "Coordinación de Estudios Generales",
-  "extension": "2511-7353",
-  "edificio": "Pabellón 1",
-  "correo": ""
- },
- {
-  "unidad": "Carreras",
-  "oficina": "Coordinación de Informática Empresarial",
-  "extension": "2511-7330",
-  "edificio": "Aula 6",
-  "correo": ""
- },
- {
-  "unidad": "Carreras",
-  "oficina": "Coordinación de Educación Inicial en Inglés",
-  "extension": "2511-7331",
-  "edificio": "Centro Universitario",
-  "correo": ""
- },
- {
-  "unidad": "Carreras",
-  "oficina": "Coordinación de Química y de Laboratorios",
-  "extension": "2511-7348",
-  "edificio": "Administrativo",
   "correo": ""
  },
  {
@@ -168,25 +154,74 @@
   "correo": ""
  },
  {
-  "unidad": "Docencia",
-  "oficina": "Coordinación de Docencia",
-  "extension": "2511-7346",
-  "edificio": "Administrativo",
-  "correo": "docencia.sedecaribe@ucr.ac.cr"
+  "unidad": "Carreras",
+  "oficina": "Coordinación de Informática Empresarial",
+  "extension": "2511-7330",
+  "edificio": "Pabellón II",
+  "correo": ""
+ },
+ {
+  "unidad": "Carreras",
+  "oficina": "Coordinación de Educación Inicial en Inglés",
+  "extension": "2511-7331",
+  "edificio": "CIUB",
+  "correo": ""
+ },
+ {
+  "unidad": "Carreras",
+  "oficina": "Coordinación de Laboratorios de Ingeniería Química",
+  "extension": "2511-7348",
+  "edificio": "Laboratorio de Química",
+  "correo": ""
+ },
+ {
+  "unidad": "Carreras",
+  "oficina": "Coordinación de Estudios Generales",
+  "extension": "2511-7358",
+  "edificio": "Pabellón 1",
+  "correo": ""
+ },
+ {
+  "unidad": "Carreras",
+  "oficina": "Coordinación de Ingeniería Marítima",
+  "extension": "2511-7367",
+  "edificio": "Edificio de Ingeniería, II piso",
+  "correo": "marinacivil.sedecaribe@ucr.ac.cr"
+ },
+ {
+  "unidad": "Carreras",
+  "oficina": "Simuladores de Ingeniería Marítima, encargado",
+  "extension": "2511-7368",
+  "edificio": "Edificio de Ingeniería",
+  "correo": ""
  },
  {
   "unidad": "Docencia",
   "oficina": "Coordinación de Docencia",
-  "extension": "2511-7306",
-  "edificio": "Administrativo",
+  "extension": "2511-7346",
+  "edificio": "Edificio de Docencia",
   "correo": "docencia.sedecaribe@ucr.ac.cr"
  },
  {
   "unidad": "Docencia",
   "oficina": "Coordinación de Docencia, asistente",
+  "extension": "2511-7306",
+  "edificio": "Edificio de Docencia",
+  "correo": "asistentedocencia.sedecaribe@ucr.ac.cr"
+ },
+ {
+  "unidad": "Docencia",
+  "oficina": "Coordinación de Docencia, asistente",
   "extension": "2511-7341",
-  "edificio": "Administrativo",
-  "correo": ""
+  "edificio": "Edificio de Docencia",
+  "correo": "asistentedocencia.sedecaribe@ucr.ac.cr"
+ },
+ {
+  "unidad": "Docencia",
+  "oficina": "Oficina de Audiovisuales e Instalaciones",
+  "extension": "2511-7334",
+  "edificio": "Edificio de Docencia",
+  "correo": "audiovisuales.sedecaribe@ucr.ac.cr"
  },
  {
   "unidad": "Investigación",
@@ -218,14 +253,14 @@
  },
  {
   "unidad": "Investigación",
-  "oficina": "Oficina de Proyectos de Investigación",
+  "oficina": "Oficina de Proyectos de Investigación I",
   "extension": "2511-7312",
   "edificio": "Pabellón 1",
   "correo": ""
  },
  {
   "unidad": "Investigación",
-  "oficina": "Oficina de Proyectos de Investigación",
+  "oficina": "Oficina de Proyectos de Investigación II",
   "extension": "2511-7313",
   "edificio": "Pabellón 1",
   "correo": ""
@@ -246,14 +281,14 @@
  },
  {
   "unidad": "Vida Estudiantil",
-  "oficina": "Trabajo Social",
-  "extension": "2511-7325",
+  "oficina": "Registro, encargada",
+  "extension": "2511-7363",
   "edificio": "Administrativo",
   "correo": ""
  },
  {
   "unidad": "Vida Estudiantil",
-  "oficina": "Registro, encargada",
+  "oficina": "Registro, asistente",
   "extension": "2511-7343",
   "edificio": "Administrativo",
   "correo": ""
@@ -262,13 +297,6 @@
   "unidad": "Vida Estudiantil",
   "oficina": "Registro, ventanilla",
   "extension": "2511-7304",
-  "edificio": "Administrativo",
-  "correo": ""
- },
- {
-  "unidad": "Vida Estudiantil",
-  "oficina": "Registro",
-  "extension": "2511-7363",
   "edificio": "Administrativo",
   "correo": ""
  },
@@ -290,7 +318,7 @@
   "unidad": "Vida Estudiantil",
   "oficina": "Orientación",
   "extension": "2511-7323",
-  "edificio": "Administrativo",
+  "edificio": "Edificio de Ingeniería, II piso",
   "correo": ""
  },
  {
@@ -302,9 +330,9 @@
  },
  {
   "unidad": "Vida Estudiantil",
-  "oficina": "Odontología",
-  "extension": "2511-7339",
-  "edificio": "Pabellón 1",
+  "oficina": "Trabajo Social",
+  "extension": "2511-7325",
+  "edificio": "Administrativo",
   "correo": ""
  },
  {
@@ -316,16 +344,30 @@
  },
  {
   "unidad": "Vida Estudiantil",
+  "oficina": "Odontología",
+  "extension": "2511-7339",
+  "edificio": "Pabellón 1",
+  "correo": ""
+ },
+ {
+  "unidad": "Vida Estudiantil",
   "oficina": "Residencias estudiantiles",
   "extension": "2511-7317",
-  "edificio": "Residencias",
+  "edificio": "Residencias estudiantiles",
+  "correo": ""
+ },
+ {
+  "unidad": "Vida Estudiantil",
+  "oficina": "Promotor deportivo",
+  "extension": "2511-7354",
+  "edificio": "Gimnasio",
   "correo": ""
  },
  {
   "unidad": "Seguridad",
-  "oficina": "Oficiales de seguridad, entrada",
+  "oficina": "Oficiales de seguridad, entrada principal",
   "extension": "2511-7350",
-  "edificio": "Entrada",
+  "edificio": "Entrada principal",
   "correo": ""
  },
  {
@@ -347,7 +389,7 @@
   "oficina": "Coordinación del Aula Desconcentrada",
   "extension": "2511-7397",
   "edificio": "Siquirres",
-  "correo": ""
+  "correo": "recintosiquirres.sedecaribe@ucr.ac.cr"
  },
  {
   "unidad": "Siquirres",
@@ -364,6 +406,20 @@
   "correo": ""
  },
  {
+  "unidad": "Siquirres",
+  "oficina": "Oficial de seguridad",
+  "extension": "2511-7396",
+  "edificio": "Siquirres",
+  "correo": ""
+ },
+ {
+  "unidad": "Siquirres",
+  "oficina": "Asociación de Estudiantes del Recinto de Siquirres (AERSI)",
+  "extension": "2511-7320",
+  "edificio": "Siquirres",
+  "correo": ""
+ },
+ {
   "unidad": "Otros",
   "oficina": "SINDEU",
   "extension": "2511-7356",
@@ -372,22 +428,15 @@
  },
  {
   "unidad": "Otros",
-  "oficina": "AUDEL",
-  "extension": "2511-7333",
+  "oficina": "Oficina de Transportes",
+  "extension": "2511-7360",
   "edificio": "Pabellón 1",
   "correo": ""
  },
  {
   "unidad": "Otros",
-  "oficina": "Soda de la Sede",
-  "extension": "2511-7332",
-  "edificio": "Administrativo",
-  "correo": ""
- },
- {
-  "unidad": "Otros",
   "oficina": "Junta Administradora del Fondo de Ahorro y Préstamo",
-  "extension": "2511-7370",
+  "extension": "2511-1670",
   "edificio": "Pabellón 1",
   "correo": ""
  }

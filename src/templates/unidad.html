@@ -1,9 +1,16 @@
 {% extends "base.html" %}
 {% from "_macros.html" import encabezado, contacto, evento with context %}
 {% block contenido %}
-{% set padre = ("La Sede", "la-sede.html#coordinaciones") if u.grupo in ["Coordinaciones", "Gobierno", "Recintos"] else ("Campus y servicios", "la-sede.html#servicios") %}
+{% set padre = ("Docencia", "unidades/docencia.html") if u.id in ["auditorio", "laboratorios"] else ("La Sede", "la-sede.html#coordinaciones") if u.grupo in ["Coordinaciones", "Gobierno", "Recintos"] else ("Campus y servicios", "la-sede.html#servicios") %}
 {{ encabezado(u.nombre, [padre], raiz, u.resumen) }}
 <div class="ancho pagina pagina--con-ficha">
+  <div>
+  {% if u.fotos %}
+  <figure class="galeria-principal">
+    {% set f = u.fotos[0] %}
+    <img src="{{ raiz }}{{ f[1280] }}" srcset="{{ raiz }}{{ f[640] }} 640w, {{ raiz }}{{ f[1280] }} 1280w" sizes="(min-width: 1100px) 700px, 100vw" alt="{{ f.alt }}" width="{{ f.w }}" height="{{ f.h }}">
+  </figure>
+  {% endif %}
   <div class="prosa">
     {{ u.html|safe }}
     {% if u.cifras %}
@@ -18,6 +25,28 @@
       {% endfor %}
     </ul>
     {% endif %}
+    {% if u.id == "laboratorios" and aulas %}
+    <h2 id="laboratorios">Laboratorios</h2>
+    <table class="tabla tabla--espacios">
+      <thead><tr><th scope="col">Laboratorio</th><th scope="col">Capacidad</th><th scope="col">Dónde</th><th scope="col">Detalle</th></tr></thead>
+      <tbody>
+        {% for a in aulas.aulas if a.laboratorio %}<tr><td>{{ a.laboratorio }}</td><td>{{ (a.capacidad ~ " personas") if a.capacidad else "—" }}</td><td>Aula {{ a.aula }}, <a href="{{ raiz }}recorrido.html#lugar-{{ a.lugar }}">{{ a.ubicacion }}</a></td><td>{{ [a.equipo, a.nota]|select|join(". ") }}</td></tr>
+        {% endfor %}
+        {% for e in aulas.espacios if e.nombre != "Auditorio" %}<tr><td>{% if e.enlace %}<a href="{{ raiz }}{{ e.enlace }}">{{ e.nombre }}</a>{% else %}{{ e.nombre }}{% endif %}</td><td>{{ (e.capacidad ~ " personas") if e.capacidad else "—" }}</td><td><a href="{{ raiz }}recorrido.html#lugar-{{ e.lugar }}">{{ e.ubicacion }}</a></td><td>{{ e.detalle }}</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    <h2 id="aulas">Aulas y capacidades</h2>
+    <table class="tabla tabla--espacios">
+      <thead><tr><th scope="col">Aula</th><th scope="col">Capacidad</th><th scope="col">Dónde</th><th scope="col">Uso y equipo</th></tr></thead>
+      <tbody>
+        {% for a in aulas.aulas %}<tr><td>Aula {{ a.aula }}</td><td>{{ (a.capacidad ~ " personas") if a.capacidad else "—" }}</td><td><a href="{{ raiz }}recorrido.html#lugar-{{ a.lugar }}">{{ a.ubicacion }}</a> (zona {{ a.zona }})</td><td>{{ [a.laboratorio, a.equipo, a.nota]|select|join(". ") }}</td></tr>
+        {% endfor %}
+        {% for e in aulas.espacios if e.nombre == "Auditorio" %}<tr><td><a href="{{ raiz }}{{ e.enlace }}">{{ e.nombre }}</a></td><td>{{ e.capacidad }} personas</td><td><a href="{{ raiz }}recorrido.html#lugar-{{ e.lugar }}">{{ e.ubicacion }}</a> (zona {{ e.zona }})</td><td>{{ e.detalle }}</td></tr>{% endfor %}
+      </tbody>
+    </table>
+    <p class="cifras__fuente">Fuente: {{ aulas.fuente }}</p>
+    {% endif %}
     {% if u.extensiones %}
     <h2>Extensiones</h2>
     <table class="tabla">
@@ -30,6 +59,13 @@
     <h2>Próximas actividades</h2>
     <ul class="agenda">{% for e in propios %}{{ evento(e, raiz) }}{% endfor %}</ul>
     {% endif %}
+  </div>
+  {% if u.fotos|length > 1 %}
+  <h2 class="proyectos__titulo">Galería</h2>
+  <ul class="galeria">
+    {% for f in u.fotos[1:] %}<li><a href="{{ raiz }}{{ f[1920] }}"><img src="{{ raiz }}{{ f[640] }}" alt="{{ f.alt }}" width="{{ f.w }}" height="{{ f.h }}" loading="lazy"></a></li>{% endfor %}
+  </ul>
+  {% endif %}
   </div>
   <div class="columna-ficha">{{ contacto(u, raiz) }}</div>
 </div>

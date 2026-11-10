@@ -1,0 +1,325 @@
+{
+ "fuente": "Oficio SC-CD-A-001-2026 de la Oficina de Audiovisuales e Instalaciones (6 de febrero de 2026) y croquis «Distribución de Aulas 2026».",
+ "aulas": [
+  {
+   "aula": "1",
+   "capacidad": 35,
+   "lugar": 1,
+   "zona": 1,
+   "ubicacion": "Pabellón de aulas 1 a 7",
+   "laboratorio": "",
+   "equipo": "Aire acondicionado",
+   "nota": "",
+   "estado": ""
+  },
+  {
+   "aula": "2",
+   "capacidad": 35,
+   "lugar": 1,
+   "zona": 1,
+   "ubicacion": "Pabellón de aulas 1 a 7",
+   "laboratorio": "",
+   "equipo": "Aire acondicionado",
+   "nota": "",
+   "estado": ""
+  },
+  {
+   "aula": "3",
+   "capacidad": 30,
+   "lugar": 1,
+   "zona": 1,
+   "ubicacion": "Pabellón de aulas 1 a 7",
+   "laboratorio": "",
+   "equipo": "Aire acondicionado, proyector adicional y mesas tipo cubículo",
+   "nota": "",
+   "estado": ""
+  },
+  {
+   "aula": "4",
+   "capacidad": 36,
+   "lugar": 1,
+   "zona": 1,
+   "ubicacion": "Pabellón de aulas 1 a 7",
+   "laboratorio": "",
+   "equipo": "Aire acondicionado",
+   "nota": "",
+   "estado": ""
+  },
+  {
+   "aula": "5",
+   "capacidad": 30,
+   "lugar": 1,
+   "zona": 1,
+   "ubicacion": "Pabellón de aulas 1 a 7",
+   "laboratorio": "Laboratorio de Cómputo 1",
+   "equipo": "Aire acondicionado y computadoras portátiles",
+   "nota": "",
+   "estado": ""
+  },
+  {
+   "aula": "6",
+   "capacidad": 36,
+   "lugar": 1,
+   "zona": 1,
+   "ubicacion": "Pabellón de aulas 1 a 7",
+   "laboratorio": "",
+   "equipo": "Aire acondicionado",
+   "nota": "",
+   "estado": ""
+  },
+  {
+   "aula": "7",
+   "capacidad": 60,
+   "lugar": 1,
+   "zona": 1,
+   "ubicacion": "Pabellón de aulas 1 a 7",
+   "laboratorio": "",
+   "equipo": "Aire acondicionado",
+   "nota": "",
+   "estado": ""
+  },
+  {
+   "aula": "8",
+   "capacidad": 40,
+   "lugar": 14,
+   "zona": 2,
+   "ubicacion": "Pabellón de aulas 8 a 12",
+   "laboratorio": "",
+   "equipo": "",
+   "nota": "",
+   "estado": ""
+  },
+  {
+   "aula": "9",
+   "capacidad": 40,
+   "lugar": 14,
+   "zona": 2,
+   "ubicacion": "Pabellón de aulas 8 a 12",
+   "laboratorio": "",
+   "equipo": "",
+   "nota": "",
+   "estado": ""
+  },
+  {
+   "aula": "10",
+   "capacidad": 40,
+   "lugar": 14,
+   "zona": 2,
+   "ubicacion": "Pabellón de aulas 8 a 12",
+   "laboratorio": "",
+   "equipo": "",
+   "nota": "",
+   "estado": ""
+  },
+  {
+   "aula": "11",
+   "capacidad": 40,
+   "lugar": 14,
+   "zona": 2,
+   "ubicacion": "Pabellón de aulas 8 a 12",
+   "laboratorio": "",
+   "equipo": "",
+   "nota": "",
+   "estado": ""
+  },
+  {
+   "aula": "12",
+   "capacidad": 40,
+   "lugar": 14,
+   "zona": 2,
+   "ubicacion": "Pabellón de aulas 8 a 12",
+   "laboratorio": "",
+   "equipo": "",
+   "nota": "",
+   "estado": ""
+  },
+  {
+   "aula": "13",
+   "capacidad": null,
+   "lugar": 15,
+   "zona": 2,
+   "ubicacion": "Pabellón de aulas 13 a 17",
+   "laboratorio": "",
+   "equipo": "",
+   "nota": "Oficinas de coordinaciones de carrera; no se asigna para lecciones",
+   "estado": ""
+  },
+  {
+   "aula": "14",
+   "capacidad": null,
+   "lugar": 15,
+   "zona": 2,
+   "ubicacion": "Pabellón de aulas 13 a 17",
+   "laboratorio": "Laboratorio de Química",
+   "equipo": "",
+   "nota": "En los horarios aparece como A-14 o LAB IQ1. No es el LB.Qu01 (Laboratorio de Ingeniería Química) del edificio de Ingeniería",
+   "estado": ""
+  },
+  {
+   "aula": "15",
+   "capacidad": 35,
+   "lugar": 15,
+   "zona": 2,
+   "ubicacion": "Pabellón de aulas 13 a 17",
+   "laboratorio": "Laboratorio de Cómputo 2",
+   "equipo": "Computadoras de escritorio",
+   "nota": "",
+   "estado": ""
+  },
+  {
+   "aula": "16",
+   "capacidad": 30,
+   "lugar": 15,
+   "zona": 2,
+   "ubicacion": "Pabellón de aulas 13 a 17",
+   "laboratorio": "",
+   "equipo": "Mesas cuadradas",
+   "nota": "",
+   "estado": ""
+  },
+  {
+   "aula": "17",
+   "capacidad": 40,
+   "lugar": 15,
+   "zona": 2,
+   "ubicacion": "Pabellón de aulas 13 a 17",
+   "laboratorio": "",
+   "equipo": "Pupitres individuales",
+   "nota": "",
+   "estado": ""
+  },
+  {
+   "aula": "18",
+   "capacidad": 40,
+   "lugar": 25,
+   "zona": 3,
+   "ubicacion": "Edificio de Ingeniería, primer piso",
+   "laboratorio": "",
+   "equipo": "Aire acondicionado",
+   "nota": "",
+   "estado": ""
+  },
+  {
+   "aula": "19",
+   "capacidad": 40,
+   "lugar": 25,
+   "zona": 3,
+   "ubicacion": "Edificio de Ingeniería, primer piso",
+   "laboratorio": "",
+   "equipo": "Aire acondicionado",
+   "nota": "",
+   "estado": ""
+  },
+  {
+   "aula": "20",
+   "capacidad": 24,
+   "lugar": 25,
+   "zona": 3,
+   "ubicacion": "Edificio de Ingeniería, primer piso",
+   "laboratorio": "Laboratorio de Cómputo 3",
+   "equipo": "Computadoras portátiles",
+   "nota": "",
+   "estado": ""
+  },
+  {
+   "aula": "21",
+   "capacidad": 40,
+   "lugar": 25,
+   "zona": 3,
+   "ubicacion": "Edificio de Ingeniería, segundo piso",
+   "laboratorio": "",
+   "equipo": "Aire acondicionado",
+   "nota": "",
+   "estado": "Aire acondicionado dañado (oficio SC-CD-A-001-2026, febrero de 2026)"
+  },
+  {
+   "aula": "22",
+   "capacidad": 40,
+   "lugar": 25,
+   "zona": 3,
+   "ubicacion": "Edificio de Ingeniería, segundo piso",
+   "laboratorio": "",
+   "equipo": "Aire acondicionado",
+   "nota": "",
+   "estado": ""
+  },
+  {
+   "aula": "23",
+   "capacidad": 40,
+   "lugar": 25,
+   "zona": 3,
+   "ubicacion": "Edificio de Ingeniería, segundo piso",
+   "laboratorio": "",
+   "equipo": "Aire acondicionado",
+   "nota": "",
+   "estado": ""
+  },
+  {
+   "aula": "24",
+   "capacidad": 15,
+   "lugar": 26,
+   "zona": 3,
+   "ubicacion": "Edificio de Ingeniería, segundo piso",
+   "laboratorio": "Laboratorio de Cómputo 4",
+   "equipo": "Aire acondicionado y 8 computadoras",
+   "nota": "",
+   "estado": ""
+  }
+ ],
+ "espacios": [
+  {
+   "nombre": "Auditorio",
+   "capacidad": 117,
+   "lugar": 12,
+   "zona": 2,
+   "ubicacion": "Junto a la entrada principal",
+   "detalle": "Butacas tipo cine, sillas ejecutivas adicionales y mesas plegables. Reservas con la Coordinación de Docencia",
+   "enlace": "unidades/auditorio.html"
+  },
+  {
+   "nombre": "Laboratorio de Ingeniería Química (LB.Qu01)",
+   "capacidad": null,
+   "lugar": 26,
+   "zona": 3,
+   "ubicacion": "Edificio de Ingeniería, primer piso",
+   "detalle": "",
+   "enlace": ""
+  },
+  {
+   "nombre": "Simulador de Navegación",
+   "capacidad": null,
+   "lugar": 26,
+   "zona": 3,
+   "ubicacion": "Edificio de Ingeniería, primer piso",
+   "detalle": "De la carrera de Ingeniería Marítima",
+   "enlace": ""
+  },
+  {
+   "nombre": "Laboratorio de Física",
+   "capacidad": null,
+   "lugar": 26,
+   "zona": 3,
+   "ubicacion": "Edificio de Ingeniería, segundo piso",
+   "detalle": "",
+   "enlace": ""
+  },
+  {
+   "nombre": "Otros simuladores",
+   "capacidad": null,
+   "lugar": 26,
+   "zona": 3,
+   "ubicacion": "Edificio de Ingeniería, segundo piso",
+   "detalle": "De la carrera de Ingeniería Marítima",
+   "enlace": ""
+  },
+  {
+   "nombre": "Laboratorio de Investigación",
+   "capacidad": null,
+   "lugar": 32,
+   "zona": 4,
+   "ubicacion": "Zona 4, junto a la calle interna",
+   "detalle": "De la Coordinación de Investigación",
+   "enlace": "unidades/investigacion.html"
+  }
+ ]
+}

@@ -3,15 +3,16 @@
   "id": 1,
   "zona": 1,
   "nombre": "Aulas 1 a 7",
-  "texto": "Aulas de la zona 1. El Aula 3 es el Laboratorio de Idiomas y el Aula 5, el Laboratorio de Cómputo 1. El pabellón está en lo alto del talud; una escalera techada y una rampa (Ley 7600) lo unen con las oficinas administrativas. Los baños están en un extremo del pabellón.",
+  "texto": "Aulas de la zona 1. El Aula 5 es el Laboratorio de Cómputo 1. El pabellón está en lo alto del talud; una escalera techada y una rampa (Ley 7600) lo unen con las oficinas administrativas. Los baños están en un extremo del pabellón.",
   "fotos": "lugar-01-1.jpg, lugar-01-2.jpg, lugar-01-3.jpg, lugar-01-4.jpg, lugar-01-5.jpg, lugar-01-6.jpg, lugar-01-7.jpg",
-  "fotos_alt": "Escalera larga y techada que sube desde el vestíbulo de las oficinas administrativas al pabellón de aulas 1 a 7|Rampa techada que baja por el talud entre el pabellón de aulas y las oficinas administrativas|Interior de la rampa techada, entre muretes celestes con pasamanos|Vista desde lo alto de la escalera hacia el vestíbulo de las oficinas administrativas|Corredor del pabellón de aulas 1 a 7, con piso de baldosa terracota y columnas celestes|Corredor frente al Laboratorio de Cómputo 1, con mesas de concreto bajo un techito junto al talud|Entrada a los baños del pabellón, con puertas para hombres y mujeres"
+  "fotos_alt": "Escalera larga y techada que sube desde el vestíbulo de las oficinas administrativas al pabellón de aulas 1 a 7|Rampa techada que baja por el talud entre el pabellón de aulas y las oficinas administrativas|Interior de la rampa techada, entre muretes celestes con pasamanos|Vista desde lo alto de la escalera hacia el vestíbulo de las oficinas administrativas|Corredor del pabellón de aulas 1 a 7, con piso de baldosa terracota y columnas celestes|Corredor frente al Laboratorio de Cómputo 1, con mesas de concreto bajo un techito junto al talud|Entrada a los baños del pabellón, con puertas para hombres y mujeres",
+  "enlace": "unidades/laboratorios.html"
  },
  {
   "id": 2,
   "zona": 1,
   "nombre": "Oficinas administrativas",
-  "texto": "Recepción, Registro, Becas, OAF, Acción Social, Vida Estudiantil, Orientación, Psicología y Trabajo Social, Coordinación de Administración y Dirección.",
+  "texto": "Recepción, Registro, Becas, OAF, Acción Social, Vida Estudiantil, Psicología y Trabajo Social, Coordinación de Administración y Dirección.",
   "enlace": "directorio.html",
   "fotos": "lugar-02-1.jpg, lugar-02-2.jpg, lugar-02-3.jpg, lugar-02-4.jpg, lugar-02-5.jpg, lugar-02-6.jpg",
   "fotos_alt": "Fachada trasera de las oficinas administrativas, con alero verde lima y ventanas con rejas|Vestíbulo con las ventanillas de Registro e Información y la Oficina de Becas|Recepción e Información en el vestíbulo, con bancas de espera|Costado de las oficinas administrativas, con árboles en el zacate y el pasillo techado al fondo|Busto sobre un pedestal y mesas de concreto junto a las oficinas administrativas|Pasillo interno con casilleros y el rótulo que señala los baños"
@@ -92,10 +93,11 @@
  {
   "id": 12,
   "zona": 2,
-  "nombre": "Miniauditorio",
-  "texto": "Miniauditorio de la Sede. Al frente tiene una pequeña plaza con bancas de concreto, y en la fachada, el mural sobre la historia del Caribe.",
-  "fotos": "lugar-12-1.jpg, lugar-12-2.jpg, lugar-12-3.jpg, lugar-12-4.jpg",
-  "fotos_alt": "Costado del Miniauditorio con parasoles celestes y la planta eléctrica roja junto a la calle|El Miniauditorio y su mural de cerámica sobre la historia del Caribe|Frente del Miniauditorio: techo volado sobre columnas en V, plaza con bancas celestes y pluma de acceso|Parte trasera del Miniauditorio, con el techo de lámina y los equipos de aire acondicionado"
+  "nombre": "Auditorio",
+  "texto": "Auditorio de la Sede, con 117 butacas. Al frente tiene una pequeña plaza con bancas de concreto, y en la fachada, el mural sobre la historia del Caribe.",
+  "fotos": "lugar-12-1.jpg, lugar-12-2.jpg, lugar-12-3.jpg, lugar-12-4.jpg, auditorio-escenario.jpg, auditorio-butacas-1.jpg, auditorio-butacas-2.jpg",
+  "fotos_alt": "Costado del Auditorio con parasoles celestes y la planta eléctrica roja junto a la calle|El Auditorio y su mural de cerámica sobre la historia del Caribe|Frente del Auditorio: techo volado sobre columnas en V, plaza con bancas celestes y pluma de acceso|Parte trasera del Auditorio, con el techo de lámina y los equipos de aire acondicionado|Escenario de madera del auditorio, con la pantalla de proyección, una pizarra y el piano cubierto|Butacas negras tipo cine en gradería, con paredes de madera|Las butacas vistas desde un costado, con los aires acondicionados y las ventanas",
+  "enlace": "unidades/auditorio.html"
  },
  {
   "id": 13,
@@ -117,7 +119,7 @@
   "id": 15,
   "zona": 2,
   "nombre": "Aulas 13 a 17",
-  "texto": "El Aula 14 es el Laboratorio de Química y Física; el Aula 15, el Laboratorio de Cómputo 2, y el Aula 17, el Laboratorio de Cómputo 3.",
+  "texto": "El Aula 13 alberga coordinaciones de carrera; el Aula 14 es el Laboratorio de Química, y el Aula 15, el Laboratorio de Cómputo 2.",
   "enlace": "unidades/laboratorios.html",
   "fotos": "lugar-15-1.jpg, lugar-15-2.jpg, lugar-15-3.jpg",
   "fotos_alt": "Aulas 13 a 17 vistas desde el patio, con mesas de concreto celeste|Patio arbolado entre los pabellones de aulas, con barandas celestes y el pasillo techado|Costado de las aulas 13 a 17, con el pasillo techado y el zacate junto al bosque"
@@ -145,7 +147,7 @@
   "nombre": "Camino techado a la entrada",
   "texto": "Camino que baja desde la entrada principal junto a la calle interna: el primer tramo es una acera sin techo y, desde donde llega el pasillo de las aulas 8 a 17, sigue techado.",
   "fotos": "lugar-18-1.jpg, lugar-18-2.jpg, lugar-18-3.jpg",
-  "fotos_alt": "Inicio del camino techado junto a la calle, frente al Miniauditorio|Camino techado junto a la calle, con el parqueo de motos y bicicletas al lado|El camino techado bajando en curva junto a la calle interna"
+  "fotos_alt": "Inicio del camino techado junto a la calle, frente al Auditorio|Camino techado junto a la calle, con el parqueo de motos y bicicletas al lado|El camino techado bajando en curva junto a la calle interna"
  },
  {
   "id": 19,
@@ -174,10 +176,10 @@
  {
   "id": 22,
   "zona": 2,
-  "nombre": "Baño del Miniauditorio",
-  "texto": "Baños del Miniauditorio, en el ala baja del mismo edificio, con entrada propia bajo el alero.",
+  "nombre": "Baño del Auditorio",
+  "texto": "Baños del Auditorio, en el ala baja del mismo edificio, con entrada propia bajo el alero.",
   "fotos": "lugar-22-1.jpg",
-  "fotos_alt": "Ala de baños del Miniauditorio, con celosías y entrada propia bajo el alero"
+  "fotos_alt": "Ala de baños del Auditorio, con celosías y entrada propia bajo el alero"
  },
  {
   "id": 23,
@@ -200,17 +202,19 @@
   "id": 25,
   "zona": 3,
   "nombre": "Aulas 18 a 23",
-  "texto": "Aulas 18 a 20 en el primer piso y aulas 21 a 23 en el segundo.",
+  "texto": "Aulas 18 a 20 en el primer piso y aulas 21 a 23 en el segundo. El Aula 20 es el Laboratorio de Cómputo 3.",
   "fotos": "edificio-nuevo.jpg",
-  "fotos_alt": "El edificio nuevo: a la izquierda las aulas, con galerías y escalera exterior; a la derecha los laboratorios, con parasoles curvos blancos"
+  "fotos_alt": "El edificio nuevo: a la izquierda las aulas, con galerías y escalera exterior; a la derecha los laboratorios, con parasoles curvos blancos",
+  "enlace": "unidades/laboratorios.html"
  },
  {
   "id": 26,
   "zona": 3,
   "nombre": "Edificio de Ingeniería, Laboratorios y Simuladores",
-  "texto": "Primer piso: Laboratorio de Ingeniería Química y Simulador de Navegación. Segundo piso: Aula 24, Laboratorio de Física y otros simuladores.",
+  "texto": "Primer piso: Laboratorio de Ingeniería Química y Simulador de Navegación. Segundo piso: Orientación, Aula 24 (Laboratorio de Cómputo 4), Laboratorio de Física y otros simuladores.",
   "fotos": "laboratorios-parasoles.jpg, edificio-nuevo.jpg",
-  "fotos_alt": "Edificio de laboratorios de dos pisos con ventanales verdes y parasoles curvos de lámina blanca|El edificio nuevo: a la izquierda las aulas, con galerías y escalera exterior; a la derecha los laboratorios"
+  "fotos_alt": "Edificio de laboratorios de dos pisos con ventanales verdes y parasoles curvos de lámina blanca|El edificio nuevo: a la izquierda las aulas, con galerías y escalera exterior; a la derecha los laboratorios",
+  "enlace": "unidades/laboratorios.html"
  },
  {
   "id": 27,

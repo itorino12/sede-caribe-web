@@ -504,6 +504,8 @@ main:focus { outline: none; }
 .tabla th { text-align: left; font-weight: 700; color: var(--tinta-2); border-bottom: 2px solid var(--azul); padding: 8px 12px 8px 0; }
 .tabla td { border-bottom: 1px solid var(--linea); padding: 10px 12px 10px 0; vertical-align: top; overflow-wrap: anywhere; }
 .tabla td:nth-child(2) { white-space: nowrap; }
+.tabla--espacios td { overflow-wrap: break-word; }
+.tabla--espacios td:first-child { min-width: 9ch; }
 @media (max-width: 640px) {
   .tabla thead { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
   .tabla tr { display: grid; grid-template-columns: 1fr auto; gap: 2px 12px; padding: 10px 0; border-bottom: 1px solid var(--linea); }

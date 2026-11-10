@@ -63,22 +63,22 @@ NUMERACION = {int(k): v for k, v in NUMERACION.items()}
 # Aulas y dependencias de cada edificio, tal como las detalla el croquis oficial o la Sede (número del croquis). Cada grupo
 # es un piso (sin nombre si el edificio es de uno); cada espacio, [nombre, uso o detalle].
 DEPENDENCIAS = {
-    1: [{"piso": None, "espacios": [["Aula 1", None], ["Aula 2", None], ["Aula 3", "Laboratorio de Idiomas"], ["Aula 4", None],
+    1: [{"piso": None, "espacios": [["Aula 1", None], ["Aula 2", None], ["Aula 3", None], ["Aula 4", None],
                                     ["Aula 5", "Laboratorio de Cómputo #1"], ["Aula 6", None], ["Aula 7", None], ["Servicios sanitarios", None]]}],
     2: [{"piso": None, "espacios": [["Recepción", None], ["Registro", None], ["Becas", None], ["OAF", None], ["Acción Social", None],
-                                    ["Vida Estudiantil", None], ["Oficinas", "Orientación, Psicología y Trabajo Social"],
+                                    ["Vida Estudiantil", None], ["Oficinas", "Psicología y Trabajo Social"],
                                     ["Coordinación de Administración", None], ["Dirección", None]]}],
     # (la Sede) Coordinación de Docencia: el croquis no la detalla
     4: [{"piso": None, "espacios": [["Coordinación de Docencia", None], ["Audiovisuales", None], ["Tecnologías de la Información", None],
                                     ["Sala de Profesores", None]]}],
     7: [{"piso": None, "espacios": [["Aula 8", None], ["Aula 9", None], ["Aula 10", None], ["Aula 11", None], ["Aula 12", None]]}],
-    8: [{"piso": None, "espacios": [["Aula 13", None], ["Aula 14", "Laboratorio de Química y Física"], ["Aula 15", "Laboratorio de Cómputo #2"],
-                                    ["Aula 16", None], ["Aula 17", "Laboratorio de Cómputo #3"]]}],
+    8: [{"piso": None, "espacios": [["Aula 13", "Coordinaciones de carrera"], ["Aula 14", "Laboratorio de Química"], ["Aula 15", "Laboratorio de Cómputo #2"],
+                                    ["Aula 16", None], ["Aula 17", None]]}],
     9: [{"piso": None, "espacios": [["Oficinas administrativas", None], ["Consultorio Médico", None], ["Consultorio Odontológico", None]]}],
-    12: [{"piso": "Piso 1", "espacios": [["Aula 18", None], ["Aula 19", None], ["Aula 20", None]]},
+    12: [{"piso": "Piso 1", "espacios": [["Aula 18", None], ["Aula 19", None], ["Aula 20", "Laboratorio de Cómputo #3"]]},
          {"piso": "Piso 2", "espacios": [["Aula 21", None], ["Aula 22", None], ["Aula 23", None]]}],
     13: [{"piso": "Piso 1", "espacios": [["Laboratorio de Ingeniería Química", None], ["Simulador de Navegación", None]]},
-         {"piso": "Piso 2", "espacios": [["Aula 24", None], ["Laboratorio de Física", None], ["Otros simuladores", None]]}],
+         {"piso": "Piso 2", "espacios": [["Orientación", None], ["Aula 24", "Laboratorio de Cómputo #4"], ["Laboratorio de Física", None], ["Otros simuladores", None]]}],
 }
 
 # Edificios: número del croquis, forma y pisos. rect = (cx, cy, largo, ancho, giro en grados, horario)
@@ -104,7 +104,7 @@ EDIFICIOS = [
     # (anotaciones) más atrás de lo que marca el croquis, lejos del pasillo 27, con su propio pasillo techado
     {"id": 4, "hex": (672, 1490, 36), "pisos": 1,
      "estilo": {"techo": "#6fa596", "fascia": "#a9d4ef", "alero": 2.8, "columnas": "#3f6f9e", "linterna_hex": True}},
-    # Miniauditorio (fotos): blanco, franja alta de paneles grises, losa de techo muy volada sobre columnas de
+    # Auditorio (fotos): blanco, franja alta de paneles grises, losa de techo muy volada sobre columnas de
     # acero en V, mural de cerámica hacia la calle y parasoles celestes junto a la puerta lateral
     # (fotos y anotaciones) más atrás que en el croquis: entre la fachada del mural y la calle hay una plaza
     {"id": 5, "rect": (989, 1292, 100, 100, 34), "pisos": 1, "alto": 7.5,
@@ -233,7 +233,7 @@ def marco(id_, u, v):
 # los que dependen de las calles se calculan en main().
 PUENTE_PEATONAL_X = 1775          # sobre la ruta 32, al norte de los edificios 12 y 13
 CASETA_GUARDA = (1045, 1197)      # en la isla de zacate entre las calles, al sur de la entrada
-BANO_MINIAUDITORIO = (925, 1361)  # al suroeste del miniauditorio, entre él y el sendero
+BANO_MINIAUDITORIO = (925, 1361)  # al suroeste del auditorio, entre él y el sendero
 # sendero techado que sube desde la calle (cerca del paso de la quebrada) hasta la explanada
 # (anotaciones) el tramo de abajo sale de la calle más al este y sube derecho hasta donde el sendero da la vuelta
 # Los árboles se colocan con números al azar que dependen de qué puntos quedan libres: si cambia un despeje, se
@@ -514,7 +514,7 @@ def lugares_nuevos(calles, quebrada, lejos_carretera, y_ruta32):
     pasillo([marco(7, -74, 6), marco(7, -90, 2), (1118, 1374)] + union7)
     # (anotaciones) el pasillo del lado de la piscina termina antes de la esquina sur del 7
     pasillo([marco(9, 84, 38), marco(9, 84, 0), marco(8, 84, 0), marco(7, 84, 0), marco(7, 84, -8)])
-    # sendero techado que sube de la calle a la explanada (29), pasando junto al baño del miniauditorio (31)
+    # sendero techado que sube de la calle a la explanada (29), pasando junto al baño del auditorio (31)
     # (fotos) el sendero sube a la explanada entre muros celestes, con baranda gris, y entra a ella por el norte
     pasillo(junto_calle(SENDERO_EXPLANADA[:1], 9, calles) + SENDERO_EXPLANADA[1:] + [(856, 1170)], techo=False, ancho=2.0, subida=3.5,
             cima=(945, 1212), limpiar=despejar_post)
@@ -530,7 +530,7 @@ def lugares_nuevos(calles, quebrada, lejos_carretera, y_ruta32):
     elem.append({"tipo": "explanada", "id": 29, "contorno": M(EXPLANADA), "centro": a_metros(*ex.mean(axis=0)), "alto": 3.5,
                  "arbol": a_metros(*(ex.mean(axis=0) + (-14, 6)))})
 
-    # --- plaza frente al Miniauditorio (fotos): concreto con guía táctil, bancas de concreto celeste
+    # --- plaza frente al Auditorio (fotos): concreto con guía táctil, bancas de concreto celeste
     plaza5 = [marco(5, 52, -56), marco(5, 82, -56), marco(5, 82, 56), marco(5, 52, 56)]
     cv2.fillPoly(claro_plaza, [np.array(plaza5, np.int32)], 255)
     cv2.fillPoly(despejar, [np.array(plaza5, np.int32)], 1)
@@ -545,7 +545,7 @@ def lugares_nuevos(calles, quebrada, lejos_carretera, y_ruta32):
     hx, hy = xs_[k_] - 60, ys_[k_] - 60
     elem.append({"tipo": "pluma", "id": None, "p": a_metros(CASETA_GUARDA[0] + hx * 0.8, CASETA_GUARDA[1] + hy * 0.8),
                  "giro": round(math.atan2(hx, hy), 3), "largo": 4.5})
-    # baños del Miniauditorio (31): el ala baja del mismo edificio (fotos), pegada a su cara suroeste, con celosías
+    # baños del Auditorio (31): el ala baja del mismo edificio (fotos), pegada a su cara suroeste, con celosías
     # y entrada propia bajo el alero
     caja(31, "caseta", marco(5, -20, -74), 34, 14.0, 12.0, alto=3.4, uso="ala_moderna")
     # caseta de arriba (37, fotos): torre blanca de dos niveles, cuartos eléctricos abajo y escalera metálica azul

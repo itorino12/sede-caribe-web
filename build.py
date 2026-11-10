@@ -323,7 +323,7 @@ def preparar(sitio, d):
         # «cifras-<id>»: datos destacados opcionales; el documento los ubica con un párrafo que diga solo [[cifras]]
         html = md(leer_pagina(u.get("documento")))
         antes, _, despues = html.partition("<p>[[cifras]]</p>")
-        unidades.append({**u, "html": antes, "html_despues": despues, "extensiones": ext,
+        unidades.append({**u, "html": antes, "html_despues": despues, "extensiones": ext, "fotos": fotos_de(u, "unidades"),
                          "cifras": leer_tabla(f"cifras-{u['id']}")[0]})
 
     proyectos = []
@@ -366,7 +366,7 @@ def preparar(sitio, d):
              [("portada", "entrada.jpg"), ("portada_noche", "entrada-noche.jpg"), ("carreras", "auditorio.jpg"), ("historia", "edificio-aulas.jpg")]}
 
     return {"semana": semana, "fotos": fotos, "avisos": avisos, "noticias": noticias, "eventos": eventos, "recientes": recientes, "agenda": agenda,
-            "carreras": carreras, "unidades": unidades, "unidad": {u["id"]: u for u in unidades},
+            "carreras": carreras, "unidades": unidades, "aulas": json.loads((SRC / "data" / "aulas.json").read_text(encoding="utf-8")), "unidad": {u["id"]: u for u in unidades},
             "directorio": grupos_dir, "enlaces": enlaces, "hitos": d["hitos"], "cifras": d["cifras"], "modalidades": modalidades,
             "categorias": sorted({n["categoria"] for n in noticias if n.get("categoria")}),
             "areas": list(dict.fromkeys(c["area"] for c in carreras))}

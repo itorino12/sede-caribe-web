@@ -528,7 +528,7 @@ for (const e of datos.campus.edificios) {
       const borde = new THREE.Mesh(new THREE.CylinderGeometry(3.62, 3.62, 0.18, 6), new THREE.MeshStandardMaterial({ color: 0x3f6f9e })); borde.position.set(e.centro[0], e.cumbre + 0.2, e.centro[1]);
       grupo.add(anillo, tapa, borde);
     }
-    if (estilo.moderno) {   // Miniauditorio (fotos): franja alta gris, losa muy volada, columnas en V, mural y parasoles
+    if (estilo.moderno) {   // Auditorio (fotos): franja alta gris, losa muy volada, columnas en V, mural y parasoles
       const c = e.volumenes[0].contorno;
       grupo.add(prisma(c, e.alto * 0.36, e.alto * 0.64, new THREE.MeshStandardMaterial({ color: 0xd2d5d8, roughness: 0.8 }), 0.05));
       grupo.add(prisma(desplazar(c, 4.2), 0.35, e.alto, mat.techo));
@@ -1025,7 +1025,7 @@ if (datos.campus.parqueo) {
       const losa = bloque(largo + 2.2, 0.18, ancho + 1.6, techoM, 0.6, alto + 0.3); losa.rotation.z = 0.06;
       for (const z of [-ancho / 2 - 0.4, ancho / 2 + 0.4]) { const c = new THREE.Mesh(new THREE.CylinderGeometry(0.08, 0.08, alto + 0.4, 8), acero); c.position.set(largo / 2 + 1.2, (alto + 0.4) / 2, z); c.rotation.z = 0.25; g.add(c); }
       puerta(0, ancho / 2 + 0.05, vidrio);
-    } else if (uso === "ala_moderna") {   // ala de baños del Miniauditorio: blanca, celosías arriba, losa gris volada
+    } else if (uso === "ala_moderna") {   // ala de baños del Auditorio: blanca, celosías arriba, losa gris volada
       bloque(largo, alto, ancho, pared);
       bloque(largo + 0.08, 0.6, ancho + 0.08, mate(0xe9ebec), 0, alto - 0.55);
       techoM = mate(0xd9dcdf);
@@ -1380,7 +1380,7 @@ if (datos.campus.parqueo) {
     registrar(g, id, new THREE.Vector3(hasta[0], 4, hasta[1]), { pared: sinUso(), techo: sinUso() }, 0);
   }
 
-  // bancas de concreto celeste (plaza del Miniauditorio)
+  // bancas de concreto celeste (plaza del Auditorio)
   function bancas({ puntos, giro }) {
     const g = new THREE.Group(), mat = mate(0x9cc4df, { roughness: 0.9 });
     for (const [x, z] of puntos) {
