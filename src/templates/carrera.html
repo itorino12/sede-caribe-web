@@ -29,7 +29,8 @@
       {% elif carrera.plan_url %}<a class="boton boton--bloque" href="{{ carrera.plan_url }}">Plan de estudios</a>{% endif %}
       <a class="ficha__enlace" href="{{ raiz }}admision.html">Cómo ingresar</a>
     </aside>
-    {{ contacto(carrera, raiz) }}
+    {{ contacto(carrera, raiz, f.titulo_contacto or 'Contacto') }}
+    {% for k in f.contactos or [] %}{{ contacto(k, raiz, k.titulo) }}{% endfor %}
   </div>
 </div>
 
@@ -44,11 +45,12 @@
       <div class="malla-areas__botones" role="group" aria-label="Resaltar un área de la malla">
         {% for a in m.areas %}<button type="button" class="malla-area" aria-pressed="false" data-area="{{ a.id }}" style="--c:{{ a.color }};--c-o:{{ a.oscuro }}" title="{{ a.descripcion }}"><span class="malla-area__muestra"></span>{{ a.corto }} <b>{{ a.creditos }}</b></button>{% endfor %}
       </div>
-      <p class="malla-areas__total">{{ m.total }} créditos en total, con optativos por área. Además, {{ m.tcu }} horas de Trabajo Comunal Universitario.</p>
+      <p class="malla-areas__total">{{ m.resumen_creditos or (m.total ~ " créditos en total.") }}{% if m.tcu %} Además, {{ m.tcu }} horas de Trabajo Comunal Universitario.{% endif %}</p>
     </div>
 
     <div class="malla-cuerpo">
-      <div class="malla" data-malla>
+      {% set hay_verano = m.ciclos|selectattr("verano")|list|length > 0 %}
+      <div class="malla{% if not hay_verano %} malla--sin-verano{% endif %}" data-malla>
         <svg class="malla__lineas" aria-hidden="true"><defs>
           <marker id="flecha-req" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z"/></marker>
           <marker id="flecha-abre" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z"/></marker>
@@ -56,16 +58,17 @@
         {% set nombres_anio = ["Primer año", "Segundo año", "Tercer año", "Cuarto año", "Quinto año", "Sexto año"] %}
         {% for anio, ciclos in m.ciclos|groupby("anio") %}
         <div class="malla__anio">
-          <h3 class="malla__anio-t">{{ nombres_anio[anio - 1] }}</h3>
+          {% set tramo = (ciclos|selectattr("tramo")|map(attribute="tramo")|first) %}
+          <h3 class="malla__anio-t">{{ nombres_anio[anio - 1] }}{% if tramo %} <span>· {{ tramo }}</span>{% endif %}</h3>
           {% set regulares = ciclos|rejectattr("verano")|list %}
-          {% for c in regulares + [None] * (2 - regulares|length) + (ciclos|selectattr("verano")|list or [None]) %}
+          {% for c in regulares + [None] * (2 - regulares|length) + ((ciclos|selectattr("verano")|list or [None]) if hay_verano else []) %}
           {% if c %}
           <div class="malla__ciclo{% if c.verano %} malla__ciclo--verano{% endif %}">
             <h4>{{ c.nombre }} <span>{{ c.creditos }} cr.</span></h4>
             <ul>
               {% for x in m.cursos if x.ciclo == c.n %}{% set a = m.areas|selectattr("id", "equalto", x.area)|first %}
               <li><button type="button" class="curso{% if x.optativo %} curso--optativo{% endif %}" data-sigla="{{ x.sigla }}" data-area="{{ x.area }}" style="--c:{{ a.color }};--c-o:{{ a.oscuro }}" aria-pressed="false" aria-describedby="malla-ayuda">
-                <span class="curso__sigla">{{ 'Optativo' if x.optativo else x.sigla }}</span>
+                <span class="curso__sigla">{{ (x.etiqueta or 'Optativo') if x.optativo else x.sigla }}</span>
                 <span class="curso__nombre">{{ x.nombre|replace('Optativo del área de ', '') }}</span>
                 <span class="curso__cr">{{ x.creditos }} cr.</span>
               </button></li>
@@ -93,22 +96,24 @@
       {% for c in m.ciclos %}
       <table>
         <caption>{{ c.nombre }} · {{ c.creditos }} créditos</caption>
-        <thead><tr><th scope="col">Sigla</th><th scope="col">Curso</th><th scope="col">Créditos</th><th scope="col">Requisitos</th><th scope="col">Programa</th></tr></thead>
-        <tbody>{% for x in m.cursos if x.ciclo == c.n %}<tr><td>{{ '—' if x.optativo else x.sigla }}</td><td>{{ x.nombre }}</td><td>{{ x.creditos }}</td><td>{{ x.req_texto or ('Según el optativo elegido' if x.optativo else (x.req|join(', ') or 'Ninguno')) }}</td><td>{% if x.programa %}<a href="{{ raiz }}{{ x.programa.archivo }}">PDF, {{ x.programa.ciclo }}</a>{% else %}—{% endif %}</td></tr>{% endfor %}</tbody>
+        <thead><tr><th scope="col">Sigla</th><th scope="col">Curso</th><th scope="col">Créditos</th><th scope="col">Requisitos</th>{% if m.cursos|selectattr("coreq_texto")|list %}<th scope="col">Correquisitos</th>{% endif %}<th scope="col">Programa</th></tr></thead>
+        <tbody>{% for x in m.cursos if x.ciclo == c.n %}<tr><td>{{ '—' if x.optativo else x.sigla }}</td><td>{{ x.nombre }}</td><td>{{ x.creditos }}</td><td>{{ x.req_texto or ('Según el optativo elegido' if x.optativo else (x.req|join(', ') or 'Ninguno')) }}</td>{% if m.cursos|selectattr("coreq_texto")|list %}<td>{{ x.coreq_texto or '—' }}</td>{% endif %}<td>{% if x.programa %}<a href="{{ raiz }}{{ x.programa.archivo }}">PDF, {{ x.programa.ciclo }}</a>{% else %}—{% endif %}</td></tr>{% endfor %}</tbody>
       </table>
       {% endfor %}
     </details>
 
-    <h3 class="malla-opt-t">Cursos optativos por área de tendencia</h3>
+    {% set listas = m.listas_optativos or [] %}
+    <h3 class="malla-opt-t">{{ m.titulo_optativos or "Cursos optativos por área de tendencia" }}</h3>
     <div class="malla-optativos">
-      {% for a in m.areas if m.optativos[a.id] %}
-      <section class="optativos" style="--c:{{ a.color }};--c-o:{{ a.oscuro }}" aria-labelledby="opt-{{ a.id }}">
-        <h4 id="opt-{{ a.id }}">{{ a.nombre }}</h4>
+      {% for a in (listas if listas else m.areas) if m.optativos[a.id] %}{% set ar = m.areas|selectattr("id", "equalto", a.color_de or a.id)|first %}
+      <section class="optativos" style="--c:{{ ar.color if ar else '#5F6B78' }};--c-o:{{ ar.oscuro if ar else '#A9B4BF' }}" aria-labelledby="opt-{{ a.id }}">
+        <h4 id="opt-{{ a.id }}">{{ a.titulo or a.nombre }}</h4>
+        {% if a.nota %}<p class="optativos__meta">{{ a.nota }}</p>{% endif %}
         <ul>{% for o in m.optativos[a.id] %}<li><b>{{ o.sigla }}</b> {{ o.nombre }} <span class="optativos__meta">{{ o.creditos }} cr.{% if o.req_texto %} · Requisito: {{ o.req_texto }}{% endif %}</span>{% if o.programa %} <a href="{{ raiz }}{{ o.programa.archivo }}">Programa<span class="oculto"> de {{ o.nombre }}</span> (PDF, {{ o.programa.ciclo }})</a>{% endif %}</li>{% endfor %}</ul>
       </section>
       {% endfor %}
     </div>
-    <p class="malla-fuente">{{ f.fuente }} Las siglas que siguen a «o» en los requisitos son los cursos equivalentes del plan anterior.</p>
+    <p class="malla-fuente">{{ f.fuente }} {{ m.nota_fuente or "Las siglas que siguen a «o» en los requisitos son los cursos equivalentes del plan anterior." }}</p>
   </div>
   <script type="application/json" id="malla-datos">{{ m|tojson }}</script>
   <script src="{{ raiz }}assets/js/malla.js" defer data-raiz="{{ raiz }}"></script>

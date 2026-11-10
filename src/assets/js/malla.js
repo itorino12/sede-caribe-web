@@ -58,7 +58,11 @@
     h += '<p class="malla-panel__area" style="--c:' + a.color + ";--c-o:" + a.oscuro + '">' + esc(a.nombre) + "</p>";
     h += '<h3 id="malla-panel-t">' + (c.optativo ? "" : '<span class="malla-panel__sigla">' + esc(c.sigla) + "</span> ") + esc(c.nombre) + "</h3>";
     h += '<dl class="malla-panel__datos"><dt>Ciclo</dt><dd>' + esc(ciclo[c.ciclo]) + "</dd><dt>Créditos</dt><dd>" + c.creditos + "</dd>";
-    if (c.horas) h += "<dt>Horas por semana</dt><dd>" + c.horas.teoria + " de teoría y " + c.horas.practica + " de práctica</dd>";
+    if (c.horas) {
+      var partes = [["teoria", "de teoría"], ["practica", "de práctica"], ["laboratorio", "de laboratorio"], ["teorico_practica", "teórico-prácticas"]]
+        .filter(function (x) { return c.horas[x[0]]; }).map(function (x) { return c.horas[x[0]] + " " + x[1]; });
+      if (partes.length) h += "<dt>Horas por semana</dt><dd>" + partes.join(", ").replace(/, ([^,]*)$/, " y $1") + "</dd>";
+    }
     h += "</dl>";
     if (c.desc) h += "<p>" + esc(c.desc) + "</p>";
     var req = (c.req || []).filter(function (r) { return cursos[r]; });
@@ -66,18 +70,20 @@
     h += req.length ? "<ul>" + req.map(function (r) { return "<li>" + enlaceCurso(r) + "</li>"; }).join("") + "</ul>" : "<p>Ninguno: se puede llevar desde el inicio.</p>";
     if (c.req_texto && !c.optativo && /\bo\b/.test(c.req_texto) && req.some(function (r) { return cursos[r].optativo; })) h += '<p class="malla-panel__nota">Requisito oficial: ' + esc(c.req_texto) + ".</p>";
     h += equivalencias(c);
+    var co = (c.coreq || []).filter(function (r) { return cursos[r]; });
+    if (co.length) h += "<h4>Correquisitos</h4><p class=\"malla-panel__nota\">Se matriculan en el mismo ciclo, salvo que ya estén aprobados.</p><ul>" + co.map(function (r) { return "<li>" + enlaceCurso(r) + "</li>"; }).join("") + "</ul>";
     var siguientes = abre[c.sigla];
     h += '<h4><span class="marca marca--abre">Se abren al aprobarlo</span></h4>';
     h += siguientes.length ? "<ul>" + siguientes.map(function (s) { return "<li>" + enlaceCurso(s) + "</li>"; }).join("") + "</ul>" : "<p>No es requisito de otro curso de la malla.</p>";
     if (c.nota) h += '<p class="malla-panel__nota">' + esc(c.nota) + "</p>";
     if (c.optativo) {
-      var lista = datos.optativos[c.area] || [];
+      var lista = datos.optativos[c.lista || c.area] || [];
       h += "<h4>Cursos que puede elegir</h4><ul class=\"malla-panel__opt\">" + lista.map(function (o) {
         return "<li><b>" + esc(o.sigla) + "</b> " + esc(o.nombre) + ' <span class="optativos__meta">Requisito: ' + esc(o.req_texto || "ninguno") + "</span>" +
           (o.programa ? ' <a href="' + raiz + esc(o.programa.archivo) + '" download>Programa (PDF, ' + esc(o.programa.ciclo) + ")</a>" : "") + "</li>";
       }).join("") + "</ul>";
     } else {
-      h += c.programa ? programa(c.programa, c.nombre) : '<p class="malla-panel__nota">El programa se publicará cuando el curso se imparta por primera vez en el Plan 07.</p>';
+      h += c.programa ? programa(c.programa, c.nombre) : '<p class="malla-panel__nota">' + esc(datos.sin_programa || "El programa de este curso todavía no está publicado en el sitio.") + "</p>";
     }
     detalle.innerHTML = h;
   }

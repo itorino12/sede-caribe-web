@@ -54,14 +54,14 @@
 </article>
 {% endmacro %}
 
-{% macro contacto(u, raiz) %}
-<aside class="ficha" aria-label="Contacto">
-  <h2 class="ficha__titulo">Contacto</h2>
+{% macro contacto(u, raiz, titulo='Contacto') %}
+<aside class="ficha" aria-label="{{ titulo }}">
+  <h2 class="ficha__titulo">{{ titulo }}</h2>
   <dl>
     {% if u.responsable %}<dt>{{ u.cargo or 'A cargo' }}</dt><dd>{{ u.responsable }}</dd>{% endif %}
     {% if u.coordinacion %}<dt>Coordinación</dt><dd>{{ u.coordinacion }}</dd>{% endif %}
     {% if u.extension %}<dt>Teléfono</dt><dd><a href="{{ u.extension|tel }}">{{ u.extension }}</a></dd>{% endif %}
-    {% if u.correo %}<dt>Correo</dt><dd><a href="mailto:{{ u.correo }}">{{ u.correo }}</a></dd>{% endif %}
+    {% if u.correo %}<dt>Correo</dt><dd><a href="mailto:{{ u.correo }}">{{ (u.correo|e)|replace('@', '<wbr>@'|safe)|replace('.', '.<wbr>'|safe) }}</a></dd>{% endif %}
     {% if u.edificio %}<dt>Dónde</dt><dd>{{ u.edificio }}</dd>{% endif %}
   </dl>
   {% if not (u.extension or u.correo) %}<p>Central telefónica <a href="{{ sitio.telefono|tel }}">{{ sitio.telefono }}</a></p>{% endif %}

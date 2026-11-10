@@ -883,7 +883,9 @@
      "req_texto": "IF-0019"
     }
    ]
-  }
+  },
+  "sin_programa": "El programa se publicará cuando el curso se imparta por primera vez en el Plan 07.",
+  "resumen_creditos": "144 créditos en total, con optativos por área."
  },
  "actualizacion": {
   "titulo": "Plan 07: la malla se renovó por completo",
@@ -1086,5 +1088,13 @@
   "texto": "La carrera se imparte en diez sedes y recintos de la UCR y la coordina el Consejo de Carrera Intersedes.",
   "url": "https://informaticaempresarial.ucr.ac.cr/",
   "nombre": "informaticaempresarial.ucr.ac.cr"
- }
+ },
+ "titulo_contacto": "Contacto en Limón",
+ "contactos": [
+  {
+   "titulo": "Contacto en Siquirres",
+   "coordinacion": "MCi. Walter Felipe Jenkins Cruz",
+   "correo": "informaticaempresarial.siquirres@ucr.ac.cr"
+  }
+ ]
 }

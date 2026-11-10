@@ -872,6 +872,8 @@ html.sin-desplazar, html.sin-desplazar body { overflow: hidden; }
 #flecha-req path { fill: var(--azul); }
 #flecha-abre path { fill: var(--verde-texto); }
 .malla__anio { display: grid; grid-template-columns: 1fr 1fr minmax(150px, .75fr); gap: 12px; padding: 12px; background: var(--papel); border: 1px solid var(--linea); }
+.malla--sin-verano .malla__anio { grid-template-columns: 1fr 1fr; }
+.malla__anio-t span { text-transform: none; letter-spacing: 0; font-weight: 400; }
 .malla__anio-t { grid-column: 1 / -1; margin: 0; font-size: var(--t-sm); text-transform: uppercase; letter-spacing: .06em; color: var(--tinta-2); }
 .malla__ciclo h4 { display: flex; justify-content: space-between; gap: 8px; margin: 0 0 8px; font-size: var(--t-sm); color: var(--azul); }
 .malla__ciclo h4 span { color: var(--tinta-2); font-weight: 400; }

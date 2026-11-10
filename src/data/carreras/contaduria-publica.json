@@ -1,0 +1,1178 @@
+{
+ "fuente": "Estructura curricular del Bachillerato y Licenciatura en Contaduría Pública, código 330103, Plan 2 (Informe curricular CEA-05-2025). Las áreas de color agrupan los cursos por tema para facilitar la lectura; no son una división oficial del plan.",
+ "lema": "Información financiera confiable para decidir mejor",
+ "planes": [
+  {
+   "nombre": "Plan de estudios",
+   "detalle": "Código 330103, Plan 2 · PDF",
+   "url": "assets/docs/contaduria-publica-plan-2.pdf",
+   "principal": true
+  }
+ ],
+ "cifras": [
+  {
+   "valor": "174",
+   "etiqueta": "créditos: 140 del bachillerato y 34 de la licenciatura"
+  },
+  {
+   "valor": "5 años",
+   "etiqueta": "en 10 ciclos lectivos"
+  },
+  {
+   "valor": "46",
+   "etiqueta": "cupos en Limón para el ingreso 2026"
+  },
+  {
+   "valor": "506,77",
+   "etiqueta": "nota de corte en Limón, ingreso 2026"
+  }
+ ],
+ "malla": {
+  "plan": "Plan 2",
+  "total": 174,
+  "tcu": null,
+  "resumen_creditos": "174 créditos: 140 del bachillerato (ocho ciclos) y 34 de la licenciatura (dos ciclos).",
+  "nota_fuente": "Las siglas que siguen a «o» en los requisitos son cursos equivalentes de otros planes o carreras.",
+  "areas": [
+   {
+    "id": "CON",
+    "nombre": "Contabilidad y costos",
+    "corto": "Contabilidad",
+    "color": "#0A6AA6",
+    "oscuro": "#5AAEE0",
+    "descripcion": "Contabilidad básica, intermedia, avanzada y gubernamental, contabilizaciones especiales y sistemas de costeo.",
+    "creditos": 31
+   },
+   {
+    "id": "AUD",
+    "nombre": "Auditoría y control",
+    "corto": "Auditoría",
+    "color": "#00796B",
+    "oscuro": "#4DB6A8",
+    "descripcion": "Auditoría financiera, informática, de gestión e interna, muestreo y control interno.",
+    "creditos": 37
+   },
+   {
+    "id": "FIN",
+    "nombre": "Finanzas y métodos cuantitativos",
+    "corto": "Finanzas",
+    "color": "#5A47A6",
+    "oscuro": "#A595E6",
+    "descripcion": "Matemática financiera, administración financiera, proyectos y métodos cuantitativos para decidir.",
+    "creditos": 18
+   },
+   {
+    "id": "LEG",
+    "nombre": "Legislación y entorno",
+    "corto": "Legislación y entorno",
+    "color": "#A8550A",
+    "oscuro": "#E8A060",
+    "descripcion": "Legislación empresarial, comercial, laboral y tributaria, y el entorno económico de los negocios.",
+    "creditos": 18
+   },
+   {
+    "id": "ADM",
+    "nombre": "Administración, mercadeo e investigación",
+    "corto": "Administración",
+    "color": "#B0306A",
+    "oscuro": "#E58BB5",
+    "descripcion": "Administración de negocios, liderazgo, mercadeo, ofimática e investigación.",
+    "creditos": 27
+   },
+   {
+    "id": "MAT",
+    "nombre": "Matemática y estadística",
+    "corto": "Matemática",
+    "color": "#3B6E2C",
+    "oscuro": "#8CC27A",
+    "descripcion": "Precálculo, cálculo para ciencias económicas y estadística general.",
+    "creditos": 16
+   },
+   {
+    "id": "FG",
+    "nombre": "Formación general",
+    "corto": "Formación general",
+    "color": "#5F6B78",
+    "oscuro": "#A9B4BF",
+    "descripcion": "Humanidades, Seminarios de Realidad Nacional, Arte, Actividad Deportiva y Repertorio.",
+    "creditos": 21
+   },
+   {
+    "id": "OPT",
+    "nombre": "Optativos y opcionales",
+    "corto": "Optativos",
+    "color": "#7A5C00",
+    "oscuro": "#D9B550",
+    "descripcion": "Dos optativos en la licenciatura e inglés para negocios opcional.",
+    "creditos": 6
+   }
+  ],
+  "ciclos": [
+   {
+    "n": "I",
+    "anio": 1,
+    "nombre": "I ciclo",
+    "verano": false,
+    "creditos": 17
+   },
+   {
+    "n": "II",
+    "anio": 1,
+    "nombre": "II ciclo",
+    "verano": false,
+    "creditos": 16
+   },
+   {
+    "n": "III",
+    "anio": 2,
+    "nombre": "III ciclo",
+    "verano": false,
+    "creditos": 18
+   },
+   {
+    "n": "IV",
+    "anio": 2,
+    "nombre": "IV ciclo",
+    "verano": false,
+    "creditos": 18
+   },
+   {
+    "n": "V",
+    "anio": 3,
+    "nombre": "V ciclo",
+    "verano": false,
+    "creditos": 17
+   },
+   {
+    "n": "VI",
+    "anio": 3,
+    "nombre": "VI ciclo",
+    "verano": false,
+    "creditos": 18
+   },
+   {
+    "n": "VII",
+    "anio": 4,
+    "nombre": "VII ciclo",
+    "verano": false,
+    "creditos": 18
+   },
+   {
+    "n": "VIII",
+    "anio": 4,
+    "nombre": "VIII ciclo",
+    "verano": false,
+    "creditos": 18
+   },
+   {
+    "n": "IX",
+    "anio": 5,
+    "nombre": "IX ciclo",
+    "verano": false,
+    "creditos": 17,
+    "tramo": "Licenciatura"
+   },
+   {
+    "n": "X",
+    "anio": 5,
+    "nombre": "X ciclo",
+    "verano": false,
+    "creditos": 17,
+    "tramo": "Licenciatura"
+   }
+  ],
+  "cursos": [
+   {
+    "sigla": "DN-0101",
+    "nombre": "Introducción a la Administración de Negocios",
+    "ciclo": "I",
+    "area": "ADM",
+    "creditos": 3,
+    "req": [],
+    "horas": {
+     "teoria": 1,
+     "practica": 2
+    }
+   },
+   {
+    "sigla": "DN-0102",
+    "nombre": "Aplicaciones Ofimáticas para la Toma de Decisiones",
+    "ciclo": "I",
+    "area": "ADM",
+    "creditos": 3,
+    "req": [],
+    "horas": {
+     "teoria": 2,
+     "laboratorio": 2
+    }
+   },
+   {
+    "sigla": "EG-",
+    "nombre": "Curso de Arte",
+    "ciclo": "I",
+    "area": "FG",
+    "creditos": 2,
+    "req": [],
+    "nota": "Se elige entre la oferta de la Sede para cada ciclo."
+   },
+   {
+    "sigla": "EG-I",
+    "nombre": "Curso Integrado de Humanidades I",
+    "ciclo": "I",
+    "area": "FG",
+    "creditos": 6,
+    "req": []
+   },
+   {
+    "sigla": "MA-0001",
+    "nombre": "Precálculo",
+    "ciclo": "I",
+    "area": "MAT",
+    "creditos": 0,
+    "req": [],
+    "horas": {
+     "teoria": 5
+    }
+   },
+   {
+    "sigla": "RP-",
+    "nombre": "Repertorio",
+    "ciclo": "I",
+    "area": "FG",
+    "creditos": 3,
+    "req": [],
+    "nota": "Se elige entre la oferta de la Sede para cada ciclo."
+   },
+   {
+    "sigla": "DN-0103",
+    "nombre": "Administración de Proyectos y Herramientas para el Análisis de Datos",
+    "ciclo": "II",
+    "area": "ADM",
+    "creditos": 3,
+    "req": [
+     "DN-0102"
+    ],
+    "horas": {
+     "teoria": 2,
+     "laboratorio": 2
+    },
+    "req_texto": "DN-0102 o DN-0170 o CI-0101"
+   },
+   {
+    "sigla": "DN-0104",
+    "nombre": "Elementos Fundamentales de Legislación Empresarial",
+    "ciclo": "II",
+    "area": "LEG",
+    "creditos": 3,
+    "req": [
+     "DN-0101"
+    ],
+    "horas": {
+     "teoria": 2,
+     "practica": 1
+    },
+    "req_texto": "DN-0101 o PC-0170 o XS-3510"
+   },
+   {
+    "sigla": "EF-",
+    "nombre": "Actividad Deportiva",
+    "ciclo": "II",
+    "area": "FG",
+    "creditos": 0,
+    "req": [],
+    "nota": "Se elige entre la oferta de la Sede para cada ciclo."
+   },
+   {
+    "sigla": "EG-II",
+    "nombre": "Curso Integrado de Humanidades II",
+    "ciclo": "II",
+    "area": "FG",
+    "creditos": 6,
+    "req": [
+     "EG-I"
+    ]
+   },
+   {
+    "sigla": "MA-1021",
+    "nombre": "Cálculo para Ciencias Económicas I",
+    "ciclo": "II",
+    "area": "MAT",
+    "creditos": 4,
+    "req": [
+     "MA-0001"
+    ],
+    "horas": {
+     "teoria": 5
+    }
+   },
+   {
+    "sigla": "PC-0200",
+    "nombre": "Contabilidad Básica",
+    "ciclo": "III",
+    "area": "CON",
+    "creditos": 4,
+    "req": [
+     "DN-0101"
+    ],
+    "horas": {
+     "teoria": 2,
+     "practica": 2
+    },
+    "req_texto": "DN-0101 o PC-0170 o XE-0156 o EC-1100 o XS-3510"
+   },
+   {
+    "sigla": "PC-0240",
+    "nombre": "Matemática Financiera",
+    "ciclo": "III",
+    "area": "FIN",
+    "creditos": 3,
+    "req": [
+     "MA-1021"
+    ],
+    "horas": {
+     "teoria": 2,
+     "practica": 1
+    },
+    "req_texto": "MA-1021 o XS-3510"
+   },
+   {
+    "sigla": "PC-0261",
+    "nombre": "Legislación Comercial, Bancaria y Financiera",
+    "ciclo": "III",
+    "area": "LEG",
+    "creditos": 3,
+    "req": [
+     "DN-0104",
+     "PC-0260"
+    ],
+    "horas": {
+     "teoria": 2,
+     "practica": 1
+    },
+    "req_texto": "DN-0104 o DN-0380 o PC-0260"
+   },
+   {
+    "sigla": "XS-0276",
+    "nombre": "Estadística General I",
+    "ciclo": "III",
+    "area": "MAT",
+    "creditos": 4,
+    "req": [
+     "MA-1021"
+    ],
+    "horas": {
+     "teoria": 2,
+     "practica": 2
+    },
+    "req_texto": "MA-1001 o MA-0230 o MA-0225 o MA-1021"
+   },
+   {
+    "sigla": "OPC-1",
+    "nombre": "Inglés para negocios (opcional)",
+    "ciclo": "III",
+    "area": "OPT",
+    "creditos": 0,
+    "req": [],
+    "optativo": true,
+    "lista": "OPC",
+    "nota": "Este espacio no es obligatorio: permite matricular los cursos opcionales de inglés para fortalecer la formación.",
+    "etiqueta": "Opcional"
+   },
+   {
+    "sigla": "MA-1022",
+    "nombre": "Cálculo para Ciencias Económicas II",
+    "ciclo": "III",
+    "area": "MAT",
+    "creditos": 4,
+    "req": [
+     "MA-1021"
+    ],
+    "horas": {
+     "teoria": 5
+    }
+   },
+   {
+    "sigla": "SR-I",
+    "nombre": "Seminario de Realidad Nacional I",
+    "ciclo": "IV",
+    "area": "FG",
+    "creditos": 2,
+    "req": [
+     "EG-II"
+    ]
+   },
+   {
+    "sigla": "XS-0277",
+    "nombre": "Estadística General II",
+    "ciclo": "IV",
+    "area": "MAT",
+    "creditos": 4,
+    "req": [
+     "XS-0276",
+     "MA-1022"
+    ],
+    "horas": {
+     "teoria": 2,
+     "practica": 2
+    },
+    "req_texto": "XS-0276, MA-1022 o MA-0230"
+   },
+   {
+    "sigla": "PC-0202",
+    "nombre": "Contabilidad Intermedia I",
+    "ciclo": "IV",
+    "area": "CON",
+    "creditos": 3,
+    "req": [
+     "PC-0200"
+    ],
+    "horas": {
+     "teoria": 2,
+     "practica": 2
+    },
+    "req_texto": "PC-0200 o DN-0160"
+   },
+   {
+    "sigla": "PC-0260",
+    "nombre": "Legislación Laboral",
+    "ciclo": "IV",
+    "area": "LEG",
+    "creditos": 3,
+    "req": [
+     "PC-0261"
+    ],
+    "horas": {
+     "teoria": 2,
+     "practica": 1
+    },
+    "req_texto": "PC-0261 o DN-0380 o PC-0171"
+   },
+   {
+    "sigla": "DN-0123",
+    "nombre": "Metodología de la Investigación",
+    "ciclo": "IV",
+    "area": "ADM",
+    "creditos": 3,
+    "req": [
+     "XS-0276"
+    ],
+    "horas": {
+     "teoria": 2,
+     "practica": 1
+    }
+   },
+   {
+    "sigla": "DN-0340",
+    "nombre": "Administración Financiera I",
+    "ciclo": "IV",
+    "area": "FIN",
+    "creditos": 3,
+    "req": [
+     "PC-0240",
+     "PC-0200"
+    ],
+    "horas": {
+     "teoria": 2,
+     "practica": 1
+    },
+    "req_texto": "PC-0240 o DN-0202, PC-0200"
+   },
+   {
+    "sigla": "SR-II",
+    "nombre": "Seminario de Realidad Nacional II",
+    "ciclo": "V",
+    "area": "FG",
+    "creditos": 2,
+    "req": [
+     "SR-I"
+    ]
+   },
+   {
+    "sigla": "PC-0212",
+    "nombre": "Gerencia y Liderazgo para Contadores",
+    "ciclo": "V",
+    "area": "ADM",
+    "creditos": 3,
+    "req": [
+     "DN-0101"
+    ],
+    "horas": {
+     "teoria": 3
+    },
+    "req_texto": "DN-0101 o PC-0170"
+   },
+   {
+    "sigla": "PC-0241",
+    "nombre": "Negocios y Entorno Económico",
+    "ciclo": "V",
+    "area": "LEG",
+    "creditos": 3,
+    "req": [
+     "PC-0261"
+    ],
+    "horas": {
+     "teoria": 3
+    },
+    "req_texto": "PC-0261 o PC-0170"
+   },
+   {
+    "sigla": "PC-0304",
+    "nombre": "Contabilidad Intermedia II",
+    "ciclo": "V",
+    "area": "CON",
+    "creditos": 3,
+    "req": [
+     "PC-0240",
+     "PC-0202"
+    ],
+    "horas": {
+     "teoria": 2,
+     "practica": 2
+    },
+    "req_texto": "PC-0240, PC-0202"
+   },
+   {
+    "sigla": "PC-0320",
+    "nombre": "Auditoría Financiera I",
+    "ciclo": "V",
+    "area": "AUD",
+    "creditos": 3,
+    "req": [
+     "PC-0202",
+     "XS-0276"
+    ],
+    "horas": {
+     "teoria": 2,
+     "practica": 1
+    },
+    "req_texto": "PC-0202, XS-0276"
+   },
+   {
+    "sigla": "DN-0341",
+    "nombre": "Administración Financiera II",
+    "ciclo": "V",
+    "area": "FIN",
+    "creditos": 3,
+    "req": [
+     "DN-0340",
+     "XS-0277"
+    ],
+    "horas": {
+     "teoria": 2,
+     "practica": 1
+    },
+    "req_texto": "DN-0340, XS-0277"
+   },
+   {
+    "sigla": "PC-0211",
+    "nombre": "Muestreo Aplicado a la Auditoría",
+    "ciclo": "VI",
+    "area": "AUD",
+    "creditos": 3,
+    "req": [
+     "XS-0277",
+     "PC-0320"
+    ],
+    "horas": {
+     "teoria": 1,
+     "practica": 2
+    },
+    "req_texto": "XS-0277 o PC-0322, PC-0320",
+    "coreq": [
+     "PC-0321"
+    ],
+    "coreq_texto": "PC-0321"
+   },
+   {
+    "sigla": "PC-0242",
+    "nombre": "Entorno, Gestión y Control",
+    "ciclo": "VI",
+    "area": "LEG",
+    "creditos": 3,
+    "req": [
+     "PC-0241"
+    ],
+    "horas": {
+     "teoria": 3
+    }
+   },
+   {
+    "sigla": "PC-0305",
+    "nombre": "Contabilizaciones Especiales",
+    "ciclo": "VI",
+    "area": "CON",
+    "creditos": 3,
+    "req": [
+     "PC-0304"
+    ],
+    "horas": {
+     "teoria": 2,
+     "practica": 2
+    }
+   },
+   {
+    "sigla": "PC-0321",
+    "nombre": "Auditoría Financiera II",
+    "ciclo": "VI",
+    "area": "AUD",
+    "creditos": 3,
+    "req": [
+     "PC-0320"
+    ],
+    "horas": {
+     "teoria": 2,
+     "practica": 1
+    }
+   },
+   {
+    "sigla": "DN-0105",
+    "nombre": "Métodos Cuantitativos para la Toma de Decisiones I",
+    "ciclo": "VI",
+    "area": "FIN",
+    "creditos": 3,
+    "req": [
+     "DN-0340",
+     "XS-0277"
+    ],
+    "horas": {
+     "teoria": 2,
+     "practica": 2
+    },
+    "req_texto": "(DN-0340, XS-0277) o (PC-0322, PC-0343)",
+    "coreq": [
+     "DN-0341",
+     "DN-0320"
+    ],
+    "coreq_texto": "DN-0341, DN-0320"
+   },
+   {
+    "sigla": "DN-0320",
+    "nombre": "Principios de Mercadeo",
+    "ciclo": "VI",
+    "area": "ADM",
+    "creditos": 3,
+    "req": [
+     "PC-0200",
+     "XS-0276"
+    ],
+    "horas": {
+     "teoria": 3
+    },
+    "req_texto": "PC-0200, XS-0276",
+    "coreq": [
+     "DN-0105"
+    ],
+    "coreq_texto": "DN-0105"
+   },
+   {
+    "sigla": "PC-0204",
+    "nombre": "Laboratorio de Contabilidad",
+    "ciclo": "VII",
+    "area": "CON",
+    "creditos": 3,
+    "req": [
+     "PC-0305"
+    ],
+    "horas": {
+     "laboratorio": 3
+    },
+    "coreq": [
+     "PC-0407"
+    ],
+    "coreq_texto": "PC-0407"
+   },
+   {
+    "sigla": "PC-0306",
+    "nombre": "Sistemas de Costeo Básico",
+    "ciclo": "VII",
+    "area": "CON",
+    "creditos": 3,
+    "req": [
+     "PC-0304"
+    ],
+    "horas": {
+     "teoria": 2,
+     "practica": 2
+    }
+   },
+   {
+    "sigla": "PC-0344",
+    "nombre": "Formulación y Evaluación de Proyectos I",
+    "ciclo": "VII",
+    "area": "FIN",
+    "creditos": 3,
+    "req": [
+     "DN-0341"
+    ],
+    "horas": {
+     "teoria": 2,
+     "practica": 1
+    },
+    "req_texto": "DN-0341 o PC-0343"
+   },
+   {
+    "sigla": "PC-0407",
+    "nombre": "Contabilidad Avanzada I",
+    "ciclo": "VII",
+    "area": "CON",
+    "creditos": 3,
+    "req": [
+     "PC-0305"
+    ],
+    "horas": {
+     "teoria": 2,
+     "practica": 2
+    },
+    "coreq": [
+     "PC-0204"
+    ],
+    "coreq_texto": "PC-0204"
+   },
+   {
+    "sigla": "PC-0421",
+    "nombre": "Auditoría Financiera III",
+    "ciclo": "VII",
+    "area": "AUD",
+    "creditos": 3,
+    "req": [
+     "PC-0321"
+    ],
+    "horas": {
+     "teoria": 2,
+     "practica": 1
+    }
+   },
+   {
+    "sigla": "PC-0462",
+    "nombre": "Legislación Tributaria y Aduanera",
+    "ciclo": "VII",
+    "area": "LEG",
+    "creditos": 3,
+    "req": [
+     "PC-0304",
+     "PC-0260"
+    ],
+    "horas": {
+     "teoria": 2,
+     "practica": 1
+    },
+    "req_texto": "(PC-0304, PC-0260) o (DN-0381, DN-0261)"
+   },
+   {
+    "sigla": "PC-0205",
+    "nombre": "Contabilidad Gubernamental",
+    "ciclo": "VIII",
+    "area": "CON",
+    "creditos": 3,
+    "req": [
+     "PC-0407"
+    ],
+    "horas": {
+     "teoria": 3
+    }
+   },
+   {
+    "sigla": "PC-0409",
+    "nombre": "Sistemas de Costeo Gerencial",
+    "ciclo": "VIII",
+    "area": "CON",
+    "creditos": 3,
+    "req": [
+     "PC-0306"
+    ],
+    "horas": {
+     "teoria": 2,
+     "practica": 2
+    }
+   },
+   {
+    "sigla": "PC-0410",
+    "nombre": "Contabilidad Avanzada II",
+    "ciclo": "VIII",
+    "area": "CON",
+    "creditos": 3,
+    "req": [
+     "PC-0407"
+    ],
+    "horas": {
+     "teoria": 2,
+     "practica": 2
+    }
+   },
+   {
+    "sigla": "PC-0531",
+    "nombre": "Auditoría Financiera IV",
+    "ciclo": "VIII",
+    "area": "AUD",
+    "creditos": 3,
+    "req": [
+     "PC-0421"
+    ],
+    "horas": {
+     "practica": 3
+    }
+   },
+   {
+    "sigla": "DN-0110",
+    "nombre": "Métodos Cuantitativos para la Toma de Decisiones II",
+    "ciclo": "VIII",
+    "area": "FIN",
+    "creditos": 3,
+    "req": [
+     "DN-0105"
+    ],
+    "horas": {
+     "teoria": 2,
+     "practica": 2
+    },
+    "req_texto": "DN-0105 o PC-0490",
+    "coreq": [
+     "PC-0344"
+    ],
+    "coreq_texto": "PC-0344 o DN-0442"
+   },
+   {
+    "sigla": "DN-0525",
+    "nombre": "Mercadeo de Servicios",
+    "ciclo": "VIII",
+    "area": "ADM",
+    "creditos": 3,
+    "req": [
+     "DN-0320"
+    ],
+    "horas": {
+     "teoria": 2,
+     "practica": 1
+    },
+    "req_texto": "DN-0320 o PC-0250"
+   },
+   {
+    "sigla": "PC-0423",
+    "nombre": "Auditoría Informática I",
+    "ciclo": "IX",
+    "area": "AUD",
+    "creditos": 3,
+    "req": [
+     "PC-0531"
+    ],
+    "horas": {
+     "teoria": 3
+    },
+    "req_texto": "PC-0530 o PC-0422 o PC-0531",
+    "coreq": [
+     "PC-0424"
+    ],
+    "coreq_texto": "PC-0424"
+   },
+   {
+    "sigla": "PC-0424",
+    "nombre": "Laboratorio de Auditoría Informática I",
+    "ciclo": "IX",
+    "area": "AUD",
+    "creditos": 1,
+    "req": [
+     "PC-0531"
+    ],
+    "horas": {
+     "laboratorio": 2
+    },
+    "req_texto": "PC-0530 o PC-0422 o PC-0531",
+    "coreq": [
+     "PC-0423"
+    ],
+    "coreq_texto": "PC-0423"
+   },
+   {
+    "sigla": "PC-0425",
+    "nombre": "Control Interno y Auditorías Especiales",
+    "ciclo": "IX",
+    "area": "AUD",
+    "creditos": 3,
+    "req": [
+     "PC-0531"
+    ],
+    "horas": {
+     "teoria": 3
+    },
+    "req_texto": "PC-0530 o PC-0422 o PC-0531"
+   },
+   {
+    "sigla": "PC-0528",
+    "nombre": "Auditoría de Gestión I",
+    "ciclo": "IX",
+    "area": "AUD",
+    "creditos": 4,
+    "req": [
+     "PC-0421",
+     "PC-0531"
+    ],
+    "horas": {
+     "teoria": 2,
+     "practica": 2
+    },
+    "req_texto": "PC-0421 o PC-0422 o PC-0531"
+   },
+   {
+    "sigla": "DN-0114",
+    "nombre": "Comunicación Intercultural de los Negocios",
+    "ciclo": "IX",
+    "area": "ADM",
+    "creditos": 3,
+    "req": [
+     "PC-0409"
+    ],
+    "horas": {
+     "practica": 3
+    },
+    "req_texto": "PC-0409 o DN-0113 o DN-0546 o PC-0583 o XS-3510"
+   },
+   {
+    "sigla": "OPT-1",
+    "nombre": "Curso optativo",
+    "ciclo": "IX",
+    "area": "OPT",
+    "creditos": 3,
+    "req": [],
+    "optativo": true,
+    "lista": "OPT"
+   },
+   {
+    "sigla": "PC-0210",
+    "nombre": "Auditoría Interna",
+    "ciclo": "X",
+    "area": "AUD",
+    "creditos": 3,
+    "req": [
+     "PC-0425"
+    ],
+    "horas": {
+     "teoria": 2,
+     "practica": 1
+    }
+   },
+   {
+    "sigla": "PC-0526",
+    "nombre": "Auditoría Informática II",
+    "ciclo": "X",
+    "area": "AUD",
+    "creditos": 3,
+    "req": [
+     "PC-0423",
+     "PC-0424"
+    ],
+    "horas": {
+     "teoria": 3
+    },
+    "req_texto": "PC-0423, PC-0424",
+    "coreq": [
+     "PC-0527"
+    ],
+    "coreq_texto": "PC-0527"
+   },
+   {
+    "sigla": "PC-0527",
+    "nombre": "Laboratorio de Auditoría Informática II",
+    "ciclo": "X",
+    "area": "AUD",
+    "creditos": 1,
+    "req": [
+     "PC-0423",
+     "PC-0424"
+    ],
+    "horas": {
+     "laboratorio": 2
+    },
+    "req_texto": "PC-0423, PC-0424",
+    "coreq": [
+     "PC-0526"
+    ],
+    "coreq_texto": "PC-0526"
+   },
+   {
+    "sigla": "PC-0529",
+    "nombre": "Auditoría de Gestión II",
+    "ciclo": "X",
+    "area": "AUD",
+    "creditos": 4,
+    "req": [
+     "PC-0528"
+    ],
+    "horas": {
+     "teoria": 2,
+     "practica": 2
+    }
+   },
+   {
+    "sigla": "DN-0115",
+    "nombre": "Taller de Investigación",
+    "ciclo": "X",
+    "area": "ADM",
+    "creditos": 3,
+    "req": [
+     "DN-0114"
+    ],
+    "horas": {
+     "teoria": 3
+    },
+    "req_texto": "DN-0113 o DN-0114 o DN-0546 o PC-0583"
+   },
+   {
+    "sigla": "OPT-2",
+    "nombre": "Curso optativo",
+    "ciclo": "X",
+    "area": "OPT",
+    "creditos": 3,
+    "req": [],
+    "optativo": true,
+    "lista": "OPT"
+   }
+  ],
+  "optativos": {
+   "OPT": [
+    {
+     "sigla": "DN-0113",
+     "nombre": "Administración Mediada por Tecnologías de la Información",
+     "creditos": 3,
+     "req_texto": "DN-0112 o DN-0496 o PC-0410 o PC-0421"
+    },
+    {
+     "sigla": "DN-0117",
+     "nombre": "Derivados Financieros",
+     "creditos": 3,
+     "req_texto": "DN-0108 o (DN-0443, DN-0444) o PC-0344 o PC-0411"
+    },
+    {
+     "sigla": "DN-0118",
+     "nombre": "Mentoring and Coaching",
+     "creditos": 3,
+     "req_texto": "DN-0304 o PC-0409"
+    },
+    {
+     "sigla": "DN-0119",
+     "nombre": "Formulación y Evaluación de Proyectos II",
+     "creditos": 3,
+     "req_texto": "PC-0344 o DN-0546"
+    },
+    {
+     "sigla": "DN-0121",
+     "nombre": "Gerencia de Riesgo y Gestión Aseguradora",
+     "creditos": 3,
+     "req_texto": "PC-0344"
+    },
+    {
+     "sigla": "DN-0122",
+     "nombre": "Valoraciones, Fusiones y Adquisiciones de Empresas",
+     "creditos": 3,
+     "req_texto": "PC-0344"
+    },
+    {
+     "sigla": "DN-0171",
+     "nombre": "Gestión Sostenible de Empresas",
+     "creditos": 3,
+     "req_texto": "DN-0405 o PC-0409 o XS-3510"
+    },
+    {
+     "sigla": "DN-0508",
+     "nombre": "Seminario Integrado de Alta Gerencia",
+     "creditos": 3,
+     "req_texto": "DN-0423 o PC-0409"
+    },
+    {
+     "sigla": "DN-2302",
+     "nombre": "Inteligencia Emocional en el Trabajo",
+     "creditos": 3,
+     "req_texto": "DN-0304 o DN-0525"
+    },
+    {
+     "sigla": "PC-0168",
+     "nombre": "Auditoría Forense",
+     "creditos": 3,
+     "req_texto": "PC-0531"
+    },
+    {
+     "sigla": "PC-0169",
+     "nombre": "Legislación sobre Comercio Internacional",
+     "creditos": 3,
+     "req_texto": "PC-0462"
+    },
+    {
+     "sigla": "PC-0206",
+     "nombre": "Contabilidad para PYMES",
+     "creditos": 3,
+     "req_texto": "PC-0410"
+    },
+    {
+     "sigla": "PC-0207",
+     "nombre": "Contabilidad Administrativa para Producción Ajustada",
+     "creditos": 3,
+     "req_texto": "PC-0409"
+    },
+    {
+     "sigla": "PC-0208",
+     "nombre": "Costos Avanzados",
+     "creditos": 3,
+     "req_texto": "PC-0409"
+    },
+    {
+     "sigla": "PC-0209",
+     "nombre": "Auditoría Fiscal",
+     "creditos": 3,
+     "req_texto": "PC-0531, PC-0462"
+    },
+    {
+     "sigla": "PC-0213",
+     "nombre": "Temas Avanzados en Tecnologías de la Información",
+     "creditos": 3,
+     "req_texto": "DN-0110"
+    },
+    {
+     "sigla": "PC-0352",
+     "nombre": "Comercio Internacional",
+     "creditos": 3,
+     "req_texto": "PC-0344"
+    }
+   ],
+   "OPC": [
+    {
+     "sigla": "LM-0601",
+     "nombre": "Inglés para Administración de Negocios I",
+     "creditos": 3,
+     "req_texto": "DN-0101"
+    },
+    {
+     "sigla": "LM-0602",
+     "nombre": "Inglés para Administración de Negocios II",
+     "creditos": 3,
+     "req_texto": "LM-0601"
+    },
+    {
+     "sigla": "LM-0603",
+     "nombre": "Inglés para Administración de Negocios III",
+     "creditos": 3,
+     "req_texto": "LM-0602"
+    },
+    {
+     "sigla": "LM-0604",
+     "nombre": "Inglés para Administración de Negocios IV",
+     "creditos": 3,
+     "req_texto": "LM-0603"
+    }
+   ]
+  },
+  "titulo_optativos": "Cursos optativos y opcionales",
+  "listas_optativos": [
+   {
+    "id": "OPT",
+    "titulo": "Optativos de la licenciatura",
+    "nota": "Se eligen dos, uno en el IX ciclo y otro en el X.",
+    "color_de": "OPT"
+   },
+   {
+    "id": "OPC",
+    "titulo": "Inglés para negocios (opcional)",
+    "nota": "No es obligatorio; refuerza la formación en inglés.",
+    "color_de": "OPT"
+   }
+  ]
+ }
+}
