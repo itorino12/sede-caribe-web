@@ -105,13 +105,12 @@ main:focus { outline: none; }
 .cabecera { background: var(--cab-fondo); color: var(--cab-texto); border-bottom: 1px solid var(--cab-linea); position: sticky; top: 0; z-index: 20; }
 .cabecera__fila { display: flex; align-items: center; gap: 18px; min-height: 92px; }
 .firma { display: flex; align-items: center; gap: 18px; text-decoration: none; flex-shrink: 0; }
-/* Firma con escudo (Manual UCR 3.1): escudo + «Universidad de Costa Rica», y a la derecha el nombre de la unidad */
+/* Firma oficial horizontal en dos líneas (imagen del Manual UCR), y a la derecha el nombre de la unidad */
 .firma { gap: 12px; }
 .firma__escudo { width: auto; height: 72px; }
 .firma__escudo--oscuro { display: none; }
 :root[data-tema="oscuro"] .firma__escudo--claro { display: none; }
 :root[data-tema="oscuro"] .firma__escudo--oscuro { display: block; }
-.firma__ucr-texto { font-size: 1.05rem; font-weight: 700; line-height: 1.1; letter-spacing: .04em; text-transform: uppercase; color: var(--cab-texto); }
 /* identificador compuesto del manual: sigla | línea celeste | tipo y nombre de la unidad */
 .ident { display: flex; align-items: center; gap: 12px; color: var(--cab-texto-2); margin-left: 4px; }
 .ident__sigla { font-size: 1.6rem; font-weight: 700; letter-spacing: .06em; color: #000; line-height: 1; }
@@ -182,7 +181,7 @@ main:focus { outline: none; }
 }
 @media (max-width: 560px) {
   .menu-boton > span:last-child { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
-  .firma { gap: 8px; } .firma__escudo { height: 60px; } .firma__ucr-texto { font-size: .8rem; } .ident__sigla { font-size: 1.15rem; } .ident { gap: 8px; } .ident__nombre { font-size: .8rem; } .ident__nombre strong { font-size: .95rem; }
+  .firma { gap: 8px; } .firma__escudo { height: 60px; } .ident__sigla { font-size: 1.15rem; } .ident { gap: 8px; } .ident__nombre { font-size: .8rem; } .ident__nombre strong { font-size: .95rem; }
   .buscar-boton span { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
 }
 
@@ -542,7 +541,6 @@ main:focus { outline: none; }
 .pie__rejilla { display: grid; grid-template-columns: 1.4fr 1fr 1fr 1fr; gap: 32px; padding-block: 52px 32px; }
 .pie__firma { display: flex; align-items: center; gap: 12px; margin-bottom: 14px; }
 .pie__firma img { height: 80px; width: auto; }
-.pie__firma span { font-weight: 700; text-transform: uppercase; letter-spacing: .04em; line-height: 1.1; color: #fff; }
 .pie__nombre { font-size: var(--t-md); font-weight: 700; color: #fff; }
 .pie h2 { font-size: var(--t-base); color: #fff; margin-bottom: 10px; letter-spacing: 0; }
 .pie ul { list-style: none; padding: 0; margin: 0; }
@@ -602,7 +600,7 @@ dialog::backdrop { background: rgba(0,25,45,.6); }
   .buscar-boton { display: none; }
   .menu-boton { margin-left: auto; padding: 8px 12px; }
   .menu__buscar { display: block; }
-  .firma { gap: 6px; } .firma__ucr-texto { font-size: .72rem; } .ident { gap: 6px; margin-left: 2px; }
+  .firma { gap: 6px; } .firma__escudo { height: 52px; } .ident { gap: 6px; margin-left: 2px; }
   .ident__sigla { font-size: 1rem; } .ident__nombre { font-size: .72rem; } .ident__nombre strong { font-size: .86rem; }
 }
 @media (max-width: 340px) { .menu-boton { order: 3; width: 100%; justify-content: center; margin-left: 0; } }
