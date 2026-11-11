@@ -124,8 +124,12 @@
           var ok = !q || coincideGrupo || normal(f.textContent).indexOf(q) > -1;
           f.hidden = !ok; if (ok) visibles++;
         });
-        $$("[data-subgrupo]", g).forEach(function (s) { s.hidden = !$("[data-fila]:not([hidden])", s); });
+        $$("[data-subgrupo]", g).forEach(function (s) {
+          s.hidden = !$("[data-fila]:not([hidden])", s);
+          if (s.tagName === "DETAILS") s.open = q ? !s.hidden : s.hasAttribute("data-abierto");
+        });
         g.hidden = visibles === 0; total += visibles;
+        if (g.tagName === "DETAILS") g.open = q ? visibles > 0 : false;
       });
       est.textContent = q ? (total ? total + " coincidencias" : (input.dataset.vacio || "Nada coincide. Llame a la central, 2511-7300, y le comunican.")) : "";
     });
@@ -133,6 +137,13 @@
     var pedido = new URLSearchParams(location.search).get("buscar");
     if (pedido) { input.value = pedido; input.dispatchEvent(new Event("input")); }
   });
+
+  // horarios.html: los accesos por carrera abren la pestaña a la que apuntan
+  function abrirDestino() {
+    var d = location.hash && document.getElementById(decodeURIComponent(location.hash.slice(1)));
+    if (d && d.tagName === "DETAILS") { d.open = true; d.scrollIntoView(); }
+  }
+  window.addEventListener("hashchange", abrirDestino); abrirDestino();
 
   // ---------- panel de accesibilidad
   var r = document.documentElement, pref = {};
