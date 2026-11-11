@@ -86,7 +86,7 @@ def bonito(nombre):
 def para_sitio(meta, cursos):
     return {"ciclo": CICLO, "version": meta["version"], "generado": meta["generado"],
             "fuente": "Guía de Cursos y Horarios, Recinto de Limón, Oficina de Registro e Información (UCR)",
-            "cursos": [{"sigla": c["sigla"], "nombre": bonito(c["nombre"]),
+            "cursos": [{"sigla": c["sigla"], "nombre": bonito(c["nombre"]), "escuela": bonito(c["escuela"]),
                         "grupos": [{"grupo": g["grupo"], "modalidad": g["modalidad"], "cerrado": g["cerrado"], "horas": g["horas"]} for g in c["grupos"]]}
                        for c in cursos]}
 

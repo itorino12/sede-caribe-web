@@ -27,6 +27,8 @@ import markdown
 import nh3
 from jinja2 import Environment, FileSystemLoader, select_autoescape
 
+from horarios_sitio import armar as armar_horarios
+
 RAIZ = Path(__file__).resolve().parent
 SRC, DIST, CONT = RAIZ / "src", RAIZ / "dist", RAIZ / "contenido"
 CR = timezone(timedelta(hours=-6))  # Costa Rica no usa horario de verano
@@ -365,8 +367,11 @@ def preparar(sitio, d):
     fotos = {k: imagen(sitio.get(f"foto_{k}") or por_defecto) for k, por_defecto in
              [("portada", "entrada.jpg"), ("portada_noche", "entrada-noche.jpg"), ("carreras", "auditorio-escenario.jpg"), ("historia", "edificio-aulas.jpg")]}
 
+    aulas = json.loads((SRC / "data" / "aulas.json").read_text(encoding="utf-8"))
+    horarios = armar_horarios(json.loads((SRC / "data" / "horarios-iic-2026.json").read_text(encoding="utf-8")), carreras, aulas)
+
     return {"semana": semana, "fotos": fotos, "avisos": avisos, "noticias": noticias, "eventos": eventos, "recientes": recientes, "agenda": agenda,
-            "carreras": carreras, "unidades": unidades, "aulas": json.loads((SRC / "data" / "aulas.json").read_text(encoding="utf-8")), "horarios": json.loads((SRC / "data" / "horarios-iic-2026.json").read_text(encoding="utf-8")), "unidad": {u["id"]: u for u in unidades},
+            "carreras": carreras, "unidades": unidades, "aulas": aulas, "horarios": horarios, "unidad": {u["id"]: u for u in unidades},
             "directorio": grupos_dir, "enlaces": enlaces, "hitos": d["hitos"], "cifras": d["cifras"], "modalidades": modalidades,
             "categorias": sorted({n["categoria"] for n in noticias if n.get("categoria")}),
             "areas": list(dict.fromkeys(c["area"] for c in carreras)),
@@ -453,6 +458,7 @@ def main():
         ("agenda.html", "agenda.html", "Agenda", "Actividades, cursos, plazos y eventos de la Sede del Caribe.", {}),
         ("directorio.html", "directorio.html", "Directorio", "Extensiones telefónicas y correos de las oficinas de la Sede del Caribe.", {}),
         ("enlaces.html", "enlaces.html", "Enlaces y trámites", "Accesos a los sistemas universitarios para estudiantes y personal.", {}),
+        ("horarios.html", "horarios.html", "Horario de aulas", "En qué aula se imparte cada curso de la Sede del Caribe, por carrera y ciclo, con enlace al recorrido 3D.", {}),
         ("contacto.html", "contacto.html", "Contacto", "Cómo comunicarse con la Sede del Caribe.", {}),
         ("recorrido.html", "recorrido.html", "Recorrido por la Sede", "Maqueta 3D del campus de la Sede del Caribe: edificios, aulas, laboratorios y servicios.",
          {"lugares": recorrido["lugares"], "campus3d": recorrido["campus"]}),

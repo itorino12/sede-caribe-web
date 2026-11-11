@@ -124,6 +124,7 @@
           var ok = !q || coincideGrupo || normal(f.textContent).indexOf(q) > -1;
           f.hidden = !ok; if (ok) visibles++;
         });
+        $$("[data-subgrupo]", g).forEach(function (s) { s.hidden = !$("[data-fila]:not([hidden])", s); });
         g.hidden = visibles === 0; total += visibles;
       });
       est.textContent = q ? (total ? total + " coincidencias" : (input.dataset.vacio || "Nada coincide. Llame a la central, 2511-7300, y le comunican.")) : "";

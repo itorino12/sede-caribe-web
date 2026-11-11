@@ -1,0 +1,79 @@
+{% extends "base.html" %}
+{% from "_macros.html" import encabezado with context %}
+{% block contenido %}
+{% macro aula(a) %}{% if a.estado == "ok" and a.lugar %}<a class="hz-aula" href="{{ raiz }}recorrido.html#lugar-{{ a.lugar }}" aria-label="Aula {{ a.n }}: verla en el recorrido 3D"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s-7-6.2-7-11.5A7 7 0 0 1 19 9.5C19 14.8 12 21 12 21Z"/><circle cx="12" cy="9.5" r="2.5"/></svg>Aula {{ a.n }}</a>{% elif a.estado == "confirmar" %}<span class="hz-aula hz-aula--aparte">Aula por confirmar</span>{% else %}<span class="hz-aula hz-aula--aparte">Sin aula asignada</span>{% endif %}{% endmacro %}
+{% macro curso(c) %}
+<li class="hz-curso" data-fila{% if c.color %} style="--hz-c: {{ c.color }}; --hz-co: {{ c.oscuro or c.color }}"{% endif %}>
+  <h4 class="hz-curso__nombre"><span class="hz-curso__sigla">{{ c.sigla }}</span> {{ c.nombre }}</h4>
+  <ul class="hz-grupos">
+    {% for g in c.grupos %}
+    <li class="hz-grupo">
+      <span class="hz-grupo__n">Grupo {{ g.grupo }}</span>
+      {% if g.modalidad %}<span class="hz-etiqueta">{{ g.modalidad }}</span>{% endif %}{% if g.cerrado %}<span class="hz-etiqueta">Cerrado</span>{% endif %}
+      {% for f in g.franjas %}<span class="hz-hora"><b>{{ f.dias }}</b> {{ f.rango }}</span>{% if not g.aula_unica %} {{ aula(f.aula) }}{% endif %}{% endfor %}
+      {% if g.aula_unica %}{{ aula(g.aula_unica) }}{% endif %}
+    </li>
+    {% endfor %}
+  </ul>
+</li>
+{% endmacro %}
+{{ encabezado("Horario de aulas", [("Docencia", "unidades/docencia.html")], raiz, "Dónde se imparte cada curso en el " ~ horarios.ciclo ~ ", por carrera y por ciclo del plan. Toque el aula para verla en el recorrido 3D.") }}
+<div class="ancho pagina hz">
+  <p class="hz-intro">Los cursos están ordenados por carrera y por ciclo del <strong>plan de estudios</strong> (I, II, III…), no por el ciclo lectivo. Si un curso se lleva en varias carreras, aparece en cada una. Los que no están en ninguna malla publicada en este sitio van al final, en «Cursos complementarios».</p>
+
+  <nav class="hz-nav" aria-label="Ir a una carrera">
+    {% for c in horarios.carreras %}<a href="#hz-{{ c.id }}">{{ c.nombre }}</a>{% endfor %}
+    <a href="#hz-generales">Generales</a>
+    <a href="#hz-complementarios">Cursos complementarios</a>
+  </nav>
+
+  <div class="filtro-texto">
+    <label for="filtro-horarios">Buscar un curso, una sigla o un aula</label>
+    <input id="filtro-horarios" type="search" autocomplete="off" data-filtrar-tabla="horarios" data-vacio="Nada coincide. Pruebe con la sigla (por ejemplo IF0004) o con parte del nombre." placeholder="Por ejemplo: IF0004, bases de datos, aula 7">
+    <p class="filtro-texto__estado" aria-live="polite" data-estado-filtro></p>
+  </div>
+
+  <div id="horarios">
+    {% for c in horarios.carreras %}
+    <section class="hz-carrera" id="hz-{{ c.id }}" data-grupo>
+      <header class="hz-carrera__cab">
+        <h2><a href="{{ raiz }}carreras/{{ c.id }}.html">{{ c.nombre }}</a></h2>
+        <p>{{ c.grados }}{% if c.plan %} · {{ c.plan }}{% endif %} · {{ c.n }} {{ "curso" if c.n == 1 else "cursos" }} este ciclo</p>
+      </header>
+      {% for ci in c.ciclos %}
+      <div class="hz-ciclo" data-subgrupo>
+        {% set partes = ci.nombre.split(" ", 1) %}
+        <h3 class="hz-ciclo__titulo">{% if partes|length > 1 %}<span class="hz-ciclo__num">{{ partes[0] }}</span><span class="hz-ciclo__resto">{{ partes[1] }}</span>{% else %}<span class="hz-ciclo__num hz-ciclo__num--texto">{{ ci.nombre }}</span>{% endif %}</h3>
+        <ul class="hz-cursos">{% for k in ci.cursos %}{{ curso(k) }}{% endfor %}</ul>
+      </div>
+      {% endfor %}
+    </section>
+    {% endfor %}
+
+    <section class="hz-carrera hz-carrera--aparte" id="hz-generales" data-grupo>
+      <header class="hz-carrera__cab">
+        <h2>Generales</h2>
+        <p>Estudios Generales, seminarios de realidad nacional, arte, deporte y repertorio · {{ horarios.n_generales }} cursos este ciclo</p>
+      </header>
+      {% for g in horarios.generales %}
+      <div class="hz-ciclo" data-subgrupo>
+        <h3 class="hz-ciclo__titulo"><span class="hz-ciclo__num hz-ciclo__num--texto">{{ g.titulo }}</span></h3>
+        <ul class="hz-cursos">{% for k in g.cursos %}{{ curso(k) }}{% endfor %}</ul>
+      </div>
+      {% endfor %}
+    </section>
+
+    <section class="hz-carrera hz-carrera--aparte" id="hz-complementarios" data-grupo>
+      <header class="hz-carrera__cab">
+        <h2>Cursos complementarios</h2>
+        <p>Seminarios de graduación, cursos de planes anteriores y cursos de servicio de otras escuelas · {{ horarios.complementarios|length }} cursos este ciclo</p>
+      </header>
+      <div class="hz-ciclo hz-ciclo--solo" data-subgrupo>
+        <ul class="hz-cursos">{% for k in horarios.complementarios %}{{ curso(k) }}{% endfor %}</ul>
+      </div>
+    </section>
+  </div>
+
+  <p class="cifras__fuente">Fuente: {{ horarios.fuente }}. Versión {{ horarios.version }}, generada el {{ horarios.generado }}. Los horarios y las aulas pueden cambiar: confirme con su carrera o con la Coordinación de Docencia.</p>
+</div>
+{% endblock %}
