@@ -21,79 +21,66 @@
     </ul>
     {% endif %}
     {% if u.id == "laboratorios" and aulas %}
-    {% set auditorio = (aulas.espacios|selectattr("nombre", "equalto", "Auditorio")|list)[0] %}
-    {% set labs = aulas.aulas|selectattr("laboratorio")|list %}
-    {% set otros = aulas.espacios|rejectattr("nombre", "equalto", "Auditorio")|list %}
-    {% set tope = ([auditorio.capacidad] + aulas.aulas|map(attribute="capacidad")|select|list)|max %}
+    {% set area_de = {1: "p1", 14: "p2", 15: "p3", 25: "ing", 26: "ing", 12: "aud", 32: "inv"} %}
+    {% set sitios = {} %}
+    {% for a in aulas.aulas %}{% set k = area_de[a.lugar] %}
+      {% set _ = sitios.setdefault(k, []).append({"id": "aula-" ~ a.aula, "titulo": "Aula " ~ a.aula, "cap": a.capacidad, "lab": a.laboratorio, "es_lab": a.laboratorio|length > 0, "nota": a.nota or "", "estado": a.estado, "ubic": a.ubicacion, "zona": a.zona, "lugar": a.lugar, "piso": (a.ubicacion.split(",")[1]|trim if k == "ing" else ""), "enlace": ""}) %}
+    {% endfor %}
+    {% for e in aulas.espacios %}{% set k = area_de[e.lugar] %}
+      {% set _ = sitios.setdefault(k, []).append({"id": "espacio-" ~ loop.index, "titulo": e.nombre, "cap": e.capacidad, "lab": "", "es_lab": e.nombre != "Auditorio", "nota": e.detalle, "estado": "", "ubic": e.ubicacion, "zona": e.zona, "lugar": e.lugar, "piso": (e.ubicacion.split(",")[1]|trim if k == "ing" else ""), "enlace": e.enlace}) %}
+    {% endfor %}
+    {% set todas = aulas.aulas|list + aulas.espacios|list %}
+    {% set labs = [] %}
+    {% for k, lista in sitios.items() %}{% for r in lista if r.es_lab %}{% set _ = labs.append(r) %}{% endfor %}{% endfor %}
     {% set con_dato = aulas.aulas|map(attribute="capacidad")|select|list %}
+    {% set auditorio = sitios["aud"][0] %}
+
+    {% macro sala(r) %}
+    <li class="sala{% if r.es_lab %} sala--lab{% endif %}{% if not r.cap %} sala--sin{% endif %}" id="{{ r.id }}">
+      <p class="sala__titulo">{% if r.enlace %}<a href="{{ raiz }}{{ r.enlace }}">{{ r.titulo }}</a>{% else %}{{ r.titulo }}{% endif %}</p>
+      {% if r.lab %}<p class="sala__lab">{{ r.lab }}</p>{% endif %}
+      {% if r.cap %}
+      <p class="sala__cap"><strong>{{ r.cap }}</strong> <span>personas</span></p>
+      <span class="sala__puestos" aria-hidden="true">{% for _ in range(r.cap) %}<i></i>{% endfor %}</span>
+      {% else %}<p class="sala__sin">Sin capacidad registrada</p>{% endif %}
+      {% if r.nota %}<p class="sala__nota">{{ r.nota }}</p>{% endif %}
+      {% if r.estado %}<p class="sala__aviso">{{ r.estado }}</p>{% endif %}
+    </li>
+    {% endmacro %}
+
     <ul class="cifras">
       <li><strong>{{ aulas.aulas|length }}</strong><span>aulas numeradas (1 a {{ aulas.aulas|length }})</span></li>
-      <li><strong>{{ labs|length + otros|length }}</strong><span>laboratorios y simuladores</span></li>
+      <li><strong>{{ labs|length }}</strong><span>laboratorios y simuladores</span></li>
       <li><strong>{{ con_dato|sum }}</strong><span>puestos en las {{ con_dato|length }} aulas con capacidad registrada</span></li>
-      <li><strong>{{ auditorio.capacidad }}</strong><span>personas caben en el Auditorio, el espacio más grande</span></li>
+      <li><strong>{{ auditorio.cap }}</strong><span>personas caben en el Auditorio</span></li>
     </ul>
 
     <h2 id="aulas">Aulas y capacidades</h2>
-    <p>Cada barra mide la capacidad del aula frente a la del Auditorio ({{ tope }} personas). El color indica la zona del campus, igual que en la <a href="{{ raiz }}recorrido.html">maqueta 3D</a>. Las aulas con rayas son laboratorios.</p>
-    {% set grupos = namespace(lista=[]) %}
-    {% for a in aulas.aulas %}
-      {% set edificio = a.ubicacion.split(",")[0] %}
-      {% if grupos.lista and grupos.lista[-1].nombre == edificio %}{% set _ = grupos.lista[-1].filas.append(a) %}
-      {% else %}{% set _ = grupos.lista.append({"nombre": edificio, "zona": a.zona, "lugar": a.lugar, "filas": [a]}) %}{% endif %}
-    {% endfor %}
-    <div class="capac">
-      {% for g in grupos.lista %}
-      <section class="capac__grupo" aria-labelledby="capac-{{ loop.index }}">
-        <h3 id="capac-{{ loop.index }}" class="capac__titulo"><span class="capac__zona capac__zona--z{{ g.zona }}">Zona {{ g.zona }}</span> <a href="{{ raiz }}recorrido.html#lugar-{{ g.lugar }}">{{ g.nombre }}</a></h3>
-        <ul class="capac__lista">
-          {% for a in g.filas %}
-          <li class="capac__fila{% if a.laboratorio %} capac__fila--lab{% endif %}{% if not a.capacidad %} capac__fila--sin{% endif %}">
-            <span class="capac__nombre">Aula {{ a.aula }}</span>
-            <span class="capac__pista" aria-hidden="true"><span class="capac__barra capac__barra--z{{ a.zona }}" style="--p: {{ ((a.capacidad or 0) * 100 / tope)|round(1) }}%"></span></span>
-            <span class="capac__valor">{% if a.capacidad %}<strong>{{ a.capacidad }}</strong> <span class="capac__unidad">personas</span>{% else %}<span class="capac__sin">sin capacidad registrada</span>{% endif %}</span>
-            <span class="capac__detalle">
-              {% if a.laboratorio %}<span class="capac__etiqueta">{{ a.laboratorio }}</span> {% endif %}
-              {{ a.ubicacion.split(",")[1]|trim|capitalize if "," in a.ubicacion else "" }}{% if "," in a.ubicacion and (a.equipo or a.nota) %}. {% endif %}{{ [a.equipo, a.nota]|select|join(". ") }}
-              {% if a.estado %}<span class="capac__aviso">{{ a.estado }}</span>{% endif %}
-            </span>
-          </li>
+    <p>Esquema del campus, sin escala, con los edificios ordenados de norte a sur. Cada punto es un puesto: las aulas se cuentan por lo que realmente caben. El color es el de la zona, igual que en la <a href="{{ raiz }}recorrido.html">maqueta 3D</a>.</p>
+    <p class="sala__leyenda" aria-hidden="true"><span><i class="puesto-ej"></i> puesto en aula</span> <span><i class="puesto-ej puesto-ej--lab"></i> puesto en laboratorio</span> <span><i class="puesto-ej puesto-ej--sin"></i> sin dato</span></p>
+
+    <div class="croquis" role="group" aria-label="Esquema de aulas y laboratorios del campus">
+      {% for k in ["ing", "p3", "aud", "p2", "p1", "inv"] %}
+      {% set lista = sitios[k] %}{% set p = lista[0] %}
+      <section class="edif edif--{{ k }} edif--z{{ p.zona }}" aria-labelledby="edif-{{ k }}">
+        <h3 id="edif-{{ k }}" class="edif__titulo"><span class="edif__zona">Zona {{ p.zona }}</span>
+          <a href="{{ raiz }}recorrido.html#lugar-{{ p.lugar }}">{% if k in ["p1", "p2", "p3", "ing"] %}{{ p.ubic.split(",")[0] }}{% elif "," in p.ubic %}{{ p.ubic.split(",")[1]|trim|capitalize }}{% else %}{{ p.ubic }}{% endif %}</a></h3>
+        {% if k == "ing" %}
+          {% for piso in ["segundo piso", "primer piso"] %}
+          <h4 class="edif__piso">{{ piso|capitalize }}</h4>
+          <ul class="salas">{% for r in lista if r.piso == piso %}{{ sala(r) }}{% endfor %}</ul>
           {% endfor %}
-        </ul>
+        {% else %}
+        <ul class="salas">{% for r in lista %}{{ sala(r) }}{% endfor %}</ul>
+        {% endif %}
       </section>
       {% endfor %}
-      <section class="capac__grupo" aria-labelledby="capac-aud">
-        <h3 id="capac-aud" class="capac__titulo"><span class="capac__zona capac__zona--z{{ auditorio.zona }}">Zona {{ auditorio.zona }}</span> <a href="{{ raiz }}{{ auditorio.enlace }}">Auditorio</a></h3>
-        <ul class="capac__lista">
-          <li class="capac__fila">
-            <span class="capac__nombre">Auditorio</span>
-            <span class="capac__pista" aria-hidden="true"><span class="capac__barra capac__barra--z{{ auditorio.zona }}" style="--p: {{ (auditorio.capacidad * 100 / tope)|round(1) }}%"></span></span>
-            <span class="capac__valor"><strong>{{ auditorio.capacidad }}</strong> <span class="capac__unidad">personas</span></span>
-            <span class="capac__detalle">{{ auditorio.ubicacion }}. {{ auditorio.detalle }}</span>
-          </li>
-        </ul>
-      </section>
     </div>
 
     <h2 id="laboratorios">Laboratorios</h2>
-    <p>Los cuatro laboratorios de cómputo y el de Química son aulas del listado anterior; los demás son espacios propios.</p>
-    <ul class="labs">
-      {% for a in labs %}
-      <li class="lab lab--z{{ a.zona }}">
-        <p class="lab__lugar">Aula {{ a.aula }} · <a href="{{ raiz }}recorrido.html#lugar-{{ a.lugar }}">{{ a.ubicacion }}</a></p>
-        <h3 class="lab__nombre">{{ a.laboratorio }}</h3>
-        {% if a.capacidad %}<p class="lab__cap"><strong>{{ a.capacidad }}</strong> <span>personas</span></p>
-        <span class="capac__pista" aria-hidden="true"><span class="capac__barra capac__barra--z{{ a.zona }}" style="--p: {{ (a.capacidad * 100 / tope)|round(1) }}%"></span></span>
-        {% else %}<p class="lab__cap lab__cap--sin">Sin capacidad registrada</p>{% endif %}
-        {% if a.equipo or a.nota %}<p class="lab__texto">{{ [a.equipo, a.nota]|select|join(". ") }}</p>{% endif %}
-      </li>
-      {% endfor %}
-      {% for e in otros %}
-      <li class="lab lab--z{{ e.zona }}">
-        <p class="lab__lugar"><a href="{{ raiz }}recorrido.html#lugar-{{ e.lugar }}">{{ e.ubicacion }}</a></p>
-        <h3 class="lab__nombre">{% if e.enlace %}<a href="{{ raiz }}{{ e.enlace }}">{{ e.nombre }}</a>{% else %}{{ e.nombre }}{% endif %}</h3>
-        {% if e.capacidad %}<p class="lab__cap"><strong>{{ e.capacidad }}</strong> <span>personas</span></p>{% else %}<p class="lab__cap lab__cap--sin">Sin capacidad registrada</p>{% endif %}
-        {% if e.detalle %}<p class="lab__texto">{{ e.detalle }}</p>{% endif %}
-      </li>
+    <p>Toque un laboratorio para ir a su lugar en el esquema. Los cuatro de cómputo y el de Química son aulas; los demás son espacios propios.</p>
+    <ul class="labs-chips">
+      {% for r in labs %}<li><a href="#{{ r.id }}">{{ r.lab or r.titulo }}{% if r.lab %} <span>({{ r.titulo }})</span>{% endif %}</a></li>
       {% endfor %}
     </ul>
 
