@@ -103,6 +103,7 @@
       {% endfor %}
     </details>
 
+    {% if m.optativos %}
     {% set listas = m.listas_optativos or [] %}
     <h3 class="malla-opt-t">{{ m.titulo_optativos or "Cursos optativos por área de tendencia" }}</h3>
     <div class="malla-optativos">
@@ -114,6 +115,7 @@
       </section>
       {% endfor %}
     </div>
+    {% endif %}
     <p class="malla-fuente">{{ f.fuente }} {{ m.nota_fuente or "Las siglas que siguen a «o» en los requisitos son los cursos equivalentes del plan anterior." }}</p>
   </div>
   <script type="application/json" id="malla-datos">{{ m|tojson }}</script>

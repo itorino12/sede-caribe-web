@@ -1,0 +1,155 @@
+Bachillerato
+
+
+ Turismo
+Sostenible
+con énfasis
+    en
+Ecoturismo
+                  ESTRUCTURA CURRICULAR DEL PLAN DE ESTUDIOS DE BACHILLERATO EN TURISMO SOSTENIBLE
+                                  CON ÉNFASIS EN ECOTURISMO, CÓDIGO 600310 , PLAN 01
+
+  NIVEL Y                                                      HORAS
+   SIGLA      NOMBRE DEL CURSO                             T   P   L   TP   REQUISITOS   CORREQUISITOS   CRÉDITOS
+
+
+PRIMER AÑO
+
+
+I CICLO
+EG-I          CURSO INTEGRADO DE HUMANIDADES I             -   -   -   -        ----          ----          6
+TE-0204       INTRODUCCIÓN AL TURISMO                      3   1   -   -        ----          ----          3
+TE-0205       FUNDAMENTOS DE BIOLOGÍA PARA EL ECOTURISMO   3   1   -   -        ----          ----          3
+TE-0206       INTRODUCCIÓN AL INGLÉS                       -   -   -   4        ----          ----          3
+PI-0044       COMUNICACIÓN Y EXPRESIÓN ORAL Y ESCRITA      -   -   -   3        ----          ----          3
+              EN ESPAÑOL
+                                                                                           SUBTOTAL         18
+
+
+II CICLO
+EG-II         CURSO INTEGRADO DE HUMANIDADES II            -   -   -   -       EG-I           ----          6
+EF-           ACTIVIDAD DEPORTIVA                          -   -   -   -        ----          ----          0
+TE-0207       COMPRENSIÓN AUDITIVA Y COMUNICACIÓN ORAL     -   -   -   6     TE-0206          ----          4
+              EN INGLÉS I
+TE-0208       BIODIVERSIDAD DE COSTA RICA I                3   -   1   -     TE-0205          ----          3
+TE-0209       GEOGRAFÍA TURÍSTICA DE COSTA RICA            3   1   -   -     TE-0204          ----          3
+TE-0210       FUNDAMENTOS DE ADMINISTRACIÓN                2   1   -   -        ----                        2
+                                                                                           SUBTOTAL         18
+Según Informe Curricular CEA-22-2025
+  NIVEL Y                                                         HORAS
+   SIGLA      NOMBRE DEL CURSO                                T   P   L   TP     REQUISITOS        CORREQUISITOS   CRÉDITOS
+
+
+SEGUNDO AÑO
+
+
+III CICLO
+TE-0211       COMPRENSIÓN AUDITIVA Y COMUNICACIÓN ORAL        -   -   -   6        TE-0207              ----          4
+              EN INGLÉS II
+EG-           CURSO DE ARTE                                   -   -   -   -           ----              ----          2
+TE-0212       BIODIVERSIDAD DE COSTA RICA II                  3   -   1   -        TE-0208              ----          3
+TE-0213       ESTADÍSTICA APLICADA AL TURISMO                 3   1   -   -           ----                            3
+RP-           REPERTORIO                                      -   -       -           ----              ----          3
+TE-0408       ADMINISTRACIÓN DE PERSONAL PARA TURISMO         -   -   -   3    TE-0210 o TE-0303                      3
+                                                                                                     SUBTOTAL         18
+
+
+
+IV CICLO
+TE-0214       COMPRENSIÓN AUDITIVA Y COMUNICACIÓN ORAL        -   -   -   4        TE-0211              ----          2
+              EN INGLÉS III
+
+TE-0215       COMPRENSIÓN DE LECTURA Y COMUNICACIÓN ESCRITA   -   -   -   3        TE-0211              ----          2
+              EN INGLÉS I
+TE-0216       HISTORIA NATURAL DE COSTA RICA PARA TURISMO     3   -   -   -        TE-0212              ----          3
+TE-0217       EDUCACIÓN AMBIENTAL Y ECOTURÍSTICA              3   -   -   -           ----              ----          3
+TE-0218       MATEMÁTICA PARA LOS NEGOCIOS                    4   -   -   -           ----              ----          2
+TE-0406       ADMINISTRACIÓN EMPRESAS TURÍSTICAS              3   1   -   -        TE-0408              ----          3
+TE-0219       MÉTODOS DE INVESTIGACIÓN APLICADA AL TURISMO    -   -   -   3           ----              ----          3
+                                                                                                     SUBTOTAL         18
+Según Informe Curricular CEA-22-2025
+   NIVEL Y                                                        HORAS
+    SIGLA     NOMBRE DEL CURSO                                T   P   L   TP     REQUISITOS       CORREQUISITOS   CRÉDITOS
+
+
+TERCER AÑO
+V CICLO
+TE-0220       COMPRENSIÓN AUDITIVA Y COMUNICACIÓN ORAL        -   -   -   4        TE-0214             ----          2
+              EN INGLÉS IV
+
+TE-0221       COMPRENSIÓN DE LECTURA Y COMUNICACIÓN ESCRITA   -   -   -   3        TE-0215             ----          2
+              EN INGLÉS II
+SR-I          SEMINARIO DE REALIDAD NACIONAL I                2   -   -   -         EG-II              ----          2
+TE-0201       FUNDAMENTOS DE ECOLOGÍA                         4   -   -   -    TE-0216 o B-0105      TE-0202         3
+TE-0202       LABORATORIO DE FUNDAMENTOS DE ECOLOGÍA          -   -   3   -    TE-0216 o B-0105      TE-0201         1
+TE-0222       INTRODUCCIÓN A LA CONTABILIDAD                  3   1   -   -        TE-0218             ----          2
+TE-0223       MULTICULTURALISMO DE COSTA RICA                 3   1   -   -          ----            TE-0224         3
+TE-0224       HISTORIA DE COSTA RICA                          4   -   -   -          ----            TE-0223         3
+                                                                                                    SUBTOTAL         18
+
+
+VI CICLO
+TE-0225       COMPRENSIÓN AUDITIVA Y COMUNICACIÓN ORAL        -   -   -   4        TE-0220             ----          2
+               EN INGLÉS V
+
+TE-0226       COMPRENSIÓN DE LECTURA Y COMUNICACIÓN ESCRITA   -   -   -   3        TE-0221             ----          2
+              EN INGLÉS III
+SR-II         SEMINARIO DE REALIDAD NACIONAL II               2   -   -   -          SR-I              ----          2
+TE-0227       INTERPRETACIÓN DEL PATRIMONIO TURÍSTICO         3   1   -   -        TE-0223           TE-0229         3
+TE-0301       ECODESARROLLO                                   4   -   -   -    TE-0201, TE-0202        ----          3
+TE-0228       INTRODUCCIÓN A LAS FINANZAS                     3   1   -   -        TE-0222             ----          2
+TE-0229       ATENCIÓN Y GUIADO DE TURISTAS                   3   1   -   -        TE-0223           TE-0227         2
+              HERRAMIENTAS DIGITALES Y TECNOLÓGICAS
+TE-0230       APLICADAS AL TURISMO                            3   -   1   -          ----              ----          2
+                                                                                                    SUBTOTAL         18
+Según Informe Curricular CEA-22-2025
+  NIVEL Y                                                         HORAS
+   SIGLA      NOMBRE DEL CURSO                                T   P   L    TP     REQUISITOS            CORREQUISITOS             CRÉDITOS
+
+
+CUARTO AÑO
+
+
+VII CICLO
+TE-0231       INGLÉS PARA SERVICIOS TURÍSTICOS Y CULTURALES   -   -    -   4    TE-0225, TE-0226               ----                  2
+TE-0303       ECOTURISMO I                                    4   -    -   -        TE-0301                    ----                  3
+TE-0232       EMPRENDIMIENTO TURÍSTICO                        4   -    -   -        TE-0228                    ----                  2
+TE-0302       ECONOMÍA TURÍSTICA                              4   -    -   -          ----                     ----                  3
+TE-0407       LEGISLACIÓN TURÍSTICA Y AMBIENTAL               4   -    -   -          ----              TE-0233 o TE-0402            3
+TE-0233       PLANIFICACIÓN DEL ESPACIO TURÍSTICO             3   1    -   -          ----                   TE-0407                 3
+TE-0234       SISTEMAS DE RESERVACIONES PARA EL TURISMO       -   -    4   -        TE-0230                    ----                  2
+                                                                                                            SUBTOTAL                 18
+
+
+
+VIII CICLO
+OPT-          BLOQUE OPTATIVO DEL BACHILLERATO                -   -    -   -          ----                     ----                  4
+TE-0403       ECOTURISMO II                                   4   -    -   -        TE-0303        TE-0236 o (TE-0404, TE-0401)      3
+TE-0235       FRANCÉS PARA TURISMO                            3   -    1   -          ----                     ----                  3
+TE-0236       PRÁCTICA PROFESIONAL                            -   16   -   -          ----                   TE-0403                 6
+                                                                                                            SUBTOTAL                 16
+                                                                                                     TOTAL DEL BACHILLERATO         142
+Según Informe Curricular CEA-22-2025
+                                                        LISTA DE CURSOS OPTATIVOS DEL BACHILLERATO
+                                                                               HORAS
+NIVEL Y SIGLA NOMBRE DEL CURSO                                             T   P   L   TP   REQUISITOS   CORREQUISITOS   CRÉDITOS
+
+
+TE-0237        GESTIÓN DE LA CALIDAD DEL SERVICIO TURÍSTICO                3   -   -   -        ----          ----          2
+               HERRAMIENTAS DE GESTIÓN Y CERTIFICACIONES
+TE-0238        TURÍSTICAS                                                  3   -   -   -        ----          ----          2
+TE-0239        DESARROLLO LOCAL Y COMUNITARIO                              2   2   -   -        ----          ----          2
+TE-0240        INTELIGENCIA TURÍSTICA                                      3   -   -   -        ----          ----          2
+TE-0241        AVITURISMO                                                  3   1   -   -        ----          ----          2
+TE-0242        TURISMO DE BIENESTAR                                        3   -   -   -        ----          ----          2
+TE-0243        HISTORIA DEL ARTE                                           3   -   -   -        ----          ----          2
+TE-0244        BIOGEOGRAFÍA TURÍSTICA                                      -   -   -   3        ----          ----          2
+TE-0245        ÉTICA PROFESIONAL                                           3   -   -   -        ----          ----          1
+TE-0246        PRIMEROS AUXILIOS Y RESPIRACIÓN CARDIOPULMONAR              -   -   -   3        ----          ----          1
+
+
+Según Informe Curricular CEA-22-2025
+Actualizado el 13/05/2025 por ACG
+En: Estructuras/Sede de Guanacaste/Planes Actuales/Turismo Sostenible co
+énfasis en Ecoturismo B
+

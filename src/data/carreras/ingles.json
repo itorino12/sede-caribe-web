@@ -18,5 +18,736 @@
       "url": "https://drive.google.com/file/d/1AjjUHLoX-rpHY55T3hnpZX_uEFrUUKud/view",
       "principal": true
     }
-  ]
+  ],
+  "malla": {
+    "plan": "Plan 3",
+    "total": 140,
+    "tcu": null,
+    "resumen_creditos": "140 créditos del bachillerato en ocho ciclos, con seis bloques optativos de 3 créditos.",
+    "nota_fuente": "Fuente: fascículo del Sistema de Aplicaciones Estudiantiles (SAE) del plan 3 del Bachillerato en Inglés, código 120303 (resolución VD-R-10013-2018). Las siglas que siguen a «Equiv.:» son cursos equivalentes de planes anteriores.",
+    "areas": [
+      {
+        "id": "LEN",
+        "nombre": "Lengua inglesa",
+        "corto": "Lengua inglesa",
+        "color": "#0A6AA6",
+        "oscuro": "#5AAEE0",
+        "descripcion": "Inglés integrado, gramática, comunicación oral, composición, comprensión de lectura, técnicas de comunicación y pronunciación y retórica.",
+        "creditos": 71
+      },
+      {
+        "id": "LIT",
+        "nombre": "Literatura en inglés",
+        "corto": "Literatura",
+        "color": "#B0306A",
+        "oscuro": "#E58BB5",
+        "descripcion": "Introducción a la literatura, narrativa, drama, poesía y panoramas de las literaturas británica y norteamericana, literatura de la Commonwealth y crítica literaria.",
+        "creditos": 24
+      },
+      {
+        "id": "LIN",
+        "nombre": "Lingüística y comunicación intercultural",
+        "corto": "Lingüística",
+        "color": "#5A47A6",
+        "oscuro": "#A595E6",
+        "descripcion": "Introducción a la lingüística y comunicación intercultural.",
+        "creditos": 6
+      },
+      {
+        "id": "OPT",
+        "nombre": "Optativos",
+        "corto": "Optativos",
+        "color": "#7A5C00",
+        "oscuro": "#D9B550",
+        "descripcion": "Seis bloques optativos de 3 créditos: traducción, literatura, francés y otros cursos de la lista.",
+        "creditos": 18
+      },
+      {
+        "id": "FG",
+        "nombre": "Formación general",
+        "corto": "Formación general",
+        "color": "#5F6B78",
+        "oscuro": "#A9B4BF",
+        "descripcion": "Cursos integrados de humanidades, arte, repertorio, actividad deportiva y seminarios de realidad nacional, comunes a toda la Universidad.",
+        "creditos": 21
+      }
+    ],
+    "ciclos": [
+      {
+        "n": "I",
+        "anio": 1,
+        "nombre": "I ciclo",
+        "verano": false,
+        "creditos": 16
+      },
+      {
+        "n": "II",
+        "anio": 1,
+        "nombre": "II ciclo",
+        "verano": false,
+        "creditos": 17
+      },
+      {
+        "n": "III",
+        "anio": 2,
+        "nombre": "III ciclo",
+        "verano": false,
+        "creditos": 17
+      },
+      {
+        "n": "IV",
+        "anio": 2,
+        "nombre": "IV ciclo",
+        "verano": false,
+        "creditos": 18
+      },
+      {
+        "n": "V",
+        "anio": 3,
+        "nombre": "V ciclo",
+        "verano": false,
+        "creditos": 19
+      },
+      {
+        "n": "VI",
+        "anio": 3,
+        "nombre": "VI ciclo",
+        "verano": false,
+        "creditos": 19
+      },
+      {
+        "n": "VII",
+        "anio": 4,
+        "nombre": "VII ciclo",
+        "verano": false,
+        "creditos": 17
+      },
+      {
+        "n": "VIII",
+        "anio": 4,
+        "nombre": "VIII ciclo",
+        "verano": false,
+        "creditos": 17
+      }
+    ],
+    "cursos": [
+      {
+        "sigla": "EF-",
+        "nombre": "Actividad Deportiva",
+        "ciclo": "I",
+        "creditos": 0,
+        "optativo": false,
+        "area": "FG",
+        "req": []
+      },
+      {
+        "sigla": "EG-",
+        "nombre": "Curso de Arte",
+        "ciclo": "I",
+        "creditos": 2,
+        "optativo": false,
+        "area": "FG",
+        "req": [],
+        "nota": "Se elige entre la oferta de la Sede para cada ciclo."
+      },
+      {
+        "sigla": "EG-I",
+        "nombre": "Curso Integrado de Humanidades I",
+        "ciclo": "I",
+        "creditos": 6,
+        "optativo": false,
+        "area": "FG",
+        "req": []
+      },
+      {
+        "sigla": "LM-1001",
+        "nombre": "Inglés Integrado I",
+        "ciclo": "I",
+        "creditos": 8,
+        "optativo": false,
+        "area": "LEN",
+        "req": []
+      },
+      {
+        "sigla": "EG-II",
+        "nombre": "Curso Integrado de Humanidades II",
+        "ciclo": "II",
+        "creditos": 6,
+        "optativo": false,
+        "area": "FG",
+        "req": [
+          "EG-I"
+        ]
+      },
+      {
+        "sigla": "LM-1002",
+        "nombre": "Inglés Integrado II",
+        "ciclo": "II",
+        "creditos": 8,
+        "optativo": false,
+        "area": "LEN",
+        "req": [
+          "LM-1001"
+        ]
+      },
+      {
+        "sigla": "RP-",
+        "nombre": "Repertorio",
+        "ciclo": "II",
+        "creditos": 3,
+        "optativo": false,
+        "area": "FG",
+        "req": [],
+        "nota": "Se elige entre la oferta de la Sede para cada ciclo."
+      },
+      {
+        "sigla": "LM-0352",
+        "nombre": "Gramática Inglesa I",
+        "ciclo": "III",
+        "creditos": 2,
+        "optativo": false,
+        "area": "LEN",
+        "req": [
+          "LM-1002"
+        ]
+      },
+      {
+        "sigla": "LM-1230",
+        "nombre": "Comunicación Oral I",
+        "ciclo": "III",
+        "creditos": 5,
+        "optativo": false,
+        "area": "LEN",
+        "req": [
+          "LM-1002"
+        ]
+      },
+      {
+        "sigla": "LM-1235",
+        "nombre": "Composición Inglesa I",
+        "ciclo": "III",
+        "creditos": 3,
+        "optativo": false,
+        "area": "LEN",
+        "req": [
+          "LM-1002"
+        ]
+      },
+      {
+        "sigla": "LM-1246",
+        "nombre": "Comprensión de Lectura",
+        "ciclo": "III",
+        "creditos": 2,
+        "optativo": false,
+        "area": "LEN",
+        "req": [
+          "LM-1002"
+        ]
+      },
+      {
+        "sigla": "OPT-III-1",
+        "nombre": "Optativo de Inglés",
+        "ciclo": "III",
+        "creditos": 3,
+        "optativo": true,
+        "area": "OPT",
+        "req": [],
+        "etiqueta": "Optativo",
+        "nota": "Se elige un curso de la lista de optativos."
+      },
+      {
+        "sigla": "SR-I",
+        "nombre": "Seminario de Realidad Nacional I",
+        "ciclo": "III",
+        "creditos": 2,
+        "optativo": false,
+        "area": "FG",
+        "req": [
+          "EG-II"
+        ]
+      },
+      {
+        "sigla": "LM-0353",
+        "nombre": "Gramática Inglesa II",
+        "ciclo": "IV",
+        "creditos": 2,
+        "optativo": false,
+        "area": "LEN",
+        "req": [
+          "LM-0352"
+        ],
+        "req_texto": "LM-0352 Equiv.: LM-1234; LM-1230; LM-1235",
+        "coreq": [
+          "LM-1240",
+          "LM-1245"
+        ]
+      },
+      {
+        "sigla": "LM-1237",
+        "nombre": "Introducción a la Literatura Inglesa",
+        "ciclo": "IV",
+        "creditos": 3,
+        "optativo": false,
+        "area": "LIT",
+        "req": [
+          "LM-1235",
+          "LM-1246"
+        ]
+      },
+      {
+        "sigla": "LM-1240",
+        "nombre": "Comunicación Oral II",
+        "ciclo": "IV",
+        "creditos": 5,
+        "optativo": false,
+        "area": "LEN",
+        "req": [
+          "LM-0352"
+        ],
+        "req_texto": "LM-0352 Equiv.: LM-1234; LM-1230; LM-1235",
+        "coreq": [
+          "LM-0353"
+        ],
+        "coreq_texto": "LM-0353 Equiv.: LM-1244; LM-1245"
+      },
+      {
+        "sigla": "LM-1245",
+        "nombre": "Composición Inglesa II",
+        "ciclo": "IV",
+        "creditos": 3,
+        "optativo": false,
+        "area": "LEN",
+        "req": [
+          "LM-0352"
+        ],
+        "req_texto": "LM-0352 Equiv.: LM-1234; LM-1230; LM-1235",
+        "coreq": [
+          "LM-0353"
+        ],
+        "coreq_texto": "LM-0353 Equiv.: LM-1244; LM-1240"
+      },
+      {
+        "sigla": "OPT-IV-1",
+        "nombre": "Optativo de Inglés",
+        "ciclo": "IV",
+        "creditos": 3,
+        "optativo": true,
+        "area": "OPT",
+        "req": [],
+        "etiqueta": "Optativo"
+      },
+      {
+        "sigla": "SR-II",
+        "nombre": "Seminario de Realidad Nacional II",
+        "ciclo": "IV",
+        "creditos": 2,
+        "optativo": false,
+        "area": "FG",
+        "req": [
+          "SR-I"
+        ]
+      },
+      {
+        "sigla": "LM-0354",
+        "nombre": "Gramática Inglesa III",
+        "ciclo": "V",
+        "creditos": 2,
+        "optativo": false,
+        "area": "LEN",
+        "req": [
+          "LM-0353"
+        ],
+        "req_texto": "LM-0353 Equiv.: LM-1244; LM-1240; LM-1245"
+      },
+      {
+        "sigla": "LM-1220",
+        "nombre": "Introducción a la Narrativa",
+        "ciclo": "V",
+        "creditos": 3,
+        "optativo": false,
+        "area": "LIT",
+        "req": [
+          "LM-1237",
+          "LM-1245"
+        ]
+      },
+      {
+        "sigla": "LM-1222",
+        "nombre": "Introducción al Drama",
+        "ciclo": "V",
+        "creditos": 3,
+        "optativo": false,
+        "area": "LIT",
+        "req": [
+          "LM-1237",
+          "LM-1245"
+        ]
+      },
+      {
+        "sigla": "LM-1351",
+        "nombre": "Técnicas de Comunicación y Pronunciación I",
+        "ciclo": "V",
+        "creditos": 5,
+        "optativo": false,
+        "area": "LEN",
+        "req": [
+          "LM-0353"
+        ],
+        "req_texto": "LM-0353 Equiv.: LM-1244; LM-1240; LM-1245"
+      },
+      {
+        "sigla": "LM-1352",
+        "nombre": "Retórica Inglesa I",
+        "ciclo": "V",
+        "creditos": 3,
+        "optativo": false,
+        "area": "LEN",
+        "req": [
+          "LM-0353"
+        ],
+        "req_texto": "LM-0353 Equiv.: LM-1244; LM-1240; LM-1245"
+      },
+      {
+        "sigla": "OPT-V-1",
+        "nombre": "Optativo de Inglés",
+        "ciclo": "V",
+        "creditos": 3,
+        "optativo": true,
+        "area": "OPT",
+        "req": [],
+        "etiqueta": "Optativo"
+      },
+      {
+        "sigla": "LM-0355",
+        "nombre": "Gramática Inglesa IV",
+        "ciclo": "VI",
+        "creditos": 2,
+        "optativo": false,
+        "area": "LEN",
+        "req": [
+          "LM-0354"
+        ],
+        "req_texto": "LM-0354 Equiv.: LM-1353; LM-1351; LM-1352"
+      },
+      {
+        "sigla": "LM-1361",
+        "nombre": "Técnicas de Comunicación y Pronunciación II",
+        "ciclo": "VI",
+        "creditos": 5,
+        "optativo": false,
+        "area": "LEN",
+        "req": [
+          "LM-0354"
+        ],
+        "req_texto": "LM-0354 Equiv.: LM-1353; LM-1351; LM-1352"
+      },
+      {
+        "sigla": "LM-1362",
+        "nombre": "Retórica Inglesa II",
+        "ciclo": "VI",
+        "creditos": 3,
+        "optativo": false,
+        "area": "LEN",
+        "req": [
+          "LM-0354"
+        ],
+        "req_texto": "LM-0354 Equiv.: LM-1353; LM-1351; LM-1352"
+      },
+      {
+        "sigla": "LM-1366",
+        "nombre": "Introducción a la Poesía",
+        "ciclo": "VI",
+        "creditos": 3,
+        "optativo": false,
+        "area": "LIT",
+        "req": [
+          "LM-1351",
+          "LM-1352"
+        ]
+      },
+      {
+        "sigla": "LM-1485",
+        "nombre": "Curso Panorámico de Literatura Británica",
+        "ciclo": "VI",
+        "creditos": 3,
+        "optativo": false,
+        "area": "LIT",
+        "req": [
+          "LM-1220",
+          "LM-1222"
+        ],
+        "req_texto": "LM-1356 Equiv.: LM-1220; LM-1365 Equiv.: LM-1222"
+      },
+      {
+        "sigla": "OPT-VI-1",
+        "nombre": "Optativo de Inglés",
+        "ciclo": "VI",
+        "creditos": 3,
+        "optativo": true,
+        "area": "OPT",
+        "req": [],
+        "etiqueta": "Optativo"
+      },
+      {
+        "sigla": "FL-3168",
+        "nombre": "Introducción a la Lingüística I (En Inglés)",
+        "ciclo": "VII",
+        "creditos": 3,
+        "optativo": false,
+        "area": "LIN",
+        "req": []
+      },
+      {
+        "sigla": "LM-0356",
+        "nombre": "Gramática Inglesa V",
+        "ciclo": "VII",
+        "creditos": 2,
+        "optativo": false,
+        "area": "LEN",
+        "req": [
+          "LM-0355"
+        ],
+        "req_texto": "LM-0355 Equiv.: LM-1363"
+      },
+      {
+        "sigla": "LM-1221",
+        "nombre": "Curso Panorámico de Literatura Norteamericana",
+        "ciclo": "VII",
+        "creditos": 3,
+        "optativo": false,
+        "area": "LIT",
+        "req": [
+          "LM-1485"
+        ]
+      },
+      {
+        "sigla": "LM-1471",
+        "nombre": "Técnicas de Comunicación y Pronunciación III",
+        "ciclo": "VII",
+        "creditos": 3,
+        "optativo": false,
+        "area": "LEN",
+        "req": [
+          "LM-1361",
+          "LM-1362",
+          "LM-0355"
+        ],
+        "req_texto": "LM-1361; LM-1362; LM-1363 Equiv.: LM-0355"
+      },
+      {
+        "sigla": "LM-1472",
+        "nombre": "Retórica Inglesa III",
+        "ciclo": "VII",
+        "creditos": 3,
+        "optativo": false,
+        "area": "LEN",
+        "req": [
+          "LM-0355",
+          "LM-1220",
+          "LM-1361",
+          "LM-1362"
+        ],
+        "req_texto": "LM-0355 Equiv.: LM-1363; LM-1356 Equiv.: LM-1243 o LM-1220; LM-1361; LM-1362"
+      },
+      {
+        "sigla": "OPT-VII-1",
+        "nombre": "Optativo de Inglés",
+        "ciclo": "VII",
+        "creditos": 3,
+        "optativo": true,
+        "area": "OPT",
+        "req": [],
+        "etiqueta": "Optativo"
+      },
+      {
+        "sigla": "LM-0357",
+        "nombre": "Gramática Inglesa VI",
+        "ciclo": "VIII",
+        "creditos": 2,
+        "optativo": false,
+        "area": "LEN",
+        "req": [
+          "LM-0356"
+        ]
+      },
+      {
+        "sigla": "LM-0364",
+        "nombre": "Literatura de la Commonwealth",
+        "ciclo": "VIII",
+        "creditos": 3,
+        "optativo": false,
+        "area": "LIT",
+        "req": [
+          "LM-1471",
+          "LM-1472"
+        ]
+      },
+      {
+        "sigla": "LM-1481",
+        "nombre": "Comunicación Intercultural",
+        "ciclo": "VIII",
+        "creditos": 3,
+        "optativo": false,
+        "area": "LIN",
+        "req": [
+          "LM-1471",
+          "LM-1472"
+        ]
+      },
+      {
+        "sigla": "LM-1482",
+        "nombre": "Retórica Inglesa IV",
+        "ciclo": "VIII",
+        "creditos": 3,
+        "optativo": false,
+        "area": "LEN",
+        "req": [
+          "LM-1471",
+          "LM-1472"
+        ]
+      },
+      {
+        "sigla": "LM-1486",
+        "nombre": "Crítica Literaria",
+        "ciclo": "VIII",
+        "creditos": 3,
+        "optativo": false,
+        "area": "LIT",
+        "req": [
+          "LM-1471",
+          "LM-1472"
+        ]
+      },
+      {
+        "sigla": "OPT-VIII-1",
+        "nombre": "Optativo de Inglés",
+        "ciclo": "VIII",
+        "creditos": 3,
+        "optativo": true,
+        "area": "OPT",
+        "req": [],
+        "etiqueta": "Optativo"
+      }
+    ],
+    "optativos": {
+      "OPT": [
+        {
+          "sigla": "LM-0358",
+          "nombre": "Traducción I",
+          "creditos": 3,
+          "req_texto": "LM-1002"
+        },
+        {
+          "sigla": "LM-0359",
+          "nombre": "Traducción II",
+          "creditos": 3,
+          "req_texto": "LM-0358"
+        },
+        {
+          "sigla": "LM-0360",
+          "nombre": "Traducción III",
+          "creditos": 3,
+          "req_texto": "LM-0359"
+        },
+        {
+          "sigla": "LM-0361",
+          "nombre": "Traducción IV",
+          "creditos": 3,
+          "req_texto": "LM-0360"
+        },
+        {
+          "sigla": "LM-0362",
+          "nombre": "Traducción V",
+          "creditos": 3,
+          "req_texto": "LM-0361"
+        },
+        {
+          "sigla": "LM-0363",
+          "nombre": "Traducción VI",
+          "creditos": 3,
+          "req_texto": "LM-0362"
+        },
+        {
+          "sigla": "LM-0365",
+          "nombre": "Lectura Dirigida",
+          "creditos": 3,
+          "req_texto": "LM-1230; LM-1247"
+        },
+        {
+          "sigla": "LM-1247",
+          "nombre": "Literatura Infantil",
+          "creditos": 3,
+          "req_texto": "LM-1002"
+        },
+        {
+          "sigla": "LM-1358",
+          "nombre": "Literatura de Misterio y Suspenso",
+          "creditos": 3,
+          "req_texto": "LM-1245"
+        },
+        {
+          "sigla": "LM-1368",
+          "nombre": "Literatura y Mujer",
+          "creditos": 3,
+          "req_texto": "LM-0354 Equiv.: LM-1353; LM-1358"
+        },
+        {
+          "sigla": "LM-1477",
+          "nombre": "Literatura y Cine",
+          "creditos": 3,
+          "req_texto": "LM-1361; LM-1368"
+        },
+        {
+          "sigla": "LM-1487",
+          "nombre": "Literatura Comparada",
+          "creditos": 3,
+          "req_texto": "LM-1472; LM-1477"
+        },
+        {
+          "sigla": "LM-2013",
+          "nombre": "Francés I",
+          "creditos": 3
+        },
+        {
+          "sigla": "LM-2014",
+          "nombre": "Francés II",
+          "creditos": 3,
+          "req_texto": "LM-2013 Equiv.: LM-2031"
+        },
+        {
+          "sigla": "LM-2015",
+          "nombre": "Francés III",
+          "creditos": 3,
+          "req_texto": "LM-2014 Equiv.: LM-2033 o LM-2111"
+        },
+        {
+          "sigla": "LM-2016",
+          "nombre": "Francés IV",
+          "creditos": 3,
+          "req_texto": "LM-2015"
+        },
+        {
+          "sigla": "LM-2017",
+          "nombre": "Francés V",
+          "creditos": 3,
+          "req_texto": "LM-2016"
+        },
+        {
+          "sigla": "LM-2207",
+          "nombre": "Civilización Francesa I",
+          "creditos": 3,
+          "req_texto": "LM-2017"
+        }
+      ]
+    },
+    "titulo_optativos": "Lista de cursos optativos",
+    "listas_optativos": [
+      {
+        "id": "OPT",
+        "titulo": "Cursos optativos",
+        "nota": "En cada ciclo desde el III se elige un curso de esta lista, para un total de seis.",
+        "color_de": "OPT"
+      }
+    ]
+  }
 }

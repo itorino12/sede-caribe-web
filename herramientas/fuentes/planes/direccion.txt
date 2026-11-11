@@ -1,0 +1,169 @@
+Bachillerato y Licenciatura                02
+                                         01
+                                       33
+                                  go
+                                di
+                              Có
+
+
+Dirección
+   de
+Empresas
+                 ESTRUCTURA CURRICULAR DEL PLAN DE ESTUDIOS DE BACHILLERATO Y LICENCIATURA EN DIRECCIÓN DE EMPRESAS
+                                                        CÓDIGO 330102, PLAN 2
+  NIVEL Y                     NOMBRE DEL CURSO                          HORAS          REQUISITOS         CORREQUISITOS CRÉDITOS
+   SIGLA                                                           T P L TP
+1 AÑO
+I CICLO
+EG-I        CURSO INTEGRADO DE HUMANIDADES I                       -   -   -   -               ---                  ---     6
+RP-         REPERTORIO                                             -   -   -   -               ---                  ---     3
+EG-         CURSO DE ARTE                                          -   -   -   -               ---                  ---     2
+DN-0101     INTRODUCCIÓN A LA ADMINISTRACIÓN DE NEGOCIOS           1   2   -   -               ---                  ---     3
+MA-0001     PRECÁLCULO                                             5   -   -   -               ---                  ---     0
+XE-0156     INTRODUCCIÓN A LA ECONOMÍA                             4   -   -   -               ---                  ---      4
+                                                                                                                 SUBTOTAL   18
+II CICLO
+EG-II       CURSO INTEGRADO DE HUMANIDADES II                      -   -   -   -              EG-I                  ---     6
+EF-         ACTIVIDAD DEPORTIVA                                    -   -   -   -               ---                  ---     0
+DN-0102     APLICACIONES OFIMÁTICAS PARA LA TOMA DE DECISIONES     2   -   2   -               ---                  ---     3
+PC-0200     CONTABILIDAD BÁSICA                                    2   2   -   -   DN-0101 o PC-0170 o XE-0156      ---     4
+                                                                                      o EC-1100 o XS-3510
+MA-1021     CÁLCULO PARA CIENCIAS ECONÓMICAS I                     5   -   -   -            MA-0001                 ---     4
+                                                                                                                 SUBTOTAL   17
+
+2 AÑO
+III CICLO
+DN-0103     ADMINISTRACIÓN DE PROYECTOS Y HERRAMIENTAS PARA EL     2   -   2   -   DN-0102 o DN-0170 o CI-0101      ---     3
+            ANÁLISIS DE DATOS
+PC-0202     CONTABILIDAD INTERMEDIA I                              2   2   -   -        PC-0200 o DN-0160           ---     3
+PC-0240     MATEMÁTICA FINANCIERA                                  2   1   -   -       MA-1021 o XS-3510            ---     3
+MA-1022     CÁLCULO PARA CIENCIAS ECONÓMICAS II                    5   -   -   -             MA-1021                ---     4
+OPT-        OPCIONAL/1                                             -   -   -   -               ---                  ---     0
+XS-0276     ESTADÍSTICA GENERAL I                                  2   2   -   -   MA-0225 o MA-0230 o MA-1001      ---     4
+                                                                                            o MA-1021
+                                                                                                                 SUBTOTAL   17
+Según Informe Curricular CEA-05-2025
+ NIVEL Y                               NOMBRE DEL CURSO               HORAS               REQUISITOS             CORREQUISITOS CRÉDITOS
+  SIGLA                                                           T    P L TP
+IV CICLO
+DN-0123     METODOLOGÍA DE LA INVESTIGACIÓN                       2   1   -   -              XS-0276                    ---          3
+XS-0277     ESTADÍSTICA GENERAL II                                2   2   -   -    XS-0276, MA-1022 o MA-0230           ---          4
+DN-0104     ELEMENTOS FUNDAMENTALES DE LEGISLACIÓN EMPRESARIAL    2   1   -    -   DN-0101 o PC-0170 o XS-3510          ---          3
+PC-0304     CONTABILIDAD INTERMEDIA II                            2   2   -   -         PC-0240, PC-0202                ---          3
+SR-I        SEMINARIO DE REALIDAD NACIONAL I                      -   -   -   -               EG-II                     ---          2
+DN-0340     ADMINISTRACIÓN FINANCIERA I                           2   1   -   -    PC-0240 o DN-0202, PC-0200           ---          3
+                                                                                                                      SUBTOTAL      18
+
+3 AÑO
+V CICLO
+DN-0105     MÉTODOS CUANTITATIVOS PARA LA TOMA DE DECISIONES I    2   2   -   -       (DN-0340, XS-0277) o       DN-0341, DN-0320   3
+                                                                                        (PC-0322, PC0343)
+DN-0107     ECONOMÍA Y COMERCIO INTERNACIONAL                     3   -   -   -         XE-0156, XS-0276               ---           3
+DN-0341     ADMINISTRACIÓN FINANCIERA II                          2   1   -   -         DN-0340, XS-0277               ---           3
+PC-0261     LEGISLACIÓN COMERCIAL, BANCARIA Y FINANCIERA          2   1   -   -    DN-0104 o DN-0380 o PC-0260         ---           3
+DN-0320     PRINCIPIOS DE MERCADEO                                3   -   -   -         PC-0200, XS-0276             DN-0105         3
+DN-0202     PRINCIPIOS DE GERENCIA                                3   -   -   -        DN-0340 o DN-0160             DN-0320         3
+                                                                                                                      SUBTOTAL      18
+
+VI CICLO
+DN-0106     GESTIÓN DEL TALENTO Y CONOCIMIENTO HUMANO             3   -   -   -            DN-0202                      ---         3
+DN-0110     MÉTODOS CUANTITATIVOS PARA LA TOMA DE DECISIONES II   2   2   -   -        DN-0105 o PC-0490             PC-0344        3
+                                                                                                                    o DN-0442
+PC-0260     LEGISLACIÓN LABORAL                                   2   1   -   -    PC-0261 o DN-0380 o PC-0171          ---          3
+DN-0321     PUBLICIDAD Y PROMOCIÓN                                3   -   -   -              DN-0320                   ---           3
+DN-0442     ADMINISTRACIÓN FINANCIERA III                         2   1   -   -              DN-0341                 DN-0110         3
+SR-II       SEMINARIO DE REALIDAD NACIONAL II                     -   -   -   -               SR-I                      ---          2
+                                                                                                                      SUBTOTAL      17
+Según Informe Curricular CEA-05-2025
+  NIVEL Y                              NOMBRE DEL CURSO            HORAS              REQUISITOS              CORREQUISITOS CRÉDITOS
+   SIGLA                                                       T    P L TP
+4 AÑO
+VII CICLO
+DN-0496     GERENCIA DE OPERACIONES                            3   -   -   -       DN-0110 o DN-0495               ---         3
+DN-0405     EMPRENDIMIENTO Y CREACIÓN DE EMPRESAS              3   -   -   -       DN-0106 o DN-0203             DN-0423       3
+DN-0423     INVESTIGACIÓN DE MERCADOS                          3   -   -   -             DN-0321                 DN-0405       3
+DN-0304     LIDERAZGO GERENCIAL                                3   -   -   -   DN-0106 o DN-0203 o XS-3510         ---         3
+PC-0344     FORMULACIÓN Y EVALUACIÓN DE PROYECTOS I            2   1   -   -       DN-0341 o PC-0343               ---         3
+PC-0462     LEGISLACIÓN TRIBUTARIA Y ADUANERA                  2   1   -   -      (DN-0381, DN-0261) o             ---         3
+                                                                                    (PC-0304, PC-0260)
+                                                                                                                SUBTOTAL       18
+
+VIII CICLO
+DN-0111    GESTIÓN DE LA INNOVACIÓN Y ESTRATEGIA COMPETITIVA   3   -   -   -        DN-0106 o DN-0203         DN-0423          3
+DN-0108    MERCADOS BURSÁTILES                                 2   2   -   -        PC-0344 o DN-0442           ---            4
+DN-0109    PRINCIPIOS DE AUDITORÍA FINANCIERA                  2   1   -   -   (PC-0304 o DN-0261), DN-0442      ---           3
+DN-0112    GERENCIA DE LA CALIDAD                              2   -   2   -             DN-0496                ---            3
+DN-0322    VENTAS Y DISTRIBUCIÓN                               3   -   -   -             DN-0423                ---            3
+                                                                                                             SUBTOTAL         16
+                                                                                                  SUBTOTAL BACHILLERATO       139
+
+5 AÑO
+IX CICLO
+DN-0507     ESTRATEGIAS Y TÁCTICAS DE NEGOCIACIÓN              3   -   -   -   DN-0111 o DN-0406 o XS-3510         ---         3
+DN-0113     ADMINISTRACIÓN MEDIADA POR TECNOLOGÍAS             2   -   2   -      DN-0112 o DN-0496 o              ---         3
+            DE LA INFORMACIÓN                                              -       PC-0410 o PC-0421
+OPT-        CURSO OPTATIVO                                     -   -   -   -                                                   12
+                                                                                                                SUBTOTAL       18
+Según Informe Curricular CEA-05-2025
+ NIVEL Y                   NOMBRE DEL CURSO                                 HORAS                  REQUISITOS              CORREQUISITOS CRÉDITOS
+  SIGLA                                                                 T    P L TP
+X CICLO
+DN-0114  COMUNICACIÓN INTERCULTURAL DE LOS NEGOCIOS                     -       3 -   -   PC-0409 o DN-0113 o DN-0546           ---         3
+                                                                                              o PC-0583 o XS-3510
+DN-0115     TALLER DE INVESTIGACIÓN                                     3   -     -   -   DN-0113 o DN-0114 o DN-0546           ---         3
+                                                                                                    o PC-0583
+OPT-        CURSO OPTATIVO                                              -   -     -   -                                                     12
+                                                                                                                          SUBTOTAL         18
+                                                                                                                SUBTOTAL LICENCIATURA      36
+                                                                                                                            TOTAL          175
+Según Informe Curricular CEA-05-2025
+                                                          LISTA DE CURSOS OPTATIVOS
+
+  SIGLA                                NOMBRE DEL CURSO                     HORAS                  REQUISITOS              CORREQUISITOS CRÉDITOS
+                                                                        T    P L TP
+DN-0116     GESTIÓN DE LA CADENA DE ABASTECIMIENTO                      3    -  - -            DN-0112 o DN-0496                ---         3
+DN-0117     DERIVADOS FINANCIEROS                                       2    1  - -       DN-0108 o (DN-0443, DN-0444) o        ---         3
+                                                                                               (PC-0344 o PC-0411)
+DN-0118     MENTORING AND COACHING                                      3   -     -   -         DN-0304 o PC-0409               ---         3
+DN-0119     FORMULACIÓN Y EVALUACIÓN DE PROYECTOS II                    2   1     -   -        PC-0344 o DN-0546                ---         3
+DN-0120     SHOPPER & RETAIL MARKETING                                  3   -     -   -              DN-0322                    ---         3
+DN-0121     GERENCIA DE RIESGO Y GESTIÓN ASEGURADORA                    3   -     -   -               PC-0344                   ---         3
+DN-0122     VALORACIONES, FUSIONES Y ADQUISICIONES DE EMPRESAS          2   1     -   -               PC-0344                   ---         3
+DN-0124     COSTEO GERENCIAL PARA ADMINISTRADORES                       2   2     -   -         PC-0304 o DN-0261               ---         3
+DN-0171     GESTIÓN SOSTENIBLE DE EMPRESAS                              2   1     -   -    DN-0405 o PC-0409 o XS-3510          ---         3
+DN-0125     MODELOS DE NEGOCIOS SOSTENIBLES Y ESTRATEGIAS               2   1     -   -         DN-0111, DN-0304                ---         3
+            DE ECONOMÍA CIRCULAR
+DN-0172     MERCADEO AVANZADO DE SERVICIOS                              2   1     -   -              DN-0322                    ---         3
+DN-0173     INTELIGENCIA DE NEGOCIOS                                    1   2     -   -              DN-0113                    ---         3
+DN-0424     GERENCIA DE MERCADEO                                        3   -     -   -              DN-0322                    ---         3
+DN-0508     SEMINARIO INTEGRADO DE ALTA GERENCIA                        3   -     -   -         DN-0423 o PC-0409               ---         3
+DN-0526     COMPORTAMIENTO DEL CONSUMIDOR                               3   -     -   -              DN-0423                    ---         3
+DN-0527     MERCADEO INTERNACIONAL                                      3   -     -   -              DN-0526                    ---         3
+DN-0547     BANCA Y SISTEMA ECONÓMICO                                   3   -     -   -    DN-0108 o (DN-0443, DN-0444)         ---         3
+DN-0548     MERCADOS FINANCIEROS INTERNACIONALES                        3   -     -   -    DN-0108 o (DN-0443, DN-0444)         ---         3
+DN-2302     INTELIGENCIA EMOCIONAL EN EL TRABAJO                        2   1     -   -         DN-0304 o DN-0525               ---         3
+Según Informe Curricular CEA-05-2025
+                                                                            LISTA DE CURSOS OPCIONALES
+
+  SIGLA                                   NOMBRE DEL CURSO                                             HORAS                      REQUISITOS                  CORREQUISITOS CRÉDITOS
+                                                                                                  T     P L TP
+LM-0601       INGLÉS PARA ADMINISTRACIÓN DE NEGOCIOS I                                            4     -  - -                      DN-0101                            ---               3
+LM-0602       INGLÉS PARA ADMINISTRACIÓN DE NEGOCIOS II                                           4     -  - -                      LM-0601                            ---               3
+LM-0603       INGLÉS PARA ADMINISTRACIÓN DE NEGOCIOS III                                          4     -  - -                      LM-0602                            ---               3
+LM-0604       INGLÉS PARA ADMINISTRACIÓN DE NEGOCIOS IV                                           4     -  - -                      LM-0603                            ---               3
+
+1/Este espacio no es obligatorio, sino que da la posibilidad de que el estudiantado matricule los cursos opcionales de inglés para fortalecer su formación.
+Conforme al Estatuto Orgánico y al Reglamento de Trabajos Finales de Graduación, la Universidad de Costa Rica establece como requisito de Graduación para obtener el grado de
+licenciatura, las siguientes opciones de Trabajo Final de Graduación: Tesis de Graduación, Seminario de Graduación, Proyecto de Graduación y Práctica Dirigida de Graduación.
+Corresponde a la Unidad Académica indicar cuál o cuáles de estas opciones podrá matricular su población estudiantil.
+Para hacer la presentación pública (defensa) del trabajo final de graduación, el estudiante deberá haber concluido satisfactoriamente, sin excepción, todos los requisitos de su
+plan de estudios.
+Si la defensa es exitosa, en el acto se declarará que el postulante es acreedor del grado de licenciado en el área respectiva, quedando pendiente únicamente la obligación de asistir a un
+Acto Público de Graduación, para ser juramentado y recibir el diploma correspondiente.
+
+Según Informe Curricular CEA-05-2025
+Actualizado el 30 de abril 2025 por MVG
+
+En: Estructuras/Sede UniversitariaRodrigo Facio/Área de Ciencias Sociales/Facultad de Ciencias Económicas/Escuela Administración de Negocios/ Planes actuales/
+Dirección de Empresas B-L
+

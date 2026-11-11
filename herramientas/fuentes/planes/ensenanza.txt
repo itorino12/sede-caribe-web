@@ -1,0 +1,124 @@
+ Bachillerato y Licenciatura                   08
+                                             02
+                                           32
+                                      go
+                                    di
+                                  Có
+
+
+
+Enseñanza
+ del Inglés
+Sede Rodrigo Facio y Sede del Pacífico
+               MALLA CURRICULAR DEL BACHILLERATO EN LA ENSEÑANZA DEL INGLÉS CON SALIDA LATERAL AL PROFESORADO
+                                                    CÓDIGO 320208, PLAN 02
+ NIVEL Y                                                          HORAS
+              NOMBRE DEL CURSO                                                 REQUISITOS       CORREQUISITOS CRÉDITOS
+  SIGLA                                                        T P L TP
+PRIMER AÑO
+
+
+I CICLO
+EG-I          CURSO INTEGRADO DE HUMANIDADES I                      -    -   -   -          ---             ---     6
+EG-           CURSO DE ARTE                                         -    -   -   -          ---             ---     2
+EF-           ACTIVIDAD DEPORTIVA                                   -    -   -   -          ---             ---     0
+FD-0548       INTRODUCCIÓN A LA PEDAGOGÍA                           3    1   -   -          ---             ---     3
+LM-1001       INGLÉS INTEGRADO I                                    10   -   3   -          ---             ---     8
+                                                                                                         SUBTOTAL   19
+
+
+II CICLO
+
+
+EG-II         CURSO INTEGRADO DE HUMANIDADES II                     -    -   -   -         EG-I             ---     6
+OE-1103       PROCESOS DE DESARROLLO EN LA ADOLESCENCIA Y LA VIDA   4    -   -   -       FD-0548            ---     3
+              ADULTA
+LM-1002       INGLÉS INTEGRADO II                                   10   -   3   -       LM-1001            ---     8
+                                                                                                         SUBTOTAL   17
+
+
+SEGUNDO AÑO
+
+
+III CICLO
+FD-0152       FUNDAMENTOS DE DIDÁCTICA                              4    -   -   -       FD-0548            ---     3
+FD-5051       PRINCIPIOS DE CURRÍCULUM                              4    -   -   -   FD-0548 o EA-0340      ---     3
+LM-0352       GRAMÁTICA INGLESA I                                   3    -   -   -       LM-1002            ---     2
+LM-1230       COMUNICACIÓN ORAL I                                   6    -   -   -       LM-1002            ---     5
+LM-1235       COMPOSICIÓN INGLESA I                                 3    -   -   -       LM-1002            ---     3
+LM-1246       COMPRENSIÓN DE LECTURA                                3    -   -   -       LM-1002            ---     2
+                                                                                                         SUBTOTAL   18
+Según Informe Curricular CEA-59-2024
+ NIVEL Y                                                                 HORAS
+              NOMBRE DEL CURSO                                                             REQUISITOS        CORREQUISITOS        CRÉDITOS
+  SIGLA                                                                 T P L TP
+IV CICLO
+SR-I          SEMINARIO DE REALIDAD NACIONAL I                          -   -   -   -          EG-II                 ---             2
+OE-0342       EVALUACIÓN DE LOS APRENDIZAJES EN EL CONTEXTO EDUCATIVO   4   -   -   -    FD-0152, FD-5051            ---             3
+EA-0350       TALLER DE MATERIALES DIDÁCTICOS Y MEDIOS AUDIOVISUALES    2   2   -   -    FD-0152, FD-5051            ---             3
+LM-0353       GRAMÁTICA INGLESA II                                      3   -   -   -   LM-1230, LM-0352 o   LM-1240, LM-1245        2
+                                                                                         LM-1234, LM-1235
+LM-1240       COMUNICACIÓN ORAL II                                      6   -   -   -   LM-1230, LM-0352 o   LM-0353 o LM-1244,      5
+                                                                                         LM-1234, LM-1235         LM-1245
+LM-1245       COMPOSICIÓN INGLESA II                                    3   -   -   -   LM-1230, LM-0352 o   LM-1240, LM-0353        3
+                                                                                         LM-1234, LM-1235        o LM-1244
+                                                                                                                SUBTOTAL             18
+TERCER AÑO
+V CICLO
+FD-0530       METODOLOGÍA DE LA ENSEÑANZA DEL INGLÉS                    2   2   -   -    OE-0342, EA-0350            ---             3
+LM-0354       GRAMÁTICA INGLESA III                                     3   -   -   -    LM-1240, LM-1245,           ---             2
+                                                                                        LM- 0353 o LM-1244
+LM-1243       NARRATIVAS PARA LA ENSEÑANZA DEL INGLÉS                   2   -   -   -        LM-1246                 ---             2
+LM-1351       TÉCNICAS DE COMUNICACIÓN Y PRONUNCIACIÓN I                6   -   -   -   LM-1240, LM-0353 o           ---             5
+                                                                                         LM-1244, LM-1245
+LM-1352       RETÓRICA INGLESA I                                        3   -   -   -   LM-1240, LM-0353 o           ---             3
+                                                                                         LM-1244, LM-1245
+                                                                                                                SUBTOTAL             15
+VI CICLO
+FD-0540       EXPERIENCIA DOCENTE EN INGLÉS                             4 14    -   -         FD-0530                ---             6
+LM-0355       GRAMÁTICA INGLESA IV                                      3   -   -   -    LM-1351, LM-1352,           ---             2
+                                                                                         LM-0354 o LM-1353
+LM-1354       POESÍA PARA LA ENSEÑANZA DEL INGLÉS                       3   -   -   -        LM-1240                 ---             3
+LM-1361       TÉCNICAS DE COMUNICACIÓN Y PRONUNCIACIÓN II               6   -   -   -    LM-1351, LM-1352,           ---             5
+                                                                                         LM-0354 o LM-1353
+LM-1362       RETÓRICA INGLESA II                                       3   -   -   -    LM-1351, LM-1352,           ---             3
+                                                                                        LM- 0354 o LM-1353
+                                                                                                                SUBTOTAL             19
+Según Informe Curricular CEA-59-2024
+  NIVEL Y                                                                                                           HORAS
+                NOMBRE DEL CURSO                                                                                                                  REQUISITOS                       CORREQUISITOS    CRÉDITOS
+   SIGLA                                                                                                           T P L TP
+CUARTO AÑO
+VII CICLO
+RP-             REPERTORIO                                                                                         -    -    -    -                       ---                                 ---      3
+FD-0545         INVESTIGACIÓN PARA EL MEJORAMIENTO DEL APRENDIZAJE                                                 2    2    -    -     FD-0535 o FD-0536 o FD-0537 o                         ---      3
+                                                                                                                                        FD-0028 o FD-0538 o FD-0539 o
+                                                                                                                                        FD-0540 o FD-0541 o FD-0542 o
+                                                                                                                                                      FD-0543
+FD-0554         SEMINARIO DE ENSEÑANZA DEL INGLÉS                                                                  3    3    -    -                   FD-0540                                 ---      4
+LM-1364         DRAMA PARA LA ENSEÑANZA DEL INGLÉS I                                                               3    -    -    -            LM-1243, LM-1351                               ---      3
+LM-1471         TÉCNICAS DE COMUNICACIÓN Y PRONUNCIACIÓN III                                                       4    -    -    -            LM-1361, LM-1362,                              ---      3
+                                                                                                                                               LM-1363 o LM-0355
+LM-1472         RETÓRICA INGLESA III                                                                               3    -    -    -    LM-1356 o LM-1243 o LM-1220,                           ---      3
+                                                                                                                                               LM-1361, LM-1362,
+                                                                                                                                               LM-0355 o LM-1363
+                                                                                                                                                                                       SUBTOTAL        19
+VIII CICLO
+SR-II           SEMINARIO DE REALIDAD NACIONAL II                                                                  -    -    -    -                     SR-I                                  ---      2
+OE-1012         PRINCIPIOS DE PSICOPEDAGOGÍA EN LA ADOLESCENCIA Y LA                                               4    -    -    -             FD-0152 o FD-0023                             ---      3
+                VIDA ADULTA
+FD-0544         TEORÍA DE LA EDUCACIÓN                                                                             3    1    -    -    FD-1046 o FD-0534 o FD-0535 o                          ---      3
+                                                                                                                                        FD-0536 o FD-0537 o FD-0026 o
+                                                                                                                                       FD-0538 o FD-0539 o FD-0540 o
+                                                                                                                                        FD-0541 o FD-0542 o FD-0543 o
+                                                                                                                                                      FD-0547
+LM-1481         COMUNICACIÓN INTERCULTURAL                                                                         4    -    -    -            LM-1471, LM-1472                               ---      3
+LM-1482         RETÓRICA INGLESA IV                                                                                3    -    -    -            LM-1471, LM-1472                               ---      3
+LM-1486         CRÍTICA LITERARIA                                                                                  4    -    -    -            LM-1471, LM-1472                               ---      3
+                                                                                                                                                                                       SUBTOTAL        17
+                                                                                                                                                                                          TOTAL       142
+Al concluir el VI ciclo el estudiantado puede optar por el título de profesorado, para lo cual debe aprobar 150 horas de Trabajo Comunal Universitario. Para optar por el título de Bachillerato,
+el estudiantado debe aprobar 150 horas adicionales, para así completar las 300.
+Según Informe Curricular CEA-59-2024 Actualizado el 27/11/2024 por NPE
+En: Estructuras\Sede Universitaria Rodrigo Facio\Área de Ciencias Sociales\ Facultad de Educación\Escuela de Formación Docente\ Carreras Compartidas\Planes actuales/Enseñanza Inglés B.
+

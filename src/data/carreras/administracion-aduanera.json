@@ -30,5 +30,1269 @@
       "url": "https://drive.google.com/file/d/1IBZe_Fsrt3FlvRfqyVEqFl8wQi8rtdQW/view",
       "principal": true
     }
-  ]
+  ],
+  "malla": {
+    "plan": "Plan de estudios",
+    "total": 165,
+    "tcu": null,
+    "resumen_creditos": "165 créditos: 83 del diplomado (hasta el V ciclo), 135 del bachillerato (hasta el VIII ciclo) y 30 de la licenciatura, que se cursa en uno de cuatro énfasis. En el IX y el X ciclo se muestran los cuatro énfasis; cada estudiante cursa uno.",
+    "nota_fuente": "Fuente: estructura curricular del plan de estudios (Informe Curricular CEA-46-2024). Las siglas que siguen a «o» en los requisitos son cursos equivalentes de planes anteriores.",
+    "areas": [
+      {
+        "id": "ADU",
+        "nombre": "Derecho, regímenes y gestión aduanera",
+        "corto": "Gestión aduanera",
+        "color": "#0A6AA6",
+        "oscuro": "#5AAEE0",
+        "descripcion": "Derecho aduanero, regímenes y sus procedimientos, valoración, control y fiscalización, facilitación y los cursos del énfasis en gestión aduanera.",
+        "creditos": 49
+      },
+      {
+        "id": "MER",
+        "nombre": "Merceología, arancel y origen",
+        "corto": "Merceología",
+        "color": "#A8550A",
+        "oscuro": "#E8A060",
+        "descripcion": "Clasificación arancelaria de mercancías, arancel y barreras no arancelarias y normas de origen.",
+        "creditos": 21
+      },
+      {
+        "id": "COM",
+        "nombre": "Comercio internacional y economía",
+        "corto": "Comercio internacional",
+        "color": "#00796B",
+        "oscuro": "#4DB6A8",
+        "descripcion": "Economía, comercio multilateral y regional, tratados comerciales, comercio de servicios y los cursos del énfasis en comercio internacional.",
+        "creditos": 44
+      },
+      {
+        "id": "LOG",
+        "nombre": "Logística y cadena de abastecimiento",
+        "corto": "Logística",
+        "color": "#5A47A6",
+        "oscuro": "#A595E6",
+        "descripcion": "Introducción a la logística y los cursos del énfasis en logística y cadena de abastecimiento.",
+        "creditos": 27
+      },
+      {
+        "id": "GES",
+        "nombre": "Gestión, finanzas y mercadeo",
+        "corto": "Gestión y finanzas",
+        "color": "#B0306A",
+        "oscuro": "#E58BB5",
+        "descripcion": "Organizaciones, planificación, contabilidad, finanzas, mercadeo, proyectos y los cursos del énfasis en gestión de organizaciones de comercio exterior.",
+        "creditos": 45
+      },
+      {
+        "id": "MET",
+        "nombre": "Métodos, idiomas y análisis de datos",
+        "corto": "Métodos e idiomas",
+        "color": "#3B6E2C",
+        "oscuro": "#8CC27A",
+        "descripcion": "Precálculo y cálculo, expresión oral y escrita, inglés, métodos de investigación, análisis de datos y seminario de investigación.",
+        "creditos": 18
+      },
+      {
+        "id": "OPT",
+        "nombre": "Optativos",
+        "corto": "Optativos",
+        "color": "#7A5C00",
+        "oscuro": "#D9B550",
+        "descripcion": "Tres cursos optativos de 3 créditos, uno en el VI ciclo, uno en el VIII y uno en el X.",
+        "creditos": 9
+      },
+      {
+        "id": "FG",
+        "nombre": "Formación general",
+        "corto": "Formación general",
+        "color": "#5F6B78",
+        "oscuro": "#A9B4BF",
+        "descripcion": "Cursos integrados de humanidades, arte, repertorio, actividad deportiva y seminarios de realidad nacional, comunes a toda la Universidad.",
+        "creditos": 21
+      }
+    ],
+    "ciclos": [
+      {
+        "n": "I",
+        "anio": 1,
+        "nombre": "I ciclo",
+        "verano": false,
+        "creditos": 19
+      },
+      {
+        "n": "II",
+        "anio": 1,
+        "nombre": "II ciclo",
+        "verano": false,
+        "creditos": 18
+      },
+      {
+        "n": "III",
+        "anio": 2,
+        "nombre": "III ciclo",
+        "verano": false,
+        "creditos": 17
+      },
+      {
+        "n": "IV",
+        "anio": 2,
+        "nombre": "IV ciclo",
+        "verano": false,
+        "creditos": 14
+      },
+      {
+        "n": "V",
+        "anio": 3,
+        "nombre": "V ciclo",
+        "verano": false,
+        "creditos": 15
+      },
+      {
+        "n": "VI",
+        "anio": 3,
+        "nombre": "VI ciclo",
+        "verano": false,
+        "creditos": 18
+      },
+      {
+        "n": "VII",
+        "anio": 4,
+        "nombre": "VII ciclo",
+        "verano": false,
+        "creditos": 17
+      },
+      {
+        "n": "VIII",
+        "anio": 4,
+        "nombre": "VIII ciclo",
+        "verano": false,
+        "creditos": 17
+      },
+      {
+        "n": "IX",
+        "anio": 5,
+        "nombre": "IX ciclo · un énfasis",
+        "verano": false,
+        "tramo": "Licenciatura",
+        "creditos": 15
+      },
+      {
+        "n": "X",
+        "anio": 5,
+        "nombre": "X ciclo · un énfasis",
+        "verano": false,
+        "tramo": "Licenciatura",
+        "creditos": 15
+      }
+    ],
+    "cursos": [
+      {
+        "sigla": "EG-I",
+        "nombre": "Curso Integrado de Humanidades I",
+        "ciclo": "I",
+        "creditos": 6,
+        "optativo": false,
+        "area": "FG",
+        "req": []
+      },
+      {
+        "sigla": "EG-",
+        "nombre": "Curso de Arte",
+        "ciclo": "I",
+        "creditos": 2,
+        "optativo": false,
+        "area": "FG",
+        "req": [],
+        "nota": "Se elige entre la oferta de la Sede para cada ciclo."
+      },
+      {
+        "sigla": "MA-0001",
+        "nombre": "Precálculo",
+        "ciclo": "I",
+        "creditos": 0,
+        "optativo": false,
+        "area": "MET",
+        "req": []
+      },
+      {
+        "sigla": "XE-0156",
+        "nombre": "Introducción a la Economía",
+        "ciclo": "I",
+        "creditos": 4,
+        "optativo": false,
+        "area": "COM",
+        "req": []
+      },
+      {
+        "sigla": "FL-2075",
+        "nombre": "Técnicas de Expresión Escrita y Oral",
+        "ciclo": "I",
+        "creditos": 2,
+        "optativo": false,
+        "area": "MET",
+        "req": []
+      },
+      {
+        "sigla": "XP-0240",
+        "nombre": "Introducción al Estado, Sociedad, Comercio y Aduanas",
+        "ciclo": "I",
+        "creditos": 2,
+        "optativo": false,
+        "area": "COM",
+        "req": []
+      },
+      {
+        "sigla": "XP-0243",
+        "nombre": "Métodos y Técnicas de Investigación",
+        "ciclo": "I",
+        "creditos": 3,
+        "optativo": false,
+        "area": "MET",
+        "req": [],
+        "coreq_texto": "FL-0275"
+      },
+      {
+        "sigla": "EG-II",
+        "nombre": "Curso Integrado de Humanidades II",
+        "ciclo": "II",
+        "creditos": 6,
+        "optativo": false,
+        "area": "FG",
+        "req": [
+          "EG-I"
+        ]
+      },
+      {
+        "sigla": "EF-",
+        "nombre": "Actividad Deportiva",
+        "ciclo": "II",
+        "creditos": 0,
+        "optativo": false,
+        "area": "FG",
+        "req": []
+      },
+      {
+        "sigla": "MA-1021",
+        "nombre": "Cálculo para Ciencias Económicas I",
+        "ciclo": "II",
+        "creditos": 4,
+        "optativo": false,
+        "area": "MET",
+        "req": [
+          "MA-0001"
+        ]
+      },
+      {
+        "sigla": "XP-0201",
+        "nombre": "Economía Internacional",
+        "ciclo": "II",
+        "creditos": 2,
+        "optativo": false,
+        "area": "COM",
+        "req": [
+          "XE-0156"
+        ]
+      },
+      {
+        "sigla": "XP-0241",
+        "nombre": "Introducción al Derecho Aduanero",
+        "ciclo": "II",
+        "creditos": 3,
+        "optativo": false,
+        "area": "ADU",
+        "req": [
+          "XP-0240"
+        ],
+        "req_texto": "XP-0240 o XP-0106"
+      },
+      {
+        "sigla": "XP-0242",
+        "nombre": "Merceología y Clasificación I",
+        "ciclo": "II",
+        "creditos": 3,
+        "optativo": false,
+        "area": "MER",
+        "req": [
+          "XP-0240"
+        ],
+        "req_texto": "XP-0240 o XP-0106"
+      },
+      {
+        "sigla": "SR-I",
+        "nombre": "Seminario de Realidad Nacional I",
+        "ciclo": "III",
+        "creditos": 2,
+        "optativo": false,
+        "area": "FG",
+        "req": [
+          "EG-II"
+        ]
+      },
+      {
+        "sigla": "XP-0301",
+        "nombre": "Aspectos Legales del Procedimiento Administrativo Aduanero",
+        "ciclo": "III",
+        "creditos": 3,
+        "optativo": false,
+        "area": "ADU",
+        "req": [
+          "XP-0241"
+        ]
+      },
+      {
+        "sigla": "XP-0244",
+        "nombre": "Merceología y Clasificación II",
+        "ciclo": "III",
+        "creditos": 3,
+        "optativo": false,
+        "area": "MER",
+        "req": [
+          "XP-0242"
+        ],
+        "req_texto": "XP-0242 o XP-0213"
+      },
+      {
+        "sigla": "XP-0246",
+        "nombre": "Teoría de las Organizaciones",
+        "ciclo": "III",
+        "creditos": 3,
+        "optativo": false,
+        "area": "GES",
+        "req": [
+          "XP-0201"
+        ]
+      },
+      {
+        "sigla": "XP-0247",
+        "nombre": "Comercio Multilateral y Regional I",
+        "ciclo": "III",
+        "creditos": 3,
+        "optativo": false,
+        "area": "COM",
+        "req": [
+          "XP-0240"
+        ],
+        "req_texto": "XP-0240 o XP-0106"
+      },
+      {
+        "sigla": "LM-0348",
+        "nombre": "Inglés para Administración y Comercio I",
+        "ciclo": "III",
+        "creditos": 3,
+        "optativo": false,
+        "area": "MET",
+        "req": []
+      },
+      {
+        "sigla": "SR-II",
+        "nombre": "Seminario de Realidad Nacional II",
+        "ciclo": "IV",
+        "creditos": 2,
+        "optativo": false,
+        "area": "FG",
+        "req": [
+          "SR-I"
+        ]
+      },
+      {
+        "sigla": "XP-0527",
+        "nombre": "Derecho Aduanero",
+        "ciclo": "IV",
+        "creditos": 3,
+        "optativo": false,
+        "area": "ADU",
+        "req": [
+          "XP-0301"
+        ]
+      },
+      {
+        "sigla": "XP-0248",
+        "nombre": "Merceología y Clasificación III",
+        "ciclo": "IV",
+        "creditos": 3,
+        "optativo": false,
+        "area": "MER",
+        "req": [
+          "XP-0244"
+        ],
+        "req_texto": "XP-0244 o XP-0233"
+      },
+      {
+        "sigla": "XP-0249",
+        "nombre": "Comercio Multilateral y Regional II",
+        "ciclo": "IV",
+        "creditos": 3,
+        "optativo": false,
+        "area": "COM",
+        "req": [
+          "XP-0247"
+        ],
+        "req_texto": "XP-0247 o XP-0302"
+      },
+      {
+        "sigla": "XP-0250",
+        "nombre": "Planificación Estratégica",
+        "ciclo": "IV",
+        "creditos": 3,
+        "optativo": false,
+        "area": "GES",
+        "req": [
+          "XP-0246"
+        ],
+        "req_texto": "XP-0246 o XP-1002"
+      },
+      {
+        "sigla": "XP-0252",
+        "nombre": "Merceología y Clasificación IV",
+        "ciclo": "V",
+        "creditos": 3,
+        "optativo": false,
+        "area": "MER",
+        "req": [
+          "XP-0248"
+        ],
+        "req_texto": "XP-0248 o XP-0333"
+      },
+      {
+        "sigla": "XP-0253",
+        "nombre": "Arancel y Barreras No Arancelarias",
+        "ciclo": "V",
+        "creditos": 3,
+        "optativo": false,
+        "area": "MER",
+        "req": [
+          "XP-0248"
+        ],
+        "req_texto": "XP-0248 o XP-0333",
+        "coreq": [
+          "XP-0252"
+        ],
+        "coreq_texto": "XP-0252 o XP-0105"
+      },
+      {
+        "sigla": "XP-0502",
+        "nombre": "Regímenes Aduaneros y sus Procedimientos I",
+        "ciclo": "V",
+        "creditos": 3,
+        "optativo": false,
+        "area": "ADU",
+        "req": [
+          "XP-0527"
+        ]
+      },
+      {
+        "sigla": "XP-0503",
+        "nombre": "Valoración Aduanera de Mercancías I",
+        "ciclo": "V",
+        "creditos": 3,
+        "optativo": false,
+        "area": "ADU",
+        "req": [
+          "XP-0527"
+        ]
+      },
+      {
+        "sigla": "XP-0245",
+        "nombre": "Contabilidad para Comercio Internacional",
+        "ciclo": "V",
+        "creditos": 3,
+        "optativo": false,
+        "area": "GES",
+        "req": []
+      },
+      {
+        "sigla": "XP-0251",
+        "nombre": "Finanzas",
+        "ciclo": "VI",
+        "creditos": 3,
+        "optativo": false,
+        "area": "GES",
+        "req": [
+          "XP-0245"
+        ],
+        "req_texto": "XP-0245 o MA-0230"
+      },
+      {
+        "sigla": "XP-0254",
+        "nombre": "Mercadeo Estratégico",
+        "ciclo": "VI",
+        "creditos": 3,
+        "optativo": false,
+        "area": "GES",
+        "req": [
+          "XP-0250"
+        ],
+        "req_texto": "XP-0250 o XP-4016"
+      },
+      {
+        "sigla": "XP-0255",
+        "nombre": "Normas de Origen",
+        "ciclo": "VI",
+        "creditos": 3,
+        "optativo": false,
+        "area": "MER",
+        "req": [
+          "XP-0253"
+        ],
+        "req_texto": "XP-0253 o XP-0501"
+      },
+      {
+        "sigla": "XP-0602",
+        "nombre": "Regímenes Aduaneros y sus Procedimientos II",
+        "ciclo": "VI",
+        "creditos": 3,
+        "optativo": false,
+        "area": "ADU",
+        "req": [
+          "XP-0502"
+        ]
+      },
+      {
+        "sigla": "XP-0603",
+        "nombre": "Valoración Aduanera de Mercancías II",
+        "ciclo": "VI",
+        "creditos": 3,
+        "optativo": false,
+        "area": "ADU",
+        "req": [
+          "XP-0503"
+        ]
+      },
+      {
+        "sigla": "OPT-VI-1",
+        "nombre": "Optativo/2",
+        "ciclo": "VI",
+        "creditos": 3,
+        "optativo": true,
+        "area": "OPT",
+        "req": [],
+        "etiqueta": "Optativo",
+        "nota": "Se elige un curso de la lista de optativos."
+      },
+      {
+        "sigla": "RP-",
+        "nombre": "Repertorio",
+        "ciclo": "VII",
+        "creditos": 3,
+        "optativo": false,
+        "area": "FG",
+        "req": [],
+        "nota": "Se elige entre la oferta de la Sede para cada ciclo."
+      },
+      {
+        "sigla": "XP-0256",
+        "nombre": "Modelos de Negocios de la Economía Digital",
+        "ciclo": "VII",
+        "creditos": 3,
+        "optativo": false,
+        "area": "GES",
+        "req": [
+          "XP-0254"
+        ],
+        "req_texto": "XP-0801 o XP-0254"
+      },
+      {
+        "sigla": "XP-0257",
+        "nombre": "Introducción a la Logística",
+        "ciclo": "VII",
+        "creditos": 3,
+        "optativo": false,
+        "area": "LOG",
+        "req": [
+          "XP-0602",
+          "XP-0603"
+        ]
+      },
+      {
+        "sigla": "XP-0258",
+        "nombre": "Acceso a Mercados en los Tratados Comerciales de Costa Rica",
+        "ciclo": "VII",
+        "creditos": 3,
+        "optativo": false,
+        "area": "COM",
+        "req": [
+          "XP-0255",
+          "XP-0249"
+        ],
+        "req_texto": "XP-0601 o XP-0255, XP-0401 o XP-0249"
+      },
+      {
+        "sigla": "XP-0259",
+        "nombre": "Control y Fiscalización Aduanera",
+        "ciclo": "VII",
+        "creditos": 3,
+        "optativo": false,
+        "area": "ADU",
+        "req": [
+          "XP-0602"
+        ]
+      },
+      {
+        "sigla": "XP-0260",
+        "nombre": "Taller Práctico",
+        "ciclo": "VII",
+        "creditos": 2,
+        "optativo": false,
+        "area": "ADU",
+        "req": [
+          "XP-0253",
+          "XP-0255",
+          "XP-0602",
+          "XP-0603",
+          "XP-0252"
+        ],
+        "req_texto": "XP-0501 o XP-0253, XP-0255 o XP-0601, XP-0602, XP-0603, XP-0252 o XP-0105"
+      },
+      {
+        "sigla": "XP-0261",
+        "nombre": "Facilitación del Comercio",
+        "ciclo": "VIII",
+        "creditos": 3,
+        "optativo": false,
+        "area": "ADU",
+        "req": [
+          "XP-0259"
+        ],
+        "req_texto": "XP-0259 o XP-0803"
+      },
+      {
+        "sigla": "XP-0262",
+        "nombre": "Administración de Tratados y sus Mejores Prácticas",
+        "ciclo": "VIII",
+        "creditos": 3,
+        "optativo": false,
+        "area": "COM",
+        "req": [
+          "XP-0258"
+        ],
+        "req_texto": "XP-0258 o XP-0560"
+      },
+      {
+        "sigla": "XP-0263",
+        "nombre": "Comercio de Servicios I",
+        "ciclo": "VIII",
+        "creditos": 3,
+        "optativo": false,
+        "area": "COM",
+        "req": [
+          "XP-0258"
+        ],
+        "req_texto": "XP-0258 o XP-0560"
+      },
+      {
+        "sigla": "XP-0264",
+        "nombre": "Formulación de Proyectos",
+        "ciclo": "VIII",
+        "creditos": 3,
+        "optativo": false,
+        "area": "GES",
+        "req": [
+          "XP-0256"
+        ],
+        "req_texto": "XP-0256 o XP-0804"
+      },
+      {
+        "sigla": "XP-0265",
+        "nombre": "Taller de Tics con Énfasis en Pedimentación",
+        "ciclo": "VIII",
+        "creditos": 2,
+        "optativo": false,
+        "area": "ADU",
+        "req": [
+          "XP-0260"
+        ],
+        "req_texto": "XP-0260 o XP-0702"
+      },
+      {
+        "sigla": "OPT-VIII-1",
+        "nombre": "Optativo/2",
+        "ciclo": "VIII",
+        "creditos": 3,
+        "optativo": true,
+        "area": "OPT",
+        "req": [],
+        "etiqueta": "Optativo",
+        "nota": "Se elige un curso de la lista de optativos."
+      },
+      {
+        "sigla": "XP-0266",
+        "nombre": "Comercio de Mercancías",
+        "ciclo": "IX",
+        "creditos": 3,
+        "optativo": false,
+        "area": "COM",
+        "req": [
+          "XP-0263"
+        ],
+        "req_texto": "XP-0263 o XP-0563",
+        "nota": "Énfasis en comercio internacional."
+      },
+      {
+        "sigla": "XP-0267",
+        "nombre": "Comercio de Servicios II",
+        "ciclo": "IX",
+        "creditos": 3,
+        "optativo": false,
+        "area": "COM",
+        "req": [
+          "XP-0263"
+        ],
+        "req_texto": "XP-0263 o XP-0563",
+        "nota": "Énfasis en comercio internacional."
+      },
+      {
+        "sigla": "XP-0268",
+        "nombre": "Solución de Controversias",
+        "ciclo": "IX",
+        "creditos": 3,
+        "optativo": false,
+        "area": "COM",
+        "req": [
+          "XP-0262"
+        ],
+        "req_texto": "XP-0262 o XP-0574",
+        "nota": "Énfasis en comercio internacional."
+      },
+      {
+        "sigla": "XP-0269",
+        "nombre": "Atracción de Inversión Extranjera Directa",
+        "ciclo": "IX",
+        "creditos": 3,
+        "optativo": false,
+        "area": "COM",
+        "req": [
+          "XP-0263"
+        ],
+        "req_texto": "XP-0263 o XP-0563",
+        "nota": "Énfasis en comercio internacional."
+      },
+      {
+        "sigla": "XP-0312",
+        "nombre": "Seminario de Investigación",
+        "ciclo": "IX",
+        "creditos": 3,
+        "optativo": false,
+        "area": "MET",
+        "req": [],
+        "nota": "Lo llevan los cuatro énfasis."
+      },
+      {
+        "sigla": "XP-0270",
+        "nombre": "Defensa Comercial",
+        "ciclo": "X",
+        "creditos": 3,
+        "optativo": false,
+        "area": "COM",
+        "req": [
+          "XP-0266"
+        ],
+        "req_texto": "XP-0266 o XP-0562",
+        "nota": "Énfasis en comercio internacional."
+      },
+      {
+        "sigla": "XP-0271",
+        "nombre": "Propiedad Intelectual",
+        "ciclo": "X",
+        "creditos": 3,
+        "optativo": false,
+        "area": "COM",
+        "req": [
+          "XP-0267",
+          "XP-0269"
+        ],
+        "nota": "Énfasis en comercio internacional."
+      },
+      {
+        "sigla": "XP-0272",
+        "nombre": "Reglas de Origen y sus Procedimientos",
+        "ciclo": "X",
+        "creditos": 3,
+        "optativo": false,
+        "area": "MER",
+        "req": [
+          "XP-0255",
+          "XP-0266"
+        ],
+        "req_texto": "XP-0255 o XP-0601, XP-0266 o XP-0562",
+        "nota": "Énfasis en comercio internacional y en gestión aduanera."
+      },
+      {
+        "sigla": "XP-0273",
+        "nombre": "Negociación de Tratados y Técnicas de Negociación",
+        "ciclo": "X",
+        "creditos": 3,
+        "optativo": false,
+        "area": "COM",
+        "req": [
+          "XP-0266",
+          "XP-0267",
+          "XP-0268",
+          "XP-0269"
+        ],
+        "req_texto": "XP-0266 o XP-0562, XP-0267 XP-0268, XP-0269",
+        "nota": "Énfasis en comercio internacional."
+      },
+      {
+        "sigla": "OPT-X-1",
+        "nombre": "Optativo/2",
+        "ciclo": "X",
+        "creditos": 3,
+        "optativo": true,
+        "area": "OPT",
+        "req": [],
+        "etiqueta": "Optativo",
+        "nota": "Se elige un curso de la lista de optativos."
+      },
+      {
+        "sigla": "XP-0274",
+        "nombre": "Gestión de la Cadena de Abastecimiento",
+        "ciclo": "IX",
+        "creditos": 3,
+        "optativo": false,
+        "area": "LOG",
+        "req": [
+          "XP-0257"
+        ],
+        "req_texto": "XP-0257 o XP-0701",
+        "nota": "Énfasis en logística y cadena de abastecimiento."
+      },
+      {
+        "sigla": "XP-0275",
+        "nombre": "Compraventa Internacional y Medios de Pagos Internacionales",
+        "ciclo": "IX",
+        "creditos": 3,
+        "optativo": false,
+        "area": "LOG",
+        "req": [
+          "XP-0257"
+        ],
+        "req_texto": "XP-0257 o XP-0701",
+        "nota": "Énfasis en logística y cadena de abastecimiento."
+      },
+      {
+        "sigla": "XP-0276",
+        "nombre": "Sistema de Redes de Transporte",
+        "ciclo": "IX",
+        "creditos": 3,
+        "optativo": false,
+        "area": "LOG",
+        "req": [
+          "XP-0257"
+        ],
+        "req_texto": "XP-0257 o XP-0701",
+        "nota": "Énfasis en logística y cadena de abastecimiento."
+      },
+      {
+        "sigla": "XP-0277",
+        "nombre": "Gestión de la Calidad en Logística",
+        "ciclo": "IX",
+        "creditos": 3,
+        "optativo": false,
+        "area": "LOG",
+        "req": [
+          "XP-0257"
+        ],
+        "req_texto": "XP-0257 o XP-0701",
+        "nota": "Énfasis en logística y cadena de abastecimiento."
+      },
+      {
+        "sigla": "XP-0278",
+        "nombre": "Gestión Estratégica de Compras",
+        "ciclo": "X",
+        "creditos": 3,
+        "optativo": false,
+        "area": "LOG",
+        "req": [
+          "XP-0274"
+        ],
+        "nota": "Énfasis en logística y cadena de abastecimiento."
+      },
+      {
+        "sigla": "XP-0279",
+        "nombre": "Tecnologías de la Informacón en Logística",
+        "ciclo": "X",
+        "creditos": 3,
+        "optativo": false,
+        "area": "LOG",
+        "req": [
+          "XP-0274"
+        ],
+        "nota": "Énfasis en logística y cadena de abastecimiento."
+      },
+      {
+        "sigla": "XP-0280",
+        "nombre": "Gestión de Inventarios y Almacenes",
+        "ciclo": "X",
+        "creditos": 3,
+        "optativo": false,
+        "area": "LOG",
+        "req": [
+          "XP-0274",
+          "XP-0275",
+          "XP-0276",
+          "XP-0277"
+        ],
+        "nota": "Énfasis en logística y cadena de abastecimiento."
+      },
+      {
+        "sigla": "XP-0281",
+        "nombre": "Taller de Logística y Cadena de Abastecimiento",
+        "ciclo": "X",
+        "creditos": 3,
+        "optativo": false,
+        "area": "LOG",
+        "req": [
+          "XP-0274",
+          "XP-0275",
+          "XP-0276",
+          "XP-0277"
+        ],
+        "coreq": [
+          "XP-0278",
+          "XP-0279",
+          "XP-0280"
+        ],
+        "nota": "Énfasis en logística y cadena de abastecimiento."
+      },
+      {
+        "sigla": "XP-0282",
+        "nombre": "Mercadeo Internacional",
+        "ciclo": "IX",
+        "creditos": 3,
+        "optativo": false,
+        "area": "GES",
+        "req": [
+          "XP-0251",
+          "XP-0254",
+          "XP-0264"
+        ],
+        "req_texto": "XP-0251 o XP-3005, XP-0254 o XP-0801, XP-0264 o XP-0901",
+        "nota": "Énfasis en gestión de organizaciones de comercio exterior."
+      },
+      {
+        "sigla": "XP-0283",
+        "nombre": "Gestión y Procesos de las Organizaciones",
+        "ciclo": "IX",
+        "creditos": 3,
+        "optativo": false,
+        "area": "GES",
+        "req": [
+          "XP-0251",
+          "XP-0254",
+          "XP-0264"
+        ],
+        "req_texto": "XP-0251 o XP-3005, XP-0254 o XP-0801, XP-0264 o XP-0901",
+        "nota": "Énfasis en gestión de organizaciones de comercio exterior."
+      },
+      {
+        "sigla": "XP-0284",
+        "nombre": "Evaluación de Proyectos",
+        "ciclo": "IX",
+        "creditos": 3,
+        "optativo": false,
+        "area": "GES",
+        "req": [
+          "XP-0251",
+          "XP-0254",
+          "XP-0264"
+        ],
+        "req_texto": "XP-0251 o XP-3005, XP-0254 o XP-0801, XP-0264 o XP-0901",
+        "nota": "Énfasis en gestión de organizaciones de comercio exterior."
+      },
+      {
+        "sigla": "XP-0285",
+        "nombre": "Gestión de la Financiación de Operaciones Internacionales",
+        "ciclo": "IX",
+        "creditos": 3,
+        "optativo": false,
+        "area": "GES",
+        "req": [
+          "XP-0251",
+          "XP-0254",
+          "XP-0264"
+        ],
+        "req_texto": "XP-0251 o XP-3005, XP-0254 o XP-0801, XP-0264 o XP-0901",
+        "nota": "Énfasis en gestión de organizaciones de comercio exterior."
+      },
+      {
+        "sigla": "XP-0286",
+        "nombre": "Gestión de Riesgos Operativos y Financieros",
+        "ciclo": "X",
+        "creditos": 3,
+        "optativo": false,
+        "area": "GES",
+        "req": [
+          "XP-0285"
+        ],
+        "nota": "Énfasis en gestión de organizaciones de comercio exterior."
+      },
+      {
+        "sigla": "XP-0287",
+        "nombre": "Gestión de Servicios",
+        "ciclo": "X",
+        "creditos": 3,
+        "optativo": false,
+        "area": "GES",
+        "req": [
+          "XP-0282"
+        ],
+        "nota": "Énfasis en gestión de organizaciones de comercio exterior."
+      },
+      {
+        "sigla": "XP-0288",
+        "nombre": "Etiqueta, Protocolo y Cultura de Negocios Internacionales",
+        "ciclo": "X",
+        "creditos": 3,
+        "optativo": false,
+        "area": "GES",
+        "req": [
+          "XP-0285"
+        ],
+        "nota": "Énfasis en gestión de organizaciones de comercio exterior."
+      },
+      {
+        "sigla": "XP-0289",
+        "nombre": "Liderazgo y Gestión Efectiva de Equipos",
+        "ciclo": "X",
+        "creditos": 3,
+        "optativo": false,
+        "area": "GES",
+        "req": [
+          "XP-0283"
+        ],
+        "nota": "Énfasis en gestión de organizaciones de comercio exterior."
+      },
+      {
+        "sigla": "XP-0313",
+        "nombre": "Análisis de Datos para Comercio Internacional y Aduanas",
+        "ciclo": "IX",
+        "creditos": 3,
+        "optativo": false,
+        "area": "MET",
+        "req": [
+          "XP-0201",
+          "XP-0258",
+          "MA-1021"
+        ],
+        "req_texto": "XP-0201, XP-0258 o XP-0560, MA-1021 o MA-0230",
+        "nota": "Énfasis en gestión aduanera."
+      },
+      {
+        "sigla": "XP-0314",
+        "nombre": "Sistemas de Información Aduanera",
+        "ciclo": "IX",
+        "creditos": 3,
+        "optativo": false,
+        "area": "ADU",
+        "req": [
+          "XP-0265"
+        ],
+        "req_texto": "XP-0265 o XP-0104",
+        "nota": "Énfasis en gestión aduanera."
+      },
+      {
+        "sigla": "XP-0315",
+        "nombre": "Regímenes Aduaneros y sus Procedimientos Especializados",
+        "ciclo": "IX",
+        "creditos": 3,
+        "optativo": false,
+        "area": "ADU",
+        "req": [
+          "XP-0602"
+        ],
+        "nota": "Énfasis en gestión aduanera."
+      },
+      {
+        "sigla": "XP-0316",
+        "nombre": "Derecho Aduanero Especializado",
+        "ciclo": "IX",
+        "creditos": 3,
+        "optativo": false,
+        "area": "ADU",
+        "req": [
+          "XP-0265",
+          "XP-0527",
+          "XP-0602"
+        ],
+        "req_texto": "XP-0265 o XP-0104, XP-0527, XP-0602",
+        "nota": "Énfasis en gestión aduanera."
+      },
+      {
+        "sigla": "XP-0317",
+        "nombre": "Gestión e Inteligencia del Riesgo Aduanero",
+        "ciclo": "X",
+        "creditos": 3,
+        "optativo": false,
+        "area": "ADU",
+        "req": [
+          "XP-0259",
+          "XP-0313",
+          "XP-0314"
+        ],
+        "req_texto": "XP-0259 o XP-0803, XP-0313, XP-0314",
+        "nota": "Énfasis en gestión aduanera."
+      },
+      {
+        "sigla": "XP-0318",
+        "nombre": "Política Aduanera y Gestión Tributaria",
+        "ciclo": "X",
+        "creditos": 3,
+        "optativo": false,
+        "area": "ADU",
+        "req": [
+          "XP-0259",
+          "XP-0313",
+          "XP-0314",
+          "XP-0315",
+          "XP-0316"
+        ],
+        "req_texto": "XP-0260 o XP-0702, XP-0259 o XP-0803, XP-0313, XP-0314, XP-0315, XP-0316",
+        "nota": "Énfasis en gestión aduanera."
+      },
+      {
+        "sigla": "XP-0319",
+        "nombre": "Gerencia Aduanera",
+        "ciclo": "X",
+        "creditos": 3,
+        "optativo": false,
+        "area": "ADU",
+        "req": [
+          "XP-0259",
+          "XP-0314"
+        ],
+        "req_texto": "XP-0264 o XP-0901, XP-0259 o XP-0803, XP-0314",
+        "nota": "Énfasis en gestión aduanera."
+      }
+    ],
+    "optativos": {
+      "OPT": [
+        {
+          "sigla": "XP-0290",
+          "nombre": "Construcción e Interpretación de Indicadores de Gestión",
+          "creditos": 3,
+          "req_texto": "XP-0250"
+        },
+        {
+          "sigla": "XP-0291",
+          "nombre": "Economía de la Innovación",
+          "creditos": 3,
+          "req_texto": "XP-0250"
+        },
+        {
+          "sigla": "XP-0292",
+          "nombre": "Economía Política Internacional",
+          "creditos": 3,
+          "req_texto": "XP-0249"
+        },
+        {
+          "sigla": "XP-0293",
+          "nombre": "Elementos Esenciales en los Negocios Internacionales",
+          "creditos": 3,
+          "req_texto": "XP-0254"
+        },
+        {
+          "sigla": "XP-0294",
+          "nombre": "Emprendimiento Social",
+          "creditos": 3,
+          "req_texto": "XP-0254"
+        },
+        {
+          "sigla": "XP-0295",
+          "nombre": "Estudios de Mercado",
+          "creditos": 3,
+          "req_texto": "XP-0254"
+        },
+        {
+          "sigla": "XP-0296",
+          "nombre": "Financiamiento y Banca Internacional",
+          "creditos": 3,
+          "req_texto": "XP-0251"
+        },
+        {
+          "sigla": "XP-0297",
+          "nombre": "Haciendo Negocios con Asia",
+          "creditos": 3,
+          "req_texto": "XP-0254"
+        },
+        {
+          "sigla": "XP-0298",
+          "nombre": "Haciendo Negocios con Oriente Medio y África",
+          "creditos": 3,
+          "req_texto": "XP-0254"
+        },
+        {
+          "sigla": "XP-0299",
+          "nombre": "Haciendo Negocios con la Unión Europea",
+          "creditos": 3,
+          "req_texto": "XP-0254"
+        },
+        {
+          "sigla": "XP-0303",
+          "nombre": "Interpretando Datos Estadísticos",
+          "creditos": 3,
+          "req_texto": "XP-0243"
+        },
+        {
+          "sigla": "XP-0304",
+          "nombre": "Logística Inversa y Medio Ambiente",
+          "creditos": 3,
+          "req_texto": "XP-0257 o XP-0701"
+        },
+        {
+          "sigla": "XP-0305",
+          "nombre": "Manejo de Bases de Datos",
+          "creditos": 3
+        },
+        {
+          "sigla": "XP-0306",
+          "nombre": "OMA - Tendencias y Actualidad",
+          "creditos": 3,
+          "req_texto": "XP-0259"
+        },
+        {
+          "sigla": "XP-0307",
+          "nombre": "OMC - Tendencias y Actualidad",
+          "creditos": 3,
+          "req_texto": "XP-0249"
+        },
+        {
+          "sigla": "XP-0308",
+          "nombre": "Pasantía Profesional",
+          "creditos": 3,
+          "req_texto": "XP-0260"
+        },
+        {
+          "sigla": "XP-0309",
+          "nombre": "Presentando Licitaciones Internacionales",
+          "creditos": 3
+        },
+        {
+          "sigla": "XP-0310",
+          "nombre": "Técnicas de Búsqueda de Empleo y de Selección de Personal",
+          "creditos": 3
+        },
+        {
+          "sigla": "XP-0311",
+          "nombre": "Toma de Decisiones",
+          "creditos": 3,
+          "req_texto": "XP-0250"
+        },
+        {
+          "sigla": "LM-0349",
+          "nombre": "Inglés para Administración y Comercio II",
+          "creditos": 3,
+          "req_texto": "LM-0348"
+        }
+      ]
+    },
+    "titulo_optativos": "Lista de cursos optativos",
+    "listas_optativos": [
+      {
+        "id": "OPT",
+        "titulo": "Cursos optativos",
+        "nota": "Se eligen tres cursos de 3 créditos.",
+        "color_de": "OPT"
+      }
+    ]
+  }
 }

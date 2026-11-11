@@ -18,5 +18,748 @@
       "url": "https://drive.google.com/file/d/1k7IqScYmHYeUMC2_0EmRqjX80WkuP5Pk/view",
       "principal": true
     }
-  ]
+  ],
+  "malla": {
+    "plan": "Plan 01",
+    "total": 142,
+    "tcu": null,
+    "resumen_creditos": "142 créditos del bachillerato en ocho ciclos, más 300 horas de Trabajo Comunal Universitario.",
+    "nota_fuente": "Fuente: estructura curricular del plan 600310 (Informe Curricular CEA-22-2025).",
+    "areas": [
+      {
+        "id": "ECO",
+        "nombre": "Ecoturismo y recursos naturales",
+        "corto": "Ecoturismo",
+        "color": "#A8550A",
+        "oscuro": "#E8A060",
+        "descripcion": "Biología, ecología, biodiversidad, historia natural, geografía, educación ambiental y los dos cursos de ecoturismo.",
+        "creditos": 31
+      },
+      {
+        "id": "GES",
+        "nombre": "Gestión y emprendimiento turístico",
+        "corto": "Gestión turística",
+        "color": "#0A6AA6",
+        "oscuro": "#5AAEE0",
+        "descripcion": "Administración, contabilidad, finanzas, economía, legislación, planificación, reservaciones, emprendimiento y estadística aplicada.",
+        "creditos": 39
+      },
+      {
+        "id": "IDI",
+        "nombre": "Idiomas",
+        "corto": "Idiomas",
+        "color": "#5A47A6",
+        "oscuro": "#A595E6",
+        "descripcion": "Inglés progresivo para el servicio turístico y francés para turismo.",
+        "creditos": 28
+      },
+      {
+        "id": "CUL",
+        "nombre": "Cultura y patrimonio",
+        "corto": "Cultura y patrimonio",
+        "color": "#B0306A",
+        "oscuro": "#E58BB5",
+        "descripcion": "Historia, multiculturalismo, interpretación del patrimonio, atención y guiado de turistas.",
+        "creditos": 11
+      },
+      {
+        "id": "PRA",
+        "nombre": "Investigación y práctica profesional",
+        "corto": "Práctica",
+        "color": "#00796B",
+        "oscuro": "#4DB6A8",
+        "descripcion": "Métodos de investigación aplicada y práctica profesional.",
+        "creditos": 9
+      },
+      {
+        "id": "FG",
+        "nombre": "Formación general",
+        "corto": "Formación general",
+        "color": "#5F6B78",
+        "oscuro": "#A9B4BF",
+        "descripcion": "Cursos integrados de humanidades, arte, repertorio, actividad deportiva y seminarios de realidad nacional, comunes a toda la Universidad.",
+        "creditos": 24
+      }
+    ],
+    "ciclos": [
+      {
+        "n": "I",
+        "anio": 1,
+        "nombre": "I ciclo",
+        "verano": false,
+        "creditos": 18
+      },
+      {
+        "n": "II",
+        "anio": 1,
+        "nombre": "II ciclo",
+        "verano": false,
+        "creditos": 18
+      },
+      {
+        "n": "III",
+        "anio": 2,
+        "nombre": "III ciclo",
+        "verano": false,
+        "creditos": 18
+      },
+      {
+        "n": "IV",
+        "anio": 2,
+        "nombre": "IV ciclo",
+        "verano": false,
+        "creditos": 18
+      },
+      {
+        "n": "V",
+        "anio": 3,
+        "nombre": "V ciclo",
+        "verano": false,
+        "creditos": 18
+      },
+      {
+        "n": "VI",
+        "anio": 3,
+        "nombre": "VI ciclo",
+        "verano": false,
+        "creditos": 18
+      },
+      {
+        "n": "VII",
+        "anio": 4,
+        "nombre": "VII ciclo",
+        "verano": false,
+        "creditos": 18
+      },
+      {
+        "n": "VIII",
+        "anio": 4,
+        "nombre": "VIII ciclo",
+        "verano": false,
+        "creditos": 16
+      }
+    ],
+    "cursos": [
+      {
+        "sigla": "EG-I",
+        "nombre": "Curso Integrado de Humanidades I",
+        "ciclo": "I",
+        "creditos": 6,
+        "optativo": false,
+        "area": "FG",
+        "req": []
+      },
+      {
+        "sigla": "TE-0204",
+        "nombre": "Introducción al Turismo",
+        "ciclo": "I",
+        "creditos": 3,
+        "optativo": false,
+        "area": "GES",
+        "req": []
+      },
+      {
+        "sigla": "TE-0205",
+        "nombre": "Fundamentos de Biología para el Ecoturismo",
+        "ciclo": "I",
+        "creditos": 3,
+        "optativo": false,
+        "area": "ECO",
+        "req": []
+      },
+      {
+        "sigla": "TE-0206",
+        "nombre": "Introducción al Inglés",
+        "ciclo": "I",
+        "creditos": 3,
+        "optativo": false,
+        "area": "IDI",
+        "req": []
+      },
+      {
+        "sigla": "PI-0044",
+        "nombre": "Comunicación y Expresión Oral y Escrita en Español",
+        "ciclo": "I",
+        "creditos": 3,
+        "optativo": false,
+        "area": "FG",
+        "req": []
+      },
+      {
+        "sigla": "EG-II",
+        "nombre": "Curso Integrado de Humanidades II",
+        "ciclo": "II",
+        "creditos": 6,
+        "optativo": false,
+        "area": "FG",
+        "req": [
+          "EG-I"
+        ]
+      },
+      {
+        "sigla": "EF-",
+        "nombre": "Actividad Deportiva",
+        "ciclo": "II",
+        "creditos": 0,
+        "optativo": false,
+        "area": "FG",
+        "req": []
+      },
+      {
+        "sigla": "TE-0207",
+        "nombre": "Comprensión Auditiva y Comunicación Oral en Inglés I",
+        "ciclo": "II",
+        "creditos": 4,
+        "optativo": false,
+        "area": "IDI",
+        "req": [
+          "TE-0206"
+        ]
+      },
+      {
+        "sigla": "TE-0208",
+        "nombre": "Biodiversidad de Costa Rica I",
+        "ciclo": "II",
+        "creditos": 3,
+        "optativo": false,
+        "area": "ECO",
+        "req": [
+          "TE-0205"
+        ]
+      },
+      {
+        "sigla": "TE-0209",
+        "nombre": "Geografía Turística de Costa Rica",
+        "ciclo": "II",
+        "creditos": 3,
+        "optativo": false,
+        "area": "ECO",
+        "req": [
+          "TE-0204"
+        ]
+      },
+      {
+        "sigla": "TE-0210",
+        "nombre": "Fundamentos de Administración",
+        "ciclo": "II",
+        "creditos": 2,
+        "optativo": false,
+        "area": "GES",
+        "req": []
+      },
+      {
+        "sigla": "TE-0211",
+        "nombre": "Comprensión Auditiva y Comunicación Oral en Inglés II",
+        "ciclo": "III",
+        "creditos": 4,
+        "optativo": false,
+        "area": "IDI",
+        "req": [
+          "TE-0207"
+        ]
+      },
+      {
+        "sigla": "EG-",
+        "nombre": "Curso de Arte",
+        "ciclo": "III",
+        "creditos": 2,
+        "optativo": false,
+        "area": "FG",
+        "req": [],
+        "nota": "Se elige entre la oferta de la Sede para cada ciclo."
+      },
+      {
+        "sigla": "TE-0212",
+        "nombre": "Biodiversidad de Costa Rica II",
+        "ciclo": "III",
+        "creditos": 3,
+        "optativo": false,
+        "area": "ECO",
+        "req": [
+          "TE-0208"
+        ]
+      },
+      {
+        "sigla": "TE-0213",
+        "nombre": "Estadística Aplicada al Turismo",
+        "ciclo": "III",
+        "creditos": 3,
+        "optativo": false,
+        "area": "GES",
+        "req": []
+      },
+      {
+        "sigla": "RP-",
+        "nombre": "Repertorio",
+        "ciclo": "III",
+        "creditos": 3,
+        "optativo": false,
+        "area": "FG",
+        "req": [],
+        "nota": "Se elige entre la oferta de la Sede para cada ciclo."
+      },
+      {
+        "sigla": "TE-0408",
+        "nombre": "Administración de Personal para Turismo",
+        "ciclo": "III",
+        "creditos": 3,
+        "optativo": false,
+        "area": "GES",
+        "req": [
+          "TE-0210"
+        ],
+        "req_texto": "TE-0210 o TE-0303"
+      },
+      {
+        "sigla": "TE-0214",
+        "nombre": "Comprensión Auditiva y Comunicación Oral en Inglés III",
+        "ciclo": "IV",
+        "creditos": 2,
+        "optativo": false,
+        "area": "IDI",
+        "req": [
+          "TE-0211"
+        ]
+      },
+      {
+        "sigla": "TE-0215",
+        "nombre": "Comprensión de Lectura y Comunicación Escrita en Inglés I",
+        "ciclo": "IV",
+        "creditos": 2,
+        "optativo": false,
+        "area": "IDI",
+        "req": [
+          "TE-0211"
+        ]
+      },
+      {
+        "sigla": "TE-0216",
+        "nombre": "Historia Natural de Costa Rica para Turismo",
+        "ciclo": "IV",
+        "creditos": 3,
+        "optativo": false,
+        "area": "ECO",
+        "req": [
+          "TE-0212"
+        ]
+      },
+      {
+        "sigla": "TE-0217",
+        "nombre": "Educación Ambiental y Ecoturística",
+        "ciclo": "IV",
+        "creditos": 3,
+        "optativo": false,
+        "area": "ECO",
+        "req": []
+      },
+      {
+        "sigla": "TE-0218",
+        "nombre": "Matemática para los Negocios",
+        "ciclo": "IV",
+        "creditos": 2,
+        "optativo": false,
+        "area": "GES",
+        "req": []
+      },
+      {
+        "sigla": "TE-0406",
+        "nombre": "Administración de Empresas Turísticas",
+        "ciclo": "IV",
+        "creditos": 3,
+        "optativo": false,
+        "area": "GES",
+        "req": [
+          "TE-0408"
+        ]
+      },
+      {
+        "sigla": "TE-0219",
+        "nombre": "Métodos de Investigación Aplicada al Turismo",
+        "ciclo": "IV",
+        "creditos": 3,
+        "optativo": false,
+        "area": "PRA",
+        "req": []
+      },
+      {
+        "sigla": "TE-0220",
+        "nombre": "Comprensión Auditiva y Comunicación Oral en Inglés IV",
+        "ciclo": "V",
+        "creditos": 2,
+        "optativo": false,
+        "area": "IDI",
+        "req": [
+          "TE-0214"
+        ]
+      },
+      {
+        "sigla": "TE-0221",
+        "nombre": "Comprensión de Lectura y Comunicación Escrita en Inglés II",
+        "ciclo": "V",
+        "creditos": 2,
+        "optativo": false,
+        "area": "IDI",
+        "req": [
+          "TE-0215"
+        ]
+      },
+      {
+        "sigla": "SR-I",
+        "nombre": "Seminario de Realidad Nacional I",
+        "ciclo": "V",
+        "creditos": 2,
+        "optativo": false,
+        "area": "FG",
+        "req": [
+          "EG-II"
+        ]
+      },
+      {
+        "sigla": "TE-0201",
+        "nombre": "Fundamentos de Ecología",
+        "ciclo": "V",
+        "creditos": 3,
+        "optativo": false,
+        "area": "ECO",
+        "req": [
+          "TE-0216"
+        ],
+        "req_texto": "TE-0216 o B-0105",
+        "coreq": [
+          "TE-0202"
+        ]
+      },
+      {
+        "sigla": "TE-0202",
+        "nombre": "Laboratorio de Fundamentos de Ecología",
+        "ciclo": "V",
+        "creditos": 1,
+        "optativo": false,
+        "area": "ECO",
+        "req": [
+          "TE-0216"
+        ],
+        "req_texto": "TE-0216 o B-0105",
+        "coreq": [
+          "TE-0201"
+        ]
+      },
+      {
+        "sigla": "TE-0222",
+        "nombre": "Introducción a la Contabilidad",
+        "ciclo": "V",
+        "creditos": 2,
+        "optativo": false,
+        "area": "GES",
+        "req": [
+          "TE-0218"
+        ]
+      },
+      {
+        "sigla": "TE-0223",
+        "nombre": "Multiculturalismo de Costa Rica",
+        "ciclo": "V",
+        "creditos": 3,
+        "optativo": false,
+        "area": "CUL",
+        "req": [],
+        "coreq": [
+          "TE-0224"
+        ]
+      },
+      {
+        "sigla": "TE-0224",
+        "nombre": "Historia de Costa Rica",
+        "ciclo": "V",
+        "creditos": 3,
+        "optativo": false,
+        "area": "CUL",
+        "req": [],
+        "coreq": [
+          "TE-0223"
+        ]
+      },
+      {
+        "sigla": "TE-0225",
+        "nombre": "Comprensión Auditiva y Comunicación Oral en Inglés V",
+        "ciclo": "VI",
+        "creditos": 2,
+        "optativo": false,
+        "area": "IDI",
+        "req": [
+          "TE-0220"
+        ]
+      },
+      {
+        "sigla": "TE-0226",
+        "nombre": "Comprensión de Lectura y Comunicación Escrita en Inglés III",
+        "ciclo": "VI",
+        "creditos": 2,
+        "optativo": false,
+        "area": "IDI",
+        "req": [
+          "TE-0221"
+        ]
+      },
+      {
+        "sigla": "SR-II",
+        "nombre": "Seminario de Realidad Nacional II",
+        "ciclo": "VI",
+        "creditos": 2,
+        "optativo": false,
+        "area": "FG",
+        "req": [
+          "SR-I"
+        ]
+      },
+      {
+        "sigla": "TE-0227",
+        "nombre": "Interpretación del Patrimonio Turístico",
+        "ciclo": "VI",
+        "creditos": 3,
+        "optativo": false,
+        "area": "CUL",
+        "req": [
+          "TE-0223"
+        ],
+        "coreq": [
+          "TE-0229"
+        ]
+      },
+      {
+        "sigla": "TE-0301",
+        "nombre": "Ecodesarrollo",
+        "ciclo": "VI",
+        "creditos": 3,
+        "optativo": false,
+        "area": "ECO",
+        "req": [
+          "TE-0201",
+          "TE-0202"
+        ]
+      },
+      {
+        "sigla": "TE-0228",
+        "nombre": "Introducción a las Finanzas",
+        "ciclo": "VI",
+        "creditos": 2,
+        "optativo": false,
+        "area": "GES",
+        "req": [
+          "TE-0222"
+        ]
+      },
+      {
+        "sigla": "TE-0229",
+        "nombre": "Atención y Guiado de Turistas",
+        "ciclo": "VI",
+        "creditos": 2,
+        "optativo": false,
+        "area": "CUL",
+        "req": [
+          "TE-0223"
+        ],
+        "coreq": [
+          "TE-0227"
+        ]
+      },
+      {
+        "sigla": "TE-0230",
+        "nombre": "Herramientas Digitales y Tecnológicas Aplicadas al Turismo",
+        "ciclo": "VI",
+        "creditos": 2,
+        "optativo": false,
+        "area": "GES",
+        "req": []
+      },
+      {
+        "sigla": "TE-0231",
+        "nombre": "Inglés para Servicios Turísticos y Culturales",
+        "ciclo": "VII",
+        "creditos": 2,
+        "optativo": false,
+        "area": "IDI",
+        "req": [
+          "TE-0225",
+          "TE-0226"
+        ]
+      },
+      {
+        "sigla": "TE-0303",
+        "nombre": "Ecoturismo I",
+        "ciclo": "VII",
+        "creditos": 3,
+        "optativo": false,
+        "area": "ECO",
+        "req": [
+          "TE-0301"
+        ]
+      },
+      {
+        "sigla": "TE-0232",
+        "nombre": "Emprendimiento Turístico",
+        "ciclo": "VII",
+        "creditos": 2,
+        "optativo": false,
+        "area": "GES",
+        "req": [
+          "TE-0228"
+        ]
+      },
+      {
+        "sigla": "TE-0302",
+        "nombre": "Economía Turística",
+        "ciclo": "VII",
+        "creditos": 3,
+        "optativo": false,
+        "area": "GES",
+        "req": []
+      },
+      {
+        "sigla": "TE-0407",
+        "nombre": "Legislación Turística y Ambiental",
+        "ciclo": "VII",
+        "creditos": 3,
+        "optativo": false,
+        "area": "GES",
+        "req": [],
+        "coreq": [
+          "TE-0233"
+        ],
+        "coreq_texto": "TE-0233 o TE-0402"
+      },
+      {
+        "sigla": "TE-0233",
+        "nombre": "Planificación del Espacio Turístico",
+        "ciclo": "VII",
+        "creditos": 3,
+        "optativo": false,
+        "area": "GES",
+        "req": [],
+        "coreq": [
+          "TE-0407"
+        ]
+      },
+      {
+        "sigla": "TE-0234",
+        "nombre": "Sistemas de Reservaciones para el Turismo",
+        "ciclo": "VII",
+        "creditos": 2,
+        "optativo": false,
+        "area": "GES",
+        "req": [
+          "TE-0230"
+        ]
+      },
+      {
+        "sigla": "OPT-VIII-1",
+        "nombre": "Bloque Optativo del Bachillerato",
+        "ciclo": "VIII",
+        "creditos": 4,
+        "optativo": true,
+        "area": "GES",
+        "req": [],
+        "etiqueta": "Optativo"
+      },
+      {
+        "sigla": "TE-0403",
+        "nombre": "Ecoturismo II",
+        "ciclo": "VIII",
+        "creditos": 3,
+        "optativo": false,
+        "area": "ECO",
+        "req": [
+          "TE-0303"
+        ],
+        "coreq": [
+          "TE-0236"
+        ],
+        "coreq_texto": "TE-0236 o (TE-0404, TE-0401)"
+      },
+      {
+        "sigla": "TE-0235",
+        "nombre": "Francés para Turismo",
+        "ciclo": "VIII",
+        "creditos": 3,
+        "optativo": false,
+        "area": "IDI",
+        "req": []
+      },
+      {
+        "sigla": "TE-0236",
+        "nombre": "Práctica Profesional",
+        "ciclo": "VIII",
+        "creditos": 6,
+        "optativo": false,
+        "area": "PRA",
+        "req": [],
+        "coreq": [
+          "TE-0403"
+        ]
+      }
+    ],
+    "optativos": {
+      "OPT": [
+        {
+          "sigla": "TE-0237",
+          "nombre": "Gestión de la Calidad del Servicio Turístico",
+          "creditos": 2
+        },
+        {
+          "sigla": "TE-0238",
+          "nombre": "Herramientas de Gestión y Certificaciones Turísticas",
+          "creditos": 2
+        },
+        {
+          "sigla": "TE-0239",
+          "nombre": "Desarrollo Local y Comunitario",
+          "creditos": 2
+        },
+        {
+          "sigla": "TE-0240",
+          "nombre": "Inteligencia Turística",
+          "creditos": 2
+        },
+        {
+          "sigla": "TE-0241",
+          "nombre": "Aviturismo",
+          "creditos": 2
+        },
+        {
+          "sigla": "TE-0242",
+          "nombre": "Turismo de Bienestar",
+          "creditos": 2
+        },
+        {
+          "sigla": "TE-0243",
+          "nombre": "Historia del Arte",
+          "creditos": 2
+        },
+        {
+          "sigla": "TE-0244",
+          "nombre": "Biogeografía Turística",
+          "creditos": 2
+        },
+        {
+          "sigla": "TE-0245",
+          "nombre": "Ética Profesional",
+          "creditos": 1
+        },
+        {
+          "sigla": "TE-0246",
+          "nombre": "Primeros Auxilios y Respiración Cardiopulmonar",
+          "creditos": 1
+        }
+      ]
+    },
+    "titulo_optativos": "Cursos optativos del bachillerato",
+    "listas_optativos": [
+      {
+        "id": "OPT",
+        "titulo": "Optativos del bachillerato",
+        "nota": "Se eligen según el bloque optativo del VIII ciclo.",
+        "color_de": "ECO"
+      }
+    ]
+  }
 }

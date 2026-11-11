@@ -22,5 +22,1032 @@
       "url": "https://drive.google.com/file/d/1O2VcsuxnPkZBq4NKYeNz7Oqkrho3YkEB/view",
       "principal": true
     }
-  ]
+  ],
+  "malla": {
+    "plan": "Plan 600004",
+    "total": 177,
+    "tcu": 300,
+    "resumen_creditos": "177 créditos en el énfasis en Náutica y Transporte Marítimo o 176 en el de Máquinas Marinas, en once ciclos (el V es un interciclo). Los cursos de cada énfasis se señalan en su ficha.",
+    "nota_fuente": "Fuente: estructura curricular del plan de la Licenciatura en Ingeniería Marítima, código 600004 (Informe Curricular CEA-16-2025). Los cursos comunes que cada énfasis cursa en un ciclo distinto se muestran en el ciclo del énfasis en Náutica; la ficha indica el otro.",
+    "areas": [
+      {
+        "id": "MAT",
+        "nombre": "Ciencias básicas y métodos",
+        "corto": "Ciencias básicas",
+        "color": "#3B6E2C",
+        "oscuro": "#8CC27A",
+        "descripcion": "Matemática, física, química, informática, expresión gráfica, probabilidad y estadística y métodos de investigación.",
+        "creditos": 47
+      },
+      {
+        "id": "BUQ",
+        "nombre": "Buque, seguridad y embarque",
+        "corto": "Buque y seguridad",
+        "color": "#0A6AA6",
+        "oscuro": "#5AAEE0",
+        "descripcion": "Teoría y sistemas del buque, buques tanque y gaseros, seguridad marítima, legislación y cursos de embarque (OMI).",
+        "creditos": 24
+      },
+      {
+        "id": "NAV",
+        "nombre": "Náutica y transporte marítimo",
+        "corto": "Náutica",
+        "color": "#00796B",
+        "oscuro": "#4DB6A8",
+        "descripcion": "Navegación, maniobras, comunicaciones, reglamentos y señales, meteorología, estiba y prácticas externas del énfasis en Náutica.",
+        "creditos": 65
+      },
+      {
+        "id": "MAQ",
+        "nombre": "Máquinas marinas y electrotecnia",
+        "corto": "Máquinas marinas",
+        "color": "#A8550A",
+        "oscuro": "#E8A060",
+        "descripcion": "Electrotecnia, termodinámica, materiales, motores, propulsión, sistemas auxiliares y prácticas del énfasis en Máquinas Marinas.",
+        "creditos": 68
+      },
+      {
+        "id": "ING",
+        "nombre": "Inglés marítimo",
+        "corto": "Inglés marítimo",
+        "color": "#5A47A6",
+        "oscuro": "#A595E6",
+        "descripcion": "Cuatro cursos de inglés marítimo, del interciclo al VIII ciclo.",
+        "creditos": 14
+      },
+      {
+        "id": "OPT",
+        "nombre": "Optativos",
+        "corto": "Optativos",
+        "color": "#7A5C00",
+        "oscuro": "#D9B550",
+        "descripcion": "Un bloque optativo de 2 créditos en cada énfasis.",
+        "creditos": 4
+      },
+      {
+        "id": "FG",
+        "nombre": "Formación general",
+        "corto": "Formación general",
+        "color": "#5F6B78",
+        "oscuro": "#A9B4BF",
+        "descripcion": "Cursos integrados de humanidades, arte, repertorio, actividad deportiva y seminarios de realidad nacional, comunes a toda la Universidad.",
+        "creditos": 21
+      }
+    ],
+    "ciclos": [
+      {
+        "n": "I",
+        "anio": 1,
+        "nombre": "I ciclo",
+        "verano": false,
+        "creditos": 18
+      },
+      {
+        "n": "II",
+        "anio": 1,
+        "nombre": "II ciclo",
+        "verano": false,
+        "creditos": 18
+      },
+      {
+        "n": "III",
+        "anio": 2,
+        "nombre": "III ciclo",
+        "verano": false,
+        "creditos": 17
+      },
+      {
+        "n": "IV",
+        "anio": 2,
+        "nombre": "IV ciclo",
+        "verano": false,
+        "creditos": 18
+      },
+      {
+        "n": "V",
+        "anio": 2,
+        "nombre": "V ciclo (interciclo)",
+        "verano": true,
+        "creditos": 4
+      },
+      {
+        "n": "VI",
+        "anio": 3,
+        "nombre": "VI ciclo",
+        "verano": false,
+        "creditos": "17–18"
+      },
+      {
+        "n": "VII",
+        "anio": 3,
+        "nombre": "VII ciclo",
+        "verano": false,
+        "creditos": 16
+      },
+      {
+        "n": "VIII",
+        "anio": 4,
+        "nombre": "VIII ciclo",
+        "verano": false,
+        "creditos": 18
+      },
+      {
+        "n": "IX",
+        "anio": 4,
+        "nombre": "IX ciclo",
+        "verano": false,
+        "creditos": "16–18"
+      },
+      {
+        "n": "X",
+        "anio": 5,
+        "nombre": "X ciclo",
+        "verano": false,
+        "creditos": 16
+      },
+      {
+        "n": "XI",
+        "anio": 5,
+        "nombre": "XI ciclo",
+        "verano": false,
+        "creditos": "16–18"
+      }
+    ],
+    "cursos": [
+      {
+        "sigla": "EG-I",
+        "nombre": "Curso Integrado de Humanidades I",
+        "ciclo": "I",
+        "creditos": 6,
+        "optativo": false,
+        "area": "FG",
+        "req": []
+      },
+      {
+        "sigla": "EG-",
+        "nombre": "Curso de Arte",
+        "ciclo": "I",
+        "creditos": 2,
+        "optativo": false,
+        "area": "FG",
+        "req": [],
+        "nota": "Se elige entre la oferta de la Sede para cada ciclo."
+      },
+      {
+        "sigla": "MA-0001",
+        "nombre": "Precálculo",
+        "ciclo": "I",
+        "creditos": 0,
+        "optativo": false,
+        "area": "MAT",
+        "req": []
+      },
+      {
+        "sigla": "MA-1001",
+        "nombre": "Cálculo I",
+        "ciclo": "I",
+        "creditos": 3,
+        "optativo": false,
+        "area": "MAT",
+        "req": [],
+        "req_texto": "MA-0001"
+      },
+      {
+        "sigla": "CN-0005",
+        "nombre": "Informática",
+        "ciclo": "I",
+        "creditos": 4,
+        "optativo": false,
+        "area": "MAT",
+        "req": []
+      },
+      {
+        "sigla": "FS-0127",
+        "nombre": "Introducción a la Física",
+        "ciclo": "I",
+        "creditos": 3,
+        "optativo": false,
+        "area": "MAT",
+        "req": []
+      },
+      {
+        "sigla": "EG-II",
+        "nombre": "Curso Integrado de Humanidades II",
+        "ciclo": "II",
+        "creditos": 6,
+        "optativo": false,
+        "area": "FG",
+        "req": [
+          "EG-I"
+        ]
+      },
+      {
+        "sigla": "EF-",
+        "nombre": "Actividad Deportiva",
+        "ciclo": "II",
+        "creditos": 0,
+        "optativo": false,
+        "area": "FG",
+        "req": []
+      },
+      {
+        "sigla": "MA-1002",
+        "nombre": "Cálculo II",
+        "ciclo": "II",
+        "creditos": 4,
+        "optativo": false,
+        "area": "MAT",
+        "req": [
+          "MA-1001"
+        ],
+        "req_texto": "MA-1001 o MA-1101"
+      },
+      {
+        "sigla": "FS-0210",
+        "nombre": "Física General I",
+        "ciclo": "II",
+        "creditos": 3,
+        "optativo": false,
+        "area": "MAT",
+        "req": [
+          "MA-1001"
+        ],
+        "req_texto": "MA-1001 o MA-1210 o MA-0250 o MA-1101",
+        "coreq": [
+          "FS-0211"
+        ]
+      },
+      {
+        "sigla": "FS-0211",
+        "nombre": "Laboratorio de Física General I",
+        "ciclo": "II",
+        "creditos": 1,
+        "optativo": false,
+        "area": "MAT",
+        "req": [
+          "MA-1001"
+        ],
+        "req_texto": "MA-1001 o MA-1210 o MA-0250 o MA-1101",
+        "coreq": [
+          "FS-0210"
+        ],
+        "coreq_texto": "FS-0210 o FS-0227"
+      },
+      {
+        "sigla": "CN-0002",
+        "nombre": "Expresión Gráfica",
+        "ciclo": "II",
+        "creditos": 4,
+        "optativo": false,
+        "area": "MAT",
+        "req": []
+      },
+      {
+        "sigla": "QU-0100",
+        "nombre": "Química General I",
+        "ciclo": "III",
+        "creditos": 3,
+        "optativo": false,
+        "area": "MAT",
+        "req": [],
+        "coreq": [
+          "QU-0101"
+        ]
+      },
+      {
+        "sigla": "QU-0101",
+        "nombre": "Laboratorio de Química General I",
+        "ciclo": "III",
+        "creditos": 1,
+        "optativo": false,
+        "area": "MAT",
+        "req": [],
+        "coreq": [
+          "QU-0100"
+        ]
+      },
+      {
+        "sigla": "MA-1003",
+        "nombre": "Cálculo III",
+        "ciclo": "III",
+        "creditos": 4,
+        "optativo": false,
+        "area": "MAT",
+        "req": [
+          "MA-1002"
+        ],
+        "coreq": [
+          "MA-1004"
+        ],
+        "coreq_texto": "MA-1004 o MA-0307"
+      },
+      {
+        "sigla": "FS-0310",
+        "nombre": "Física General II",
+        "ciclo": "III",
+        "creditos": 3,
+        "optativo": false,
+        "area": "MAT",
+        "req": [
+          "FS-0210",
+          "FS-0211",
+          "MA-1002"
+        ],
+        "req_texto": "FS-0210, FS-0211, MA-1002 o MA-2210 o MA-0350",
+        "coreq": [
+          "FS-0311"
+        ]
+      },
+      {
+        "sigla": "MA-1004",
+        "nombre": "Álgebra Lineal",
+        "ciclo": "III",
+        "creditos": 3,
+        "optativo": false,
+        "area": "MAT",
+        "req": []
+      },
+      {
+        "sigla": "FS-0311",
+        "nombre": "Laboratorio de Física General II",
+        "ciclo": "III",
+        "creditos": 1,
+        "optativo": false,
+        "area": "MAT",
+        "req": [
+          "FS-0210",
+          "FS-0211",
+          "MA-1002"
+        ],
+        "req_texto": "FS-0210 o FS-0227, FS-0211, MA-1002 o MA-2210 o MA-0350",
+        "coreq": [
+          "FS-0310"
+        ],
+        "coreq_texto": "FS-0310 o FS-0327"
+      },
+      {
+        "sigla": "CN-0100",
+        "nombre": "Fundamentos Teóricos del Buque",
+        "ciclo": "III",
+        "creditos": 2,
+        "optativo": false,
+        "area": "BUQ",
+        "req": []
+      },
+      {
+        "sigla": "CN-0102",
+        "nombre": "Construcción Naval y Teoría del Buque I",
+        "ciclo": "IV",
+        "creditos": 2,
+        "optativo": false,
+        "area": "BUQ",
+        "req": [
+          "MA-1001",
+          "CN-0100"
+        ]
+      },
+      {
+        "sigla": "MA-1005",
+        "nombre": "Ecuaciones Diferenciales",
+        "ciclo": "IV",
+        "creditos": 4,
+        "optativo": false,
+        "area": "MAT",
+        "req": [
+          "MA-1002",
+          "MA-1004"
+        ],
+        "req_texto": "MA-1002 o MA-1023 o MA-0292 o MA-0232, MA-1004 o MA-0294 o MA-0232"
+      },
+      {
+        "sigla": "CN-0103",
+        "nombre": "Sistemas del Buque",
+        "ciclo": "IV",
+        "creditos": 2,
+        "optativo": false,
+        "area": "BUQ",
+        "req": [
+          "CN-0100"
+        ]
+      },
+      {
+        "sigla": "II-0305",
+        "nombre": "Probabilidad y Estadística I",
+        "ciclo": "IV",
+        "creditos": 3,
+        "optativo": false,
+        "area": "MAT",
+        "req": [
+          "MA-1002"
+        ]
+      },
+      {
+        "sigla": "CN-0110",
+        "nombre": "Inglés Marítimo I",
+        "ciclo": "V",
+        "creditos": 4,
+        "optativo": false,
+        "area": "ING",
+        "req": []
+      },
+      {
+        "sigla": "CN-0111",
+        "nombre": "Inglés Marítimo II",
+        "ciclo": "VI",
+        "creditos": 4,
+        "optativo": false,
+        "area": "ING",
+        "req": [
+          "CN-0110"
+        ],
+        "req_texto": "CN-0110 o CN-0019"
+      },
+      {
+        "sigla": "CN-0017",
+        "nombre": "Electrotécnia y Tecnología Electrónica I",
+        "ciclo": "VI",
+        "creditos": 4,
+        "optativo": false,
+        "area": "MAQ",
+        "req": [
+          "FS-0310",
+          "MA-1003"
+        ]
+      },
+      {
+        "sigla": "CN-0105",
+        "nombre": "Buques Petroleros y Quimiqueros (OMI 1.01, 1.02, 1.03)",
+        "ciclo": "VI",
+        "creditos": 3,
+        "optativo": false,
+        "area": "BUQ",
+        "req": [
+          "CN-0103",
+          "QU-0100",
+          "QU-0101"
+        ],
+        "req_texto": "CN-0103 o CN-0013, QU-0100, QU-0101"
+      },
+      {
+        "sigla": "CN-0016",
+        "nombre": "Seguridad Marítima",
+        "ciclo": "VII",
+        "creditos": 3,
+        "optativo": false,
+        "area": "BUQ",
+        "req": [
+          "CN-0100"
+        ],
+        "req_texto": "CN-0100 o CN-0009"
+      },
+      {
+        "sigla": "CN-0108",
+        "nombre": "Buques Gaseros (OMI 1.04 y 1.05)",
+        "ciclo": "VII",
+        "creditos": 3,
+        "optativo": false,
+        "area": "BUQ",
+        "req": [
+          "CN-0105"
+        ],
+        "req_texto": "CN-0105 o CN-0014"
+      },
+      {
+        "sigla": "CN-0112",
+        "nombre": "Inglés Marítimo III",
+        "ciclo": "VII",
+        "creditos": 3,
+        "optativo": false,
+        "area": "ING",
+        "req": [
+          "CN-0111"
+        ]
+      },
+      {
+        "sigla": "CN-0113",
+        "nombre": "Inglés Marítimo IV",
+        "ciclo": "VIII",
+        "creditos": 3,
+        "optativo": false,
+        "area": "ING",
+        "req": [
+          "CN-0112"
+        ]
+      },
+      {
+        "sigla": "CN-0071",
+        "nombre": "Curso Básico de Embarque (OMI 1.13, 1.19, 1.20, 1.21 y 3.26)",
+        "ciclo": "IX",
+        "creditos": 2,
+        "optativo": false,
+        "area": "BUQ",
+        "req": [
+          "CN-0115",
+          "CN-0128"
+        ],
+        "req_texto": "(CN-0019, CN-0115 o CN-0030) o (CN-0128 o CN-0061)"
+      },
+      {
+        "sigla": "CN-0101",
+        "nombre": "Navegación Costera",
+        "ciclo": "IV",
+        "creditos": 3,
+        "optativo": false,
+        "area": "NAV",
+        "req": [
+          "MA-1001",
+          "CN-0100"
+        ],
+        "nota": "Énfasis en Náutica y Transporte Marítimo."
+      },
+      {
+        "sigla": "CN-0104",
+        "nombre": "Estiba y Manejo de la Carga",
+        "ciclo": "IV",
+        "creditos": 2,
+        "optativo": false,
+        "area": "NAV",
+        "req": [
+          "MA-1001",
+          "CN-0100"
+        ],
+        "nota": "Énfasis en Náutica y Transporte Marítimo."
+      },
+      {
+        "sigla": "SR-I",
+        "nombre": "Seminario de Realidad Nacional I",
+        "ciclo": "IV",
+        "creditos": 2,
+        "optativo": false,
+        "area": "FG",
+        "req": [
+          "EG-II"
+        ],
+        "nota": "Común a los dos énfasis; en Máquinas Marinas se cursa en el VI ciclo."
+      },
+      {
+        "sigla": "CN-0106",
+        "nombre": "Liderazgo y Trabajo en Equipo (OMI 1.39)",
+        "ciclo": "VI",
+        "creditos": 2,
+        "optativo": false,
+        "area": "BUQ",
+        "req": [],
+        "nota": "Común a los dos énfasis; en Máquinas Marinas se cursa en el VII ciclo."
+      },
+      {
+        "sigla": "CN-0107",
+        "nombre": "Navegación Astronómica",
+        "ciclo": "VI",
+        "creditos": 3,
+        "optativo": false,
+        "area": "NAV",
+        "req": [
+          "CN-0101",
+          "MA-1002"
+        ],
+        "req_texto": "CN-0101 o CN-0010, MA-1002",
+        "nota": "Énfasis en Náutica y Transporte Marítimo."
+      },
+      {
+        "sigla": "SR-II",
+        "nombre": "Seminario de Realidad Nacional II",
+        "ciclo": "VI",
+        "creditos": 2,
+        "optativo": false,
+        "area": "FG",
+        "req": [
+          "SR-I"
+        ],
+        "nota": "Común a los dos énfasis; en Máquinas Marinas se cursa en el VII ciclo."
+      },
+      {
+        "sigla": "CN-0023",
+        "nombre": "Construcción Naval y Teoría del Buque II",
+        "ciclo": "VII",
+        "creditos": 4,
+        "optativo": false,
+        "area": "NAV",
+        "req": [],
+        "req_texto": "CN-0012, CN-0014",
+        "nota": "Énfasis en Náutica y Transporte Marítimo."
+      },
+      {
+        "sigla": "CN-0109",
+        "nombre": "Legislación Internacional Marítima",
+        "ciclo": "VII",
+        "creditos": 3,
+        "optativo": false,
+        "area": "BUQ",
+        "req": [],
+        "nota": "Común a los dos énfasis; en Máquinas Marinas se cursa en el VIII ciclo."
+      },
+      {
+        "sigla": "CN-0116",
+        "nombre": "Comunicaciones Marítimas",
+        "ciclo": "VIII",
+        "creditos": 3,
+        "optativo": false,
+        "area": "NAV",
+        "req": [
+          "CN-0016",
+          "CN-0017",
+          "CN-0107"
+        ],
+        "req_texto": "CN-0016, CN-0017, CN-0107 o CN-0020",
+        "nota": "Énfasis en Náutica y Transporte Marítimo."
+      },
+      {
+        "sigla": "CN-0117",
+        "nombre": "Maniobras del Buque I",
+        "ciclo": "VIII",
+        "creditos": 3,
+        "optativo": false,
+        "area": "NAV",
+        "req": [
+          "CN-0100"
+        ],
+        "nota": "Énfasis en Náutica y Transporte Marítimo."
+      },
+      {
+        "sigla": "CN-0115",
+        "nombre": "Navegación Electrónica (OMI 1.08, 1.22, 1.27)",
+        "ciclo": "VIII",
+        "creditos": 4,
+        "optativo": false,
+        "area": "NAV",
+        "req": [
+          "CN-0107"
+        ],
+        "req_texto": "CN-0107 o CN-0020",
+        "nota": "Énfasis en Náutica y Transporte Marítimo."
+      },
+      {
+        "sigla": "CN-0114",
+        "nombre": "Códigos Internacionales del SOLAS",
+        "ciclo": "VIII",
+        "creditos": 2,
+        "optativo": false,
+        "area": "NAV",
+        "req": [
+          "CN-0109"
+        ],
+        "req_texto": "CN-0109 o CN-0025",
+        "nota": "Énfasis en Náutica y Transporte Marítimo."
+      },
+      {
+        "sigla": "RP-",
+        "nombre": "Repertorio",
+        "ciclo": "VIII",
+        "creditos": 3,
+        "optativo": false,
+        "area": "FG",
+        "req": [],
+        "nota": "Se elige entre la oferta de la Sede para cada ciclo."
+      },
+      {
+        "sigla": "CN-0119",
+        "nombre": "Reglamentos y Señales",
+        "ciclo": "IX",
+        "creditos": 3,
+        "optativo": false,
+        "area": "NAV",
+        "req": [
+          "CN-0107",
+          "CN-0117"
+        ],
+        "req_texto": "CN-0107 o CN-0020, CN-0117 o CN-0024",
+        "nota": "Énfasis en Náutica y Transporte Marítimo."
+      },
+      {
+        "sigla": "CN-0120",
+        "nombre": "Maniobras del Buque II",
+        "ciclo": "IX",
+        "creditos": 3,
+        "optativo": false,
+        "area": "NAV",
+        "req": [
+          "CN-0117"
+        ],
+        "req_texto": "CN-0117 o CN-0024",
+        "nota": "Énfasis en Náutica y Transporte Marítimo."
+      },
+      {
+        "sigla": "CN-0028",
+        "nombre": "Meteorología",
+        "ciclo": "IX",
+        "creditos": 3,
+        "optativo": false,
+        "area": "NAV",
+        "req": [
+          "MA-1005",
+          "FS-0310"
+        ],
+        "nota": "Énfasis en Náutica y Transporte Marítimo."
+      },
+      {
+        "sigla": "CN-0118",
+        "nombre": "Métodos y Técnicas de Investigación",
+        "ciclo": "IX",
+        "creditos": 3,
+        "optativo": false,
+        "area": "MAT",
+        "req": [],
+        "nota": "Común a los dos énfasis; en Máquinas Marinas se cursa en el X ciclo."
+      },
+      {
+        "sigla": "OPT-IX-1",
+        "nombre": "Bloque Optativo",
+        "ciclo": "IX",
+        "creditos": 2,
+        "optativo": true,
+        "area": "OPT",
+        "req": [],
+        "etiqueta": "Optativo",
+        "nota": "Énfasis en Náutica y Transporte Marítimo: se elige un curso de la lista de optativos."
+      },
+      {
+        "sigla": "CN-0124",
+        "nombre": "Prácticas Externas I",
+        "ciclo": "X",
+        "creditos": 16,
+        "optativo": false,
+        "area": "NAV",
+        "req": [
+          "CN-0028",
+          "CN-0111",
+          "CN-0071"
+        ],
+        "req_texto": "CN-0026, CN-0027, CN-0028, CN-0111, CN-0071",
+        "nota": "Énfasis en Náutica y Transporte Marítimo."
+      },
+      {
+        "sigla": "CN-0125",
+        "nombre": "Prácticas Externas II",
+        "ciclo": "XI",
+        "creditos": 16,
+        "optativo": false,
+        "area": "NAV",
+        "req": [
+          "CN-0124"
+        ],
+        "req_texto": "CN-0124 o CN-0032",
+        "nota": "Énfasis en Náutica y Transporte Marítimo."
+      },
+      {
+        "sigla": "CN-0126",
+        "nombre": "Curso Avanzado de Embarque (OMI 1.15, 1.23, 2.03)",
+        "ciclo": "XI",
+        "creditos": 2,
+        "optativo": false,
+        "area": "BUQ",
+        "req": [
+          "CN-0071"
+        ],
+        "req_texto": "CN-0071",
+        "nota": "Común a los dos énfasis (XI ciclo)."
+      },
+      {
+        "sigla": "CN-0127",
+        "nombre": "Ciencia y Tecnología de los Materiales",
+        "ciclo": "IV",
+        "creditos": 3,
+        "optativo": false,
+        "area": "MAQ",
+        "req": [
+          "QU-0100",
+          "QU-0101"
+        ],
+        "nota": "Énfasis en Máquinas Marinas."
+      },
+      {
+        "sigla": "CN-0058",
+        "nombre": "Termodinámica y Mecánica de Fluidos",
+        "ciclo": "IV",
+        "creditos": 4,
+        "optativo": false,
+        "area": "MAQ",
+        "req": [
+          "FS-0210",
+          "FS-0211",
+          "QU-0100",
+          "QU-0101"
+        ],
+        "nota": "Énfasis en Máquinas Marinas."
+      },
+      {
+        "sigla": "CN-0059",
+        "nombre": "Mecánica y Resistencia de Materiales",
+        "ciclo": "VI",
+        "creditos": 4,
+        "optativo": false,
+        "area": "MAQ",
+        "req": [
+          "FS-0210",
+          "FS-0211",
+          "CN-0127"
+        ],
+        "req_texto": "FS-0210, FS-0211, CN-0127 o CN-0057",
+        "nota": "Énfasis en Máquinas Marinas."
+      },
+      {
+        "sigla": "CN-0060",
+        "nombre": "Termodinámica Aplicada y Turbomáquinas Térmicas",
+        "ciclo": "VII",
+        "creditos": 3,
+        "optativo": false,
+        "area": "MAQ",
+        "req": [
+          "CN-0058",
+          "FS-0310",
+          "FS-0311"
+        ],
+        "nota": "Énfasis en Máquinas Marinas."
+      },
+      {
+        "sigla": "CN-0128",
+        "nombre": "Motores de Combustión Interna",
+        "ciclo": "VIII",
+        "creditos": 5,
+        "optativo": false,
+        "area": "MAQ",
+        "req": [
+          "CN-0060"
+        ],
+        "nota": "Énfasis en Máquinas Marinas."
+      },
+      {
+        "sigla": "CN-0062",
+        "nombre": "Electrotecnia y Tecnología Electrónica II",
+        "ciclo": "VIII",
+        "creditos": 4,
+        "optativo": false,
+        "area": "MAQ",
+        "req": [
+          "CN-0017"
+        ],
+        "nota": "Énfasis en Máquinas Marinas."
+      },
+      {
+        "sigla": "CN-0068",
+        "nombre": "Operación de los Sistemas de Propulsión I",
+        "ciclo": "IX",
+        "creditos": 4,
+        "optativo": false,
+        "area": "MAQ",
+        "req": [
+          "CN-0128"
+        ],
+        "req_texto": "CN-0128 o CN-0061",
+        "nota": "Énfasis en Máquinas Marinas."
+      },
+      {
+        "sigla": "CN-0063",
+        "nombre": "Sistemas Auxiliares de Buque",
+        "ciclo": "IX",
+        "creditos": 4,
+        "optativo": false,
+        "area": "MAQ",
+        "req": [
+          "CN-0128",
+          "CN-0062"
+        ],
+        "req_texto": "CN-0018, CN-0128 o CN-0061, CN-0062",
+        "nota": "Énfasis en Máquinas Marinas."
+      },
+      {
+        "sigla": "CN-0064",
+        "nombre": "Generadores de Vapor",
+        "ciclo": "IX",
+        "creditos": 3,
+        "optativo": false,
+        "area": "MAQ",
+        "req": [
+          "CN-0060"
+        ],
+        "nota": "Énfasis en Máquinas Marinas."
+      },
+      {
+        "sigla": "CN-0129",
+        "nombre": "Mantenimiento y Oficina Técnica",
+        "ciclo": "IX",
+        "creditos": 2,
+        "optativo": false,
+        "area": "MAQ",
+        "req": [
+          "CN-0108",
+          "CN-0128",
+          "CN-0062"
+        ],
+        "req_texto": "CN-0108 o CN-0018, CN-0128 o CN-0061, CN-0062",
+        "nota": "Énfasis en Máquinas Marinas."
+      },
+      {
+        "sigla": "CN-0066",
+        "nombre": "Tecnología Mecánica y Montaje",
+        "ciclo": "IX",
+        "creditos": 3,
+        "optativo": false,
+        "area": "MAQ",
+        "req": [
+          "CN-0108",
+          "CN-0059"
+        ],
+        "req_texto": "CN-0108 o CN-0018, CN-0059",
+        "nota": "Énfasis en Máquinas Marinas."
+      },
+      {
+        "sigla": "CN-0130",
+        "nombre": "Prácticas en las Instalaciones Energéticas",
+        "ciclo": "X",
+        "creditos": 4,
+        "optativo": false,
+        "area": "MAQ",
+        "req": [
+          "CN-0063",
+          "CN-0064",
+          "CN-0129"
+        ],
+        "req_texto": "CN-0063, CN-0064, CN-0129 o CN-0065",
+        "nota": "Énfasis en Máquinas Marinas."
+      },
+      {
+        "sigla": "CN-0069",
+        "nombre": "Operación de los Sistemas de Propulsión II",
+        "ciclo": "X",
+        "creditos": 3,
+        "optativo": false,
+        "area": "MAQ",
+        "req": [
+          "CN-0068"
+        ],
+        "nota": "Énfasis en Máquinas Marinas."
+      },
+      {
+        "sigla": "OPT-X-1",
+        "nombre": "Bloque Optativo",
+        "ciclo": "X",
+        "creditos": 2,
+        "optativo": true,
+        "area": "OPT",
+        "req": [],
+        "etiqueta": "Optativo",
+        "nota": "Énfasis en Máquinas Marinas: se elige un curso de la lista de optativos."
+      },
+      {
+        "sigla": "CN-0046",
+        "nombre": "Sistemas de Regulación y Control",
+        "ciclo": "X",
+        "creditos": 4,
+        "optativo": false,
+        "area": "MAQ",
+        "req": [
+          "CN-0128"
+        ],
+        "req_texto": "CN-0128 o CN-0061",
+        "nota": "Énfasis en Máquinas Marinas."
+      },
+      {
+        "sigla": "CN-0131",
+        "nombre": "Prácticas Externas",
+        "ciclo": "XI",
+        "creditos": 14,
+        "optativo": false,
+        "area": "MAQ",
+        "req": [
+          "CN-0130"
+        ],
+        "req_texto": "CN-0130 o CN-0067",
+        "nota": "Énfasis en Máquinas Marinas."
+      }
+    ],
+    "optativos": {
+      "OPT": [
+        {
+          "sigla": "CN-0121",
+          "nombre": "Técnicas Gerenciales",
+          "creditos": 2
+        },
+        {
+          "sigla": "CN-0122",
+          "nombre": "Formulación y Evaluación de Proyectos para Marina Civil",
+          "creditos": 2
+        },
+        {
+          "sigla": "CN-0123",
+          "nombre": "Evaluación de Riesgos",
+          "creditos": 2
+        }
+      ]
+    },
+    "titulo_optativos": "Lista de cursos optativos",
+    "listas_optativos": [
+      {
+        "id": "OPT",
+        "titulo": "Cursos optativos",
+        "nota": "Se elige uno de 2 créditos en el bloque optativo de cada énfasis.",
+        "color_de": "OPT"
+      }
+    ]
+  }
 }

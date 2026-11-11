@@ -14,5 +14,705 @@
       "url": "https://drive.google.com/file/d/1jxpodINfOSB8NF3f8Fa3-1kYOxEH2oBL/view",
       "principal": true
     }
-  ]
+  ],
+  "malla": {
+    "plan": "Plan 01",
+    "total": 136,
+    "tcu": 300,
+    "resumen_creditos": "136 créditos del bachillerato en ocho ciclos, más 300 horas de Trabajo Comunal Universitario.",
+    "nota_fuente": "Fuente: estructura curricular del plan 600135 (Informe Curricular CEA-59-2025, actualizada el 5 de noviembre de 2025).",
+    "areas": [
+      {
+        "id": "EDI",
+        "nombre": "Educación inicial",
+        "corto": "Educación inicial",
+        "color": "#B0306A",
+        "oscuro": "#E58BB5",
+        "descripcion": "Pedagogía, didáctica, currículo, desarrollo de la niñez, planeamiento, expresión plástica, música y salud mental.",
+        "creditos": 53
+      },
+      {
+        "id": "COM",
+        "nombre": "Comunicación en inglés",
+        "corto": "Comunicación en inglés",
+        "color": "#0A6AA6",
+        "oscuro": "#5AAEE0",
+        "descripcion": "Comunicación oral y escrita, laboratorios, fonética, fonología y literatura infantil en inglés.",
+        "creditos": 48
+      },
+      {
+        "id": "DID",
+        "nombre": "Didáctica del inglés y práctica",
+        "corto": "Didáctica del inglés",
+        "color": "#A8550A",
+        "oscuro": "#E8A060",
+        "descripcion": "Didáctica del inglés I y II y experiencia profesional en la enseñanza del inglés en educación inicial.",
+        "creditos": 14
+      },
+      {
+        "id": "FG",
+        "nombre": "Formación general",
+        "corto": "Formación general",
+        "color": "#5F6B78",
+        "oscuro": "#A9B4BF",
+        "descripcion": "Cursos integrados de humanidades, arte, repertorio, actividad deportiva y seminarios de realidad nacional, comunes a toda la Universidad.",
+        "creditos": 21
+      }
+    ],
+    "ciclos": [
+      {
+        "n": "I",
+        "anio": 1,
+        "nombre": "I ciclo",
+        "verano": false,
+        "creditos": 18
+      },
+      {
+        "n": "II",
+        "anio": 1,
+        "nombre": "II ciclo",
+        "verano": false,
+        "creditos": 18
+      },
+      {
+        "n": "III",
+        "anio": 2,
+        "nombre": "III ciclo",
+        "verano": false,
+        "creditos": 17
+      },
+      {
+        "n": "IV",
+        "anio": 2,
+        "nombre": "IV ciclo",
+        "verano": false,
+        "creditos": 18
+      },
+      {
+        "n": "V",
+        "anio": 3,
+        "nombre": "V ciclo",
+        "verano": false,
+        "creditos": 16
+      },
+      {
+        "n": "VI",
+        "anio": 3,
+        "nombre": "VI ciclo",
+        "verano": false,
+        "creditos": 18
+      },
+      {
+        "n": "VII",
+        "anio": 4,
+        "nombre": "VII ciclo",
+        "verano": false,
+        "creditos": 15
+      },
+      {
+        "n": "VIII",
+        "anio": 4,
+        "nombre": "VIII ciclo",
+        "verano": false,
+        "creditos": 16
+      }
+    ],
+    "cursos": [
+      {
+        "sigla": "EG-I",
+        "nombre": "Curso Integrado de Humanidades I",
+        "ciclo": "I",
+        "creditos": 6,
+        "optativo": false,
+        "area": "FG",
+        "req": []
+      },
+      {
+        "sigla": "EF-",
+        "nombre": "Actividad Deportiva",
+        "ciclo": "I",
+        "creditos": 0,
+        "optativo": false,
+        "area": "FG",
+        "req": []
+      },
+      {
+        "sigla": "ED-0067",
+        "nombre": "Pedagogía",
+        "ciclo": "I",
+        "creditos": 3,
+        "optativo": false,
+        "area": "EDI",
+        "req": []
+      },
+      {
+        "sigla": "ED-1157",
+        "nombre": "Seminario Introductorio a la Educación Inicial",
+        "ciclo": "I",
+        "creditos": 2,
+        "optativo": false,
+        "area": "EDI",
+        "req": []
+      },
+      {
+        "sigla": "IO-5001",
+        "nombre": "Laboratorio de Comunicación Oral I",
+        "ciclo": "I",
+        "creditos": 1,
+        "optativo": false,
+        "area": "COM",
+        "req": [],
+        "coreq": [
+          "IO-5400"
+        ]
+      },
+      {
+        "sigla": "IO-5200",
+        "nombre": "Comunicación Escrita I",
+        "ciclo": "I",
+        "creditos": 3,
+        "optativo": false,
+        "area": "COM",
+        "req": [],
+        "coreq": [
+          "IO-5400"
+        ]
+      },
+      {
+        "sigla": "IO-5400",
+        "nombre": "Comunicación Oral I",
+        "ciclo": "I",
+        "creditos": 3,
+        "optativo": false,
+        "area": "COM",
+        "req": [],
+        "coreq": [
+          "IO-5001",
+          "IO-5200"
+        ]
+      },
+      {
+        "sigla": "EG-II",
+        "nombre": "Curso Integrado de Humanidades II",
+        "ciclo": "II",
+        "creditos": 6,
+        "optativo": false,
+        "area": "FG",
+        "req": [
+          "EG-I"
+        ]
+      },
+      {
+        "sigla": "ED-0012",
+        "nombre": "Didáctica General",
+        "ciclo": "II",
+        "creditos": 3,
+        "optativo": false,
+        "area": "EDI",
+        "req": [
+          "ED-0067"
+        ]
+      },
+      {
+        "sigla": "ED-1158",
+        "nombre": "Mediación Pedagógica en la Educación Inicial",
+        "ciclo": "II",
+        "creditos": 2,
+        "optativo": false,
+        "area": "EDI",
+        "req": [
+          "ED-0067"
+        ]
+      },
+      {
+        "sigla": "IO-5002",
+        "nombre": "Laboratorio de Comunicación Oral II",
+        "ciclo": "II",
+        "creditos": 1,
+        "optativo": false,
+        "area": "COM",
+        "req": [
+          "IO-5001"
+        ],
+        "coreq": [
+          "IO-5410"
+        ]
+      },
+      {
+        "sigla": "IO-5210",
+        "nombre": "Comunicación Escrita II",
+        "ciclo": "II",
+        "creditos": 3,
+        "optativo": false,
+        "area": "COM",
+        "req": [
+          "IO-5200"
+        ],
+        "coreq": [
+          "IO-5410"
+        ]
+      },
+      {
+        "sigla": "IO-5410",
+        "nombre": "Comunicación Oral II",
+        "ciclo": "II",
+        "creditos": 3,
+        "optativo": false,
+        "area": "COM",
+        "req": [
+          "IO-5400"
+        ],
+        "coreq": [
+          "IO-5002",
+          "IO-5210"
+        ]
+      },
+      {
+        "sigla": "ED-0047",
+        "nombre": "Didáctica Específica en la Educación Inicial",
+        "ciclo": "III",
+        "creditos": 3,
+        "optativo": false,
+        "area": "EDI",
+        "req": [
+          "ED-0012"
+        ]
+      },
+      {
+        "sigla": "ED-1146",
+        "nombre": "Comunicación Oral y Escrita para la Educación Inicial y Primaria",
+        "ciclo": "III",
+        "creditos": 3,
+        "optativo": false,
+        "area": "EDI",
+        "req": []
+      },
+      {
+        "sigla": "IO-5003",
+        "nombre": "Laboratorio de Comunicación Oral III",
+        "ciclo": "III",
+        "creditos": 1,
+        "optativo": false,
+        "area": "COM",
+        "req": [
+          "IO-5002"
+        ],
+        "coreq": [
+          "IO-5420"
+        ]
+      },
+      {
+        "sigla": "IO-5420",
+        "nombre": "Comunicación Oral III",
+        "ciclo": "III",
+        "creditos": 3,
+        "optativo": false,
+        "area": "COM",
+        "req": [
+          "IO-5410"
+        ],
+        "coreq": [
+          "IO-5003",
+          "IO-5220"
+        ]
+      },
+      {
+        "sigla": "IO-5220",
+        "nombre": "Comunicación Escrita III",
+        "ciclo": "III",
+        "creditos": 3,
+        "optativo": false,
+        "area": "COM",
+        "req": [
+          "IO-5210"
+        ],
+        "coreq": [
+          "IO-5420"
+        ]
+      },
+      {
+        "sigla": "IO-5300",
+        "nombre": "Fonética y Lectura",
+        "ciclo": "III",
+        "creditos": 3,
+        "optativo": false,
+        "area": "COM",
+        "req": [
+          "IO-5410"
+        ],
+        "coreq": [
+          "IO-5301"
+        ]
+      },
+      {
+        "sigla": "IO-5301",
+        "nombre": "Laboratorio de Fonética y Lectura",
+        "ciclo": "III",
+        "creditos": 1,
+        "optativo": false,
+        "area": "COM",
+        "req": [
+          "IO-5002"
+        ],
+        "coreq": [
+          "IO-5300"
+        ]
+      },
+      {
+        "sigla": "ED-0195",
+        "nombre": "Desarrollo de la Niñez en Educación Inicial y Primaria",
+        "ciclo": "IV",
+        "creditos": 3,
+        "optativo": false,
+        "area": "EDI",
+        "req": []
+      },
+      {
+        "sigla": "ED-1163",
+        "nombre": "Pensamiento Científico en la Educación Inicial",
+        "ciclo": "IV",
+        "creditos": 3,
+        "optativo": false,
+        "area": "EDI",
+        "req": [
+          "ED-0047"
+        ]
+      },
+      {
+        "sigla": "IO-5004",
+        "nombre": "Laboratorio de Comunicación Oral IV",
+        "ciclo": "IV",
+        "creditos": 1,
+        "optativo": false,
+        "area": "COM",
+        "req": [
+          "IO-5003"
+        ],
+        "coreq": [
+          "IO-5430"
+        ]
+      },
+      {
+        "sigla": "IO-5230",
+        "nombre": "Comunicación Escrita IV",
+        "ciclo": "IV",
+        "creditos": 4,
+        "optativo": false,
+        "area": "COM",
+        "req": [
+          "IO-5220"
+        ],
+        "coreq": [
+          "IO-5430"
+        ]
+      },
+      {
+        "sigla": "IO-5302",
+        "nombre": "Laboratorio de Fonología del Idioma Inglés",
+        "ciclo": "IV",
+        "creditos": 1,
+        "optativo": false,
+        "area": "COM",
+        "req": [
+          "IO-5301"
+        ],
+        "coreq": [
+          "IO-5309"
+        ]
+      },
+      {
+        "sigla": "IO-5309",
+        "nombre": "Fonología del Idioma Inglés",
+        "ciclo": "IV",
+        "creditos": 3,
+        "optativo": false,
+        "area": "COM",
+        "req": [
+          "IO-5300"
+        ],
+        "coreq": [
+          "IO-5302"
+        ]
+      },
+      {
+        "sigla": "IO-5430",
+        "nombre": "Comunicación Oral IV",
+        "ciclo": "IV",
+        "creditos": 3,
+        "optativo": false,
+        "area": "COM",
+        "req": [
+          "IO-5420"
+        ],
+        "coreq": [
+          "IO-5004",
+          "IO-5230"
+        ]
+      },
+      {
+        "sigla": "ED-0106",
+        "nombre": "Fundamentos Psicobiológicos y Neurológicos del Desarrollo y del Aprendizaje",
+        "ciclo": "V",
+        "creditos": 3,
+        "optativo": false,
+        "area": "EDI",
+        "req": [
+          "ED-0195"
+        ]
+      },
+      {
+        "sigla": "ED-1160",
+        "nombre": "Desarrollo de Habilidades del Lenguaje en Educación Inicial",
+        "ciclo": "V",
+        "creditos": 3,
+        "optativo": false,
+        "area": "EDI",
+        "req": [
+          "ED-0012",
+          "ED-0195"
+        ]
+      },
+      {
+        "sigla": "IO-5005",
+        "nombre": "Laboratorio de Comunicación Oral V",
+        "ciclo": "V",
+        "creditos": 1,
+        "optativo": false,
+        "area": "COM",
+        "req": [
+          "IO-5004"
+        ],
+        "coreq": [
+          "IO-5440"
+        ]
+      },
+      {
+        "sigla": "IO-5440",
+        "nombre": "Comunicación Oral V",
+        "ciclo": "V",
+        "creditos": 3,
+        "optativo": false,
+        "area": "COM",
+        "req": [
+          "IO-5430"
+        ],
+        "coreq": [
+          "IO-5005"
+        ]
+      },
+      {
+        "sigla": "ED-0044",
+        "nombre": "Currículo para la Educación Inicial",
+        "ciclo": "V",
+        "creditos": 3,
+        "optativo": false,
+        "area": "EDI",
+        "req": [
+          "ED-0012"
+        ]
+      },
+      {
+        "sigla": "ED-0764",
+        "nombre": "Didáctica del Inglés I",
+        "ciclo": "V",
+        "creditos": 3,
+        "optativo": false,
+        "area": "DID",
+        "req": [],
+        "coreq": [
+          "IO-5440",
+          "IO-5005"
+        ],
+        "coreq_texto": "(IO-5450, IO-5006) o (IO-5440, IO-5005)"
+      },
+      {
+        "sigla": "ED-0038",
+        "nombre": "Investigación Educativa",
+        "ciclo": "VI",
+        "creditos": 3,
+        "optativo": false,
+        "area": "EDI",
+        "req": [
+          "ED-0047",
+          "ED-0044"
+        ],
+        "req_texto": "ED-0196 o ED-0197 o ED-0047, ED-0078 o ED-0044"
+      },
+      {
+        "sigla": "ED-0762",
+        "nombre": "Didáctica del Inglés II",
+        "ciclo": "VI",
+        "creditos": 3,
+        "optativo": false,
+        "area": "DID",
+        "req": [
+          "ED-0764"
+        ]
+      },
+      {
+        "sigla": "ED-1167",
+        "nombre": "Planeamiento y Evaluación para la Niñez de 4 a 6 Años",
+        "ciclo": "VI",
+        "creditos": 3,
+        "optativo": false,
+        "area": "EDI",
+        "req": [
+          "ED-0044",
+          "ED-0047"
+        ]
+      },
+      {
+        "sigla": "IO-5006",
+        "nombre": "Laboratorio de Comunicación Oral VI",
+        "ciclo": "VI",
+        "creditos": 1,
+        "optativo": false,
+        "area": "COM",
+        "req": [
+          "IO-5005"
+        ],
+        "coreq": [
+          "IO-5450"
+        ]
+      },
+      {
+        "sigla": "IO-5530",
+        "nombre": "Literatura Infantil en Inglés",
+        "ciclo": "VI",
+        "creditos": 3,
+        "optativo": false,
+        "area": "COM",
+        "req": [
+          "IO-5440"
+        ]
+      },
+      {
+        "sigla": "IO-5450",
+        "nombre": "Comunicación Oral VI",
+        "ciclo": "VI",
+        "creditos": 3,
+        "optativo": false,
+        "area": "COM",
+        "req": [
+          "IO-5440"
+        ],
+        "coreq": [
+          "IO-5006"
+        ]
+      },
+      {
+        "sigla": "SR-I",
+        "nombre": "Seminario de Realidad Nacional I",
+        "ciclo": "VI",
+        "creditos": 2,
+        "optativo": false,
+        "area": "FG",
+        "req": [
+          "EG-II"
+        ]
+      },
+      {
+        "sigla": "ED-0029",
+        "nombre": "Expresión Plástica para la Educación Inicial",
+        "ciclo": "VII",
+        "creditos": 2,
+        "optativo": false,
+        "area": "EDI",
+        "req": []
+      },
+      {
+        "sigla": "ED-0041",
+        "nombre": "Salud Mental",
+        "ciclo": "VII",
+        "creditos": 3,
+        "optativo": false,
+        "area": "EDI",
+        "req": []
+      },
+      {
+        "sigla": "ED-1175",
+        "nombre": "Pensamiento Lógico Matemático en la Educación Inicial",
+        "ciclo": "VII",
+        "creditos": 3,
+        "optativo": false,
+        "area": "EDI",
+        "req": [
+          "ED-0047"
+        ]
+      },
+      {
+        "sigla": "EG-",
+        "nombre": "Curso de Arte",
+        "ciclo": "VII",
+        "creditos": 2,
+        "optativo": false,
+        "area": "FG",
+        "req": [],
+        "nota": "Se elige entre la oferta de la Sede para cada ciclo."
+      },
+      {
+        "sigla": "SR-II",
+        "nombre": "Seminario de Realidad Nacional II",
+        "ciclo": "VII",
+        "creditos": 2,
+        "optativo": false,
+        "area": "FG",
+        "req": [
+          "SR-I"
+        ]
+      },
+      {
+        "sigla": "RP-",
+        "nombre": "Repertorio",
+        "ciclo": "VII",
+        "creditos": 3,
+        "optativo": false,
+        "area": "FG",
+        "req": [],
+        "nota": "Se elige entre la oferta de la Sede para cada ciclo."
+      },
+      {
+        "sigla": "ED-0039",
+        "nombre": "Fundamentos de Administración Educativa",
+        "ciclo": "VIII",
+        "creditos": 3,
+        "optativo": false,
+        "area": "EDI",
+        "req": [
+          "ED-1167"
+        ],
+        "req_texto": "ED-1167 o ED-0196 o ED-0197"
+      },
+      {
+        "sigla": "ED-0049",
+        "nombre": "Seminario de Ética en el Ejercicio Docente",
+        "ciclo": "VIII",
+        "creditos": 2,
+        "optativo": false,
+        "area": "EDI",
+        "req": []
+      },
+      {
+        "sigla": "ED-0629",
+        "nombre": "Experiencia Profesional en la Enseñanza del Inglés en Educación Inicial",
+        "ciclo": "VIII",
+        "creditos": 8,
+        "optativo": false,
+        "area": "DID",
+        "req": [
+          "ED-0762"
+        ],
+        "req_texto": "4 ED-0762"
+      },
+      {
+        "sigla": "ED-1161",
+        "nombre": "Música y Expresión Corporal para la Educación Inicial",
+        "ciclo": "VIII",
+        "creditos": 3,
+        "optativo": false,
+        "area": "EDI",
+        "req": []
+      }
+    ]
+  }
 }

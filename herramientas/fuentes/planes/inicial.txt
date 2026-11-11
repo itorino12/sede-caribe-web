@@ -1,0 +1,116 @@
+Bachillerato                35
+                          01
+                        60
+                   go
+                 di
+               Có
+
+
+
+Educación
+ Inicial en
+   Inglés
+                                  ESTRUCTURA CURRICULAR DEL BACHILLERATO EN EDUCACIÓN INICIAL
+                                                          EN INGLÉS
+                                                     CÓDIGO 600135, PLAN 01
+ NIVEL Y                         NOMBRE DEL CURSO                  HORAS       REQUISITOS       CORREQUISITOS      CRÉDITOS
+  SIGLA                                                          T P L TP
+1 AÑO
+
+I CICLO
+EG-I       CURSO INTEGRADO DE HUMANIDADES I                      - -     - -       ---                 ---             6
+EF-        ACTIVIDAD DEPORTIVA                                   - -     - -       ---                 ---             0
+ED-0067    PEDAGOGÍA                                             - -     - 4       ---                 ---             3
+ED-1157    SEMINARIO INTRODUCTORIO A LA EDUCACIÓN INICIAL        - -     - 3       ---                 ---             2
+IO-5001    LABORATORIO DE COMUNICACIÓN ORAL I                    - -     3 -       ---              IO-5400            1
+IO-5200    COMUNICACIÓN ESCRITA I                                - -     - 4       ---              IO-5400            3
+IO-5400    COMUNICACIÓN ORAL I                                  - -      - 6       ---          IO-5001, IO-5200       3
+                                                                                                  SUBTOTAL            18
+II CICLO
+EG-II      CURSO INTEGRADO DE HUMANIDADES II                     -   -   -   -     EG-I                ---             6
+ED-0012    DIDÁCTICA GENERAL                                     -   -   -   4   ED-0067               ---             3
+ED-1158    MEDIACIÓN PEDAGÓGICA EN LA EDUCACIÓN INICIAL          -   -   -   3   ED-0067               ---             2
+IO-5002    LABORATORIO DE COMUNICACIÓN ORAL II                   -   -   3   -   IO-5001            IO-5410            1
+IO-5210    COMUNICACIÓN ESCRITA II                               -   -   -   4   IO-5200            IO-5410            3
+IO-5410    COMUNICACIÓN ORAL II                                  -   -   -   6   IO-5400        IO-5002, IO-5210       3
+                                                                                                  SUBTOTAL            18
+2 AÑO
+
+III CICLO
+ED-0047 DIDÁCTICA ESPECÍFICA EN LA EDUCACIÓN INICIAL             3 1     -   -   ED-0012              ---             3
+ED-1146 COMUNICACIÓN ORAL Y ESCRITA PARA LA EDUCACIÓN            - -     -   4     ---                ---             3
+          INICIAL Y PRIMARIA
+IO-5003   LABORATORIO DE COMUNICACIÓN ORAL III                   -   -   2 -     IO-5002            IO-5420            1
+IO-5420   COMUNICACIÓN ORAL III                                  -   -   - 4     IO-5410        IO-5003, IO-5220       3
+IO-5220   COMUNICACIÓN ESCRITA III                               -   -   - 4     IO-5210            IO-5420            3
+IO-5300   FONÉTICA Y LECTURA                                     -   -   - 4     IO-5410            IO-5301            3
+IO-5301   LABORATORIO DE FONÉTICA Y LECTURA                      -   -   2 -     IO-5002            IO-5300            1
+                                                                                                  SUBTOTAL            17
+'Según Informe Curricular CEA-59-2025
+ NIVEL Y                  NOMBRE DEL CURSO                 HORAS             REQUISITOS          CORREQUISITOS         CRÉDITOS
+  SIGLA                                                   T P L TP
+IV CICLO
+ED-0195 DESARROLLO DE LA NIÑEZ EN EDUCACIÓN INICIAL       -   -   -   4           ---                    ---              3
+         Y PRIMARIA
+ED-1163 PENSAMIENTO CIENTÍFICO EN LA EDUCACIÓN INICIAL    -   -   - 4          ED-0047                  ---                3
+IO-5004  LABORATORIO DE COMUNICACIÓN ORAL IV              -   -   2 -          IO-5003               IO-5430               1
+IO-5230  COMUNICACIÓN ESCRITA IV                          -   -   - 4          IO-5220               IO-5430               4
+IO-5302  LABORATORIO DE FONOLOGÍA DEL IDIOMA INGLÉS       -   -   2 -          IO-5301               IO-5309               1
+IO-5309  FONOLOGÍA DEL IDIOMA INGLÉS                      -   -   - 4          IO-5300               IO-5302               3
+IO-5430  COMUNICACIÓN ORAL IV                             -   -   - 4          IO-5420           IO-5004, IO-5230          3
+                                                                                                   SUBTOTAL               18
+
+
+3 AÑO
+V CICLO
+ED-0106 FUNDAMENTOS PSICOBIOLÓGICOS Y NEUROLÓGICOS        4   -   -   -        ED-0195                   ---              3
+        DEL DESARROLLO Y DEL APRENDIZAJE                          -
+ED-1160 DESARROLLO DE HABILIDADES DEL LENGUAJE EN         -   -   -   4    ED-0012, ED-0195              ---              3
+        EDUCACIÓN INICIAL
+IO-5005 LABORATORIO DE COMUNICACIÓN ORAL V                -   -   3 -          IO-5004                 IO-5440            1
+IO-5440 COMUNICACIÓN ORAL V                               -   -   - 4          IO-5430                 IO-5005            3
+ED-0044 CURRÍCULO PARA LA EDUCACIÓN INICIAL               -   -   - 4          ED-0012                    ---             3
+ED-0764 DIDÁCTICA DEL INGLÉS I                            -   -   - 4            ---            (IO-5450, IO-5006) o      3
+                                                                                                  (IO-5440, IO-5005)
+                                                                                                     SUBTOTAL             16
+VI CICLO
+ED-0038 INVESTIGACIÓN EDUCATIVA                           -   -   -   4   ED-0196 o ED-0197 o            ---              3
+                                                                          ED-0047, ED-0078 o
+                                                                               ED-0044
+ED-0762    DIDÁCTICA DEL INGLÉS II                        -   -   -   4        ED-0764                   ---              3
+ED-1167    PLANEAMIENTO Y EVALUACIÓN PARA LA NIÑEZ DE 4   -   -   -   4    ED-0044, ED-0047              ---              3
+           A 6 AÑOS
+IO-5006    LABORATORIO DE COMUNICACIÓN ORAL VI            -   -   3 -          IO-5005               IO-5450               1
+IO-5530    LITERATURA INFANTIL EN INGLÉS                  -   -   - 4          IO-5440                 ---                 3
+IO-5450    COMUNICACIÓN ORAL VI                           -   -   - 4          IO-5440               IO-5006               3
+SR-I       SEMINARIO DE REALIDAD NACIONAL I               -   -   - -           EG-II                  ---                 2
+                                                                                                    SUBTOTAL              18
+'Según Informe Curricular CEA-59-2025
+ NIVEL Y                   NOMBRE DEL CURSO                                           HORAS               REQUISITOS       CORREQUISITOS   CRÉDITOS
+  SIGLA                                                                              T P L TP
+4 AÑO
+VII CICLO
+ED-0029 EXPRESIÓN PLÁSTICA PARA LA EDUCACIÓN INICIAL                                 -   -   -   3             ---              ---           2
+ED-0041 SALUD MENTAL                                                                 -   -   -   4             ---              ---           3
+ED-1175 PENSAMIENTO LÓGICO MATEMÁTICO EN LA EDUCACIÓN                                -   -   -   4           ED-0047            ---           3
+          INICIAL
+EG-       CURSO DE ARTE                                                              -   -   -   -              ---             ---            2
+SR-II     SEMINARIO DE REALIDAD NACIONAL II                                          -   -   -   -             SR-I             ---            2
+RP-       REPERTORIO                                                                 -   -   -   -              ---             ---            3
+                                                                                                                             SUBTOTAL         15
+VIII CICLO
+ED-0039 FUNDAMENTOS DE ADMINISTRACIÓN EDUCATIVA                                      -   -   -   4     ED-1167 o ED-0196        ---           3
+                                                                                                           o ED-0197
+ED-0049     SEMINARIO DE ÉTICA EN EL EJERCICIO DOCENTE                               2 - -       1            ---               ---           2
+ED-0629     EXPERIENCIA PROFESIONAL EN LA ENSEÑANZA DEL                              - 10 -      4          ED-0762             ---           8
+            INGLÉS EN EDUCACIÓN INICIAL
+ED-1161     MÚSICA Y EXPRESIÓN CORPORAL PARA LA EDUCACIÓN                            -   -   -   4                 ---          ---           3
+             INICIAL
+                                                                                                                             SUBTOTAL         16
+                                                                                                                               TOTAL         136
+Notas:
+El estudiantado debe cumplir 300 horas de Trabajo Comunal Universitario para optar por el grado de Bachillerato.
+Actualizado por MTGT el 05/11/2025
+En: Estructuras/Sede de Occidente/Recinto San Ramón/Estructuras a modificar/Enseñanza-inglés B-L
+Según Informe Curricular CEA-59-2025
+

@@ -1,0 +1,359 @@
+                    
+                            
+                       
+                    
+               
+
+
+
+ 
+ Universidad de Costa Rica                                                                                                                                 Programa: PE_REP_020
+ Sistema de Aplicaciones Estudiantiles SAE                                                                                                                 Fecha   : 15/02/2022
+ Módulo Planes de Estudio                                                                                                                                  Hora    : 10:33:01
+                                                                                                                                                           Página 1 de 7
+                                                               FASCÍCULO UNIDAD ACADÉMICA
+                                                 Escuela:                  INGENIERIA QUIMICA
+
+ Carrera            420501     LIC.EN INGENIERIA QUIMICA
+ Plan de Estudio       1       PLAN DE 2003
+
+
+ Enfasis               0       Bloque Común(no hay énfasis)
+
+
+                                                                   *Horas*
+Ciclo     Curso   Nombre del curso                             T   P   L TP Requisitos y Req. Equivalentes                                Correquisitos y Correq. Equivalentes    Cred.
+
+ 1      EG-       CURSO DE ARTE                                0   0   0     3                                                                                                     2
+ 1      EG-I      CURSO INTEGRADO DE HUMANIDADES I             8   0   0     0                                                                                                     6
+ 1      LM1030    ESTRATEGIAS DE LECTURA EN INGLÉS I (PARA OTRAS
+                                                               6 CARRERAS)
+                                                                  0 0 0                                                                                                            4
+ 1      MA0001    PRECÁLCULO                                   5   0   0     0                                                                                                     0
+        MA1001    CÁLCULO I                                    5   0   0         MA0001                                                                                            3
+ 1
+        QU0100    QUÍMICA GENERAL I                            4   0   0     0                                                            QU0101                                   3
+ 1
+        QU0101    LABORATORIO DE QUÍMICA GENERAL I             0   0   3     0                                                            QU0100                                   1
+ 1
+                                                              Grado: LICENCIATURA                    Créditos ciclo 1 : 19
+
+ 2      EF-       ACTIVIDAD DEPORTIVA                          0   0   2     0                                                                                                     0
+        EG-II     CURSO INTEGRADO DE HUMANIDADES II            8   0   0     0   EG-I                                                                                              6
+ 2
+        FS0210    FÍSICA GENERAL I                             4   0   0         MA1001 Equiv.: MA0250 o MA1210 o MA1101                  FS0211                                   3
+ 2
+        FS0211    LABORATORIO DE FÍSICA GENERAL I              0   0   3         MA1001 Equiv.: MA0250 o MA1210 o MA1101                  FS0210 Equiv.: FS0227                    1
+ 2
+        MA1002    CÁLCULO II                                   5   0   0     0   MA1001 Equiv.: MA1101                                                                             4
+ 2
+        QU0102    QUÍMICA GENERAL II                           4   0   0     0   QU0100; QU0101                                           QU0103                                   3
+ 2
+        QU0103    LABORATORIO DE QUÍMICA GENERAL II            0   0   3         QU0100; QU0101                                           QU0102                                   1
+ 2
+                                                              Grado: LICENCIATURA                    Créditos ciclo 2 : 18
+
+        FS0310    FÍSICA GENERAL II                            4   0   0         FS0210; FS0211; MA1002 Equiv.: MA0350 o MA2210           FS0311                                   3
+ 3
+        FS0311    LABORATORIO DE FÍSICA GENERAL II             0   0   3         FS0210 Equiv.: FS0227; FS0211; MA1002 Equiv.: MA2210 o   FS0310 Equiv.: FS0327                    1
+ 3                                                                               MA0350
+
+        IQ0200    ANÁLISIS GRÁFICO PARA INGENIERÍA QUÍMICA     3   3   0         FS0210; MA1002; QU0102                                                                            3
+ 3
+        MA1003    CÁLCULO III                                  5   0   0         MA1002                                                   MA1004 Equiv.: MA0307                    4
+ 3
+ 3      MA1004    ÁLGEBRA LINEAL                               5   0   0     0                                                                                                     3
+        QU0200    QUÍMICA ANALÍTICA CUANTITATIVA I             4   0   0     0   QU0102 Equiv.: QU0114; QU0103 Equiv.: QU0115             QU0201                                   3
+ 3
+ Universidad de Costa Rica                                                                                                                             Programa: PE_REP_020
+ Sistema de Aplicaciones Estudiantiles SAE                                                                                                             Fecha   : 15/02/2022
+ Módulo Planes de Estudio                                                                                                                              Hora    : 10:33:01
+                                                                                                                                                       Página 2 de 7
+                                                             FASCÍCULO UNIDAD ACADÉMICA
+                                               Escuela:                  INGENIERIA QUIMICA
+ Carrera            420501   LIC.EN INGENIERIA QUIMICA
+ Plan de Estudio       1     PLAN DE 2003
+
+
+ Enfasis               0     Bloque Común(no hay énfasis)
+
+
+                                                                 *Horas*
+Ciclo     Curso   Nombre del curso                           T   P   L TP Requisitos y Req. Equivalentes                              Correquisitos y Correq. Equivalentes    Cred.
+
+        QU0201    LABORATORIO DE QUÍMICA ANALÍTICA CUANTITATIVA
+                                                             2 I0    4         QU0102 Equiv.: QU0114; QU0103 Equiv.: QU0115           QU0200                                   2
+ 3
+                                                            Grado: LICENCIATURA                    Créditos ciclo 3 : 19
+
+        CI0202    PRINCIPIOS DE INFORMÁTICA                  4   0   0         MA0205 Equiv.: MA0225 o MA0230 o MA1001 o MA1210 o                                              4
+ 4                                                                             MA1101
+
+        FS0410    FÍSICA GENERAL III                         4   0   0         FS0310; FS0311; MA1003 Equiv.: MA0450                  FS0411                                   3
+ 4
+        FS0411    LABORATORIO DE FÍSICA GENERAL III          0   0   3         FS0310 Equiv.: FS0327; FS0311; MA0450 Equiv.: MA1003   FS0410 Equiv.: FS0427                    1
+ 4
+        IQ0332    ANÁLISIS DE PROCESOS I                     4   2   0         FS0310; IQ0200                                                                                  4
+ 4
+        MA1005    ECUACIONES DIFERENCIALES                   5   0   0         MA1002 Equiv.: MA1023 o MA0292 o MA0232; MA1004                                                 4
+ 4                                                                             Equiv.: MA0294 o MA0232
+
+        QU0260    FÍSICO QUÍMICA PARA INGENIERÍA QUÍMICA     4   0   0     0   FS0310; FS0311; MA1002; QU0102; QU0103                                                          4
+ 4
+                                                            Grado: LICENCIATURA                    Créditos ciclo 4 : 20
+
+        IQ0312    MECÁNICA I                                 4   2   0         FS0210; FS0211; MA1003; MA1004                                                                  4
+ 5
+        IQ0333    ANÁLISIS DE PROCESOS II                    3   2   0     0   CI0202; IQ0332; MA1003; MA1005                                                                  3
+ 5
+        IQ0334    TERMODINÁMICA I                            3   2   0         IQ0332; MA1005; QU0260                                                                          3
+ 5
+        QU0212    QUÍMICA ORGÁNICA GENERAL I                 4   0   0     0   QU0102; QU0103                                         QU0213                                   4
+ 5
+        QU0213    LABORATORIO DE QUÍMICA ORGÁNICA GENERAL I 1    0   3         QU0102; QU0103                                         QU0212                                   1
+ 5
+        XS0217    PROBABILIDADES E INFERENCIA ESTADÍSTICA    4   0   0     0   MA0303 Equiv.: MA1004 o MA0325 o MA1005                                                         4
+ 5
+                                                            Grado: LICENCIATURA                    Créditos ciclo 5 : 19
+
+        IE0303    ELECTROTECNIA I                            2   0   3     0   FS0310; FS0311; MA1003                                                                          3
+ 6
+        IQ0313    FENÓMENOS DE TRANSFERENCIA                 4   2   0         IQ0333; IQ0334                                                                                  4
+ 6
+        IQ0331    MEDICIÓN Y TRATAMIENTO DE DATOS EXPERIMENTALES
+                                                            1 1      4         FS0410; FS0411; IQ0332; QU0201; XS0217                                                          3
+ 6
+        IQ0335    TERMODINÁMICA II                           3   0   0         CI0202; IQ0334; MA1003; QU0212                                                                  3
+ 6
+        QU0214    QUÍMICA ORGÁNICA GENERAL II                4   0   0     0   QU0212; QU0213                                         QU0215                                   4
+ 6
+ Universidad de Costa Rica                                                                                                                     Programa: PE_REP_020
+ Sistema de Aplicaciones Estudiantiles SAE                                                                                                     Fecha   : 15/02/2022
+ Módulo Planes de Estudio                                                                                                                      Hora    : 10:33:01
+                                                                                                                                               Página 3 de 7
+                                                               FASCÍCULO UNIDAD ACADÉMICA
+                                               Escuela:                    INGENIERIA QUIMICA
+ Carrera            420501   LIC.EN INGENIERIA QUIMICA
+ Plan de Estudio       1     PLAN DE 2003
+
+
+ Enfasis               0     Bloque Común(no hay énfasis)
+
+
+                                                                   *Horas*
+Ciclo     Curso   Nombre del curso                             T   P   L TP Requisitos y Req. Equivalentes                    Correquisitos y Correq. Equivalentes    Cred.
+
+        QU0215    LABORATORIO DE QUÍMICA ORGÁNICA GENERAL II 1     0   3         QU0212; QU0213                               QU0214                                   1
+ 6
+                                                             Grado: LICENCIATURA                      Créditos ciclo 6 : 18
+
+        IQ0415    INGENIERÍA DE LOS MATERIALES                 3   0   1         IQ0312; IQ0335                                                                        3
+ 7
+        IQ0423    OPERACIONES DE TRANSFERENCIA DE FLUIDOS Y CALOR
+                                                             4 0       0         IQ0313                                       IQ0432                                   3
+ 7
+ 7      IQ0432    LABORATORIO DE OPERACIONES DE TRANSFERENCIA
+                                                            1 DE1 FLUIDOS
+                                                                    3     YIQ0313;
+                                                                             CALOR IQ0331                                     IQ0423                                   3
+        IQ0451    PLANEAMIENTO DE LA PRODUCCIÓN                3   0   0         XS0217 Equiv.: XS0215                                                                 3
+ 7
+ 7      OPT413    BLOQUE OPTATIVO                                                                                                                                      3
+        SR-I      SEMINARIO DE REALIDAD NACIONAL I             2   0   0     0   EG-II                                                                                 2
+ 7
+                                                             Grado: LICENCIATURA                      Créditos ciclo 7 : 17
+
+        IQ0416    CINÉTICA Y REACTORES QUÍMICOS                3   0   0     0   IQ0415; IQ0423; QU0214                                                                3
+ 8
+        IQ0424    OPERACIONES POR SEPARACIÓN DE FASES          4   0   0         IQ0335; IQ0423                               IQ0433                                   3
+ 8
+        IQ0433    LABORATORIO DE OPERACIONES POR SEPARACIÓN DE
+                                                            1 FASES
+                                                               1 3               IQ0335; IQ0432; QU0215                       IQ0424                                   2
+ 8
+        IQ0452    CONTROL DE LA PRODUCCIÓN                     3   0   0         IQ0451                                                                                3
+ 8
+ 8      RP-1      REPERTORIO                                   0   0   0     0                                                                                         3
+        SR-II     SEMINARIO DE REALIDAD NACIONAL II            2   0   0     0   SR-I                                                                                  2
+ 8
+                                                             Grado: LICENCIATURA                      Créditos ciclo 8 : 16
+
+        IQ0517    CONTROL E INSTRUMENTACIÓN DE PROCESOS        3   0   0     0   IE0303; IQ0416; IQ0424; IQ0433                                                        3
+ 9
+        IQ0525    OPERACIONES DE SEPARACIÓN POR MÉTODOS DIFUSIONALES
+                                                            4 0 0                IQ0424                                       IQ0534                                   3
+ 9
+        IQ0534    LABORATORIO DE OPERACIONES DE SEPARACIÓN POR
+                                                            1 MÉTODOS
+                                                               1 3      IQ0424; IQ0433
+                                                                      DIFUSIONALES                                            IQ0525                                   2
+ 9
+        IQ0553    EVALUACION DE PROYECTOS                      3   1   0         IQ0424; IQ0452                                                                        3
+ 9
+        IQ0590    SEMINARIO PARA PROYECTOS DE GRADUACIÓN       2   0   0         IQ0424; IQ0452                               IQ0553                                   2
+ 9
+ 9      OPT413    BLOQUE OPTATIVO                                                                                                                                      3
+
+                                                             Grado: LICENCIATURA                      Créditos ciclo 9 : 16
+ Universidad de Costa Rica                                                                                                                  Programa: PE_REP_020
+ Sistema de Aplicaciones Estudiantiles SAE                                                                                                  Fecha   : 15/02/2022
+ Módulo Planes de Estudio                                                                                                                   Hora    : 10:33:01
+                                                                                                                                            Página 4 de 7
+                                                            FASCÍCULO UNIDAD ACADÉMICA
+                                              Escuela:                  INGENIERIA QUIMICA
+ Carrera           420501   LIC.EN INGENIERIA QUIMICA
+ Plan de Estudio     1      PLAN DE 2003
+
+
+ Enfasis             0      Bloque Común(no hay énfasis)
+
+
+                                                                *Horas*
+Ciclo   Curso   Nombre del curso                            T   P   L TP Requisitos y Req. Equivalentes                    Correquisitos y Correq. Equivalentes    Cred.
+                                                                              IQ0525; IQ0553
+ 10 IQ0526      PROCESOS Y OPERACIONES INTEGRADAS           4   0   0                                                                                               3
+                                                                              IQ0416; IQ0525; IQ0553
+ 10 IQ0551      DISEÑO DE PROCESOS QUÍMICOS                 3   1   0                                                                                               3
+                                                                              IQ0525; IQ0553
+ 10 IQ0556      PRINCIPIOS DE ADMINISTRACIÓN INDUSTRIAL     3   0   0     0                                                                                         3
+                                                                              IQ0590
+ 10 IQ9500      INVESTIGACION DIRIGIDA I                    0   0   0     0                                                                                         0
+ 10 IQ9700      PRÁCTICA DIRIGIDA I                         0   0   0     0                                                                                         0
+ 10 IQ9800      PROYECTO DE GRADUACIÓN I                    0   0   0     0                                                                                         0
+ 10 OPT413      BLOQUE OPTATIVO                                                                                                                                     3
+
+                                                           Grado: LICENCIATURA                    Créditos ciclo 10 : 12
+
+ 11 IQ9501      INVESTIGACIÓN DIRIGIDA II                   0   0   0     0                                                                                         0
+                                                                              IQ9700
+ 11 IQ9701      PRÁCTICA DIRIGIDA II                        0   0   0     0                                                                                         0
+                                                                              IQ9800
+ 11 IQ9801      PROYECTO DE GRADUACIÓN II                   0   0   0     0                                                                                         0
+
+                                                           Grado: LICENCIATURA                    Créditos ciclo 11 : 0
+
+ 12 IQ9502      INVESTIGACION DIRIGIDA III                  0   0   0     0                                                                                         0
+                                                                              IQ9701
+ 12 IQ9702      PRÁCTICA DIRIGIDA III                       0   0   0     0                                                                                         0
+ Universidad de Costa Rica                                                                                                                         Programa: PE_REP_020
+ Sistema de Aplicaciones Estudiantiles SAE                                                                                                         Fecha   : 15/02/2022
+ Módulo Planes de Estudio                                                                                                                          Hora    : 10:33:01
+                                                                                                                                                   Página 5 de 7
+                                                                    FASCÍCULO UNIDAD ACADÉMICA
+                                               Escuela:                         INGENIERIA QUIMICA
+ Carrera           420501   LIC.EN INGENIERIA QUIMICA
+ Plan de Estudio     1      PLAN DE 2003
+
+
+ Enfasis             0      Bloque Común(no hay énfasis)
+
+
+                                                                        *Horas*
+Ciclo   Curso   Nombre del curso                                    T   P   L TP Requisitos y Req. Equivalentes                   Correquisitos y Correq. Equivalentes    Cred.
+                                                                                      IQ9801
+ 12 IQ9802      PROYECTO DE GRADUACIÓN III                          0   0   0     0                                                                                        0
+
+                                                                  Grado: LICENCIATURA                     Créditos ciclo 12 : 0
+
+                                                                            Total créditos enfasis 0 :         174
+
+                                                                                Total cursos enfasis 0 :       70
+
+                                                                                         Total de créditos :   174
+
+Observaciones generales     El y la estudiante deben además, aprobar 300 horas de TCU.
+del plan de estudio         Última actualización: Resolución 7289-2003.
+ Universidad de Costa Rica                                                                                                   Programa: PE_REP_020
+ Sistema de Aplicaciones Estudiantiles SAE                                                                                   Fecha   : 15/02/2022
+ Módulo Planes de Estudio                                                                                                    Hora    : 10:33:01
+                                                                                                                             Página 6 de 7
+                                                            FASCÍCULO UNIDAD ACADÉMICA
+                                           Escuela:                      INGENIERIA QUIMICA
+Carrera           420501   LIC.EN INGENIERIA QUIMICA
+Plan de Estudio     1      PLAN DE 2003
+
+Bloques Optativos
+Bloque Optativo         OPT413   BLOQUE OPTATIVO
+Observaciones:
+                                                           *Horas*
+  Curso    Nombre del curso                            T    P   L TP Cred. Requisitos y Req. Equivalentes   Correquisitos y Correq. Equivalentes
+  IQ0330   INGENIERÍA DE PROCESOS I                    4    1   0          3   IQ0335; QU0214
+
+  IQ0437   INTRODUCCIÓN A LOS FLUIDOS DE               3    0   0          3   IQ0423; IQ0432
+           PERFORACIÓN
+  IQ0499   TECNOLOGÍA DEL ASFALTO                      3    0   0    0     3   IQ0331; QU0214
+
+  IQ0500   INGENIERIA PETROLERA                        3    0   0          3   IQ0423; IQ0432
+
+  IQ0503   INGENIERÍA DE PROCESOS ALIMENTICIOS         3    0   0          3   IQ0335; IQ0423
+
+  IQ0504   FUENTES RENOVALBLES DE ENERGÍA              3    0   0    0     3   IQ0334
+
+  IQ0552   CORROSION                                   3    0   0          3   IQ0415
+
+  IQ0559   DISEÑO DE PROCESOS TÉRMICOS EN LA           3    0   0          3   IQ0313
+           INDUSTRIA ALIMENTARIA
+  IQ0569   DISEÑO DE PROCESOS Y EQUIPO EN ALIMENTOS    3    0   0    0     3   IQ0423
+
+  IQ0570   TECNOLOGÍA DE POLÍMEROS                     3    0   0    0     3   IQ0415; QU0212
+
+  IQ0579   TECNOLOGÍA DE POLÍMEROS II                  3    0   0    0     3   IQ0570; QU0212
+
+  IQ0620   ESTADÍSTICA APLICADA A LA CALIDAD           4    0   0          3   IQ0331
+
+  IQ0621   GESTIÓN DE LA CALIDAD                       3    0   0          3   IQ0331
+
+  IQ0622   DISEÑO ESTADÍSTICO DE EXPERIMENTOS          3    0   0          3   IQ0331
+
+  IQ0630   INGENIERÍA AZUCARERA                        3    0   0          3   IQ0423; QU0214
+
+  IQ0631   INGENIERIA AZUCARERA II                     3    0   0    0     3   IQ0630
+
+  IQ0640   TRATAMIENTO DE DESECHOS                     3    0   0    0     3   IQ0423; QU0214
+
+  IQ0642   BIOINGENIERÍA                               3    0   0          3   IQ0423; QU0214
+
+  IQ0643   BIOINGENIERÍA II                            3    0   0    0     3   IQ0642
+
+  IQ0655   CERAMICA INDUSTRIAL                         3    0   0          3   IQ0415
+
+  IQ0660   SEGURIDAD E HIGIENE INDUSTRIAL              3    0   0          3   IQ0423
+
+  IQ0661   CONTAMINACIÓN INDUSTRIAL DEL AIRE           3    0   0          3   IQ0335; IQ0423; QU0214
+
+  IQ0664   SEGURIDAD E HIGIENE INDUSTRIAL II           3    0   0    0     3   IQ0660
+
+  IQ0670   CONTROL AUTOMÁTICO                          3    0   0          3   IQ0517
+
+  IQ0671   IMPACTO AMBIENTAL                           3    0   0    0     3   IQ0335; IQ0423; QU0214
+ Universidad de Costa Rica                                                                                                   Programa: PE_REP_020
+ Sistema de Aplicaciones Estudiantiles SAE                                                                                   Fecha   : 15/02/2022
+ Módulo Planes de Estudio                                                                                                    Hora    : 10:33:01
+                                                                                                                             Página 7 de 7
+                                                            FASCÍCULO UNIDAD ACADÉMICA
+                                           Escuela:                      INGENIERIA QUIMICA
+Carrera           420501   LIC.EN INGENIERIA QUIMICA
+Plan de Estudio     1      PLAN DE 2003
+
+Bloques Optativos
+Bloque Optativo         OPT413   BLOQUE OPTATIVO
+Observaciones:
+                                                           *Horas*
+  Curso    Nombre del curso                            T    P   L TP Cred. Requisitos y Req. Equivalentes   Correquisitos y Correq. Equivalentes
+  IQ0672   GESTIÓN INTEGRAL DE LOS DESECHOS SÓLIDOS: 3      0   0          3   IQ0423; QU0214
+           ORDINARIOS Y ESPECIALES
+  IQ0680   INGENIERIA TEXTIL                           3    0   0          3   IQ0335; QU0214
+
+  IQ0690   INSTALACIONES FRIGORIFICAS                  3    0   0          3   IQ0335; IQ0423
+
+  IQ0700   METALURGIA EXTRACTIVA I                     3    0   0          3   IQ0415
+
+  IQ0701   METALURGIA EXTRACTIVA II                    3    0   0    0     3   IQ0700
+
+  IQ0710   MÉTODOS Y SISTEMAS DE INVESTIGACIÓN         3    0   0          3   IQ0331
+
+  IQ2102   MÉTODOS CUANTITATIVOS PARA LA TOMA DE       3    0   0          3   IQ0313; IQ0451; IQ0452
+           DECISIONES I
+  IQ2103   MÉTODOS CUANTITATIVOS PARA LA TOMA DE       3    0   0    0     3   IQ2102
+           DECISIONES II
+

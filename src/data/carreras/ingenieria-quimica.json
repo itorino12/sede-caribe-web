@@ -18,5 +18,1282 @@
       "url": "https://drive.google.com/file/d/1wC1xBXCyNfzjmwVB9-nAUhlGXpudMqyD/view",
       "principal": true
     }
-  ]
+  ],
+  "malla": {
+    "plan": "Plan de 2003",
+    "total": 174,
+    "tcu": 300,
+    "resumen_creditos": "174 créditos de la licenciatura en diez ciclos, más dos ciclos finales de trabajo final de graduación sin créditos y tres bloques optativos de 3 créditos.",
+    "nota_fuente": "Fuente: fascículo del Sistema de Aplicaciones Estudiantiles (SAE) del plan de 2003 de la Licenciatura en Ingeniería Química, código 420501 (última actualización: resolución 7289-2003). Las siglas que siguen a «Equiv.:» son cursos equivalentes de planes anteriores.",
+    "areas": [
+      {
+        "id": "MAT",
+        "nombre": "Matemática, estadística e informática",
+        "corto": "Matemática",
+        "color": "#3B6E2C",
+        "oscuro": "#8CC27A",
+        "descripcion": "Precálculo, cálculo, álgebra lineal, ecuaciones diferenciales, probabilidades e inferencia estadística y principios de informática.",
+        "creditos": 26
+      },
+      {
+        "id": "FIS",
+        "nombre": "Física y electrotecnia",
+        "corto": "Física",
+        "color": "#A8550A",
+        "oscuro": "#E8A060",
+        "descripcion": "Física general I a III con sus laboratorios y electrotecnia.",
+        "creditos": 15
+      },
+      {
+        "id": "QUI",
+        "nombre": "Química",
+        "corto": "Química",
+        "color": "#5A47A6",
+        "oscuro": "#A595E6",
+        "descripcion": "Química general, analítica, orgánica y físico química, con sus laboratorios.",
+        "creditos": 27
+      },
+      {
+        "id": "ING",
+        "nombre": "Ingeniería de procesos",
+        "corto": "Ingeniería de procesos",
+        "color": "#0A6AA6",
+        "oscuro": "#5AAEE0",
+        "descripcion": "Análisis de procesos, termodinámica, fenómenos de transferencia, operaciones unitarias, reactores, control y diseño de procesos.",
+        "creditos": 58
+      },
+      {
+        "id": "GES",
+        "nombre": "Gestión de la producción y proyectos",
+        "corto": "Gestión",
+        "color": "#00796B",
+        "oscuro": "#4DB6A8",
+        "descripcion": "Planeamiento y control de la producción, evaluación de proyectos y administración industrial.",
+        "creditos": 12
+      },
+      {
+        "id": "GRA",
+        "nombre": "Trabajo final de graduación",
+        "corto": "Graduación",
+        "color": "#B0306A",
+        "oscuro": "#E58BB5",
+        "descripcion": "Seminario para proyectos de graduación y las modalidades de investigación dirigida, práctica dirigida y proyecto de graduación (sin créditos).",
+        "creditos": 2
+      },
+      {
+        "id": "OPT",
+        "nombre": "Optativos",
+        "corto": "Optativos",
+        "color": "#7A5C00",
+        "oscuro": "#D9B550",
+        "descripcion": "Tres bloques optativos de 3 créditos, con cursos de procesos, alimentos, materiales, ambiente, calidad y gestión.",
+        "creditos": 9
+      },
+      {
+        "id": "FG",
+        "nombre": "Formación general",
+        "corto": "Formación general",
+        "color": "#5F6B78",
+        "oscuro": "#A9B4BF",
+        "descripcion": "Cursos integrados de humanidades, arte, repertorio, actividad deportiva y seminarios de realidad nacional, comunes a toda la Universidad.",
+        "creditos": 25
+      }
+    ],
+    "ciclos": [
+      {
+        "n": "I",
+        "anio": 1,
+        "nombre": "I ciclo",
+        "verano": false,
+        "creditos": 19
+      },
+      {
+        "n": "II",
+        "anio": 1,
+        "nombre": "II ciclo",
+        "verano": false,
+        "creditos": 18
+      },
+      {
+        "n": "III",
+        "anio": 2,
+        "nombre": "III ciclo",
+        "verano": false,
+        "creditos": 19
+      },
+      {
+        "n": "IV",
+        "anio": 2,
+        "nombre": "IV ciclo",
+        "verano": false,
+        "creditos": 20
+      },
+      {
+        "n": "V",
+        "anio": 3,
+        "nombre": "V ciclo",
+        "verano": false,
+        "creditos": 19
+      },
+      {
+        "n": "VI",
+        "anio": 3,
+        "nombre": "VI ciclo",
+        "verano": false,
+        "creditos": 18
+      },
+      {
+        "n": "VII",
+        "anio": 4,
+        "nombre": "VII ciclo",
+        "verano": false,
+        "creditos": 17
+      },
+      {
+        "n": "VIII",
+        "anio": 4,
+        "nombre": "VIII ciclo",
+        "verano": false,
+        "creditos": 16
+      },
+      {
+        "n": "IX",
+        "anio": 5,
+        "nombre": "IX ciclo",
+        "verano": false,
+        "creditos": 16
+      },
+      {
+        "n": "X",
+        "anio": 5,
+        "nombre": "X ciclo",
+        "verano": false,
+        "creditos": 12
+      },
+      {
+        "n": "XI",
+        "anio": 6,
+        "nombre": "XI ciclo",
+        "verano": false,
+        "creditos": 0
+      },
+      {
+        "n": "XII",
+        "anio": 6,
+        "nombre": "XII ciclo",
+        "verano": false,
+        "creditos": 0
+      }
+    ],
+    "cursos": [
+      {
+        "sigla": "EG-",
+        "nombre": "Curso de Arte",
+        "ciclo": "I",
+        "creditos": 2,
+        "optativo": false,
+        "area": "FG",
+        "req": [],
+        "nota": "Se elige entre la oferta de la Sede para cada ciclo."
+      },
+      {
+        "sigla": "EG-I",
+        "nombre": "Curso Integrado de Humanidades I",
+        "ciclo": "I",
+        "creditos": 6,
+        "optativo": false,
+        "area": "FG",
+        "req": []
+      },
+      {
+        "sigla": "LM-1030",
+        "nombre": "Estrategias de Lectura en Inglés I (Para Otras Carreras)",
+        "ciclo": "I",
+        "creditos": 4,
+        "optativo": false,
+        "area": "FG",
+        "req": []
+      },
+      {
+        "sigla": "MA-0001",
+        "nombre": "Precálculo",
+        "ciclo": "I",
+        "creditos": 0,
+        "optativo": false,
+        "area": "MAT",
+        "req": []
+      },
+      {
+        "sigla": "MA-1001",
+        "nombre": "Cálculo I",
+        "ciclo": "I",
+        "creditos": 3,
+        "optativo": false,
+        "area": "MAT",
+        "req": [],
+        "req_texto": "MA-0001"
+      },
+      {
+        "sigla": "QU-0100",
+        "nombre": "Química General I",
+        "ciclo": "I",
+        "creditos": 3,
+        "optativo": false,
+        "area": "QUI",
+        "req": [],
+        "coreq": [
+          "QU-0101"
+        ]
+      },
+      {
+        "sigla": "QU-0101",
+        "nombre": "Laboratorio de Química General I",
+        "ciclo": "I",
+        "creditos": 1,
+        "optativo": false,
+        "area": "QUI",
+        "req": [],
+        "coreq": [
+          "QU-0100"
+        ]
+      },
+      {
+        "sigla": "EF-",
+        "nombre": "Actividad Deportiva",
+        "ciclo": "II",
+        "creditos": 0,
+        "optativo": false,
+        "area": "FG",
+        "req": []
+      },
+      {
+        "sigla": "EG-II",
+        "nombre": "Curso Integrado de Humanidades II",
+        "ciclo": "II",
+        "creditos": 6,
+        "optativo": false,
+        "area": "FG",
+        "req": [
+          "EG-I"
+        ]
+      },
+      {
+        "sigla": "FS-0210",
+        "nombre": "Física General I",
+        "ciclo": "II",
+        "creditos": 3,
+        "optativo": false,
+        "area": "FIS",
+        "req": [
+          "MA-1001"
+        ],
+        "req_texto": "MA-1001 Equiv.: MA-0250 o MA-1210 o MA-1101",
+        "coreq": [
+          "FS-0211"
+        ]
+      },
+      {
+        "sigla": "FS-0211",
+        "nombre": "Laboratorio de Física General I",
+        "ciclo": "II",
+        "creditos": 1,
+        "optativo": false,
+        "area": "FIS",
+        "req": [
+          "MA-1001"
+        ],
+        "req_texto": "MA-1001 Equiv.: MA-0250 o MA-1210 o MA-1101",
+        "coreq": [
+          "FS-0210"
+        ],
+        "coreq_texto": "FS-0210 Equiv.: FS-0227"
+      },
+      {
+        "sigla": "MA-1002",
+        "nombre": "Cálculo II",
+        "ciclo": "II",
+        "creditos": 4,
+        "optativo": false,
+        "area": "MAT",
+        "req": [
+          "MA-1001"
+        ],
+        "req_texto": "MA-1001 Equiv.: MA-1101"
+      },
+      {
+        "sigla": "QU-0102",
+        "nombre": "Química General II",
+        "ciclo": "II",
+        "creditos": 3,
+        "optativo": false,
+        "area": "QUI",
+        "req": [
+          "QU-0100",
+          "QU-0101"
+        ],
+        "coreq": [
+          "QU-0103"
+        ]
+      },
+      {
+        "sigla": "QU-0103",
+        "nombre": "Laboratorio de Química General II",
+        "ciclo": "II",
+        "creditos": 1,
+        "optativo": false,
+        "area": "QUI",
+        "req": [
+          "QU-0100",
+          "QU-0101"
+        ],
+        "coreq": [
+          "QU-0102"
+        ]
+      },
+      {
+        "sigla": "FS-0310",
+        "nombre": "Física General II",
+        "ciclo": "III",
+        "creditos": 3,
+        "optativo": false,
+        "area": "FIS",
+        "req": [
+          "FS-0210",
+          "FS-0211",
+          "MA-1002"
+        ],
+        "req_texto": "FS-0210; FS-0211; MA-1002 Equiv.: MA-0350 o MA-2210",
+        "coreq": [
+          "FS-0311"
+        ]
+      },
+      {
+        "sigla": "FS-0311",
+        "nombre": "Laboratorio de Física General II",
+        "ciclo": "III",
+        "creditos": 1,
+        "optativo": false,
+        "area": "FIS",
+        "req": [
+          "FS-0210",
+          "FS-0211",
+          "MA-1002"
+        ],
+        "req_texto": "FS-0210 Equiv.: FS-0227; FS-0211; MA-1002 Equiv.: MA-2210 o MA-0350",
+        "coreq": [
+          "FS-0310"
+        ],
+        "coreq_texto": "FS-0310 Equiv.: FS-0327"
+      },
+      {
+        "sigla": "IQ-0200",
+        "nombre": "Análisis Gráfico para Ingeniería Química",
+        "ciclo": "III",
+        "creditos": 3,
+        "optativo": false,
+        "area": "ING",
+        "req": [
+          "FS-0210",
+          "MA-1002",
+          "QU-0102"
+        ]
+      },
+      {
+        "sigla": "MA-1003",
+        "nombre": "Cálculo III",
+        "ciclo": "III",
+        "creditos": 4,
+        "optativo": false,
+        "area": "MAT",
+        "req": [
+          "MA-1002"
+        ],
+        "coreq": [
+          "MA-1004"
+        ],
+        "coreq_texto": "MA-1004 Equiv.: MA-0307"
+      },
+      {
+        "sigla": "MA-1004",
+        "nombre": "Álgebra Lineal",
+        "ciclo": "III",
+        "creditos": 3,
+        "optativo": false,
+        "area": "MAT",
+        "req": []
+      },
+      {
+        "sigla": "QU-0200",
+        "nombre": "Química Analítica Cuantitativa I",
+        "ciclo": "III",
+        "creditos": 3,
+        "optativo": false,
+        "area": "QUI",
+        "req": [
+          "QU-0102",
+          "QU-0103"
+        ],
+        "req_texto": "QU-0102 Equiv.: QU-0114; QU-0103 Equiv.: QU-0115",
+        "coreq": [
+          "QU-0201"
+        ]
+      },
+      {
+        "sigla": "QU-0201",
+        "nombre": "Laboratorio de Química Analítica Cuantitativa",
+        "ciclo": "III",
+        "creditos": 2,
+        "optativo": false,
+        "area": "QUI",
+        "req": [
+          "QU-0102",
+          "QU-0103"
+        ],
+        "req_texto": "QU-0102 Equiv.: QU-0114; QU-0103 Equiv.: QU-0115",
+        "coreq": [
+          "QU-0200"
+        ]
+      },
+      {
+        "sigla": "CI-0202",
+        "nombre": "Principios de Informática",
+        "ciclo": "IV",
+        "creditos": 4,
+        "optativo": false,
+        "area": "MAT",
+        "req": [
+          "MA-1001"
+        ],
+        "req_texto": "MA-0205 Equiv.: MA-0225 o MA-0230 o MA-1001 o MA-1210 o MA-1101"
+      },
+      {
+        "sigla": "FS-0410",
+        "nombre": "Física General III",
+        "ciclo": "IV",
+        "creditos": 3,
+        "optativo": false,
+        "area": "FIS",
+        "req": [
+          "FS-0310",
+          "FS-0311",
+          "MA-1003"
+        ],
+        "req_texto": "FS-0310; FS-0311; MA-1003 Equiv.: MA-0450",
+        "coreq": [
+          "FS-0411"
+        ]
+      },
+      {
+        "sigla": "FS-0411",
+        "nombre": "Laboratorio de Física General III",
+        "ciclo": "IV",
+        "creditos": 1,
+        "optativo": false,
+        "area": "FIS",
+        "req": [
+          "FS-0310",
+          "FS-0311",
+          "MA-1003"
+        ],
+        "req_texto": "FS-0310 Equiv.: FS-0327; FS-0311; MA-0450 Equiv.: MA-1003",
+        "coreq": [
+          "FS-0410"
+        ],
+        "coreq_texto": "FS-0410 Equiv.: FS-0427"
+      },
+      {
+        "sigla": "IQ-0332",
+        "nombre": "Análisis de Procesos I",
+        "ciclo": "IV",
+        "creditos": 4,
+        "optativo": false,
+        "area": "ING",
+        "req": [
+          "FS-0310",
+          "IQ-0200"
+        ]
+      },
+      {
+        "sigla": "MA-1005",
+        "nombre": "Ecuaciones Diferenciales",
+        "ciclo": "IV",
+        "creditos": 4,
+        "optativo": false,
+        "area": "MAT",
+        "req": [
+          "MA-1002",
+          "MA-1004"
+        ],
+        "req_texto": "MA-1002 Equiv.: MA-1023 o MA-0292 o MA-0232; MA-1004 Equiv.: MA-0294 o MA-0232"
+      },
+      {
+        "sigla": "QU-0260",
+        "nombre": "Físico Química para Ingeniería Química",
+        "ciclo": "IV",
+        "creditos": 4,
+        "optativo": false,
+        "area": "QUI",
+        "req": [
+          "FS-0310",
+          "FS-0311",
+          "MA-1002",
+          "QU-0102",
+          "QU-0103"
+        ]
+      },
+      {
+        "sigla": "IQ-0312",
+        "nombre": "Mecánica I",
+        "ciclo": "V",
+        "creditos": 4,
+        "optativo": false,
+        "area": "ING",
+        "req": [
+          "FS-0210",
+          "FS-0211",
+          "MA-1003",
+          "MA-1004"
+        ]
+      },
+      {
+        "sigla": "IQ-0333",
+        "nombre": "Análisis de Procesos II",
+        "ciclo": "V",
+        "creditos": 3,
+        "optativo": false,
+        "area": "ING",
+        "req": [
+          "CI-0202",
+          "IQ-0332",
+          "MA-1003",
+          "MA-1005"
+        ]
+      },
+      {
+        "sigla": "IQ-0334",
+        "nombre": "Termodinámica I",
+        "ciclo": "V",
+        "creditos": 3,
+        "optativo": false,
+        "area": "ING",
+        "req": [
+          "IQ-0332",
+          "MA-1005",
+          "QU-0260"
+        ]
+      },
+      {
+        "sigla": "QU-0212",
+        "nombre": "Química Orgánica General I",
+        "ciclo": "V",
+        "creditos": 4,
+        "optativo": false,
+        "area": "QUI",
+        "req": [
+          "QU-0102",
+          "QU-0103"
+        ],
+        "coreq": [
+          "QU-0213"
+        ]
+      },
+      {
+        "sigla": "QU-0213",
+        "nombre": "Laboratorio de Química Orgánica General I",
+        "ciclo": "V",
+        "creditos": 1,
+        "optativo": false,
+        "area": "QUI",
+        "req": [
+          "QU-0102",
+          "QU-0103"
+        ],
+        "coreq": [
+          "QU-0212"
+        ]
+      },
+      {
+        "sigla": "XS-0217",
+        "nombre": "Probabilidades e Inferencia Estadística",
+        "ciclo": "V",
+        "creditos": 4,
+        "optativo": false,
+        "area": "MAT",
+        "req": [],
+        "req_texto": "MA-0303 Equiv.: MA-1004 o MA-0325 o MA-1005",
+        "nota": "El requisito oficial usa equivalencias de planes anteriores; revise la ficha."
+      },
+      {
+        "sigla": "IE-0303",
+        "nombre": "Electrotecnia I",
+        "ciclo": "VI",
+        "creditos": 3,
+        "optativo": false,
+        "area": "FIS",
+        "req": [
+          "FS-0310",
+          "FS-0311",
+          "MA-1003"
+        ]
+      },
+      {
+        "sigla": "IQ-0313",
+        "nombre": "Fenómenos de Transferencia",
+        "ciclo": "VI",
+        "creditos": 4,
+        "optativo": false,
+        "area": "ING",
+        "req": [
+          "IQ-0333",
+          "IQ-0334"
+        ]
+      },
+      {
+        "sigla": "IQ-0331",
+        "nombre": "Medición y Tratamiento de Datos Experimentales",
+        "ciclo": "VI",
+        "creditos": 3,
+        "optativo": false,
+        "area": "ING",
+        "req": [
+          "FS-0410",
+          "FS-0411",
+          "IQ-0332",
+          "QU-0201",
+          "XS-0217"
+        ]
+      },
+      {
+        "sigla": "IQ-0335",
+        "nombre": "Termodinámica II",
+        "ciclo": "VI",
+        "creditos": 3,
+        "optativo": false,
+        "area": "ING",
+        "req": [
+          "CI-0202",
+          "IQ-0334",
+          "MA-1003",
+          "QU-0212"
+        ]
+      },
+      {
+        "sigla": "QU-0214",
+        "nombre": "Química Orgánica General II",
+        "ciclo": "VI",
+        "creditos": 4,
+        "optativo": false,
+        "area": "QUI",
+        "req": [
+          "QU-0212",
+          "QU-0213"
+        ],
+        "coreq": [
+          "QU-0215"
+        ]
+      },
+      {
+        "sigla": "QU-0215",
+        "nombre": "Laboratorio de Química Orgánica General II",
+        "ciclo": "VI",
+        "creditos": 1,
+        "optativo": false,
+        "area": "QUI",
+        "req": [
+          "QU-0212",
+          "QU-0213"
+        ],
+        "coreq": [
+          "QU-0214"
+        ]
+      },
+      {
+        "sigla": "IQ-0415",
+        "nombre": "Ingeniería de los Materiales",
+        "ciclo": "VII",
+        "creditos": 3,
+        "optativo": false,
+        "area": "ING",
+        "req": [
+          "IQ-0312",
+          "IQ-0335"
+        ]
+      },
+      {
+        "sigla": "IQ-0423",
+        "nombre": "Operaciones de Transferencia de Fluidos y Calor",
+        "ciclo": "VII",
+        "creditos": 3,
+        "optativo": false,
+        "area": "ING",
+        "req": [
+          "IQ-0313"
+        ],
+        "coreq": [
+          "IQ-0432"
+        ]
+      },
+      {
+        "sigla": "IQ-0432",
+        "nombre": "Laboratorio de Operaciones de Transferencia de Fluidos y Calor",
+        "ciclo": "VII",
+        "creditos": 3,
+        "optativo": false,
+        "area": "ING",
+        "req": [
+          "IQ-0313",
+          "IQ-0331"
+        ],
+        "coreq": [
+          "IQ-0423"
+        ]
+      },
+      {
+        "sigla": "IQ-0451",
+        "nombre": "Planeamiento de la Producción",
+        "ciclo": "VII",
+        "creditos": 3,
+        "optativo": false,
+        "area": "GES",
+        "req": [
+          "XS-0217"
+        ],
+        "req_texto": "XS-0217 Equiv.: XS-0215"
+      },
+      {
+        "sigla": "OPT-VII-1",
+        "nombre": "Bloque optativo",
+        "ciclo": "VII",
+        "creditos": 3,
+        "optativo": true,
+        "area": "OPT",
+        "req": [],
+        "etiqueta": "Optativo",
+        "nota": "Se elige un curso de la lista de optativos."
+      },
+      {
+        "sigla": "SR-I",
+        "nombre": "Seminario de Realidad Nacional I",
+        "ciclo": "VII",
+        "creditos": 2,
+        "optativo": false,
+        "area": "FG",
+        "req": [
+          "EG-II"
+        ]
+      },
+      {
+        "sigla": "IQ-0416",
+        "nombre": "Cinética y Reactores Químicos",
+        "ciclo": "VIII",
+        "creditos": 3,
+        "optativo": false,
+        "area": "ING",
+        "req": [
+          "IQ-0415",
+          "IQ-0423",
+          "QU-0214"
+        ]
+      },
+      {
+        "sigla": "IQ-0424",
+        "nombre": "Operaciones por Separación de Fases",
+        "ciclo": "VIII",
+        "creditos": 3,
+        "optativo": false,
+        "area": "ING",
+        "req": [
+          "IQ-0335",
+          "IQ-0423"
+        ],
+        "coreq": [
+          "IQ-0433"
+        ]
+      },
+      {
+        "sigla": "IQ-0433",
+        "nombre": "Laboratorio de Operaciones por Separación de Fases",
+        "ciclo": "VIII",
+        "creditos": 2,
+        "optativo": false,
+        "area": "ING",
+        "req": [
+          "IQ-0335",
+          "IQ-0432",
+          "QU-0215"
+        ],
+        "coreq": [
+          "IQ-0424"
+        ]
+      },
+      {
+        "sigla": "IQ-0452",
+        "nombre": "Control de la Producción",
+        "ciclo": "VIII",
+        "creditos": 3,
+        "optativo": false,
+        "area": "GES",
+        "req": [
+          "IQ-0451"
+        ]
+      },
+      {
+        "sigla": "RP-",
+        "nombre": "Repertorio",
+        "ciclo": "VIII",
+        "creditos": 3,
+        "optativo": false,
+        "area": "FG",
+        "req": [],
+        "nota": "Se elige entre la oferta de la Sede para cada ciclo."
+      },
+      {
+        "sigla": "SR-II",
+        "nombre": "Seminario de Realidad Nacional II",
+        "ciclo": "VIII",
+        "creditos": 2,
+        "optativo": false,
+        "area": "FG",
+        "req": [
+          "SR-I"
+        ]
+      },
+      {
+        "sigla": "IQ-0517",
+        "nombre": "Control e Instrumentación de Procesos",
+        "ciclo": "IX",
+        "creditos": 3,
+        "optativo": false,
+        "area": "ING",
+        "req": [
+          "IE-0303",
+          "IQ-0416",
+          "IQ-0424",
+          "IQ-0433"
+        ]
+      },
+      {
+        "sigla": "IQ-0525",
+        "nombre": "Operaciones de Separación por Métodos Difusionales",
+        "ciclo": "IX",
+        "creditos": 3,
+        "optativo": false,
+        "area": "ING",
+        "req": [
+          "IQ-0424"
+        ],
+        "coreq": [
+          "IQ-0534"
+        ]
+      },
+      {
+        "sigla": "IQ-0534",
+        "nombre": "Laboratorio de Operaciones de Separación por Métodos Difusionales",
+        "ciclo": "IX",
+        "creditos": 2,
+        "optativo": false,
+        "area": "ING",
+        "req": [
+          "IQ-0424",
+          "IQ-0433"
+        ],
+        "coreq": [
+          "IQ-0525"
+        ]
+      },
+      {
+        "sigla": "IQ-0553",
+        "nombre": "Evaluación de Proyectos",
+        "ciclo": "IX",
+        "creditos": 3,
+        "optativo": false,
+        "area": "GES",
+        "req": [
+          "IQ-0424",
+          "IQ-0452"
+        ]
+      },
+      {
+        "sigla": "IQ-0590",
+        "nombre": "Seminario para Proyectos de Graduación",
+        "ciclo": "IX",
+        "creditos": 2,
+        "optativo": false,
+        "area": "GRA",
+        "req": [
+          "IQ-0424",
+          "IQ-0452"
+        ],
+        "coreq": [
+          "IQ-0553"
+        ]
+      },
+      {
+        "sigla": "OPT-IX-1",
+        "nombre": "Bloque optativo",
+        "ciclo": "IX",
+        "creditos": 3,
+        "optativo": true,
+        "area": "OPT",
+        "req": [],
+        "etiqueta": "Optativo",
+        "nota": "Se elige un curso de la lista de optativos."
+      },
+      {
+        "sigla": "IQ-0526",
+        "nombre": "Procesos y Operaciones Integradas",
+        "ciclo": "X",
+        "creditos": 3,
+        "optativo": false,
+        "area": "ING",
+        "req": [
+          "IQ-0525",
+          "IQ-0553"
+        ]
+      },
+      {
+        "sigla": "IQ-0551",
+        "nombre": "Diseño de Procesos Químicos",
+        "ciclo": "X",
+        "creditos": 3,
+        "optativo": false,
+        "area": "ING",
+        "req": [
+          "IQ-0416",
+          "IQ-0525",
+          "IQ-0553"
+        ]
+      },
+      {
+        "sigla": "IQ-0556",
+        "nombre": "Principios de Administración Industrial",
+        "ciclo": "X",
+        "creditos": 3,
+        "optativo": false,
+        "area": "GES",
+        "req": [
+          "IQ-0525",
+          "IQ-0553"
+        ]
+      },
+      {
+        "sigla": "IQ-9500",
+        "nombre": "Investigación Dirigida I",
+        "ciclo": "X",
+        "creditos": 0,
+        "optativo": false,
+        "area": "GRA",
+        "req": [
+          "IQ-0590"
+        ],
+        "nota": "Las tres modalidades de graduación se detallan en el plan; se cursa una."
+      },
+      {
+        "sigla": "IQ-9700",
+        "nombre": "Práctica Dirigida I",
+        "ciclo": "X",
+        "creditos": 0,
+        "optativo": false,
+        "area": "GRA",
+        "req": []
+      },
+      {
+        "sigla": "IQ-9800",
+        "nombre": "Proyecto de Graduación I",
+        "ciclo": "X",
+        "creditos": 0,
+        "optativo": false,
+        "area": "GRA",
+        "req": []
+      },
+      {
+        "sigla": "OPT-X-1",
+        "nombre": "Bloque optativo",
+        "ciclo": "X",
+        "creditos": 3,
+        "optativo": true,
+        "area": "OPT",
+        "req": [],
+        "etiqueta": "Optativo",
+        "nota": "Se elige un curso de la lista de optativos."
+      },
+      {
+        "sigla": "IQ-9501",
+        "nombre": "Investigación Dirigida II",
+        "ciclo": "XI",
+        "creditos": 0,
+        "optativo": false,
+        "area": "GRA",
+        "req": [
+          "IQ-9500"
+        ]
+      },
+      {
+        "sigla": "IQ-9701",
+        "nombre": "Práctica Dirigida II",
+        "ciclo": "XI",
+        "creditos": 0,
+        "optativo": false,
+        "area": "GRA",
+        "req": [
+          "IQ-9700"
+        ]
+      },
+      {
+        "sigla": "IQ-9801",
+        "nombre": "Proyecto de Graduación II",
+        "ciclo": "XI",
+        "creditos": 0,
+        "optativo": false,
+        "area": "GRA",
+        "req": [
+          "IQ-9800"
+        ]
+      },
+      {
+        "sigla": "IQ-9502",
+        "nombre": "Investigación Dirigida III",
+        "ciclo": "XII",
+        "creditos": 0,
+        "optativo": false,
+        "area": "GRA",
+        "req": [
+          "IQ-9501"
+        ]
+      },
+      {
+        "sigla": "IQ-9702",
+        "nombre": "Práctica Dirigida III",
+        "ciclo": "XII",
+        "creditos": 0,
+        "optativo": false,
+        "area": "GRA",
+        "req": [
+          "IQ-9701"
+        ]
+      },
+      {
+        "sigla": "IQ-9802",
+        "nombre": "Proyecto de Graduación III",
+        "ciclo": "XII",
+        "creditos": 0,
+        "optativo": false,
+        "area": "GRA",
+        "req": [
+          "IQ-9801"
+        ]
+      }
+    ],
+    "optativos": {
+      "OPT": [
+        {
+          "sigla": "IQ-0330",
+          "nombre": "Ingeniería de Procesos I",
+          "creditos": 3,
+          "req_texto": "IQ-0335; QU-0214"
+        },
+        {
+          "sigla": "IQ-0437",
+          "nombre": "Introducción a los Fluidos de Perforación",
+          "creditos": 3,
+          "req_texto": "IQ-0423; IQ-0432"
+        },
+        {
+          "sigla": "IQ-0499",
+          "nombre": "Tecnología del Asfalto",
+          "creditos": 3,
+          "req_texto": "IQ-0331; QU-0214"
+        },
+        {
+          "sigla": "IQ-0500",
+          "nombre": "Ingenieria Petrolera",
+          "creditos": 3,
+          "req_texto": "IQ-0423; IQ-0432"
+        },
+        {
+          "sigla": "IQ-0503",
+          "nombre": "Ingeniería de Procesos Alimenticios",
+          "creditos": 3,
+          "req_texto": "IQ-0335; IQ-0423"
+        },
+        {
+          "sigla": "IQ-0504",
+          "nombre": "Fuentes Renovalbles de Energía",
+          "creditos": 3,
+          "req_texto": "IQ-0334"
+        },
+        {
+          "sigla": "IQ-0552",
+          "nombre": "Corrosion",
+          "creditos": 3,
+          "req_texto": "IQ-0415"
+        },
+        {
+          "sigla": "IQ-0559",
+          "nombre": "Diseño de Procesos Térmicos en la Industria Alimentaria",
+          "creditos": 3,
+          "req_texto": "IQ-0313"
+        },
+        {
+          "sigla": "IQ-0569",
+          "nombre": "Diseño de Procesos y Equipo en Alimentos",
+          "creditos": 3,
+          "req_texto": "IQ-0423"
+        },
+        {
+          "sigla": "IQ-0570",
+          "nombre": "Tecnología de Polímeros",
+          "creditos": 3,
+          "req_texto": "IQ-0415; QU-0212"
+        },
+        {
+          "sigla": "IQ-0579",
+          "nombre": "Tecnología de Polímeros II",
+          "creditos": 3,
+          "req_texto": "IQ-0570; QU-0212"
+        },
+        {
+          "sigla": "IQ-0620",
+          "nombre": "Estadística Aplicada a la Calidad",
+          "creditos": 3,
+          "req_texto": "IQ-0331"
+        },
+        {
+          "sigla": "IQ-0621",
+          "nombre": "Gestión de la Calidad",
+          "creditos": 3,
+          "req_texto": "IQ-0331"
+        },
+        {
+          "sigla": "IQ-0622",
+          "nombre": "Diseño Estadístico de Experimentos",
+          "creditos": 3,
+          "req_texto": "IQ-0331"
+        },
+        {
+          "sigla": "IQ-0630",
+          "nombre": "Ingeniería Azucarera",
+          "creditos": 3,
+          "req_texto": "IQ-0423; QU-0214"
+        },
+        {
+          "sigla": "IQ-0631",
+          "nombre": "Ingenieria Azucarera II",
+          "creditos": 3,
+          "req_texto": "IQ-0630"
+        },
+        {
+          "sigla": "IQ-0640",
+          "nombre": "Tratamiento de Desechos",
+          "creditos": 3,
+          "req_texto": "IQ-0423; QU-0214"
+        },
+        {
+          "sigla": "IQ-0642",
+          "nombre": "Bioingeniería",
+          "creditos": 3,
+          "req_texto": "IQ-0423; QU-0214"
+        },
+        {
+          "sigla": "IQ-0643",
+          "nombre": "Bioingeniería II",
+          "creditos": 3,
+          "req_texto": "IQ-0642"
+        },
+        {
+          "sigla": "IQ-0655",
+          "nombre": "Ceramica Industrial",
+          "creditos": 3,
+          "req_texto": "IQ-0415"
+        },
+        {
+          "sigla": "IQ-0660",
+          "nombre": "Seguridad e Higiene Industrial",
+          "creditos": 3,
+          "req_texto": "IQ-0423"
+        },
+        {
+          "sigla": "IQ-0661",
+          "nombre": "Contaminación Industrial del Aire",
+          "creditos": 3,
+          "req_texto": "IQ-0335; IQ-0423; QU-0214"
+        },
+        {
+          "sigla": "IQ-0664",
+          "nombre": "Seguridad e Higiene Industrial II",
+          "creditos": 3,
+          "req_texto": "IQ-0660"
+        },
+        {
+          "sigla": "IQ-0670",
+          "nombre": "Control Automático",
+          "creditos": 3,
+          "req_texto": "IQ-0517"
+        },
+        {
+          "sigla": "IQ-0671",
+          "nombre": "Impacto Ambiental",
+          "creditos": 3,
+          "req_texto": "IQ-0335; IQ-0423; QU-0214"
+        },
+        {
+          "sigla": "IQ-0672",
+          "nombre": "Gestión Integral de los Desechos Sólidos: Ordinarios y Especiales",
+          "creditos": 3,
+          "req_texto": "IQ-0423; QU-0214"
+        },
+        {
+          "sigla": "IQ-0680",
+          "nombre": "Ingenieria Textil",
+          "creditos": 3,
+          "req_texto": "IQ-0335; QU-0214"
+        },
+        {
+          "sigla": "IQ-0690",
+          "nombre": "Instalaciones Frigorificas",
+          "creditos": 3,
+          "req_texto": "IQ-0335; IQ-0423"
+        },
+        {
+          "sigla": "IQ-0700",
+          "nombre": "Metalurgia Extractiva I",
+          "creditos": 3,
+          "req_texto": "IQ-0415"
+        },
+        {
+          "sigla": "IQ-0701",
+          "nombre": "Metalurgia Extractiva II",
+          "creditos": 3,
+          "req_texto": "IQ-0700"
+        },
+        {
+          "sigla": "IQ-0710",
+          "nombre": "Métodos y Sistemas de Investigación",
+          "creditos": 3,
+          "req_texto": "IQ-0331"
+        },
+        {
+          "sigla": "IQ-2102",
+          "nombre": "Métodos Cuantitativos para la Toma de Decisiones I",
+          "creditos": 3,
+          "req_texto": "IQ-0313; IQ-0451; IQ-0452"
+        },
+        {
+          "sigla": "IQ-2103",
+          "nombre": "Métodos Cuantitativos para la Toma de Decisiones II",
+          "creditos": 3,
+          "req_texto": "IQ-2102"
+        }
+      ]
+    },
+    "titulo_optativos": "Lista de cursos optativos",
+    "listas_optativos": [
+      {
+        "id": "OPT",
+        "titulo": "Cursos optativos",
+        "nota": "Se eligen tres cursos de 3 créditos: uno en el VII ciclo, uno en el IX y uno en el X.",
+        "color_de": "OPT"
+      }
+    ]
+  }
 }

@@ -22,5 +22,922 @@
       "url": "https://drive.google.com/file/d/171RadjhFnxGqPqxzN2Ty_BkJ5uXRQfXJ/view",
       "principal": true
     }
-  ]
+  ],
+  "malla": {
+    "plan": "Plan 2",
+    "total": 175,
+    "tcu": null,
+    "resumen_creditos": "175 créditos: 139 del bachillerato (ocho ciclos) y 36 de la licenciatura (dos ciclos).",
+    "nota_fuente": "Fuente: estructura curricular del plan 330102 (Informe Curricular CEA-05-2025). Las siglas que siguen a «o» en los requisitos son cursos equivalentes de otros planes o carreras.",
+    "areas": [
+      {
+        "id": "ADM",
+        "nombre": "Administración y gerencia",
+        "corto": "Administración",
+        "color": "#0A6AA6",
+        "oscuro": "#5AAEE0",
+        "descripcion": "Fundamentos de administración, talento humano, operaciones, liderazgo, innovación, calidad, emprendimiento y negociación.",
+        "creditos": 36
+      },
+      {
+        "id": "MKT",
+        "nombre": "Mercadeo y ventas",
+        "corto": "Mercadeo",
+        "color": "#B0306A",
+        "oscuro": "#E58BB5",
+        "descripcion": "Principios de mercadeo, publicidad, investigación de mercados, ventas y distribución.",
+        "creditos": 12
+      },
+      {
+        "id": "FIN",
+        "nombre": "Finanzas, contabilidad y legislación",
+        "corto": "Finanzas",
+        "color": "#00796B",
+        "oscuro": "#4DB6A8",
+        "descripcion": "Contabilidad, matemática financiera, administración financiera, mercados bursátiles, auditoría, proyectos y legislación.",
+        "creditos": 47
+      },
+      {
+        "id": "CUA",
+        "nombre": "Métodos cuantitativos y economía",
+        "corto": "Cuantitativos",
+        "color": "#3B6E2C",
+        "oscuro": "#8CC27A",
+        "descripcion": "Precálculo, cálculo, estadística, métodos cuantitativos, economía y metodología de la investigación.",
+        "creditos": 35
+      },
+      {
+        "id": "OPT",
+        "nombre": "Optativos y opcionales",
+        "corto": "Optativos",
+        "color": "#7A5C00",
+        "oscuro": "#D9B550",
+        "descripcion": "Cursos optativos de la licenciatura y cursos opcionales de inglés para negocios.",
+        "creditos": 24
+      },
+      {
+        "id": "FG",
+        "nombre": "Formación general",
+        "corto": "Formación general",
+        "color": "#5F6B78",
+        "oscuro": "#A9B4BF",
+        "descripcion": "Cursos integrados de humanidades, arte, repertorio, actividad deportiva y seminarios de realidad nacional, comunes a toda la Universidad.",
+        "creditos": 21
+      }
+    ],
+    "ciclos": [
+      {
+        "n": "I",
+        "anio": 1,
+        "nombre": "I ciclo",
+        "verano": false,
+        "creditos": 18
+      },
+      {
+        "n": "II",
+        "anio": 1,
+        "nombre": "II ciclo",
+        "verano": false,
+        "creditos": 17
+      },
+      {
+        "n": "III",
+        "anio": 2,
+        "nombre": "III ciclo",
+        "verano": false,
+        "creditos": 17
+      },
+      {
+        "n": "IV",
+        "anio": 2,
+        "nombre": "IV ciclo",
+        "verano": false,
+        "creditos": 18
+      },
+      {
+        "n": "V",
+        "anio": 3,
+        "nombre": "V ciclo",
+        "verano": false,
+        "creditos": 18
+      },
+      {
+        "n": "VI",
+        "anio": 3,
+        "nombre": "VI ciclo",
+        "verano": false,
+        "creditos": 17
+      },
+      {
+        "n": "VII",
+        "anio": 4,
+        "nombre": "VII ciclo",
+        "verano": false,
+        "creditos": 18
+      },
+      {
+        "n": "VIII",
+        "anio": 4,
+        "nombre": "VIII ciclo",
+        "verano": false,
+        "creditos": 16
+      },
+      {
+        "n": "IX",
+        "anio": 5,
+        "nombre": "IX ciclo",
+        "verano": false,
+        "tramo": "Licenciatura",
+        "creditos": 18
+      },
+      {
+        "n": "X",
+        "anio": 5,
+        "nombre": "X ciclo",
+        "verano": false,
+        "tramo": "Licenciatura",
+        "creditos": 18
+      }
+    ],
+    "cursos": [
+      {
+        "sigla": "EG-I",
+        "nombre": "Curso Integrado de Humanidades I",
+        "ciclo": "I",
+        "creditos": 6,
+        "optativo": false,
+        "area": "FG",
+        "req": []
+      },
+      {
+        "sigla": "RP-",
+        "nombre": "Repertorio",
+        "ciclo": "I",
+        "creditos": 3,
+        "optativo": false,
+        "area": "FG",
+        "req": [],
+        "nota": "Se elige entre la oferta de la Sede para cada ciclo."
+      },
+      {
+        "sigla": "EG-",
+        "nombre": "Curso de Arte",
+        "ciclo": "I",
+        "creditos": 2,
+        "optativo": false,
+        "area": "FG",
+        "req": [],
+        "nota": "Se elige entre la oferta de la Sede para cada ciclo."
+      },
+      {
+        "sigla": "DN-0101",
+        "nombre": "Introducción a la Administración de Negocios",
+        "ciclo": "I",
+        "creditos": 3,
+        "optativo": false,
+        "area": "ADM",
+        "req": []
+      },
+      {
+        "sigla": "MA-0001",
+        "nombre": "Precálculo",
+        "ciclo": "I",
+        "creditos": 0,
+        "optativo": false,
+        "area": "CUA",
+        "req": []
+      },
+      {
+        "sigla": "XE-0156",
+        "nombre": "Introducción a la Economía",
+        "ciclo": "I",
+        "creditos": 4,
+        "optativo": false,
+        "area": "CUA",
+        "req": []
+      },
+      {
+        "sigla": "EG-II",
+        "nombre": "Curso Integrado de Humanidades II",
+        "ciclo": "II",
+        "creditos": 6,
+        "optativo": false,
+        "area": "FG",
+        "req": [
+          "EG-I"
+        ]
+      },
+      {
+        "sigla": "EF-",
+        "nombre": "Actividad Deportiva",
+        "ciclo": "II",
+        "creditos": 0,
+        "optativo": false,
+        "area": "FG",
+        "req": []
+      },
+      {
+        "sigla": "DN-0102",
+        "nombre": "Aplicaciones Ofimáticas para la Toma de Decisiones",
+        "ciclo": "II",
+        "creditos": 3,
+        "optativo": false,
+        "area": "CUA",
+        "req": []
+      },
+      {
+        "sigla": "PC-0200",
+        "nombre": "Contabilidad Básica",
+        "ciclo": "II",
+        "creditos": 4,
+        "optativo": false,
+        "area": "FIN",
+        "req": [
+          "DN-0101",
+          "XE-0156"
+        ],
+        "req_texto": "DN-0101 o PC-0170 o XE-0156 o EC-1100 o XS-3510"
+      },
+      {
+        "sigla": "MA-1021",
+        "nombre": "Cálculo para Ciencias Económicas I",
+        "ciclo": "II",
+        "creditos": 4,
+        "optativo": false,
+        "area": "CUA",
+        "req": [
+          "MA-0001"
+        ]
+      },
+      {
+        "sigla": "DN-0103",
+        "nombre": "Administración de Proyectos y Herramientas para el Análisis de Datos",
+        "ciclo": "III",
+        "creditos": 3,
+        "optativo": false,
+        "area": "FIN",
+        "req": [
+          "DN-0102"
+        ],
+        "req_texto": "DN-0102 o DN-0170 o CI-0101"
+      },
+      {
+        "sigla": "PC-0202",
+        "nombre": "Contabilidad Intermedia I",
+        "ciclo": "III",
+        "creditos": 3,
+        "optativo": false,
+        "area": "FIN",
+        "req": [
+          "PC-0200"
+        ],
+        "req_texto": "PC-0200 o DN-0160"
+      },
+      {
+        "sigla": "PC-0240",
+        "nombre": "Matemática Financiera",
+        "ciclo": "III",
+        "creditos": 3,
+        "optativo": false,
+        "area": "FIN",
+        "req": [
+          "MA-1021"
+        ],
+        "req_texto": "MA-1021 o XS-3510"
+      },
+      {
+        "sigla": "MA-1022",
+        "nombre": "Cálculo para Ciencias Económicas II",
+        "ciclo": "III",
+        "creditos": 4,
+        "optativo": false,
+        "area": "CUA",
+        "req": [
+          "MA-1021"
+        ]
+      },
+      {
+        "sigla": "OPT-III-1",
+        "nombre": "Inglés opcional (sin créditos)",
+        "ciclo": "III",
+        "creditos": 0,
+        "optativo": true,
+        "area": "OPT",
+        "req": [],
+        "etiqueta": "Optativo",
+        "nota": "Espacio para los cursos opcionales de inglés para negocios; no es obligatorio."
+      },
+      {
+        "sigla": "XS-0276",
+        "nombre": "Estadística General I",
+        "ciclo": "III",
+        "creditos": 4,
+        "optativo": false,
+        "area": "CUA",
+        "req": [
+          "MA-1021"
+        ],
+        "req_texto": "MA-0225 o MA-0230 o MA-1001 o MA-1021"
+      },
+      {
+        "sigla": "DN-0123",
+        "nombre": "Metodología de la Investigación",
+        "ciclo": "IV",
+        "creditos": 3,
+        "optativo": false,
+        "area": "CUA",
+        "req": [
+          "XS-0276"
+        ]
+      },
+      {
+        "sigla": "XS-0277",
+        "nombre": "Estadística General II",
+        "ciclo": "IV",
+        "creditos": 4,
+        "optativo": false,
+        "area": "CUA",
+        "req": [
+          "XS-0276",
+          "MA-1022"
+        ],
+        "req_texto": "XS-0276, MA-1022 o MA-0230"
+      },
+      {
+        "sigla": "DN-0104",
+        "nombre": "Elementos Fundamentales de Legislación Empresarial",
+        "ciclo": "IV",
+        "creditos": 3,
+        "optativo": false,
+        "area": "FIN",
+        "req": [
+          "DN-0101"
+        ],
+        "req_texto": "DN-0101 o PC-0170 o XS-3510"
+      },
+      {
+        "sigla": "PC-0304",
+        "nombre": "Contabilidad Intermedia II",
+        "ciclo": "IV",
+        "creditos": 3,
+        "optativo": false,
+        "area": "FIN",
+        "req": [
+          "PC-0240",
+          "PC-0202"
+        ]
+      },
+      {
+        "sigla": "SR-I",
+        "nombre": "Seminario de Realidad Nacional I",
+        "ciclo": "IV",
+        "creditos": 2,
+        "optativo": false,
+        "area": "FG",
+        "req": [
+          "EG-II"
+        ]
+      },
+      {
+        "sigla": "DN-0340",
+        "nombre": "Administración Financiera I",
+        "ciclo": "IV",
+        "creditos": 3,
+        "optativo": false,
+        "area": "FIN",
+        "req": [
+          "PC-0240",
+          "PC-0200"
+        ],
+        "req_texto": "PC-0240 o DN-0202, PC-0200"
+      },
+      {
+        "sigla": "DN-0105",
+        "nombre": "Métodos Cuantitativos para la Toma de Decisiones I",
+        "ciclo": "V",
+        "creditos": 3,
+        "optativo": false,
+        "area": "CUA",
+        "req": [
+          "DN-0340",
+          "XS-0277"
+        ],
+        "req_texto": "(DN-0340, XS-0277) o (PC-0322, PC0343)",
+        "coreq": [
+          "DN-0341",
+          "DN-0320"
+        ]
+      },
+      {
+        "sigla": "DN-0107",
+        "nombre": "Economía y Comercio Internacional",
+        "ciclo": "V",
+        "creditos": 3,
+        "optativo": false,
+        "area": "ADM",
+        "req": [
+          "XE-0156",
+          "XS-0276"
+        ]
+      },
+      {
+        "sigla": "DN-0341",
+        "nombre": "Administración Financiera II",
+        "ciclo": "V",
+        "creditos": 3,
+        "optativo": false,
+        "area": "FIN",
+        "req": [
+          "DN-0340",
+          "XS-0277"
+        ]
+      },
+      {
+        "sigla": "PC-0261",
+        "nombre": "Legislación Comercial, Bancaria y Financiera",
+        "ciclo": "V",
+        "creditos": 3,
+        "optativo": false,
+        "area": "FIN",
+        "req": [
+          "DN-0104"
+        ],
+        "req_texto": "DN-0104 o DN-0380 o PC-0260"
+      },
+      {
+        "sigla": "DN-0320",
+        "nombre": "Principios de Mercadeo",
+        "ciclo": "V",
+        "creditos": 3,
+        "optativo": false,
+        "area": "MKT",
+        "req": [
+          "PC-0200",
+          "XS-0276"
+        ],
+        "coreq": [
+          "DN-0105"
+        ]
+      },
+      {
+        "sigla": "DN-0202",
+        "nombre": "Principios de Gerencia",
+        "ciclo": "V",
+        "creditos": 3,
+        "optativo": false,
+        "area": "ADM",
+        "req": [
+          "DN-0340"
+        ],
+        "req_texto": "DN-0340 o DN-0160",
+        "coreq": [
+          "DN-0320"
+        ]
+      },
+      {
+        "sigla": "DN-0106",
+        "nombre": "Gestión del Talento y Conocimiento Humano",
+        "ciclo": "VI",
+        "creditos": 3,
+        "optativo": false,
+        "area": "ADM",
+        "req": [
+          "DN-0202"
+        ]
+      },
+      {
+        "sigla": "DN-0110",
+        "nombre": "Métodos Cuantitativos para la Toma de Decisiones II",
+        "ciclo": "VI",
+        "creditos": 3,
+        "optativo": false,
+        "area": "CUA",
+        "req": [
+          "DN-0105"
+        ],
+        "req_texto": "DN-0105 o PC-0490",
+        "coreq": [
+          "DN-0442"
+        ],
+        "coreq_texto": "PC-0344 o DN-0442"
+      },
+      {
+        "sigla": "PC-0260",
+        "nombre": "Legislación Laboral",
+        "ciclo": "VI",
+        "creditos": 3,
+        "optativo": false,
+        "area": "FIN",
+        "req": [
+          "PC-0261"
+        ],
+        "req_texto": "PC-0261 o DN-0380 o PC-0171"
+      },
+      {
+        "sigla": "DN-0321",
+        "nombre": "Publicidad y Promoción",
+        "ciclo": "VI",
+        "creditos": 3,
+        "optativo": false,
+        "area": "MKT",
+        "req": [
+          "DN-0320"
+        ]
+      },
+      {
+        "sigla": "DN-0442",
+        "nombre": "Administración Financiera III",
+        "ciclo": "VI",
+        "creditos": 3,
+        "optativo": false,
+        "area": "FIN",
+        "req": [
+          "DN-0341"
+        ],
+        "coreq": [
+          "DN-0110"
+        ]
+      },
+      {
+        "sigla": "SR-II",
+        "nombre": "Seminario de Realidad Nacional II",
+        "ciclo": "VI",
+        "creditos": 2,
+        "optativo": false,
+        "area": "FG",
+        "req": [
+          "SR-I"
+        ]
+      },
+      {
+        "sigla": "DN-0496",
+        "nombre": "Gerencia de Operaciones",
+        "ciclo": "VII",
+        "creditos": 3,
+        "optativo": false,
+        "area": "ADM",
+        "req": [
+          "DN-0110"
+        ],
+        "req_texto": "DN-0110 o DN-0495"
+      },
+      {
+        "sigla": "DN-0405",
+        "nombre": "Emprendimiento y Creación de Empresas",
+        "ciclo": "VII",
+        "creditos": 3,
+        "optativo": false,
+        "area": "ADM",
+        "req": [
+          "DN-0106"
+        ],
+        "req_texto": "DN-0106 o DN-0203",
+        "coreq": [
+          "DN-0423"
+        ]
+      },
+      {
+        "sigla": "DN-0423",
+        "nombre": "Investigación de Mercados",
+        "ciclo": "VII",
+        "creditos": 3,
+        "optativo": false,
+        "area": "MKT",
+        "req": [
+          "DN-0321"
+        ],
+        "coreq": [
+          "DN-0405"
+        ]
+      },
+      {
+        "sigla": "DN-0304",
+        "nombre": "Liderazgo Gerencial",
+        "ciclo": "VII",
+        "creditos": 3,
+        "optativo": false,
+        "area": "ADM",
+        "req": [
+          "DN-0106"
+        ],
+        "req_texto": "DN-0106 o DN-0203 o XS-3510"
+      },
+      {
+        "sigla": "PC-0344",
+        "nombre": "Formulación y Evaluación de Proyectos I",
+        "ciclo": "VII",
+        "creditos": 3,
+        "optativo": false,
+        "area": "FIN",
+        "req": [
+          "DN-0341"
+        ],
+        "req_texto": "DN-0341 o PC-0343"
+      },
+      {
+        "sigla": "PC-0462",
+        "nombre": "Legislación Tributaria y Aduanera",
+        "ciclo": "VII",
+        "creditos": 3,
+        "optativo": false,
+        "area": "FIN",
+        "req": [
+          "PC-0304",
+          "PC-0260"
+        ],
+        "req_texto": "(DN-0381, DN-0261) o (PC-0304, PC-0260)"
+      },
+      {
+        "sigla": "DN-0111",
+        "nombre": "Gestión de la Innovación y Estrategia Competitiva",
+        "ciclo": "VIII",
+        "creditos": 3,
+        "optativo": false,
+        "area": "ADM",
+        "req": [
+          "DN-0106"
+        ],
+        "req_texto": "DN-0106 o DN-0203",
+        "coreq_texto": "DN-0423"
+      },
+      {
+        "sigla": "DN-0108",
+        "nombre": "Mercados Bursátiles",
+        "ciclo": "VIII",
+        "creditos": 4,
+        "optativo": false,
+        "area": "FIN",
+        "req": [
+          "PC-0344",
+          "DN-0442"
+        ],
+        "req_texto": "PC-0344 o DN-0442"
+      },
+      {
+        "sigla": "DN-0109",
+        "nombre": "Principios de Auditoría Financiera",
+        "ciclo": "VIII",
+        "creditos": 3,
+        "optativo": false,
+        "area": "FIN",
+        "req": [
+          "PC-0304",
+          "DN-0442"
+        ],
+        "req_texto": "(PC-0304 o DN-0261), DN-0442"
+      },
+      {
+        "sigla": "DN-0112",
+        "nombre": "Gerencia de la Calidad",
+        "ciclo": "VIII",
+        "creditos": 3,
+        "optativo": false,
+        "area": "ADM",
+        "req": [
+          "DN-0496"
+        ]
+      },
+      {
+        "sigla": "DN-0322",
+        "nombre": "Ventas y Distribución",
+        "ciclo": "VIII",
+        "creditos": 3,
+        "optativo": false,
+        "area": "MKT",
+        "req": [
+          "DN-0423"
+        ]
+      },
+      {
+        "sigla": "DN-0507",
+        "nombre": "Estrategias y Tácticas de Negociación",
+        "ciclo": "IX",
+        "creditos": 3,
+        "optativo": false,
+        "area": "ADM",
+        "req": [
+          "DN-0111"
+        ],
+        "req_texto": "DN-0111 o DN-0406 o XS-3510"
+      },
+      {
+        "sigla": "DN-0113",
+        "nombre": "Administración Mediada por Tecnologías de la Información - Pc-0410 o Pc-0421",
+        "ciclo": "IX",
+        "creditos": 3,
+        "optativo": false,
+        "area": "ADM",
+        "req": [
+          "DN-0112",
+          "DN-0496"
+        ],
+        "req_texto": "DN-0112 o DN-0496 o"
+      },
+      {
+        "sigla": "OPT-IX-1",
+        "nombre": "Cursos optativos (12 créditos)",
+        "ciclo": "IX",
+        "creditos": 12,
+        "optativo": true,
+        "area": "OPT",
+        "req": [],
+        "etiqueta": "Optativo",
+        "nota": "Se eligen cuatro cursos de 3 créditos de la lista de optativos (dos en este ciclo y dos en el siguiente)."
+      },
+      {
+        "sigla": "DN-0114",
+        "nombre": "Comunicación Intercultural de los Negocios",
+        "ciclo": "X",
+        "creditos": 3,
+        "optativo": false,
+        "area": "ADM",
+        "req": [
+          "DN-0113"
+        ],
+        "req_texto": "- PC-0409 o DN-0113 o DN-0546 o PC-0583 o XS-3510"
+      },
+      {
+        "sigla": "DN-0115",
+        "nombre": "Taller de Investigación",
+        "ciclo": "X",
+        "creditos": 3,
+        "optativo": false,
+        "area": "CUA",
+        "req": [
+          "DN-0113"
+        ],
+        "req_texto": "DN-0113 o DN-0114 o DN-0546 o PC-0583"
+      },
+      {
+        "sigla": "OPT-X-1",
+        "nombre": "Cursos optativos (12 créditos)",
+        "ciclo": "X",
+        "creditos": 12,
+        "optativo": true,
+        "area": "OPT",
+        "req": [],
+        "etiqueta": "Optativo",
+        "nota": "Se eligen dos cursos de la lista de optativos."
+      }
+    ],
+    "optativos": {
+      "OPT": [
+        {
+          "sigla": "DN-0116",
+          "nombre": "Gestión de la Cadena de Abastecimiento",
+          "creditos": 3,
+          "req_texto": "DN-0112 o DN-0496"
+        },
+        {
+          "sigla": "DN-0117",
+          "nombre": "Derivados Financieros",
+          "creditos": 3,
+          "req_texto": "DN-0108 o (DN-0443, DN-0444) o (PC-0344 o PC-0411)"
+        },
+        {
+          "sigla": "DN-0118",
+          "nombre": "Mentoring And Coaching",
+          "creditos": 3,
+          "req_texto": "DN-0304 o PC-0409"
+        },
+        {
+          "sigla": "DN-0119",
+          "nombre": "Formulación y Evaluación de Proyectos II",
+          "creditos": 3,
+          "req_texto": "PC-0344 o DN-0546"
+        },
+        {
+          "sigla": "DN-0120",
+          "nombre": "Shopper & Retail Marketing",
+          "creditos": 3,
+          "req_texto": "DN-0322"
+        },
+        {
+          "sigla": "DN-0121",
+          "nombre": "Gerencia de Riesgo y Gestión Aseguradora",
+          "creditos": 3,
+          "req_texto": "PC-0344"
+        },
+        {
+          "sigla": "DN-0122",
+          "nombre": "Valoraciones, Fusiones y Adquisiciones de Empresas",
+          "creditos": 3,
+          "req_texto": "PC-0344"
+        },
+        {
+          "sigla": "DN-0124",
+          "nombre": "Costeo Gerencial para Administradores",
+          "creditos": 3,
+          "req_texto": "PC-0304 o DN-0261"
+        },
+        {
+          "sigla": "DN-0171",
+          "nombre": "Gestión Sostenible de Empresas",
+          "creditos": 3,
+          "req_texto": "DN-0405 o PC-0409 o XS-3510"
+        },
+        {
+          "sigla": "DN-0125",
+          "nombre": "Modelos de Negocios Sostenibles y Estrategias de Economía Circular",
+          "creditos": 3,
+          "req_texto": "DN-0111, DN-0304"
+        },
+        {
+          "sigla": "DN-0172",
+          "nombre": "Mercadeo Avanzado de Servicios",
+          "creditos": 3,
+          "req_texto": "DN-0322"
+        },
+        {
+          "sigla": "DN-0173",
+          "nombre": "Inteligencia de Negocios",
+          "creditos": 3,
+          "req_texto": "DN-0113"
+        },
+        {
+          "sigla": "DN-0424",
+          "nombre": "Gerencia de Mercadeo",
+          "creditos": 3,
+          "req_texto": "DN-0322"
+        },
+        {
+          "sigla": "DN-0508",
+          "nombre": "Seminario Integrado de Alta Gerencia",
+          "creditos": 3,
+          "req_texto": "DN-0423 o PC-0409"
+        },
+        {
+          "sigla": "DN-0526",
+          "nombre": "Comportamiento del Consumidor",
+          "creditos": 3,
+          "req_texto": "DN-0423"
+        },
+        {
+          "sigla": "DN-0527",
+          "nombre": "Mercadeo Internacional",
+          "creditos": 3,
+          "req_texto": "DN-0526"
+        },
+        {
+          "sigla": "DN-0547",
+          "nombre": "Banca y Sistema Económico",
+          "creditos": 3,
+          "req_texto": "DN-0108 o (DN-0443, DN-0444)"
+        },
+        {
+          "sigla": "DN-0548",
+          "nombre": "Mercados Financieros Internacionales",
+          "creditos": 3,
+          "req_texto": "DN-0108 o (DN-0443, DN-0444)"
+        },
+        {
+          "sigla": "DN-2302",
+          "nombre": "Inteligencia Emocional en el Trabajo",
+          "creditos": 3,
+          "req_texto": "DN-0304 o DN-0525"
+        }
+      ],
+      "OPC": [
+        {
+          "sigla": "LM-0601",
+          "nombre": "Inglés para Administración de Negocios I",
+          "creditos": 3,
+          "req_texto": "DN-0101"
+        },
+        {
+          "sigla": "LM-0602",
+          "nombre": "Inglés para Administración de Negocios II",
+          "creditos": 3,
+          "req_texto": "LM-0601"
+        },
+        {
+          "sigla": "LM-0603",
+          "nombre": "Inglés para Administración de Negocios III",
+          "creditos": 3,
+          "req_texto": "LM-0602"
+        },
+        {
+          "sigla": "LM-0604",
+          "nombre": "Inglés para Administración de Negocios IV 1/este Espacio No Es Obligatorio, Sino Que Da la Posibilidad de Que el Estudiantado Matricule los Cursos Opcionales de Inglés para Fortalecer su Formación. Conforme al Estatuto Orgánico y al Reglamento de Trabajos Finales de Graduación, la Universidad de Costa Rica Establece Como Requisito de Graduación para Obtener el Grado de Licenciatura, las Siguientes Opciones de Trabajo Final de Graduación: Tesis de Graduación, Seminario de Graduación, Proyecto de Graduación y Práctica Dirigida de Graduación. Corresponde a la Unidad Académica Indicar Cuál o Cuáles de Estas Opciones Podrá Matricular su Población Estudiantil. para Hacer la Presentación Pública (Defensa) del Trabajo Final de Graduación, el Estudiante Deberá Haber Concluido Satisfactoriamente, sin Excepción, Todos los Requisitos de su Plan de Estudios. Si la Defensa Es Exitosa, en el Acto Se Declarará Que el Postulante Es Acreedor del Grado de Licenciado en el Área Respectiva, Quedando Pendiente Únicamente la Obligación de Asistir a un Acto Público de Graduación, para Ser Juramentado y Recibir el Diploma Correspondiente.",
+          "creditos": 3,
+          "req_texto": "LM-0603"
+        }
+      ]
+    },
+    "titulo_optativos": "Cursos optativos y opcionales",
+    "listas_optativos": [
+      {
+        "id": "OPT",
+        "titulo": "Optativos de la licenciatura",
+        "nota": "Se eligen cuatro cursos de 3 créditos: dos en el IX ciclo y dos en el X.",
+        "color_de": "OPT"
+      },
+      {
+        "id": "OPC",
+        "titulo": "Inglés para administración de negocios (opcional)",
+        "nota": "No es obligatorio; refuerza la formación en inglés.",
+        "color_de": "OPT"
+      }
+    ]
+  }
 }

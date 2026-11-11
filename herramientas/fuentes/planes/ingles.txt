@@ -1,0 +1,211 @@
+
+                         
+                     
+                
+
+
+
+
+ 
+ Universidad de Costa Rica                                                                                                                  Programa: PE_REP_020
+ Sistema de Aplicaciones Estudiantiles SAE                                                                                                  Fecha     : 07/02/2022
+ Módulo Planes de Estudio                                                                                                                   Hora      : 14:05:20
+                                                                                                                                            Página 1 de 4
+                                                                 FASCÍCULO UNIDAD ACADÉMICA
+                                                  Escuela:                LENGUAS MODERNAS
+
+ Carrera              120303   BACH. EN INGLES
+ Plan de Estudio        3      BACHILLERATO EN INGLÉS ( PLAN 3, VD-R-10013-2018)
+
+
+ Enfasis                 0     Bloque Común(no hay énfasis)
+
+
+                                                                      *Horas*
+Ciclo     Curso    Nombre del curso                               T   P   L TP Cred. Requisitos y Req. Equivalentes             Correquisitos y Correq. Equivalentes
+
+ 1      EF-        ACTIVIDAD DEPORTIVA                            0   0   2     0   0
+ 1      EG-        CURSO DE ARTE                                  0   0   0     3   2
+ 1      EG-I       CURSO INTEGRADO DE HUMANIDADES I               8   0   0     0   6
+ 1      LM1001     INGLÉS INTEGRADO I                            10   0   3     0   8
+
+                                                                Grado: BACHILLERATO                   Créditos ciclo 1 : 16
+
+ 2      EG-II      CURSO INTEGRADO DE HUMANIDADES II              8   0   0     0   6   EG-I
+
+ 2      LM1002     INGLÉS INTEGRADO II                           10   0   3     0   8   LM1001
+
+ 2      RP-1       REPERTORIO                                     0   0   0     0   3
+
+                                                                Grado: BACHILLERATO                   Créditos ciclo 2 : 17
+
+ 3      LM0352     GRAMÁTICA INGLESA I                            3   0   0     0   2   LM1002
+
+ 3      LM1230     COMUNICACIÓN ORAL I                            6   0   0     0   5   LM1002
+
+ 3      LM1235     COMPOSICIÓN INGLESA I                          3   0   0     0   3   LM1002
+
+ 3      LM1246     COMPRENSIÓN DE LECTURA                         3   0   0     0   2   LM1002
+
+ 3      OPT1124    OPTATIVO DE INGLÉS. PLAN 3                                       3
+ 3      SR-I       SEMINARIO DE REALIDAD NACIONAL I               2   0   0     0   2   EG-II
+
+                                                                Grado: BACHILLERATO                   Créditos ciclo 3 : 17
+
+ 4      LM0353     GRAMÁTICA INGLESA II                           3   0   0     0   2   LM0352 Equiv.: LM1234; LM1230; LM1235   LM1240; LM1245
+
+ 4      LM1237     INTRODUCCIÓN A LA LITERATURA INGLESA           3   0   0         3   LM1235; LM1246
+
+ 4      LM1240     COMUNICACIÓN ORAL II                           6   0   0         5   LM0352 Equiv.: LM1234; LM1230; LM1235   LM0353 Equiv.: LM1244; LM1245
+
+ 4      LM1245     COMPOSICIÓN INGLESA II                         3   0   0         3   LM0352 Equiv.: LM1234; LM1230; LM1235   LM0353 Equiv.: LM1244; LM1240
+
+ 4      OPT1124    OPTATIVO DE INGLÉS. PLAN 3                                       3
+ 4      SR-II      SEMINARIO DE REALIDAD NACIONAL II              2   0   0     0   2   SR-I
+
+                                                                Grado: BACHILLERATO                   Créditos ciclo 4 : 18
+ Universidad de Costa Rica                                                                                                                                   Programa: PE_REP_020
+ Sistema de Aplicaciones Estudiantiles SAE                                                                                                                   Fecha     : 07/02/2022
+ Módulo Planes de Estudio                                                                                                                                    Hora      : 14:05:20
+                                                                                                                                                             Página 2 de 4
+                                                                 FASCÍCULO UNIDAD ACADÉMICA
+                                                  Escuela:                LENGUAS MODERNAS
+ Carrera              120303   BACH. EN INGLES
+ Plan de Estudio        3      BACHILLERATO EN INGLÉS ( PLAN 3, VD-R-10013-2018)
+
+
+ Enfasis                 0     Bloque Común(no hay énfasis)
+
+
+                                                                      *Horas*
+Ciclo     Curso    Nombre del curso                               T   P   L TP Cred. Requisitos y Req. Equivalentes                              Correquisitos y Correq. Equivalentes
+
+ 5      LM0354     GRAMÁTICA INGLESA III                          3   0   0     0   2   LM0353 Equiv.: LM1244; LM1240; LM1245
+
+ 5      LM1220     INTRODUCCIÓN A LA NARRATIVA                    4   0   0     0   3   LM1237; LM1245
+
+ 5      LM1222     INTRODUCCIÓN AL DRAMA                          4   0   0     0   3   LM1237; LM1245
+
+ 5      LM1351     TÉCNICAS DE COMUNICACIÓN Y PRONUNCIACIÓN I 6       0   0         5   LM0353 Equiv.: LM1244; LM1240; LM1245
+
+ 5      LM1352     RETÓRICA INGLESA I                             3   0   0         3   LM0353 Equiv.: LM1244; LM1240; LM1245
+
+ 5      OPT1124    OPTATIVO DE INGLÉS. PLAN 3                                       3
+
+                                                                 Grado: BACHILLERATO                   Créditos ciclo 5 : 19
+
+ 6      LM0355     GRAMÁTICA INGLESA IV                           3   0   0     0   2   LM0354 Equiv.: LM1353; LM1351; LM1352
+
+ 6      LM1361     TÉCNICAS DE COMUNICACIÓN Y PRONUNCIACIÓN II 6      0   0         5   LM0354 Equiv.: LM1353; LM1351; LM1352
+
+ 6      LM1362     RETÓRICA INGLESA II                            3   0   0         3   LM0354 Equiv.: LM1353; LM1351; LM1352
+
+ 6      LM1366     INTRODUCCIÓN A LA POESÍA                       4   0   0         3   LM1351; LM1352
+
+ 6      LM1485     CURSO PANORÁMICO DE LITERATURA BRITÁNICA       4   0   0         3   LM1356 Equiv.: LM1220; LM1365 Equiv.: LM1222
+
+ 6      OPT1124    OPTATIVO DE INGLÉS. PLAN 3                                       3
+
+                                                                 Grado: BACHILLERATO                   Créditos ciclo 6 : 19
+
+ 7      FL3168     INTRODUCCIÓN A LA LINGÜÍSTICA I (EN INGLÉS)    3   0   0     0   3
+ 7      LM0356     GRAMÁTICA INGLESA V                            3   0   0     0   2   LM0355 Equiv.: LM1363
+
+ 7      LM1221     CURSO PANORÁMICO DE LITERATURA NORTEAMERICANA
+                                                            4 0           0     0   3   LM1485
+
+ 7      LM1471     TÉCNICAS DE COMUNICACIÓN Y PRONUNCIACIÓN III4      0   0         3   LM1361; LM1362; LM1363 Equiv.: LM0355
+
+ 7      LM1472     RETÓRICA INGLESA III                           3   0   0         3   LM0355 Equiv.: LM1363; LM1356 Equiv.: LM1243 o LM1220;
+                                                                                        LM1361; LM1362
+ 7      OPT1124    OPTATIVO DE INGLÉS. PLAN 3                                       3
+
+                                                                 Grado: BACHILLERATO                   Créditos ciclo 7 : 17
+
+ 8      LM0357     GRAMÁTICA INGLESA VI                           3   0   0     0   2   LM0356
+
+ 8      LM0364     LITERATURA DE LA COMMONWEALTH                  3   0   0     0   3   LM1471; LM1472
+ Universidad de Costa Rica                                                                                                                 Programa: PE_REP_020
+ Sistema de Aplicaciones Estudiantiles SAE                                                                                                 Fecha     : 07/02/2022
+ Módulo Planes de Estudio                                                                                                                  Hora      : 14:05:20
+                                                                                                                                           Página 3 de 4
+                                                                 FASCÍCULO UNIDAD ACADÉMICA
+                                                  Escuela:                LENGUAS MODERNAS
+ Carrera              120303   BACH. EN INGLES
+ Plan de Estudio        3      BACHILLERATO EN INGLÉS ( PLAN 3, VD-R-10013-2018)
+
+
+ Enfasis                 0     Bloque Común(no hay énfasis)
+
+
+                                                                      *Horas*
+Ciclo     Curso    Nombre del curso                               T   P   L TP Cred. Requisitos y Req. Equivalentes            Correquisitos y Correq. Equivalentes
+
+ 8      LM1481     COMUNICACIÓN INTERCULTURAL                     4   0   0     0   3   LM1471; LM1472
+
+ 8      LM1482     RETÓRICA INGLESA IV                            3   0   0     0   3   LM1471; LM1472
+
+ 8      LM1486     CRÍTICA LITERARIA                              4   0   0         3   LM1471; LM1472
+
+ 8      OPT1124    OPTATIVO DE INGLÉS. PLAN 3                                       3
+
+                                                                Grado: BACHILLERATO                    Créditos ciclo 8 : 17
+
+                                                                          Total créditos enfasis 0 :       140
+
+                                                                              Total cursos enfasis 0 :     43
+
+                                                                                     Total de créditos :   140
+
+Observaciones generales        REESTRUCTURACIÓN DE LA CARRERA DE BACHILLERATO EN INGLÉS, CÓDIGO 120303 Y CREACIÓN EN EL SISTEMA DE APLICACIONES ESTUDIANTILES
+del plan de estudio            DEL PLAN DE ESTUDIOS 3. PARA LA POBLACIÓN DE NUEVO INGRESO AÑO 2018. Última resolución que lo modifica 10013-2018.
+ Universidad de Costa Rica                                                                                                           Programa: PE_REP_020
+ Sistema de Aplicaciones Estudiantiles SAE                                                                                           Fecha     : 07/02/2022
+ Módulo Planes de Estudio                                                                                                            Hora      : 14:05:20
+                                                                                                                                     Página 4 de 4
+                                                                  FASCÍCULO UNIDAD ACADÉMICA
+                                               Escuela:                    LENGUAS MODERNAS
+Carrera             120303   BACH. EN INGLES
+Plan de Estudio       3      BACHILLERATO EN INGLÉS ( PLAN 3, VD-R-10013-2018)
+
+Bloques Optativos
+Bloque Optativo           OPT1124   OPTATIVO DE INGLÉS. PLAN 3
+
+Observaciones:
+                                                                 *Horas*
+  Curso    Nombre del curso                                  T   P    L TP Cred. Requisitos y Req. Equivalentes     Correquisitos y Correq. Equivalentes
+  LM0358   TRADUCCIÓN I                                      3    0   0    0   3   LM1002
+
+  LM0359   TRADUCCIÓN II                                     3    0   0    0   3   LM0358
+
+  LM0360   TRADUCCIÓN III                                    3    0   0    0   3   LM0359
+
+  LM0361   TRADUCCIÓN IV                                     3    0   0    0   3   LM0360
+
+  LM0362   TRADUCCIÓN V                                      3    0   0    0   3   LM0361
+
+  LM0363   TRADUCCIÓN VI                                     3    0   0    0   3   LM0362
+
+  LM0365   LECTURA DIRIGIDA                                  3    0   0    0   3   LM1230; LM1247
+
+  LM1247   LITERATURA INFANTIL                               3    0   0        3   LM1002
+
+  LM1358   LITERATURA DE MISTERIO Y SUSPENSO                 3    0   0        3   LM1245
+
+  LM1368   LITERATURA Y MUJER                                3    0   0        3   LM0354 Equiv.: LM1353; LM1358
+
+  LM1477   LITERATURA Y CINE                                 3    0   0        3   LM1361; LM1368
+
+  LM1487   LITERATURA COMPARADA                              3    0   0        3   LM1472; LM1477
+
+  LM2013   FRANCÉS I                                         3    0   1    0   3
+  LM2014   FRANCÉS II                                        3    0   1    0   3   LM2013 Equiv.: LM2031
+
+  LM2015   FRANCÉS III                                       3    0   1    0   3   LM2014 Equiv.: LM2033 o LM2111
+
+  LM2016   FRANCÉS IV                                        3    0   1    0   3   LM2015
+
+  LM2017   FRANCÉS V                                         3    0   1    0   3   LM2016
+
+  LM2207   CIVILIZACIÓN FRANCESA I                           3    0   0    0   3   LM2017
+

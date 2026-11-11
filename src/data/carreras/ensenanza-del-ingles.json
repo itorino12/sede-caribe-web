@@ -14,5 +14,600 @@
       "url": "https://drive.google.com/file/d/1Fakf9DX4Uqdia8tZokT-Dqs-55ZxwPIW/view",
       "principal": true
     }
-  ]
+  ],
+  "malla": {
+    "plan": "Plan 02",
+    "total": 142,
+    "tcu": 300,
+    "resumen_creditos": "142 créditos del bachillerato en ocho ciclos, con salida lateral al profesorado al concluir el VI ciclo.",
+    "nota_fuente": "Fuente: malla curricular del plan 320208 (Informe Curricular CEA-59-2024). Al concluir el VI ciclo se puede optar por el título de profesorado (150 horas de TCU); el bachillerato completa las 300.",
+    "areas": [
+      {
+        "id": "LEN",
+        "nombre": "Lengua inglesa",
+        "corto": "Lengua inglesa",
+        "color": "#0A6AA6",
+        "oscuro": "#5AAEE0",
+        "descripcion": "Inglés integrado, gramática, comunicación oral, composición, comprensión de lectura, retórica y pronunciación.",
+        "creditos": 67
+      },
+      {
+        "id": "LIT",
+        "nombre": "Literatura y cultura",
+        "corto": "Literatura",
+        "color": "#B0306A",
+        "oscuro": "#E58BB5",
+        "descripcion": "Narrativa, poesía y drama para la enseñanza del inglés, crítica literaria y comunicación intercultural.",
+        "creditos": 14
+      },
+      {
+        "id": "DID",
+        "nombre": "Didáctica del inglés y práctica docente",
+        "corto": "Didáctica",
+        "color": "#A8550A",
+        "oscuro": "#E8A060",
+        "descripcion": "Metodología de la enseñanza del inglés, materiales didácticos, experiencia docente, investigación y seminario.",
+        "creditos": 19
+      },
+      {
+        "id": "PED",
+        "nombre": "Formación pedagógica",
+        "corto": "Pedagogía",
+        "color": "#00796B",
+        "oscuro": "#4DB6A8",
+        "descripcion": "Pedagogía, didáctica, currículum, desarrollo adolescente, psicopedagogía, evaluación y teoría de la educación.",
+        "creditos": 21
+      },
+      {
+        "id": "FG",
+        "nombre": "Formación general",
+        "corto": "Formación general",
+        "color": "#5F6B78",
+        "oscuro": "#A9B4BF",
+        "descripcion": "Cursos integrados de humanidades, arte, repertorio, actividad deportiva y seminarios de realidad nacional, comunes a toda la Universidad.",
+        "creditos": 21
+      }
+    ],
+    "ciclos": [
+      {
+        "n": "I",
+        "anio": 1,
+        "nombre": "I ciclo",
+        "verano": false,
+        "creditos": 19
+      },
+      {
+        "n": "II",
+        "anio": 1,
+        "nombre": "II ciclo",
+        "verano": false,
+        "creditos": 17
+      },
+      {
+        "n": "III",
+        "anio": 2,
+        "nombre": "III ciclo",
+        "verano": false,
+        "creditos": 18
+      },
+      {
+        "n": "IV",
+        "anio": 2,
+        "nombre": "IV ciclo",
+        "verano": false,
+        "creditos": 18
+      },
+      {
+        "n": "V",
+        "anio": 3,
+        "nombre": "V ciclo",
+        "verano": false,
+        "creditos": 15
+      },
+      {
+        "n": "VI",
+        "anio": 3,
+        "nombre": "VI ciclo",
+        "verano": false,
+        "creditos": 19
+      },
+      {
+        "n": "VII",
+        "anio": 4,
+        "nombre": "VII ciclo",
+        "verano": false,
+        "creditos": 19
+      },
+      {
+        "n": "VIII",
+        "anio": 4,
+        "nombre": "VIII ciclo",
+        "verano": false,
+        "creditos": 17
+      }
+    ],
+    "cursos": [
+      {
+        "sigla": "EG-I",
+        "nombre": "Curso Integrado de Humanidades I",
+        "ciclo": "I",
+        "creditos": 6,
+        "optativo": false,
+        "area": "FG",
+        "req": [],
+        "coreq_texto": "--- ---"
+      },
+      {
+        "sigla": "EG-",
+        "nombre": "Curso de Arte",
+        "ciclo": "I",
+        "creditos": 2,
+        "optativo": false,
+        "area": "FG",
+        "req": [],
+        "coreq_texto": "--- ---",
+        "nota": "Se elige entre la oferta de la Sede para cada ciclo."
+      },
+      {
+        "sigla": "EF-",
+        "nombre": "Actividad Deportiva",
+        "ciclo": "I",
+        "creditos": 0,
+        "optativo": false,
+        "area": "FG",
+        "req": [],
+        "coreq_texto": "--- ---"
+      },
+      {
+        "sigla": "FD-0548",
+        "nombre": "Introducción a la Pedagogía",
+        "ciclo": "I",
+        "creditos": 3,
+        "optativo": false,
+        "area": "PED",
+        "req": [],
+        "coreq_texto": "--- ---"
+      },
+      {
+        "sigla": "LM-1001",
+        "nombre": "Inglés Integrado I",
+        "ciclo": "I",
+        "creditos": 8,
+        "optativo": false,
+        "area": "LEN",
+        "req": []
+      },
+      {
+        "sigla": "EG-II",
+        "nombre": "Curso Integrado de Humanidades II",
+        "ciclo": "II",
+        "creditos": 6,
+        "optativo": false,
+        "area": "FG",
+        "req": [],
+        "coreq_texto": "EG-I ---"
+      },
+      {
+        "sigla": "OE-1103",
+        "nombre": "Procesos de Desarrollo en la Adolescencia y la Vida Adulta",
+        "ciclo": "II",
+        "creditos": 3,
+        "optativo": false,
+        "area": "PED",
+        "req": [],
+        "coreq_texto": "FD-0548 ---"
+      },
+      {
+        "sigla": "LM-1002",
+        "nombre": "Inglés Integrado II",
+        "ciclo": "II",
+        "creditos": 8,
+        "optativo": false,
+        "area": "LEN",
+        "req": [],
+        "coreq_texto": "- LM-1001 ---"
+      },
+      {
+        "sigla": "FD-0152",
+        "nombre": "Fundamentos de Didáctica",
+        "ciclo": "III",
+        "creditos": 3,
+        "optativo": false,
+        "area": "PED",
+        "req": [],
+        "coreq_texto": "FD-0548 ---"
+      },
+      {
+        "sigla": "FD-5051",
+        "nombre": "Principios de Currículum",
+        "ciclo": "III",
+        "creditos": 3,
+        "optativo": false,
+        "area": "PED",
+        "req": [],
+        "coreq_texto": "FD-0548 o EA-0340 ---"
+      },
+      {
+        "sigla": "LM-0352",
+        "nombre": "Gramática Inglesa I",
+        "ciclo": "III",
+        "creditos": 2,
+        "optativo": false,
+        "area": "LEN",
+        "req": [],
+        "coreq_texto": "LM-1002 ---"
+      },
+      {
+        "sigla": "LM-1230",
+        "nombre": "Comunicación Oral I",
+        "ciclo": "III",
+        "creditos": 5,
+        "optativo": false,
+        "area": "LEN",
+        "req": [],
+        "coreq_texto": "LM-1002 ---"
+      },
+      {
+        "sigla": "LM-1235",
+        "nombre": "Composición Inglesa I",
+        "ciclo": "III",
+        "creditos": 3,
+        "optativo": false,
+        "area": "LEN",
+        "req": [],
+        "coreq_texto": "LM-1002 ---"
+      },
+      {
+        "sigla": "LM-1246",
+        "nombre": "Comprensión de Lectura",
+        "ciclo": "III",
+        "creditos": 2,
+        "optativo": false,
+        "area": "LEN",
+        "req": [],
+        "coreq_texto": "LM-1002 ---"
+      },
+      {
+        "sigla": "SR-I",
+        "nombre": "Seminario de Realidad Nacional I",
+        "ciclo": "IV",
+        "creditos": 2,
+        "optativo": false,
+        "area": "FG",
+        "req": [],
+        "coreq_texto": "EG-II ---"
+      },
+      {
+        "sigla": "OE-0342",
+        "nombre": "Evaluación de los Aprendizajes en el Contexto Educativo",
+        "ciclo": "IV",
+        "creditos": 3,
+        "optativo": false,
+        "area": "PED",
+        "req": [],
+        "coreq_texto": "FD-0152, FD-5051 ---"
+      },
+      {
+        "sigla": "EA-0350",
+        "nombre": "Taller de Materiales Didácticos y Medios Audiovisuales",
+        "ciclo": "IV",
+        "creditos": 3,
+        "optativo": false,
+        "area": "DID",
+        "req": [],
+        "coreq_texto": "FD-0152, FD-5051 ---"
+      },
+      {
+        "sigla": "LM-0353",
+        "nombre": "Gramática Inglesa II",
+        "ciclo": "IV",
+        "creditos": 2,
+        "optativo": false,
+        "area": "LEN",
+        "req": [
+          "LM-1235"
+        ],
+        "req_texto": "LM-1234, LM-1235",
+        "coreq": [
+          "LM-1240",
+          "LM-1245"
+        ],
+        "coreq_texto": "LM-1230, LM-0352 o LM-1240, LM-1245"
+      },
+      {
+        "sigla": "LM-1240",
+        "nombre": "Comunicación Oral II",
+        "ciclo": "IV",
+        "creditos": 5,
+        "optativo": false,
+        "area": "LEN",
+        "req": [
+          "LM-1235"
+        ],
+        "req_texto": "LM-1234, LM-1235",
+        "coreq": [
+          "LM-0353",
+          "LM-1245"
+        ],
+        "coreq_texto": "LM-1230, LM-0352 o LM-0353 o LM-1244, LM-1245"
+      },
+      {
+        "sigla": "LM-1245",
+        "nombre": "Composición Inglesa II",
+        "ciclo": "IV",
+        "creditos": 3,
+        "optativo": false,
+        "area": "LEN",
+        "req": [
+          "LM-1235"
+        ],
+        "req_texto": "LM-1234, LM-1235",
+        "coreq": [
+          "LM-1240",
+          "LM-0353"
+        ],
+        "coreq_texto": "LM-1230, LM-0352 o LM-1240, LM-0353 o LM-1244"
+      },
+      {
+        "sigla": "FD-0530",
+        "nombre": "Metodología de la Enseñanza del Inglés",
+        "ciclo": "V",
+        "creditos": 3,
+        "optativo": false,
+        "area": "DID",
+        "req": [],
+        "coreq_texto": "OE-0342, EA-0350 ---"
+      },
+      {
+        "sigla": "LM-0354",
+        "nombre": "Gramática Inglesa III",
+        "ciclo": "V",
+        "creditos": 2,
+        "optativo": false,
+        "area": "LEN",
+        "req": [
+          "LM-0353"
+        ],
+        "req_texto": "LM-0353 o LM-1244",
+        "coreq_texto": "LM-1240, LM-1245, ---"
+      },
+      {
+        "sigla": "LM-1243",
+        "nombre": "Narrativas para la Enseñanza del Inglés",
+        "ciclo": "V",
+        "creditos": 2,
+        "optativo": false,
+        "area": "LIT",
+        "req": [],
+        "coreq_texto": "LM-1246 ---"
+      },
+      {
+        "sigla": "LM-1351",
+        "nombre": "Técnicas de Comunicación y Pronunciación I",
+        "ciclo": "V",
+        "creditos": 5,
+        "optativo": false,
+        "area": "LEN",
+        "req": [
+          "LM-1245"
+        ],
+        "req_texto": "LM-1244, LM-1245",
+        "coreq_texto": "LM-1240, LM-0353 o ---"
+      },
+      {
+        "sigla": "LM-1352",
+        "nombre": "Retórica Inglesa I",
+        "ciclo": "V",
+        "creditos": 3,
+        "optativo": false,
+        "area": "LEN",
+        "req": [
+          "LM-1245"
+        ],
+        "req_texto": "LM-1244, LM-1245",
+        "coreq_texto": "LM-1240, LM-0353 o ---"
+      },
+      {
+        "sigla": "FD-0540",
+        "nombre": "Experiencia Docente en Inglés",
+        "ciclo": "VI",
+        "creditos": 6,
+        "optativo": false,
+        "area": "DID",
+        "req": [],
+        "coreq_texto": "FD-0530 ---"
+      },
+      {
+        "sigla": "LM-0355",
+        "nombre": "Gramática Inglesa IV",
+        "ciclo": "VI",
+        "creditos": 2,
+        "optativo": false,
+        "area": "LEN",
+        "req": [
+          "LM-0354"
+        ],
+        "req_texto": "LM-0354 o LM-1353",
+        "coreq_texto": "LM-1351, LM-1352, ---"
+      },
+      {
+        "sigla": "LM-1354",
+        "nombre": "Poesía para la Enseñanza del Inglés",
+        "ciclo": "VI",
+        "creditos": 3,
+        "optativo": false,
+        "area": "LIT",
+        "req": [],
+        "coreq_texto": "LM-1240 ---"
+      },
+      {
+        "sigla": "LM-1361",
+        "nombre": "Técnicas de Comunicación y Pronunciación II",
+        "ciclo": "VI",
+        "creditos": 5,
+        "optativo": false,
+        "area": "LEN",
+        "req": [
+          "LM-0354"
+        ],
+        "req_texto": "LM-0354 o LM-1353",
+        "coreq_texto": "LM-1351, LM-1352, ---"
+      },
+      {
+        "sigla": "LM-1362",
+        "nombre": "Retórica Inglesa II",
+        "ciclo": "VI",
+        "creditos": 3,
+        "optativo": false,
+        "area": "LEN",
+        "req": [
+          "LM-0354"
+        ],
+        "req_texto": "LM-0354 o LM-1353",
+        "coreq_texto": "LM-1351, LM-1352, ---"
+      },
+      {
+        "sigla": "RP-",
+        "nombre": "Repertorio",
+        "ciclo": "VII",
+        "creditos": 3,
+        "optativo": false,
+        "area": "FG",
+        "req": [],
+        "coreq_texto": "--- ---",
+        "nota": "Se elige entre la oferta de la Sede para cada ciclo."
+      },
+      {
+        "sigla": "FD-0545",
+        "nombre": "Investigación para el Mejoramiento del Aprendizaje",
+        "ciclo": "VII",
+        "creditos": 3,
+        "optativo": false,
+        "area": "DID",
+        "req": [
+          "FD-0540"
+        ],
+        "req_texto": "FD-0535 o FD-0536 o FD-0537 o FD-0028 o FD-0538 o FD-0539 o FD-0540 o FD-0541 o FD-0542 o FD-0543"
+      },
+      {
+        "sigla": "FD-0554",
+        "nombre": "Seminario de Enseñanza del Inglés",
+        "ciclo": "VII",
+        "creditos": 4,
+        "optativo": false,
+        "area": "DID",
+        "req": [],
+        "coreq_texto": "FD-0540 ---"
+      },
+      {
+        "sigla": "LM-1364",
+        "nombre": "Drama para la Enseñanza del Inglés I",
+        "ciclo": "VII",
+        "creditos": 3,
+        "optativo": false,
+        "area": "LIT",
+        "req": [
+          "LM-1243",
+          "LM-1351"
+        ]
+      },
+      {
+        "sigla": "LM-1471",
+        "nombre": "Técnicas de Comunicación y Pronunciación III",
+        "ciclo": "VII",
+        "creditos": 3,
+        "optativo": false,
+        "area": "LEN",
+        "req": [
+          "LM-1361",
+          "LM-1362",
+          "LM-0355"
+        ],
+        "req_texto": "LM-1361, LM-1362, LM-1363 o LM-0355"
+      },
+      {
+        "sigla": "LM-1472",
+        "nombre": "Retórica Inglesa III",
+        "ciclo": "VII",
+        "creditos": 3,
+        "optativo": false,
+        "area": "LEN",
+        "req": [
+          "LM-1243",
+          "LM-1361",
+          "LM-1362",
+          "LM-0355"
+        ],
+        "req_texto": "LM-1356 o LM-1243 o LM-1220, LM-1361, LM-1362, LM-0355 o LM-1363"
+      },
+      {
+        "sigla": "SR-II",
+        "nombre": "Seminario de Realidad Nacional II",
+        "ciclo": "VIII",
+        "creditos": 2,
+        "optativo": false,
+        "area": "FG",
+        "req": [],
+        "coreq_texto": "SR-I ---"
+      },
+      {
+        "sigla": "OE-1012",
+        "nombre": "Principios de Psicopedagogía en la Adolescencia y la Vida Adulta",
+        "ciclo": "VIII",
+        "creditos": 3,
+        "optativo": false,
+        "area": "PED",
+        "req": [],
+        "coreq_texto": "FD-0152 o FD-0023 ---"
+      },
+      {
+        "sigla": "FD-0544",
+        "nombre": "Teoría de la Educación",
+        "ciclo": "VIII",
+        "creditos": 3,
+        "optativo": false,
+        "area": "PED",
+        "req": [
+          "FD-0540"
+        ],
+        "req_texto": "FD-1046 o FD-0534 o FD-0535 o FD-0536 o FD-0537 o FD-0026 o FD-0538 o FD-0539 o FD-0540 o FD-0541 o FD-0542 o FD-0543 o FD-0547"
+      },
+      {
+        "sigla": "LM-1481",
+        "nombre": "Comunicación Intercultural",
+        "ciclo": "VIII",
+        "creditos": 3,
+        "optativo": false,
+        "area": "LIT",
+        "req": [
+          "LM-1471",
+          "LM-1472"
+        ]
+      },
+      {
+        "sigla": "LM-1482",
+        "nombre": "Retórica Inglesa IV",
+        "ciclo": "VIII",
+        "creditos": 3,
+        "optativo": false,
+        "area": "LEN",
+        "req": [
+          "LM-1471",
+          "LM-1472"
+        ]
+      },
+      {
+        "sigla": "LM-1486",
+        "nombre": "Crítica Literaria",
+        "ciclo": "VIII",
+        "creditos": 3,
+        "optativo": false,
+        "area": "LIT",
+        "req": [
+          "LM-1471",
+          "LM-1472"
+        ]
+      }
+    ]
+  }
 }

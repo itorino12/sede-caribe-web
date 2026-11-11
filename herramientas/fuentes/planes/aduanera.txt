@@ -1,0 +1,239 @@
+                         
+                                                          
+                                                       
+                                                  
+                                               
+                                             
+                                         
+
+
+     
+     
+
+                 ESTRUCTURA CURRICULAR DEL PLAN DE ESTUDIOS DEL DIPLOMADO EN ADMINISTRACIÓN ADUANERA,
+                            BACHILLERATO EN ADMINISTRACIÓN ADUANERA Y COMERCIO EXTERIOR,
+         Y LICENCIATURA EN ADMINISTRACIÓN ADUANERA Y COMERCIO EXTERIOR CON ÉNFASIS EN COMERCIO INTERNACIONAL,
+        GESTIÓN DE ORGANIZACIÓNES DE COMERCIO EXTERIOR, LOGÍSTICA Y CADENA DE ABASTECIMIENTO Y GESTIÓN ADUANERA,
+                                                  CÓDIGO 330212, plan 1
+
+  NIVEL Y                              NOMBRE DEL CURSO                 HORAS          REQUISITOS        CORREQUISITOS CRÉDITOS
+   SIGLA                                                            T   P    TP L
+PRIMER AÑO
+I CICLO
+EG-I         CURSO INTEGRADO DE HUMANIDADES I                       -    -   -   -          ---               ---         6
+EG-          CURSO DE ARTE                                          -    -   -   -          ---               ---         2
+MA-0001      PRECÁLCULO 1/                                          5    -   -   -          ---               ---         0
+XE-0156      INTRODUCCIÓN A LA ECONOMÍA                             4    -   -   -          ---               ---         4
+FL-2075      TÉCNICAS DE EXPRESIÓN ESCRITA Y ORAL                   -    -   3   -          ---               ---         2
+XP-0240      INTRODUCCIÓN AL ESTADO, SOCIEDAD, COMERCIO Y ADUANAS   3    -   -   -          ---               ---         2
+XP-0243      MÉTODOS Y TÉCNICAS DE INVESTIGACIÓN                    3    -   -   -          ---             FL-0275       3
+                                                                                                             SUBTOTAL     19
+II CICLO
+EG-II        CURSO INTEGRADO DE HUMANIDADES II                      -    -   -   -         EG-I               ---         6
+EF-          ACTIVIDAD DEPORTIVA                                    -    -   -   -          ---               ---         0
+MA-1021      CÁLCULO PARA CIENCIAS ECONÓMICAS I                     5    -   -   -       MA-0001              ---         4
+XP-0201      ECONOMÍA INTERNACIONAL                                 3    -   -   -       XE-0156              ---         2
+XP-0241      INTRODUCCIÓN AL DERECHO ADUANERO                       3    -   -   -   XP-0240 o XP-0106        ---         3
+XP-0242      MERCEOLOGÍA Y CLASIFICACIÓN I                          3   2    -   -   XP-0240 o XP-0106        ---         3
+                                                                                                             SUBTOTAL     18
+Según Informe Curricular CEA-46-2024
+NIVEL Y                                NOMBRE DEL CURSO              HORAS          REQUISITOS          CORREQUISITOS CRÉDITOS
+SIGLA                                                            T   P    TP L
+SEGUNDO AÑO
+III CICLO
+SR-I         SEMINARIO DE REALIDAD NACIONAL I                    -    -   -   -         EG-II                  ---          2
+XP-0301      ASPECTOS LEGALES DEL PROCEDIMIENTO ADMINISTRATIVO   3    -   -   -       XP-0241                  ---          3
+             ADUANERO
+XP- 0244     MERCEOLOGÍA Y CLASIFICACIÓN II                      3   2    -   -   XP-0242 o XP-0213            ---          3
+XP-0246      TEORÍA DE LAS ORGANIZACIONES                        3    -   -   -       XP-0201                  ---          3
+XP-0247      COMERCIO MULTILATERAL Y REGIONAL I                  3    -   -   -   XP-0240 o XP-0106            ---          3
+LM-0348      INGLÉS PARA ADMINISTRACIÓN Y COMERCIO I             3    -   -   1          ---                   ---          3
+                                                                                                              SUBTOTAL      17
+IV CICLO
+SR-II        SEMINARIO DE REALIDAD NACIONAL II                   -    -   -   -         SR-I                   ---          2
+XP-0527      DERECHO ADUANERO                                    3    -   -   -       XP-0301                  ---          3
+XP-0248      MERCEOLOGÍA Y CLASIFICACIÓN III                     3   2    -   -   XP-0244 o XP-0233            ---          3
+XP-0249      COMERCIO MULTILATERAL Y REGIONAL II                 3    -   -   -   XP-0247 o XP-0302            ---          3
+XP-0250      PLANIFICACIÓN ESTRATÉGICA                           3    -   -   -   XP-0246 o XP-1002            ---          3
+                                                                                                              SUBTOTAL      14
+TERCER AÑO
+V CICLO
+XP-0252      MERCEOLOGÍA Y CLASIFICACIÓN IV                      3   2    -   -   XP-0248 o XP-0333            ---          3
+XP-0253      ARANCEL Y BARRERAS NO ARANCELARIAS                  3    -   -   -   XP-0248 o XP-0333     XP-0252 o XP-0105   3
+XP-0502      REGÍMENES ADUANEROS Y SUS PROCEDIMIENTOS I          3    -   -   -       XP-0527                  ---          3
+XP-0503      VALORACIÓN ADUANERA DE MERCANCÍAS I                 3    -   -   -       XP-0527                  ---          3
+XP-0245      CONTABILIDAD PARA COMERCIO INTERNACIONAL            3    -   -   -          ---                   ---          3
+                                                                                                              SUBTOTAL      15
+                                                                                                      TOTAL DIPLOMADO       83
+Según Informe Curricular CEA-46-2024
+NIVEL Y                                NOMBRE DEL CURSO               HORAS                    REQUISITOS                  CORREQUISITOS CRÉDITOS
+SIGLA                                                             T   P    TP L
+VI CICLO
+XP-0251      FINANZAS                                             4    -   -   -            XP-0245 o MA-0230                   ---         3
+XP-0254      MERCADEO ESTRATÉGICO                                 3    -   -   -            XP-0250 o XP-4016                   ---         3
+XP-0255      NORMAS DE ORIGEN                                     3    -   -   -            XP-0253 o XP-0501                   ---         3
+XP-0602      REGÍMENES ADUANEROS Y SUS PROCEDIMIENTOS II          3    -   -   -                 XP-0502                        ---         3
+XP-0603      VALORACIÓN ADUANERA DE MERCANCÍAS II                 3    -   -   -                 XP-0503                        ---         3
+OPT-         OPTATIVO/2                                           -    -   -   -                    ---                         ---         3
+                                                                                                                               SUBTOTAL     18
+CUARTO AÑO
+VII CICLO
+RP-          REPERTORIO                                           -    -   -   -                    ---                         ---         3
+XP-0256      MODELOS DE NEGOCIOS DE LA ECONOMÍA DIGITAL           3    -   -   -            XP-0801 o XP-0254                   ---         3
+XP-0257      INTRODUCCIÓN A LA LOGÍSTICA                          3    -   -   -             XP-0602, XP-0603                   ---         3
+XP-0258      ACCESO A MERCADOS EN LOS TRATADOS COMERCIALES        3    -   -   -            XP-0601 o XP-0255,                  ---         3
+             DE COSTA RICA                                                                  XP-0401 o XP-0249
+XP-0259      CONTROL Y FISCALIZACIÓN ADUANERA                     3    -   -   -                 XP-0602                        ---         3
+XP-0260      TALLER PRÁCTICO                                      3    -   -   -   XP-0501 o XP-0253, XP-0255 o XP-0601,        ---         2
+                                                                                    XP-0602, XP-0603, XP-0252 o XP-0105
+                                                                                                                               SUBTOTAL     17
+VIII CICLO
+XP-0261      FACILITACIÓN DEL COMERCIO                            3    -   -   -            XP-0259 o XP-0803                   ---         3
+XP-0262      ADMINISTRACIÓN DE TRATADOS Y SUS MEJORES PRÁCTICAS   3    -   -   -            XP-0258 o XP-0560                   ---         3
+XP-0263      COMERCIO DE SERVICIOS I                              3    -   -   -            XP-0258 o XP-0560                   ---         3
+XP-0264      FORMULACIÓN DE PROYECTOS                             3    -   -   -            XP-0256 o XP-0804                   ---         3
+XP-0265      TALLER DE TICS CON ÉNFASIS EN PEDIMENTACIÓN          3    -   -   -            XP-0260 o XP-0702                   ---         2
+OPT-         OPTATIVO/2                                           -    -   -   -                    ---                         ---         3
+                                                                                                                               SUBTOTAL     17
+                                                                                                                  TOTAL BACHILLERATO       135
+Según Informe Curricular CEA-46-2024
+                      LICENCIATURA EN ADMINISTRACIÓN ADUANERA Y COMERCIO EXTERIOR CON ÉNFASIS EN COMERCIO INTERNACIONAL
+NIVEL Y                                NOMBRE DEL CURSO                     HORAS                   REQUISITOS                  CORREQUISITOS CRÉDITOS
+SIGLA                                                                   T   P    TP L
+QUINTO AÑO
+IX CICLO
+XP-0266      COMERCIO DE MERCANCÍAS                                     3    -   -   -            XP-0263 o XP-0563                  ---            3
+XP-0267      COMERCIO DE SERVICIOS II                                   3    -   -   -            XP-0263 o XP-0563                  ---            3
+XP-0268      SOLUCIÓN DE CONTROVERSIAS                                  3    -   -   -            XP-0262 o XP-0574                  ---            3
+XP-0269      ATRACCIÓN DE INVERSIÓN EXTRANJERA DIRECTA                  3    -   -   -            XP-0263 o XP-0563                  ---            3
+XP-0312      SEMINARIO DE INVESTIGACIÓN                                 3    -   -   -                   ---                         ---            3
+                                                                                                                                    SUBTOTAL       15
+
+
+X CICLO
+XP-0270      DEFENSA COMERCIAL                                          3    -   -   -            XP-0266 o XP-0562                  ---            3
+XP-0271      PROPIEDAD INTELECTUAL                                      3    -   -   -            XP-0267, XP-0269                   ---            3
+XP-0272      REGLAS DE ORIGEN Y SUS PROCEDIMIENTOS                      3    -   -   -   XP-0255 o XP-0601, XP-0266 o XP-0562        ---            3
+XP-0273      NEGOCIACIÓN DE TRATADOS Y TÉCNICAS DE NEGOCIACIÓN          3    -   -   -       XP-0266 o XP-0562, XP-0267              ---            3
+                                                                                                  XP-0268, XP-0269
+OPT-         OPTATIVO/2                                                 -    -   -   -                   ---                         ---            3
+                                                                                                                                    SUBTOTAL       15
+                                                                                                                          TOTAL LICENCIATURA       30
+                                                                                                                                           TOTAL   165
+Según Informe Curricular CEA-46-2024
+             LICENCIATURA EN ADMINISTRACIÓN ADUANERA Y COMERCIO EXTERIOR CON ÉNFASIS EN LOGÍSTICA Y CADENA DE ABASTECIMIENTO
+NIVEL Y                                NOMBRE DEL CURSO                   HORAS                  REQUISITOS                 CORREQUISITOS CRÉDITOS
+SIGLA                                                                 T   P    TP L
+QUINTO AÑO
+IX CICLO
+XP-0274      GESTIÓN DE LA CADENA DE ABASTECIMIENTO                   3    -   -   -           XP-0257 o XP-0701                   ---            3
+XP-0275      COMPRAVENTA INTERNACIONAL Y MEDIOS DE PAGOS              3    -   -   -           XP-0257 o XP-0701                   ---            3
+             INTERNACIONALES
+XP-0276      SISTEMA DE REDES DE TRANSPORTE                           3    -   -   -           XP-0257 o XP-0701                   ---            3
+XP-0277      GESTIÓN DE LA CALIDAD EN LOGÍSTICA                       3    -   -   -           XP-0257 o XP-0701                   ---            3
+XP-0312      SEMINARIO DE INVESTIGACIÓN                               3    -   -   -                  ---                          ---            3
+                                                                                                                                  SUBTOTAL       15
+X CICLO
+XP-0278      GESTIÓN ESTRATÉGICA DE COMPRAS                           3    -   -   -                XP-0274                        ---            3
+XP-0279      TECNOLOGÍAS DE LA INFORMACÓN EN LOGÍSTICA                3    -   -   -                XP-0274                        ---            3
+XP-0280      GESTIÓN DE INVENTARIOS Y ALMACENES                       3    -   -   -   XP-0274, XP-0275, XP-0276, XP-0277          ---            3
+XP-0281      TALLER DE LOGÍSTICA Y CADENA DE ABASTECIMIENTO           3    -   -   -   XP-0274, XP-0275, XP-0276, XP-0277   XP-0278, XP-0279,     3
+                                                                                                                                XP-0280
+OPT-         OPTATIVO/2                                               -    -   -   -                  ---                          ---            3
+                                                                                                                                  SUBTOTAL       15
+                                                                                                                     TOTAL LICENCIATURA          30
+                                                                                                                                         TOTAL   165
+Según Informe Curricular CEA-46-2024
+                                       LICENCIATURA EN ADMINISTRACIÓN ADUANERA Y COMERCIO EXTERIOR CON ÉNFASIS EN
+                                                    GESTIÓN DE ORGANIZACIONES DE COMERCIO EXTERIOR
+NIVEL Y                                 NOMBRE DEL CURSO                          HORAS                    REQUISITOS                  CORREQUISITOS CRÉDITOS
+SIGLA                                                                         T   P    TP L
+QUINTO AÑO
+IX CICLO
+XP-0282      MERCADEO INTERNACIONAL                                           3    -   -   -   XP-0251 o XP-3005, XP-0254 o XP-0801,        ---            3
+                                                                                                        XP-0264 o XP-0901
+XP-0283      GESTIÓN Y PROCESOS DE LAS ORGANIZACIONES                         3    -   -   -   XP-0251 o XP-3005, XP-0254 o XP-0801,        ---            3
+                                                                                                        XP-0264 o XP-0901
+XP-0284      EVALUACIÓN DE PROYECTOS                                          3    -   -   -   XP-0251 o XP-3005, XP-0254 o XP-0801,        ---            3
+                                                                                                        XP-0264 o XP-0901
+XP-0285      GESTIÓN DE LA FINANCIACIÓN DE OPERACIONES                        3    -   -   -   XP-0251 o XP-3005, XP-0254 o XP-0801,        ---            3
+             INTERNACIONALES                                                                            XP-0264 o XP-0901
+XP-0312      SEMINARIO DE INVESTIGACIÓN                                       3    -   -   -                    ---                         ---            3
+                                                                                                                                           SUBTOTAL       15
+X CICLO
+XP-0286      GESTIÓN DE RIESGOS OPERATIVOS Y FINANCIEROS                      3    -   -   -                 XP-0285                        ---            3
+XP-0287      GESTIÓN DE SERVICIOS                                             3    -   -   -                 XP-0282                        ---            3
+XP-0288      ETIQUETA, PROTOCOLO Y CULTURA DE                                 3    -   -   -                 XP-0285                        ---            3
+             NEGOCIOS INTERNACIONALES
+XP-0289      LIDERAZGO Y GESTIÓN EFECTIVA DE EQUIPOS                          3    -   -   -                 XP-0283                        ---            3
+OPT-         OPTATIVO/2                                                       -    -   -   -                    ---                         ---            3
+                                                                                                                                           SUBTOTAL       15
+                                                                                                                               TOTAL LICENCIATURA         30
+                                                                                                                                                  TOTAL   165
+Según Informe Curricular CEA-46-2024
+                          LICENCIATURA EN ADMINISTRACIÓN ADUANERA Y COMERCIO EXTERIOR CON ÉNFASIS EN GESTIÓN ADUANERA
+NIVEL Y                                NOMBRE DEL CURSO                      HORAS                    REQUISITOS                  CORREQUISITOS CRÉDITOS
+SIGLA                                                                    T   P    TP L
+QUINTO AÑO
+IX CICLO
+XP-0313      ANÁLISIS DE DATOS PARA COMERCIO INTERNACIONAL               3    -   -   -       XP-0201, XP-0258 o XP-0560,              ---          3
+              Y ADUANAS                                                                            MA-1021 o MA-0230
+XP-0314      SISTEMAS DE INFORMACIÓN ADUANERA                            3    -   -   -            XP-0265 o XP-0104                   ---          3
+XP-0315      REGÍMENES ADUANEROS Y SUS PROCEDIMIENTOS                    3    -   -   -                 XP-0602                        ---          3
+             ESPECIALIZADOS
+XP-0316      DERECHO ADUANERO ESPECIALIZADO                              3    -   -   -   XP-0265 o XP-0104, XP-0527, XP-0602          ---          3
+XP-0312      SEMINARIO DE INVESTIGACIÓN                                  3    -   -   -                    ---                         ---          3
+                                                                                                                                      SUBTOTAL     15
+X CICLO
+XP-0317      GESTIÓN E INTELIGENCIA DEL RIESGO ADUANERO                  3    -   -   -   XP-0259 o XP-0803, XP-0313, XP-0314          ---          3
+XP-0318      POLÍTICA ADUANERA Y GESTIÓN TRIBUTARIA                      3    -   -   -   XP-0260 o XP-0702, XP-0259 o XP-0803,        ---          3
+                                                                                           XP-0313, XP-0314, XP-0315, XP-0316
+XP-0319      GERENCIA ADUANERA                                           3    -   -   -   XP-0264 o XP-0901, XP-0259 o XP-0803         ---          3
+                                                                                                        XP-0314
+XP-0272      REGLAS DE ORIGEN Y SUS PROCEDIMIENTOS                       3    -   -   -   XP-0255 o XP-0601, XP-0266 o XP-0562         ---          3
+OPT-         OPTATIVO/2                                                  -    -   -   -                    ---                         ---           3
+                                                                                                                                      SUBTOTAL      15
+                                                                                                                            TOTAL LICENCIATURA      30
+                                                                                                                                           TOTAL   165
+Según Informe Curricular CEA-46-2024
+                                                                                   LISTA DE CURSOS OPTATIVOS
+    SIGLA                                     NOMBRE DEL CURSO                                               HORAS                        REQUISITOS                    CORREQUISITOS CRÉDITOS
+                                                                                                         T    P   TP L
+XP-0290        CONSTRUCCIÓN E INTERPRETACIÓN DE INDICADORES DE GESTIÓN                                   3    -    -    -                    XP-0250                         ---         3
+XP-0291        ECONOMÍA DE LA INNOVACIÓN                                                                 3    -    -    -                    XP-0250                         ---         3
+XP-0292        ECONOMÍA POLÍTICA INTERNACIONAL                                                           3    -    -    -                    XP-0249                         ---         3
+XP-0293        ELEMENTOS ESENCIALES EN LOS NEGOCIOS INTERNACIONALES                                      3    -    -    -                    XP-0254                         ---         3
+XP-0294        EMPRENDIMIENTO SOCIAL                                                                     3    -    -    -                    XP-0254                         ---         3
+XP-0295        ESTUDIOS DE MERCADO                                                                       3    -    -    -                    XP-0254                         ---         3
+XP-0296        FINANCIAMIENTO Y BANCA INTERNACIONAL                                                      3    -    -    -                    XP-0251                         ---         3
+XP-0297        HACIENDO NEGOCIOS CON ASIA                                                                3    -    -    -                    XP-0254                         ---         3
+XP-0298        HACIENDO NEGOCIOS CON ORIENTE MEDIO Y ÁFRICA                                              3    -    -    -                    XP-0254                         ---         3
+XP-0299        HACIENDO NEGOCIOS CON LA UNIÓN EUROPEA                                                    3    -    -    -                    XP-0254                         ---         3
+XP-0303        INTERPRETANDO DATOS ESTADÍSTICOS                                                          3    -    -    -                    XP-0243                         ---         3
+XP-0304        LOGÍSTICA INVERSA Y MEDIO AMBIENTE                                                        3    -    -    -              XP-0257 o XP-0701                     ---         3
+XP-0305        MANEJO DE BASES DE DATOS                                                                  3    -    -    -                       ---                          ---         3
+XP-0306        OMA - TENDENCIAS Y ACTUALIDAD                                                             3    -    -    -                    XP-0259                         ---         3
+XP-0307        OMC - TENDENCIAS Y ACTUALIDAD                                                             3    -    -    -                    XP-0249                         ---         3
+XP-0308        PASANTÍA PROFESIONAL                                                                      3    -    -    -                    XP-0260                         ---         3
+XP-0309        PRESENTANDO LICITACIONES INTERNACIONALES                                                  3    -    -    -                       ---                          ---         3
+XP-0310        TÉCNICAS DE BÚSQUEDA DE EMPLEO Y DE SELECCIÓN                                             3    -    -    -                       ---                          ---         3
+                   DE PERSONAL
+XP-0311        TOMA DE DECISIONES                                                                        3    -    -    -                    XP-0250                         ---         3
+LM-0349        INGLÉS PARA ADMINISTRACIÓN Y COMERCIO II                                                  3    -    -   1                     LM-0348                         ---         3
+Según Informe Curricular CEA-46-2024
+Notas:
+1/ Si el o la estudiante obtiene en la prueba DiMa una nota igual o superior a 7.0 se le dará por aprobado el curso MA-0001, según lo dispuesto en la resolución
+VD-R-9190-2015. La población estudiantil debe hacer 150 horas de Trabajo Comunal Universitario para optar por el grado de Diplomado y completar 300 horas para
+el Bachillerato.
+2/ La persona estudiante puede aprobar cualquier curso de idioma “complementario” que ofrezca la Escuela de Lenguas Modernas, de creditaje mayor o igual a 3 créditos
+y será convalidado por un curso del bloque optativo de carrera.
+Conforme al Estatuto Orgánico y al Reglamento de Trabajos Finales de Graduación, la Universidad de Costa Rica establece como requisito de Graduación para obtener
+el grado de licenciaturas, las siguientes opciones de Trabajo Final de Graduación: Tesis de Graduación, Seminario de Graduación, Proyecto de Graduación y
+Práctica Dirigida de Graduación. Corresponde a la Unidad Académica indicar cuál o cuáles de estas opciones podrá matricular su población estudiantil.
+Para hacer la presentación pública (defensa) del trabajo final de graduación, el estudiante deberá haber concluido satisfactoriamente, sin excepción, todos los requisitos de
+su plan de estudios. Si la defensa es exitosa, en el acto se declarará que el postulante es acreedor del grado de licenciado en el área respectiva, quedando pendiente
+únicamente la obligación de asistir a un Acto Público de Graduación, para ser juramentado y recibir el diploma correspondiente.
+Actualizado 27/09/2024 por MVG
+\\Sistemas-2\Estructuras\Sede Universitaria Rodrigo Facio\Area de Ciencias Sociales\Facultad de Ciencias Económicas\Escuela de Administración Publica\PlanesAModificar\
+Adm Aduanera B-L.xls
+

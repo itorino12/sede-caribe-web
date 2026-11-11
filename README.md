@@ -89,6 +89,8 @@ La fila 1 son los encabezados (se pueden escribir con tildes y mayúsculas). Las
 - `req` lista las siglas de la malla que son requisito; con eso se dibuja la ruta. `req_texto` es el requisito oficial tal como lo escribe el plan, con las equivalencias del plan anterior.
 - `programa` apunta al PDF vigente en `src/assets/programas/<id>/` (`archivo`, `ciclo`, `kb`). Al subir un programa nuevo, se reemplaza el PDF y se actualizan `ciclo` y `kb`.
 - La malla en PDF del plan vigente va en `src/assets/docs/`.
+- Las mallas de las demás carreras se generan desde el texto del plan oficial: `python3 herramientas/mallas_planes.py [id]` (configuración por carrera en `herramientas/mallas_config.py`; textos en `herramientas/fuentes/planes/`). Planes en formato «estructura curricular» los lee `plan_texto.py`; los fascículos del SAE (Inglés), `plan_sae.py`; la de Ingeniería Química se transcribió a mano en `mallas_config.py`. Si el plan cambia, se actualiza el texto y se vuelve a correr (solo toca la clave `malla`). Sin malla: Comunicación Colectiva (falta el plan) y la maestría.
+- Los énfasis se muestran juntos en el mismo ciclo (Administración Aduanera IX–X; Marina Civil IV–XI); `creditos_ciclo` de la configuración pone los créditos que cursa cada estudiante.
 - `malla.js` dibuja la ruta. Sin JavaScript queda la lista por ciclo con requisitos y programas.
 
 En todas: buscador interno (tecla `/` o Ctrl+K), panel de accesibilidad (texto, tema claro u oscuro, alto contraste, subrayado, animaciones), RSS de noticias, mapa del sitio y datos estructurados para buscadores.

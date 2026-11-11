@@ -1,0 +1,241 @@
+    Licenciatura
+
+
+
+
+Ingeniería Marítima con
+énfasis en Náutica y
+Transporte Marítimo y
+Máquinas Marinas
+             07/2025
+            CEA-16-2025
+                                               ESTRUCTURA CURRICULAR DEL PLAN DE ESTUDIOS DE LA LICENCIATURA
+                          EN INGENIERÍA MARÍTIMA CON ÉNFASIS EN NÁUTICA Y TRANSPORTE MARÍTIMO Y EN MÁQUINAS MARINAS, CÓDIGO 600004
+NIVEL Y     NOMBRE DEL CURSO                                           HORAS                    REQUISITOS                  CORREQUISITOS        CRÉDITOS
+SIGLA                                                             T    P   L   TP
+BLOQUE COMÚN
+PRIMER AÑO
+I CICLO
+EG-I        CURSO INTEGRADO DE HUMANIDADES I                       -   -   -   -                     ---                            ---              6
+EG-         CURSO DE ARTE                                          -   -   -   -                     ---                            ---              2
+MA-0001     PRECÁLCULO 1/                                         5    -   -   -                     ---                            ---              0
+MA-1001     CÁLCULO I                                             5    -   -   -                  MA-0001                           ---              3
+CN-0005     INFORMÁTICA                                           4    -   -   -                     ---                            ---              4
+FS-0127     INTRODUCCIÓN A LA FÍSICA                              4    -   -   -                     ---                            ---              3
+                                                                                                                                SUBTOTAL             18
+
+
+II CICLO
+EG-II       CURSO INTEGRADO DE HUMANIDADES II                      -   -   -   -                    EG-I                            ---              6
+EF-         ACTIVIDAD DEPORTIVA                                    -   -   -   -                     ---                            ---              0
+MA-1002     CÁLCULO II                                            5    -   -   -             MA-1001 o MA-1101                      ---              4
+FS-0210     FÍSICA GENERAL I                                      4    -   -    -   MA-1001 o MA-1210 o MA-0250 o MA-1101         FS-0211            3
+FS-0211     LABORATORIO DE FÍSICA GENERAL I                        -   -   3    -   MA-1001 o MA-1210 o MA-0250 o MA-1101    FS-0210 o FS-0227       1
+CN-0002     EXPRESIÓN GRÁFICA                                     4    -   -   -                     ---                            ---              4
+                                                                                                                                SUBTOTAL             18
+
+
+SEGUNDO AÑO
+III CICLO
+QU-0100     QUÍMICA GENERAL I                                     4    -   -   -                     ---                         QU-0101              3
+QU-0101     LABORATORIO DE QUÍMICA GENERAL I                       -   -   3   -                     ---                         QU-0100              1
+MA-1003     CÁLCULO III                                           5    -   -   -                  MA-1002                    MA-1004 o MA-0307        4
+FS-0310     FÍSICA GENERAL II                                     4    -   -   -         FS-0210, FS-0211, MA-1002 o              FS-0311             3
+                                                                                             MA-2210 o MA-0350
+MA-1004     ÁLGEBRA LINEAL                                        5    -   -   -                     ---                            ---               3
+FS-0311     LABORATORIO DE FÍSICA GENERAL II                       -   -   3   -         FS-0210 o FS-0227, FS-0211,         FS-0310 o FS-0327        1
+                                                                                        MA-1002 o MA-2210 o MA-0350
+CN-0100     FUNDAMENTOS TEÓRICOS DEL BUQUE                         -   -   -   4                     ---                            ---              2
+                                                                                                                                SUBTOTAL             17
+Según Informe Curricular CEA-16-2025
+NIVEL Y      NOMBRE DEL CURSO                                HORAS                   REQUISITOS                 CORREQUISITOS   CRÉDITOS
+SIGLA                                                    T   P   L   TP
+IV CICLO
+CN-0102      CONSTRUCCIÓN NAVAL Y TEORÍA DEL BUQUE I     2   -   -   2             MA-1001, CN-0100                  ---           2
+MA-1005      ECUACIONES DIFERENCIALES                    5   -   -   -       MA-1002 o MA-1023 o MA-0292             ---           4
+                                                                             o MA-0232, MA-1004 o MA-0294
+                                                                                       o MA-0232
+CN-0103      SISTEMAS DEL BUQUE                          2   -   -   2                  CN-0100                      ---           2
+II-0305      PROBABILIDAD Y ESTADÍSTICA I                3   -   -   -                  MA-1002                      ---           3
+                                                                                                                  SUBTOTAL         11
+
+
+V CICLO (INTERCICLO)
+CN-0110      INGLÉS MARÍTIMO I                           3   -   3   -                    ---                        ---           4
+                                                                                                                  SUBTOTAL         4
+
+
+TERCER AÑO
+VI CICLO
+CN-0111      INGLÉS MARÍTIMO II                          3   -   3   -             CN-0110 o CN-0019                 ---           4
+CN-0017      ELECTROTÉCNIA Y TECNOLOGÍA ELECTRÓNICA I    4   -   -   2             FS-0310, MA-1003                  ---           4
+CN-0105      BUQUES PETROLEROS Y QUIMIQUEROS (OMI        -   -   3   3    CN-0103 o CN-0013, QU-0100, QU-0101        ---           3
+             1.01, 1.02, 1.03)
+                                                                                                                  SUBTOTAL         11
+
+
+VII CICLO
+CN-0016      SEGURIDAD MARÍTIMA                          4   -   -   2             CN-0100 o CN-0009                 ---           3
+CN-0108      BUQUES GASEROS (OMI 1.04 y 1.05)            -   -   3   3             CN-0105 o CN-0014                 ---           3
+CN-0112      INGLÉS MARÍTIMO III                         3   -   3   -                  CN-0111                      ---           3
+                                                                                                                  SUBTOTAL         9
+CUARTO AÑO
+VIII CICLO
+CN-0113      INGLÉS MARÍTIMO IV                          3   -   3   -                 CN-0112                       ---           3
+                                                                                                                  SUBTOTAL         3
+IX CICLO
+CN-0071      CURSO BÁSICO DE EMBARQUE (OMI 1.13, 1.19,   -   -   -   5       (CN-0019, CN-0115 o CN-0030)            ---           2
+             1.20, 1.21 y 3.26)                                                  o (CN-0128 o CN-0061)
+                                                                                                                  SUBTOTAL         2
+Según Informe Curricular CEA-16-2025
+NIVEL Y      NOMBRE DEL CURSO                                HORAS                                   REQUISITOS                 CORREQUISITOS   CRÉDITOS
+SIGLA                                                        T       P       L       TP
+
+
+ÉNFASIS EN NÁUTICA Y TRANSPORTE MARÍTIMO
+
+
+IV CICLO
+CN-0101      NAVEGACIÓN COSTERA                              4           -       -    2            MA-1001, CN-0100                  ---           3
+CN-0104      ESTIBA Y MANEJO DE LA CARGA                     2           -       -    2            MA-1001, CN-0100                  ---           2
+SR-I         SEMINARIO DE REALIDAD NACIONAL I                    -       -       -    -                  EG-II                       ---           2
+                                                                                                                                  SUBTOTAL         7
+
+
+TERCER AÑO
+VI CICLO
+CN-0106      LIDERAZGO Y TRABAJO EN EQUIPO (OMI 1.39)        2           -       -    2                   ---                        ---           2
+CN-0107      NAVEGACIÓN ASTRONÓMICA                          3                        3       CN-0101 o CN-0010, MA-1002             ---           3
+SR-II        SEMINARIO DE REALIDAD NACIONAL II                   -       -       -    -                  SR-I                        ---           2
+                                                                                                                                  SUBTOTAL         7
+VII CICLO
+CN-0023      CONSTRUCCIÓN NAVAL Y TEORÍA DEL BUQUE II        4           -       -    2            CN-0012, CN-0014                  ---           4
+CN-0109      LEGISLACIÓN INTERNACIONAL MARÍTIMA              3           -       -    2                   ---                        ---           3
+                                                                                                                                  SUBTOTAL         7
+CUARTO AÑO
+VIII CICLO
+CN-0116      COMUNICACIONES MARÍTIMAS                            -       -       3    3   CN-0016, CN-0017, CN-0107 o CN-0020        ---           3
+CN-0117      MANIOBRAS DEL BUQUE I                               -       -       3    2                CN-0100                       ---           3
+CN-0115      NAVEGACIÓN ELECTRÓNICA (OMI 1.08, 1.22, 1.27)       -       -       3    3           CN-0107 o CN-0020                  ---           4
+CN-0114      CÓDIGOS INTERNACIONALES DEL SOLAS               2                        2           CN-0109 o CN-0025                  ---           2
+RP-          REPERTORIO                                          -       -       -    -                   ---                        ---           3
+                                                                                                                                  SUBTOTAL         15
+Según Informe Curricular CEA-16-2025
+ NIVEL Y                        NOMBRE DEL CURSO         HORAS                    REQUISITOS                  CORREQUISITOS   CRÉDITOS
+  SIGLA                                              T   P    L   TP
+IX CICLO
+CN-0119     REGLAMENTOS Y SEÑALES                    -   -    3   3        CN-0107 o CN-0020, CN-0117                ---         3
+                                                                                   o CN-0024
+CN-0120     MANIOBRAS DEL BUQUE II                   -   -    3   2            CN-0117 o CN-0024                     ---         3
+CN-0028     METEOROLOGÍA                             4   -    2   -             MA-1005, FS-0310                     ---         3
+CN-0118     MÉTODOS Y TÉCNICAS DE INVESTIGACIÓN      3   -    -   2                    ---                           ---         3
+OPT-        BLOQUE OPTATIVO                          -   -    -   -                    ---                           ---         2
+                                                                                                                 SUBTOTAL        14
+
+
+QUINTO AÑO
+X CICLO
+CN-0124     PRÁCTICAS EXTERNAS I                     -   30   -   12   CN-0026, CN-0027, CN-0028, CN-0111,           ---         16
+                                                                                    CN-0071
+                                                                                                                 SUBTOTAL        16
+XI CICLO
+CN-0125     PRÁCTICAS EXTERNAS II                    -   30   -   12           CN-0124 o CN-0032                     ---         16
+CN-0126     CURSO AVANZADO DE EMBARQUE (OMI 1.15,                 5                 CN-0071                          ---         2
+            1.23, 2.03)
+                                                                                                             SUBTOTAL            18
+                                                                                                             TOTAL              177
+
+
+ÉNFASIS EN MÁQUINAS MARINAS
+
+
+IV CICLO
+CN-0127     CIENCIA Y TECNOLOGÍA DE LOS MATERIALES   2   -    -   2             QU-0100, QU-0101                     ---         3
+CN-0058     TERMODINÁMICA Y MECÁNICA DE FLUIDOS      3   -    -   3    FS-0210, FS-0211, QU-0100, QU-0101            ---         4
+                                                                                                             SUBTOTAL            7
+
+
+VI CICLO
+CN-0059     MECÁNICA Y RESISTENCIA DE MATERIALES     4   -    -   2    FS-0210, FS-0211, CN-0127 o CN-0057           ---         4
+SR-I        SEMINARIO DE REALIDAD NACIONAL I         -   -    -   -                   EG-II                          ---         2
+                                                                                                             SUBTOTAL            6
+
+Según Informe Curricular CEA-16-2025
+ NIVEL Y                        NOMBRE DEL CURSO              HORAS                   REQUISITOS                  CORREQUISITOS   CRÉDITOS
+  SIGLA                                                   T   P   L   TP
+VII CICLO
+SR-II        SEMINARIO DE REALIDAD NACIONAL II            -   -   -   -                   SR-I                          ---          2
+CN-0106      LIDERAZGO Y TRABAJO EN EQUIPO (OMI 1.39)     2   -   -   2                    ---                          ---          2
+CN-0060      TERMODINÁMICA APLICADA Y TURBOMÁQUINAS       3   -   -   3         CN-0058, FS-0310, FS-0311               ---          3
+             TÉRMICAS
+                                                                                                                 SUBTOTAL            7
+
+
+CUARTO AÑO
+VIII CICLO
+RP-          REPERTORIO                                   -   -   -   -                    ---                          ---          3
+CN-0109      LEGISLACIÓN INTERNACIONAL MARÍTIMA           3   -   -   2                    ---                          ---          3
+CN-0128      MOTORES DE COMBUSTIÓN INTERNA                4   -   -   4                 CN-0060                         ---          5
+CN-0062      ELECTROTECNIA Y TECNOLOGÍA ELECTRÓNICA II    4   -   -   2                 CN-0017                         ---          4
+                                                                                                                                     15
+IX CICLO
+CN-0068      OPERACIÓN DE LOS SISTEMAS DE PROPULSIÓN I    -   -   -   6            CN-0128 o CN-0061                    ---          4
+CN-0063      SISTEMAS AUXILIARES DE BUQUE                 4   -   -   2    CN-0018, CN-0128 o CN-0061, CN-0062          ---          4
+CN-0064      GENERADORES DE VAPOR                         4   -   -   2                 CN-0060                         ---          3
+CN-0129      MANTENIMIENTO Y OFICINA TÉCNICA              2   -   -   2       CN-0108 o CN-0018, CN-0128 o              ---          2
+                                                                                    CN-0061, CN-0062
+CN-0066      TECNOLOGÍA MECÁNICA Y MONTAJE                4   -   -   2        CN-0108 o CN-0018, CN-0059               ---          3
+                                                                                                                     SUBTOTAL        16
+
+
+QUINTO AÑO
+X CICLO
+CN-0130      PRÁCTICAS EN LAS INSTALACIONES               -   6   -   2        CN-0063, CN-0064, CN-0129                ---          4
+             ENERGÉTICAS                                                               o CN-0065
+CN-0069      OPERACIÓN DE LOS SISTEMAS DE PROPULSIÓN II   4   -   -   2                 CN-0068                         ---          3
+CN-0118      MÉTODOS Y TÉCNICAS DE INVESTIGACIÓN          3   -   -   2                    ---                          ---          3
+OPT-         BLOQUE OPTATIVO                              -   -   -   -                    ---                          ---          2
+CN-0046      SISTEMAS DE REGULACIÓN Y CONTROL             4   -   -   2            CN-0128 o CN-0061                    ---          4
+                                                                                                                     SUBTOTAL        16
+Según Informe Curricular CEA-16-2025
+  NIVEL Y                          NOMBRE DEL CURSO                                    HORAS                             REQUISITOS                         CORREQUISITOS   CRÉDITOS
+   SIGLA                                                                          T    P    L    TP
+XI CICLO
+CN-0131      PRÁCTICAS EXTERNAS                                                    -   30   -    12                  CN-0130 o CN-0067                             ---         14
+CN-0126      CURSO AVANZADO DE EMBARQUE (OMI 1.15,                                               5                         CN-0071                                 ---         2
+              1.23, 2.03)
+                                                                                                                                                           SUBTOTAL            16
+                                                                                                                                                           TOTAL              176
+
+
+
+
+                                                                                LISTA DE CURSOS OPTATIVOS
+
+
+SIGLA                                                                                  HORAS
+                                   NOMBRE DEL CURSO                                                                      REQUISITOS                         CORREQUISITOS   CRÉDITOS
+                                                                                   T   P    L    TP
+CN-0121      TÉCNICAS GERENCIALES                                                  2   -    -    2                             ---                                 ---         2
+CN-0122      FORMULACIÓN Y EVALUACIÓN                                              2   -    -    2                             ---                                 ---         2
+             DE PROYECTOS PARA MARINA CIVIL
+CN-0123      EVALUACIÓN DE RIESGOS                                                 2   -    -    2                             ---                                 ---         2
+
+
+Para optar por el grado de Licenciatura se deben aprobar 177 créditos en el ënfasis de Náutica y Transporte Marítimo y 176 en el Énfasis
+de Máquinas Marinas y realizar 300 horas de Trabajo Comunal Universitario.
+Conforme al Estatuto Orgánico y al Reglamento de Trabajos Finales de Graduación, la Universidad de Costa Rica establece como requisito de graduación
+para obtener el grado de licenciatura, las siguientes opciones de Trabajo Final de Graduación: Tesis de Graduación, Seminario de Graduación, Proyecto de
+Graduación y Práctica Dirigida de Graduación. Corresponde a la Unidad Académica indicar cuál o cuáles de estas opciones podrá matricular su población
+estudiantil. Para hacer la presentación pública (defensa) del trabajo final de graduación, el estudiantedeberá haber concluido satisfactoriamente,
+sin excepción, todos los requisitos de su plan de estudios. Si la defensa es exitosa, en el acto se declarará que el postulante es acreedor del grado de
+licenciado en el área respectiva, quedando pendiente unicamente la obligación de asistir al Acto Público de Graduación, para ser juramentado y recibir
+el diploma correspondiente. Circular VD-14-2019
+1/Si bien el CONARE aprobó mediante dictamen que este curso se incorpore en la malla curricular como una nota, para efectos de viabilizar su gestión
+en el sistema de matrícula, se procede a consignarlo en el primer nivel, lo cual no implica que sea matriculado de forma simultánea al curso MA-1001 CÁLCULO.
+Así, si la persona estudiante obtiene una nota inferior a 7.0 en la prueba DiMa deberá cursar MA-0001 PRECÁLCULO antes que MA-1001 CÁLCULO I, si la nota
+es igual o superior a 7.0 podrá matricular MA-1001 CÁLCULO I, según lo dispuesto en la resolución VD-R-9190-2015.
+Según Informe Curricular CEA-16-2025
+Actualizado el 22/04/ 2025 por MTGT
+En : \Estructuras\SedelCaribe\PlanesAmodificar.Marina Civil.L.xls
+
