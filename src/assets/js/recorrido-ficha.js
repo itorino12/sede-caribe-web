@@ -99,6 +99,10 @@ export function rellenarFicha(l) {
     return nodos;
   }));
   carruselFicha.cargar(l.fotos || [], `Fotos de ${l.nombre}`);
+  const vid = ficha.querySelector(".mapa3d__ficha-video");
+  vid.pause(); vid.hidden = !l.video;
+  if (l.video) { vid.poster = raiz.dataset.raiz + l.video.poster; vid.src = raiz.dataset.raiz + l.video.src; vid.setAttribute("aria-label", l.video.descripcion); }
+  else vid.removeAttribute("src");
   const enlace = ficha.querySelector(".mapa3d__ficha-enlace");
   enlace.hidden = !l.enlace;
   if (l.enlace) enlace.href = raiz.dataset.raiz + l.enlace;

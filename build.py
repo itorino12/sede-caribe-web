@@ -156,10 +156,28 @@ def lugares_campus():
                 f = imagen(nombre)
                 if f:
                     fotos.append({"s": f[640], "m": f[1280], "g": f[1920], "alt": alts[i] if i < len(alts) and alts[i] else f"{l['nombre']}, foto {i + 1}"})
-            salida.append({**l, "id": int(l["id"]), "zona": int(l.get("zona") or 0), "fotos": fotos})
+            video = (medios_de(f"lugar-{int(l['id'])}") or {}).get("video")  # el afiche y demás van solo en la página
+            salida.append({**l, "id": int(l["id"]), "zona": int(l.get("zona") or 0), "fotos": fotos, **({"video": video} if video else {})})
         except (KeyError, ValueError):
             continue
     return sorted(salida, key=lambda l: l["id"])
+
+
+def medios_de(clave):
+    """Video y afiche de un lugar o proyecto (src/data/videos.json). El video va en src/assets/video/ y se copia tal cual;
+    la portada y el afiche pasan por imagen(). Devuelve None si la clave no tiene medios."""
+    m = json.loads((SRC / "data" / "videos.json").read_text(encoding="utf-8")).get(clave)
+    if not m:
+        return None
+    salida = {}
+    if m.get("archivo") and (SRC / "assets" / "video" / m["archivo"]).exists():
+        poster = imagen(m.get("poster"))
+        salida["video"] = {"src": f"assets/video/{m['archivo']}", "poster": poster[1280] if poster else "", "descripcion": m.get("descripcion", "")}
+    if m.get("afiche"):
+        f = imagen(m["afiche"])
+        if f:
+            salida["afiche"] = {**f, "alt": m.get("afiche_alt", ""), "nota": m.get("afiche_nota", "")}
+    return salida or None
 
 
 def fotos_de(fila, carpeta):
@@ -333,7 +351,7 @@ def preparar(sitio, d):
         if p.get("modalidad") not in {m["id"] for m in MODALIDADES} or not p.get("id"):
             print(f"  ! proyecto sin modalidad válida: {p.get('nombre')!r}")
             continue
-        proyectos.append({**p, "html": md(leer_pagina(p.get("documento"))), "fotos": fotos_de(p, "proyectos")})
+        proyectos.append({**p, "html": md(leer_pagina(p.get("documento"))), "fotos": fotos_de(p, "proyectos"), "medios": medios_de(f"proyecto-{p['id']}")})
     modalidades = [{**m, "html": md(leer_pagina(f"modalidad-{m['id']}")), "proyectos": [p for p in proyectos if p["modalidad"] == m["id"]]}
                    for m in MODALIDADES]
     for m in modalidades:  # entrada del menú «Acción social»: la agrupación y, dentro, sus proyectos

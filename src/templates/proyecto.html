@@ -6,6 +6,22 @@
 <div class="ancho pagina pagina--con-ficha">
   <div>
     {{ galeria(p.fotos, raiz, "Fotos de " ~ p.nombre) }}
+    {% if p.medios %}
+    <div class="medios">
+      {% if p.medios.video %}{% set v = p.medios.video %}
+      <figure class="medios__item">
+        <video controls preload="none" playsinline poster="{{ raiz }}{{ v.poster }}" aria-label="{{ v.descripcion }}"><source src="{{ raiz }}{{ v.src }}" type="video/mp4">Su navegador no reproduce video. <a href="{{ raiz }}{{ v.src }}">Descargar el video</a>.</video>
+        <figcaption>{{ v.descripcion }}</figcaption>
+      </figure>
+      {% endif %}
+      {% if p.medios.afiche %}{% set a = p.medios.afiche %}
+      <figure class="medios__item">
+        <a href="{{ raiz }}{{ a[1920] }}"><img src="{{ raiz }}{{ a[1280] }}" srcset="{{ raiz }}{{ a[640] }} 640w, {{ raiz }}{{ a[1280] }} 1280w" sizes="(max-width: 720px) 90vw, 320px" width="{{ a.w }}" height="{{ a.h }}" alt="{{ a.alt }}" loading="lazy"></a>
+        <figcaption>Afiche del CIUB.{% if a.nota %} {{ a.nota }}{% endif %}</figcaption>
+      </figure>
+      {% endif %}
+    </div>
+    {% endif %}
     <div class="prosa">{{ p.html|safe }}</div>
   </div>
   <div class="columna-ficha">
