@@ -119,14 +119,14 @@
     input.addEventListener("input", function () {
       var q = normal(input.value.trim()), total = 0;
       $$("[data-grupo]", cont).forEach(function (g) {
-        var visibles = 0, coincideGrupo = normal($("h2", g).textContent).indexOf(q) > -1;
+        var visibles = 0, coincideGrupo = normal($("h2, h3", g).textContent).indexOf(q) > -1;
         $$("[data-fila]", g).forEach(function (f) {
           var ok = !q || coincideGrupo || normal(f.textContent).indexOf(q) > -1;
           f.hidden = !ok; if (ok) visibles++;
         });
         g.hidden = visibles === 0; total += visibles;
       });
-      est.textContent = q ? (total ? total + " coincidencias" : "Nada coincide. Llame a la central, 2511-7300, y le comunican.") : "";
+      est.textContent = q ? (total ? total + " coincidencias" : (input.dataset.vacio || "Nada coincide. Llame a la central, 2511-7300, y le comunican.")) : "";
     });
     // directorio.html?buscar=... llega ya filtrado (lo usan los enlaces del menú Administración)
     var pedido = new URLSearchParams(location.search).get("buscar");

@@ -77,6 +77,36 @@
       {% endfor %}
     </div>
 
+    {% if horarios %}
+    {% set dia_corto = {"lunes": "lun", "martes": "mar", "miércoles": "mié", "jueves": "jue", "viernes": "vie", "sábado": "sáb", "domingo": "dom"} %}
+    <h2 id="horario-aulas">Horario de aulas, {{ horarios.ciclo }}</h2>
+    <p>Para saber dónde se imparte un curso este ciclo. Las aulas llevan el mismo número que en el esquema de arriba.</p>
+    <details class="capac__tablas horario-aulas">
+      <summary>¿En qué aula es mi curso? ({{ horarios.cursos|length }} cursos)</summary>
+      <div class="filtro-texto">
+        <label for="filtro-horarios">Buscar un curso, una sigla o un aula</label>
+        <input id="filtro-horarios" type="search" autocomplete="off" data-filtrar-tabla="horarios" data-vacio="Nada coincide. Pruebe con la sigla (por ejemplo IF0004) o con parte del nombre." placeholder="Por ejemplo: IF0004, bases de datos, aula 7">
+        <p class="filtro-texto__estado" aria-live="polite" data-estado-filtro></p>
+      </div>
+      <div id="horarios">
+        {% for c in horarios.cursos %}
+        <section class="horario-curso" data-grupo>
+          <h3>{{ c.sigla }} <span>{{ c.nombre }}</span></h3>
+          <ul>
+            {% for g in c.grupos %}
+            <li data-fila><strong>Grupo {{ g.grupo }}</strong>{% if g.modalidad != "PRESENCIAL" %} <em>({{ g.modalidad|lower }})</em>{% endif %}{% if g.cerrado %} <em>(cerrado)</em>{% endif %}:
+              {% for h in g.horas %}{{ ", ".join(h.dias[:-1]) ~ " y " ~ h.dias[-1] if h.dias|length > 1 else h.dias[0] }} {{ h.inicio }} a {{ h.fin }}, {% if h.aula and h.aula != "9999" %}<a href="#aula-{{ h.aula }}">aula {{ h.aula }}</a>{% else %}aula por confirmar{% endif %}{{ "; " if not loop.last else "." }}
+              {% endfor %}
+            </li>
+            {% endfor %}
+          </ul>
+        </section>
+        {% endfor %}
+      </div>
+      <p class="cifras__fuente">Fuente: {{ horarios.fuente }}. Versión {{ horarios.version }}, generada el {{ horarios.generado }}. Pueden cambiar: confirme con su carrera.</p>
+    </details>
+    {% endif %}
+
     <h2 id="laboratorios">Laboratorios</h2>
     <p>Toque un laboratorio para ir a su lugar en el esquema. Los cuatro de cómputo y el de Química son aulas; los demás son espacios propios.</p>
     <ul class="labs-chips">

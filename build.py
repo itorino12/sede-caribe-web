@@ -366,7 +366,7 @@ def preparar(sitio, d):
              [("portada", "entrada.jpg"), ("portada_noche", "entrada-noche.jpg"), ("carreras", "auditorio-escenario.jpg"), ("historia", "edificio-aulas.jpg")]}
 
     return {"semana": semana, "fotos": fotos, "avisos": avisos, "noticias": noticias, "eventos": eventos, "recientes": recientes, "agenda": agenda,
-            "carreras": carreras, "unidades": unidades, "aulas": json.loads((SRC / "data" / "aulas.json").read_text(encoding="utf-8")), "unidad": {u["id"]: u for u in unidades},
+            "carreras": carreras, "unidades": unidades, "aulas": json.loads((SRC / "data" / "aulas.json").read_text(encoding="utf-8")), "horarios": json.loads((SRC / "data" / "horarios-iic-2026.json").read_text(encoding="utf-8")), "unidad": {u["id"]: u for u in unidades},
             "directorio": grupos_dir, "enlaces": enlaces, "hitos": d["hitos"], "cifras": d["cifras"], "modalidades": modalidades,
             "categorias": sorted({n["categoria"] for n in noticias if n.get("categoria")}),
             "areas": list(dict.fromkeys(c["area"] for c in carreras)),

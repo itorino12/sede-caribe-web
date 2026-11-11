@@ -1067,6 +1067,10 @@ html.sin-desplazar, html.sin-desplazar body { overflow: hidden; }
 .labs-chips a:hover span { color: inherit; }
 .capac__tablas { margin: 8px 0 20px; }
 .capac__tablas summary { cursor: pointer; font-weight: 700; color: var(--azul); padding: 6px 0; }
+.horario-curso { margin: 14px 0 0; padding-top: 10px; border-top: 1px solid var(--linea); }
+.horario-curso h3 { font-size: var(--t-md, 1rem); margin: 0 0 4px; } .horario-curso h3 span { font-weight: 400; color: var(--tinta-2); }
+.horario-curso ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 2px; font-size: var(--t-sm); }
+.horario-curso em { font-style: normal; color: var(--tinta-2); }
 .capac__tablas summary:focus-visible { outline: 3px solid var(--foco); outline-offset: 2px; }
 @media (forced-colors: active) { .sala__puestos i, .puesto-ej { background: CanvasText; forced-color-adjust: none; } }
 
