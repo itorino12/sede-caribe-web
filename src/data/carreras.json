@@ -8,10 +8,10 @@
   "area": "Ciencias económicas",
   "recintos": "Limón",
   "coordinacion": "",
-  "correo": "",
-  "extension": "",
-  "resumen": "",
-  "plan_url": "https://sedecaribe.ucr.ac.cr/images/Carreras/Planesdeestudios2025/330212_DIPL_ADM_ADUANERA_BACH_ADM_ADUANERA_COM_EXT",
+  "correo": "administracion.publica@ucr.ac.cr",
+  "extension": "2511-5660",
+  "resumen": "Forma personas que conocen las reglas, los trámites y los negocios del comercio exterior: importación y exportación, derecho aduanero y logística. Diplomado y bachillerato en Limón.",
+  "plan_url": "https://drive.google.com/file/d/1IBZe_Fsrt3FlvRfqyVEqFl8wQi8rtdQW/view",
   "documento": "administracion-aduanera"
  },
  {
@@ -39,9 +39,9 @@
   "recintos": "Limón",
   "coordinacion": "Miguel Chavarría Chaves",
   "correo": "miguel.chavarriachaves@ucr.ac.cr",
-  "extension": "",
-  "resumen": "",
-  "plan_url": "https://sedecaribe.ucr.ac.cr/images/Carreras/Planesdeestudios2025/330102_BACH_Y_LIC_EN_DIRECCION_DE_EMPRESAS",
+  "extension": "2511-7310",
+  "resumen": "Prepara profesionales para administrar empresas, con énfasis en procesos administrativos y productivos, finanzas y mercadeo. Bachillerato y licenciatura en Limón.",
+  "plan_url": "https://drive.google.com/file/d/171RadjhFnxGqPqxzN2Ty_BkJ5uXRQfXJ/view",
   "documento": "direccion-de-empresas"
  },
  {
@@ -70,23 +70,23 @@
   "coordinacion": "",
   "correo": "",
   "extension": "2511-7348",
-  "resumen": "",
-  "plan_url": "https://sedecaribe.ucr.ac.cr/images/Carreras/Planesdeestudios2025/420501_LIC_EN_INGENIERIA_QUIMICA",
+  "resumen": "Forma profesionales que diseñan, evalúan y controlan procesos en los que una materia prima se transforma en un producto. Licenciatura con trabajo constante de laboratorio.",
+  "plan_url": "https://drive.google.com/file/d/1wC1xBXCyNfzjmwVB9-nAUhlGXpudMqyD/view",
   "documento": "ingenieria-quimica"
  },
  {
   "publicar": "sí",
   "id": "marina-civil",
   "nombre": "Ingeniería Marítima",
-  "grados": "Licenciatura con énfasis en Ingeniería Náutica y Transporte Marítimo",
+  "grados": "Licenciatura con énfasis en Náutica y Transporte Marítimo y en Máquinas Marinas",
   "codigo": "600004",
   "area": "Ingeniería y tecnología",
   "recintos": "Limón",
   "coordinacion": "",
   "correo": "marinacivil.sedecaribe@ucr.ac.cr",
   "extension": "2511-7367",
-  "resumen": "",
-  "plan_url": "https://sedecaribe.ucr.ac.cr/images/Carreras/Planesdeestudios2025/600004_LIC_MARINA_CIVIL_ENF_ING_NAUTICA_Y_TRANSP_MARITIMO",
+  "resumen": "Forma profesionales para operar y dirigir buques mercantes y sus instalaciones, con dos énfasis y embarque como cadete en el último año. La carrera tiene requisitos especiales de ingreso.",
+  "plan_url": "https://drive.google.com/file/d/1O2VcsuxnPkZBq4NKYeNz7Oqkrho3YkEB/view",
   "documento": "marina-civil"
  },
  {
@@ -101,7 +101,7 @@
   "correo": "",
   "extension": "2511-7315",
   "resumen": "Cursos prácticos y teóricos para dominar la lengua inglesa, con salidas hacia la traducción, la literatura y la lingüística.",
-  "plan_url": "https://sedecaribe.ucr.ac.cr/images/Carreras/Planesdeestudios2025/120303_BACH_EN_INGLES",
+  "plan_url": "https://drive.google.com/file/d/1AjjUHLoX-rpHY55T3hnpZX_uEFrUUKud/view",
   "documento": "ingles"
  },
  {
@@ -115,8 +115,8 @@
   "coordinacion": "",
   "correo": "ensenanzaingles.sedecaribe@ucr.ac.cr",
   "extension": "2511-7315",
-  "resumen": "",
-  "plan_url": "https://sedecaribe.ucr.ac.cr/images/Carreras/Planesdeestudios2025/600113_BACH_Y_LIC_EN_LA_ENS_DEL_INGLES",
+  "resumen": "Forma docentes de inglés para secundaria, con pedagogía y lengua en un mismo plan. Bachillerato con salida lateral al profesorado y licenciatura. Acreditada por SINAES.",
+  "plan_url": "https://drive.google.com/file/d/1Fakf9DX4Uqdia8tZokT-Dqs-55ZxwPIW/view",
   "documento": "ensenanza-del-ingles"
  },
  {
@@ -130,8 +130,8 @@
   "coordinacion": "",
   "correo": "educacionpreescolar.sedecaribe@ucr.ac.cr",
   "extension": "2511-7331",
-  "resumen": "",
-  "plan_url": "https://sedecaribe.ucr.ac.cr/images/Carreras/Planesdeestudios2025/600135_BACH_EN_EDUC_INICIAL_EN_INGLES",
+  "resumen": "Forma docentes para la niñez en sus primeros años, con inglés dentro del plan. Bachillerato acreditado por SINAES.",
+  "plan_url": "https://drive.google.com/file/d/1jxpodINfOSB8NF3f8Fa3-1kYOxEH2oBL/view",
   "documento": "educacion-inicial-ingles"
  },
  {
@@ -145,23 +145,23 @@
   "coordinacion": "",
   "correo": "",
   "extension": "",
-  "resumen": "",
+  "resumen": "Forma profesionales para diseñar, gestionar e investigar la comunicación en comunidades y organizaciones. Bachillerato y licenciatura en Ciencias de la Comunicación.",
   "plan_url": "https://sedecaribe.ucr.ac.cr/images/Carreras/Planesdeestudios2025/340105_BACH_COMUNC_COLECT_LIC_EN_CS_COMUC_EN",
   "documento": "comunicacion-colectiva"
  },
  {
   "publicar": "sí",
   "id": "turismo-ecologico",
-  "nombre": "Turismo Ecológico",
-  "grados": "Bachillerato, y Licenciatura en Gestión Ecoturística",
-  "codigo": "600307",
+  "nombre": "Turismo Sostenible con énfasis en Ecoturismo",
+  "grados": "Bachillerato",
+  "codigo": "600310",
   "area": "Ciencias sociales",
   "recintos": "Limón",
   "coordinacion": "",
   "correo": "turismoecologico.sedecaribe@ucr.ac.cr",
   "extension": "2511-7316",
-  "resumen": "",
-  "plan_url": "https://sedecaribe.ucr.ac.cr/images/Carreras/Planesdeestudios2025/600307_BACH_EN_TURISMO_ECOLOGICO_Y_LIC_GESTION_ECOTURISTICA",
+  "resumen": "Forma profesionales para un turismo que cuida la naturaleza y beneficia a las comunidades, con trabajo de campo e inglés a lo largo de la carrera. Bachillerato.",
+  "plan_url": "https://drive.google.com/file/d/1k7IqScYmHYeUMC2_0EmRqjX80WkuP5Pk/view",
   "documento": "turismo-ecologico"
  },
  {

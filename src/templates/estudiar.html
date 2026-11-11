@@ -1,27 +1,57 @@
 {% extends "base.html" %}
 {% from "_macros.html" import encabezado with context %}
 {% block contenido %}
-{{ encabezado("Carreras", [], raiz, "Grado y posgrado de la Universidad de Costa Rica en Limón y en el Aula Desconcentrada de Siquirres. Cada ficha enlaza al plan de estudios vigente.") }}
-<div class="ancho pagina">
-  <div class="filtros" role="group" aria-label="Filtrar por área" data-filtro="carreras">
-    <button type="button" aria-pressed="true" data-valor="">Todas</button>
-    {% for a in areas %}<button type="button" aria-pressed="false" data-valor="{{ a }}">{{ a }}</button>{% endfor %}
-  </div>
-  <ul class="lista-carreras" id="carreras">
-    {% for c in carreras %}
-    <li class="lista-carreras__item" data-area="{{ c.area }}">
-      <div>
-        <h2 class="lista-carreras__nombre"><a href="carreras/{{ c.id }}.html">{{ c.nombre }}</a></h2>
-        <p class="lista-carreras__grado">{{ c.grados }}</p>
+{{ encabezado("¿Qué carrera es para usted?", [], raiz, "Una actividad corta para empezar a pensar: marque lo que le gusta, responda seis preguntas y vea qué carreras de la Sede se acercan más a usted.") }}
+<div class="ancho pagina orientador">
+  <p class="orientador__nota">Es una guía para empezar, no un test vocacional. Le sirve para conversar con su familia, su colegio o la Orientación de la Sede. Sus respuestas no se guardan ni se envían a ningún lugar.</p>
+  <noscript><p class="orientador__nota">La actividad necesita JavaScript. Mientras tanto, puede ver todas las <a href="{{ raiz }}carreras.html">carreras y sus planes de estudio</a>.</p></noscript>
+
+  {% set lista = [] %}
+  {% for c in carreras if c.id in orientador.perfiles %}
+    {% set pu = (c.ficha.planes[0].url if c.ficha.planes else c.plan_url) or "" %}
+    {% set _ = lista.append({"id": c.id, "nombre": c.nombre, "grados": c.grados, "area": c.area, "url": raiz ~ "carreras/" ~ c.id ~ ".html", "plan": (pu if pu.startswith("http") or not pu else raiz ~ pu)}) %}
+  {% endfor %}
+  <script type="application/json" id="orientador-datos">{{ {"pesos": orientador.pesos, "minimo_gustos": orientador.minimo_gustos, "rasgos": orientador.rasgos, "perfiles": orientador.perfiles, "carreras": lista}|tojson }}</script>
+
+  <form id="orientador" class="orientador__form" novalidate>
+    <fieldset class="orientador__bloque" data-gustos tabindex="-1">
+      <legend><span class="orientador__paso">Paso 1</span> Marque todo lo que le describe <small>(mínimo {{ orientador.minimo_gustos }})</small></legend>
+      <div class="orientador__gustos">
+        {% for g in orientador.gustos %}
+        <label class="orientador__opcion"><input type="checkbox" name="gusto" value="{{ loop.index }}" data-r="{{ g.rasgos|join(' ') }}"><span>{{ g.texto }}</span></label>
+        {% endfor %}
       </div>
-      <p class="lista-carreras__datos"><span>{{ c.area }}</span><span>{{ c.recintos }}</span>{% if c.codigo %}<span>Código {{ c.codigo }}</span>{% endif %}</p>
-    </li>
+    </fieldset>
+
+    {% for q in orientador.preguntas %}
+    {% set n = loop.index %}
+    <fieldset class="orientador__bloque" data-pregunta tabindex="-1">
+      <legend><span class="orientador__paso">Pregunta {{ n }} de {{ orientador.preguntas|length }}</span> {{ q.texto }}</legend>
+      <div class="orientador__escenarios">
+        {% for o in q.opciones %}
+        <label class="orientador__opcion"><input type="radio" name="p{{ n }}" value="{{ loop.index }}" data-r="{{ o.rasgos|join(' ') }}"><span>{{ o.texto }}</span></label>
+        {% endfor %}
+      </div>
+    </fieldset>
     {% endfor %}
-  </ul>
-  <section class="llamado">
-    <h2>¿Quiere entrar a alguna?</h2>
-    <p>El ingreso se hace por el proceso de admisión de la UCR, el mismo para todas las sedes.</p>
-    <a class="boton" href="admision.html">Ver los pasos de admisión</a>
+
+    <div class="orientador__pie">
+      <p id="orientador-aviso" class="orientador__aviso" role="alert" hidden></p>
+      <p id="orientador-avance" class="orientador__avance"></p>
+      <button type="submit" class="boton">Ver mis carreras</button>
+    </div>
+  </form>
+
+  <section id="orientador-resultado" class="orientador__resultado" aria-labelledby="orientador-titulo" hidden>
+    <h2 id="orientador-titulo" tabindex="-1">Estas son las carreras que más se acercan a usted</h2>
+    <ol class="orientador__lista" data-lista></ol>
+    <p class="orientador__nota">El resultado depende de lo que marcó hoy y de cómo entendió cada pregunta; cambie sus respuestas y compare. Antes de decidir, lea el plan de estudios y converse con la <a href="{{ raiz }}unidades/vida-estudiantil.html">Orientación de la Sede</a>.</p>
+    <p class="orientador__acciones">
+      <button type="button" class="boton boton--secundario" data-cambiar>Cambiar mis respuestas</button>
+      <button type="button" class="boton boton--secundario" data-reiniciar>Empezar de nuevo</button>
+    </p>
+    <p><a href="{{ raiz }}carreras.html">Ver todas las carreras y sus planes de estudio</a> · <a href="{{ raiz }}admision.html">Cómo ingresar a la UCR</a></p>
   </section>
+  <script src="{{ raiz }}assets/js/orientador.js" defer></script>
 </div>
 {% endblock %}

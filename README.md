@@ -62,7 +62,8 @@ La fila 1 son los encabezados (se pueden escribir con tildes y mayúsculas). Las
 | Página | Contenido |
 |---|---|
 | `index.html` | Portada: «Hoy en la Sede» (fecha, avisos, próximas actividades, última noticia), accesos por perfil, noticias, carreras por área, historia, servicios |
-| `estudiar.html` y `carreras/<id>.html` | Oferta académica con filtro por área y una ficha por carrera |
+| `estudiar.html` | Orientador: gustos y seis preguntas que sugieren las carreras más cercanas (`src/data/orientador.json`, `assets/js/orientador.js`) |
+| `carreras.html` y `carreras/<id>.html` | Oferta académica (menú Docencia) con filtro por área y una ficha por carrera; el plan de estudios abre en pestaña nueva |
 | `admision.html` | Pasos para ingresar |
 | `la-sede.html` | Historia, misión y visión, coordinaciones, servicios |
 | `unidades/<id>.html` | Una página por coordinación, recinto o servicio, con sus extensiones |

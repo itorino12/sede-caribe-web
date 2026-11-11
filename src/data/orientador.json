@@ -1,0 +1,430 @@
+{
+  "pesos": {
+    "gusto": 1,
+    "escenario": 2
+  },
+  "minimo_gustos": 3,
+  "rasgos": {
+    "numeros": "los números",
+    "tecnologia": "la tecnología",
+    "ciencia": "la ciencia",
+    "idiomas": "los idiomas",
+    "ensenar": "la enseñanza",
+    "ninez": "la niñez",
+    "comunicar": "la comunicación",
+    "mar": "el mar",
+    "naturaleza": "la naturaleza",
+    "negocios": "los negocios",
+    "normas": "las normas",
+    "comunidad": "el servicio a la comunidad"
+  },
+  "gustos": [
+    {
+      "texto": "Resolver problemas con números me resulta entretenido",
+      "rasgos": [
+        "numeros"
+      ]
+    },
+    {
+      "texto": "Quiero saber cómo funcionan las computadoras, las aplicaciones y la web",
+      "rasgos": [
+        "tecnologia"
+      ]
+    },
+    {
+      "texto": "Programar o automatizar tareas repetitivas me llama la atención",
+      "rasgos": [
+        "tecnologia"
+      ]
+    },
+    {
+      "texto": "Disfruto los experimentos y entender por qué pasan las cosas",
+      "rasgos": [
+        "ciencia"
+      ]
+    },
+    {
+      "texto": "Me interesa cómo se transforman los materiales en productos",
+      "rasgos": [
+        "ciencia"
+      ]
+    },
+    {
+      "texto": "Quiero hablar inglés con soltura",
+      "rasgos": [
+        "idiomas"
+      ]
+    },
+    {
+      "texto": "Me gusta explicar algo hasta que la otra persona lo entiende",
+      "rasgos": [
+        "ensenar"
+      ]
+    },
+    {
+      "texto": "Disfruto leer literatura y analizar textos",
+      "rasgos": [
+        "idiomas",
+        "comunicar"
+      ]
+    },
+    {
+      "texto": "Me llevo bien con niñas y niños pequeños",
+      "rasgos": [
+        "ninez"
+      ]
+    },
+    {
+      "texto": "Quisiera trabajar en un jardín de niños o en un centro infantil",
+      "rasgos": [
+        "ninez"
+      ]
+    },
+    {
+      "texto": "Me gusta escribir, grabar audio o video y contar historias",
+      "rasgos": [
+        "comunicar"
+      ]
+    },
+    {
+      "texto": "Me gusta entrevistar gente y averiguar qué pasa en mi comunidad",
+      "rasgos": [
+        "comunicar",
+        "comunidad"
+      ]
+    },
+    {
+      "texto": "Me llama la atención el periodismo, la publicidad o las redes sociales",
+      "rasgos": [
+        "comunicar"
+      ]
+    },
+    {
+      "texto": "Me gusta aprender idiomas: su gramática, sus sonidos y su cultura",
+      "rasgos": [
+        "idiomas"
+      ]
+    },
+    {
+      "texto": "Me atraen el mar, los barcos y el puerto",
+      "rasgos": [
+        "mar"
+      ]
+    },
+    {
+      "texto": "Prefiero trabajar al aire libre: bosque, playa o parques",
+      "rasgos": [
+        "naturaleza"
+      ]
+    },
+    {
+      "texto": "Me interesan el ambiente y la biodiversidad",
+      "rasgos": [
+        "naturaleza",
+        "ciencia"
+      ]
+    },
+    {
+      "texto": "Me gusta recibir a gente de otros países y mostrarles Limón",
+      "rasgos": [
+        "idiomas",
+        "naturaleza"
+      ]
+    },
+    {
+      "texto": "Me veo liderando un equipo o con un negocio propio",
+      "rasgos": [
+        "negocios"
+      ]
+    },
+    {
+      "texto": "Soy detallista con los documentos, las reglas y los trámites",
+      "rasgos": [
+        "normas"
+      ]
+    },
+    {
+      "texto": "Me gusta que las cuentas cuadren",
+      "rasgos": [
+        "numeros",
+        "normas"
+      ]
+    },
+    {
+      "texto": "Me atraen el comercio internacional y las aduanas",
+      "rasgos": [
+        "normas",
+        "negocios"
+      ]
+    },
+    {
+      "texto": "Me importa ayudar a mi comunidad y conocer su cultura",
+      "rasgos": [
+        "comunidad"
+      ]
+    }
+  ],
+  "preguntas": [
+    {
+      "texto": "Su grupo organiza una feria en la comunidad. ¿Qué parte prefiere asumir?",
+      "opciones": [
+        {
+          "texto": "Hacer el presupuesto y llevar las cuentas",
+          "rasgos": [
+            "numeros",
+            "normas"
+          ]
+        },
+        {
+          "texto": "Crear la página y el sistema de inscripción",
+          "rasgos": [
+            "tecnologia"
+          ]
+        },
+        {
+          "texto": "Dar a conocer la feria con carteles, redes y entrevistas",
+          "rasgos": [
+            "comunicar"
+          ]
+        },
+        {
+          "texto": "Coordinar al equipo y conseguir patrocinadores",
+          "rasgos": [
+            "negocios"
+          ]
+        }
+      ]
+    },
+    {
+      "texto": "Tiene un sábado libre. ¿Qué elige?",
+      "opciones": [
+        {
+          "texto": "Caminar por un sendero o ir a la playa",
+          "rasgos": [
+            "naturaleza"
+          ]
+        },
+        {
+          "texto": "Armar o desarmar algo para entender cómo funciona",
+          "rasgos": [
+            "tecnologia",
+            "ciencia"
+          ]
+        },
+        {
+          "texto": "Ver o leer algo en inglés sin subtítulos",
+          "rasgos": [
+            "idiomas"
+          ]
+        },
+        {
+          "texto": "Ayudar en una actividad con niños o en el barrio",
+          "rasgos": [
+            "ninez",
+            "comunidad"
+          ]
+        }
+      ]
+    },
+    {
+      "texto": "Debe presentar un tema ante un grupo. ¿Cuál escoge?",
+      "opciones": [
+        {
+          "texto": "Cómo viajan las mercancías desde el puerto de Moín hasta el mundo",
+          "rasgos": [
+            "mar",
+            "normas"
+          ]
+        },
+        {
+          "texto": "Cómo se convierte una materia prima en un producto",
+          "rasgos": [
+            "ciencia"
+          ]
+        },
+        {
+          "texto": "Cómo se aprende mejor un idioma",
+          "rasgos": [
+            "ensenar",
+            "idiomas"
+          ]
+        },
+        {
+          "texto": "Cómo empezar un negocio con pocos recursos",
+          "rasgos": [
+            "negocios"
+          ]
+        }
+      ]
+    },
+    {
+      "texto": "¿Qué le daría más satisfacción?",
+      "opciones": [
+        {
+          "texto": "Que una cuenta cuadre hasta el último colón",
+          "rasgos": [
+            "numeros",
+            "normas"
+          ]
+        },
+        {
+          "texto": "Que un grupo entienda por fin lo que usted le explicó",
+          "rasgos": [
+            "ensenar"
+          ]
+        },
+        {
+          "texto": "Que algo que usted produjo se publique y la gente lo comente",
+          "rasgos": [
+            "comunicar"
+          ]
+        },
+        {
+          "texto": "Que un sistema funcione sin fallas",
+          "rasgos": [
+            "tecnologia"
+          ]
+        }
+      ]
+    },
+    {
+      "texto": "Si trabajara en Limón, ¿dónde se imagina?",
+      "opciones": [
+        {
+          "texto": "En un barco o en la terminal portuaria",
+          "rasgos": [
+            "mar"
+          ]
+        },
+        {
+          "texto": "En un laboratorio o en una planta de producción",
+          "rasgos": [
+            "ciencia"
+          ]
+        },
+        {
+          "texto": "En un aula o en un centro infantil",
+          "rasgos": [
+            "ensenar",
+            "ninez"
+          ]
+        },
+        {
+          "texto": "En un hotel, en una gira o en un área de conservación",
+          "rasgos": [
+            "naturaleza",
+            "idiomas"
+          ]
+        }
+      ]
+    },
+    {
+      "texto": "¿Qué frase le describe mejor?",
+      "opciones": [
+        {
+          "texto": "«Me gusta que todo esté en regla y bien documentado»",
+          "rasgos": [
+            "normas"
+          ]
+        },
+        {
+          "texto": "«Me gusta convencer y proponer ideas nuevas»",
+          "rasgos": [
+            "negocios",
+            "comunicar"
+          ]
+        },
+        {
+          "texto": "«Me gusta ayudar a otras personas a salir adelante»",
+          "rasgos": [
+            "comunidad",
+            "ensenar"
+          ]
+        },
+        {
+          "texto": "«Me gusta analizar datos y encontrar patrones»",
+          "rasgos": [
+            "numeros",
+            "tecnologia"
+          ]
+        }
+      ]
+    }
+  ],
+  "perfiles": {
+    "administracion-aduanera": {
+      "normas": 3,
+      "negocios": 2,
+      "numeros": 1,
+      "idiomas": 1,
+      "mar": 1
+    },
+    "contaduria-publica": {
+      "numeros": 3,
+      "normas": 3,
+      "negocios": 1,
+      "tecnologia": 1
+    },
+    "direccion-de-empresas": {
+      "negocios": 3,
+      "numeros": 1,
+      "comunicar": 1,
+      "comunidad": 1,
+      "normas": 1
+    },
+    "informatica-empresarial": {
+      "tecnologia": 3,
+      "negocios": 2,
+      "numeros": 2,
+      "ciencia": 1
+    },
+    "ingenieria-quimica": {
+      "ciencia": 3,
+      "numeros": 2,
+      "tecnologia": 1,
+      "naturaleza": 1,
+      "normas": 1
+    },
+    "marina-civil": {
+      "mar": 3,
+      "tecnologia": 1,
+      "numeros": 1,
+      "ciencia": 1,
+      "normas": 1,
+      "negocios": 1
+    },
+    "ingles": {
+      "idiomas": 3,
+      "comunicar": 2,
+      "comunidad": 1,
+      "ensenar": 1
+    },
+    "ensenanza-del-ingles": {
+      "ensenar": 3,
+      "idiomas": 3,
+      "comunicar": 1,
+      "comunidad": 1,
+      "ninez": 1
+    },
+    "educacion-inicial-ingles": {
+      "ninez": 3,
+      "ensenar": 2,
+      "idiomas": 2,
+      "comunidad": 1
+    },
+    "comunicacion-colectiva": {
+      "comunicar": 3,
+      "comunidad": 2,
+      "tecnologia": 1,
+      "idiomas": 1
+    },
+    "turismo-ecologico": {
+      "naturaleza": 3,
+      "idiomas": 2,
+      "comunidad": 1,
+      "negocios": 1,
+      "comunicar": 1,
+      "ciencia": 1
+    }
+  }
+}

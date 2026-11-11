@@ -1,0 +1,22 @@
+{
+  "fuente": "Plan de estudios oficial de la carrera y ficha de la Feria Vocacional de la UCR (feriavocacional.ucr.ac.cr). Cupos y notas de corte de ingreso 2026 en el recinto de Limón.",
+  "lema": "Turismo que cuida la naturaleza y beneficia a las comunidades",
+  "cifras": [
+    {
+      "valor": "46",
+      "etiqueta": "cupos en Limón para el ingreso 2026"
+    },
+    {
+      "valor": "479,50",
+      "etiqueta": "nota de corte en Limón, ingreso 2026"
+    }
+  ],
+  "planes": [
+    {
+      "nombre": "Plan de estudios",
+      "detalle": "Código 600310, Plan 01 · PDF",
+      "url": "https://drive.google.com/file/d/1k7IqScYmHYeUMC2_0EmRqjX80WkuP5Pk/view",
+      "principal": true
+    }
+  ]
+}

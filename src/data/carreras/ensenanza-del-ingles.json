@@ -1,0 +1,18 @@
+{
+  "fuente": "Plan de estudios oficial de la carrera y ficha de la Feria Vocacional de la UCR (feriavocacional.ucr.ac.cr). Cupos y notas de corte de ingreso 2026 en el recinto de Limón.",
+  "lema": "Formar a quienes enseñarán inglés en las aulas del país",
+  "cifras": [
+    {
+      "valor": "SINAES",
+      "etiqueta": "carrera acreditada"
+    }
+  ],
+  "planes": [
+    {
+      "nombre": "Malla curricular",
+      "detalle": "Bachillerato y licenciatura, Plan 02 · PDF",
+      "url": "https://drive.google.com/file/d/1Fakf9DX4Uqdia8tZokT-Dqs-55ZxwPIW/view",
+      "principal": true
+    }
+  ]
+}

@@ -1,0 +1,26 @@
+{
+  "fuente": "Plan de estudios oficial de la carrera y ficha de la Feria Vocacional de la UCR (feriavocacional.ucr.ac.cr). Cupos y notas de corte de ingreso 2026 en el recinto de Limón.",
+  "lema": "Dirigir organizaciones con visión de negocio y criterio humano",
+  "cifras": [
+    {
+      "valor": "82",
+      "etiqueta": "cupos en Limón para el ingreso 2026"
+    },
+    {
+      "valor": "471,82",
+      "etiqueta": "nota de corte en Limón, ingreso 2026"
+    },
+    {
+      "valor": "SINAES",
+      "etiqueta": "carrera acreditada"
+    }
+  ],
+  "planes": [
+    {
+      "nombre": "Plan de estudios",
+      "detalle": "Código 330102, Plan 2 · PDF",
+      "url": "https://drive.google.com/file/d/171RadjhFnxGqPqxzN2Ty_BkJ5uXRQfXJ/view",
+      "principal": true
+    }
+  ]
+}

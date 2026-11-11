@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% from "_macros.html" import encabezado with context %}
+{% block contenido %}
+{{ encabezado("Carreras y planes de estudio", [("Docencia", "unidades/docencia.html")], raiz, "Grado y posgrado de la Universidad de Costa Rica en Limón y en el Aula Desconcentrada de Siquirres. Cada ficha enlaza al plan de estudios vigente.") }}
+<div class="ancho pagina">
+  <div class="filtros" role="group" aria-label="Filtrar por área" data-filtro="carreras">
+    <button type="button" aria-pressed="true" data-valor="">Todas</button>
+    {% for a in areas %}<button type="button" aria-pressed="false" data-valor="{{ a }}">{{ a }}</button>{% endfor %}
+  </div>
+  <ul class="lista-carreras" id="carreras">
+    {% for c in carreras %}
+    <li class="lista-carreras__item" data-area="{{ c.area }}">
+      <div>
+        <h2 class="lista-carreras__nombre"><a href="carreras/{{ c.id }}.html">{{ c.nombre }}</a></h2>
+        <p class="lista-carreras__grado">{{ c.grados }}</p>
+      </div>
+      <p class="lista-carreras__datos"><span>{{ c.area }}</span><span>{{ c.recintos }}</span>{% if c.codigo %}<span>Código {{ c.codigo }}</span>{% endif %}</p>
+    </li>
+    {% endfor %}
+  </ul>
+  <section class="llamado">
+    <h2>¿No sabe por cuál decidirse?</h2>
+    <p>Marque sus gustos y responda unas preguntas cortas: la actividad le sugiere las carreras que más se acercan a usted.</p>
+    <a class="boton boton--secundario" href="estudiar.html">Descubrir mi carrera</a>
+  </section>
+  <section class="llamado">
+    <h2>¿Quiere entrar a alguna?</h2>
+    <p>El ingreso se hace por el proceso de admisión de la UCR, el mismo para todas las sedes.</p>
+    <a class="boton" href="admision.html">Ver los pasos de admisión</a>
+  </section>
+</div>
+{% endblock %}

@@ -369,7 +369,8 @@ def preparar(sitio, d):
             "carreras": carreras, "unidades": unidades, "aulas": json.loads((SRC / "data" / "aulas.json").read_text(encoding="utf-8")), "unidad": {u["id"]: u for u in unidades},
             "directorio": grupos_dir, "enlaces": enlaces, "hitos": d["hitos"], "cifras": d["cifras"], "modalidades": modalidades,
             "categorias": sorted({n["categoria"] for n in noticias if n.get("categoria")}),
-            "areas": list(dict.fromkeys(c["area"] for c in carreras))}
+            "areas": list(dict.fromkeys(c["area"] for c in carreras)),
+            "orientador": json.loads((SRC / "data" / "orientador.json").read_text(encoding="utf-8"))}
 
 
 # --------------------------------------------------------------------------- salida
@@ -443,7 +444,8 @@ def main():
     # (archivo de salida, plantilla, título, descripción, variables extra)
     paginas = [
         ("index.html", "index.html", "Inicio", sitio["descripcion"], {}),
-        ("estudiar.html", "estudiar.html", "Carreras", "Carreras de grado y posgrado de la UCR en Limón y Siquirres.", {}),
+        ("estudiar.html", "estudiar.html", "¿Qué carrera es para usted?", "Actividad para descubrir cuáles carreras de la Sede del Caribe se acercan más a sus gustos y habilidades.", {}),
+        ("carreras.html", "carreras.html", "Carreras y planes de estudio", "Carreras de grado y posgrado de la UCR en Limón y Siquirres, con sus planes de estudio.", {}),
         ("admision.html", "admision.html", "Cómo ingresar", "Pasos para entrar a la Universidad de Costa Rica en la Sede del Caribe.", {"html": md(leer_pagina("admision"))}),
         ("la-sede.html", "la-sede.html", "La Sede", "Historia, misión, visión, coordinaciones y recintos de la Sede del Caribe.",
          {"historia": md(leer_pagina("historia")), "mision": md(leer_pagina("mision-vision"))}),

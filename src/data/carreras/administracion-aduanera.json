@@ -1,0 +1,34 @@
+{
+  "fuente": "Plan de estudios oficial de la carrera y ficha de la Feria Vocacional de la UCR (feriavocacional.ucr.ac.cr). Cupos y notas de corte de ingreso 2026 en el recinto de Limón.",
+  "lema": "Las reglas, los trámites y los negocios que mueven el comercio entre países",
+  "cifras": [
+    {
+      "valor": "83",
+      "etiqueta": "créditos del diplomado"
+    },
+    {
+      "valor": "135",
+      "etiqueta": "créditos del bachillerato"
+    },
+    {
+      "valor": "46",
+      "etiqueta": "cupos en Limón para el ingreso 2026"
+    },
+    {
+      "valor": "517,05",
+      "etiqueta": "nota de corte en Limón, ingreso 2026"
+    },
+    {
+      "valor": "SINAES",
+      "etiqueta": "carrera acreditada"
+    }
+  ],
+  "planes": [
+    {
+      "nombre": "Plan de estudios",
+      "detalle": "Código 330212, Plan 1 · PDF",
+      "url": "https://drive.google.com/file/d/1IBZe_Fsrt3FlvRfqyVEqFl8wQi8rtdQW/view",
+      "principal": true
+    }
+  ]
+}

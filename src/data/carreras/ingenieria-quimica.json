@@ -1,0 +1,22 @@
+{
+  "fuente": "Plan de estudios oficial de la carrera y ficha de la Feria Vocacional de la UCR (feriavocacional.ucr.ac.cr). Cupos y notas de corte de ingreso 2026 en el recinto de Limón.",
+  "lema": "Procesos que transforman la materia en productos útiles",
+  "cifras": [
+    {
+      "valor": "35",
+      "etiqueta": "cupos en Limón para el ingreso 2026"
+    },
+    {
+      "valor": "566,82",
+      "etiqueta": "nota de corte en Limón, ingreso 2026"
+    }
+  ],
+  "planes": [
+    {
+      "nombre": "Plan de estudios",
+      "detalle": "Código 420501 · PDF",
+      "url": "https://drive.google.com/file/d/1wC1xBXCyNfzjmwVB9-nAUhlGXpudMqyD/view",
+      "principal": true
+    }
+  ]
+}

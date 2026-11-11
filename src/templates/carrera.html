@@ -5,12 +5,13 @@
 {% set f = carrera.ficha %}
 {% macro url(u) %}{{ u if u.startswith('http') else raiz ~ u }}{% endmacro %}
 {% block contenido %}
-{{ encabezado(carrera.nombre, [("Carreras", "estudiar.html")], raiz, f.lema or carrera.grados) }}
+{{ encabezado(carrera.nombre, [("Docencia", "unidades/docencia.html"), ("Carreras", "carreras.html")], raiz, f.lema or carrera.grados) }}
 <div class="ancho pagina pagina--con-ficha">
   <div class="prosa">
     {% if f.cifras %}<ul class="cifras cifras--carrera">{% for x in f.cifras %}<li><strong>{{ x.valor }}</strong><span>{{ x.etiqueta }}</span></li>{% endfor %}</ul>{% endif %}
     {% if carrera.html %}{{ carrera.html|safe }}
     {% else %}<p>La coordinación de la carrera está preparando la descripción de esta página. Mientras tanto, el plan de estudios detalla los cursos y el grado que se obtiene.</p>{% endif %}
+    {% if f.fuente and not f.malla %}<p class="carrera-fuente">Fuente: {{ f.fuente }}</p>{% endif %}
     {% if f.malla %}<p class="carrera-saltos"><a href="#malla">Recorrer la malla curso por curso</a>{% if f.actualizacion %} · <a href="#plan">El Plan 07</a>{% endif %}{% if f.acreditacion %} · <a href="#acreditacion">Acreditación</a>{% endif %}{% if f.historia %} · <a href="#historia">Historia</a>{% endif %}</p>{% endif %}
   </div>
   <div class="columna-ficha">
@@ -24,9 +25,9 @@
       </dl>
       {% if f.planes %}
       <div class="ficha__planes">
-        {% for p in f.planes %}<a class="boton boton--bloque{% if not p.principal %} boton--secundario{% endif %}" href="{{ url(p.url) }}"{% if p.url.startswith('http') %} rel="noopener"{% endif %}><span>{{ p.nombre }}<small>{{ p.detalle }}</small></span></a>{% endfor %}
+        {% for p in f.planes %}<a class="boton boton--bloque{% if not p.principal %} boton--secundario{% endif %}" href="{{ url(p.url) }}" target="_blank" rel="noopener"><span>{{ p.nombre }}<small>{{ p.detalle }}</small></span><span class="oculto"> (se abre en una pestaña nueva)</span></a>{% endfor %}
       </div>
-      {% elif carrera.plan_url %}<a class="boton boton--bloque" href="{{ carrera.plan_url }}">Plan de estudios</a>{% endif %}
+      {% elif carrera.plan_url %}<a class="boton boton--bloque" href="{{ carrera.plan_url }}" target="_blank" rel="noopener">Plan de estudios<span class="oculto"> (se abre en una pestaña nueva)</span></a>{% endif %}
       <a class="ficha__enlace" href="{{ raiz }}admision.html">Cómo ingresar</a>
     </aside>
     {{ contacto(carrera, raiz, f.titulo_contacto or 'Contacto') }}

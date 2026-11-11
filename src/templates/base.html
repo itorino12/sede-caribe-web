@@ -52,9 +52,9 @@
         <ul>
           <li class="menu__item menu__buscar"><button type="button" class="menu__enlace" data-abrir="buscador" aria-controls="buscador" aria-expanded="false">Buscar en el sitio</button></li>
           {% set secciones = [
-            ("Estudiar", "estudiar.html", [("Carreras", "estudiar.html"), ("Cómo ingresar", "admision.html"), ("Becas", "unidades/vida-estudiantil.html"), ("Servicios en línea", "enlaces.html#estudiantes"), ("Aula de Siquirres", "unidades/siquirres.html")]),
+            ("Estudiar", "estudiar.html", [("¿Qué carrera es para usted?", "estudiar.html"), ("Cómo ingresar", "admision.html"), ("Becas", "unidades/vida-estudiantil.html"), ("Servicios en línea", "enlaces.html#estudiantes"), ("Aula de Siquirres", "unidades/siquirres.html")]),
             ("Vida Estudiantil", "unidades/vida-estudiantil.html", [("Coordinación de Vida Estudiantil", "unidades/vida-estudiantil.html"), ("Residencias estudiantiles", "unidades/residencias.html"), ("Gimnasio", "unidades/gimnasio.html"), ("Piscina", "unidades/piscina.html")]),
-            ("Docencia", "unidades/docencia.html", [("Coordinación de Docencia", "unidades/docencia.html"), ("Auditorio", "unidades/auditorio.html"), ("Aulas y laboratorios", "unidades/laboratorios.html"), ("Recursos para el personal", "enlaces.html#personal-universitario")]),
+            ("Docencia", "unidades/docencia.html", [("Coordinación de Docencia", "unidades/docencia.html"), ("Carreras y planes de estudio", "carreras.html"), ("Auditorio", "unidades/auditorio.html"), ("Aulas y laboratorios", "unidades/laboratorios.html"), ("Recursos para el personal", "enlaces.html#personal-universitario")]),
             ("Investigación", "unidades/investigacion.html", [("Coordinación de Investigación", "unidades/investigacion.html"), ("Biblioteca", "unidades/biblioteca.html"), ("Editorial", "unidades/editorial.html"), ("Observatorio del Turismo del Caribe", "http://obturcaribe.ucr.ac.cr/")]),
             ("Acción social", "unidades/accion-social.html", [("Coordinación de Acción Social", "unidades/accion-social.html")] + ((modalidades or [])|map(attribute="menu")|list)),
             ("Administración", "unidades/administracion.html", [("Coordinación de Administración", "unidades/administracion.html"), ("Administración Financiera", "directorio.html?buscar=Administraci%C3%B3n+Financiera"), ("Recursos Humanos", "directorio.html?buscar=Recursos+humanos"), ("Compras Especializadas", "directorio.html?buscar=Compras+Especializadas"), ("Activos fijos", "directorio.html?buscar=Activos+fijos"), ("Servicios generales", "directorio.html?buscar=Servicios+generales"), ("Mantenimiento", "directorio.html?buscar=Mantenimiento"), ("Administración de red", "directorio.html?buscar=Administraci%C3%B3n+de+red")]),
@@ -62,7 +62,7 @@
             ("Actualidad", "noticias.html", [("Noticias", "noticias.html"), ("Agenda", "agenda.html")]),
           ] %}
           {% for nombre, url, hijos in secciones %}
-          {% set activo = pagina == url or (pagina.startswith('carreras/') and url == 'estudiar.html') or (pagina.startswith('noticias/') and url == 'noticias.html') %}
+          {% set activo = pagina == url or (pagina.startswith('carreras/') and url == 'unidades/docencia.html') or (pagina.startswith('noticias/') and url == 'noticias.html') %}
           <li class="menu__item{% if hijos %} menu__item--sub{% endif %}">
             {% if hijos %}
             <button type="button" class="menu__enlace" aria-expanded="false" data-sub>{{ nombre }}</button>
@@ -111,7 +111,7 @@
       </div>
       <nav aria-label="Estudiar">
         <h2>Estudiar</h2>
-        <ul><li><a href="{{ raiz }}estudiar.html">Carreras</a></li><li><a href="{{ raiz }}admision.html">Cómo ingresar</a></li>
+        <ul><li><a href="{{ raiz }}estudiar.html">¿Qué carrera es para usted?</a></li><li><a href="{{ raiz }}carreras.html">Carreras y planes</a></li><li><a href="{{ raiz }}admision.html">Cómo ingresar</a></li>
             <li><a href="{{ raiz }}unidades/vida-estudiantil.html">Becas y vida estudiantil</a></li><li><a href="{{ raiz }}unidades/siquirres.html">Aula de Siquirres</a></li></ul>
       </nav>
       <nav aria-label="La Sede">
