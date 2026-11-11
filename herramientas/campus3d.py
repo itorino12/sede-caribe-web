@@ -223,6 +223,8 @@ def marco(id_, u, v):
 # Lugares sin edificio que marcó la Sede sobre la maqueta (capturas anotadas). Píxeles del croquis original;
 # los que dependen de las calles se calculan en main().
 PUENTE_PEATONAL_X = 1775          # sobre la ruta 32, al norte de los edificios 12 y 13
+# isla frente a la entrada (foto): zacate hasta esta distancia (m) al norte del centro del pórtico; más allá, adoquín
+ISLA_ENTRADA = {"zacate_hasta": 18.3}
 CASETA_GUARDA = (1045, 1197)      # en la isla de zacate entre las calles, al sur de la entrada
 BANO_MINIAUDITORIO = (925, 1361)  # al suroeste del auditorio, entre él y el sendero
 # sendero techado que sube desde la calle (cerca del paso de la quebrada) hasta la explanada
@@ -1109,6 +1111,32 @@ def main(pdf, sat=None):
             cv2.fillPoly(sombra, [np.array([(x - x0 + 6, y - y0 + 6) for x, y in pol], np.int32)], 255)
     sombra = cv2.GaussianBlur(cv2.resize(sombra, (w, h)), (0, 0), 6).astype(np.float32)[..., None] / 255
     suelo *= 1 - sombra * 0.28
+    # (foto de la entrada) la parte norte de la isla frente al rótulo es una plaza de adoquín; el zacate queda solo en
+    # una franja de LARGO_ZACATE_ENTRADA m detrás de la cual está el rótulo. Se pinta en la textura (de lejos) y
+    # recorrido.js la dibuja con su textura de adoquín
+    (ax_, az_), (bx_, bz_) = [a_metros(x, y) for x, y in contornos_px(next(e for e in EDIFICIOS if e["id"] == 6))[0][:2]]
+    ux_, uz_ = bx_ - ax_, bz_ - az_
+    nx_, nz_ = uz_, -ux_
+    if nz_ > 0:
+        nx_, nz_ = -nx_, -nz_
+    nn_ = math.hypot(nx_, nz_); nx_, nz_ = nx_ / nn_, nz_ / nn_
+    cx_, cz_ = np.mean([a_metros(x, y) for x, y in contornos_px(next(e for e in EDIFICIOS if e["id"] == 6))[0]], axis=0)
+    tx_, tz_ = a_metros(x0, y0)
+    sx_ = w / ((x1 - x0) * ESCALA)
+    XX, ZZ = np.meshgrid(tx_ + (np.arange(w) + 0.5) / sx_, tz_ + (np.arange(h) + 0.5) / sx_)
+    bb = (XX - cx_) * nx_ + (ZZ - cz_) * nz_
+    verde_ = ((suelo[..., 1] > suelo[..., 0] + 12) & (suelo[..., 1] > suelo[..., 2] + 12)).astype(np.uint8)
+    _, comp = cv2.connectedComponents(verde_)
+    semilla = (int((cz_ + nz_ * 14 - tz_) * sx_), int((cx_ + nx_ * 14 - tx_) * sx_))
+    isla = (comp == comp[semilla]) & (comp[semilla] > 0)
+    plaza = (isla & (bb > ISLA_ENTRADA["zacate_hasta"])).astype(np.uint8)
+    plaza = cv2.morphologyEx(plaza, cv2.MORPH_OPEN, np.ones((3, 3), np.uint8))
+    suelo[plaza > 0] = (184, 178, 168)
+    cont_ = max(cv2.findContours(plaza, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)[0], key=cv2.contourArea)
+    cont_ = cv2.approxPolyDP(cont_, 1.0, True)[:, 0]
+    pol_ = [[round(tx_ + x / sx_, 2), round(tz_ + y / sx_, 2)] for x, y in cont_]
+    junto = sorted(pol_, key=lambda q: abs((q[0] - cx_) * nx_ + (q[1] - cz_) * nz_ - ISLA_ENTRADA["zacate_hasta"]))[:2]
+    plaza_entrada = {"poligono": pol_, "borde_zacate": sorted(junto)}
     salida = RAIZ / "src/assets/img/campus-suelo.webp"
     cv2.imwrite(str(salida), cv2.cvtColor(np.clip(suelo, 0, 255).astype(np.uint8), cv2.COLOR_RGB2BGR), [cv2.IMWRITE_WEBP_QUALITY, 82])
 
@@ -1448,6 +1476,7 @@ def main(pdf, sat=None):
         "cerca": cerca,
         "porton_pista": porton,
         "porton_residencias": porton_res,
+        "plaza_entrada": plaza_entrada,
         "picnic": {"centro": a_metros(*PICNIC["centro"]), "radio": round(PICNIC["radio"] * ESCALA, 2)},
         "parqueo": {"centro": a_metros(*PARQUEO["rect"][:2]), "largo": round(PARQUEO["rect"][2] * ESCALA, 2),
                     "ancho": round(PARQUEO["rect"][3] * ESCALA, 2), "giro": round(math.radians(PARQUEO["rect"][4]), 3),
