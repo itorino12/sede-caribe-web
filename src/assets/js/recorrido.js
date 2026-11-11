@@ -1262,7 +1262,7 @@ if (datos.campus.parqueo) {
 
   // parqueo asfaltado (asfalto y rayas en la textura): topes amarillos, alumbrado verde y, si lleva, carport
   // de lámina verde a una agua sobre columnas azules con base amarilla. Sin carros.
-  function parqueo({ id, centro: [cx, cz], largo, ancho, giro, filas, techado }) {
+  function parqueo({ id, centro: [cx, cz], largo, ancho, giro, filas, techado, techado_desde = 0 }) {
     const g = new THREE.Group();
     const tope = mate(0xe6b800, { roughness: 0.7 }), verdePoste = mate(0x2f6b45, { roughness: 0.6 });
     for (const { z: zv, fondo, n } of filas) {
@@ -1271,7 +1271,7 @@ if (datos.campus.parqueo) {
         const t = new THREE.Mesh(new THREE.BoxGeometry(1.6, 0.15, 0.25), tope); t.position.set((-n / 2 + i + 0.5) * 2.6, 0.08, z + lado * (fondo / 2 - 0.6)); g.add(t);
       }
       if (techado) {
-        const k = Math.min(techado, n), x0 = -n / 2 * 2.6, L = k * 2.6;
+        const k = Math.min(techado, n - techado_desde), x0 = (-n / 2 + techado_desde) * 2.6, L = k * 2.6;
         const t = new THREE.Mesh(new THREE.BoxGeometry(L + 0.6, 0.08, fondo + 1), mate(0x4e8a62, { roughness: 0.55, metalness: 0.25 }));
         t.position.set(x0 + L / 2, 2.75, z); t.rotation.x = lado * 0.07; g.add(t);
         const losa = new THREE.Mesh(new THREE.BoxGeometry(L, 0.18, fondo), concretoClaro); losa.position.set(x0 + L / 2, 0.09, z); g.add(losa);

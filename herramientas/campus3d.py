@@ -223,6 +223,14 @@ def marco(id_, u, v):
 # Lugares sin edificio que marcó la Sede sobre la maqueta (capturas anotadas). Píxeles del croquis original;
 # los que dependen de las calles se calculan en main().
 PUENTE_PEATONAL_X = 1775          # sobre la ruta 32, al norte de los edificios 12 y 13
+# parqueos del administrativo (mapa de Google): zona verde (m de la maqueta) que separa el parqueo del 34, junto
+# al 2, del parqueo del 25, donde llega la calle: una lengua de zacate frente a la mitad sureste de la fila del 34
+# que se abre hacia afuera. Trazada sobre el mapa de Google y llevada a la maqueta con la fila del 34 y el 25.
+VERDE_PARQUEOS = [(-72.5, 17.4), (-82.6, 20.9), (-87.5, 22.3), (-92.9, 23.3), (-96.9, 25.6), (-97.1, 30.4),
+                  (-93.6, 35.7), (-95.0, 38.6), (-103.3, 42.2), (-108.4, 41.9), (-115.5, 34.8), (-120.0, 31.0),
+                  (-123.4, 30.7), (-127.9, 32.5), (-131.3, 34.7), (-131.4, 37.5), (-123.7, 45.0), (-123.5, 48.3),
+                  (-130.0, 51.9), (-136.2, 54.9), (-146.4, 59.2), (-131.8, 75.4), (-50.9, 41.3)]
+CENTRO_P25 = (-106.9, 35.2)   # (mapa) los cuatro espacios están en el parqueo donde entra la calle
 # isla frente a la entrada (foto): zacate hasta esta distancia (m) al norte del centro del pórtico; más allá, adoquín
 ISLA_ENTRADA = {"zacate_hasta": 18.3}
 CASETA_GUARDA = (1045, 1197)      # en la isla de zacate entre las calles, al sur de la entrada
@@ -470,7 +478,7 @@ def lugares_nuevos(calles, quebrada, lejos_carretera, y_ruta32):
         cv2.fillPoly(despejar if limpiar is None else limpiar, [np.array(rect_contorno(p[0], p[1], largo / ESCALA + 56, ancho / ESCALA + 56, giro), np.int32)], 1)
         elem.append({"tipo": tipo, "id": id_, "p": a_metros(*p), "giro": round(math.radians(giro), 3), "largo": largo, "ancho": ancho, **extra})
 
-    def parqueo(id_, centro, largo, ancho, giro, filas, conexion=None, techado=False):
+    def parqueo(id_, centro, largo, ancho, giro, filas, conexion=None, techado=False, techado_desde=0):
         """Parqueo asfaltado (largo x ancho en metros); filas = [(z del centro de la fila, fondo)] en metros,
         z medido hacia la izquierda del giro (como v en marco)."""
         cx, cy = centro
@@ -489,7 +497,7 @@ def lugares_nuevos(calles, quebrada, lejos_carretera, y_ruta32):
         if conexion:   # entrada de asfalto desde la calle
             cv2.line(asfalto, tuple(int(k) for k in conexion[0]), tuple(int(k) for k in conexion[1]), 255, 22)
         elem.append({"tipo": "parqueo", "id": id_, "centro": a_metros(cx, cy), "largo": largo, "ancho": ancho,
-                     "giro": round(math.radians(giro), 3), "filas": espacios, "techado": techado})
+                     "giro": round(math.radians(giro), 3), "filas": espacios, "techado": techado, "techado_desde": techado_desde})
 
     # --- pasillos techados (anotaciones): de la entrada bajan por el lado sureste de la calle (26), cruzan la
     # quebrada junto a la calle y siguen hacia el edificio administrativo (27) hasta la punta de la calle, donde
@@ -563,16 +571,20 @@ def lugares_nuevos(calles, quebrada, lejos_carretera, y_ruta32):
     # (anotaciones y fotos) no hay calle hacia el 25: entre el final de la calle, el 25 y el 34 todo es una
     # explanada de asfalto. El 25 tiene cuatro espacios de frente hacia Docencia; el 34, tres espacios techados
     # (carport verde) y el resto del patio con rayas
-    c25 = marco(2, 52, 149)
+    c25 = (CENTRO_P25[0] / ESCALA + ORIGEN[0], CENTRO_P25[1] / ESCALA + ORIGEN[1])
     parqueo(25, c25, 11.9, 6.0, -39, [(0.0, 5.0)])
     c34 = marco(2, -42, 63)
-    parqueo(34, c34, 25.0, 9.5, 51, [(-2.25, 5.0)], techado=3)
+    parqueo(34, c34, 25.0, 9.5, 51, [(-2.25, 5.0)], techado=4, techado_desde=1)   # (mapa) techo de 4 espacios, no en la punta
     esquinas_ = rect_contorno(c25[0], c25[1], 11.9 / ESCALA + 8, 6.0 / ESCALA + 8, -39) + rect_contorno(c34[0], c34[1], 25.0 / ESCALA + 4, 9.5 / ESCALA + 4, 51)
     esquinas_ += [p_ for p_ in zip(*np.nonzero(calles[1570:1625, 640:830])[::-1])]   # borde de la calle, al norte
     esquinas_ = [(x + 640, y + 1570) if i_ >= 8 else (x, y) for i_, (x, y) in enumerate(esquinas_)]
     plaza = cv2.convexHull(np.array(esquinas_, np.float32)).astype(np.int32)
     cv2.fillPoly(asfalto, [plaza], 255)
     cv2.fillPoly(despejar, [plaza], 1)
+    # (mapa de Google) en realidad son dos parqueos separados por zona verde (VERDE_PARQUEOS)
+    verde_ = np.array([(x / ESCALA + ORIGEN[0], z / ESCALA + ORIGEN[1]) for x, z in VERDE_PARQUEOS], np.int32)
+    for m_ in (asfalto, calles):
+        cv2.fillPoly(m_, [verde_], 0)
     # la 33 es el parqueo de la piscina, que ya está modelado
 
     # --- (fotos) el 1 está en lo alto del talud, unos 3,5 m sobre el 2. Una escalera larga y techada baja del
