@@ -219,10 +219,27 @@ def vista(nav, base, texto):
     c.close()
 
 
+def camara(nav, base, texto):
+    """Vista oblicua: «objetivo x,y,z y cámara x,y,z» (metros de la maqueta), sin niebla ni botones."""
+    tx, ty, tz, cx, cy, cz = (float(v) for v in texto.split(","))
+    c, p, _ = pagina(nav, base + "recorrido.html#captura-giro", {"width": 1280, "height": 900})
+    p.wait_for_function("window.__giro", timeout=120000)
+    p.wait_for_timeout(2500)
+    p.add_style_tag(content=".mapa3d__herramientas,.mapa3d__brujula,.mapa3d__marcas,.mapa3d__zonas{display:none!important}.mapa3d__escena{height:800px!important}")
+    p.evaluate("""([tx, ty, tz, cx, cy, cz]) => { const g = window.__giro; g.controles.target.set(tx, ty, tz); g.camara.position.set(cx, cy, cz);
+      g.camara.lookAt(tx, ty, tz); g.escena.fog.near = 5000; g.escena.fog.far = 9000; g.renderer.render(g.escena, g.camara); }""",
+               [tx, ty, tz, cx, cy, cz])
+    archivo = SALIDA / f"camara_{int(tx)}_{int(tz)}_{int(cx)}_{int(cz)}.png"
+    p.locator(".mapa3d__lienzo").screenshot(path=str(archivo))
+    print(f"Vista guardada en {archivo.relative_to(RAIZ)}")
+    c.close()
+
+
 def main():
     a = argparse.ArgumentParser()
     a.add_argument("--completa", action="store_true")
     a.add_argument("--vista")
+    a.add_argument("--camara", action="append", default=[], help="objetivo y cámara: TX,TY,TZ,CX,CY,CZ (se puede repetir)")
     args = a.parse_args()
     if not (RAIZ / "dist" / "index.html").exists():
         subprocess.run([sys.executable, "build.py", "--vista-previa"], cwd=RAIZ, check=True)
@@ -235,6 +252,8 @@ def main():
             completa(nav, base)
         if args.vista:
             vista(nav, base, args.vista)
+        for texto in args.camara:
+            camara(nav, base, texto)
         nav.close()
     s.shutdown()
     print(f"\n{len(fallas)} fallas. Capturas en .cache/pruebas/" if fallas else "\nTodo bien. Capturas en .cache/pruebas/")

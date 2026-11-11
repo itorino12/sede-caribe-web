@@ -5,7 +5,7 @@ Sitio estático (Python + Jinja2). El contenido sale de Google Drive; la vista p
 ## Comandos
 - Compilar: `python3 build.py --vista-previa` (sale en `dist/`).
 - Rehacer la maqueta 3D: `herramientas/rehacer_maqueta.sh`. Regenera los datos desde `herramientas/fuentes/` y rehace las imágenes de respaldo; tarda unos 2,5 min. Con `--sin-fotos` solo regenera los datos y compila, para probar.
-- Probar: `python3 herramientas/pruebas.py`, que es la prueba rápida. Para cambios mayores, `--completa`: celular, ficha, pantalla completa, zonas, respaldos sin 3D y axe. Para ver una zona de la maqueta desde arriba, `--vista=X,Z,ALTO`. Las capturas quedan en `.cache/pruebas/`.
+- Probar: `python3 herramientas/pruebas.py`, que es la prueba rápida. Para cambios mayores, `--completa`: celular, ficha, pantalla completa, zonas, respaldos sin 3D y axe. Para ver una zona de la maqueta desde arriba, `--vista=X,Z,ALTO`; en vista oblicua, `--camara=TX,TY,TZ,CX,CY,CZ` (objetivo y cámara; se puede repetir). Las capturas quedan en `.cache/pruebas/`.
 
 ## Maqueta 3D
 - Generador: `herramientas/campus3d.py`. Produce `src/data/campus3d.json` y `src/assets/img/campus-suelo.webp`.
@@ -17,6 +17,9 @@ Sitio estático (Python + Jinja2). El contenido sale de Google Drive; la vista p
   - `recorrido-config.js`: prioridad de los números y `FRENTE_PORTADA`.
   - `recorrido-ficha.js`: la ficha de cada lugar.
   - `recorrido-giro.js` y `portada-giro.js`: los respaldos sin 3D.
+- Relieve y quebrada: del plano de conjunto de la OEPI (2010, `herramientas/fuentes/plano-oepi-2010.pdf`). `herramientas/relieve_oepi.py` saca cotas, curvas y cauce a `fuentes/relieve-oepi.json` (las cotas se leyeron a mano y están escritas en el script); `herramientas/relieve.py` los lleva a la maqueta (placa delgada con los edificios comunes y el puente) y arma la malla de alturas (`relieve` en `campus3d.json`, decímetros). Del plano solo se usan relieve y quebrada: su infraestructura es vieja.
+  - En el visor, `alturaEn(x, z)` da la altura del terreno; al final del armado, «asentar» sube cada lugar a su altura y dobla sobre el terreno lo que va a ras del suelo. Lo que se agregue después se arma en y = 0, como siempre.
+  - Edificios, explanada, pista, parqueo de la piscina y plaza del auditorio quedan sobre plataformas a nivel. Bajo calles, pasillos y aceras el cauce no se excava (va entubado).
 - Coordenadas en metros: x crece hacia el este y z hacia el sur. Zonas: 1 cian, 2 amarillo, 3 magenta, 4 negro.
 - Si se cambia la maqueta y no se rehacen las imágenes de respaldo, la portada y la versión sin 3D quedan desactualizadas.
 

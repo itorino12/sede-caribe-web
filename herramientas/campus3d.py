@@ -26,6 +26,8 @@ from pathlib import Path
 import cv2
 import numpy as np
 
+import relieve
+
 RAIZ = Path(__file__).resolve().parent.parent
 ESCALA = 0.25            # metros por píxel del croquis (aprox.: el gimnasio queda de ~49 x 38 m)
 ORIGEN = (1200, 1500)    # píxel del croquis que queda en el centro de la maqueta
@@ -210,17 +212,6 @@ def ensanchar_imagen(img):
     return cv2.remap(img.astype(np.uint8), mapa_x, mapa_y, cv2.INTER_NEAREST, borderMode=cv2.BORDER_REPLICATE)
 
 
-# Cauce de la quebrada al oeste del puente, trazado sobre una vista de la maqueta (ajuste afín con los
-# números de los edificios); al este del puente sigue el trazo de antes
-_VISTA = np.array([(325, 795), (852, 332), (896, 170), (1270, 330), (1343, 131), (1540, 293), (1580, 917), (1662, 800), (1408, 836), (545, 573)], float)
-_CROQ = np.array([(466, 1759), (1011, 1306), (1049, 1131), (1433, 1304), (1510, 1113), (1689, 1292), (1721, 1900), (1816, 1795), (1553, 1826), (692, 1541)], float)
-_AFIN = np.linalg.lstsq(np.hstack([_VISTA, np.ones((len(_VISTA), 1))]), _CROQ, rcond=None)[0]
-QUEBRADA_OESTE = [tuple(np.array([x, y, 1.0]) @ _AFIN) for x, y in
-                  [(275, 425), (330, 400), (385, 372), (440, 352), (500, 368), (560, 395), (620, 430), (670, 470),
-                   (705, 505), (735, 550), (765, 580), (830, 596), (900, 600), (980, 590), (1060, 570), (1130, 545),
-                   (1190, 510), (1240, 482), (1290, 466), (1335, 472)]]
-
-
 def marco(id_, u, v):
     """Punto en el marco de un edificio: u a lo largo (sentido del giro), v hacia el lado izquierdo
     (para 1 y 2: u hacia el sureste, v hacia el noreste). En píxeles del croquis."""
@@ -244,6 +235,9 @@ SENDERO_ANTERIOR = [(948, 1466), (912, 1439), (883, 1417), (863, 1384), (862, 13
 SENDERO_EXPLANADA = [(974, 1443), (922, 1401), (868, 1339), (878, 1317), (908, 1283),
                      (934, 1245), (945, 1212), (925, 1188), (899, 1157), (887, 1141)]
 # explanada (anotaciones): todo el zacate abierto dentro de la vuelta del sendero, que la delimita al este
+# la explanada es la cima del cerro emparejada: el relieve la pone en lo alto y ella solo se levanta un poco
+# sobre su plataforma (taludes cortos), lo mismo que sube al final el sendero que llega a ella
+ALTO_EXPLANADA = 1.5
 EXPLANADA = [(910, 1240), (840, 1362), (794, 1353), (722, 1302), (676, 1254), (702, 1186), (745, 1136), (796, 1147), (885, 1201)]
 
 
@@ -516,7 +510,7 @@ def lugares_nuevos(calles, quebrada, lejos_carretera, y_ruta32):
     pasillo([marco(9, 84, 38), marco(9, 84, 0), marco(8, 84, 0), marco(7, 84, 0), marco(7, 84, -8)])
     # sendero techado que sube de la calle a la explanada (29), pasando junto al baño del auditorio (31)
     # (fotos) el sendero sube a la explanada entre muros celestes, con baranda gris, y entra a ella por el norte
-    pasillo(junto_calle(SENDERO_EXPLANADA[:1], 9, calles) + SENDERO_EXPLANADA[1:] + [(856, 1170)], techo=False, ancho=2.0, subida=3.5,
+    pasillo(junto_calle(SENDERO_EXPLANADA[:1], 9, calles) + SENDERO_EXPLANADA[1:] + [(856, 1170)], techo=False, ancho=2.0, subida=ALTO_EXPLANADA,
             cima=(945, 1212), limpiar=despejar_post)
     viejo_ = suavizar(junto_calle(SENDERO_ANTERIOR[:1], 9, calles) + SENDERO_ANTERIOR[1:] + [(856, 1170)])
     cv2.polylines(despejar, [np.array(viejo_, np.int32)], False, 1, 34)
@@ -527,7 +521,7 @@ def lugares_nuevos(calles, quebrada, lejos_carretera, y_ruta32):
     despejar[:] = np.maximum(despejar, cv2.dilate(claro, np.ones((25, 25), np.uint8)) // 255)
     ex = np.array(EXPLANADA, float)
     # (fotos) es una planicie en lo alto, con taludes de zacate, y en ella un higuerón enorme
-    elem.append({"tipo": "explanada", "id": 29, "contorno": M(EXPLANADA), "centro": a_metros(*ex.mean(axis=0)), "alto": 3.5,
+    elem.append({"tipo": "explanada", "id": 29, "contorno": M(EXPLANADA), "centro": a_metros(*ex.mean(axis=0)), "alto": ALTO_EXPLANADA,
                  "arbol": a_metros(*(ex.mean(axis=0) + (-14, 6)))})
 
     # --- plaza frente al Auditorio (fotos): concreto con guía táctil, bancas de concreto celeste
@@ -1055,7 +1049,7 @@ def main(pdf, sat=None):
     pintar(interior, (170, 210, 140))
     pintar(pista, (196, 116, 88), borde=(235, 235, 228))
     # calles internas: asfalto con cordón de concreto (fotos); el camino a la pista es de lastre
-    # quebrada: cruza bajo el puente, de oeste a este, con un trazo ondulado
+    # quebrada: baja del cerro, pasa bajo la calle de entrada, da la vuelta al sur y sigue al este hasta el puente
     quebrada = np.zeros_like(calles)
     # el puente se ajusta al eje real de la calle: centro y dirección salen del trazo de la calle en el croquis
     px0, py0 = PUENTE["centro"]
@@ -1069,14 +1063,12 @@ def main(pdf, sat=None):
     PUENTE["centro"] = (int(round(np.polyval(coef, py0))), py0)
     mitad = PUENTE["largo"] / 2 + 6
     PUENTE["eje"] = [(float(np.polyval(coef, yy)), float(yy)) for yy in np.linspace(py0 - mitad, py0 + mitad, 9)]
-    qx, qy = PUENTE["centro"]
-    oeste = [(ensanchar(x), y) for x, y in QUEBRADA_OESTE] + [(qx, qy)]
-    este = [(qx + d, qy + 26 * math.sin(d / 90) + 0.12 * d) for d in range(12, 430, 12)]
-    puntos = np.array(oeste + este, np.float32)
-    # se suaviza el trazo a mano (media móvil) para que el cauce no quede quebrado
-    suave = np.array([puntos[max(0, i - 2):i + 3].mean(axis=0) for i in range(len(puntos))])
-    suave[-len(este) - 1] = (qx, qy)
-    cv2.polylines(quebrada, [suave.astype(np.int32)], False, 255, 13)
+    # trazado del plano de la OEPI (relieve.py), llevado a la maqueta con los edificios comunes y el puente
+    datos_relieve = relieve.cargar()
+    a_maqueta = relieve.registro(datos_relieve, [(relieve.CRUCE_PUENTE, a_metros(*PUENTE["centro"]))])
+    cauce_m, n_plano = relieve.cauce(datos_relieve, a_maqueta, borde_x=a_metros(x1, y0)[0])
+    suave = np.array([(x / ESCALA + ORIGEN[0], z / ESCALA + ORIGEN[1]) for x, z in cauce_m], np.float32)
+    cv2.polylines(quebrada, [np.round(suave).astype(np.int32)], False, 255, 13)
     lejos_carretera = cv2.distanceTransform((carretera == 0).astype(np.uint8), cv2.DIST_L2, 5)
     elementos, extra = lugares_nuevos(calles, quebrada, lejos_carretera, y_de)
     pintar(extra["claro"], (164, 206, 126))
@@ -1390,9 +1382,28 @@ def main(pdf, sat=None):
                 if d < 34:
                     print(f"  ! el edificio {e['id']} queda pegado a la carretera ({d:.0f} px): se sale de la cerca")
 
+    # --- relieve (plano de la OEPI): plataformas a nivel donde hay edificios, la explanada, la pista, el parqueo
+    # de la piscina y la plaza del auditorio; bajo las calles (y el puente) el cauce no se excava
+    terreno = {"x": a_metros(x0, y0)[0], "z": a_metros(x0, y0)[1], "ancho": round((x1 - x0) * ESCALA, 2), "largo": round((y1 - y0) * ESCALA, 2)}
+    poligonos = lambda mascara: [[a_metros(float(x), float(y)) for x, y in c[:, 0]]
+                                 for c in cv2.findContours(mascara, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)[0] if len(c) >= 3]
+    plataformas = [[a_metros(x, y) for x, y in pol] for e in EDIFICIOS for pol in contornos_px(e)]
+    plataformas += [[a_metros(x, y) for x, y in EXPLANADA], [a_metros(x, y) for x, y in esquinas]]
+    plataformas += poligonos(lleno) + poligonos(extra["plaza"])
+    tubo = cv2.bitwise_or(cv2.bitwise_or(calles, acceso), cv2.bitwise_or(carretera, extra["calles_extra"]))
+    for el in elementos:   # pasillos y aceras cruzan la quebrada sobre una alcantarilla: ahí tampoco se excava
+        if el["tipo"] in ("pasillo", "acera") and len(el.get("puntos", [])) > 1:
+            pts = np.array([(x / ESCALA + ORIGEN[0], z / ESCALA + ORIGEN[1]) for x, z in el["puntos"]], np.int32)
+            cv2.polylines(tubo, [pts], False, 255, int(el.get("ancho", 2) / ESCALA) + 4)
+    info_r, alturas, _ = relieve.malla(terreno, relieve.muestras(datos_relieve, a_maqueta), plataformas, cauce_m, n_plano,
+                                      tubo[y0:y1, x0:x1])
+    print(f"Relieve: {info_r['nx']}x{info_r['nz']} celdas de {info_r['paso']} m, de {alturas.min():.1f} a {alturas.max():.1f} m")
+
     datos = {
-        "nota": "Generado por herramientas/campus3d.py a partir del croquis oficial «Distribución de Aulas». Esquemático, no a escala.",
-        "terreno": {"x": a_metros(x0, y0)[0], "z": a_metros(x0, y0)[1], "ancho": round((x1 - x0) * ESCALA, 2), "largo": round((y1 - y0) * ESCALA, 2)},
+        "nota": "Generado por herramientas/campus3d.py a partir del croquis oficial «Distribución de Aulas» (planta) y del "
+                "plano de conjunto de la OEPI de 2010 (relieve y quebrada). Esquemático, no a escala.",
+        "terreno": terreno,
+        "relieve": relieve.codificar(info_r, alturas),
         "edificios": [edificio_json(e) for e in EDIFICIOS],
         "arboles": arboles,
         "cerca": cerca,
