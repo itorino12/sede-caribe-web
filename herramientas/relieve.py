@@ -19,8 +19,15 @@ from scipy.ndimage import distance_transform_edt, gaussian_filter
 FUENTE = Path(__file__).resolve().parent / "fuentes" / "relieve-oepi.json"
 REFERENCIA = 96.0     # cota (m) que queda en y = 0: la explanada de las aulas y la piscina
 PASO = 2.0            # metros por celda de la malla de alturas
-CAUCE = {"hondo": 1.3, "ancho": 3.0, "borde": 3.5}   # cauce de la quebrada (m)
-CRUCE_PUENTE = (758.5, 342.8)   # en el plano: donde la quebrada pasa bajo la calle de residencias (el puente)
+CAUCE = {"hondo": 1.3, "ancho": 3.0, "borde": 2.5}   # cauce de la quebrada (m)
+# Puntos de control de la quebrada (plano en pt → maqueta en m). El puente: donde la quebrada pasa bajo la calle
+# de residencias. Al este del puente, el cauce va por el medio de las dos mallas que lo bordean (anotaciones de
+# la Sede, en campus3d.py): el punto medio entre ellas a x = 130, 150 y 170 m.
+CRUCE_PUENTE = (758.5, 342.8)
+# donde pasa bajo la calle de entrada (alcantarilla del plano) ↔ el paso rayado sobre la alcantarilla (19), donde el
+# pasillo techado cruza la calle
+CRUCE_ENTRADA = ((355.5, 390.0), (-72.0, 5.65))
+ENTRE_MALLAS = [((788.0, 358.8), (130.0, 4.04)), ((826.7, 377.1), (150.0, 6.70)), ((865.6, 395.5), (170.0, 9.48))]
 ORILLA = 40.0         # ancho de la franja en que el relieve baja a cero junto al borde de la maqueta (m)
 
 
@@ -43,7 +50,8 @@ def cauce(datos, a_maqueta, borde_x):
     la bordean, hasta salir de la maqueta (como antes)."""
     q = a_maqueta(datos["quebrada"])
     ex, ez = q[-1]
-    cola = np.array([(ex + 22, ez - 7), (ex + 45, ez - 12), (ex + 70, ez - 14), (borde_x + 12, ez - 15)])
+    # pasa al sur de la esquina de la malla norte (209, −2,6) y al norte de la malla sur, que baja desde (181, 22)
+    cola = np.array([(ex + 20, ez - 1.5), (ex + 40, ez - 3.5), (ex + 70, ez - 5.5), (borde_x + 12, ez - 6.5)])
     d = np.hypot(*np.diff(np.vstack([q[-1:], cola]), axis=0).T)
     pts = [q[-1]]
     for (a, b), L in zip(zip(np.vstack([q[-1:], cola])[:-1], cola), d):
@@ -86,9 +94,10 @@ def armonica(h, fijo, vueltas=4000):
     return h
 
 
-def malla(terreno, muestras_xyz, plataformas, cauce, n_plano, calles):
+def malla(terreno, muestras_xyz, plataformas, cauce, n_plano, calles, rampas=()):
     """Alturas (m, relativas a REFERENCIA) en una malla de PASO metros sobre el terreno de la maqueta.
-    plataformas: polígonos [(x, z), ...] en metros; cada uno queda a nivel (edificios, explanada, pista...).
+    plataformas: lista de {"pol", "subir", "suave", "nivel" o "como"} (ver abajo): edificios, explanada, pista...
+    rampas: lista de {"puntos", "ancho", "desde", "hasta", "cima"}: franjas que suben de una plataforma a otra.
     cauce, n_plano: eje de la quebrada (m) y cuántos de sus puntos vienen del plano (en ellos el fondo
     siempre baja; en la cola, que sale de la maqueta, sigue al terreno).
     calles: máscara (uint8) de las calles sobre el terreno de la maqueta, a cualquier resolución: ahí el
@@ -124,18 +133,51 @@ def malla(terreno, muestras_xyz, plataformas, cauce, n_plano, calles):
     t = np.clip(d_borde / ORILLA, 0, 1)
     h *= t * t * (3 - 2 * t)
 
-    # plataformas a nivel bajo los edificios, con un talud suave alrededor
-    for pol in plataformas:
+    # plataformas a nivel (en orden: la que viene después manda), con un talud suave alrededor. Cada una es
+    # {"pol": [(x, z)...], "subir": m sobre el nivel del terreno (loma), "suave": ancho del talud (m)}; el nivel es
+    # la mediana del terreno bajo ella, salvo que traiga "nivel", "nivel_de" (puntos) o "como" (índice de otra)
+    niveles = []
+    for pl in plataformas:
         m = np.zeros(X.shape, np.uint8)
-        cv2.fillPoly(m, [a_celda(pol)], 1)
+        cv2.fillPoly(m, [a_celda(pl["pol"])], 1)
         m = m > 0
         if not m.any():
+            niveles.append(None)
             continue
-        nivel = float(np.median(h[m]))
+        if "como" in pl:   # al nivel de otra; con «bajar», al pie de su loma
+            nivel = niveles[pl["como"]] - (plataformas[pl["como"]].get("subir", 0.0) if pl.get("bajar") else 0.0)
+        elif "nivel_de" in pl:   # mediana del terreno en esos puntos (la plaza, para la excavación del auditorio)
+            ij = a_celda(pl["nivel_de"])
+            nivel = float(np.median(h[ij[:, 1].clip(0, nz - 1), ij[:, 0].clip(0, nx - 1)]))
+        else:
+            nivel = pl.get("nivel", float(np.median(h[m]))) + pl.get("subir", 0.0)
+        niveles.append(nivel)
+        suave = pl.get("suave", 7.0)
         d = distance_transform_edt(~m) * PASO
-        w = np.clip(1 - (d - 2.0) / 7.0, 0, 1)
+        w = np.clip(1 - (d - min(2.0, suave)) / max(suave, 1e-3), 0, 1) if suave > 0 else (d <= 0).astype(float)
         w = w * w * (3 - 2 * w)
         h = h * (1 - w) + nivel * w
+
+    # calles en terraplén: donde una calle cruza la hondonada de la quebrada (a menos de 30 m del cauce) no baja con
+    # el terreno; su altura sale de la misma calle más allá (promedio entre vecinas de calle, Laplace solo sobre ella)
+    eje_q = np.zeros(X.shape, np.uint8)
+    cq = np.asarray(cauce, float)
+    eje_q[np.clip(np.round((cq[:, 1] - zs[0]) / PASO).astype(int), 0, nz - 1),
+          np.clip(np.round((cq[:, 0] - xs[0]) / PASO).astype(int), 0, nx - 1)] = 1
+    cerca_q = calles_m & (distance_transform_edt(eje_q == 0) * PASO < 30)
+    if cerca_q.any():
+        calle = calles_m.astype(float)
+        for _ in range(1500):
+            p_h, p_c = np.pad(h * calle, 1), np.pad(calle, 1)
+            suma = p_h[:-2, 1:-1] + p_h[2:, 1:-1] + p_h[1:-1, :-2] + p_h[1:-1, 2:]
+            n = p_c[:-2, 1:-1] + p_c[2:, 1:-1] + p_c[1:-1, :-2] + p_c[1:-1, 2:]
+            h = np.where(cerca_q & (n > 0), suma / np.maximum(n, 1), h)
+        # las orillas del terraplén bajan en un talud corto hacia la hondonada
+        d_terr = distance_transform_edt(~cerca_q) * PASO
+        borde = (d_terr > 0) & (d_terr < 6)
+        _, idx = distance_transform_edt(~cerca_q, return_indices=True)
+        w = np.clip(1 - d_terr / 6, 0, 1)
+        h = np.where(borde, np.maximum(h, h * (1 - w) + h[idx[0], idx[1]] * w), h)
 
     # cauce: el fondo baja siempre aguas abajo; se excava salvo bajo las calles (alcantarillas y puente)
     c = np.asarray(cauce, float)
@@ -155,9 +197,28 @@ def malla(terreno, muestras_xyz, plataformas, cauce, n_plano, calles):
     a, b = CAUCE["ancho"] / 2, CAUCE["ancho"] / 2 + CAUCE["borde"]
     w = np.clip((b - d_cauce) / (b - a), 0, 1)
     w = w * w * (3 - 2 * w)
-    w[calles_m] = 0
-    w = gaussian_filter(w, 0.6)
+    # junto a las calles el cauce se va haciendo llano (entra al tubo sin dejar la orilla de la calle colgando)
+    d_calle = distance_transform_edt(~calles_m) * PASO
+    w *= np.clip(d_calle / 8.0, 0, 1)
+    w = gaussian_filter(w, 0.8)
     h = np.where(w > 0, np.minimum(h, h * (1 - w) + nivel_cauce * w), h)
+    # rampas (el sendero a la explanada): una franja que sube parejo del nivel de una plataforma al de otra
+    for r in rampas:
+        p = np.asarray(r["puntos"], float)
+        largo = np.r_[0, np.cumsum(np.hypot(*np.diff(p, axis=0).T))]
+        t = np.clip(largo / largo[r.get("cima", len(p) - 1)], 0, 1)
+        y = niveles[r["desde"]] + (niveles[r["hasta"]] - niveles[r["desde"]]) * t
+        fino = np.linspace(0, largo[-1], int(largo[-1] / 0.5) + 2)
+        px, pz, py = np.interp(fino, largo, p[:, 0]), np.interp(fino, largo, p[:, 1]), np.interp(fino, largo, y)
+        sel = np.zeros(X.shape, np.uint8)
+        lin = np.round(np.c_[(px - xs[0]) / PASO, (pz - zs[0]) / PASO]).astype(np.int32)
+        cv2.polylines(sel, [lin], False, 1, max(1, int(round(r["ancho"] / PASO))))
+        eje = np.ones(X.shape, bool)   # cada celda de la franja toma la altura del punto del eje más cercano
+        eje[lin[:, 1].clip(0, nz - 1), lin[:, 0].clip(0, nx - 1)] = False
+        _, idx = distance_transform_edt(eje, return_indices=True)
+        tabla = np.zeros(X.shape, np.float32)
+        tabla[lin[:, 1].clip(0, nz - 1), lin[:, 0].clip(0, nx - 1)] = py
+        h = np.where(sel > 0, tabla[idx[0], idx[1]], h)
     return {"x": float(xs[0]), "z": float(zs[0]), "paso": PASO, "nx": nx, "nz": nz}, h.astype(np.float32), fondo
 
 

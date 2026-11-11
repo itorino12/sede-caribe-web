@@ -235,9 +235,10 @@ SENDERO_ANTERIOR = [(948, 1466), (912, 1439), (883, 1417), (863, 1384), (862, 13
 SENDERO_EXPLANADA = [(974, 1443), (922, 1401), (868, 1339), (878, 1317), (908, 1283),
                      (934, 1245), (945, 1212), (925, 1188), (899, 1157), (887, 1141)]
 # explanada (anotaciones): todo el zacate abierto dentro de la vuelta del sendero, que la delimita al este
-# la explanada es la cima del cerro emparejada: el relieve la pone en lo alto y ella solo se levanta un poco
-# sobre su plataforma (taludes cortos), lo mismo que sube al final el sendero que llega a ella
-ALTO_EXPLANADA = 1.5
+# la explanada es la cima del cerro emparejada: es parte del relieve (plataforma a nivel), sin taludes propios.
+# El sendero que llega a ella sigue el terreno, que a lo largo del sendero sube parejo desde la plaza del auditorio
+ALTO_EXPLANADA = 0.0
+CIMA_SENDERO = (945, 1212)   # punto del sendero donde ya llegó arriba
 EXPLANADA = [(910, 1240), (840, 1362), (794, 1353), (722, 1302), (676, 1254), (702, 1186), (745, 1136), (796, 1147), (885, 1201)]
 
 
@@ -511,7 +512,7 @@ def lugares_nuevos(calles, quebrada, lejos_carretera, y_ruta32):
     # sendero techado que sube de la calle a la explanada (29), pasando junto al baño del auditorio (31)
     # (fotos) el sendero sube a la explanada entre muros celestes, con baranda gris, y entra a ella por el norte
     pasillo(junto_calle(SENDERO_EXPLANADA[:1], 9, calles) + SENDERO_EXPLANADA[1:] + [(856, 1170)], techo=False, ancho=2.0, subida=ALTO_EXPLANADA,
-            cima=(945, 1212), limpiar=despejar_post)
+            cima=CIMA_SENDERO, limpiar=despejar_post)
     viejo_ = suavizar(junto_calle(SENDERO_ANTERIOR[:1], 9, calles) + SENDERO_ANTERIOR[1:] + [(856, 1170)])
     cv2.polylines(despejar, [np.array(viejo_, np.int32)], False, 1, 34)
 
@@ -1065,7 +1066,7 @@ def main(pdf, sat=None):
     PUENTE["eje"] = [(float(np.polyval(coef, yy)), float(yy)) for yy in np.linspace(py0 - mitad, py0 + mitad, 9)]
     # trazado del plano de la OEPI (relieve.py), llevado a la maqueta con los edificios comunes y el puente
     datos_relieve = relieve.cargar()
-    a_maqueta = relieve.registro(datos_relieve, [(relieve.CRUCE_PUENTE, a_metros(*PUENTE["centro"]))])
+    a_maqueta = relieve.registro(datos_relieve, [(relieve.CRUCE_PUENTE, a_metros(*PUENTE["centro"])), relieve.CRUCE_ENTRADA] + relieve.ENTRE_MALLAS)
     cauce_m, n_plano = relieve.cauce(datos_relieve, a_maqueta, borde_x=a_metros(x1, y0)[0])
     suave = np.array([(x / ESCALA + ORIGEN[0], z / ESCALA + ORIGEN[1]) for x, z in cauce_m], np.float32)
     cv2.polylines(quebrada, [np.round(suave).astype(np.int32)], False, 255, 13)
@@ -1383,20 +1384,58 @@ def main(pdf, sat=None):
                     print(f"  ! el edificio {e['id']} queda pegado a la carretera ({d:.0f} px): se sale de la cerca")
 
     # --- relieve (plano de la OEPI): plataformas a nivel donde hay edificios, la explanada, la pista, el parqueo
-    # de la piscina y la plaza del auditorio; bajo las calles (y el puente) el cauce no se excava
+    # de la piscina y la plaza del auditorio; bajo calles, pasillos y aceras el cauce no se excava
     terreno = {"x": a_metros(x0, y0)[0], "z": a_metros(x0, y0)[1], "ancho": round((x1 - x0) * ESCALA, 2), "largo": round((y1 - y0) * ESCALA, 2)}
     poligonos = lambda mascara: [[a_metros(float(x), float(y)) for x, y in c[:, 0]]
                                  for c in cv2.findContours(mascara, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)[0] if len(c) >= 3]
-    plataformas = [[a_metros(x, y) for x, y in pol] for e in EDIFICIOS for pol in contornos_px(e)]
-    plataformas += [[a_metros(x, y) for x, y in EXPLANADA], [a_metros(x, y) for x, y in esquinas]]
-    plataformas += poligonos(lleno) + poligonos(extra["plaza"])
+    caja_m = lambda c, giro, largo, ancho: [(c[0] + math.cos(giro) * u * largo / 2 + math.sin(giro) * v * ancho / 2,
+                                            c[1] - math.sin(giro) * u * largo / 2 + math.cos(giro) * v * ancho / 2)
+                                           for u, v in ((-1, -1), (1, -1), (1, 1), (-1, 1))]
+    plataformas = []
+    for e in EDIFICIOS:
+        loma = e.get("estilo", {}).get("loma", 0)   # (fotos) el edificio está en lo alto de un talud de zacate
+        for pol in contornos_px(e):
+            plataformas.append({"pol": [a_metros(x, y) for x, y in pol], "subir": loma, "suave": 9.0 if loma else 7.0})
+    # la escalera, las rampas y los descansos que suben al edificio en la loma arrancan abajo, al nivel de alrededor
+    i_loma = next(i for i, pl in enumerate(plataformas) if pl["subir"])
+    for el in elementos:
+        if el["tipo"] in ("escalera", "descanso"):
+            plataformas.append({"pol": caja_m(el["p"], el["giro"], el["largo"] + 1, el["ancho"] + 1), "nivel": 0.0, "suave": 1.0})
+        elif el["tipo"] == "rampa":
+            (ax_, az_), (bx_, bz_) = el["desde"], el["hasta"]
+            giro_ = math.atan2(-(bz_ - az_), bx_ - ax_)
+            plataformas.append({"pol": caja_m(((ax_ + bx_) / 2, (az_ + bz_) / 2), giro_, math.dist(el["desde"], el["hasta"]) + 1, el["ancho"] + 1),
+                                "nivel": 0.0, "suave": 1.0})
+    for pl in plataformas[i_loma + 1:]:
+        if pl.get("nivel") == 0.0:
+            pl.pop("nivel"); pl["como"] = i_loma; pl["bajar"] = True
+    i_explanada = len(plataformas)
+    plataformas.append({"pol": [a_metros(x, y) for x, y in EXPLANADA]})
+    plataformas.append({"pol": [a_metros(x, y) for x, y in esquinas]})
+    plataformas += [{"pol": pol} for pol in poligonos(lleno)]
+    # (Sede) al construir el auditorio se excavó el pie del cerro: el frente del auditorio, la plaza y el baño quedan
+    # a nivel; el cerro sigue detrás y lo contiene el sendero que sube a la explanada
+    sendero = min((el for el in elementos if el["tipo"] == "pasillo"),
+                  key=lambda el: math.dist(el["puntos"][0], a_metros(*SENDERO_EXPLANADA[0])))
+    pts_ex = [p for e in EDIFICIOS if e["id"] == 5 for pol in contornos_px(e) for p in pol]
+    bx_, by_ = BANO_MINIAUDITORIO
+    pts_ex += [(bx_ + dx, by_ + dy) for dx in (-16, 16) for dy in (-16, 16)]
+    pts_ex += [tuple(p) for p in np.argwhere(extra["plaza"] > 0)[:, ::-1][::50]]
+    pts_ex += [(x / ESCALA + ORIGEN[0], z / ESCALA + ORIGEN[1]) for x, z in sendero["puntos"]]
+    casco = cv2.convexHull(np.array(pts_ex, np.float32))[:, 0]
+    i_excavado = len(plataformas)
+    plataformas.append({"pol": [a_metros(float(x), float(y)) for x, y in casco], "nivel_de": [a_metros(float(x), float(y)) for x, y in
+                        np.argwhere(extra["plaza"] > 0)[:, ::-1][::50]], "suave": 2.0})
+    plataformas += [{"pol": pol} for pol in poligonos(extra["plaza"])]
+    cima = int(np.argmin([math.dist(p, a_metros(*CIMA_SENDERO)) for p in sendero["puntos"]]))
+    rampas = [{"puntos": sendero["puntos"], "ancho": sendero["ancho"] + 2, "desde": i_excavado, "hasta": i_explanada, "cima": cima}]
     tubo = cv2.bitwise_or(cv2.bitwise_or(calles, acceso), cv2.bitwise_or(carretera, extra["calles_extra"]))
     for el in elementos:   # pasillos y aceras cruzan la quebrada sobre una alcantarilla: ahí tampoco se excava
         if el["tipo"] in ("pasillo", "acera") and len(el.get("puntos", [])) > 1:
             pts = np.array([(x / ESCALA + ORIGEN[0], z / ESCALA + ORIGEN[1]) for x, z in el["puntos"]], np.int32)
             cv2.polylines(tubo, [pts], False, 255, int(el.get("ancho", 2) / ESCALA) + 4)
     info_r, alturas, _ = relieve.malla(terreno, relieve.muestras(datos_relieve, a_maqueta), plataformas, cauce_m, n_plano,
-                                      tubo[y0:y1, x0:x1])
+                                      tubo[y0:y1, x0:x1], rampas)
     print(f"Relieve: {info_r['nx']}x{info_r['nz']} celdas de {info_r['paso']} m, de {alturas.min():.1f} a {alturas.max():.1f} m")
 
     datos = {

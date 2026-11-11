@@ -69,32 +69,41 @@ escena.add(sol);
 // conjunto de la OEPI: una malla de alturas en decímetros (herramientas/relieve.py). Fuera de ella, y en su borde,
 // la altura es cero, como el entorno.
 const t = datos.campus.terreno;
-const alturaEn = (() => {
+const relieve = (() => {
   const r = datos.campus.relieve;
-  if (!r) return () => 0;
+  if (!r) return null;
   const bytes = atob(r.datos), h = new Float32Array(bytes.length);
   for (let i = 0; i < bytes.length; i++) h[i] = ((bytes.charCodeAt(i) << 24) >> 24) * r.unidad;   // byte con signo
-  return (x, z) => {
-    const fx = (x - r.x) / r.paso, fz = (z - r.z) / r.paso;
-    if (!(fx >= 0 && fz >= 0 && fx <= r.nx - 1 && fz <= r.nz - 1)) return 0;
-    const i = Math.min(Math.floor(fx), r.nx - 2), j = Math.min(Math.floor(fz), r.nz - 2), u = fx - i, v = fz - j, k = j * r.nx + i;
-    return (h[k] * (1 - u) + h[k + 1] * u) * (1 - v) + (h[k + r.nx] * (1 - u) + h[k + r.nx + 1] * u) * v;
-  };
+  return { ...r, h };
 })();
+// altura del terreno (m) en un punto; «asentar» empareja después la malla bajo los lugares que se suben enteros
+function alturaEn(x, z) {
+  const r = relieve;
+  if (!r) return 0;
+  const fx = (x - r.x) / r.paso, fz = (z - r.z) / r.paso;
+  if (!(fx >= 0 && fz >= 0 && fx <= r.nx - 1 && fz <= r.nz - 1)) return 0;
+  const i = Math.min(Math.floor(fx), r.nx - 2), j = Math.min(Math.floor(fz), r.nz - 2), u = fx - i, v = fz - j, k = j * r.nx + i, h = r.h;
+  return (h[k] * (1 - u) + h[k + 1] * u) * (1 - v) + (h[k + r.nx] * (1 - u) + h[k + r.nx + 1] * u) * v;
+}
 const textura = new THREE.TextureLoader().load(raiz.dataset.suelo, pedirDibujo);
 textura.colorSpace = THREE.SRGBColorSpace;
 textura.anisotropy = 4;
 const sueloGeo = (() => {
-  const r = datos.campus.relieve, paso = r ? r.paso * (liviano ? 2 : 1) : t.ancho;
+  const paso = relieve ? relieve.paso * (liviano ? 2 : 1) : t.ancho;
   const g = new THREE.PlaneGeometry(t.ancho, t.largo, Math.max(1, Math.round(t.ancho / paso)), Math.max(1, Math.round(t.largo / paso)));
   g.rotateX(-Math.PI / 2);
   g.translate(t.x + t.ancho / 2, 0, t.z + t.largo / 2);
-  const pos = g.attributes.position;
-  for (let i = 0; i < pos.count; i++) pos.setY(i, alturaEn(pos.getX(i), pos.getZ(i)));
-  g.computeVertexNormals();
   return g;
 })();
-const suelo = new THREE.Mesh(sueloGeo, new THREE.MeshLambertMaterial({ map: textura }));
+function levantarSuelo() {   // se llama de nuevo cuando «asentar» empareja el terreno
+  const pos = sueloGeo.attributes.position;
+  for (let i = 0; i < pos.count; i++) pos.setY(i, alturaEn(pos.getX(i), pos.getZ(i)));
+  pos.needsUpdate = true;
+  sueloGeo.computeVertexNormals(); sueloGeo.computeBoundingBox(); sueloGeo.computeBoundingSphere();
+}
+levantarSuelo();
+// el suelo cede ante lo que va encima casi a ras (losas, aceras, rayas): sin parpadeo ni zacate asomándose
+const suelo = new THREE.Mesh(sueloGeo, new THREE.MeshLambertMaterial({ map: textura, polygonOffset: true, polygonOffsetFactor: 2, polygonOffsetUnits: 6 }));
 suelo.receiveShadow = true;
 escena.add(suelo);
 // Alrededor del croquis: zacate hasta el horizonte, las carreteras que siguen y los barrios, naves y bosques de
@@ -586,14 +595,7 @@ for (const e of datos.campus.edificios) {
       torre.castShadow = tapa.castShadow = true;
       grupo.add(torre, tapa);
     }
-    if (estilo.loma) {   // el edificio está en lo alto de un talud de zacate
-      grupo.children.forEach((h) => { h.position.y += estilo.loma; });
-      const zacate = new THREE.MeshLambertMaterial({ color: 0x86b862 });
-      for (const vol of e.volumenes) for (let k = 0; k < 5; k++) {
-        const m = prisma(desplazar(vol.contorno, alero + 0.6 + 6 * (1 - k / 5)), estilo.loma / 5, (estilo.loma * k) / 5, zacate);
-        m.castShadow = false; grupo.add(m);
-      }
-    }
+    // estilo.loma (edificio en lo alto de un talud): ahora es parte del relieve (plataforma elevada en relieve.py)
     if (estilo.hundido) {   // está en un bajo: talud de zacate alrededor, abierto del lado de la entrada (hacia el 2)
       const c = e.volumenes[0].contorno, zacate = new THREE.MeshLambertMaterial({ color: 0x86b862 }), h = estilo.hundido;
       const ext = desplazar(c, alero + 1.5);
@@ -626,6 +628,7 @@ for (const e of datos.campus.edificios) {
   const malla = new THREE.MeshLambertMaterial({ color: 0x24533a, transparent: true, opacity: 0.5, side: THREE.DoubleSide, depthWrite: false });
   const puas = new THREE.MeshLambertMaterial({ color: 0xc3c7cb });
   const grupoCerca = new THREE.Group();
+  grupoCerca.userData.lineal = true;
   for (const t of tramos) {
     for (let i = 0; i < t.length - 1; i++) {
       const [ax, az] = t[i], [bx, bz] = t[i + 1];
@@ -795,6 +798,7 @@ if (datos.campus.puente) {
   // el puente se arma por tramos a lo largo del eje de la calle, así sigue la curva y empata con el asfalto
   const { centro: [px, pz], eje } = datos.campus.puente;
   const puente = new THREE.Group();
+  puente.userData.talud = 8;   // sobre la calle (en terraplén, ver relieve.py): el terreno empata con él sin lomo
   const concreto = new THREE.MeshStandardMaterial({ color: 0xc9c7c0, roughness: 0.9 });
   const asfalto = new THREE.MeshStandardMaterial({ color: 0x55595f, roughness: 0.95 });
   const amarillo = new THREE.MeshStandardMaterial({ color: 0xf2c200, roughness: 0.5, metalness: 0.2 });
@@ -1005,6 +1009,7 @@ if (datos.campus.parqueo) {
   // un muro celeste (las rampas a la explanada)
   function pasillo({ id, puntos, ancho, techo = true, en_calle = [], alturas = [] }) {
     const g = new THREE.Group(), pisos = [], guias = [], techos = [], columnas = [], barandas = [], muros = [];
+    g.userData.lineal = true;   // sigue el terreno tramo a tramo (ver «asentar»)
     const y = (i) => alturas[i] || 0;
     for (let i = 0; i < puntos.length - 1; i++) {
       if (en_calle[i] || en_calle[i + 1]) continue;
@@ -1320,12 +1325,8 @@ if (datos.campus.parqueo) {
   // y un higuerón enorme (unas tres veces más grande que los árboles comunes)
   function explanada({ id, contorno, centro, alto, arbol }) {
     const g = new THREE.Group();
-    const lado = new THREE.MeshLambertMaterial({ color: 0x86b862 }), arriba = new THREE.MeshLambertMaterial({ color: 0xa4ce7e });
-    const capas = 6;
-    for (let k = 0; k < capas; k++) {
-      const m = prisma(desplazar(contorno, 5 * (1 - k / capas)), alto / capas, (alto * k) / capas, k === capas - 1 ? arriba : lado);
-      m.castShadow = false; g.add(m);
-    }
+    const arriba = new THREE.MeshLambertMaterial({ color: 0xa4ce7e });
+    // la planicie y sus taludes son parte del relieve (plataforma en relieve.py); aquí solo bancas y el higuerón
     contorno.forEach(([x, z], i) => {
       if (i % 2) return;
       const dx = centro[0] - x, dz = centro[1] - z, d = Math.hypot(dx, dz) || 1;
@@ -1357,6 +1358,7 @@ if (datos.campus.parqueo) {
     g.add(cajas(mate(0x9d9b94), rayas));
     const guia = new THREE.Mesh(new THREE.BoxGeometry(ancho + 0.6, 0.03, 0.4), amarilloGuia); guia.position.y = 0.175; g.add(guia);
     g.position.set(p[0], 0, p[1]); g.rotation.y = giro;
+    g.userData.talud = 12;
     registrar(g, id, new THREE.Vector3(p[0], 3, p[1]), { pared: concreto, techo: concreto });
   }
 
@@ -1447,7 +1449,13 @@ if (datos.campus.parqueo) {
   }
 
   // acera sin techo (anotaciones): losa de concreto con guía táctil amarilla, sin barandas
-  function acera({ puntos, ancho }) {
+  function acera({ puntos: crudos, ancho }) {
+    // tramos de 3 m como mucho, para que la acera siga el terreno (cada losa se inclina entre sus dos puntas)
+    const puntos = [crudos[0]];
+    for (let i = 1; i < crudos.length; i++) {
+      const [ax, az] = crudos[i - 1], [bx, bz] = crudos[i], n = Math.ceil(Math.hypot(bx - ax, bz - az) / 3);
+      for (let k = 1; k <= n; k++) puntos.push([ax + ((bx - ax) * k) / n, az + ((bz - az) * k) / n]);
+    }
     const losas = [], guias = [];
     for (let i = 0; i < puntos.length - 1; i++) {
       const [ax, az] = puntos[i], [bx, bz] = puntos[i + 1];
@@ -1455,7 +1463,7 @@ if (datos.campus.parqueo) {
       losas.push([cx, 0.06, cz, ancho, 0.12, L, ang]);
       guias.push([cx, 0.125, cz, 0.36, 0.02, L, ang]);
     }
-    const g = new THREE.Group(); g.add(cajas(concretoClaro, losas), cajas(amarilloGuia, guias)); registrar(g, null);
+    const g = new THREE.Group(); g.add(cajas(concretoClaro, losas), cajas(amarilloGuia, guias)); g.userData.lineal = true; registrar(g, null);
   }
   // paso de cebra (anotaciones): franjas blancas a lo largo de la calle, una tras otra de lado a lado
   function cebra({ franjas, giro, ancho = 3 }) {
@@ -1593,74 +1601,129 @@ if (datos.campus.parqueo) {
 }
 
 // ---------- asentar sobre el relieve
-// Todo se armó sobre un suelo plano (y = 0). Cada lugar que mide menos de UNIDAD en planta se sube entero a la
-// altura del terreno en su centro (los edificios quedan sobre su plataforma a nivel); lo más grande (cercas,
-// pasillos largos, grupos con muchas piezas) se recorre pieza por pieza. Lo que va pegado al suelo (aceras,
-// losas, rayas, cebras) se dobla sobre el terreno vértice por vértice, para que no quede enterrado ni volando.
-// Las instancias (árboles, columnas) se suben una por una. Todo se calcula con las posiciones de antes de subir.
+// Todo se armó sobre un suelo plano (y = 0). Tres casos:
+//  · un lugar con altura (edificio, piscina, puente, caseta, parqueo) que mide menos de UNIDAD en planta se sube
+//    entero a la altura del terreno en su centro, sin deformarlo, y el terreno se empareja debajo de su huella
+//    (lo que toca el suelo), con un talud corto alrededor: así no asoma zacate ni queda nada volando;
+//  · lo lineal (pasillos, aceras, cercas: userData.lineal) y lo plano a ras del suelo (losas, cebras, rayas)
+//    sigue el terreno tramo a tramo: cada pieza se inclina con la pendiente y las mallas se doblan;
+//  · las instancias sueltas (árboles) se suben una por una.
+// Todo se calcula con las posiciones de antes de subir; al final se rehace el suelo con el terreno emparejado.
 {
-  const UNIDAD = 75;
+  const UNIDAD = 75, TALUD = 6, AREA_MIN = 20;
   escena.updateMatrixWorld(true);
   const caja = new THREE.Box3(), centro = new THREE.Vector3(), tam = new THREE.Vector3(), m3 = new THREE.Matrix3();
   const m4 = new THREE.Matrix4(), p = new THREE.Vector3(), q = new THREE.Quaternion(), s = new THREE.Vector3();
   const local = (matrizMundo, h) => new THREE.Vector3(0, h, 0).applyMatrix3(m3.setFromMatrix4(matrizMundo).invert());
   const alSuelo = (o) => { caja.setFromObject(o); return !caja.isEmpty() && caja.max.y - caja.min.y < 0.8 && caja.min.y < 0.6; };
-  // h0: lo que ya subió el lugar que la contiene (en metros del mundo)
-  const doblar = (o, h0) => {
+
+  // huella de un lugar: envolvente convexa (en planta) de las piezas que tocan el suelo
+  const envolvente = (pts) => {
+    pts.sort((a, b) => a[0] - b[0] || a[1] - b[1]);
+    const cruz = (o, a, b) => (a[0] - o[0]) * (b[1] - o[1]) - (a[1] - o[1]) * (b[0] - o[0]);
+    const abajo = [], arriba = [];
+    for (const v of pts) { while (abajo.length > 1 && cruz(abajo.at(-2), abajo.at(-1), v) <= 0) abajo.pop(); abajo.push(v); }
+    for (const v of pts.slice().reverse()) { while (arriba.length > 1 && cruz(arriba.at(-2), arriba.at(-1), v) <= 0) arriba.pop(); arriba.push(v); }
+    return abajo.slice(0, -1).concat(arriba.slice(0, -1));
+  };
+  const huella = (o) => {
+    const pts = [], b = new THREE.Box3();
+    o.traverse((x) => {
+      if (!x.isMesh || !x.visible) return;
+      b.setFromObject(x);
+      if (b.isEmpty() || b.min.y > 0.6) return;
+      for (const [px, pz] of [[b.min.x, b.min.z], [b.max.x, b.min.z], [b.max.x, b.max.z], [b.min.x, b.max.z]]) pts.push([px, pz]);
+    });
+    if (pts.length < 3) return null;
+    const h = envolvente(pts);
+    let area = 0;
+    for (let i = 0; i < h.length; i++) { const a = h[i], b2 = h[(i + 1) % h.length]; area += a[0] * b2[1] - b2[0] * a[1]; }
+    return Math.abs(area) / 2 >= AREA_MIN ? h : null;
+  };
+  // empareja la malla de alturas dentro de una huella (convexa, antihoraria) y con un talud alrededor
+  const aplanar = (hull, nivel, TALUD) => {
+    const r = relieve;
+    if (!r) return;
+    const xs = hull.map((v) => v[0]), zs = hull.map((v) => v[1]);
+    const i0 = Math.max(0, Math.floor((Math.min(...xs) - TALUD - r.x) / r.paso)), i1 = Math.min(r.nx - 1, Math.ceil((Math.max(...xs) + TALUD - r.x) / r.paso));
+    const j0 = Math.max(0, Math.floor((Math.min(...zs) - TALUD - r.z) / r.paso)), j1 = Math.min(r.nz - 1, Math.ceil((Math.max(...zs) + TALUD - r.z) / r.paso));
+    for (let j = j0; j <= j1; j++) for (let i = i0; i <= i1; i++) {
+      const x = r.x + i * r.paso, z = r.z + j * r.paso;
+      let dentro = true, d = Infinity;
+      for (let k = 0; k < hull.length; k++) {
+        const [ax, az] = hull[k], [bx, bz] = hull[(k + 1) % hull.length], ex = bx - ax, ez = bz - az;
+        if (ex * (z - az) - ez * (x - ax) < 0) dentro = false;
+        const t2 = Math.max(0, Math.min(1, ((x - ax) * ex + (z - az) * ez) / (ex * ex + ez * ez || 1)));
+        d = Math.min(d, Math.hypot(x - ax - t2 * ex, z - az - t2 * ez));
+      }
+      if (dentro) d = 0;
+      d = Math.max(0, d - 1.5);   // la malla es de 2 m: la orilla de la huella queda a nivel
+      if (d >= TALUD) continue;
+      let w = 1 - d / TALUD; w = w * w * (3 - 2 * w);
+      const k = j * r.nx + i;
+      r.h[k] = r.h[k] * (1 - w) + nivel * w;
+    }
+  };
+  const doblar = (o) => {
     const geo = o.geometry.clone(), pos = geo.attributes.position, mw = o.matrixWorld, inversa = mw.clone().invert(), d = new THREE.Vector3();
+    m3.setFromMatrix4(inversa);
     for (let i = 0; i < pos.count; i++) {
       p.fromBufferAttribute(pos, i).applyMatrix4(mw);
-      d.set(0, alturaEn(p.x, p.z) - h0, 0).applyMatrix3(m3.setFromMatrix4(inversa));
+      d.set(0, alturaEn(p.x, p.z), 0).applyMatrix3(m3);
       pos.setXYZ(i, pos.getX(i) + d.x, pos.getY(i) + d.y, pos.getZ(i) + d.z);
     }
     if (geo.attributes.normal) geo.computeVertexNormals();
     geo.computeBoundingBox(); geo.computeBoundingSphere();
     o.geometry = geo;
   };
-  // las losas y guías (cajas delgadas a ras del suelo) además se inclinan a lo largo, con la pendiente
+  // instancias: se suben a la altura de su centro; las cajas largas (losas, guías, techos y barandas de un pasillo)
+  // se inclinan además a lo largo, con la pendiente, para que un tramo empate con el siguiente
   const u = new THREE.Vector3(), w = new THREE.Vector3(), qt = new THREE.Quaternion(), ARRIBA = new THREE.Vector3(0, 1, 0);
-  const instancias = (o, h0) => {
+  const instancias = (o, inclinarTodo) => {
     const par = o.geometry.parameters || {}, esCaja = o.geometry.type === "BoxGeometry";
     for (let i = 0; i < o.count; i++) {
       o.getMatrixAt(i, m4); m4.decompose(p, q, s);
       centro.copy(p).applyMatrix4(o.matrixWorld);
       let h = alturaEn(centro.x, centro.z);
-      if (esCaja && s.y * par.height < 0.8 && centro.y < 0.6) {
-        const enX = s.x * par.width >= s.z * par.depth, L = (enX ? s.x * par.width : s.z * par.depth) / 2;
+      const enX = esCaja && s.x * par.width >= s.z * par.depth, L = esCaja ? (enX ? s.x * par.width : s.z * par.depth) / 2 : 0;
+      if (esCaja && L > 0.5 && (inclinarTodo || (s.y * par.height < 0.8 && centro.y < 0.6))) {
         u.set(enX ? 1 : 0, 0, enX ? 0 : 1).applyQuaternion(q).transformDirection(o.matrixWorld).setY(0).normalize();
         const hA = alturaEn(centro.x - u.x * L, centro.z - u.z * L), hB = alturaEn(centro.x + u.x * L, centro.z + u.z * L);
         h = (hA + hB) / 2;
         w.crossVectors(u, ARRIBA).applyMatrix3(m3.setFromMatrix4(o.matrixWorld).invert()).normalize();
         q.premultiply(qt.setFromAxisAngle(w, Math.atan2(hB - hA, 2 * L)));
       }
-      p.add(local(o.matrixWorld, h - h0));
+      p.add(local(o.matrixWorld, h));
       o.setMatrixAt(i, m4.compose(p, q, s));
     }
     o.instanceMatrix.needsUpdate = true;
     o.computeBoundingBox(); o.computeBoundingSphere();
   };
-  const piezasAlSuelo = (o, h) => o.traverse((x) => {
-    if (x === o) return;
-    if (x.isInstancedMesh) instancias(x, h);
-    else if (x.isMesh && alSuelo(x)) doblar(x, h);
-  });
-  const asentar = (o, h0 = 0) => {
+
+  // 1. clasificar (con el terreno del plano)
+  const enteros = [], aDoblar = [], sueltas = [], lineales = [];
+  const piezasPlanas = (o) => o.traverse((x) => { if (x.isInstancedMesh) sueltas.push(x); else if (x.isMesh) aDoblar.push(x); });
+  const clasificar = (o) => {
     if (o.isLight) return;
-    if (o.isInstancedMesh) { instancias(o, h0); return; }
-    if (o.isMesh && alSuelo(o)) { doblar(o, h0); return; }
+    if (o.userData.lineal) { lineales.push(o); return; }
+    if (o.isInstancedMesh) { sueltas.push(o); return; }
     caja.setFromObject(o);
     if (caja.isEmpty()) return;
     caja.getSize(tam); caja.getCenter(centro);
-    if (Math.max(tam.x, tam.z) <= UNIDAD) {
-      const h = alturaEn(centro.x, centro.z);
-      o.position.add(local(o.parent.matrixWorld, h - h0));
-      piezasAlSuelo(o, h);
-      return;
-    }
-    if (o.children.length) { [...o.children].forEach((x) => asentar(x, h0)); return; }
-    if (o.isMesh) doblar(o, h0);   // una sola pieza grande: se dobla sobre el terreno
+    if (tam.y < 0.8 && caja.min.y < 0.6) { piezasPlanas(o); return; }   // a ras del suelo: se dobla
+    if (Math.max(tam.x, tam.z) <= UNIDAD) { enteros.push({ o, h: alturaEn(centro.x, centro.z), huella: huella(o) }); return; }
+    if (o.children.length) { [...o.children].forEach(clasificar); return; }
+    if (o.isMesh) aDoblar.push(o);
   };
-  escena.children.slice(inicioCampus).forEach((o) => asentar(o));
+  escena.children.slice(inicioCampus).forEach(clasificar);
+  // 2. emparejar el terreno bajo los lugares que se suben enteros
+  for (const e of enteros) if (e.huella) aplanar(e.huella, e.h, e.o.userData.talud || TALUD);
+  // 3. subir
+  for (const e of enteros) e.o.position.add(local(e.o.parent.matrixWorld, e.h));
+  for (const o of aDoblar) doblar(o);
+  for (const o of sueltas) instancias(o, false);
+  for (const g of lineales) g.traverse((x) => { if (x.isInstancedMesh) instancias(x, true); else if (x.isMesh) doblar(x); });
+  levantarSuelo();
   // anclas de los números y de los congos: a la altura del terreno de su lugar
   const anclas = new Set();
   escena.traverse((o) => { const c = o.userData.centro; if (c && c.isVector3) anclas.add(c); });

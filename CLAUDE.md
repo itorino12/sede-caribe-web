@@ -18,8 +18,9 @@ Sitio estático (Python + Jinja2). El contenido sale de Google Drive; la vista p
   - `recorrido-ficha.js`: la ficha de cada lugar.
   - `recorrido-giro.js` y `portada-giro.js`: los respaldos sin 3D.
 - Relieve y quebrada: del plano de conjunto de la OEPI (2010, `herramientas/fuentes/plano-oepi-2010.pdf`). `herramientas/relieve_oepi.py` saca cotas, curvas y cauce a `fuentes/relieve-oepi.json` (las cotas se leyeron a mano y están escritas en el script); `herramientas/relieve.py` los lleva a la maqueta (placa delgada con los edificios comunes y el puente) y arma la malla de alturas (`relieve` en `campus3d.json`, decímetros). Del plano solo se usan relieve y quebrada: su infraestructura es vieja.
-  - En el visor, `alturaEn(x, z)` da la altura del terreno; al final del armado, «asentar» sube cada lugar a su altura y dobla sobre el terreno lo que va a ras del suelo. Lo que se agregue después se arma en y = 0, como siempre.
-  - Edificios, explanada, pista, parqueo de la piscina y plaza del auditorio quedan sobre plataformas a nivel. Bajo calles, pasillos y aceras el cauce no se excava (va entubado).
+  - En el visor, `alturaEn(x, z)` da la altura del terreno. Al final del armado, «asentar»: un lugar con altura (< 75 m) se sube entero y el terreno se empareja bajo su huella (`userData.talud` cambia el talud); lo lineal (`userData.lineal`: pasillos, aceras, cercas) y lo plano a ras del suelo siguen el terreno tramo a tramo. Lo que se agregue después se arma en y = 0, como siempre.
+  - Relieve.py: plataformas a nivel (edificios, explanada, pista, parqueo; el edificio 1 con su loma de 3,5 m y la escalera y rampas al pie), excavación al pie del cerro frente al auditorio (plaza y baño a nivel) y el sendero a la explanada como rampa que contiene el cerro. Calles en terraplén donde cruzan la hondonada de la quebrada. Bajo calles, pasillos y aceras el cauce no se excava.
+  - Puntos de control de la quebrada: el puente, el paso rayado sobre la alcantarilla (19) y el medio entre las mallas al este del puente (`relieve.py`).
 - Coordenadas en metros: x crece hacia el este y z hacia el sur. Zonas: 1 cian, 2 amarillo, 3 magenta, 4 negro.
 - Si se cambia la maqueta y no se rehacen las imágenes de respaldo, la portada y la versión sin 3D quedan desactualizadas.
 
