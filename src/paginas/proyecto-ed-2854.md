@@ -10,7 +10,7 @@ Aplicar un modelo educativo bilingüe con enfoque de derechos que promueva la fo
 
 - **Formación integral y bilingüe:** experiencias lúdicas que integran las áreas de desarrollo de cada niña y cada niño, respetando su ritmo.
 - **Acompañamiento a las familias:** charlas y talleres sobre crianza respetuosa, abiertos también a familias de la comunidad.
-- **«Salgamos a jugar»:** actividades en vacaciones para niñas, niños y familias de la comunidad, y también con personas adultas mayores y Aldeas SOS.
+- **«Salgamos a jugar»:** actividades en vacaciones para niñas, niños y familias de la comunidad, y también con personas adultas mayores.
 - **Espacio de práctica** para estudiantes de Preescolar, Enseñanza del Inglés, Informática, Trabajo Social y otras carreras.
 - **Capacitación** para docentes de centros infantiles de la zona.
 
@@ -18,4 +18,4 @@ La Universidad otorga becas para las hijas y los hijos de estudiantes de la Sede
 
 ## Matrícula
 
-El CIUB divulga su proceso de inscripción en las redes de la Sede y en la radio local. Las familias interesadas pasan por una entrevista y un periodo de adaptación. Para más información, escriba a la coordinación del CIUB.
+Las familias interesadas solicitan la información al correo del proyecto y se da seguimiento al proceso de información y matrícula. Luego pasan por una entrevista y un periodo de adaptación.

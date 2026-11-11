@@ -16,7 +16,7 @@
         <thead><tr><th scope="col">Oficina</th><th scope="col">Teléfono</th><th scope="col">Edificio</th><th scope="col">Correo</th></tr></thead>
         <tbody>
           {% for f in filas %}
-          <tr data-fila><td>{{ f.oficina }}</td><td><a href="{{ f.extension|tel }}">{{ f.extension }}</a></td><td>{{ f.edificio }}</td><td>{% if f.correo %}<a href="mailto:{{ f.correo }}">{{ f.correo }}</a>{% endif %}</td></tr>
+          <tr data-fila><td>{{ f.oficina }}</td><td>{% if f.extension %}<a href="{{ f.extension|tel }}">{{ f.extension }}</a>{% endif %}</td><td>{{ f.edificio }}</td><td>{% if f.correo %}<a href="mailto:{{ f.correo }}">{{ f.correo }}</a>{% endif %}</td></tr>
           {% endfor %}
         </tbody>
       </table>
