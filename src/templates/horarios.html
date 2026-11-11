@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% from "_macros.html" import encabezado with context %}
 {% block contenido %}
-{% macro aula(a) %}{% if a.estado == "ok" and a.lugar %}<a class="hz-aula" href="{{ raiz }}recorrido.html#lugar-{{ a.lugar }}" aria-label="Aula {{ a.n }}: verla en el recorrido 3D"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s-7-6.2-7-11.5A7 7 0 0 1 19 9.5C19 14.8 12 21 12 21Z"/><circle cx="12" cy="9.5" r="2.5"/></svg>Aula {{ a.n }}</a>{% elif a.estado == "confirmar" %}<span class="hz-aula hz-aula--aparte">Aula por confirmar</span>{% else %}<span class="hz-aula hz-aula--aparte">Sin aula asignada</span>{% endif %}{% endmacro %}
+{% macro aula(a) %}{% if a.estado == "ok" and a.lugar %}<a class="hz-aula" href="{{ raiz }}recorrido.html#lugar-{{ a.lugar }}" aria-label="Aula {{ a.n }}: verla en el recorrido 3D"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s-7-6.2-7-11.5A7 7 0 0 1 19 9.5C19 14.8 12 21 12 21Z"/><circle cx="12" cy="9.5" r="2.5"/></svg>Aula {{ a.n }}</a>{% elif a.estado == "confirmar" %}<span class="hz-aula hz-aula--aparte">Aula sin asignar</span>{% else %}<span class="hz-aula hz-aula--aparte">Aula sin asignar</span>{% endif %}{% endmacro %}
 {% macro curso(c) %}
 <li class="hz-curso" data-fila{% if c.color %} style="--hz-c: {{ c.color }}; --hz-co: {{ c.oscuro or c.color }}"{% endif %}>
   <h4 class="hz-curso__nombre"><span class="hz-curso__sigla">{{ c.sigla }}</span> {{ c.nombre }}</h4>
