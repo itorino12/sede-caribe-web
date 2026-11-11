@@ -1009,7 +1009,10 @@ if (datos.campus.parqueo) {
   // un muro celeste (las rampas a la explanada)
   function pasillo({ id, puntos, ancho, techo = true, en_calle = [], alturas = [] }) {
     const g = new THREE.Group(), pisos = [], guias = [], techos = [], columnas = [], barandas = [], muros = [];
-    g.userData.lineal = true;   // sigue el terreno tramo a tramo (ver «asentar»)
+    // sigue el terreno tramo a tramo (ver «asentar»); las franjas son los tramos de piso fuera de la calle
+    const franjas = [];
+    puntos.forEach((p, i) => { if (en_calle[i]) franjas.push([]); else (franjas.at(-1) || franjas[franjas.push([]) - 1]).push(p); });
+    Object.assign(g.userData, { lineal: true, franjas: franjas.filter((f) => f.length > 1), ancho });
     const y = (i) => alturas[i] || 0;
     for (let i = 0; i < puntos.length - 1; i++) {
       if (en_calle[i] || en_calle[i + 1]) continue;
@@ -1463,7 +1466,9 @@ if (datos.campus.parqueo) {
       losas.push([cx, 0.06, cz, ancho, 0.12, L, ang]);
       guias.push([cx, 0.125, cz, 0.36, 0.02, L, ang]);
     }
-    const g = new THREE.Group(); g.add(cajas(concretoClaro, losas), cajas(amarilloGuia, guias)); g.userData.lineal = true; registrar(g, null);
+    const g = new THREE.Group(); g.add(cajas(concretoClaro, losas), cajas(amarilloGuia, guias));
+    Object.assign(g.userData, { lineal: true, franjas: [puntos], ancho });
+    registrar(g, null);
   }
   // paso de cebra (anotaciones): franjas blancas a lo largo de la calle, una tras otra de lado a lado
   function cebra({ franjas, giro, ancho = 3 }) {
@@ -1718,6 +1723,29 @@ if (datos.campus.parqueo) {
   escena.children.slice(inicioCampus).forEach(clasificar);
   // 2. emparejar el terreno bajo los lugares que se suben enteros
   for (const e of enteros) if (e.huella) aplanar(e.huella, e.h, e.o.userData.talud || TALUD);
+  // 2b. bajo aceras y pisos de pasillo el terreno toma la rasante del camino: la altura del terreno en sus puntos,
+  // suavizada; así no asoma el zacate sobre el camino ni una losa se clava en una zanja
+  const nivelarFranja = (pts, ancho) => {
+    const r = relieve;
+    if (!r || pts.length < 2) return;
+    let y = pts.map(([x, z]) => alturaEn(x, z));
+    for (let pasada = 0; pasada < 3; pasada++) y = y.map((v, i) => (i === 0 || i === y.length - 1 ? v : (y[i - 1] + 2 * v + y[i + 1]) / 4));
+    const nucleo = ancho / 2 + 0.9, borde = nucleo + 2.5;
+    for (let k = 0; k < pts.length - 1; k++) {
+      const [ax, az] = pts[k], [bx, bz] = pts[k + 1], ex = bx - ax, ez = bz - az, L2 = ex * ex + ez * ez || 1;
+      const i0 = Math.max(0, Math.floor((Math.min(ax, bx) - borde - r.x) / r.paso)), i1 = Math.min(r.nx - 1, Math.ceil((Math.max(ax, bx) + borde - r.x) / r.paso));
+      const j0 = Math.max(0, Math.floor((Math.min(az, bz) - borde - r.z) / r.paso)), j1 = Math.min(r.nz - 1, Math.ceil((Math.max(az, bz) + borde - r.z) / r.paso));
+      for (let j = j0; j <= j1; j++) for (let i = i0; i <= i1; i++) {
+        const x = r.x + i * r.paso, z = r.z + j * r.paso, t2 = Math.max(0, Math.min(1, ((x - ax) * ex + (z - az) * ez) / L2));
+        const d = Math.hypot(x - ax - t2 * ex, z - az - t2 * ez);
+        if (d > borde) continue;
+        const rasante = y[k] + (y[k + 1] - y[k]) * t2 - 0.03, c = j * r.nx + i;
+        let w = d <= nucleo ? 1 : 1 - (d - nucleo) / (borde - nucleo); w = w * w * (3 - 2 * w);
+        r.h[c] = r.h[c] * (1 - w) + rasante * w;
+      }
+    }
+  };
+  for (const g of lineales) for (const f of g.userData.franjas || []) nivelarFranja(f, g.userData.ancho || 2);
   // 3. subir
   for (const e of enteros) e.o.position.add(local(e.o.parent.matrixWorld, e.h));
   for (const o of aDoblar) doblar(o);

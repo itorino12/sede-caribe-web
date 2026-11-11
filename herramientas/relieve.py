@@ -158,26 +158,22 @@ def malla(terreno, muestras_xyz, plataformas, cauce, n_plano, calles, rampas=())
         w = w * w * (3 - 2 * w)
         h = h * (1 - w) + nivel * w
 
-    # calles en terraplén: donde una calle cruza la hondonada de la quebrada (a menos de 30 m del cauce) no baja con
-    # el terreno; su altura sale de la misma calle más allá (promedio entre vecinas de calle, Laplace solo sobre ella)
+    # calles junto a la quebrada: bajan con el terreno hasta el puente o la alcantarilla (el puente es bajo), pero
+    # con la pendiente repartida: la altura de la calle es un promedio suave (≈ 12 m) solo entre celdas de calle
     eje_q = np.zeros(X.shape, np.uint8)
     cq = np.asarray(cauce, float)
     eje_q[np.clip(np.round((cq[:, 1] - zs[0]) / PASO).astype(int), 0, nz - 1),
           np.clip(np.round((cq[:, 0] - xs[0]) / PASO).astype(int), 0, nx - 1)] = 1
-    cerca_q = calles_m & (distance_transform_edt(eje_q == 0) * PASO < 30)
+    cerca_q = calles_m & (distance_transform_edt(eje_q == 0) * PASO < 40)
     if cerca_q.any():
         calle = calles_m.astype(float)
-        for _ in range(1500):
-            p_h, p_c = np.pad(h * calle, 1), np.pad(calle, 1)
-            suma = p_h[:-2, 1:-1] + p_h[2:, 1:-1] + p_h[1:-1, :-2] + p_h[1:-1, 2:]
-            n = p_c[:-2, 1:-1] + p_c[2:, 1:-1] + p_c[1:-1, :-2] + p_c[1:-1, 2:]
-            h = np.where(cerca_q & (n > 0), suma / np.maximum(n, 1), h)
-        # las orillas del terraplén bajan en un talud corto hacia la hondonada
-        d_terr = distance_transform_edt(~cerca_q) * PASO
-        borde = (d_terr > 0) & (d_terr < 6)
-        _, idx = distance_transform_edt(~cerca_q, return_indices=True)
-        w = np.clip(1 - d_terr / 6, 0, 1)
-        h = np.where(borde, np.maximum(h, h * (1 - w) + h[idx[0], idx[1]] * w), h)
+        suave = gaussian_filter(h * calle, 6.0) / np.maximum(gaussian_filter(calle, 6.0), 1e-6)
+        h = np.where(cerca_q, suave, h)
+        # orillas: un talud corto entre la calle y el terreno de al lado
+        d_c, idx = distance_transform_edt(~cerca_q, return_indices=True)
+        w = np.clip(1 - d_c * PASO / 6, 0, 1)
+        w = w * w * (3 - 2 * w)
+        h = np.where(~cerca_q & (w > 0), h * (1 - w) + h[idx[0], idx[1]] * w, h)
 
     # cauce: el fondo baja siempre aguas abajo; se excava salvo bajo las calles (alcantarillas y puente)
     c = np.asarray(cauce, float)
