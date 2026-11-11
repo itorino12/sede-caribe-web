@@ -147,7 +147,7 @@
   </div>
   <ul class="servicios">
     {% for u in unidades if u.grupo == 'Servicios' %}
-    <li><a href="unidades/{{ u.id }}.html">{{ u.nombre }}</a><p>{{ u.resumen }}</p></li>
+    <li><a href="{{ u.enlace or ('unidades/' ~ u.id ~ '.html') }}">{{ u.nombre }}</a><p>{{ u.resumen }}</p></li>
     {% endfor %}
   </ul>
 </section>

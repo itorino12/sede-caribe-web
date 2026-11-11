@@ -352,6 +352,14 @@ def preparar(sitio, d):
             print(f"  ! proyecto sin modalidad válida: {p.get('nombre')!r}")
             continue
         proyectos.append({**p, "html": md(leer_pagina(p.get("documento"))), "fotos": fotos_de(p, "proyectos"), "medios": medios_de(f"proyecto-{p['id']}")})
+    # Un servicio que también es proyecto de Acción Social (mismo nombre) no tiene página propia: «Campus y servicios»
+    # y el resto del sitio apuntan a la del proyecto, que es la más completa, y la unidad deja solo un aviso de redirección.
+    por_nombre = {normal(p["nombre"]): p for p in proyectos if not p.get("enlace")}
+    for u in unidades:
+        p = por_nombre.get(normal(u["nombre"]))
+        if p and u.get("grupo") == "Servicios":
+            u["enlace"] = f"accion-social/proyectos/{p['id']}.html"
+
     modalidades = [{**m, "html": md(leer_pagina(f"modalidad-{m['id']}")), "proyectos": [p for p in proyectos if p["modalidad"] == m["id"]]}
                    for m in MODALIDADES]
     for m in modalidades:  # entrada del menú «Acción social»: la agrupación y, dentro, sus proyectos
@@ -485,7 +493,7 @@ def main():
     ]
     paginas += [(f"carreras/{x['id']}.html", "carrera.html", x["nombre"], x.get("resumen") or f"{x['grados']} en {x['nombre']}, UCR Sede del Caribe.", {"carrera": x})
                 for x in c["carreras"]]
-    paginas += [(f"unidades/{u['id']}.html", "unidad.html", u["nombre"], u["resumen"], {"u": u}) for u in c["unidades"]]
+    paginas += [(f"unidades/{u['id']}.html", "unidad.html", u["nombre"], u["resumen"], {"u": u}) for u in c["unidades"] if not u.get("enlace")]
     paginas += [(f"noticias/{n['id']}.html", "noticia.html", n["titulo"], n.get("resumen", ""), {"n": n}) for n in c["noticias"]]
     paginas += [(f"accion-social/{m['id']}.html", "modalidad.html", m["nombre"], m["resumen"], {"m": m}) for m in c["modalidades"]]
     paginas += [(f"accion-social/proyectos/{p['id']}.html", "proyecto.html", p["nombre"], p["resumen"],
@@ -504,6 +512,13 @@ def main():
         if salida != "404.html":
             m = re.search(r"<main[^>]*>(.*)</main>", texto, re.S)
             indice.append({"t": titulo, "u": salida, "x": texto_plano(m.group(1) if m else texto)[:4000]})
+    for u in c["unidades"]:  # direcciones viejas de las unidades repetidas: llevan a la página que sí existe
+        if u.get("enlace"):
+            destino = DIST / "unidades" / f"{u['id']}.html"
+            destino.parent.mkdir(parents=True, exist_ok=True)
+            destino.write_text(f'<!doctype html><html lang="es"><meta charset="utf-8"><title>{html.escape(u["nombre"])}</title><meta name="robots" content="noindex">'
+                               f'<meta http-equiv="refresh" content="0; url=../{u["enlace"]}"><link rel="canonical" href="../{u["enlace"]}">'
+                               f'<p>Esta página cambió de lugar: <a href="../{u["enlace"]}">{html.escape(u["nombre"])}</a>.</p></html>', encoding="utf-8")
     for e in c["eventos"]:
         indice.append({"t": e["titulo"], "u": f"agenda.html#{e['id']}", "x": f"{fecha_larga(e['f'])} {e.get('lugar', '')} {e.get('descripcion', '')}"})
     for g, filas in c["directorio"].items():

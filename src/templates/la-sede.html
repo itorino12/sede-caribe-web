@@ -27,7 +27,7 @@
     <ul class="unidades">
       {% for u in unidades if u.grupo in ["Gobierno", "Coordinaciones", "Recintos"] %}
       <li>
-        <h3><a href="unidades/{{ u.id }}.html">{{ u.nombre }}</a></h3>
+        <h3><a href="{{ u.enlace or ('unidades/' ~ u.id ~ '.html') }}">{{ u.nombre }}</a></h3>
         {% if u.responsable %}<p class="unidades__persona">{{ u.responsable }}</p>{% endif %}
         <p>{{ u.resumen }}</p>
         <p class="unidades__contacto">{% if u.extension %}<a href="{{ u.extension|tel }}">{{ u.extension }}</a>{% endif %}{% if u.correo %} <a href="mailto:{{ u.correo }}">{{ u.correo }}</a>{% endif %}</p>
@@ -40,7 +40,7 @@
     <h2>Campus y servicios</h2>
     <ul class="servicios">
       {% for u in unidades if u.grupo == 'Servicios' %}
-      <li><a href="unidades/{{ u.id }}.html">{{ u.nombre }}</a><p>{{ u.resumen }}</p></li>
+      <li><a href="{{ u.enlace or ('unidades/' ~ u.id ~ '.html') }}">{{ u.nombre }}</a><p>{{ u.resumen }}</p></li>
       {% endfor %}
     </ul>
   </section>
