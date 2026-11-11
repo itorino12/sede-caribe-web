@@ -998,8 +998,8 @@
   ]
  },
  "acreditacion": {
-  "estado": "Acreditada por SINAES desde el 10 de diciembre de 2019",
-  "detalle": "La reacreditación está en trámite. La carrera cerró en 2026 su Proyecto Especial de Mejora y recibió la visita de pares evaluadores del 21 al 25 de septiembre. Espera la resolución de SINAES.",
+  "estado": "Acreditada por SINAES hasta el 3 de noviembre de 2030",
+  "detalle": "El Consejo Nacional de Acreditación reacreditó la carrera por cuatro años, a partir del 3 de noviembre de 2026 (ACUERDO-CNA-305-2026). Incluye el Recinto de Limón de la Sede del Caribe y los demás recintos y sedes donde se imparte. La primera acreditación fue el 10 de diciembre de 2019.",
   "pem": {
    "completos": 9,
    "total": 10
@@ -1046,9 +1046,14 @@
     "texto": "Evaluación externa de SINAES en las sedes y recintos."
    },
    {
-    "fecha": "II ciclo 2026",
-    "titulo": "En espera de resolución",
-    "texto": "La carrera espera la resolución de SINAES sobre la reacreditación.",
+    "fecha": "3 nov 2026",
+    "titulo": "Reacreditación",
+    "texto": "El Consejo Nacional de Acreditación acredita la carrera por cuatro años, hasta el 3 de noviembre de 2030 (ACUERDO-CNA-305-2026, Acta 1994-2026)."
+   },
+   {
+    "fecha": "3 nov 2028",
+    "titulo": "Informe de avance del compromiso",
+    "texto": "La carrera presenta el avance del Compromiso de Mejoramiento (ACCM), a mitad del período.",
     "futuro": true
    }
   ],
@@ -1099,10 +1104,10 @@
  ],
  "sinaes": {
   "carrera": "Bachillerato en Informática Empresarial",
-  "sede": "Sede del Caribe, Limón",
-  "periodo": "",
-  "detalle": "Acreditada por SINAES desde el 10 de diciembre de 2019. La reacreditación está en trámite: la visita de pares fue del 21 al 25 de septiembre de 2026 y se espera la resolución.",
-  "sello": false,
-  "fuente": "Carrera de Informática Empresarial (informaticaempresarial.ucr.ac.cr/acreditacion.html)."
+  "sede": "Sede del Caribe, Recinto de Limón",
+  "periodo": "2026–2030",
+  "detalle": "El Consejo Nacional de Acreditación acreditó la carrera por cuatro años a partir del 3 de noviembre de 2026; el período vence el 3 de noviembre de 2030 (ACUERDO-CNA-305-2026). La carrera fue acreditada por primera vez el 10 de diciembre de 2019.",
+  "sello": true,
+  "fuente": "ACUERDO-CNA-305-2026 del Consejo Nacional de Acreditación, Acta 1994-2026, Proceso 187."
  }
 }
