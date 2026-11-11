@@ -205,4 +205,15 @@
   {% endif %}
 </div>
 {% endif %}
+{% if f.sinaes %}
+<section class="ancho sinaes" aria-labelledby="sinaes-t">
+  {% if f.sinaes.sello and f.sinaes.periodo %}<img class="sinaes__sello" src="{{ raiz }}assets/img/sinaes-carrera-acreditada.webp" alt="Sello SINAES: carrera acreditada, Costa Rica" width="150" height="150" loading="lazy">{% endif %}
+  <div class="sinaes__texto">
+    <h2 id="sinaes-t">Carrera acreditada por SINAES</h2>
+    <p class="sinaes__carrera"><strong>{{ f.sinaes.carrera }}</strong> · {{ f.sinaes.sede }}{% if f.sinaes.periodo %} · acreditación vigente {{ f.sinaes.periodo }}{% endif %}</p>
+    <p>{{ f.sinaes.detalle }}</p>
+    <p class="cifras__fuente">Fuente: {{ f.sinaes.fuente }} El Sistema Nacional de Acreditación de la Educación Superior (SINAES) es el único ente que acredita carreras universitarias en Costa Rica.</p>
+  </div>
+</section>
+{% endif %}
 {% endblock %}

@@ -28,8 +28,8 @@
    "etiqueta": "de Trabajo Comunal Universitario"
   },
   {
-   "valor": "SINAES",
-   "etiqueta": "carrera acreditada desde 2019"
+   "valor": "492,09",
+   "etiqueta": "nota de corte en Limón, ingreso 2026 (93 cupos)"
   }
  ],
  "sedes": {
@@ -1096,5 +1096,13 @@
    "coordinacion": "MCi. Walter Felipe Jenkins Cruz",
    "correo": "informaticaempresarial.siquirres@ucr.ac.cr"
   }
- ]
+ ],
+ "sinaes": {
+  "carrera": "Bachillerato en Informática Empresarial",
+  "sede": "Sede del Caribe, Limón",
+  "periodo": "",
+  "detalle": "Acreditada por SINAES desde el 10 de diciembre de 2019. La reacreditación está en trámite: la visita de pares fue del 21 al 25 de septiembre de 2026 y se espera la resolución.",
+  "sello": false,
+  "fuente": "Carrera de Informática Empresarial (informaticaempresarial.ucr.ac.cr/acreditacion.html)."
+ }
 }

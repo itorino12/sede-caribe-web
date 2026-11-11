@@ -1,4 +1,4 @@
-Educación Inicial en Inglés forma docentes para la niñez en sus primeros años, con inglés como parte de la formación. Se imparte en la Sede del Caribe y en la Sede de Occidente. La carrera está acreditada por SINAES y la ficha de orientación la preparan el Departamento de Ciencias de la Educación y la Oficina de Orientación.
+Educación Inicial en Inglés forma docentes para la niñez en sus primeros años, con inglés como parte de la formación. Se imparte en la Sede del Caribe y en la Sede de Occidente. La ficha de orientación la preparan el Departamento de Ciencias de la Educación y la Oficina de Orientación.
 
 ## Qué podrá hacer
 

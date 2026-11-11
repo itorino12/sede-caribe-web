@@ -3,12 +3,20 @@
   "lema": "Dominar el inglés y la cultura que lo acompaña",
   "cifras": [
     {
-      "valor": "32",
-      "etiqueta": "cupos en Limón para el ingreso 2026"
+      "valor": "140",
+      "etiqueta": "créditos del bachillerato (Plan 3)"
+    },
+    {
+      "valor": "4 años",
+      "etiqueta": "en 8 ciclos lectivos"
+    },
+    {
+      "valor": "300 h",
+      "etiqueta": "de Trabajo Comunal Universitario"
     },
     {
       "valor": "477,53",
-      "etiqueta": "nota de corte en Limón, ingreso 2026"
+      "etiqueta": "nota de corte en Limón, ingreso 2026 (32 cupos)"
     }
   ],
   "planes": [

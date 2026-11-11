@@ -1069,3 +1069,12 @@ html.sin-desplazar, html.sin-desplazar body { overflow: hidden; }
 .capac__tablas summary { cursor: pointer; font-weight: 700; color: var(--azul); padding: 6px 0; }
 .capac__tablas summary:focus-visible { outline: 3px solid var(--foco); outline-offset: 2px; }
 @media (forced-colors: active) { .sala__puestos i, .puesto-ej { background: CanvasText; forced-color-adjust: none; } }
+
+/* Cuadro de acreditación SINAES al final de la carrera; el sello va sin alterar, sobre fondo blanco (Reglamento SINAES, art. 4 y 7) */
+.sinaes { display: flex; align-items: center; gap: 28px; margin-top: 40px; margin-bottom: 48px; padding: 24px 28px; border: 1px solid var(--linea); border-left: 6px solid var(--azul); border-radius: 10px; background: var(--niebla); }
+.sinaes__sello { flex: none; width: 150px; height: auto; padding: 8px; background: #fff; border-radius: 12px; }
+.sinaes__texto { min-width: 0; }
+.sinaes__texto h2 { margin: 0 0 6px; font-size: var(--t-lg); }
+.sinaes__texto p { margin: 0 0 8px; }
+.sinaes__carrera { font-size: var(--t-md); }
+@media (max-width: 640px) { .sinaes { flex-direction: column; align-items: flex-start; padding: 18px; } .sinaes__sello { width: 120px; } }

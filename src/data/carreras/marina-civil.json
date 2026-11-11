@@ -3,16 +3,20 @@
   "lema": "Formación para operar y dirigir buques mercantes y sus instalaciones",
   "cifras": [
     {
-      "valor": "20",
-      "etiqueta": "cupos en Limón para el ingreso 2026"
+      "valor": "177 o 176",
+      "etiqueta": "créditos según el énfasis: Náutica y Transporte Marítimo, o Máquinas Marinas"
+    },
+    {
+      "valor": "5 años",
+      "etiqueta": "en 11 ciclos, uno de ellos un interciclo"
+    },
+    {
+      "valor": "300 h",
+      "etiqueta": "de Trabajo Comunal Universitario"
     },
     {
       "valor": "406,38",
-      "etiqueta": "nota de corte en Limón, ingreso 2026"
-    },
-    {
-      "valor": "2",
-      "etiqueta": "énfasis: Náutica y Transporte Marítimo, y Máquinas Marinas"
+      "etiqueta": "nota de corte en Limón, ingreso 2026 (20 cupos)"
     }
   ],
   "planes": [

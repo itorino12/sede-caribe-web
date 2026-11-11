@@ -3,8 +3,20 @@
   "lema": "Educar a la niñez en sus primeros años, también en inglés",
   "cifras": [
     {
-      "valor": "SINAES",
-      "etiqueta": "carrera acreditada"
+      "valor": "136",
+      "etiqueta": "créditos del bachillerato (Plan 01)"
+    },
+    {
+      "valor": "4 años",
+      "etiqueta": "en 8 ciclos lectivos"
+    },
+    {
+      "valor": "300 h",
+      "etiqueta": "de Trabajo Comunal Universitario"
+    },
+    {
+      "valor": "493,08",
+      "etiqueta": "nota de corte en Limón, ingreso 2026"
     }
   ],
   "planes": [

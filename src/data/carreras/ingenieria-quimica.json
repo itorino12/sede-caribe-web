@@ -3,12 +3,20 @@
   "lema": "Procesos que transforman la materia en productos útiles",
   "cifras": [
     {
-      "valor": "35",
-      "etiqueta": "cupos en Limón para el ingreso 2026"
+      "valor": "174",
+      "etiqueta": "créditos de la licenciatura, más el trabajo final de graduación"
+    },
+    {
+      "valor": "6 años",
+      "etiqueta": "en 12 ciclos lectivos"
+    },
+    {
+      "valor": "300 h",
+      "etiqueta": "de Trabajo Comunal Universitario"
     },
     {
       "valor": "566,82",
-      "etiqueta": "nota de corte en Limón, ingreso 2026"
+      "etiqueta": "nota de corte en Limón, ingreso 2026 (35 cupos)"
     }
   ],
   "planes": [

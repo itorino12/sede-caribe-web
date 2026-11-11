@@ -3,24 +3,20 @@
   "lema": "Las reglas, los trámites y los negocios que mueven el comercio entre países",
   "cifras": [
     {
-      "valor": "83",
-      "etiqueta": "créditos del diplomado"
+      "valor": "83 y 135",
+      "etiqueta": "créditos: 83 del diplomado y 135 del bachillerato"
     },
     {
-      "valor": "135",
-      "etiqueta": "créditos del bachillerato"
+      "valor": "2,5 y 4 años",
+      "etiqueta": "el diplomado (5 ciclos) y el bachillerato (8 ciclos)"
     },
     {
-      "valor": "46",
-      "etiqueta": "cupos en Limón para el ingreso 2026"
+      "valor": "300 h",
+      "etiqueta": "de Trabajo Comunal Universitario en el bachillerato"
     },
     {
       "valor": "517,05",
-      "etiqueta": "nota de corte en Limón, ingreso 2026"
-    },
-    {
-      "valor": "SINAES",
-      "etiqueta": "carrera acreditada"
+      "etiqueta": "nota de corte en Limón, ingreso 2026 (46 cupos)"
     }
   ],
   "planes": [
@@ -1294,5 +1290,13 @@
         "color_de": "OPT"
       }
     ]
+  },
+  "sinaes": {
+    "carrera": "Diplomado y Bachillerato en Administración Aduanera y Comercio Exterior",
+    "sede": "Sede del Caribe, Limón",
+    "periodo": "2024–2028",
+    "detalle": "Primera acreditación de la carrera en la Sede del Caribe: 5 de marzo de 2024 (Acuerdo CNA-095-2024).",
+    "sello": true,
+    "fuente": "Centro de Evaluación Académica de la UCR y Escuela de Administración Pública (acreditación de carreras, período 2024-2028)."
   }
 }

@@ -3,8 +3,20 @@
   "lema": "Formar a quienes enseñarán inglés en las aulas del país",
   "cifras": [
     {
-      "valor": "SINAES",
-      "etiqueta": "carrera acreditada"
+      "valor": "142",
+      "etiqueta": "créditos del bachillerato (Plan 02)"
+    },
+    {
+      "valor": "4 años",
+      "etiqueta": "en 8 ciclos; el profesorado se obtiene al concluir el VI ciclo"
+    },
+    {
+      "valor": "300 h",
+      "etiqueta": "de Trabajo Comunal Universitario (150 h para el profesorado)"
+    },
+    {
+      "valor": "—",
+      "etiqueta": "sin corte de ingreso 2026 publicado para Limón"
     }
   ],
   "planes": [
