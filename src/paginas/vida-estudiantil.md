@@ -7,9 +7,11 @@ La Coordinación de Vida Estudiantil existe desde agosto de 1980. Su tarea es qu
 - Orientación.
 - Trabajo Social.
 - Psicología.
-- Consultorio médico y odontología.
+- Consultorio médico.
+- Consultorio odontológico.
 - Residencias estudiantiles.
+- Promoción deportiva y recreativa.
 
 ## Admisión
 
-Cada año la Oficina de Registro, con apoyo de Orientación y Becas, visita los 79 colegios de la región para presentar la oferta académica, el sistema de becas y el proceso de admisión. La campaña se apoya en la Feria Vocacional de la Sede, la feria de la Ciudad Universitaria Rodrigo Facio, las redes sociales y los medios de comunicación.
+Cada año, la UCR establece las fechas en las que las personas pueden inscribirse para realizar el examen de admisión, requisito indispensable para el ingreso a una carrera al año siguiente. La campaña se apoya en la Feria Vocacional de la Sede, la feria de la Ciudad Universitaria Rodrigo Facio, las redes sociales y los medios de comunicación.
