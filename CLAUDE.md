@@ -29,6 +29,12 @@ Sitio estático (Python + Jinja2). El contenido sale de Google Drive; la vista p
   - Capas: `proveedores/` (IA), `documentos/` (extracción, fragmentos, registro), `busqueda/` (embeddings, Chroma), `servicios/` (recuperación, prompts, citas, chat), `rutas/` (API).
 - Probar sin gastar: `bash herramientas/probar_congo.sh` (pytest, con proveedor y embeddings de prueba). Las pruebas `--completa` del sitio incluyen el chat.
 
+## Drive = sitio
+- La hoja «Contenido del sitio» (Drive) debe reflejar siempre `src/data/*.json`; en el servidor manda Drive, así que una pestaña vacía o vieja deja el sitio oficial desactualizado.
+- Todo cambio en `src/data/*.json` se copia a la hoja en la misma tarea: `python3 herramientas/valores_hoja.py <pestaña> [--desde N --hasta M --sin-encabezado]` imprime las filas en JSON para `update_values`; las columnas de fecha y hora van como texto (formato TEXTO) para que Sheets no las convierta.
+- Verificar con `valores_hoja.py <pestaña> --suma` (filas y suma de largos) contra `=SUMPRODUCT(LEN(rango))` y `COUNTA` en la hoja; si no coinciden, no se da por sincronizado.
+- La cuenta de servicio del servidor solo lee: la escritura en Drive la hace Claude con las herramientas de Sheets.
+
 ## Reglas
 - JorjaniEsp también sube cambios. Antes de hacer push: `git fetch`; si hay cambios, `git pull --rebase` y, si hay conflicto en `campus3d.json`, regenerarlo en vez de fusionarlo a mano.
 - No subir capturas ni scripts temporales. Las pruebas que se repiten van en `herramientas/`.
