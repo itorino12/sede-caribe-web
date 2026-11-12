@@ -52,8 +52,8 @@
         <ul>
           <li class="menu__item menu__buscar"><button type="button" class="menu__enlace" data-abrir="buscador" aria-controls="buscador" aria-expanded="false">Buscar en el sitio</button></li>
           {% set secciones = [
-            ("Estudiar", "estudiar.html", [("¿Qué carrera es para usted?", "estudiar.html"), ("Cómo ingresar", "admision.html"), ("Becas", "unidades/vida-estudiantil.html"), ("Servicios en línea", "enlaces.html#estudiantes"), ("Aula de Siquirres", "unidades/siquirres.html")]),
-            ("Vida Estudiantil", "unidades/vida-estudiantil.html", [("Coordinación de Vida Estudiantil", "unidades/vida-estudiantil.html"), ("Residencias estudiantiles", "unidades/residencias.html"), ("Gimnasio", "unidades/gimnasio.html"), ("Piscina", "unidades/piscina.html")]),
+            ("Estudiar", "estudiar.html", [("¿Qué carrera es para usted?", "estudiar.html"), ("Cómo ingresar", "admision.html"), ("Servicios en línea", "enlaces.html#estudiantes"), ("Aula de Siquirres", "unidades/siquirres.html")]),
+            ("Vida Estudiantil", "unidades/vida-estudiantil.html", [("Coordinación de Vida Estudiantil", "unidades/vida-estudiantil.html"), ("Registro", "unidades/registro.html"), ("Becas", "unidades/becas.html"), ("Acompañamiento", "", [("Orientación", "unidades/orientacion.html"), ("Trabajo Social", "unidades/trabajo-social.html"), ("Psicología", "unidades/psicologia.html")], "Oficinas de Acompañamiento"), ("Salud", "", [("Consultorio médico", "unidades/consultorio-medico.html"), ("Consultorio odontológico", "unidades/consultorio-odontologico.html")], "Consultorios de Salud"), ("Residencias estudiantiles", "unidades/residencias.html"), ("Promoción deportiva y recreativa", "unidades/promocion-deportiva.html", [("Gimnasio", "unidades/gimnasio.html"), ("Piscina", "unidades/piscina.html")], "Espacios de Promoción deportiva y recreativa")]),
             ("Docencia", "unidades/docencia.html", [("Coordinación de Docencia", "unidades/docencia.html"), ("Carreras y planes de estudio", "carreras.html"), ("Auditorio", "unidades/auditorio.html"), ("Aulas y laboratorios", "unidades/laboratorios.html"), ("Horario de aulas", "horarios.html"), ("Recursos para el personal", "enlaces.html#personal-universitario")]),
             ("Investigación", "unidades/investigacion.html", [("Coordinación de Investigación", "unidades/investigacion.html"), ("Biblioteca", "unidades/biblioteca.html"), ("Editorial", "unidades/editorial.html"), ("Observatorio del Turismo del Caribe", "http://obturcaribe.ucr.ac.cr/")]),
             ("Acción social", "unidades/accion-social.html", [("Coordinación de Acción Social", "unidades/accion-social.html")] + ((modalidades or [])|map(attribute="menu")|list)),
@@ -62,15 +62,17 @@
             ("Actualidad", "noticias.html", [("Noticias", "noticias.html"), ("Agenda", "agenda.html")]),
           ] %}
           {% for nombre, url, hijos in secciones %}
-          {% set activo = pagina == url or (pagina.startswith('carreras/') and url == 'unidades/docencia.html') or (pagina.startswith('noticias/') and url == 'noticias.html') %}
-          <li class="menu__item{% if hijos %} menu__item--sub{% endif %}">
+          {% set activo = pagina == url or (pagina.startswith('carreras/') and url == 'unidades/docencia.html') or (pagina.startswith('noticias/') and url == 'noticias.html') or (url == 'unidades/vida-estudiantil.html' and pagina.startswith('unidades/') and pagina[9:-5] in ['registro', 'becas', 'orientacion', 'trabajo-social', 'psicologia', 'consultorio-medico', 'consultorio-odontologico', 'residencias', 'promocion-deportiva', 'gimnasio', 'piscina']) %}
+          <li class="menu__item{% if hijos %} menu__item--sub{% endif %}{% if nombre == 'Vida Estudiantil' %} menu__item--der{% endif %}">
             {% if hijos %}
             <button type="button" class="menu__enlace" aria-expanded="false" data-sub>{{ nombre }}</button>
             <ul class="menu__sub">
-              {% for item in hijos if not (item[1].startswith('unidades/') and item[1][9:-5] not in unidades_publicadas) %}{% set t, h = item[0], item[1] %}
+              {% for item in hijos if not (item[1] and item[1].startswith('unidades/') and item[1][9:-5] not in unidades_publicadas) %}{% set t, h = item[0], item[1] %}
               {% if item|length > 2 and item[2] %}<li class="menu__grupo">
-                <div class="menu__fila"><a href="{{ raiz ~ h }}"{% if pagina == h %} aria-current="page"{% endif %}>{{ t }}</a><button type="button" class="menu__abrir" aria-expanded="false" data-sub2><span>Proyectos de {{ t }}</span></button></div>
-                <ul class="menu__sub2">{% for t2, h2 in item[2] %}<li><a href="{{ raiz ~ h2 }}"{% if pagina == h2 %} aria-current="page"{% endif %}>{{ t2 }}</a></li>{% endfor %}</ul>
+                {% set rotulo = item[3] if item|length > 3 else 'Proyectos de ' ~ t %}
+                {% if h %}<div class="menu__fila"><a href="{{ raiz ~ h }}"{% if pagina == h %} aria-current="page"{% endif %}>{{ t }}</a><button type="button" class="menu__abrir" aria-expanded="false" data-sub2><span>{{ rotulo }}</span></button></div>
+                {% else %}<div class="menu__fila"><button type="button" class="menu__abrir menu__abrir--texto" aria-expanded="false" data-sub2><span>{{ t }}</span></button></div>{% endif %}
+                <ul class="menu__sub2">{% for t2, h2 in item[2] if not (h2.startswith('unidades/') and h2[9:-5] not in unidades_publicadas) %}<li><a href="{{ raiz ~ h2 }}"{% if pagina == h2 %} aria-current="page"{% endif %}>{{ t2 }}</a></li>{% endfor %}</ul>
               </li>{% else %}<li><a href="{{ h if h.startswith('http') else raiz ~ h }}"{% if pagina == h %} aria-current="page"{% endif %}>{{ t }}</a></li>{% endif %}{% endfor %}
             </ul>
             {% else %}

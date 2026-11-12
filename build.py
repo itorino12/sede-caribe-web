@@ -59,8 +59,11 @@ SI = {"sí", "si", "x", "true", "verdadero", "1", "publicar", "yes"}
 
 # Qué grupo del directorio corresponde a cada unidad (para listar sus extensiones en su página)
 DIRECTORIO_DE = {"direccion": "Dirección", "docencia": "Docencia", "investigacion": "Investigación",
-                 "accion-social": "Acción Social", "vida-estudiantil": "Vida Estudiantil",
+                 "accion-social": "Acción Social",
                  "administracion": "Administración", "siquirres": "Siquirres"}
+# Vida Estudiantil tiene una página por oficina: cada una lista solo sus extensiones (las del grupo «Vida Estudiantil»
+# del directorio cuya oficina empieza con este texto)
+OFICINA_VIDA = {"vida-estudiantil": "Coordinación", "registro": "Registro", "becas": "Becas"}
 
 
 # --------------------------------------------------------------------------- utilidades
@@ -341,7 +344,10 @@ def preparar(sitio, d):
 
     unidades = []
     for u in filter(publicable, d["unidades"]):
-        ext = [f for f in d["directorio"] if f["unidad"] == DIRECTORIO_DE.get(u["id"])]
+        if u["id"] in OFICINA_VIDA:
+            ext = [f for f in d["directorio"] if f["unidad"] == "Vida Estudiantil" and f["oficina"].startswith(OFICINA_VIDA[u["id"]])]
+        else:
+            ext = [f for f in d["directorio"] if f["unidad"] == DIRECTORIO_DE.get(u["id"])]
         # «cifras-<id>»: datos destacados opcionales; el documento los ubica con un párrafo que diga solo [[cifras]]
         html = md(leer_pagina(u.get("documento")))
         antes, _, despues = html.partition("<p>[[cifras]]</p>")

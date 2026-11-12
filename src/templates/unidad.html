@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% from "_macros.html" import encabezado, contacto, evento, galeria with context %}
 {% block contenido %}
-{% set padre = ("Docencia", "unidades/docencia.html") if u.id in ["auditorio", "laboratorios"] else ("La Sede", "la-sede.html#coordinaciones") if u.grupo in ["Coordinaciones", "Gobierno", "Recintos"] else ("Campus y servicios", "la-sede.html#servicios") %}
+{% set padre = ("Docencia", "unidades/docencia.html") if u.id in ["auditorio", "laboratorios"] else ("Vida Estudiantil", "unidades/vida-estudiantil.html") if u.grupo == "Vida estudiantil" or u.id in ["residencias", "gimnasio", "piscina"] else ("La Sede", "la-sede.html#coordinaciones") if u.grupo in ["Coordinaciones", "Gobierno", "Recintos"] else ("Campus y servicios", "la-sede.html#servicios") %}
 {{ encabezado(u.nombre, [padre], raiz, u.resumen) }}
 <div class="ancho pagina pagina--con-ficha">
   <div>
@@ -17,6 +17,14 @@
     <ul class="modalidades">
       {% for m in modalidades %}
       <li><a href="{{ raiz }}accion-social/{{ m.id }}.html"><strong>{{ m.nombre }}</strong><span>{{ m.resumen }}</span><span class="modalidades__cantidad">{{ m.proyectos|length }} proyectos</span></a></li>
+      {% endfor %}
+    </ul>
+    {% endif %}
+    {% if u.id == "vida-estudiantil" %}
+    <h2>Oficinas y servicios</h2>
+    <ul class="modalidades">
+      {% for x in unidades if (x.grupo == "Vida estudiantil" or x.id in ["residencias"]) %}
+      <li><a href="{{ raiz }}unidades/{{ x.id }}.html"><strong>{{ x.nombre }}</strong><span>{{ x.resumen }}</span></a></li>
       {% endfor %}
     </ul>
     {% endif %}

@@ -139,6 +139,10 @@ main:focus { outline: none; }
 .menu__abrir::before { content: ""; display: inline-block; width: 7px; height: 7px; border: solid currentColor; border-width: 0 2px 2px 0; transform: rotate(135deg); }
 .menu__abrir span { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
 .menu__abrir:hover, .menu__abrir[aria-expanded="true"] { background: var(--niebla); color: var(--enlace); }
+/* grupo sin página propia (p. ej. Acompañamiento, Salud): toda la fila es el botón que despliega sus oficinas */
+.menu__abrir--texto { flex: 1; width: auto; display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 9px 18px; border-left: 0; color: var(--tinta); font: inherit; text-align: left; }
+.menu__abrir--texto span { position: static; width: auto; height: auto; overflow: visible; clip: auto; }
+.menu__abrir--texto::before { order: 2; }
 .menu__sub2 { display: none; list-style: none; margin: 0; padding: 6px 0; background: var(--papel); }
 .menu__sub2 a { font-size: var(--t-sm); padding: 7px 18px; line-height: 1.35; }
 .menu__abrir[aria-expanded="true"] ~ .menu__sub2, .menu__fila:has(.menu__abrir[aria-expanded="true"]) + .menu__sub2 { display: block; }
@@ -146,6 +150,10 @@ main:focus { outline: none; }
   .menu__sub:has(> .menu__grupo) { left: auto; right: 0; }
   .menu__sub2 { position: absolute; top: -9px; right: 100%; width: 360px; max-height: 75vh; overflow-y: auto; border: 1px solid var(--linea); border-top: 3px solid var(--azul); box-shadow: 0 14px 30px rgba(0,40,80,.12); }
   .menu__grupo:hover > .menu__sub2 { display: block; }
+  /* Vida Estudiantil está cerca del borde izquierdo: su menú abre hacia la derecha en vez de hacia la izquierda */
+  .menu__item--der > .menu__sub:has(> .menu__grupo) { left: 0; right: auto; }
+  .menu__item--der .menu__sub2 { right: auto; left: 100%; }
+  .menu__item--der .menu__abrir::before { transform: rotate(-45deg); }
 }
 @media (max-width: 1280px) {
   .menu__abrir { border-left: 0; transform: none; }

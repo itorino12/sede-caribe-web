@@ -1,0 +1,1 @@
+La Oficina de Trabajo Social forma parte de la [Coordinación de Vida Estudiantil](vida-estudiantil.html), cuya tarea es que entrar y mantenerse en la universidad sea posible para todas las personas. Atiende al estudiantado de la Sede en el edificio Administrativo.
