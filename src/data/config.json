@@ -41,7 +41,7 @@
  },
  {
   "clave": "instagram",
-  "valor": ""
+  "valor": "https://www.instagram.com/ucrcaribe/"
  },
  {
   "clave": "youtube",
@@ -50,6 +50,18 @@
  {
   "clave": "tiktok",
   "valor": ""
+ },
+ {
+  "clave": "tiktok_educacion_continua",
+  "valor": "https://www.tiktok.com/@ed204sedecaribe"
+ },
+ {
+  "clave": "instagram_educacion_continua",
+  "valor": "https://www.instagram.com/ed204sedecaribe/"
+ },
+ {
+  "clave": "facebook_educacion_continua",
+  "valor": "https://www.facebook.com/profile.php?id=100063714083188"
  },
  {
   "clave": "formulario_cobertura",

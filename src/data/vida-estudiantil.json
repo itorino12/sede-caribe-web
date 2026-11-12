@@ -830,6 +830,37 @@
         },
         {
           "tipo": "tarjetas",
+          "titulo": "Liderazgo universitario",
+          "intro": "Proyecto de la Vicerrectoría de Vida Estudiantil que forma al estudiantado en habilidades sociales, inteligencia emocional y liderazgo. En la Sede del Caribe nació en 2009 y hoy cuenta con más de 50 estudiantes facilitadores, que alcanzan a más de 800 personas de la Sede.",
+          "items": [
+            {
+              "titulo": "Módulos de formación",
+              "texto": "Tres módulos: Autoliderazgo, Liderando con otros y Trabajo en equipo. Se desarrollan con otras sedes mediante charlas interactivas, retos grupales y actividades de integración."
+            },
+            {
+              "titulo": "Talleres",
+              "texto": "Para grupos que los solicitan: liderazgo personal, las 5C del trabajo en equipo, manejo del estrés y resolución de conflictos."
+            },
+            {
+              "titulo": "Convivios",
+              "texto": "Bienvenidas y cierres de curso para grupos de estudiantes, orientados al bienestar y a las buenas relaciones."
+            },
+            {
+              "titulo": "Facebook",
+              "texto": "Publicaciones y fotos de las actividades.",
+              "enlace": "https://www.facebook.com/liderazgocaribe",
+              "enlace_texto": "Liderazgo UCR Caribe"
+            },
+            {
+              "titulo": "Instagram",
+              "texto": "Actividades al día y convocatorias.",
+              "enlace": "https://www.instagram.com/liderazgoucrcaribe/",
+              "enlace_texto": "@liderazgoucrcaribe"
+            }
+          ]
+        },
+        {
+          "tipo": "tarjetas",
           "titulo": "Antes de entrar a la universidad",
           "items": [
             {

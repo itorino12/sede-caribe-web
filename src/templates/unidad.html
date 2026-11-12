@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% from "_macros.html" import encabezado, contacto, evento, galeria, bloque with context %}
+{% from "_macros.html" import encabezado, contacto, evento, galeria, bloque, redes_sociales with context %}
 {% block contenido %}
 {% set padre = ("Docencia", "unidades/docencia.html") if u.id in ["auditorio", "laboratorios"] else ("Vida Estudiantil", "unidades/vida-estudiantil.html") if u.grupo == "Vida estudiantil" or u.id in ["residencias", "gimnasio", "piscina"] else ("La Sede", "la-sede.html#coordinaciones") if u.grupo in ["Coordinaciones", "Gobierno", "Recintos"] else ("Campus y servicios", "la-sede.html#servicios") %}
 {{ encabezado(u.nombre, [padre], raiz, u.resumen) }}
@@ -13,6 +13,12 @@
     {% if u.cifras[0].fuente %}<p class="cifras__fuente">{{ u.cifras[0].fuente }}</p>{% endif %}
     {% endif %}
     {{ u.html_despues|safe }}
+    {% if u.id == "educacion-continua" %}
+    {{ redes_sociales("Educación Continua en redes", "Convocatorias de cursos, fechas de matrícula y novedades.", [
+      {"red": "Facebook", "clase": "facebook", "usuario": "Educación Continua", "texto": "Convocatorias y avisos de los cursos.", "url": sitio.facebook_educacion_continua},
+      {"red": "Instagram", "clase": "instagram", "usuario": "@ed204sedecaribe", "texto": "Cursos y actividades en imágenes.", "url": sitio.instagram_educacion_continua},
+      {"red": "TikTok", "clase": "tiktok", "usuario": "@ed204sedecaribe", "texto": "Videos cortos de los cursos y su comunidad.", "url": sitio.tiktok_educacion_continua}], "redes-ec") }}
+    {% endif %}
     {% if u.id == "accion-social" and modalidades %}
     <ul class="modalidades">
       {% for m in modalidades %}

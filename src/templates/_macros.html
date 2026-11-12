@@ -1,3 +1,20 @@
+{% macro redes_sociales(titulo, intro, items, id='redes') %}
+<section class="redes" aria-labelledby="{{ id }}-titulo">
+  <h2 id="{{ id }}-titulo">{{ titulo }}</h2>
+  {% if intro %}<p class="redes__intro">{{ intro }}</p>{% endif %}
+  <ul class="redes__lista">
+    {% for r in items if r.url %}
+    <li><a class="red red--{{ r.clase }}" href="{{ r.url }}" rel="noopener">
+      <span class="red__marca">{{ r.red }}</span>
+      <strong class="red__usuario">{{ r.usuario }}</strong>
+      <span class="red__texto">{{ r.texto }}</span>
+      <span class="red__ir">Abrir en {{ r.red }} <span aria-hidden="true">→</span></span>
+    </a></li>
+    {% endfor %}
+  </ul>
+</section>
+{% endmacro %}
+
 {% macro evento(e, raiz, compacto=false, cierre=false) %}
 <li class="evento{% if compacto %} evento--compacto{% endif %}" id="{{ e.id }}"{% if e.categoria %} data-area="{{ e.categoria }}"{% endif %}>
   {% if cierre %}

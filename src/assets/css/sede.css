@@ -1229,3 +1229,23 @@ a.hz-aula:hover { text-decoration: underline; }
 .ve__contacto dd { margin: 0; overflow-wrap: anywhere; }
 .ve__nota { font-size: var(--t-sm); color: var(--tinta-2); }
 .ve__proximo strong small { display: block; font-size: var(--t-xs); font-weight: 400; }
+
+/* Redes sociales: tarjetas que se llenan con el color de la red al pasar el cursor o enfocar */
+.redes { margin: 40px 0; }
+.redes h2 { margin-bottom: 6px; }
+.redes__intro { color: var(--tinta-2); margin: 0 0 18px; max-width: 60ch; }
+.redes__lista { list-style: none; padding: 0; margin: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 16px; }
+.red { --c: var(--azul); display: flex; flex-direction: column; gap: 6px; height: 100%; padding: 18px 20px 16px; border: 1px solid var(--linea); border-top: 6px solid var(--c); border-radius: 8px; background: var(--papel); color: var(--tinta); text-decoration: none !important; transition: transform .18s, box-shadow .18s, background-color .18s, color .18s; }
+.red--facebook { --c: #1665D8; }
+.red--instagram { --c: #C13584; }
+.red--tiktok { --c: #111; }
+.red__marca { font-size: var(--t-xs); font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: var(--c); transition: color .18s; }
+.red__usuario { font-size: var(--t-md); line-height: 1.2; overflow-wrap: anywhere; }
+.red__texto { color: var(--tinta-2); font-size: var(--t-sm); transition: color .18s; }
+.red__ir { margin-top: auto; padding-top: 8px; font-weight: 600; color: var(--enlace); transition: color .18s; }
+.red__ir span { display: inline-block; transition: transform .18s; }
+.red:hover, .red:focus-visible { transform: translateY(-4px); box-shadow: 0 8px 20px rgba(0,0,0,.18); background: var(--c); color: #fff; }
+.red:hover .red__marca, .red:hover .red__texto, .red:hover .red__ir, .red:focus-visible .red__marca, .red:focus-visible .red__texto, .red:focus-visible .red__ir { color: #fff; }
+.red:hover .red__ir span, .red:focus-visible .red__ir span { transform: translateX(6px); }
+:root[data-tema="oscuro"] .red--tiktok { --c: #444; }
+.redes-portada { padding-block: 8px 24px; }

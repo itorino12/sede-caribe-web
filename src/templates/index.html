@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% from "_macros.html" import tarjeta_noticia with context %}
+{% from "_macros.html" import tarjeta_noticia, redes_sociales with context %}
 {% macro foto(f, alt, tam, carga='lazy') %}<img src="{{ f[1280] }}" srcset="{{ f[640] }} 640w, {{ f[1280] }} 1280w, {{ f[1920] }} 1920w, {{ f[2560] }} 2560w" sizes="{{ tam }}" alt="{{ alt }}" width="{{ f.w }}" height="{{ f.h }}" loading="{{ carga }}"{% if carga == 'eager' %} fetchpriority="high"{% endif %}>{% endmacro %}
 {% block cabeza %}<link rel="preload" as="image" href="{{ raiz }}assets/img/portada-maqueta.webp">{% endblock %}
 {% block contenido %}
@@ -151,6 +151,12 @@
     {% endfor %}
   </ul>
 </section>
+
+<div class="ancho redes-portada">
+  {{ redes_sociales("Síganos en redes", "Noticias, actividades y vida del campus, al día en las redes oficiales de la Sede del Caribe.", [
+    {"red": "Facebook", "clase": "facebook", "usuario": "UCR Sede del Caribe", "texto": "Anuncios, fotos de actividades y avisos para la comunidad.", "url": sitio.facebook},
+    {"red": "Instagram", "clase": "instagram", "usuario": "@ucrcaribe", "texto": "La vida estudiantil y el campus en imágenes.", "url": sitio.instagram}]) }}
+</div>
 
 <section class="visitenos" aria-labelledby="visitenos-titulo">
   {% if fotos.portada_noche %}<span class="foto-dia">{{ foto(fotos.portada_noche, "", "100vw") }}</span>{% endif %}
