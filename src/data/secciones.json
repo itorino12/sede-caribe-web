@@ -167,7 +167,7 @@
        "enlace": "tel:+50625111150"
       }
      ],
-     "nota": "El horario de atención no está publicado: llame antes de ir."
+     "nota": "Horario de atención de la Coordinación: de 8:00 a. m. a 3:00 p. m."
     },
     {
      "tipo": "faq",
@@ -373,7 +373,7 @@
        "enlace": "mailto:estudiantilestcu.vas@ucr.ac.cr"
       }
      ],
-     "nota": "El horario de atención de la Coordinación no está publicado: llame antes de ir."
+     "nota": "Horario de atención de la Coordinación: de 8:00 a. m. a 3:00 p. m."
     },
     {
      "tipo": "enlaces",
@@ -616,6 +616,28 @@
      ]
     },
     {
+     "tipo": "contacto",
+     "titulo": "Contacto",
+     "items": [
+      {
+       "etiqueta": "Coordinación de la Sede",
+       "valor": "administracion.sedecaribe@ucr.ac.cr",
+       "enlace": "mailto:administracion.sedecaribe@ucr.ac.cr"
+      },
+      {
+       "etiqueta": "Extensión",
+       "valor": "2511-7321",
+       "enlace": "tel:+50625117321"
+      },
+      {
+       "etiqueta": "Central de la Sede",
+       "valor": "2511-7300",
+       "enlace": "tel:+50625117300"
+      }
+     ],
+     "nota": "Horario de atención de la Coordinación: de 8:00 a. m. a 3:00 p. m."
+    },
+    {
      "tipo": "faq",
      "id": "preguntas",
      "atajo": "Preguntas",
@@ -627,7 +649,7 @@
       },
       {
        "p": "¿Cuál es el horario de atención de las oficinas?",
-       "r": "La Sede no publica los horarios. Llame a la extensión de la oficina o a la central, 2511-7300, antes de ir."
+       "r": "La Coordinación de Administración atiende de 8:00 a. m. a 3:00 p. m. Las demás oficinas no tienen horario publicado: llame a su extensión o a la central, 2511-7300, antes de ir."
       },
       {
        "p": "¿A quién aviso de un daño en un edificio o un aula?",
