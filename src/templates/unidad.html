@@ -6,7 +6,7 @@
 <div class="ancho pagina pagina--con-ficha">
   <div>
   {{ galeria(u.fotos, raiz, "Fotos de " ~ u.nombre) }}
-  <div class="prosa">
+  <div class="prosa{% if u.id == "vida-estudiantil" %} prosa--ancha{% endif %}">
     {{ u.html|safe }}
     {% if u.cifras %}
     <ul class="cifras">{% for x in u.cifras %}<li><strong>{{ x.valor }}</strong><span>{{ x.etiqueta }}</span></li>{% endfor %}</ul>
@@ -20,13 +20,110 @@
       {% endfor %}
     </ul>
     {% endif %}
-    {% if u.id == "vida-estudiantil" %}
-    <h2>Oficinas y servicios</h2>
-    <ul class="modalidades">
-      {% for x in unidades if (x.grupo == "Vida estudiantil" or x.id in ["residencias"]) %}
-      <li><a href="{{ raiz }}unidades/{{ x.id }}.html"><strong>{{ x.nombre }}</strong><span>{{ x.resumen }}</span></a></li>
-      {% endfor %}
-    </ul>
+    {% if u.id == "vida-estudiantil" and vida %}
+    {% set dias_nombre = ["", "lunes", "martes", "miércoles", "jueves", "viernes", "sábado", "domingo"] %}
+    <div class="ve" data-ve>
+      <nav class="ve__atajos" aria-label="En esta página">
+        <a href="#servicios">Servicios</a><a href="#fechas">Fechas clave</a><a href="#tramites">Trámites</a><a href="#actividades">Deporte y cultura</a><a href="#preguntas">Preguntas</a><a href="#canales">Canales oficiales</a>
+      </nav>
+
+      <section class="ve__ayuda" aria-labelledby="ayuda-titulo">
+        <h2 id="ayuda-titulo">Si necesita ayuda ahora</h2>
+        <ul>{% for a in vida.ayuda %}<li><a href="{{ a.enlace }}"><span>{{ a.nombre }}</span><strong>{{ a.dato }}</strong></a></li>{% endfor %}</ul>
+      </section>
+
+      <section class="ve__proximo" data-ve-proximo hidden aria-live="polite"></section>
+
+      <h2 id="servicios">Encuentre un servicio</h2>
+      <p>Escriba lo que necesita, por ejemplo «dentista», «beca» o «discapacidad», o filtre por tipo de servicio. Los horarios de atención no están publicados: llame a la extensión antes de ir, o a la central, <a href="{{ sitio.telefono|tel }}">{{ sitio.telefono }}</a>.</p>
+      <div class="ve__buscar">
+        <label for="ve-q">Buscar un servicio</label>
+        <input id="ve-q" type="search" placeholder="Beca, psicología, residencias…" autocomplete="off" data-ve-q>
+      </div>
+      <div class="filtros ve__chips" role="group" aria-label="Tipo de servicio" data-ve-cats>
+        <button type="button" aria-pressed="true" data-valor="">Todos</button>
+        {% for c in vida.categorias %}<button type="button" aria-pressed="false" data-valor="{{ c }}">{{ c }}</button>{% endfor %}
+      </div>
+      <p class="ve__estado" role="status" aria-live="polite" data-ve-estado></p>
+      <ul class="ve__servicios" data-ve-servicios>
+        {% for s in vida.servicios %}
+        <li class="ve-serv" data-cat="{{ s.categoria }}" data-texto="{{ s.nombre }} {{ s.resumen }} {{ s.categoria }} {{ s.edificio }} {{ s.palabras }}">
+          <p class="ve-serv__cat">{{ s.categoria }}</p>
+          <h3>{% if s.unidad %}<a href="{{ raiz }}unidades/{{ s.unidad }}.html">{{ s.nombre }}</a>{% else %}{{ s.nombre }}{% endif %}</h3>
+          <p>{{ s.resumen }}</p>
+          <dl>
+            <dt>Teléfono</dt><dd>{% for e in s.extension.split(" / ") %}<a href="{{ e|tel }}">{{ e }}</a>{% if not loop.last %}, {% endif %}{% endfor %}</dd>
+            <dt>Dónde</dt><dd>{{ s.edificio }}</dd>
+            {% if s.correo %}<dt>Correo</dt><dd><a href="mailto:{{ s.correo }}">{{ s.correo }}</a></dd>{% endif %}
+          </dl>
+          {% if s.enlace %}<p class="ve-serv__mas"><a href="{{ s.enlace }}">{{ s.enlace_texto }}</a></p>{% endif %}
+        </li>
+        {% endfor %}
+      </ul>
+
+      <h2 id="fechas">Fechas clave</h2>
+      <p>Becas, matrícula y receso, según la OBAS y el portal de la UCR. Revisadas el {{ vida.revision }}; confirme siempre en el enlace de cada fecha, porque la universidad puede cambiarlas.</p>
+      <div class="ve__acciones">
+        <label class="ve__marca"><input type="checkbox" data-ve-pasadas> Mostrar fechas que ya pasaron</label>
+        <button type="button" class="boton boton--secundario" data-ve-ics>Agregar las próximas a mi calendario</button>
+      </div>
+      <ol class="ve__linea" data-ve-fechas>
+        {% for f in vida.fechas %}
+        <li class="ve-fecha" data-desde="{{ f.desde }}" data-hasta="{{ f.hasta }}" data-id="{{ f.id }}" data-titulo="{{ f.titulo }}" data-detalle="{{ f.detalle }}">
+          <p class="ve-fecha__tipo">{{ f.tipo }} <span class="ve-fecha__estado" data-estado></span></p>
+          <h3>{{ f.titulo }}</h3>
+          <p class="ve-fecha__rango">{{ f.rango }}</p>
+          <p>{{ f.detalle }} <a href="{{ f.enlace }}">{{ f.enlace_texto }}</a></p>
+        </li>
+        {% endfor %}
+      </ol>
+
+      <h2 id="tramites">Trámites paso a paso</h2>
+      <p>Elija el trámite que necesita. Los pasos salen de las páginas oficiales de la ViVE, la OBAS y Orientación.</p>
+      <div class="ve__rutas" data-ve-rutas>
+        {% for r in vida.rutas %}
+        <section class="ve-ruta" id="ruta-{{ r.id }}" data-nombre="{{ r.nombre }}">
+          <h3>{{ r.nombre }}</h3>
+          <p class="ve-ruta__para"><strong>Para quién:</strong> {{ r.para }}</p>
+          <ol class="ve-pasos">
+            {% for p in r.pasos %}
+            <li><strong>{{ p.titulo }}</strong><span>{{ p.texto }}{% if p.enlace %} <a href="{{ p.enlace }}">{{ p.enlace_texto }}</a>{% endif %}</span></li>
+            {% endfor %}
+          </ol>
+        </section>
+        {% endfor %}
+      </div>
+
+      <h2 id="actividades">Deporte y cultura en el campus</h2>
+      <p>{{ vida.actividades.nota }} <a href="{{ vida.actividades.fuente }}">Fuente de los horarios</a>.</p>
+      <div class="filtros ve__dias" role="group" aria-label="Día de la semana" data-ve-dias>
+        <button type="button" aria-pressed="true" data-valor="">Toda la semana</button>
+        {% for n in range(1, 8) %}<button type="button" aria-pressed="false" data-valor="{{ n }}">{{ dias_nombre[n]|capitalize }}</button>{% endfor %}
+      </div>
+      <ul class="ve__actividades" data-ve-actividades>
+        {% for a in vida.actividades.lista %}
+        <li class="ve-act" data-dias="{{ a.dias|join(',') }}">
+          <p class="ve-act__tipo">{{ a.tipo }}</p>
+          <h3>{{ a.nombre }}</h3>
+          <p>{% for d in a.dias %}{{ dias_nombre[d]|capitalize if loop.first else dias_nombre[d] }}{% if not loop.last %}{{ ' y ' if loop.revindex == 2 else ', ' }}{% endif %}{% endfor %}, {{ a.hora }}</p>
+          <p class="ve-act__lugar">{{ a.lugar }}</p>
+        </li>
+        {% endfor %}
+      </ul>
+      <p class="ve__estado" role="status" aria-live="polite" data-ve-estado-act></p>
+
+      <h2 id="preguntas">Preguntas frecuentes</h2>
+      <p><button type="button" class="ve__todas" data-ve-abrir>Abrir todas</button></p>
+      <div class="ve__preguntas" data-ve-preguntas>
+        {% for q in vida.preguntas %}<details><summary>{{ q.p }}</summary><p>{{ q.r }}</p></details>{% endfor %}
+      </div>
+
+      <h2 id="canales">Canales oficiales para estar al día</h2>
+      <ul class="modalidades ve__canales">
+        {% for c in vida.canales %}<li><a href="{{ c.enlace }}"><strong>{{ c.nombre }}</strong><span>{{ c.detalle }}</span></a></li>{% endfor %}
+      </ul>
+    </div>
+    <script src="{{ raiz }}assets/js/vida-estudiantil.js" defer></script>
     {% endif %}
     {% if u.id == "laboratorios" and aulas %}
     {% set area_de = {1: "p1", 14: "p2", 15: "p3", 25: "ing", 26: "ing", 12: "aud", 32: "inv"} %}

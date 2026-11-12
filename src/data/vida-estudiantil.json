@@ -1,0 +1,90 @@
+{
+  "revision": "12 de noviembre de 2026",
+  "categorias": ["Becas y apoyo económico", "Salud y bienestar", "Orientación y apoyo", "Residencias", "Deporte y cultura", "Representación y voluntariado", "Trámites"],
+  "servicios": [
+    {"id": "coordinacion", "nombre": "Coordinación de Vida Estudiantil", "categoria": "Trámites", "resumen": "Puerta de entrada a los servicios: justificación de promedio, adecuaciones y residencias se tramitan aquí.", "extension": "2511-7308", "edificio": "Administrativo", "correo": "vidaestudiantil.sedecaribe@ucr.ac.cr", "palabras": "coordinador justificar promedio ponderado adecuacion articulo 37 consultas"},
+    {"id": "becas", "nombre": "Becas", "categoria": "Becas y apoyo económico", "resumen": "Beca socioeconómica, beneficios complementarios (alimentación, residencias, préstamo) y atención del estudiantado becado.", "extension": "2511-7337 / 2511-7326", "edificio": "Administrativo", "correo": "becas.sedecaribe@ucr.ac.cr", "unidad": "becas", "palabras": "beca socioeconomica obas alimentacion prestamo dinero estimulo"},
+    {"id": "registro", "nombre": "Registro", "categoria": "Trámites", "resumen": "Matrícula, expediente, certificaciones, graduaciones e información del estudiantado.", "extension": "2511-7304 / 2511-7343 / 2511-7363", "edificio": "Administrativo", "correo": "registro.sedecaribe@ucr.ac.cr", "unidad": "registro", "palabras": "matricula certificacion expediente notas ori graduacion"},
+    {"id": "trabajo-social", "nombre": "Trabajo Social", "categoria": "Orientación y apoyo", "resumen": "Acompañamiento en situaciones socioeconómicas y familiares que afectan la permanencia en la universidad.", "extension": "2511-7325", "edificio": "Administrativo", "unidad": "trabajo-social", "palabras": "social familia situacion economica acompanamiento"},
+    {"id": "psicologia", "nombre": "Psicología", "categoria": "Salud y bienestar", "resumen": "Atención psicológica para el estudiantado de la Sede.", "extension": "2511-7342", "edificio": "Administrativo", "unidad": "psicologia", "palabras": "salud mental ansiedad estres emocional apoyo psicologico"},
+    {"id": "orientacion", "nombre": "Orientación", "categoria": "Orientación y apoyo", "resumen": "Elección de carrera, apoyos académicos y desarrollo personal.", "extension": "2511-7323", "edificio": "Edificio de Ingeniería, segundo piso", "unidad": "orientacion", "palabras": "vocacional carrera estudio habitos feria vocacional"},
+    {"id": "medico", "nombre": "Consultorio médico", "categoria": "Salud y bienestar", "resumen": "Consulta médica dentro del campus.", "extension": "2511-7351", "edificio": "Pabellón 1", "unidad": "consultorio-medico", "palabras": "medico enfermedad salud consulta emergencia"},
+    {"id": "odontologia", "nombre": "Consultorio odontológico", "categoria": "Salud y bienestar", "resumen": "Atención odontológica para el estudiantado.", "extension": "2511-7339", "edificio": "Pabellón 1", "unidad": "consultorio-odontologico", "palabras": "dentista dientes odontologia muelas"},
+    {"id": "cased", "nombre": "Adecuaciones y discapacidad (CASED)", "categoria": "Orientación y apoyo", "resumen": "El Centro de Asesoría y Servicios para Estudiantes con Discapacidad gestiona las adecuaciones del artículo 37. La Sede no tiene una oficina propia: empiece por la Coordinación de Vida Estudiantil.", "extension": "2511-7308", "edificio": "Administrativo (Coordinación)", "correo": "cased@ucr.ac.cr", "enlace": "https://orientacion.ucr.ac.cr/servicios-accesibilidad/", "enlace_texto": "Servicios de accesibilidad, Orientación UCR", "palabras": "discapacidad adecuacion accesibilidad articulo 37 apoyos ceguera sordera necesidades educativas inclusion"},
+    {"id": "residencias", "nombre": "Residencias estudiantiles", "categoria": "Residencias", "resumen": "Alojamiento dentro del campus para estudiantes becados que viven lejos de Limón.", "extension": "2511-7317 / 2511-7325", "edificio": "Residencias estudiantiles", "correo": "becas.sedecaribe@ucr.ac.cr", "unidad": "residencias", "palabras": "vivir alojamiento cuarto beca lejos"},
+    {"id": "deporte", "nombre": "Promoción deportiva y recreativa", "categoria": "Deporte y cultura", "resumen": "Equipos, cursos y actividades de deporte y recreación, con el gimnasio y la piscina del campus.", "extension": "2511-7354", "edificio": "Gimnasio", "unidad": "promocion-deportiva", "palabras": "baloncesto futbol voleibol taekwondo promotor deportivo equipos gimnasio piscina"},
+    {"id": "cultura", "nombre": "Acción Social, TCU y extensión cultural", "categoria": "Deporte y cultura", "resumen": "Trabajo Comunal Universitario, música, danza y otros proyectos culturales abiertos a la comunidad estudiantil.", "extension": "2511-7313", "edificio": "Pabellón 1", "correo": "accionsocial.sedecaribe@ucr.ac.cr", "unidad": "accion-social", "palabras": "tcu voluntariado danza musica banda calypso cultura proyectos"},
+    {"id": "audel", "nombre": "AUDEL, Asociación Universitaria de Estudiantes Limonenses", "categoria": "Representación y voluntariado", "resumen": "Representación estudiantil de la Sede. Organiza la Semana de Bienvenida, torneos y actividades solidarias.", "extension": "2511-7333", "edificio": "Pabellón 1", "enlace": "https://www.facebook.com/audel.cr/", "enlace_texto": "AUDEL en Facebook", "palabras": "asociacion estudiantes representacion bienvenida torneos feuc"},
+    {"id": "siquirres", "nombre": "Apoyo estudiantil en Siquirres", "categoria": "Orientación y apoyo", "resumen": "Atención al estudiantado del Aula de Siquirres y su asociación estudiantil (AERSI).", "extension": "2511-7398 / 2511-7320", "edificio": "Aula de Siquirres", "unidad": "siquirres", "palabras": "siquirres aersi recinto aula"}
+  ],
+  "fechas": [
+    {"id": "matricula", "titulo": "Matrícula del III ciclo", "desde": "2026-11-11", "hasta": "2027-01-12", "tipo": "Matrícula", "detalle": "Período de matrícula del III ciclo de 2026, según el calendario del portal de la UCR.", "enlace": "https://www.ucr.ac.cr/", "enlace_texto": "Portal de la UCR"},
+    {"id": "complementarios", "titulo": "Solicitud de beneficios complementarios del III ciclo", "desde": "2026-11-24", "hasta": "2027-02-26", "tipo": "Becas", "detalle": "Alimentación, residencias, préstamo de dinero y justificación de carga académica.", "enlace": "https://becas.ucr.ac.cr/beneficioscomplementarios/", "enlace_texto": "Beneficios complementarios, OBAS"},
+    {"id": "vacaciones", "titulo": "Vacaciones de fin de año", "desde": "2026-12-06", "hasta": "2027-01-03", "tipo": "Calendario", "detalle": "Receso institucional. Las oficinas pueden cambiar su atención: llame antes de venir.", "enlace": "https://www.vive.ucr.ac.cr/index.php/node/index/776", "enlace_texto": "Calendario Estudiantil, ViVE"},
+    {"id": "beca-formulario", "titulo": "Beca socioeconómica I ciclo 2027: formulario", "desde": "2026-12-15", "hasta": "2026-12-17", "tipo": "Becas", "detalle": "Se completa en línea; abre el 15 de diciembre a las 8:00 a. m. y cierra el 17 a las 11:59 p. m.", "enlace": "https://serviciosbecas.ucr.ac.cr/", "enlace_texto": "Sistema de solicitud de becas"},
+    {"id": "beca-documentos", "titulo": "Beca socioeconómica: adjuntar documentos", "desde": "2026-12-15", "hasta": "2026-12-18", "tipo": "Becas", "detalle": "También se pueden adjuntar el 4 o el 5 de enero de 2027. Revise la lista de documentos antes de empezar.", "enlace": "https://becas.ucr.ac.cr/wp-content/uploads/2026/11/Lista-de-documentos-2027.pdf", "enlace_texto": "Lista de documentos 2027 (PDF)"},
+    {"id": "beca-adicional", "titulo": "Beca socioeconómica: información adicional", "desde": "2027-01-07", "hasta": "2027-01-18", "tipo": "Becas", "detalle": "Si la OBAS necesita más información, la pide en este período.", "enlace": "https://becas.ucr.ac.cr/becasocioeconomica/", "enlace_texto": "Beca socioeconómica, OBAS"},
+    {"id": "beca-resultados", "titulo": "Beca socioeconómica: resultados", "desde": "2027-02-11", "hasta": "2027-02-11", "tipo": "Becas", "detalle": "Publicación de resultados para el I ciclo de 2027.", "enlace": "https://becas.ucr.ac.cr/", "enlace_texto": "Becas UCR (OBAS)"}
+  ],
+  "rutas": [
+    {"id": "beca", "nombre": "Beca socioeconómica", "para": "Primer ingreso, quienes no tienen beca, quienes terminaron su titulación máxima sin renovar, quienes no consolidaron matrícula en 2026 y quienes la OBAS indique por resolución.", "pasos": [
+      {"titulo": "Prepare los documentos", "texto": "Descargue la lista de documentos 2027 y téngalos escaneados antes de abrir el formulario.", "enlace": "https://becas.ucr.ac.cr/wp-content/uploads/2026/11/Lista-de-documentos-2027.pdf", "enlace_texto": "Lista de documentos"},
+      {"titulo": "Complete el formulario", "texto": "Del 15 de diciembre (8:00 a. m.) al 17 de diciembre de 2026 (11:59 p. m.), en el sistema de solicitud.", "enlace": "https://serviciosbecas.ucr.ac.cr/", "enlace_texto": "Sistema de solicitud"},
+      {"titulo": "Adjunte los documentos", "texto": "Del 15 al 18 de diciembre, o el 4 o 5 de enero de 2027."},
+      {"titulo": "Responda si le piden más información", "texto": "La OBAS puede pedirla del 7 al 18 de enero de 2027. Revise su correo institucional."},
+      {"titulo": "Consulte los resultados", "texto": "Se publican el 11 de febrero de 2027. Si tiene dudas, escriba a becas.sedecaribe@ucr.ac.cr o llame al 2511-7326."}
+    ]},
+    {"id": "residencias", "nombre": "Residencias", "para": "Estudiantes con beca que viven lejos de Limón.", "pasos": [
+      {"titulo": "Tenga beca socioeconómica", "texto": "Los cupos se asignan primero a la categoría de beca 5 y luego a la 4."},
+      {"titulo": "Solicite el beneficio complementario", "texto": "Para el III ciclo, la solicitud está abierta del 24 de noviembre de 2026 al 26 de febrero de 2027.", "enlace": "https://becas.ucr.ac.cr/beneficioscomplementarios/", "enlace_texto": "Beneficios complementarios"},
+      {"titulo": "Escriba a la Oficina de Becas de la Sede", "texto": "Correo becas.sedecaribe@ucr.ac.cr o teléfonos 2511-7317 y 2511-7325."},
+      {"titulo": "Espere la asignación", "texto": "También pesan la zona de procedencia, la carga académica, el promedio o la nota de admisión y los cupos disponibles."}
+    ]},
+    {"id": "adecuacion", "nombre": "Adecuación (artículo 37)", "para": "Estudiantes con una discapacidad o condición que requiere apoyos para estudiar.", "pasos": [
+      {"titulo": "Reúna el documento que prueba su condición", "texto": "Es requisito para la solicitud."},
+      {"titulo": "Pida la adecuación por escrito", "texto": "Dentro del plazo que fija el Calendario Estudiantil Universitario.", "enlace": "https://www.vive.ucr.ac.cr/index.php/node/index/776", "enlace_texto": "Calendario Estudiantil"},
+      {"titulo": "Preséntela por la Coordinación de Vida Estudiantil", "texto": "Llame al 2511-7308 antes de ir. El CASED, que gestiona estas adecuaciones, atiende en cased@ucr.ac.cr."}
+    ]},
+    {"id": "promedio", "nombre": "Justificar el promedio ponderado", "para": "Estudiantes cuyo promedio puede afectar su beca o su matrícula.", "pasos": [
+      {"titulo": "Prepare su justificación", "texto": "Explique por escrito la situación que afectó su rendimiento y reúna los comprobantes que la respalden."},
+      {"titulo": "Preséntela en la Unidad de Vida Estudiantil", "texto": "En las sedes regionales este trámite se hace en la Coordinación de Vida Estudiantil, no en el CASE de la Sede Rodrigo Facio.", "enlace": "https://orientacion.ucr.ac.cr/gestiones-estudiantiles/", "enlace_texto": "Gestiones estudiantiles, Orientación UCR"}
+    ]}
+  ],
+  "actividades": {
+    "nota": "Horarios publicados por la Sede en 2024. Confirme con el promotor deportivo (2511-7354) antes de ir.",
+    "fuente": "https://sedecaribe.ucr.ac.cr/index.php/sede-caribe/noticias/173-hay-mas-que-teoria-en-la-ucr-la-sede-del-caribe-ofrece-diversas-actividades-extracurriculares",
+    "lista": [
+      {"nombre": "Danza folclórica y calypso", "tipo": "Cultura", "dias": [2, 4], "hora": "8:00 a. m. a 11:00 a. m.", "lugar": "Gimnasio y Casa de la Cultura"},
+      {"nombre": "Baloncesto femenino", "tipo": "Deporte", "dias": [2], "hora": "6:00 p. m. a 7:30 p. m.", "lugar": "Gimnasio de la Sede"},
+      {"nombre": "Baloncesto femenino", "tipo": "Deporte", "dias": [5], "hora": "6:30 p. m. a 8:00 p. m.", "lugar": "Gimnasio de la Sede"},
+      {"nombre": "Baloncesto masculino", "tipo": "Deporte", "dias": [3, 5], "hora": "8:00 p. m. a 9:30 p. m.", "lugar": "Gimnasio de la Sede"},
+      {"nombre": "Taekwon-do ITF", "tipo": "Deporte", "dias": [6], "hora": "6:00 p. m. a 8:00 p. m.", "lugar": "Gimnasio de la Sede"}
+    ]
+  },
+  "preguntas": [
+    {"p": "¿Cuál es el horario de atención de las oficinas de Vida Estudiantil?", "r": "La Sede no publica horarios de atención de estas oficinas. Llame a la extensión de la oficina que necesita (las tiene en el buscador de servicios) o a la central, 2511-7300, antes de ir."},
+    {"p": "¿Dónde presento la justificación de promedio?", "r": "En la Coordinación de Vida Estudiantil de la Sede. No se presenta en el CASE de la Sede Rodrigo Facio."},
+    {"p": "¿Cómo pido una adecuación por discapacidad?", "r": "Por escrito, dentro del plazo del Calendario Estudiantil y con el documento que pruebe su condición. Empiece por la Coordinación de Vida Estudiantil (2511-7308), que la encamina al CASED."},
+    {"p": "¿Quién puede vivir en las residencias?", "r": "Estudiantes con beca que viven lejos de Limón. Se prioriza la categoría 5, luego la 4, y también cuentan la zona de procedencia, la carga académica, el promedio y los cupos."},
+    {"p": "¿Cuándo salen los resultados de la beca para el I ciclo de 2027?", "r": "El 11 de febrero de 2027. El formulario se completa del 15 al 17 de diciembre de 2026."},
+    {"p": "¿Cómo me sumo a un equipo deportivo o a un grupo cultural?", "r": "Hable con el promotor deportivo (2511-7354) o con Acción Social (2511-7313). Los proyectos deportivos inscritos ante Vida Estudiantil pueden acceder a la beca de estímulo."},
+    {"p": "¿Qué hago ante una emergencia en el campus?", "r": "Llame al 911. Dentro del campus, avise a Seguridad (2511-7350) y al consultorio médico (2511-7351, Pabellón 1)."},
+    {"p": "¿Dónde encuentro la normativa y los formularios de la universidad?", "r": "En el sitio de la Vicerrectoría de Vida Estudiantil, en el menú «Documentos»: resoluciones, circulares, formularios y guías."}
+  ],
+  "ayuda": [
+    {"nombre": "Emergencias", "dato": "911", "enlace": "tel:911"},
+    {"nombre": "Seguridad de la Sede", "dato": "2511-7350", "enlace": "tel:+50625117350"},
+    {"nombre": "Consultorio médico", "dato": "2511-7351", "enlace": "tel:+50625117351"},
+    {"nombre": "Psicología", "dato": "2511-7342", "enlace": "tel:+50625117342"}
+  ],
+  "canales": [
+    {"nombre": "ViVE, Vicerrectoría de Vida Estudiantil", "detalle": "Resoluciones, circulares, formularios y calendario estudiantil.", "enlace": "https://www.vive.ucr.ac.cr/"},
+    {"nombre": "OBAS, Becas y atención socioeconómica", "detalle": "Beca, residencias, horas estudiante y asistente.", "enlace": "https://becas.ucr.ac.cr/"},
+    {"nombre": "Oficina de Orientación UCR", "detalle": "Accesibilidad, gestiones estudiantiles y chat para personas admitidas.", "enlace": "https://orientacion.ucr.ac.cr/"},
+    {"nombre": "ViVE en Facebook", "detalle": "Avisos y novedades para todo el estudiantado.", "enlace": "https://www.facebook.com/viveucr/"},
+    {"nombre": "OBAS en Instagram", "detalle": "Recordatorios de fechas de beca.", "enlace": "https://www.instagram.com/becasucr/"},
+    {"nombre": "Sede del Caribe en Instagram", "detalle": "La vida diaria en el campus.", "enlace": "https://www.instagram.com/ucrcaribe/"},
+    {"nombre": "Registro de la Sede en Facebook", "detalle": "Avisos de matrícula y trámites.", "enlace": "https://www.facebook.com/sedecaribeori/"},
+    {"nombre": "Normativa estudiantil", "detalle": "Reglamentos del Consejo Universitario.", "enlace": "http://www.cu.ucr.ac.cr/normativa/estudiantil.html"}
+  ]
+}

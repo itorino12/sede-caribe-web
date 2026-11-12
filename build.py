@@ -402,12 +402,23 @@ def preparar(sitio, d):
              [("portada", "entrada.jpg"), ("portada_noche", "entrada-noche.jpg"), ("carreras", "auditorio-escenario.jpg"), ("historia", "edificio-aulas.jpg")]}
 
     aulas = json.loads((SRC / "data" / "aulas.json").read_text(encoding="utf-8"))
+    vida = json.loads((SRC / "data" / "vida-estudiantil.json").read_text(encoding="utf-8"))
+    ids_unidad = {u["id"] for u in unidades}
+    for s in vida["servicios"]:
+        if s.get("unidad") and s["unidad"] not in ids_unidad:
+            print(f"  ! vida-estudiantil.json: unidad inexistente {s['unidad']!r}")
+        if s["categoria"] not in vida["categorias"]:
+            print(f"  ! vida-estudiantil.json: categoría desconocida {s['categoria']!r}")
+    for f in vida["fechas"]:  # texto del rango para quien no tiene JavaScript; el script lo reemplaza por el estado
+        d1, d2 = fecha(f["desde"]), fecha(f["hasta"])
+        f["rango"] = (f"{d1.day} de {MESES[d1.month - 1]} de {d1.year}" if d1 == d2 else
+                      f"Del {d1.day} de {MESES[d1.month - 1]}{'' if d1.year == d2.year else f' de {d1.year}'} al {d2.day} de {MESES[d2.month - 1]} de {d2.year}")
     horarios_ciclos = [{**armar_horarios(json.loads((SRC / "data" / f"horarios-{k}.json").read_text(encoding="utf-8")), carreras, aulas),
                         "clave": k, "pagina": "horarios.html" if i == 0 else f"horarios-{k}.html"} for i, k in enumerate(CICLOS_HORARIO)]
     horarios = horarios_ciclos[0]
 
     return {"semana": semana, "fotos": fotos, "avisos": avisos, "noticias": noticias, "eventos": eventos, "recientes": recientes, "agenda": agenda,
-            "carreras": carreras, "unidades": unidades, "aulas": aulas, "horarios": horarios, "horarios_ciclos": horarios_ciclos, "unidad": {u["id"]: u for u in unidades},
+            "carreras": carreras, "unidades": unidades, "aulas": aulas, "vida": vida, "horarios": horarios, "horarios_ciclos": horarios_ciclos, "unidad": {u["id"]: u for u in unidades},
             "directorio": grupos_dir, "enlaces": enlaces, "hitos": d["hitos"], "cifras": d["cifras"], "modalidades": modalidades,
             "categorias": sorted({n["categoria"] for n in noticias if n.get("categoria")}),
             "areas": list(dict.fromkeys(c["area"] for c in carreras)),
