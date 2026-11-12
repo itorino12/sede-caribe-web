@@ -108,7 +108,7 @@
   <ul>{% for a in vida.ayuda %}<li><a href="{{ a.enlace }}"><span>{{ a.nombre }}</span><strong>{{ a.dato }}</strong></a></li>{% endfor %}</ul>
 </section>
 {% elif b.tipo == "aviso" %}
-<aside class="ve__aviso">{% if b.titulo %}<h2>{{ b.titulo }}</h2>{% endif %}<p>{{ b.texto }}{% if b.interno %} <a href="{{ destino(b) }}">{{ b.enlace_texto }}</a>{% endif %}</p></aside>
+<aside class="ve__aviso">{% if b.titulo %}<h2>{{ b.titulo }}</h2>{% endif %}<p>{{ b.texto }}{% if b.interno or b.enlace %} <a href="{{ destino(b) }}">{{ b.enlace_texto }}</a>{% endif %}</p></aside>
 {% else %}
 {% if b.titulo %}<h2{% if b.id %} id="{{ b.id }}"{% endif %}>{{ b.titulo }}</h2>{% endif %}
 {% if b.intro %}<p>{{ b.intro }}</p>{% endif %}
@@ -155,7 +155,8 @@
   </li>
   {% endfor %}
 </ol>
-<p><a href="{{ raiz }}agenda.html{% if b.agenda %}?categoria={{ b.agenda|urlencode }}{% endif %}">Ver todas las fechas en la agenda</a>. Las fechas las fija la Universidad y pueden cambiar: confirme en el enlace oficial.</p>
+{% if b.sin_agenda %}<p class="ve__nota">{{ b.nota }}</p>{% else %}<p><a href="{{ raiz }}agenda.html{% if b.agenda %}?categoria={{ b.agenda|urlencode }}{% endif %}">Ver todas las fechas en la agenda</a>. Las fechas las fija la Universidad y pueden cambiar: confirme en el enlace oficial.</p>{% endif %}
+{% elif b.sin_agenda %}<p>No hay plazos abiertos publicados. {{ b.nota }}</p>
 {% else %}<p>No hay fechas próximas publicadas en la agenda. <a href="{{ raiz }}agenda.html">Ver la agenda</a>.</p>{% endif %}
 {% elif b.tipo == "contacto" %}
 <dl class="ve__contacto">

@@ -404,6 +404,12 @@ def preparar(sitio, d):
     aulas = json.loads((SRC / "data" / "aulas.json").read_text(encoding="utf-8"))
     vida = json.loads((SRC / "data" / "vida-estudiantil.json").read_text(encoding="utf-8"))
     ids_unidad = {u["id"] for u in unidades}
+    # Páginas de Investigación: mismo sistema de bloques que Vida estudiantil, en su propio archivo.
+    inv = json.loads((SRC / "data" / "investigacion.json").read_text(encoding="utf-8"))
+    for pid in inv["paginas"]:
+        if pid in vida["paginas"]:
+            print(f"  ! investigacion.json: la página {pid!r} ya existe en vida-estudiantil.json")
+    vida["paginas"].update(inv["paginas"])
     for s in vida["servicios"]:
         if s.get("unidad") and s["unidad"] not in ids_unidad:
             print(f"  ! vida-estudiantil.json: unidad inexistente {s['unidad']!r}")
@@ -421,6 +427,10 @@ def preparar(sitio, d):
         for bl in pag["bloques"]:
             if bl["tipo"] == "fechas":
                 bl["items"] = fechas_para(bl)
+            elif bl["tipo"] == "plazos":  # fechas escritas en el bloque (fondos, convocatorias): se muestran como las de la agenda
+                bl["tipo"], bl["sin_agenda"] = "fechas", True
+                bl["items"] = [{**x, "id": x.get("id") or slug(x["titulo"]), "f": fecha(x["desde"]), "fin": fecha(x.get("hasta") or x["desde"]),
+                                "categoria": x.get("categoria", "Fondos"), "descripcion": x.get("texto", "")} for x in bl["plazos"]]
     horarios_ciclos = [{**armar_horarios(json.loads((SRC / "data" / f"horarios-{k}.json").read_text(encoding="utf-8")), carreras, aulas),
                         "clave": k, "pagina": "horarios.html" if i == 0 else f"horarios-{k}.html"} for i, k in enumerate(CICLOS_HORARIO)]
     horarios = horarios_ciclos[0]

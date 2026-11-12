@@ -1,0 +1,290 @@
+{
+ "revision": "2026-11-12",
+ "paginas": {
+  "investigacion": {
+   "bloques": [
+    {
+     "tipo": "aviso",
+     "titulo": "Proyectos de la Sede",
+     "texto": "El listado de los proyectos de investigación de la Sede se está preparando con la Coordinación. Mientras tanto, el listado oficial, con proyectos vigentes y vencidos, está en el reporte de la unidad 530 del sistema SIGPRO.",
+     "enlace": "https://vinv.ucr.ac.cr/sigpro/web/download_projects/530/3",
+     "enlace_texto": "Reporte de proyectos de la Sede del Caribe (SIGPRO)"
+    },
+    {
+     "tipo": "tarjetas",
+     "id": "organizacion",
+     "atajo": "Cómo se organiza",
+     "titulo": "Quién hace qué",
+     "intro": "La investigación de la Sede sigue las reglas de toda la UCR. Estas son las instancias por las que pasa un proyecto.",
+     "items": [
+      {
+       "titulo": "Comisión de Investigación de la Sede",
+       "texto": "Recibe y evalúa las propuestas de los equipos de la Sede, las aprueba y les da seguimiento. Se coordina desde la Coordinación de Investigación."
+      },
+      {
+       "titulo": "Vicerrectoría de Investigación (VI)",
+       "texto": "Supervisa, coordina, promueve y divulga la investigación en toda la Universidad. Inscribe los proyectos y administra los fondos concursables.",
+       "enlace": "https://vinv.ucr.ac.cr/",
+       "enlace_texto": "Sitio de la VI"
+      },
+      {
+       "titulo": "SIGPRO",
+       "texto": "El sistema donde se inscriben las propuestas y se entregan los informes parciales y finales.",
+       "enlace": "https://vinv.ucr.ac.cr/sigpro/web/download_projects/530/3",
+       "enlace_texto": "Reporte de la Sede en SIGPRO"
+      },
+      {
+       "titulo": "Comités de ética",
+       "texto": "El Comité Ético Científico (CEC) revisa la investigación con seres humanos; el CICUA, la que usa animales; y la Comisión de Biodiversidad (CBio), la que usa recursos biológicos.",
+       "enlace": "https://cec.ucr.ac.cr/",
+       "enlace_texto": "Comité Ético Científico"
+      }
+     ]
+    },
+    {
+     "tipo": "pasos",
+     "id": "inscribir",
+     "atajo": "Inscribir un proyecto",
+     "titulo": "Inscribir un proyecto de investigación",
+     "para": "Personal docente de la Sede que quiere proponer un proyecto, programa o actividad de investigación.",
+     "pasos": [
+      {
+       "titulo": "Hable con la Coordinación antes de redactar",
+       "texto": "La propuesta se formula siguiendo las directrices de la Comisión de Investigación de la Sede y de la VI. La Coordinación le dice qué formularios y plazos aplican."
+      },
+      {
+       "titulo": "Revise si necesita aval ético",
+       "texto": "Si participan personas, animales o recursos de biodiversidad, la VI pide el análisis previo del comité que corresponde. La circular VI-36-2021 trae el formulario guía.",
+       "enlace": "https://vinv.ucr.ac.cr/sites/default/files/documentos/circular_vi-36-2021-analisis_de_propuestas_que_requieren_cec_cicua_o_cbio_o_se_realizan_en_conjunto_con_la_ccss.pdf",
+       "enlace_texto": "Circular VI-36-2021"
+      },
+      {
+       "titulo": "Pase la evaluación",
+       "texto": "La propuesta se evalúa por pares académicos externos y por la Comisión de Investigación. El acta de aprobación se adjunta al sistema."
+      },
+      {
+       "titulo": "Inscríbala en la VI",
+       "texto": "Se envía por SIGPRO, por la vía ordinaria o por un fondo concursable. El procedimiento completo es el VI-P003.",
+       "enlace": "https://vinv.ucr.ac.cr/sites/default/files/files/Procedimiento%20para%20la%20Evaluaci%C3%B3n%20de%20propuestas%20nuevas%20de%20investigaci%C3%B3nVI-P003.pdf",
+       "enlace_texto": "Procedimiento VI-P003"
+      },
+      {
+       "titulo": "Entregue los informes",
+       "texto": "Los informes parciales y finales se presentan en SIGPRO en las fechas de la notificación de inscripción. La ampliación de vigencia se pide al entregar el informe final."
+      }
+     ]
+    },
+    {
+     "tipo": "plazos",
+     "id": "fondos",
+     "atajo": "Fondos",
+     "titulo": "Fondos concursables de la VI",
+     "intro": "Son para docentes de la UCR: quien lidera el proyecto debe ser de la Universidad, aunque puede haber colaboradores externos. Se tramitan por la Unidad de Promoción de la Investigación (2511-1338). Solo se muestran los plazos que aún no pasan.",
+     "nota": "Fechas publicadas por la VI en febrero de 2026, según Semanario Universidad. Confirme siempre en el sitio de la VI: pueden cambiar.",
+     "plazos": [
+      {
+       "titulo": "Fondo de Apoyo a Tesis de Posgrado 2027",
+       "desde": "2026-10-23",
+       "hasta": "2026-10-30",
+       "enlace": "https://vinv.ucr.ac.cr/",
+       "enlace_texto": "Sitio de la VI"
+      },
+      {
+       "titulo": "Fondo de Apoyo a Trabajos Finales de Graduación 2027",
+       "desde": "2026-11-20",
+       "hasta": "2026-11-27",
+       "enlace": "https://vinv.ucr.ac.cr/",
+       "enlace_texto": "Sitio de la VI"
+      },
+      {
+       "titulo": "Fondo de Apoyo de Investigación para la Cooperación Internacional 2027",
+       "desde": "2026-03-02",
+       "hasta": "2026-03-09",
+       "enlace": "https://vinv.ucr.ac.cr/sites/default/files/premios/archivos/lineamiento_del_fondo_de_apoyo_de_investigaci34n_para_la_cooperaci34n_internacional_2027.pdf",
+       "enlace_texto": "Lineamiento"
+      },
+      {
+       "titulo": "Fondo Semilla 2027",
+       "desde": "2026-04-20",
+       "hasta": "2026-04-27",
+       "texto": "Los proyectos seleccionados pueden recibir ¼ de tiempo de carga académica, además del apoyo económico.",
+       "enlace": "https://vinv.ucr.ac.cr/sites/default/files/premios/archivos/8_1_lineamiento_del_fondo_semilla_2027.pdf",
+       "enlace_texto": "Lineamiento"
+      },
+      {
+       "titulo": "Fondo Especial de Estímulo a la Investigación 2027",
+       "desde": "2026-06-22",
+       "hasta": "2026-06-29",
+       "enlace": "https://vinv.ucr.ac.cr/",
+       "enlace_texto": "Sitio de la VI"
+      },
+      {
+       "titulo": "Fondo de Apoyo a la Mujer en la Investigación 2027",
+       "desde": "2026-09-07",
+       "hasta": "2026-09-14",
+       "enlace": "https://vinv.ucr.ac.cr/",
+       "enlace_texto": "Sitio de la VI"
+      }
+     ]
+    },
+    {
+     "tipo": "tarjetas",
+     "id": "externos",
+     "titulo": "Fondos externos",
+     "intro": "La VI también difunde convocatorias de otras entidades. Para estas, consulte a los asesores de la Unidad de Promoción (2511-1338).",
+     "items": [
+      {
+       "titulo": "Conare – Max Planck",
+       "texto": "Fondos del Sistema Conare para proyectos con la Sociedad Max Planck, 2026 y 2027."
+      },
+      {
+       "titulo": "Conare – DFG y Conare – CERN",
+       "texto": "Colaboración científica con Alemania y con el CERN. Sus fechas estaban por publicarse en febrero de 2026."
+      },
+      {
+       "titulo": "CR INNvestiga y ConectadODS",
+       "texto": "De la Promotora Costarricense de Innovación e Investigación. Revise las redes y el sitio de la PCII."
+      }
+     ]
+    },
+    {
+     "tipo": "tarjetas",
+     "id": "estudiantes",
+     "atajo": "Estudiantes",
+     "titulo": "Si usted es estudiante",
+     "items": [
+      {
+       "titulo": "Trabajo final de graduación o tesis",
+       "texto": "Los fondos de apoyo a tesis de posgrado y a trabajos finales de graduación de la VI aparecen arriba. Si su trabajo involucra personas, el CEC debe revisarlo antes.",
+       "interno": "unidades/investigacion.html#fondos",
+       "enlace_texto": "Ver los plazos"
+      },
+      {
+       "titulo": "Participar en un proyecto",
+       "texto": "Algunos proyectos nombran horas estudiante o asistente. Pregunte en la Coordinación de Investigación cuáles están abiertos."
+      }
+     ]
+    },
+    {
+     "tipo": "enlaces",
+     "id": "publicar",
+     "atajo": "Publicar y divulgar",
+     "titulo": "Dónde publicar y encontrar investigación",
+     "items": [
+      {
+       "nombre": "InterSedes",
+       "detalle": "Revista electrónica multidisciplinaria de las sedes regionales de la UCR (ISSN 2215-2458). Recibe artículos de las seis sedes.",
+       "enlace": "https://revistas.ucr.ac.cr/index.php/rintersedes"
+      },
+      {
+       "nombre": "Kérwá, repositorio institucional",
+       "detalle": "Tesis, libros y artículos de la UCR en acceso abierto.",
+       "enlace": "http://kerwa.ucr.ac.cr"
+      },
+      {
+       "nombre": "Portal de revistas de la UCR",
+       "detalle": "Todas las revistas académicas y científicas de la Universidad.",
+       "enlace": "https://revistas.ucr.ac.cr/"
+      },
+      {
+       "nombre": "Observatorio del Turismo del Caribe",
+       "detalle": "OBTURCARIBE, de la Sede del Caribe.",
+       "enlace": "http://obturcaribe.ucr.ac.cr/"
+      },
+      {
+       "nombre": "PROINNOVA",
+       "detalle": "Gestión y transferencia del conocimiento para la innovación: derechos de autor, patentes y vinculación.",
+       "enlace": "https://www.proinnova.ucr.ac.cr/"
+      }
+     ]
+    },
+    {
+     "tipo": "contacto",
+     "titulo": "Contacto",
+     "items": [
+      {
+       "etiqueta": "Coordinación de la Sede",
+       "valor": "investigacion.sedecaribe@ucr.ac.cr",
+       "enlace": "mailto:investigacion.sedecaribe@ucr.ac.cr"
+      },
+      {
+       "etiqueta": "Extensión",
+       "valor": "2511-7310",
+       "enlace": "tel:+50625117310"
+      },
+      {
+       "etiqueta": "Unidad de Promoción de la VI",
+       "valor": "2511-1338",
+       "enlace": "tel:+50625111338"
+      }
+     ],
+     "nota": "El horario de atención no está publicado: llame antes de ir."
+    },
+    {
+     "tipo": "faq",
+     "id": "preguntas",
+     "atajo": "Preguntas",
+     "titulo": "Preguntas frecuentes",
+     "preguntas": [
+      {
+       "p": "¿Quién puede dirigir un proyecto?",
+       "r": "Personal docente de la UCR. Pueden participar colaboradores externos, pero quien lidera debe ser de la Universidad."
+      },
+      {
+       "p": "¿Mi investigación con personas debe pasar por un comité de ética?",
+       "r": "Sí. Toda investigación en la que participan seres humanos la revisa el Comité Ético Científico de la UCR antes de la evaluación de la VI."
+      },
+      {
+       "p": "¿Cómo informo el avance de un proyecto?",
+       "r": "En SIGPRO, con informes parciales y finales en las fechas que indica la notificación de inscripción."
+      },
+      {
+       "p": "¿Dónde veo los proyectos que tiene la Sede?",
+       "r": "En el reporte de la unidad 530 de SIGPRO. Incluye también proyectos vencidos y terminados, así que no todos están activos."
+      },
+      {
+       "p": "¿Dónde puedo publicar los resultados?",
+       "r": "InterSedes es la revista de las sedes regionales; el Portal de revistas de la UCR reúne las demás. Los trabajos terminados se depositan en Kérwá."
+      }
+     ]
+    }
+   ]
+  },
+  "biblioteca": {
+   "bloques": [
+    {
+     "tipo": "enlaces",
+     "titulo": "Recursos para investigar",
+     "items": [
+      {
+       "nombre": "SIBDI, catálogo y bases de datos",
+       "detalle": "Libros, revistas y recursos electrónicos del Sistema de Bibliotecas de la UCR.",
+       "enlace": "https://sibdi.ucr.ac.cr/"
+      },
+      {
+       "nombre": "Kérwá, repositorio institucional",
+       "detalle": "Tesis y producción académica de la UCR en acceso abierto.",
+       "enlace": "http://kerwa.ucr.ac.cr"
+      },
+      {
+       "nombre": "Portal de revistas de la UCR",
+       "detalle": "Revistas académicas y científicas de la Universidad.",
+       "enlace": "https://revistas.ucr.ac.cr/"
+      },
+      {
+       "nombre": "InterSedes",
+       "detalle": "Revista de las sedes regionales.",
+       "enlace": "https://revistas.ucr.ac.cr/index.php/rintersedes"
+      }
+     ]
+    },
+    {
+     "tipo": "aviso",
+     "texto": "Para inscribir un proyecto o ver los fondos de la Vicerrectoría de Investigación, vaya a la Coordinación de Investigación.",
+     "interno": "unidades/investigacion.html",
+     "enlace_texto": "Ver Investigación"
+    }
+   ]
+  }
+ }
+}
