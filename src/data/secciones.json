@@ -1,0 +1,645 @@
+{
+ "revision": "2026-11-12",
+ "paginas": {
+  "docencia": {
+   "bloques": [
+    {
+     "tipo": "enlaces",
+     "id": "secciones",
+     "atajo": "En esta sección",
+     "titulo": "Qué encuentra en Docencia",
+     "items": [
+      {
+       "nombre": "Carreras y planes de estudio",
+       "detalle": "Las carreras de la Sede, sus planes y requisitos.",
+       "interno": "carreras.html"
+      },
+      {
+       "nombre": "Horario de aulas",
+       "detalle": "Qué aula y qué horario tiene cada curso del ciclo.",
+       "interno": "horarios.html"
+      },
+      {
+       "nombre": "Aulas y laboratorios",
+       "detalle": "Capacidades, laboratorios de cómputo, química, física y simuladores.",
+       "interno": "unidades/laboratorios.html"
+      },
+      {
+       "nombre": "Auditorio",
+       "detalle": "117 butacas para actividades académicas, culturales e institucionales.",
+       "interno": "unidades/auditorio.html"
+      },
+      {
+       "nombre": "Aula de Siquirres",
+       "detalle": "La oferta académica de la Sede en Siquirres.",
+       "interno": "unidades/siquirres.html"
+      },
+      {
+       "nombre": "Servicios en línea para estudiantes",
+       "detalle": "Matrícula, Mediación Virtual, correo y Registro.",
+       "interno": "enlaces.html#estudiantes"
+      }
+     ]
+    },
+    {
+     "tipo": "fechas",
+     "id": "fechas",
+     "atajo": "Fechas del ciclo",
+     "titulo": "Fechas del ciclo lectivo",
+     "categorias": [
+      "Matrícula",
+      "Lecciones"
+     ],
+     "max": 8,
+     "duracion_max": 20,
+     "agenda": "Matrícula",
+     "intro": "Salen de la agenda de la Sede, que sigue el Calendario Estudiantil Universitario: matrícula, inicio y fin de lecciones."
+    },
+    {
+     "tipo": "rutas",
+     "id": "tramites",
+     "atajo": "Trámites",
+     "titulo": "Trámites frecuentes",
+     "intro": "Los trámites de matrícula y de Registro se explican en la página de Registro; aquí van los que pasan por Docencia o por la Vicerrectoría de Docencia.",
+     "rutas": [
+      {
+       "id": "reconocimiento",
+       "nombre": "Reconocimiento y equiparación de estudios",
+       "para": "Personas con estudios o diplomas de otra institución de educación superior que quieren que la UCR los reconozca.",
+       "pasos": [
+        {
+         "titulo": "Reúna los documentos",
+         "texto": "Los requisitos están en las Adendas 1 y 2 de la resolución de la Vicerrectoría de Docencia: los documentos necesarios y los requisitos del diploma. Se pide además el plan de estudios de la carrera cursada.",
+         "enlace": "https://www.cu.ucr.ac.cr/gacetas/2020/a41-2020.pdf",
+         "enlace_texto": "Resolución en La Gaceta"
+        },
+        {
+         "titulo": "Presente la solicitud en la Oficina de Registro e Información",
+         "texto": "La ORI revisa la documentación y envía la solicitud a la unidad académica más afín, que la evalúa.",
+         "enlace": "https://ori.ucr.ac.cr/",
+         "enlace_texto": "Sitio de la ORI"
+        },
+        {
+         "titulo": "Siga el plazo de la agenda",
+         "texto": "Las fechas de recepción de diplomas extranjeros están en el Calendario Estudiantil.",
+         "enlace": "@agenda.html?categoria=Tr%C3%A1mites",
+         "enlace_texto": "Ver en la agenda"
+        }
+       ]
+      },
+      {
+       "id": "proyecto-docencia",
+       "nombre": "Proponer o consultar un proyecto de docencia",
+       "para": "Personal docente que quiere desarrollar una iniciativa docente o ver las que ya existen.",
+       "pasos": [
+        {
+         "titulo": "Consulte el catálogo",
+         "texto": "La Vicerrectoría de Docencia publica el catálogo de proyectos de docencia y una sección de iniciativas docentes.",
+         "enlace": "https://vd.ucr.ac.cr/catalogo-de-proyectos",
+         "enlace_texto": "Catálogo de proyectos"
+        },
+        {
+         "titulo": "Lea cómo se presenta una iniciativa",
+         "texto": "La sección explica los tipos de iniciativa y sus requisitos.",
+         "enlace": "https://vd.ucr.ac.cr/sobre-las-iniciativas-docentes",
+         "enlace_texto": "Iniciativas docentes"
+        },
+        {
+         "titulo": "Hable con la Coordinación de Docencia",
+         "texto": "La Coordinación le orienta sobre el apoyo de la Sede y los plazos de cada ciclo. Teléfono 2511-7346."
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "tipo": "tarjetas",
+     "id": "personal",
+     "atajo": "Personal docente",
+     "titulo": "Para el personal docente",
+     "items": [
+      {
+       "titulo": "Vicerrectoría de Docencia",
+       "texto": "Resoluciones, circulares, formularios y agenda. Su ventanilla única digital es docencia@ucr.ac.cr y su central, 2511-1150.",
+       "enlace": "https://vd.ucr.ac.cr/",
+       "enlace_texto": "Sitio de la VD"
+      },
+      {
+       "titulo": "Fechas de trámites por ciclo",
+       "texto": "Cada ciclo la VD publica una circular con las fechas de sus trámites, como la solicitud de presupuesto de apoyo a la docencia.",
+       "enlace": "https://vd.ucr.ac.cr/sites/default/files/2025-11/Circular%20VD-64-2025.pdf",
+       "enlace_texto": "Ejemplo: circular VD-64-2025"
+      },
+      {
+       "titulo": "Régimen Académico",
+       "texto": "El Centro de Evaluación Académica atiende las solicitudes de ascenso y paso en Régimen Académico, y publica un manual de inducción.",
+       "enlace": "https://cea.ucr.ac.cr/",
+       "enlace_texto": "Sitio del CEA"
+      },
+      {
+       "titulo": "Equipo audiovisual",
+       "texto": "La Coordinación presta equipo audiovisual a docentes y estudiantes. Pídalo en la oficina o llame al 2511-7346."
+      }
+     ]
+    },
+    {
+     "tipo": "contacto",
+     "titulo": "Contacto",
+     "items": [
+      {
+       "etiqueta": "Coordinación de la Sede",
+       "valor": "docencia.sedecaribe@ucr.ac.cr",
+       "enlace": "mailto:docencia.sedecaribe@ucr.ac.cr"
+      },
+      {
+       "etiqueta": "Extensión",
+       "valor": "2511-7346",
+       "enlace": "tel:+50625117346"
+      },
+      {
+       "etiqueta": "Aulas y laboratorios",
+       "valor": "2511-7348",
+       "enlace": "tel:+50625117348"
+      },
+      {
+       "etiqueta": "Vicerrectoría de Docencia",
+       "valor": "2511-1150",
+       "enlace": "tel:+50625111150"
+      }
+     ],
+     "nota": "El horario de atención no está publicado: llame antes de ir."
+    },
+    {
+     "tipo": "faq",
+     "id": "preguntas",
+     "atajo": "Preguntas",
+     "titulo": "Preguntas frecuentes",
+     "preguntas": [
+      {
+       "p": "¿Dónde veo el aula y el horario de mi curso?",
+       "r": "En la página de horario de aulas de este sitio, que se actualiza cada ciclo."
+      },
+      {
+       "p": "¿Cuándo es la matrícula?",
+       "r": "Las fechas salen del Calendario Estudiantil Universitario y están arriba y en la agenda. Cada estudiante tiene una cita de matrícula asignada por Registro."
+      },
+      {
+       "p": "¿A quién pregunto por el reconocimiento de estudios de otra universidad?",
+       "r": "A la Oficina de Registro e Información, donde se presenta la solicitud. La Coordinación de Docencia puede orientarle sobre las carreras de la Sede."
+      },
+      {
+       "p": "¿Cómo uso el auditorio o pido equipo audiovisual?",
+       "r": "Ambos los administra la Coordinación de Docencia. Escriba a docencia.sedecaribe@ucr.ac.cr o llame al 2511-7346 con la fecha y el tipo de actividad."
+      }
+     ]
+    }
+   ]
+  },
+  "accion-social": {
+   "bloques": [
+    {
+     "tipo": "datos",
+     "titulo": "El Trabajo Comunal Universitario en la UCR",
+     "items": [
+      {
+       "valor": "300 h",
+       "etiqueta": "para bachillerato o licenciatura; 150 h en diplomados"
+      },
+      {
+       "valor": "12 meses",
+       "etiqueta": "para cumplirlas desde la matrícula"
+      },
+      {
+       "valor": "≈ 5 000",
+       "etiqueta": "estudiantes por año, con más de un millón de horas a comunidades"
+      }
+     ],
+     "fuente": "Semanario Universidad y Reglamento del TCU.",
+     "fuente_enlace": "https://semanariouniversidad.com/universitarias/estudiantes-de-la-ucr-aportan-mas-de-un-millon-de-horas-anuales-a-comunidades-de-todo-el-pais-2/"
+    },
+    {
+     "tipo": "fechas",
+     "id": "fechas",
+     "atajo": "Fechas",
+     "titulo": "Próximas fechas de Acción Social",
+     "categorias": [
+      "Acción Social"
+     ],
+     "max": 6,
+     "duracion_max": 120,
+     "agenda": "Acción Social",
+     "intro": "Matrícula del TCU y convocatorias, tomadas de la agenda de la Sede."
+    },
+    {
+     "tipo": "rutas",
+     "id": "tramites",
+     "atajo": "Trámites",
+     "titulo": "Trabajo Comunal Universitario, paso a paso",
+     "intro": "El TCU es un requisito de graduación. Estos son los pasos para estudiantes y para quienes proponen proyectos.",
+     "rutas": [
+      {
+       "id": "matricular-tcu",
+       "nombre": "Matricular el TCU",
+       "para": "Estudiantes de grado o pregrado que cumplen los requisitos.",
+       "pasos": [
+        {
+         "titulo": "Verifique los requisitos",
+         "texto": "Debe ser persona estudiante activa, haber aprobado el Seminario de Realidad Nacional I (SRN I) y no tener obligaciones financieras pendientes con la UCR. Todo debe cumplirse en la prematrícula y la matrícula."
+        },
+        {
+         "titulo": "Busque un proyecto",
+         "texto": "El buscador reúne los proyectos de todas las sedes. Los de esta Sede están en la página de Trabajo Comunal Universitario.",
+         "enlace": "http://buscatcu.ucr.ac.cr/",
+         "enlace_texto": "Buscador de TCU"
+        },
+        {
+         "titulo": "Haga la prematrícula",
+         "texto": "Entre al sistema de TCU, escoja el proyecto y la carrera. Si el sistema no muestra que cumple un requisito, use la justificación por incumplimiento de requisitos.",
+         "enlace": "https://tcu.ucr.ac.cr/",
+         "enlace_texto": "Sistema de TCU"
+        },
+        {
+         "titulo": "Escoja bien las horas",
+         "texto": "Quien matricula 150 o 300 horas no puede cambiar la cantidad después. Con 300 horas no se puede pedir una aprobación parcial de 150.",
+         "enlace": "@agenda.html?categoria=Acci%C3%B3n+Social",
+         "enlace_texto": "Fechas de matrícula"
+        }
+       ]
+      },
+      {
+       "id": "durante-tcu",
+       "nombre": "Si necesita cambiar algo durante el TCU",
+       "para": "Estudiantes con TCU matriculado.",
+       "pasos": [
+        {
+         "titulo": "Tiene 12 meses",
+         "texto": "Las horas deben cumplirse en un año desde la matrícula. Si no se terminan o no se cumplen las tareas, se pierden las horas y se empieza de nuevo."
+        },
+        {
+         "titulo": "Prórroga",
+         "texto": "Se concede por 4 meses (2 en diplomado)."
+        },
+        {
+         "titulo": "Traslado de proyecto",
+         "texto": "Si permanecer en el proyecto le afecta física o emocionalmente, escriba a la Vicerrectoría de Acción Social.",
+         "enlace": "mailto:estudiantilestcu.vas@ucr.ac.cr",
+         "enlace_texto": "estudiantilestcu.vas@ucr.ac.cr"
+        },
+        {
+         "titulo": "Retiro",
+         "texto": "La interrupción se justifica según el artículo 27 del Reglamento de Régimen Estudiantil.",
+         "enlace": "https://accionsocial.ucr.ac.cr/sites/default/files/adjuntos/nuevo_reglamento_tcu_estudiantes_.pdf",
+         "enlace_texto": "Reglamento del TCU, versión para estudiantes"
+        }
+       ]
+      },
+      {
+       "id": "proponer-proyecto",
+       "nombre": "Proponer un proyecto de acción social",
+       "para": "Personal docente de la Sede que quiere formular un proyecto nuevo o renovar uno.",
+       "pasos": [
+        {
+         "titulo": "Hable con la Coordinación",
+         "texto": "La Coordinación y la Comisión de Acción Social de la Sede acompañan la formulación, antes de enviarla a la Vicerrectoría. Teléfono 2511-7349."
+        },
+        {
+         "titulo": "Formule la propuesta en SIPPRES",
+         "texto": "Se hace en el Sistema Institucional Plan Presupuesto, con la Guía Institucional de Formulación de Proyectos. La VAS ofrece asesoría de proyectos.",
+         "enlace": "https://accionsocial.ucr.ac.cr/sites/default/files/documentos/guia_para_docentes_versionweb-baja.pdf",
+         "enlace_texto": "Guía para docentes (Extensión Docente)"
+        },
+        {
+         "titulo": "Respete la convocatoria",
+         "texto": "La VAS abre una convocatoria ordinaria anual para propuestas nuevas y renovaciones. La de proyectos que empiezan en 2027 se abrió en abril de 2026.",
+         "enlace": "https://accionsocial.ucr.ac.cr/sites/default/files/documentos/2026-05/Circular%20VAS-13-2026.pdf",
+         "enlace_texto": "Circular VAS-13-2026"
+        },
+        {
+         "titulo": "La VAS inscribe el proyecto",
+         "texto": "Revisa la propuesta, pide información complementaria si hace falta, la inscribe y le asigna un código."
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "tipo": "tarjetas",
+     "id": "oportunidades",
+     "atajo": "Fondos e iniciativas",
+     "titulo": "Fondos e iniciativas",
+     "items": [
+      {
+       "titulo": "Fondos concursables de la VAS",
+       "texto": "Financian iniciativas que fortalecen la relación universidad-sociedad. La XX convocatoria cubre 2026-2027.",
+       "enlace": "https://accionsocial.ucr.ac.cr/sites/default/files/documentos/2025-11/Lineamientos%20XX%20Convocatoria%20Fondos%20Concursables.pdf",
+       "enlace_texto": "Lineamientos de la convocatoria"
+      },
+      {
+       "titulo": "Iniciativas Estudiantiles de Acción Social",
+       "texto": "Desde 2010, estudiantes de bachillerato o licenciatura pueden convertir una idea de alto impacto social en un proyecto, con recursos de la VAS. Las propuestas se reciben una vez al año: vea la agenda.",
+       "interno": "agenda.html?categoria=Acci%C3%B3n+Social",
+       "enlace_texto": "Ver la agenda"
+      },
+      {
+       "titulo": "Planes regionales «Tejiendo Redes»",
+       "texto": "Marco de la VAS para inscribir actividades por región. Cada sede designa a una persona coordinadora regional con experiencia en acción social.",
+       "enlace": "https://accionsocial.ucr.ac.cr/sites/default/files/documentos/2026-03/lineamientos_para_inscribir_planes_regionales_0.pdf",
+       "enlace_texto": "Lineamientos 2026"
+      }
+     ]
+    },
+    {
+     "tipo": "contacto",
+     "titulo": "Contacto",
+     "items": [
+      {
+       "etiqueta": "Coordinación de la Sede",
+       "valor": "accionsocial.sedecaribe@ucr.ac.cr",
+       "enlace": "mailto:accionsocial.sedecaribe@ucr.ac.cr"
+      },
+      {
+       "etiqueta": "Extensión",
+       "valor": "2511-7349",
+       "enlace": "tel:+50625117349"
+      },
+      {
+       "etiqueta": "Vicerrectoría de Acción Social",
+       "valor": "2511-1211",
+       "enlace": "tel:+50625111211"
+      },
+      {
+       "etiqueta": "Dudas sobre el TCU",
+       "valor": "estudiantilestcu.vas@ucr.ac.cr",
+       "enlace": "mailto:estudiantilestcu.vas@ucr.ac.cr"
+      }
+     ],
+     "nota": "El horario de atención de la Coordinación no está publicado: llame antes de ir."
+    },
+    {
+     "tipo": "enlaces",
+     "titulo": "Portales de la Vicerrectoría de Acción Social",
+     "items": [
+      {
+       "nombre": "Acción Social UCR",
+       "detalle": "Proyectos vigentes, circulares, calendario y gestión de proyectos.",
+       "enlace": "https://accionsocial.ucr.ac.cr/"
+      },
+      {
+       "nombre": "Sistema de TCU",
+       "detalle": "Prematrícula y matrícula del Trabajo Comunal Universitario.",
+       "enlace": "https://tcu.ucr.ac.cr/"
+      },
+      {
+       "nombre": "Buscador de TCU",
+       "detalle": "Proyectos de TCU de todo el país.",
+       "enlace": "http://buscatcu.ucr.ac.cr/"
+      }
+     ]
+    },
+    {
+     "tipo": "faq",
+     "id": "preguntas",
+     "atajo": "Preguntas",
+     "titulo": "Preguntas frecuentes",
+     "preguntas": [
+      {
+       "p": "¿Cuántas horas de TCU debo hacer?",
+       "r": "300 horas en bachillerato o licenciatura y 150 en diplomado, en un máximo de 12 meses desde la matrícula."
+      },
+      {
+       "p": "¿Puedo cambiar de 300 a 150 horas después de matricular?",
+       "r": "No. La cantidad no se modifica después de la matrícula, y con 300 horas no se puede pedir una aprobación parcial de 150."
+      },
+      {
+       "p": "¿Qué pasa si no termino a tiempo?",
+       "r": "Si vence el plazo o no cumple las tareas, pierde las horas y debe empezar de nuevo. Puede pedir una prórroga de 4 meses (2 en diplomado)."
+      },
+      {
+       "p": "¿Dónde veo los proyectos de la Sede?",
+       "r": "En las páginas de las tres modalidades de esta sección: Trabajo Comunal Universitario, Extensión Docente y Extensión Cultural."
+      },
+      {
+       "p": "¿Cómo me inscribo en un curso de Educación Continua?",
+       "r": "Se matricula por la Coordinación de Acción Social. Los cursos del periodo se anuncian en la agenda y en la página de Educación Continua."
+      }
+     ]
+    }
+   ]
+  },
+  "administracion": {
+   "bloques": [
+    {
+     "tipo": "ayuda",
+     "titulo": "Seguridad y emergencias"
+    },
+    {
+     "tipo": "tarjetas",
+     "id": "oficinas",
+     "atajo": "Oficinas",
+     "titulo": "A quién llamar",
+     "intro": "Cada oficina tiene su extensión. Si no sabe cuál, llame a la central, 2511-7300.",
+     "items": [
+      {
+       "titulo": "Coordinación de Administración",
+       "texto": "Extensión 2511-7321. Asistente ejecutiva: 2511-7301. Edificio Administrativo."
+      },
+      {
+       "titulo": "Recursos Humanos",
+       "texto": "Encargada: 2511-7344. Asistente: 2511-7324. Edificio Administrativo.",
+       "interno": "directorio.html?buscar=Recursos+humanos",
+       "enlace_texto": "Ver en el directorio"
+      },
+      {
+       "titulo": "Administración Financiera",
+       "texto": "2511-7328. Edificio Administrativo.",
+       "interno": "directorio.html?buscar=Administraci%C3%B3n+Financiera",
+       "enlace_texto": "Ver en el directorio"
+      },
+      {
+       "titulo": "Compras Especializadas",
+       "texto": "Encargada: 2511-7322. Fondo de Trabajo: 2511-7353. Edificio Administrativo.",
+       "interno": "directorio.html?buscar=Compras+Especializadas",
+       "enlace_texto": "Ver en el directorio"
+      },
+      {
+       "titulo": "Servicios generales",
+       "texto": "2511-7329. Edificio Administrativo.",
+       "interno": "directorio.html?buscar=Servicios+generales",
+       "enlace_texto": "Ver en el directorio"
+      },
+      {
+       "titulo": "Mantenimiento",
+       "texto": "2511-7352. Gimnasio.",
+       "interno": "directorio.html?buscar=Mantenimiento",
+       "enlace_texto": "Ver en el directorio"
+      },
+      {
+       "titulo": "Activos fijos y administración de red",
+       "texto": "Activos fijos: 2511-7327. Administración de red: 2511-7305. Ambas en el Gimnasio.",
+       "interno": "directorio.html?buscar=Activos+fijos",
+       "enlace_texto": "Ver en el directorio"
+      },
+      {
+       "titulo": "Transportes y bodega",
+       "texto": "Transportes: 2511-7360. Bodega: 2511-7345. Pabellón 1.",
+       "interno": "directorio.html?buscar=Transportes",
+       "enlace_texto": "Ver en el directorio"
+      },
+      {
+       "titulo": "Seguridad",
+       "texto": "Entrada principal: 2511-7350. Edificio Administrativo: 2511-7340. Residencias: 2511-7318. Siquirres: 2511-7396."
+      }
+     ]
+    },
+    {
+     "tipo": "fechas",
+     "id": "fechas",
+     "atajo": "Fechas de pago",
+     "titulo": "Fechas de pago de matrícula",
+     "categorias": [
+      "Pagos"
+     ],
+     "max": 5,
+     "duracion_max": 60,
+     "agenda": "Pagos",
+     "intro": "Las fija el Calendario Estudiantil Universitario y las administra la Oficina de Administración Financiera."
+    },
+    {
+     "tipo": "rutas",
+     "id": "tramites",
+     "atajo": "Trámites",
+     "titulo": "Trámites frecuentes",
+     "rutas": [
+      {
+       "id": "pagar-matricula",
+       "nombre": "Pagar o consultar la matrícula",
+       "para": "Estudiantes con un monto pendiente por matrícula u otros aranceles.",
+       "pasos": [
+        {
+         "titulo": "Consulte su estado de cuenta",
+         "texto": "El sitio de la Oficina de Administración Financiera es la fuente oficial: allí se ven las deudas pendientes y el calendario de cobro.",
+         "enlace": "https://oaf.ucr.ac.cr/",
+         "enlace_texto": "Sitio de la OAF"
+        },
+        {
+         "titulo": "Pague en el plazo",
+         "texto": "Las fechas están arriba. Los pagos se reflejan en línea, a más tardar el día hábil siguiente."
+        },
+        {
+         "titulo": "Si el pago no aparece o tiene morosidad",
+         "texto": "Escriba a Cobros Estudiantiles con el comprobante para que apliquen el pago y levanten la morosidad.",
+         "enlace": "mailto:cobros.oaf@ucr.ac.cr",
+         "enlace_texto": "cobros.oaf@ucr.ac.cr"
+        },
+        {
+         "titulo": "Pida un arreglo de pago si lo necesita",
+         "texto": "Las solicitudes tienen fechas en el Calendario Estudiantil.",
+         "enlace": "@agenda.html?categoria=Pagos",
+         "enlace_texto": "Ver fechas"
+        }
+       ]
+      },
+      {
+       "id": "gira",
+       "nombre": "Solicitar un vehículo para una gira",
+       "para": "Personal docente o administrativo con una actividad fuera de la Sede.",
+       "pasos": [
+        {
+         "titulo": "Entre al Sistema de Transportes",
+         "texto": "Es el sistema de la Sección de Transportes de la Oficina de Servicios Generales de la UCR. Permite pedir vehículo con chofer o sin chofer."
+        },
+        {
+         "titulo": "Complete la solicitud de gira",
+         "texto": "La guía rápida de la Vicerrectoría de Acción Social explica cada pantalla.",
+         "enlace": "https://www.accionsocial.ucr.ac.cr/sites/default/files/documentos/miniguia_solicitar_vehiculo_para_gira.pdf",
+         "enlace_texto": "Guía rápida"
+        },
+        {
+         "titulo": "Coordine con la oficina de Transportes de la Sede",
+         "texto": "Extensión 2511-7360. Pida con anticipación: las solicitudes no programadas se tratan como emergencia."
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "tipo": "tarjetas",
+     "id": "estudiantes-pagos",
+     "titulo": "Trámites de Cobros Estudiantiles",
+     "intro": "La Oficina de Administración Financiera atiende estos trámites para estudiantes.",
+     "items": [
+      {
+       "titulo": "Arreglo de pago",
+       "texto": "Para pagar la deuda por cuotas."
+      },
+      {
+       "titulo": "Préstamo a corto y largo plazo",
+       "texto": "Préstamos a estudiantes, con pago de cuotas."
+      },
+      {
+       "titulo": "Constancia de no deudas",
+       "texto": "Se pide, por ejemplo, para trámites de graduación."
+      },
+      {
+       "titulo": "Certificación de deudas o de pagos",
+       "texto": "Documento oficial de lo pendiente o de lo pagado.",
+       "enlace": "https://oaf.ucr.ac.cr/system/files/tramites_cobros_est.pdf",
+       "enlace_texto": "Guía de trámites de la OAF"
+      }
+     ]
+    },
+    {
+     "tipo": "aviso",
+     "titulo": "Estar al día con la UCR",
+     "texto": "El reglamento de obligaciones financieras estudiantiles condiciona la matrícula, los retiros, las interrupciones, el carné y los trámites de graduación al pago de lo adeudado. Consulte el sitio de la OAF antes de matricular."
+    },
+    {
+     "tipo": "enlaces",
+     "id": "enlaces",
+     "titulo": "Sitios de la Vicerrectoría de Administración",
+     "items": [
+      {
+       "nombre": "Oficina de Administración Financiera",
+       "detalle": "Estados de cuenta, calendario de cobro, fondos de trabajo y circulares.",
+       "enlace": "https://oaf.ucr.ac.cr/"
+      },
+      {
+       "nombre": "Vicerrectoría de Administración",
+       "detalle": "Circulares y resoluciones de administración, transportes y servicios generales.",
+       "enlace": "https://vra.ucr.ac.cr/"
+      },
+      {
+       "nombre": "Recursos para el personal",
+       "detalle": "Portal universitario, expediente único y estándares de equipo.",
+       "interno": "enlaces.html#personal-universitario"
+      }
+     ]
+    },
+    {
+     "tipo": "faq",
+     "id": "preguntas",
+     "atajo": "Preguntas",
+     "titulo": "Preguntas frecuentes",
+     "preguntas": [
+      {
+       "p": "¿Dónde veo cuánto debo de matrícula?",
+       "r": "En el sitio de la Oficina de Administración Financiera, que es la fuente oficial de consulta."
+      },
+      {
+       "p": "¿Cuál es el horario de atención de las oficinas?",
+       "r": "La Sede no publica los horarios. Llame a la extensión de la oficina o a la central, 2511-7300, antes de ir."
+      },
+      {
+       "p": "¿A quién aviso de un daño en un edificio o un aula?",
+       "r": "A Mantenimiento, extensión 2511-7352. Si es urgente o hay riesgo, a Seguridad: 2511-7350 en la entrada principal."
+      },
+      {
+       "p": "¿Cómo pido un vehículo para una gira?",
+       "r": "Por el Sistema de Transportes de la UCR, y se coordina con la oficina de Transportes de la Sede, extensión 2511-7360."
+      }
+     ]
+    }
+   ]
+  }
+ }
+}

@@ -126,7 +126,7 @@
 <section class="ve-ruta"{% if b.id %} id="ruta-{{ b.id }}"{% endif %}>
   {% if b.para %}<p class="ve-ruta__para"><strong>Para quién:</strong> {{ b.para }}</p>{% endif %}
   <ol class="ve-pasos">
-    {% for p in b.pasos %}<li><strong>{{ p.titulo }}</strong><span>{{ p.texto }}{% if p.enlace %} <a href="{{ p.enlace }}">{{ p.enlace_texto }}</a>{% endif %}</span></li>{% endfor %}
+    {% for p in b.pasos %}<li><strong>{{ p.titulo }}</strong><span>{{ p.texto }}{% if p.enlace %} <a href="{{ destino(p) }}">{{ p.enlace_texto }}</a>{% endif %}</span></li>{% endfor %}
   </ol>
 </section>
 {% elif b.tipo == "rutas" %}
@@ -136,7 +136,7 @@
     <h3>{{ r.nombre }}</h3>
     <p class="ve-ruta__para"><strong>Para quién:</strong> {{ r.para }}</p>
     <ol class="ve-pasos">
-      {% for p in r.pasos %}<li><strong>{{ p.titulo }}</strong><span>{{ p.texto }}{% if p.enlace %} <a href="{{ p.enlace }}">{{ p.enlace_texto }}</a>{% endif %}</span></li>{% endfor %}
+      {% for p in r.pasos %}<li><strong>{{ p.titulo }}</strong><span>{{ p.texto }}{% if p.enlace %} <a href="{{ destino(p) }}">{{ p.enlace_texto }}</a>{% endif %}</span></li>{% endfor %}
     </ol>
   </section>
   {% endfor %}

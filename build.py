@@ -405,11 +405,12 @@ def preparar(sitio, d):
     vida = json.loads((SRC / "data" / "vida-estudiantil.json").read_text(encoding="utf-8"))
     ids_unidad = {u["id"] for u in unidades}
     # Páginas de Investigación: mismo sistema de bloques que Vida estudiantil, en su propio archivo.
-    inv = json.loads((SRC / "data" / "investigacion.json").read_text(encoding="utf-8"))
-    for pid in inv["paginas"]:
-        if pid in vida["paginas"]:
-            print(f"  ! investigacion.json: la página {pid!r} ya existe en vida-estudiantil.json")
-    vida["paginas"].update(inv["paginas"])
+    for archivo in ("investigacion.json", "secciones.json"):
+        extra = json.loads((SRC / "data" / archivo).read_text(encoding="utf-8"))
+        for pid in extra["paginas"]:
+            if pid in vida["paginas"]:
+                print(f"  ! {archivo}: la página {pid!r} ya existe en otro archivo de bloques")
+        vida["paginas"].update(extra["paginas"])
     for s in vida["servicios"]:
         if s.get("unidad") and s["unidad"] not in ids_unidad:
             print(f"  ! vida-estudiantil.json: unidad inexistente {s['unidad']!r}")
