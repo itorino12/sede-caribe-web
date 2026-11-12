@@ -29,6 +29,7 @@
       </div>
       {% elif carrera.plan_url %}<a class="boton boton--bloque" href="{{ carrera.plan_url }}" target="_blank" rel="noopener">Plan de estudios<span class="oculto"> (se abre en una pestaña nueva)</span></a>{% endif %}
       <a class="ficha__enlace" href="{{ raiz }}admision.html">Cómo ingresar</a>
+      {% if f.asociacion %}<a class="ficha__enlace" href="{{ f.asociacion.enlace }}" rel="noopener">{{ f.asociacion.nombre }} (Facebook)</a>{% endif %}
     </aside>
     {{ contacto(carrera, raiz, f.titulo_contacto or 'Contacto') }}
     {% for k in f.contactos or [] %}{{ contacto(k, raiz, k.titulo) }}{% endfor %}

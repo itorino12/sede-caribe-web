@@ -1053,5 +1053,9 @@
         "color_de": "OPT"
       }
     ]
+  },
+  "asociacion": {
+    "nombre": "Asociación de estudiantes de Marina Civil",
+    "enlace": "https://www.facebook.com/Marinacivil.ucr/"
   }
 }

@@ -1221,3 +1221,11 @@ a.hz-aula:hover { text-decoration: underline; }
 .ve__preguntas summary { cursor: pointer; font-weight: 700; padding: 10px 0; }
 .ve__preguntas details p { margin: 0 0 12px; }
 @media (prefers-reduced-motion: no-preference) { .ve-serv, .ve-act, .ve-fecha { transition: box-shadow .15s; } .ve-serv:hover, .ve-act:hover { box-shadow: 0 2px 10px rgba(0,0,0,.1); } }
+.ve__aviso { margin: 16px 0; padding: 14px 18px; border: 1px solid var(--linea); border-left: 6px solid var(--azul); background: var(--niebla); }
+.ve__aviso h2 { margin: 0 0 6px; font-size: var(--t-md); }
+.ve__aviso p { margin: 0; font-size: var(--t-sm); }
+.ve__contacto { display: grid; grid-template-columns: auto 1fr; gap: 6px 20px; margin: 8px 0; padding: 14px 18px; border: 1px solid var(--linea); border-top: 4px solid var(--azul); font-size: var(--t-sm); }
+.ve__contacto dt { color: var(--tinta-2); }
+.ve__contacto dd { margin: 0; overflow-wrap: anywhere; }
+.ve__nota { font-size: var(--t-sm); color: var(--tinta-2); }
+.ve__proximo strong small { display: block; font-size: var(--t-xs); font-weight: 400; }

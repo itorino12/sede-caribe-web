@@ -95,3 +95,103 @@
 </div>
 {% endif %}
 {% endmacro %}
+
+
+{# ---- Bloques de las páginas de Vida estudiantil (datos en src/data/vida-estudiantil.json, clave «paginas») ---- #}
+{% macro destino(x) %}{% if x.interno %}{{ raiz }}{{ x.interno }}{% elif x.enlace and x.enlace.startswith('@') %}{{ raiz }}{{ x.enlace[1:] }}{% else %}{{ x.enlace }}{% endif %}{% endmacro %}
+{% macro rango_fecha(e) %}{% if e.f == e.fin %}{{ e.f|dia_semana|capitalize }} {{ e.f.day }} de {{ e.f|mes }} de {{ e.f.year }}{% else %}Del {{ e.f.day }} de {{ e.f|mes }}{% if e.f.year != e.fin.year %} de {{ e.f.year }}{% endif %} al {{ e.fin.day }} de {{ e.fin|mes }} de {{ e.fin.year }}{% endif %}{% endmacro %}
+
+{% macro bloque(b) %}
+{% if b.tipo == "ayuda" %}
+<section class="ve__ayuda" aria-label="{{ b.titulo }}">
+  <h2>{{ b.titulo }}</h2>
+  <ul>{% for a in vida.ayuda %}<li><a href="{{ a.enlace }}"><span>{{ a.nombre }}</span><strong>{{ a.dato }}</strong></a></li>{% endfor %}</ul>
+</section>
+{% elif b.tipo == "aviso" %}
+<aside class="ve__aviso">{% if b.titulo %}<h2>{{ b.titulo }}</h2>{% endif %}<p>{{ b.texto }}{% if b.interno %} <a href="{{ destino(b) }}">{{ b.enlace_texto }}</a>{% endif %}</p></aside>
+{% else %}
+{% if b.titulo %}<h2{% if b.id %} id="{{ b.id }}"{% endif %}>{{ b.titulo }}</h2>{% endif %}
+{% if b.intro %}<p>{{ b.intro }}</p>{% endif %}
+{% if b.tipo == "tarjetas" %}
+<ul class="ve__actividades">
+  {% for t in b['items'] %}
+  <li class="ve-act">
+    <h3>{{ t.titulo }}</h3>
+    {% if t.texto %}<p>{{ t.texto }}</p>{% endif %}
+    {% if t.enlace or t.interno %}<p class="ve-act__lugar"><a href="{{ destino(t) }}">{{ t.enlace_texto or 'Más información' }}</a></p>{% endif %}
+  </li>
+  {% endfor %}
+</ul>
+{% elif b.tipo == "pasos" %}
+<section class="ve-ruta"{% if b.id %} id="ruta-{{ b.id }}"{% endif %}>
+  {% if b.para %}<p class="ve-ruta__para"><strong>Para quién:</strong> {{ b.para }}</p>{% endif %}
+  <ol class="ve-pasos">
+    {% for p in b.pasos %}<li><strong>{{ p.titulo }}</strong><span>{{ p.texto }}{% if p.enlace %} <a href="{{ p.enlace }}">{{ p.enlace_texto }}</a>{% endif %}</span></li>{% endfor %}
+  </ol>
+</section>
+{% elif b.tipo == "rutas" %}
+<div class="ve__rutas" data-ve-rutas>
+  {% for r in b.rutas %}
+  <section class="ve-ruta" id="ruta-{{ r.id }}" data-nombre="{{ r.nombre }}">
+    <h3>{{ r.nombre }}</h3>
+    <p class="ve-ruta__para"><strong>Para quién:</strong> {{ r.para }}</p>
+    <ol class="ve-pasos">
+      {% for p in r.pasos %}<li><strong>{{ p.titulo }}</strong><span>{{ p.texto }}{% if p.enlace %} <a href="{{ p.enlace }}">{{ p.enlace_texto }}</a>{% endif %}</span></li>{% endfor %}
+    </ol>
+  </section>
+  {% endfor %}
+</div>
+{% elif b.tipo == "fechas" %}
+{% if b['items'] %}
+<div class="ve__acciones"><button type="button" class="boton boton--secundario" data-ve-ics>Agregar estas fechas a mi calendario</button></div>
+<ol class="ve__linea" data-ve-fechas>
+  {% for e in b['items'] %}
+  <li class="ve-fecha" id="f-{{ e.id }}" data-desde="{{ e.f.isoformat() }}" data-hasta="{{ e.fin.isoformat() }}" data-id="{{ e.id }}" data-titulo="{{ e.titulo }}" data-detalle="{{ e.descripcion or '' }}">
+    <p class="ve-fecha__tipo">{{ e.categoria }} <span class="ve-fecha__estado" data-estado></span></p>
+    <h3>{{ e.titulo }}</h3>
+    <p class="ve-fecha__rango">{{ rango_fecha(e) }}</p>
+    {% if e.descripcion %}<p>{{ e.descripcion }}</p>{% endif %}
+    <p>{% if e.enlace %}<a href="{{ e.enlace }}">{{ e.enlace_texto or 'Más información' }}</a>{% else %}<a href="{{ raiz }}agenda.html#{{ e.id }}">Ver en la agenda</a>{% endif %}</p>
+  </li>
+  {% endfor %}
+</ol>
+<p><a href="{{ raiz }}agenda.html{% if b.agenda %}?categoria={{ b.agenda|urlencode }}{% endif %}">Ver todas las fechas en la agenda</a>. Las fechas las fija la Universidad y pueden cambiar: confirme en el enlace oficial.</p>
+{% else %}<p>No hay fechas próximas publicadas en la agenda. <a href="{{ raiz }}agenda.html">Ver la agenda</a>.</p>{% endif %}
+{% elif b.tipo == "contacto" %}
+<dl class="ve__contacto">
+  {% for c in b['items'] %}<dt>{{ c.etiqueta }}</dt><dd>{% if c.enlace %}<a href="{{ c.enlace }}">{{ c.valor }}</a>{% else %}{{ c.valor }}{% endif %}</dd>{% endfor %}
+</dl>
+{% if b.nota %}<p class="ve__nota">{{ b.nota }}</p>{% endif %}
+{% elif b.tipo == "datos" %}
+<ul class="cifras">{% for x in b['items'] %}<li><strong>{{ x.valor }}</strong><span>{{ x.etiqueta }}</span></li>{% endfor %}</ul>
+{% if b.fuente %}<p class="cifras__fuente">Fuente: {% if b.fuente_enlace %}<a href="{{ b.fuente_enlace }}">{{ b.fuente }}</a>{% else %}{{ b.fuente }}{% endif %}</p>{% endif %}
+{% elif b.tipo == "faq" %}
+<p><button type="button" class="ve__todas" data-ve-abrir>Abrir todas</button></p>
+<div class="ve__preguntas" data-ve-preguntas>
+  {% for q in b.preguntas %}<details><summary>{{ q.p }}</summary><p>{{ q.r }}</p></details>{% endfor %}
+</div>
+{% elif b.tipo == "enlaces" %}
+<ul class="modalidades ve__canales">
+  {% for c in b['items'] %}<li><a href="{{ destino(c) }}"><strong>{{ c.nombre }}</strong><span>{{ c.detalle }}</span></a></li>{% endfor %}
+</ul>
+{% elif b.tipo == "semana" %}
+{% set dias_nombre = ["", "lunes", "martes", "miércoles", "jueves", "viernes", "sábado", "domingo"] %}
+<p>{{ b.nota }} <a href="{{ b.fuente }}">Fuente de los horarios</a>.</p>
+<div class="filtros ve__dias" role="group" aria-label="Día de la semana" data-ve-dias>
+  <button type="button" aria-pressed="true" data-valor="">Toda la semana</button>
+  {% for n in range(1, 8) %}<button type="button" aria-pressed="false" data-valor="{{ n }}">{{ dias_nombre[n]|capitalize }}</button>{% endfor %}
+</div>
+<ul class="ve__actividades" data-ve-actividades>
+  {% for a in b.lista %}
+  <li class="ve-act" data-dias="{{ a.dias|join(',') }}">
+    <p class="ve-act__tipo">{{ a.tipo }}</p>
+    <h3>{{ a.nombre }}</h3>
+    <p>{% for d in a.dias %}{{ dias_nombre[d]|capitalize if loop.first else dias_nombre[d] }}{% if not loop.last %}{{ ' y ' if loop.revindex == 2 else ', ' }}{% endif %}{% endfor %}, {{ a.hora }}</p>
+    <p class="ve-act__lugar">{{ a.lugar }}</p>
+  </li>
+  {% endfor %}
+</ul>
+<p class="ve__estado" role="status" aria-live="polite" data-ve-estado-act></p>
+{% endif %}
+{% endif %}
+{% endmacro %}

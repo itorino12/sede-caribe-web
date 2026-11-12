@@ -769,5 +769,9 @@
         "color_de": "ECO"
       }
     ]
+  },
+  "asociacion": {
+    "nombre": "Asociación de estudiantes de Turismo Ecológico",
+    "enlace": "https://www.facebook.com/turismoucrcaribe/"
   }
 }

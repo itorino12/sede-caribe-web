@@ -1303,5 +1303,9 @@
         "color_de": "OPT"
       }
     ]
+  },
+  "asociacion": {
+    "nombre": "Asociación de estudiantes de Ingeniería Química",
+    "enlace": "https://www.facebook.com/aseiqcaribe/"
   }
 }

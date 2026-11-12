@@ -409,10 +409,18 @@ def preparar(sitio, d):
             print(f"  ! vida-estudiantil.json: unidad inexistente {s['unidad']!r}")
         if s["categoria"] not in vida["categorias"]:
             print(f"  ! vida-estudiantil.json: categoría desconocida {s['categoria']!r}")
-    for f in vida["fechas"]:  # texto del rango para quien no tiene JavaScript; el script lo reemplaza por el estado
-        d1, d2 = fecha(f["desde"]), fecha(f["hasta"])
-        f["rango"] = (f"{d1.day} de {MESES[d1.month - 1]} de {d1.year}" if d1 == d2 else
-                      f"Del {d1.day} de {MESES[d1.month - 1]}{'' if d1.year == d2.year else f' de {d1.year}'} al {d2.day} de {MESES[d2.month - 1]} de {d2.year}")
+    # Las fechas de cada página salen de la agenda (el Calendario Estudiantil), no se escriben a mano: así no se desactualizan.
+    def fechas_para(cfg):
+        cats, pal, tope = set(cfg.get("categorias", [])), [normal(p) for p in cfg.get("palabras", [])], timedelta(days=cfg.get("duracion_max", 120))
+        sel = [e for e in eventos if (not cats or e.get("categoria") in cats) and (not pal or any(p in normal(e["titulo"]) for p in pal))
+               and e["fin"] - e["f"] <= tope and not e.get("ejemplo")]
+        return sel[: cfg.get("max", 8)]
+    for pid, pag in vida["paginas"].items():
+        if pid not in ids_unidad:
+            print(f"  ! vida-estudiantil.json: página para una unidad inexistente {pid!r}")
+        for bl in pag["bloques"]:
+            if bl["tipo"] == "fechas":
+                bl["items"] = fechas_para(bl)
     horarios_ciclos = [{**armar_horarios(json.loads((SRC / "data" / f"horarios-{k}.json").read_text(encoding="utf-8")), carreras, aulas),
                         "clave": k, "pagina": "horarios.html" if i == 0 else f"horarios-{k}.html"} for i, k in enumerate(CICLOS_HORARIO)]
     horarios = horarios_ciclos[0]
