@@ -426,6 +426,10 @@ def preparar(sitio, d):
         if pid not in ids_unidad:
             print(f"  ! vida-estudiantil.json: página para una unidad inexistente {pid!r}")
         for bl in pag["bloques"]:
+            if bl.get("fotos"):  # fotos del bloque (nombres de la carpeta Imágenes o de src/assets/fotos)
+                alts = bl.get("fotos_alt", [])
+                bl["galeria"] = [{**f, "alt": alts[i] if i < len(alts) else bl.get("titulo", "")}
+                                 for i, f in ((i, imagen(n)) for i, n in enumerate(bl["fotos"])) if f]
             if bl["tipo"] == "fechas":
                 bl["items"] = fechas_para(bl)
             elif bl["tipo"] == "plazos":  # fechas escritas en el bloque (fondos, convocatorias): se muestran como las de la agenda

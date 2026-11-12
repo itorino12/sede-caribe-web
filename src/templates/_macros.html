@@ -129,6 +129,7 @@
 {% else %}
 {% if b.titulo %}<h2{% if b.id %} id="{{ b.id }}"{% endif %}>{{ b.titulo }}</h2>{% endif %}
 {% if b.intro %}<p>{{ b.intro }}</p>{% endif %}
+{% if b.galeria %}{{ galeria(b.galeria, raiz, "Fotos de " ~ b.titulo) }}{% endif %}
 {% if b.tipo == "tarjetas" %}
 <ul class="ve__actividades">
   {% for t in b['items'] %}

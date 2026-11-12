@@ -831,6 +831,12 @@
         {
           "tipo": "tarjetas",
           "titulo": "Liderazgo universitario",
+          "fotos": ["liderazgo-grupo.jpg", "liderazgo-cuerdas.jpg", "liderazgo-paracaidas.jpg", "liderazgo-piramide.jpg"],
+          "fotos_alt": [
+            "Grupo numeroso de estudiantes y personal de la Sede del Caribe, con los brazos en alto, frente a un mural.",
+            "Estudiantes jalando cuerdas de colores en una dinámica de trabajo en equipo al aire libre.",
+            "Personas de la Sede sosteniendo un paracaídas de colores con una pelota amarilla, en una actividad en el jardín.",
+            "Estudiantes facilitadores con camisetas celestes formando una pirámide humana sobre el césped."],
           "intro": "Proyecto de la Vicerrectoría de Vida Estudiantil que forma al estudiantado en habilidades sociales, inteligencia emocional y liderazgo. En la Sede del Caribe nació en 2009 y hoy cuenta con más de 50 estudiantes facilitadores, que alcanzan a más de 800 personas de la Sede.",
           "items": [
             {
