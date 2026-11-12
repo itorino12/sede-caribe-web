@@ -4,17 +4,17 @@
 Uso:
     python3 herramientas/horarios_guia.py [guia.pdf] [--texto salida.txt]
 
-- Escribe src/data/horarios-iic-2026.json (sin profesores): lo usa «Aulas y laboratorios» para el buscador
-  «¿En qué aula es mi curso?». Es un dato solo del repositorio (como aulas.json); no va a la hoja de Drive.
+- Escribe src/data/horarios-<ciclo>.json (por ejemplo horarios-iic-2026.json, horarios-iiic-2026.json), sin profesores: lo usa la
+  página «Horario de aulas» (una por ciclo). El ciclo sale del propio PDF («Semestral Ordinaria: 3 - 2026»). Es un dato solo del
+  repositorio (como aulas.json); no va a la hoja de Drive.
 - Con --texto escribe además una línea completa por grupo, con profesor y notas, para subir a la carpeta del congo.
-- Al cambiar de ciclo: poner la guía nueva en herramientas/fuentes/, ajustar CICLO y volver a correr.
+- Al llegar un ciclo nuevo: poner su guía en herramientas/fuentes/ y correr el script con ella; luego agregar el ciclo a CICLOS en build.py.
 """
 import json, re, subprocess, sys
 from pathlib import Path
 
 RAIZ = Path(__file__).resolve().parent.parent
-CICLO = "II ciclo 2026"
-SALIDA = RAIZ / "src" / "data" / "horarios-iic-2026.json"
+ROMANO = {"1": "I", "2": "II", "3": "III"}
 DIA = {"L": "lunes", "K": "martes", "M": "miércoles", "J": "jueves", "V": "viernes", "S": "sábado", "D": "domingo"}
 
 
@@ -22,6 +22,12 @@ def leer(pdf):
     t = subprocess.run(["pdftotext", "-layout", str(pdf), "-"], capture_output=True, text=True, check=True).stdout
     meta = {"generado": (re.search(r"Datos generados el:\s*(\S+)", t) or [None, ""])[1],
             "version": (re.search(r"Versión:\s*(\d+)", t) or [None, ""])[1]}
+    m = re.search(r"Semestral Ordinaria:\s*(\d)\s*-\s*(\d{4})", t)
+    if not m:
+        sys.exit("No encontré «Semestral Ordinaria: N - AAAA» en la guía.")
+    meta["ciclo"] = f"{ROMANO[m.group(1)]} ciclo {m.group(2)}"
+    meta["archivo"] = f"horarios-{ROMANO[m.group(1)].lower()}c-{m.group(2)}.json"
+    meta["numero"], meta["anio"] = m.group(1), m.group(2)
     cursos, c, g, esc = [], None, None, None
     for ln in t.splitlines():
         s = ln.strip()
@@ -84,7 +90,7 @@ def bonito(nombre):
 
 
 def para_sitio(meta, cursos):
-    return {"ciclo": CICLO, "version": meta["version"], "generado": meta["generado"],
+    return {"ciclo": meta["ciclo"], "version": meta["version"], "generado": meta["generado"],
             "fuente": "Guía de Cursos y Horarios, Recinto de Limón, Oficina de Registro e Información (UCR)",
             "cursos": [{"sigla": c["sigla"], "nombre": bonito(c["nombre"]), "escuela": bonito(c["escuela"]),
                         "grupos": [{"grupo": g["grupo"], "modalidad": g["modalidad"], "cerrado": g["cerrado"], "horas": g["horas"]} for g in c["grupos"]]}
@@ -92,7 +98,7 @@ def para_sitio(meta, cursos):
 
 
 def texto(meta, cursos):
-    o = [f"GUÍA DE CURSOS Y HORARIOS — SEDE REGIONAL DEL CARIBE, RECINTO DE LIMÓN\nSemestral ordinaria 2-2026 ({CICLO} lectivo). Fuente: Oficina de Registro e Información, Vicerrectoría de Vida Estudiantil, UCR. "
+    o = [f"GUÍA DE CURSOS Y HORARIOS — SEDE REGIONAL DEL CARIBE, RECINTO DE LIMÓN\nSemestral ordinaria {meta['numero']}-{meta['anio']} ({meta['ciclo']}). Fuente: Oficina de Registro e Información, Vicerrectoría de Vida Estudiantil, UCR. "
          f"Datos generados el {meta['generado']}, versión {meta['version']}. Aulas: «0018 RL» es el aula 0018 del Recinto Regional de Limón. El código de aula 9999 aparece en la guía sin explicación.\n"]
     for c in cursos:
         o.append(f"CURSO {c['sigla']} {c['nombre']} — Escuela: {c['escuela']}. Créditos: {c['cred']}. Requisitos: {c['req'] or '-'}. Correquisitos: {c['cor'] or '-'}. Tipo: {c['tipo']}.")
@@ -110,8 +116,9 @@ if __name__ == "__main__":
     if "--texto" in resto:
         del resto[resto.index("--texto"):resto.index("--texto") + 2]
     args = [a for a in resto if not a.startswith("--")]
-    pdf = Path(args[0]) if args else RAIZ / "herramientas" / "fuentes" / "guia-horarios-limon-2-2026.pdf"
+    pdf = Path(args[0])
     meta, cursos = leer(pdf)
+    SALIDA = RAIZ / "src" / "data" / meta["archivo"]
     SALIDA.write_text(json.dumps(para_sitio(meta, cursos), ensure_ascii=False, separators=(",", ":")), encoding="utf-8")
     print(f"{len(cursos)} cursos, {sum(len(c['grupos']) for c in cursos)} grupos -> {SALIDA.relative_to(RAIZ)}")
     if "--texto" in sys.argv:

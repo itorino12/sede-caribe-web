@@ -1,6 +1,6 @@
 """Arma la página «Horario de aulas»: los cursos de la guía de Registro, ubicados por carrera y ciclo del plan.
 
-Entradas: src/data/horarios-iic-2026.json (guía de Registro, la saca herramientas/horarios_guia.py),
+Entradas: src/data/horarios-<ciclo>.json (guía de Registro, la saca herramientas/horarios_guia.py),
 las mallas de src/data/carreras/<id>.json (carrera y ciclo de cada sigla) y src/data/aulas.json (aula -> lugar del recorrido 3D).
 
 Reglas de ubicación:
@@ -25,7 +25,7 @@ NOMBRES = {
     "EF6201": "Actividad deportiva: voleibol principiante mixto", "HA3016": "Historia contemporánea de Costa Rica I",
     "CN0071": "Curso básico de embarque (OMI 1.13, 1.19, 1.20, 1.21 y 3.26)", "CN0105": "Buques petroleros y quimiqueros (OMI 1.01, 1.02, 1.03)",
     "IO6020": "Análisis y aplicación de teorías de la adquisición y aprendizaje de una segunda lengua en la realidad costarricense",
-    "CN9801": "Proyecto de graduación II",
+    "CN9801": "Proyecto de graduación II", "GF2510": "Geografía regional de Costa Rica",
 }
 
 

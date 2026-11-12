@@ -1128,3 +1128,8 @@ a.hz-aula:hover { text-decoration: underline; }
 .medios__item video, .medios__item img { display: block; width: 100%; height: auto; border-radius: 6px; background: #000; }
 .medios__item figcaption { margin-top: 6px; font-size: var(--t-xs); color: var(--tinta-2); }
 .mapa3d__ficha-video { display: block; width: 100%; max-height: 260px; margin: 8px 0; border-radius: 4px; background: #000; }
+.hz-ciclos { display: inline-flex; flex-wrap: wrap; margin: 0 0 20px; border: 2px solid var(--azul); border-radius: 999px; overflow: hidden; }
+.hz-ciclos a { padding: 8px 20px; font-weight: 700; color: var(--azul); text-decoration: none; }
+.hz-ciclos a:hover { background: var(--niebla); }
+.hz-ciclos a[aria-current="page"] { background: var(--azul); color: var(--sobre-acento); }
+.hz-ciclos a:focus-visible { outline: 3px solid var(--foco); outline-offset: -3px; }
