@@ -147,21 +147,26 @@ def armador(nav, base):
     """Armador de horario personal (horarios.html): choques, un grupo por curso, guardado, enlace compartido y axe."""
     print("Armador de horario")
     BUSCAR = """() => {
+      // Unidad = lo que se cursa: un grupo suelto o la pareja teoría + práctica (901 y 951), que va junta.
       const g = {};
       document.querySelectorAll('.hz-grupo[data-g]').forEach(li => {
-        const k = li.dataset.g; if (g[k]) return;
+        const cont = li.closest('.hz-unidad[data-u]'), k = cont ? cont.dataset.u : li.dataset.g;
         const fr = li.dataset.cod.split(';').map(t => { const p = t.split('|'); return {d: p[0].split(',').map(Number), i: +p[1], f: +p[2]}; });
-        g[k] = {s: k.split('|')[0], fr, cerrado: [...li.querySelectorAll('.hz-etiqueta')].some(x => x.textContent.trim() === 'Cerrado')};
+        const cerrado = [...li.querySelectorAll('.hz-etiqueta')].some(x => x.textContent.trim() === 'Cerrado');
+        const u = g[k] = g[k] || {s: k.split('|')[0], fr: [], nums: [], cerrado: false};
+        if (u.nums.includes(li.dataset.g.split('|')[1])) return;
+        u.nums.push(li.dataset.g.split('|')[1]); u.fr.push(...fr); u.cerrado = u.cerrado || cerrado;
       });
       const ks = Object.keys(g).filter(k => !g[k].cerrado);
       const choca = (a, b) => a.fr.some(x => b.fr.some(y => x.d.some(d => y.d.includes(d)) && x.i < y.f && y.i < x.f));
-      let par = null, libre = null, mismo = null;
+      let par = null, libre = null, mismo = null, pareja = null;
+      for (const k of ks) if (g[k].nums.length === 2 && !pareja) pareja = {k, nums: g[k].nums};
       for (let i = 0; i < ks.length; i++) for (let j = i + 1; j < ks.length; j++) {
         const a = g[ks[i]], b = g[ks[j]];
         if (a.s === b.s) { mismo = mismo || [ks[i], ks[j]]; continue; }
         if (choca(a, b)) par = par || [ks[i], ks[j]]; else libre = libre || [ks[i], ks[j]];
       }
-      return {par, libre, mismo, total: ks.length};
+      return {par, libre, mismo, pareja, total: ks.length};
     }"""
     TOCAR = "k => document.querySelector('button.hm-agregar[data-hm-clave=\"' + k + '\"]').click()"
     RESUMEN = "document.querySelector('[data-hm-resumen]').textContent"
@@ -170,8 +175,10 @@ def armador(nav, base):
     p.on("pageerror", lambda e: errores.append(str(e)))
     p.goto(base + "horarios.html", wait_until="domcontentloaded")
     datos = p.evaluate(BUSCAR)
-    revisar(datos["total"] > 50 and datos["par"] and datos["libre"] and datos["mismo"], f"hay grupos con horario para probar ({datos['total']})")
-    revisar(p.evaluate("document.querySelectorAll('button.hm-agregar').length") >= datos["total"], "cada grupo tiene su botón")
+    revisar(datos["total"] > 40 and datos["par"] and datos["libre"] and datos["mismo"] and datos["pareja"], f"hay cursos con horario y parejas para probar ({datos['total']})")
+    revisar(p.evaluate("document.querySelectorAll('button.hm-agregar').length") >= datos["total"], "cada unidad tiene su botón")
+    revisar(p.evaluate("document.querySelectorAll('.hz-unidad > button.hm-agregar').length") == p.evaluate("document.querySelectorAll('.hz-unidad').length"), "una pareja (901 y 951) tiene un solo botón, no uno por grupo")
+    revisar(p.evaluate("document.querySelectorAll('.hz-unidad .hm-agregar').length") == p.evaluate("document.querySelectorAll('.hz-unidad').length"), "los grupos dentro de una pareja no traen botón propio")
     revisar(p.evaluate("document.querySelector('[data-hm-barra]').hidden"), "sin cursos, la barra no se ve")
     for k in datos["libre"]:
         p.evaluate(TOCAR, k)
@@ -191,7 +198,23 @@ def armador(nav, base):
     p.evaluate("document.querySelector('[data-hm-vaciar]').click()")
     for k in datos["mismo"]:
         p.evaluate(TOCAR, k)
-    revisar("1 curso" in p.evaluate(RESUMEN), "dos grupos del mismo curso: queda uno solo")
+    revisar("1 curso" in p.evaluate(RESUMEN), "dos alternativas del mismo curso: queda una sola")
+    # teoría + práctica: una pareja entra completa, como un solo curso, y también se reconoce por cualquiera de sus dos números
+    p.evaluate("document.querySelector('[data-hm-vaciar]').click()")
+    p.evaluate(TOCAR, datos["pareja"]["k"])
+    revisar("1 curso" in p.evaluate(RESUMEN), "una pareja de grupos cuenta como un solo curso: " + p.evaluate(RESUMEN))
+    p.click("[data-hm-abrir]")
+    lista = p.inner_text("[data-hm-lista]")
+    revisar(all(n in lista for n in datos["pareja"]["nums"]), "la lista muestra ambos grupos de la pareja " + " y ".join(datos["pareja"]["nums"]))
+    revisar(p.evaluate("document.querySelectorAll('.hm-bloque').length") >= 2, "el cuadro dibuja los bloques de teoría y práctica")
+    p.click("[data-hm-cerrar]")
+    p.evaluate("document.querySelector('[data-hm-vaciar]').click()")
+    siglas = datos["pareja"]["k"].split("|")[0]
+    p.goto("about:blank")  # si solo cambia el #, la página no recarga y el enlace no se lee
+    p.goto(base + "horarios.html#mi=" + siglas + "-" + datos["pareja"]["nums"][1], wait_until="domcontentloaded")
+    p.wait_for_timeout(300)
+    revisar("1 curso" in p.evaluate(RESUMEN), "un enlace con solo el grupo de práctica trae la pareja completa")
+    p.evaluate("document.querySelector('[data-hm-vaciar]').click()")
     # se guarda en el navegador y vuelve al recargar
     p.evaluate("document.querySelector('[data-hm-vaciar]').click()")
     for k in datos["libre"]:

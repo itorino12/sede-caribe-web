@@ -1114,6 +1114,13 @@ html.sin-desplazar, html.sin-desplazar body { overflow: hidden; }
 .hz-grupos { list-style: none; margin: 0; padding: 0; display: grid; gap: 6px; }
 .hz-grupo { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 8px; padding-top: 6px; border-top: 1px dashed var(--linea); font-size: var(--t-xs); }
 .hz-grupo__n { font-weight: 700; }
+.hz-unidad { list-style: none; display: grid; gap: 6px; padding-top: 6px; border-top: 1px dashed var(--linea); font-size: var(--t-xs); }
+.hz-unidad__t { margin: 0; font-weight: 700; }
+.hz-unidad__t span { font-weight: 400; color: var(--tinta-2); }
+.hz-grupos--unidad { margin-left: 2px; padding-left: 10px; border-left: 3px solid var(--azul); }
+.hz-grupos--unidad .hz-grupo { border-top: 0; padding-top: 0; }
+.hz-grupos--unidad .hz-grupo + .hz-grupo { border-top: 1px dashed var(--linea); padding-top: 6px; }
+.hz-unidad > .hm-agregar { justify-self: end; margin-left: 0; }
 .hz-hora { padding: 1px 8px; border-radius: 4px; background: var(--niebla); white-space: nowrap; } .hz-hora b { font-weight: 700; }
 .hz-etiqueta { padding: 0 8px; border: 1px solid var(--linea); border-radius: 999px; color: var(--tinta-2); }
 .hz-aula { display: inline-flex; align-items: center; gap: 4px; padding: 2px 10px; border-radius: 999px; background: var(--azul); color: var(--sobre-acento); font-weight: 700; text-decoration: none; }

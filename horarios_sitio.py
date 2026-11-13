@@ -94,8 +94,19 @@ def armar(horarios, carreras, aulas):
             unicas = {(f["aula"]["estado"], f["aula"]["n"]) for f in fr}
             grupos.append({"grupo": g["grupo"], "modalidad": MODALIDAD.get(g["modalidad"], g["modalidad"].capitalize()), "cerrado": g["cerrado"],
                            "franjas": fr, "cod": cod, "aula_unica": fr[0]["aula"] if len(unicas) == 1 else None})
+        # Teoría y práctica: el grupo con 5 en las decenas (051, 951) es la pareja del que tiene 0 (001, 901): se cursan juntos.
+        por_num = {g["grupo"]: g for g in grupos}
+        unidades, hechos = [], set()
+        for g in sorted(grupos, key=lambda x: x["grupo"]):
+            n = g["grupo"]
+            if n in hechos:
+                continue
+            otro = por_num.get(n[0] + "5" + n[2:]) if len(n) == 3 and n.isdigit() and n[1] == "0" else None
+            miembros = [g, otro] if otro else [g]
+            hechos.update(m["grupo"] for m in miembros)
+            unidades.append({"id": n, "grupos": miembros, "juntos": len(miembros) == 2})
         return {"sigla": c["sigla"], "nombre": nombre or NOMBRES.get(c["sigla"]) or c["nombre"], "escuela": c.get("escuela", ""),
-                "color": (area or {}).get("color", ""), "oscuro": (area or {}).get("oscuro", ""), "grupos": grupos}
+                "color": (area or {}).get("color", ""), "oscuro": (area or {}).get("oscuro", ""), "grupos": grupos, "unidades": unidades}
 
     usados = set()
     salida = []

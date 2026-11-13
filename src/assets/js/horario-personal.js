@@ -29,22 +29,33 @@
     }).filter(function (x) { return x.d.length && x.f > x.i; });
   }
 
+  /* Una «unidad» es lo que se cursa: un grupo suelto, o la pareja teoría + práctica (p. ej. 901 y 951), que va junta. */
+  var miembro = {};  // "SIGLA|951" -> "SIGLA|901" (clave de su unidad)
   Array.prototype.forEach.call(document.querySelectorAll(".hz-grupo[data-g]"), function (li) {
-    var clave = li.getAttribute("data-g");
+    var mk = li.getAttribute("data-g"), partes = mk.split("|");
+    var cont = li.closest ? li.closest(".hz-unidad[data-u]") : null;
+    var clave = cont ? cont.getAttribute("data-u") : mk;
+    miembro[mk] = clave;
     var g = grupos[clave];
     if (!g) {
-      var partes = clave.split("|");
       var curso = li.closest(".hz-curso");
       var h4 = curso && curso.querySelector(".hz-curso__nombre");
       var nombre = h4 ? h4.textContent.replace(partes[0], "").replace(/\s+/g, " ").trim() : partes[0];
-      var etq = Array.prototype.map.call(li.querySelectorAll(".hz-etiqueta"), function (x) { return x.textContent.trim(); });
       g = grupos[clave] = {
-        clave: clave, sigla: partes[0], grupo: partes[1], nombre: nombre, etiquetas: etq,
-        cerrado: etq.indexOf("Cerrado") >= 0, franjas: leerFranjas(li.getAttribute("data-cod") || ""), lis: [], aulas: {}
+        clave: clave, sigla: partes[0], grupo: clave.split("|")[1], nums: [], nombre: nombre, etiquetas: [],
+        cerrado: false, franjas: [], lis: [], aulas: {}
       };
       (porCurso[partes[0]] = porCurso[partes[0]] || []).push(clave);
     }
-    g.lis.push(li);
+    var lugar = cont || li;
+    if (g.lis.indexOf(lugar) < 0) g.lis.push(lugar);
+    if (g.nums.indexOf(partes[1]) < 0) {
+      g.nums.push(partes[1]);
+      var etq = Array.prototype.map.call(li.querySelectorAll(".hz-etiqueta"), function (x) { return x.textContent.trim(); });
+      etq.forEach(function (x) { if (g.etiquetas.indexOf(x) < 0) g.etiquetas.push(x); });
+      if (etq.indexOf("Cerrado") >= 0) g.cerrado = true;
+      leerFranjas(li.getAttribute("data-cod") || "").forEach(function (f) { f.g = partes[1]; g.franjas.push(f); });
+    }
     Array.prototype.forEach.call(li.querySelectorAll("a.hz-aula"), function (a) {
       var m = /Aula\s+(\S+)/.exec(a.textContent);
       if (m) g.aulas[m[1]] = a.getAttribute("href");
@@ -67,8 +78,9 @@
   function validas(lista) {
     var vistos = {}, salida = [];
     (Array.isArray(lista) ? lista : []).forEach(function (k) {
-      if (typeof k === "string" && grupos[k] && !grupos[k].cerrado && !vistos[grupos[k].sigla]) {
-        vistos[grupos[k].sigla] = 1; salida.push(k);
+      var u = typeof k === "string" ? (grupos[k] ? k : miembro[k]) : null; // también acepta un grupo suelto de una pareja (enlaces o guardados viejos)
+      if (u && grupos[u] && !grupos[u].cerrado && !vistos[grupos[u].sigla]) {
+        vistos[grupos[u].sigla] = 1; salida.push(u);
       }
     });
     return salida;
@@ -92,7 +104,7 @@
     var salida = [];
     sel.forEach(function (k, n) {
       grupos[k].franjas.forEach(function (f) {
-        f.d.forEach(function (d) { salida.push({ clave: k, color: n % COLORES.length, d: d, i: f.i, f: f.f, aula: f.aula }); });
+        f.d.forEach(function (d) { salida.push({ clave: k, color: n % COLORES.length, d: d, i: f.i, f: f.f, aula: f.aula, g: f.g }); });
       });
     });
     return salida;
@@ -121,10 +133,11 @@
     return g.franjas.map(function (f) {
       var dias = f.d.map(function (d) { return ABR[d]; });
       var d = dias.length === 1 ? dias[0] : dias.slice(0, -1).join(", ") + " y " + dias[dias.length - 1];
-      return d + " " + hhmm(f.i) + "–" + hhmm(f.f) + (f.aula && f.aula !== "9999" ? " · Aula " + f.aula : "");
+      return (g.nums.length > 1 ? "G" + f.g + " " : "") + d + " " + hhmm(f.i) + "–" + hhmm(f.f) + (f.aula && f.aula !== "9999" ? " · Aula " + f.aula : "");
     }).join("; ");
   }
-  function etiqueta(k) { return grupos[k].sigla + " grupo " + grupos[k].grupo; }
+  function numeros(g) { return g.nums.join(" y "); }
+  function etiqueta(k) { var g = grupos[k]; return g.sigla + (g.nums.length > 1 ? " grupos " : " grupo ") + numeros(g); }
 
   /* ---------- Botones en cada grupo ---------- */
   Object.keys(grupos).forEach(function (k) {
@@ -154,7 +167,7 @@
   if (intro) {
     var ayuda = document.createElement("p");
     ayuda.className = "hz-intro hm-ayuda";
-    ayuda.textContent = "Para armar su horario, toque «Agregar a mi horario» en el grupo que quiera cursar. Se avisa si dos cursos chocan.";
+    ayuda.textContent = "Para armar su horario, toque «Agregar a mi horario» en el grupo que quiera cursar. Cuando un grupo tiene teoría y práctica (por ejemplo 901 y 951), se agregan juntos. Se avisa si dos cursos chocan.";
     intro.insertAdjacentElement("afterend", ayuda);
   }
 
@@ -214,9 +227,9 @@
         div.style.backgroundColor = COLORES[b.color];
         var tx = document.createElement("b"); tx.textContent = (enChoque[b.clave] ? "⚠ " : "") + g.sigla;
         div.appendChild(tx);
-        var sub = document.createElement("span"); sub.textContent = "G" + g.grupo + (b.aula && b.aula !== "9999" ? " · " + b.aula : "");
+        var sub = document.createElement("span"); sub.textContent = "G" + b.g + (b.aula && b.aula !== "9999" ? " · " + b.aula : "");
         div.appendChild(sub);
-        div.title = g.sigla + " " + g.nombre + ", grupo " + g.grupo + ", " + ABR[b.d] + " " + hhmm(b.i) + "–" + hhmm(b.f);
+        div.title = g.sigla + " " + g.nombre + ", grupo " + b.g + ", " + ABR[b.d] + " " + hhmm(b.i) + "–" + hhmm(b.f);
         col.appendChild(div);
       });
       cuerpo.appendChild(col);
@@ -266,7 +279,7 @@
       li.className = "hm-item" + (enChoque[k] ? " hm-item--choque" : "");
       li.style.borderLeftColor = COLORES[n % COLORES.length];
       var t = document.createElement("div"); t.className = "hm-item__t";
-      var b = document.createElement("b"); b.textContent = g.sigla + " · Grupo " + g.grupo;
+      var b = document.createElement("b"); b.textContent = g.sigla + (g.nums.length > 1 ? " · Grupos " : " · Grupo ") + numeros(g);
       t.appendChild(b);
       t.appendChild(document.createTextNode(" " + g.nombre + (g.etiquetas.length ? " (" + g.etiquetas.join(", ") + ")" : "")));
       li.appendChild(t);
@@ -304,7 +317,7 @@
     }
     var otro = sel.filter(function (x) { return grupos[x].sigla === g.sigla; })[0];
     var lista = sel.filter(function (x) { return grupos[x].sigla !== g.sigla; }).concat(k);
-    cambiar(lista, otro ? "Se cambió " + etiqueta(otro) + " por " + etiqueta(k) + " (un curso lleva un solo grupo)." : etiqueta(k) + " se agregó a su horario.");
+    cambiar(lista, otro ? "Se cambió " + etiqueta(otro) + " por " + etiqueta(k) + " (un curso lleva un solo grupo; si tiene teoría y práctica, van juntos)." : etiqueta(k) + " se agregó a su horario.");
   }
   function copiar(texto, mensaje) {
     var listo = function () { aviso = mensaje; el("[data-hm-estado]").textContent = mensaje; };
@@ -320,7 +333,7 @@
     var titulo = document.querySelector("#hm-titulo").textContent;
     return titulo + "\n" + sel.map(function (k) {
       var g = grupos[k];
-      return g.sigla + " " + g.nombre + " · Grupo " + g.grupo + " · " + textoFranjas(g);
+      return g.sigla + " " + g.nombre + (g.nums.length > 1 ? " · Grupos " : " · Grupo ") + numeros(g) + " · " + textoFranjas(g);
     }).join("\n") + "\n\nPlaneado en " + location.origin + location.pathname + " (no es una matrícula; confirme con su carrera o con Registro).";
   }
   function abrir() {
