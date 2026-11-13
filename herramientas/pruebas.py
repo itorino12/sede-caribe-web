@@ -248,6 +248,28 @@ def armador(nav, base):
     revisar(not errores, f"armador sin errores {errores[:1]}")
 
 
+def busqueda(nav, base):
+    """Buscador de lugares del recorrido: aulas, dependencias, acentos, ficha y teclado."""
+    print("Buscador de lugares")
+    c, p, e = pagina(nav, base + "recorrido.html")
+    p.wait_for_selector(".mapa3d--listo", timeout=120000)
+    def textos(q):
+        p.fill("#busqueda-q", q); p.wait_for_timeout(150)
+        return p.locator(".busqueda__lista button").all_inner_texts()
+    r = textos("aula 5")
+    revisar(r and "Aula 5" in r[0] and not any("Aula 15" in t for t in r), "«aula 5» halla el Aula 5 y no el Aula 15")
+    revisar(textos("laboratorio"), "«laboratorio» halla resultados")
+    revisar(textos("BIBLIOTECA") and textos("biblioteca")[0] == textos("BIBLIOTECA")[0], "no distingue mayúsculas")
+    revisar(textos("zzzz") == [] and "Sin resultados" in p.inner_text("[data-busqueda-estado]"), "sin coincidencias lo dice con texto")
+    textos("laboratorio"); p.keyboard.press("Enter"); p.wait_for_timeout(2500)
+    revisar(p.evaluate("!document.querySelector('.mapa3d__ficha').hidden"), "Enter en el primer resultado abre la ficha del lugar")
+    revisar(p.evaluate("document.querySelectorAll('.busqueda__lista button').length") == 0, "al elegir, la lista de resultados se cierra")
+    textos("aula"); p.keyboard.press("ArrowDown"); revisar(p.evaluate("document.activeElement.closest('.busqueda__lista') !== null"), "la flecha abajo pasa a los resultados")
+    p.keyboard.press("Escape"); revisar(p.evaluate("document.activeElement.id") == "busqueda-q", "Escape vuelve al cuadro")
+    revisar(not e, f"buscador sin errores {e[:1]}")
+    c.close()
+
+
 def completa(nav, base):
     print("Recorrido: ficha, pantalla completa y zonas")
     c, p, e = pagina(nav, base + "recorrido.html#lugar-1")
@@ -294,6 +316,7 @@ def completa(nav, base):
 
     asistente(nav, base)
     armador(nav, base)
+    busqueda(nav, base)
 
     print("Accesibilidad (axe)")
     axe = leer_axe()

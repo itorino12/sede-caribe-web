@@ -3,6 +3,15 @@
 {% block contenido %}
 {{ encabezado("Recorrido por la Sede", [("La Sede", "la-sede.html")], raiz, "Maqueta 3D del campus, hecha a partir del croquis oficial de distribución de aulas. Gire con el dedo o el ratón, acerque con dos dedos o la rueda, y toque un edificio para ver qué hay.") }}
 <div class="ancho">
+  <form class="busqueda" data-busqueda role="search" aria-label="Buscar un lugar del campus">
+    <label for="busqueda-q">Buscar un lugar, aula o dependencia</label>
+    <div class="busqueda__campo">
+      <input id="busqueda-q" type="search" autocomplete="off" enterkeyhint="search" placeholder="Ej.: laboratorio, aula 5, biblioteca, soda" aria-describedby="busqueda-estado">
+      <button type="button" class="busqueda__limpiar" data-busqueda-limpiar hidden aria-label="Borrar la búsqueda">×</button>
+    </div>
+    <p id="busqueda-estado" class="busqueda__estado" data-busqueda-estado role="status"></p>
+    <ul class="busqueda__lista" data-busqueda-lista></ul>
+  </form>
   {% set portada = False %}{% include "_mapa3d.html" %}
 
   <section class="lugares" aria-labelledby="lugares-titulo">
@@ -23,6 +32,7 @@
   </section>
 </div>
 <script type="application/json" id="datos-campus">{{ {"campus": campus3d, "lugares": lugares}|tojson }}</script>
+<script type="module" src="{{ raiz }}assets/js/recorrido-busqueda.js"></script>
 <script type="module">
   // si la maqueta 3D no llega a cargar (red o caché del navegador), queda la maqueta giratoria y no un cuadro vacío
   const js = (ruta) => new URL(ruta, document.baseURI).href;

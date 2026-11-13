@@ -709,6 +709,18 @@ html.sin-desplazar, html.sin-desplazar body { overflow: hidden; }
 .mapa3d--giro .mapa3d__escena { display: flex; flex-direction: column; overflow: visible; }
 .mapa3d--giro .mapa3d__ficha { position: relative; left: auto; bottom: auto; order: 2; overflow: visible; width: auto; max-height: none; border-radius: 0; box-shadow: none; border-top: 4px solid var(--zona, #005DA4); }
 .mapa3d__nota { font-size: var(--t-xs); color: var(--tinta-2); margin: 10px 0 0; }
+.busqueda { margin-block: 4px 18px; }
+.busqueda label { display: block; font-weight: 700; margin-bottom: 6px; }
+.busqueda__campo { position: relative; }
+.busqueda input { width: 100%; font: inherit; padding: 11px 44px 11px 14px; border: 1px solid var(--linea); border-radius: 10px; background: var(--papel); color: var(--tinta); min-height: 46px; }
+.busqueda__limpiar { position: absolute; right: 4px; top: 50%; transform: translateY(-50%); width: 40px; height: 40px; border: 0; background: none; color: var(--tinta-2); font-size: 1.5rem; line-height: 1; cursor: pointer; border-radius: 8px; }
+.busqueda__estado { margin: 6px 0 0; font-size: var(--t-xs); color: var(--tinta-2); min-height: 1.2em; }
+.busqueda__lista { list-style: none; margin: 4px 0 0; padding: 0; display: grid; gap: 0; border-radius: 10px; }
+.busqueda__lista:empty { display: none; }
+.busqueda__lista button { display: flex; gap: 10px; align-items: center; width: 100%; text-align: left; padding: 10px 8px; background: none; border: 0; border-bottom: 1px solid var(--linea); font: inherit; color: inherit; cursor: pointer; }
+.busqueda__lista button:hover { background: var(--niebla); }
+.busqueda__lista button > b { flex: none; min-width: 1.9em; height: 1.6em; padding: 0 4px; border-radius: .8em; display: inline-grid; place-items: center; font-size: .8125rem; background: var(--fondo, var(--niebla)); color: var(--letra, var(--tinta-2)); box-shadow: 0 0 0 1px rgba(0,30,60,.2); }
+.busqueda__t small { color: var(--tinta-2); }
 .lugares { margin-block: 28px clamp(44px, 6vw, 76px); }
 .lugares__zonas { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 24px; }
 .lugares h3 { font-size: var(--t-base); margin: 0 0 8px; }
