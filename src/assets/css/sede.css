@@ -261,7 +261,7 @@ main:focus { outline: none; }
 .dia__num { display: block; font-size: 2.9rem; font-weight: 900; line-height: 1; letter-spacing: -.04em; margin: 2px 0 8px; font-variant-numeric: tabular-nums; }
 .dia--hoy .dia__num { text-decoration: underline; text-decoration-thickness: 4px; text-underline-offset: 6px; }
 .dia--hoy .dia__nombre::after { content: " (hoy)"; font-weight: 400; }
-.dia--pasado { opacity: .62; }
+.dia--pasado { opacity: .9; }
 .dia ul { list-style: none; margin: 0; padding: 0; }
 .dia li { font-size: var(--t-sm); line-height: 1.35; padding: 6px 0; border-top: 1px dotted var(--linea-banda); }
 .dia li:first-child { border-top: 0; padding-top: 0; }
