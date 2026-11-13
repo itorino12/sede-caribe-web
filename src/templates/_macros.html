@@ -49,11 +49,12 @@
 <section class="agenda-mes{% if pasado %} agenda-mes--pasado{% endif %}" id="{{ m.id }}" data-grupo-filtro aria-labelledby="{{ m.id }}-t">
   <h2 id="{{ m.id }}-t">{{ MESES[m.mes - 1]|capitalize }} de {{ m.anio }}</h2>
   <div class="agenda-mes__cuerpo">
+    <div class="minical-caja"><p class="minical-caja__mes" aria-hidden="true">{{ MESES[m.mes - 1]|capitalize }} de {{ m.anio }}</p>
     <table class="minical">
       <caption class="oculto">Días con actividades en {{ MESES[m.mes - 1] }} de {{ m.anio }}</caption>
       <thead><tr>{% for d in ["L", "M", "X", "J", "V", "S", "D"] %}<th scope="col" abbr="{{ ["lunes","martes","miércoles","jueves","viernes","sábado","domingo"][loop.index0] }}">{{ d }}</th>{% endfor %}</tr></thead>
       <tbody>{% for s in m.semanas %}<tr>{% for c in s %}<td class="{{ 'fuera' if c.fuera }}{{ ' es-hoy' if c.hoy }}{{ ' con' if c.ev }}">{% if c.fuera %}{% elif c.ev %}<a href="#{{ c.ev[0].id }}" aria-label="{{ c.d.day }} de {{ MESES[m.mes - 1] }}: {{ c.ev|length }} {{ 'actividad' if c.ev|length == 1 else 'actividades' }}"{% if c.hoy %} aria-current="date"{% endif %}>{{ c.d.day }}</a>{% else %}<span{% if c.hoy %} aria-current="date"{% endif %}>{{ c.d.day }}</span>{% endif %}</td>{% endfor %}</tr>{% endfor %}</tbody>
-    </table>
+    </table></div>
     <ul class="agenda">{% for e in m.eventos %}{{ evento(e, raiz, compacto=pasado) }}{% endfor %}</ul>
   </div>
 </section>

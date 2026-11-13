@@ -463,8 +463,8 @@ main:focus { outline: none; }
 .agenda { list-style: none; padding: 0; margin: 0; }
 .agenda-mes { margin-bottom: 40px; }
 .agenda-mes h2 { font-size: var(--t-lg); color: var(--azul); border-bottom: 3px solid var(--azul); padding-bottom: 8px; margin-bottom: 8px; }
-.agenda-mes { scroll-margin-top: 90px; }
-.agenda-mes__cuerpo { display: grid; grid-template-columns: 216px minmax(0, 1fr); gap: 12px 36px; align-items: start; }
+.agenda-mes { scroll-margin-top: 150px; }
+.agenda-mes__cuerpo { display: grid; grid-template-columns: 288px minmax(0, 1fr); gap: 12px 36px; align-items: start; }
 .agenda-mes__nota, .agenda-nota { font-size: var(--t-sm); color: var(--tinta-2); margin: 0 0 8px; }
 .agenda-nota { margin-bottom: 24px; max-width: 70ch; }
 .agenda-mes--curso { padding: 4px 20px 8px; background: var(--niebla); border-left: 4px solid var(--azul); }
@@ -472,10 +472,12 @@ main:focus { outline: none; }
 .agenda .evento:target { background: var(--niebla); outline: 3px solid var(--foco); outline-offset: 2px; }
 .evento__hasta { font-size: var(--t-xs); color: var(--tinta-2); margin-bottom: 4px; }
 .agenda-meses { display: flex; flex-wrap: wrap; gap: 6px 14px; margin: -8px 0 28px; font-size: var(--t-sm); font-weight: 700; }
-.minical { position: sticky; top: 90px; width: 216px; border-collapse: collapse; margin-top: 16px; font-size: var(--t-sm); text-align: center; }
-.minical th { font-size: var(--t-xs); color: var(--tinta-2); font-weight: 700; padding: 0 0 6px; }
-.minical td { width: 30px; height: 30px; padding: 1px; }
-.minical td > * { display: grid; place-items: center; width: 28px; height: 28px; margin: auto; border-radius: 4px; color: var(--tinta-2); }
+.minical-caja { position: sticky; top: 150px; width: 288px; margin-top: 16px; padding: 12px 10px 10px; background: var(--papel); border: 1px solid var(--linea); border-top: 4px solid var(--azul); border-radius: 4px; }
+.minical-caja__mes { margin: 0 0 8px; font-size: var(--t-lg); font-weight: 800; color: var(--azul); text-align: center; }
+.minical { width: 100%; border-collapse: collapse; font-size: var(--t-base); text-align: center; }
+.minical th { font-size: var(--t-sm); color: var(--tinta-2); font-weight: 700; padding: 0 0 6px; }
+.minical td { width: 14.28%; height: 38px; padding: 1px; }
+.minical td > * { display: grid; place-items: center; width: 36px; height: 36px; margin: auto; border-radius: 5px; color: var(--tinta-2); }
 .minical td.con a { background: var(--azul); color: var(--sobre-acento); font-weight: 700; text-decoration: none; }
 .minical td.con a:hover { text-decoration: underline; }
 .minical td.es-hoy > * { box-shadow: 0 0 0 2px var(--tinta); color: var(--tinta); font-weight: 800; }
@@ -486,7 +488,7 @@ main:focus { outline: none; }
 .dia__marca { font-size: var(--t-xs); text-transform: uppercase; letter-spacing: .04em; color: var(--sobre-banda-2); }
 @media (max-width: 800px) {
   .agenda-mes__cuerpo { grid-template-columns: 1fr; }
-  .minical { position: static; margin: 8px 0 4px; }
+  .minical-caja { position: static; width: 100%; max-width: 340px; margin: 8px 0 4px; }
 }
 .suscribir { display: flex; flex-wrap: wrap; align-items: center; gap: 12px 20px; margin-bottom: 36px; }
 .suscribir span { font-size: var(--t-sm); color: var(--tinta-2); max-width: 46ch; }
