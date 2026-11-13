@@ -7,6 +7,9 @@ Sitio estático (Python + Jinja2). El contenido sale de Google Drive; la vista p
 - Rehacer la maqueta 3D: `herramientas/rehacer_maqueta.sh`. Regenera los datos desde `herramientas/fuentes/` y rehace las imágenes de respaldo; tarda unos 2,5 min. Con `--sin-fotos` solo regenera los datos y compila, para probar.
 - Probar: `python3 herramientas/pruebas.py`, que es la prueba rápida. Para cambios mayores, `--completa`: celular, ficha, pantalla completa, zonas, respaldos sin 3D y axe. Para ver una zona de la maqueta desde arriba, `--vista=X,Z,ALTO`; en vista oblicua, `--camara=TX,TY,TZ,CX,CY,CZ` (objetivo y cámara; se puede repetir). Las capturas quedan en `.cache/pruebas/`.
 
+- Revisar enlaces: `python3 herramientas/verificar_enlaces.py` (después de compilar; `--externos` revisa internet; `--autoprueba` se prueba a sí mismo). Corre solo en GitHub antes de publicar y cada lunes para los externos.
+- Visitas propias sin cookies: `visitas.js` + `POST /api/visita` + `GET /api/admin/visitas` (ver README, «Visitas y enlaces»). No guardar IP ni navegador ahí.
+
 ## Maqueta 3D
 - Generador: `herramientas/campus3d.py`. Produce `src/data/campus3d.json` y `src/assets/img/campus-suelo.webp`.
   - Por dentro usa los números del croquis; `NUMERACION` los convierte a los 37 lugares publicados.

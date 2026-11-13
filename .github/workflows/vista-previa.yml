@@ -39,6 +39,8 @@ jobs:
       - run: python build.py --vista-previa
         env:
           TZ: America/Costa_Rica
+      - name: Enlaces internos (si hay uno roto, no se publica)
+        run: python herramientas/verificar_enlaces.py
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v3
         with:

@@ -1,0 +1,58 @@
+# Revisa cada lunes los enlaces externos del sitio (internet) y abre, actualiza o cierra un aviso (issue) con el resultado.
+# Los internos ya se revisan en cada publicación (vista-previa.yml). Los 401/403/429 (sitios que bloquean robots) no
+# cuentan como rotos: salen como «para revisar a mano».
+name: Enlaces externos
+
+on:
+  schedule:
+    - cron: "23 13 * * 1"   # lunes 7:23 a. m. (Costa Rica)
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  issues: write
+
+jobs:
+  verificar:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+      - run: pip install jinja2 markdown nh3 pillow
+      - run: python build.py --vista-previa
+        env:
+          TZ: America/Costa_Rica
+      - id: revision
+        run: |
+          set +e
+          python herramientas/verificar_enlaces.py --externos --json enlaces.json | tee informe.txt
+          echo "codigo=${PIPESTATUS[0]}" >> "$GITHUB_OUTPUT"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: informe-enlaces
+          path: |
+            informe.txt
+            enlaces.json
+      - name: Abrir, actualizar o cerrar el aviso
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          titulo="Enlaces rotos: verificación semanal"
+          numero=$(gh issue list --state open --search "\"$titulo\" in:title" --json number --jq '.[0].number // empty')
+          if [ "${{ steps.revision.outputs.codigo }}" != "0" ]; then
+            {
+              echo "Resultado del $(TZ=America/Costa_Rica date '+%d/%m/%Y'):"
+              echo
+              echo '```'
+              head -c 60000 informe.txt
+              echo '```'
+              echo
+              echo "Ejecución: $GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID"
+            } > cuerpo.md
+            if [ -n "$numero" ]; then gh issue edit "$numero" --body-file cuerpo.md; else gh issue create --title "$titulo" --body-file cuerpo.md; fi
+          elif [ -n "$numero" ]; then
+            gh issue close "$numero" --comment "La última verificación no encontró enlaces rotos."
+          fi

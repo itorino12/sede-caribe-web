@@ -146,6 +146,11 @@ En la portada, un congo anda colgado de una rama. Al tocarlo se baja y abre un c
   - En la VM, `bash herramientas/probar_congo.sh --en-vivo` revisa el servicio y hace una pregunta real.
 - **Requisitos de la VM:** unos 1,5 GB de RAM para el servicio. Salida HTTPS a `generativelanguage.googleapis.com` y `pypi.org`, y a `huggingface.co` la primera vez, para bajar el modelo de búsqueda (~220 MB).
 
+## Visitas y enlaces
+
+- **Visitas (sin cookies, sin terceros):** `src/assets/js/visitas.js` envía a `POST /api/visita` solo la ruta (sin parámetros ni ancla), el dominio de origen y si la pantalla es de celular. Se omite en la vista previa y si el navegador pide «No rastrear» (DNT o GPC). El servidor (`servidor/congo/congo/servicios/visitas.py`) cuenta por día, ruta, origen y dispositivo en `/var/lib/sede-congo/visitas.sqlite3`; **no guarda IP, navegador ni textos de búsqueda**, descarta robots y cuenta visitantes distintos con un identificador temporal que vive solo en memoria y cambia cada día. Se apaga con `CONGO_VISITAS=0`. Informe (misma clave y red que el resto de la administración): `curl -H "X-Congo-Clave: …" "https://sedecaribe.ucr.ac.cr/api/admin/visitas?dias=30"` (nginx solo lo deja pasar desde la red de la UCR; también sirve desde la VM con `http://127.0.0.1:8787`). Pasa por la CSP sin cambios (`connect-src 'self'`). Ojo: nginx pide recargar (`nginx -t && systemctl reload nginx`) y el servicio, reiniciarse tras actualizar.
+- **Verificador de enlaces:** `python3 herramientas/verificar_enlaces.py` (después de compilar) revisa enlaces internos, imágenes, scripts, estilos y anclas; las `#lugar-N` del recorrido se validan contra `src/data/lugares.json`. Los que dependen del Joomla anterior (`/images/…`, `/index.php/…`) salen aparte. `--externos` comprueba cada enlace de internet; `--estricto` convierte avisos en error; `--autoprueba` lo prueba con un sitio de muestra. En GitHub: `vista-previa.yml` corre la revisión interna antes de publicar (un enlace interno roto detiene el despliegue) y `enlaces.yml` revisa los externos cada lunes y abre, actualiza o cierra un aviso (issue).
+
 ## Poner en marcha el servidor
 
 1. Pedir al CDI una máquina virtual Ubuntu 24.04 (2 vCPU, 4 GB de RAM) con salida HTTPS a GitHub, googleapis.com, generativelanguage.googleapis.com, pypi.org y huggingface.co, y el DNS de sedecaribe.ucr.ac.cr.
