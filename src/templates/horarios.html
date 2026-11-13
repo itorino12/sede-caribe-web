@@ -8,7 +8,7 @@
   <h4 class="hz-curso__nombre"><span class="hz-curso__sigla">{{ c.sigla }}</span> {{ c.nombre }}</h4>
   <ul class="hz-grupos">
     {% for g in c.grupos %}
-    <li class="hz-grupo">
+    <li class="hz-grupo"{% if g.cod %} data-g="{{ c.sigla }}|{{ g.grupo }}" data-cod="{{ g.cod }}"{% endif %}>
       <span class="hz-grupo__n">Grupo {{ g.grupo }}</span>
       {% if g.modalidad %}<span class="hz-etiqueta">{{ g.modalidad }}</span>{% endif %}{% if g.cerrado %}<span class="hz-etiqueta">Cerrado</span>{% endif %}
       {% for f in g.franjas %}<span class="hz-hora"><b>{{ f.dias }}</b> {{ f.rango }}</span>{% if not g.aula_unica %} {{ aula(f.aula) }}{% endif %}{% endfor %}
@@ -78,5 +78,30 @@
   </div>
 
   <p class="cifras__fuente">Fuente: {{ horarios.fuente }}. Versión {{ horarios.version }}, generada el {{ horarios.generado }}. Los horarios y las aulas pueden cambiar: confirme con su carrera o con la Coordinación de Docencia.</p>
+
+  {# Armador de horario personal (horario-personal.js): todo ocurre en el navegador y se guarda solo ahí. #}
+  <div class="hm-barra" data-hm-barra hidden>
+    <p class="hm-barra__estado" data-hm-resumen aria-live="polite"></p>
+    <button type="button" class="hm-boton hm-boton--fuerte" data-hm-abrir>Ver mi horario</button>
+  </div>
+  <dialog class="hm" data-hm aria-labelledby="hm-titulo">
+    <div class="hm__cab">
+      <h2 id="hm-titulo">Mi horario · {{ horarios.ciclo }}</h2>
+      <button type="button" class="hm-boton" data-hm-cerrar>Cerrar</button>
+    </div>
+    <p class="hm__aviso">Es una ayuda para planear, no una matrícula. Los horarios y las aulas pueden cambiar: confirme con su carrera o con Registro. Se guarda solo en este navegador.</p>
+    <p class="hm__estado" data-hm-estado role="status"></p>
+    <div class="hm__choques" data-hm-choques></div>
+    <div class="hm__cuadro" data-hm-cuadro aria-hidden="true"></div>
+    <h3 class="hm__sub">Cursos y grupos elegidos</h3>
+    <ul class="hm__lista" data-hm-lista></ul>
+    <div class="hm__acciones">
+      <button type="button" class="hm-boton" data-hm-copiar-enlace>Copiar enlace</button>
+      <button type="button" class="hm-boton" data-hm-copiar-texto>Copiar como texto</button>
+      <button type="button" class="hm-boton" data-hm-imprimir>Imprimir o guardar PDF</button>
+      <button type="button" class="hm-boton hm-boton--peligro" data-hm-vaciar>Quitar todo</button>
+    </div>
+  </dialog>
+  <script src="{{ raiz }}assets/js/horario-personal.js" defer data-clave="{{ horarios.clave }}"></script>
 </div>
 {% endblock %}

@@ -24,7 +24,7 @@ from playwright.sync_api import sync_playwright
 RAIZ = Path(__file__).resolve().parent.parent
 SALIDA = RAIZ / ".cache" / "pruebas"
 GL = ["--use-gl=angle", "--use-angle=swiftshader", "--enable-unsafe-swiftshader"]
-PAGINAS_AXE = ["index.html", "estudiar.html", "carreras.html", "admision.html", "la-sede.html", "noticias.html", "agenda.html", "directorio.html",
+PAGINAS_AXE = ["index.html", "horarios.html", "horarios-iiic-2026.html", "estudiar.html", "carreras.html", "admision.html", "la-sede.html", "noticias.html", "agenda.html", "directorio.html",
                "enlaces.html", "contacto.html", "accesibilidad.html", "recorrido.html",
                "unidades/accion-social.html", "accion-social/tcu.html", "accion-social/extension-docente.html", "accion-social/proyectos/tc-479.html",
                "unidades/educacion-continua.html", "unidades/laboratorios.html", "carreras/informatica-empresarial.html", "carreras/contaduria-publica.html", "carreras/administracion-aduanera.html"]
@@ -143,6 +143,88 @@ def asistente(nav, base):
             c.close()
 
 
+def armador(nav, base):
+    """Armador de horario personal (horarios.html): choques, un grupo por curso, guardado, enlace compartido y axe."""
+    print("Armador de horario")
+    BUSCAR = """() => {
+      const g = {};
+      document.querySelectorAll('.hz-grupo[data-g]').forEach(li => {
+        const k = li.dataset.g; if (g[k]) return;
+        const fr = li.dataset.cod.split(';').map(t => { const p = t.split('|'); return {d: p[0].split(',').map(Number), i: +p[1], f: +p[2]}; });
+        g[k] = {s: k.split('|')[0], fr, cerrado: [...li.querySelectorAll('.hz-etiqueta')].some(x => x.textContent.trim() === 'Cerrado')};
+      });
+      const ks = Object.keys(g).filter(k => !g[k].cerrado);
+      const choca = (a, b) => a.fr.some(x => b.fr.some(y => x.d.some(d => y.d.includes(d)) && x.i < y.f && y.i < x.f));
+      let par = null, libre = null, mismo = null;
+      for (let i = 0; i < ks.length; i++) for (let j = i + 1; j < ks.length; j++) {
+        const a = g[ks[i]], b = g[ks[j]];
+        if (a.s === b.s) { mismo = mismo || [ks[i], ks[j]]; continue; }
+        if (choca(a, b)) par = par || [ks[i], ks[j]]; else libre = libre || [ks[i], ks[j]];
+      }
+      return {par, libre, mismo, total: ks.length};
+    }"""
+    TOCAR = "k => document.querySelector('button.hm-agregar[data-hm-clave=\"' + k + '\"]').click()"
+    RESUMEN = "document.querySelector('[data-hm-resumen]').textContent"
+    c = nav.new_context(viewport={"width": 1280, "height": 900}, permissions=["clipboard-read", "clipboard-write"])
+    p = c.new_page(); errores = []
+    p.on("pageerror", lambda e: errores.append(str(e)))
+    p.goto(base + "horarios.html", wait_until="domcontentloaded")
+    datos = p.evaluate(BUSCAR)
+    revisar(datos["total"] > 50 and datos["par"] and datos["libre"] and datos["mismo"], f"hay grupos con horario para probar ({datos['total']})")
+    revisar(p.evaluate("document.querySelectorAll('button.hm-agregar').length") >= datos["total"], "cada grupo tiene su botón")
+    revisar(p.evaluate("document.querySelector('[data-hm-barra]').hidden"), "sin cursos, la barra no se ve")
+    for k in datos["libre"]:
+        p.evaluate(TOCAR, k)
+    revisar("2 cursos" in p.evaluate(RESUMEN) and "choque" not in p.evaluate(RESUMEN), "dos cursos sin choque: " + p.evaluate(RESUMEN))
+    revisar(p.evaluate("!document.querySelector('[data-hm-barra]').hidden"), "con cursos, la barra se ve")
+    p.evaluate(TOCAR, datos["libre"][0]); p.evaluate(TOCAR, datos["libre"][1])
+    for k in datos["par"]:
+        p.evaluate(TOCAR, k)
+    revisar("choque" in p.evaluate(RESUMEN), "dos cursos que chocan: " + p.evaluate(RESUMEN))
+    p.click("[data-hm-abrir]")
+    revisar(p.evaluate("document.querySelector('[data-hm]').open"), "«Ver mi horario» abre la ventana")
+    revisar(p.evaluate("document.querySelectorAll('.hm-bloque--choque').length") >= 2, "los bloques que chocan se marcan")
+    revisar("choca con" in p.inner_text("[data-hm-choques]"), "el choque se explica con texto")
+    p.screenshot(path=str(SALIDA / "armador-pc.png"))
+    p.click("[data-hm-cerrar]")
+    # un curso lleva un solo grupo
+    p.evaluate("document.querySelector('[data-hm-vaciar]').click()")
+    for k in datos["mismo"]:
+        p.evaluate(TOCAR, k)
+    revisar("1 curso" in p.evaluate(RESUMEN), "dos grupos del mismo curso: queda uno solo")
+    # se guarda en el navegador y vuelve al recargar
+    p.evaluate("document.querySelector('[data-hm-vaciar]').click()")
+    for k in datos["libre"]:
+        p.evaluate(TOCAR, k)
+    p.reload(wait_until="domcontentloaded")
+    revisar("2 cursos" in p.evaluate(RESUMEN), "al recargar, el horario sigue ahí")
+    # axe con la ventana abierta
+    axe = leer_axe()
+    for esquema in ("light", "dark"):
+        p.emulate_media(color_scheme=esquema)
+        p.click("[data-hm-abrir]")
+        p.add_script_tag(content=axe)
+        v = p.evaluate("axe.run({runOnly:['wcag2a','wcag2aa','wcag21aa','wcag22aa']}).then(r=>r.violations.map(v=>v.id+' ('+v.nodes.length+')'))")
+        revisar(not v, f"axe con «Mi horario» abierto, {esquema}: {', '.join(v)}")
+        p.click("[data-hm-cerrar]")
+    # enlace compartido
+    p.click("[data-hm-abrir]"); p.click("[data-hm-copiar-enlace]"); p.wait_for_timeout(300)
+    enlace = p.evaluate("navigator.clipboard.readText()")
+    revisar("#mi=" in enlace, "«Copiar enlace» deja el enlace en el portapapeles")
+    c.close()
+    c2 = nav.new_context(viewport={"width": 390, "height": 844}, is_mobile=True, has_touch=True)
+    q = c2.new_page(); q.on("pageerror", lambda e: errores.append(str(e)))
+    q.goto(enlace, wait_until="domcontentloaded")
+    q.wait_for_timeout(500)
+    revisar(q.evaluate("document.querySelector('[data-hm]').open"), "el enlace compartido abre el horario en otro equipo")
+    revisar("2 cursos" in q.evaluate(RESUMEN), "el enlace compartido trae los mismos 2 cursos")
+    revisar(q.evaluate("localStorage.getItem('sede-horario-iic-2026')") is None, "el enlace compartido no pisa lo guardado")
+    q.screenshot(path=str(SALIDA / "armador-celular.png"))
+    revisar(q.evaluate("document.documentElement.scrollWidth <= window.innerWidth + 1"), "celular: la página no se desborda a lo ancho")
+    c2.close()
+    revisar(not errores, f"armador sin errores {errores[:1]}")
+
+
 def completa(nav, base):
     print("Recorrido: ficha, pantalla completa y zonas")
     c, p, e = pagina(nav, base + "recorrido.html#lugar-1")
@@ -188,6 +270,7 @@ def completa(nav, base):
     c.close(); sin3d.close()
 
     asistente(nav, base)
+    armador(nav, base)
 
     print("Accesibilidad (axe)")
     axe = leer_axe()

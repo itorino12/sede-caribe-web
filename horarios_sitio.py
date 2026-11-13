@@ -57,7 +57,8 @@ def _franjas(horas):
             else:
                 unidos.append([i, f])
         for i, f in unidos:
-            salida.append({"dias": _dias(dias), "rango": f"{_hora(i)}–{_hora(f)}", "aula": aula, "_o": (ORDEN_DIA.index(dias[0]) if dias[0] in ORDEN_DIA else 9, i)})
+            salida.append({"dias": _dias(dias), "rango": f"{_hora(i)}–{_hora(f)}", "aula": aula, "_o": (ORDEN_DIA.index(dias[0]) if dias[0] in ORDEN_DIA else 9, i),
+                           "d": [ORDEN_DIA.index(x) for x in dias if x in ORDEN_DIA], "i": i, "f": f})
     salida.sort(key=lambda s: s["_o"])
     for s in salida:
         del s["_o"]
@@ -86,11 +87,13 @@ def armar(horarios, carreras, aulas):
         grupos = []
         for g in c["grupos"]:
             fr = _franjas(g["horas"])
+            # Para el armador de horario del navegador: «días|inicio|fin|aula;…», con días 0 = lunes y minutos desde la medianoche.
+            cod = ";".join(f"{','.join(str(x) for x in f['d'])}|{f['i']}|{f['f']}|{f['aula'] or ''}" for f in fr if f["d"])
             for f in fr:
                 f["aula"] = aula(f["aula"])
             unicas = {(f["aula"]["estado"], f["aula"]["n"]) for f in fr}
             grupos.append({"grupo": g["grupo"], "modalidad": MODALIDAD.get(g["modalidad"], g["modalidad"].capitalize()), "cerrado": g["cerrado"],
-                           "franjas": fr, "aula_unica": fr[0]["aula"] if len(unicas) == 1 else None})
+                           "franjas": fr, "cod": cod, "aula_unica": fr[0]["aula"] if len(unicas) == 1 else None})
         return {"sigla": c["sigla"], "nombre": nombre or NOMBRES.get(c["sigla"]) or c["nombre"], "escuela": c.get("escuela", ""),
                 "color": (area or {}).get("color", ""), "oscuro": (area or {}).get("oscuro", ""), "grupos": grupos}
 

@@ -1121,6 +1121,62 @@ html.sin-desplazar, html.sin-desplazar body { overflow: hidden; }
 a.hz-aula:hover { text-decoration: underline; }
 .hz-aula--aparte { background: transparent; color: var(--tinta-2); border: 1px dashed var(--tinta-2); font-weight: 600; }
 .capac__tablas summary:focus-visible { outline: 3px solid var(--foco); outline-offset: 2px; }
+/* ---- Armador de horario personal (horario-personal.js): botón por grupo, barra inferior y ventana «Mi horario» ---- */
+:root { --hm-peligro: #B00020; }
+:root[data-tema="oscuro"] { --hm-peligro: #FFB4AB; }
+.hm-agregar { margin-left: auto; min-height: 34px; padding: 4px 12px; border: 2px solid var(--azul); border-radius: 999px; background: var(--papel); color: var(--azul); font: inherit; font-weight: 700; font-size: var(--t-xs); cursor: pointer; }
+.hm-agregar:hover { background: var(--niebla); }
+.hm-agregar[aria-pressed="true"] { background: var(--azul); color: var(--sobre-acento, #fff); }
+.hm-agregar:disabled { border-color: var(--linea); color: var(--tinta-2); background: transparent; cursor: not-allowed; }
+.hm-agregar:focus-visible, .hm-boton:focus-visible { outline: 3px solid var(--foco); outline-offset: 2px; }
+.hm-boton { min-height: 40px; padding: 6px 16px; border: 2px solid var(--azul); border-radius: 999px; background: var(--papel); color: var(--azul); font: inherit; font-weight: 700; font-size: var(--t-xs); cursor: pointer; }
+.hm-boton:hover { background: var(--niebla); }
+.hm-boton--peligro { border-color: var(--hm-peligro); color: var(--hm-peligro); }
+.hm-barra { position: fixed; left: 0; right: 0; bottom: 0; z-index: 40; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px 16px; padding: 10px max(16px, env(safe-area-inset-right)) calc(10px + env(safe-area-inset-bottom)) max(16px, env(safe-area-inset-left)); background: var(--banda); color: var(--sobre-banda); box-shadow: 0 -2px 12px rgba(0,0,0,.25); }
+.hm-barra[hidden] { display: none; }
+.hm-barra--choque { background: #7A0019; }
+.hm-barra__estado { margin: 0; font-weight: 600; font-size: var(--t-sm); }
+body.hm-con-barra { padding-bottom: 5rem; }
+.hm { width: min(62rem, 100%); max-width: 100%; max-height: 100dvh; margin: auto; padding: 16px 18px 24px; border: 0; border-radius: 10px; background: var(--papel); color: var(--tinta); overflow: auto; box-shadow: 0 10px 40px rgba(0,0,0,.4); }
+.hm::backdrop { background: rgba(0,0,0,.55); }
+@media (max-width: 40rem) { .hm { width: 100%; height: 100dvh; border-radius: 0; } }
+.hm__cab { position: sticky; top: -16px; z-index: 2; display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 8px 0; background: var(--papel); }
+.hm__cab h2 { margin: 0; font-size: var(--t-lg); }
+.hm__aviso { margin: 4px 0; font-size: var(--t-xs); color: var(--tinta-2); }
+.hm__estado { min-height: 1.3em; margin: 6px 0; font-size: var(--t-xs); font-weight: 600; }
+.hm__choques { margin: 8px 0; padding: 10px 14px; border: 2px solid var(--hm-peligro); border-radius: 6px; font-size: var(--t-sm); }
+.hm__choques:empty { display: none; }
+.hm__choques-t { margin: 0 0 4px; font-weight: 700; color: var(--hm-peligro); }
+.hm__choques ul { margin: 4px 0 0; padding-left: 1.2em; }
+.hm__sub { margin: 20px 0 8px; font-size: var(--t-md); }
+.hm__cuadro { overflow-x: auto; margin: 10px 0; }
+.hm-c__cab, .hm-c__cuerpo { display: grid; grid-template-columns: 2.6rem repeat(var(--hm-dias, 5), minmax(3.4rem, 1fr)); min-width: calc(2.6rem + var(--hm-dias, 5) * 3.4rem); }
+.hm-c__cab span { padding: 4px 0; text-align: center; font-size: var(--t-xs); font-weight: 700; }
+.hm-c__cuerpo { padding-top: .5rem; }
+.hm-c__eje { position: relative; }
+.hm-c__eje span { position: absolute; right: 4px; transform: translateY(-50%); font-size: .7rem; color: var(--tinta-2); }
+.hm-c__dia { position: relative; border-left: 1px solid var(--linea); background-image: repeating-linear-gradient(to bottom, transparent 0, transparent calc(var(--hm-hora, 2.4rem) - 1px), var(--linea) calc(var(--hm-hora, 2.4rem) - 1px), var(--linea) var(--hm-hora, 2.4rem)); }
+.hm-bloque { position: absolute; box-sizing: border-box; padding: 2px 4px; overflow: hidden; border-radius: 4px; color: #fff; font-size: .72rem; line-height: 1.15; box-shadow: inset 0 0 0 1px rgba(255,255,255,.55); }
+.hm-bloque b { display: block; font-size: .76rem; }
+.hm-bloque span { display: block; }
+.hm-bloque--choque { z-index: 1; box-shadow: inset 0 0 0 3px #fff, 0 0 0 2px var(--hm-peligro); }
+.hm__lista { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }
+.hm__vacio { color: var(--tinta-2); }
+.hm-item { display: grid; grid-template-columns: 1fr auto; gap: 4px 12px; align-items: center; padding: 8px 12px; border: 1px solid var(--linea); border-left: 6px solid var(--azul); border-radius: 6px; font-size: var(--t-sm); }
+.hm-item--choque { border-color: var(--hm-peligro); }
+.hm-item__h, .hm-item__choque { grid-column: 1; font-size: var(--t-xs); color: var(--tinta-2); }
+.hm-item__choque { color: var(--hm-peligro); font-weight: 700; }
+.hm-item__aula { margin-left: 10px; }
+.hm-item .hm-boton { grid-column: 2; grid-row: 1 / span 3; }
+.hm__acciones { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 18px; }
+@media print {
+  .hm-imprimiendo body * { visibility: hidden; }
+  .hm-imprimiendo .hm, .hm-imprimiendo .hm * { visibility: visible; }
+  .hm-imprimiendo .hm { position: absolute; left: 0; top: 0; width: 100%; height: auto; max-height: none; overflow: visible; box-shadow: none; }
+  .hm-imprimiendo .hm .hm-boton, .hm-imprimiendo .hm__acciones { display: none; }
+  .hm-bloque, .hm-item { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+}
+
 @media (forced-colors: active) { .sala__puestos i, .puesto-ej { background: CanvasText; forced-color-adjust: none; } }
 
 /* Cuadro de acreditación SINAES al final de la carrera; el sello va sin alterar, sobre fondo blanco (Reglamento SINAES, art. 4 y 7) */
