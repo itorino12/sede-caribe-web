@@ -9,10 +9,11 @@
   {% if vista_previa %}<meta name="robots" content="noindex, nofollow">{% endif %}
   <link rel="canonical" href="{{ sitio.base_url }}/{{ '' if pagina == 'index.html' else pagina }}">
   <meta property="og:site_name" content="UCR Sede del Caribe">
-  <meta property="og:title" content="{{ titulo }}">
+  <meta property="og:title" content="{{ sitio.nombre_largo if pagina == 'index.html' else titulo }}">
   <meta property="og:description" content="{{ descripcion|striptags|truncate(200) }}">
   <meta property="og:locale" content="es_CR">
-  {% block og %}<meta property="og:type" content="website">{% endblock %}
+  {% block og %}<meta property="og:type" content="website"><meta property="og:image" content="{{ sitio.base_url }}/assets/img/og-sitio.jpg"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="630">{% endblock %}
+  <meta name="twitter:card" content="summary_large_image">
   <link rel="icon" href="{{ raiz }}assets/img/favicon.svg" type="image/svg+xml">
   <link rel="icon" href="{{ raiz }}assets/img/favicon-32.png" sizes="32x32" type="image/png">
   <link rel="apple-touch-icon" href="{{ raiz }}assets/img/icono-180.png">
