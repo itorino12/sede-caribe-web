@@ -65,6 +65,23 @@ def cauce(datos, a_maqueta, borde_x):
     return suave, len(q)
 
 
+def con_tramo_arriba(cauce_m, n_plano, tramo):
+    """Cambia el cauce aguas arriba de la alcantarilla de la calle de entrada (CRUCE_ENTRADA) por un trazado dado
+    (anotaciones de la Sede), en metros, de aguas arriba hacia la alcantarilla. Puntos cada ~3 m y la unión suavizada."""
+    c = np.asarray(cauce_m, float)
+    k = int(np.argmin(np.hypot(*(c - np.asarray(CRUCE_ENTRADA[1], float)).T)))
+    t = np.vstack([np.asarray(tramo, float), c[k:k + 1]])
+    largo = np.r_[0, np.cumsum(np.hypot(*np.diff(t, axis=0).T))]
+    fino = np.linspace(0, largo[-1], max(2, int(largo[-1] / 3.0)) + 1)[:-1]
+    arriba = np.c_[np.interp(fino, largo, t[:, 0]), np.interp(fino, largo, t[:, 1])]
+    todo = np.vstack([arriba, c[k:]])
+    n = len(arriba)
+    suave = todo.copy()
+    for i in range(max(1, n - 3), min(len(todo) - 1, n + 3)):
+        suave[i] = todo[max(0, i - 2):i + 3].mean(axis=0)
+    return suave, n_plano - k + n
+
+
 def muestras(datos, a_maqueta):
     """Puntos (x, z, cota) en metros de la maqueta: puntos de cota y curvas de nivel."""
     xyz = [np.asarray(datos["puntos"], float)]
@@ -94,10 +111,12 @@ def armonica(h, fijo, vueltas=4000):
     return h
 
 
-def malla(terreno, muestras_xyz, plataformas, cauce, n_plano, calles, rampas=()):
+def malla(terreno, muestras_xyz, plataformas, cauce, n_plano, calles, rampas=(), llanos=()):
     """Alturas (m, relativas a REFERENCIA) en una malla de PASO metros sobre el terreno de la maqueta.
     plataformas: lista de {"pol", "subir", "suave", "nivel" o "como"} (ver abajo): edificios, explanada, pista...
     rampas: lista de {"puntos", "ancho", "desde", "hasta", "cima"}: franjas que suben de una plataforma a otra.
+    llanos: lista de {"pol", "nivel", "suave"}: zonas que quedan llanas a ese nivel (calles incluidas); se aplican
+    después de las calles junto a la quebrada y antes del cauce, que se sigue excavando.
     cauce, n_plano: eje de la quebrada (m) y cuántos de sus puntos vienen del plano (en ellos el fondo
     siempre baja; en la cola, que sale de la maqueta, sigue al terreno).
     calles: máscara (uint8) de las calles sobre el terreno de la maqueta, a cualquier resolución: ahí el
@@ -175,6 +194,13 @@ def malla(terreno, muestras_xyz, plataformas, cauce, n_plano, calles, rampas=())
         w = w * w * (3 - 2 * w)
         h = np.where(~cerca_q & (w > 0), h * (1 - w) + h[idx[0], idx[1]] * w, h)
 
+    for ll in llanos:
+        m = np.zeros(X.shape, np.uint8)
+        cv2.fillPoly(m, [a_celda(ll["pol"])], 1)
+        d = distance_transform_edt(m == 0) * PASO
+        w = np.clip(1 - d / max(ll.get("suave", 8.0), 1e-3), 0, 1)
+        w = w * w * (3 - 2 * w)
+        h = h * (1 - w) + ll["nivel"] * w
     # cauce: el fondo baja siempre aguas abajo; se excava salvo bajo las calles (alcantarillas y puente)
     c = np.asarray(cauce, float)
     ci = np.clip(np.round((c[:, 1] - zs[0]) / PASO).astype(int), 0, nz - 1)

@@ -244,6 +244,26 @@ SENDERO_ANTERIOR = [(948, 1466), (912, 1439), (883, 1417), (863, 1384), (862, 13
                     (934, 1245), (945, 1212), (925, 1188), (899, 1157), (887, 1141)]
 SENDERO_EXPLANADA = [(974, 1443), (922, 1401), (868, 1339), (878, 1317), (908, 1283),
                      (934, 1245), (945, 1212), (925, 1188), (899, 1157), (887, 1141)]
+# (anotaciones) la quebrada, aguas arriba de la alcantarilla de la calle de entrada (19): viene del oeste, por el sur
+# de la explanada y al norte de Docencia, y baja al norte hasta la alcantarilla. En metros de la maqueta
+QUEBRADA_ARRIBA = [(-170.0, -51.5), (-155.0, -47.5), (-140.0, -42.8), (-125.0, -37.4), (-112.0, -33.0), (-100.0, -31.0),
+                   (-91.0, -29.6), (-84.5, -26.0), (-79.0, -18.0), (-75.5, -9.0), (-73.5, -1.0)]
+# (anotaciones) zonas llanas (m de la maqueta, sobre REFERENCIA): el relieve del plano se empareja ahí. La entrada
+# (calles, caseta del guarda, pórtico y el frente del auditorio), la carretera frente a la entrada, la orilla de la
+# quebrada entre la piscina y el puente, el puente, y el área de picnic de residencias, al nivel de la calle
+NIVEL_ENTRADA = 1.5
+LLANOS = [
+    {"pol": [(-20.0, -29.0), (-28.0, -28.5), (-42.0, -37.0), (-49.0, -59.0), (-57.5, -74.0), (-57.0, -87.0),
+             (-52.0, -106.0), (-30.0, -112.0), (-20.0, -104.0), (-19.0, -60.0)], "nivel": NIVEL_ENTRADA, "suave": 8.0},
+    {"pol": [(-60.3, -103.3), (-75.1, -93.1), (-97.7, -97.7), (-119.1, -98.1), (-109.3, -118.5), (-90.6, -129.3),
+             (-67.9, -128.1), (-50.0, -124.0), (-40.0, -112.0)], "nivel": NIVEL_ENTRADA, "suave": 22.0},
+    {"pol": [(82.1, -15.8), (78.1, -26.6), (87.0, -30.2), (102.7, -23.1), (108.0, -15.3), (106.7, -7.7), (96.6, -8.6)],
+     "nivel": 0.0, "suave": 8.0},
+    {"pol": [(103.0, -17.0), (117.0, -17.0), (118.5, 6.0), (104.0, 6.0)], "nivel": 0.0, "suave": 8.0},
+    {"pol": [(120.0, 8.0), (133.7, 11.0), (144.0, 11.5), (157.8, 13.0), (169.0, 18.0), (181.0, 23.5), (183.0, 31.5),
+             (174.0, 42.0), (164.0, 52.0), (149.0, 54.0), (129.0, 53.0), (126.0, 40.0), (123.0, 25.0), (121.0, 14.0)],
+     "nivel": 2.5, "suave": 6.0},
+]
 # explanada (anotaciones): todo el zacate abierto dentro de la vuelta del sendero, que la delimita al este
 # la explanada es la cima del cerro emparejada: es parte del relieve (plataforma a nivel), sin taludes propios.
 # El sendero que llega a ella sigue el terreno, que a lo largo del sendero sube parejo desde la plaza del auditorio
@@ -1082,6 +1102,10 @@ def main(pdf, sat=None):
     datos_relieve = relieve.cargar()
     a_maqueta = relieve.registro(datos_relieve, [(relieve.CRUCE_PUENTE, a_metros(*PUENTE["centro"])), relieve.CRUCE_ENTRADA] + relieve.ENTRE_MALLAS)
     cauce_m, n_plano = relieve.cauce(datos_relieve, a_maqueta, borde_x=a_metros(x1, y0)[0])
+    # los árboles se siguen despejando con el trazado anterior (ver SENDERO_ANTERIOR); el nuevo tramo se despeja al final
+    quebrada_arboles = np.zeros_like(calles)
+    cv2.polylines(quebrada_arboles, [np.round([(x / ESCALA + ORIGEN[0], z / ESCALA + ORIGEN[1]) for x, z in cauce_m]).astype(np.int32)], False, 255, 13)
+    cauce_m, n_plano = relieve.con_tramo_arriba(cauce_m, n_plano, QUEBRADA_ARRIBA)
     suave = np.array([(x / ESCALA + ORIGEN[0], z / ESCALA + ORIGEN[1]) for x, z in cauce_m], np.float32)
     cv2.polylines(quebrada, [np.round(suave).astype(np.int32)], False, 255, 13)
     lejos_carretera = cv2.distanceTransform((carretera == 0).astype(np.uint8), cv2.DIST_L2, 5)
@@ -1175,7 +1199,7 @@ def main(pdf, sat=None):
     # alrededor de la piscina van el deck, los baños, los vestidores y el parqueo de bicicletas: sin árboles
     pcx_, pcy_, pl_, pa_, pg_ = PISCINA_RECT
     cv2.fillPoly(lejos_edificios, [np.array(rect_contorno(pcx_, pcy_, pl_ + 150, pa_ + 150, pg_), np.int32)], 1)
-    lejos_edificios |= cv2.dilate((quebrada > 0).astype(np.uint8), np.ones((25, 25), np.uint8))   # sin árboles en el cauce
+    lejos_edificios |= cv2.dilate((quebrada_arboles > 0).astype(np.uint8), np.ones((25, 25), np.uint8))   # sin árboles en el cauce
     cv2.circle(lejos_edificios, PLANTA_ARBOLES["centro"], 115, 1, -1)
     cv2.fillPoly(lejos_edificios, [np.array(rect_contorno(*PARQUEO["rect"]), np.int32)], 1)
     lejos_edificios |= extra["despejar"]
@@ -1221,6 +1245,8 @@ def main(pdf, sat=None):
             for pol in contornos_px(e):
                 cv2.fillPoly(nuevos_, [np.array(pol, np.int32)], 1)
     nuevos_ = cv2.dilate(nuevos_, cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (73, 73)))
+    lejos_q_ = cv2.distanceTransform((quebrada == 0).astype(np.uint8), cv2.DIST_L2, 5) * ESCALA   # cauce nuevo: sin troncos encima
+    arboles = [a for a in arboles if lejos_q_[a_px_(*a["p"])[1], a_px_(*a["p"])[0]] > 2.5]
     arboles = [a for a in arboles if not extra["despejar_post"][a_px_(*a["p"])[1], a_px_(*a["p"])[0]]
                and not nuevos_[a_px_(*a["p"])[1], a_px_(*a["p"])[0]]]
     arboles = [a for a in arboles if lejos_pista[a_px_(*a["p"])[1], a_px_(*a["p"])[0]] * ESCALA >= a["r"] + 0.5
@@ -1464,8 +1490,8 @@ def main(pdf, sat=None):
     pts_ex += [(x / ESCALA + ORIGEN[0], z / ESCALA + ORIGEN[1]) for x, z in sendero["puntos"]]
     casco = cv2.convexHull(np.array(pts_ex, np.float32))[:, 0]
     i_excavado = len(plataformas)
-    plataformas.append({"pol": [a_metros(float(x), float(y)) for x, y in casco], "nivel_de": [a_metros(float(x), float(y)) for x, y in
-                        np.argwhere(extra["plaza"] > 0)[:, ::-1][::50]], "suave": 2.0})
+    # (anotaciones) la plaza y el frente del auditorio quedan llanos, al nivel de la calle y de la entrada
+    plataformas.append({"pol": [a_metros(float(x), float(y)) for x, y in casco], "nivel": NIVEL_ENTRADA, "suave": 2.0})
     plataformas += [{"pol": pol} for pol in poligonos(extra["plaza"])]
     cima = int(np.argmin([math.dist(p, a_metros(*CIMA_SENDERO)) for p in sendero["puntos"]]))
     rampas = [{"puntos": sendero["puntos"], "ancho": sendero["ancho"] + 2, "desde": i_excavado, "hasta": i_explanada, "cima": cima}]
@@ -1475,7 +1501,7 @@ def main(pdf, sat=None):
             pts = np.array([(x / ESCALA + ORIGEN[0], z / ESCALA + ORIGEN[1]) for x, z in el["puntos"]], np.int32)
             cv2.polylines(tubo, [pts], False, 255, int(el.get("ancho", 2) / ESCALA) + 4)
     info_r, alturas, _ = relieve.malla(terreno, relieve.muestras(datos_relieve, a_maqueta), plataformas, cauce_m, n_plano,
-                                      tubo[y0:y1, x0:x1], rampas)
+                                      tubo[y0:y1, x0:x1], rampas, LLANOS)
     print(f"Relieve: {info_r['nx']}x{info_r['nz']} celdas de {info_r['paso']} m, de {alturas.min():.1f} a {alturas.max():.1f} m")
 
     datos = {
