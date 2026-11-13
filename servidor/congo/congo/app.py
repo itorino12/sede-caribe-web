@@ -18,6 +18,7 @@ from .documentos.repositorio import Repositorio
 from .seguridad import Cupo
 from .servicios.chat import Chat
 from .servicios.recuperacion import Recuperacion
+from .servicios.visitas import Visitas
 
 log = logging.getLogger("congo")
 LIMITE_JSON = 64 * 1024
@@ -32,6 +33,7 @@ class Servicios:
     cupo: Cupo
     proveedor: object
     sincronizador: object = None
+    visitas: object = None
 
 
 def crear_servicios(config, proveedor=None, embebedor=None):
@@ -43,7 +45,7 @@ def crear_servicios(config, proveedor=None, embebedor=None):
     prov = proveedor or proveedores.crear(config)
     from .ingesta import Sincronizador
     return Servicios(config, repo, rec, Chat(rec, prov, repo.registro), Cupo(config.por_hora, config.por_dia), prov,
-                     Sincronizador(repo, config))
+                     Sincronizador(repo, config), Visitas(config.datos / "visitas.sqlite3") if config.visitas else None)
 
 
 def _ciclo_sincronizacion(s, parar):
@@ -96,8 +98,9 @@ def crear_app(config=None, servicios=None):
         log.exception("error no controlado en %s", request.url.path)  # sin el contenido de la pregunta
         return JSONResponse({"success": False, "error": "error interno"}, status_code=500)
 
-    from .rutas import admin, consultas, documentos
+    from .rutas import admin, consultas, documentos, visitas
     app.include_router(consultas.rutas)
+    app.include_router(visitas.rutas)
     app.include_router(documentos.rutas)
     app.include_router(admin.rutas)
     return app

@@ -18,6 +18,7 @@ Variables (todas opcionales salvo la llave del proveedor elegido):
   SEDE_WEB               carpeta publicada del sitio (/var/www/sede): se indexan sus páginas
   CONGO_SINCRONIZAR_MIN  cada cuántos minutos se sincronizan Drive y el sitio (10; 0 = nunca)
   CONGO_DOCS             1 para publicar la documentación OpenAPI en /api/docs
+  CONGO_VISITAS          0 para apagar el conteo de visitas (por omisión, encendido; ver servicios/visitas.py)
 """
 import os
 from dataclasses import dataclass, field
@@ -58,6 +59,7 @@ class Config:
     web: Path = Path("/var/www/sede")
     sincronizar_min: int = 10
     docs: bool = False
+    visitas: bool = True
     extra: dict = field(default_factory=dict)
 
     @classmethod
@@ -81,4 +83,5 @@ class Config:
             web=Path(e.get("SEDE_WEB", "/var/www/sede")),
             sincronizar_min=int(e.get("CONGO_SINCRONIZAR_MIN", "10")),
             docs=e.get("CONGO_DOCS", "") == "1",
+            visitas=e.get("CONGO_VISITAS", "1") != "0",
         )

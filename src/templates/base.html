@@ -163,5 +163,6 @@
 
   <script src="{{ raiz }}assets/js/indice.js" defer></script>
   <script src="{{ raiz }}assets/js/sede.js" defer data-raiz="{{ raiz }}"></script>
+  {% if not vista_previa %}<script src="{{ raiz }}assets/js/visitas.js" defer></script>{% endif %}
 </body>
 </html>

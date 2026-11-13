@@ -31,3 +31,11 @@ def categorias(request: Request):
 async def sincronizar(request: Request):
     informe = await run_in_threadpool(request.app.state.s.sincronizador.todo)
     return {"success": True, "informe": informe}
+
+
+@rutas.get("/visitas", summary="Visitas del sitio: por día, páginas más vistas, orígenes y dispositivos")
+def visitas(request: Request, dias: int = 30):
+    v = request.app.state.s.visitas
+    if v is None:
+        return {"success": False, "error": "el conteo de visitas está apagado (CONGO_VISITAS=0)"}
+    return {"success": True, **v.informe(dias)}
