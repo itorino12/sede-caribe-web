@@ -207,6 +207,20 @@ def armador(nav, base):
     lista = p.inner_text("[data-hm-lista]")
     revisar(all(n in lista for n in datos["pareja"]["nums"]), "la lista muestra ambos grupos de la pareja " + " y ".join(datos["pareja"]["nums"]))
     revisar(p.evaluate("document.querySelectorAll('.hm-bloque').length") >= 2, "el cuadro dibuja los bloques de teoría y práctica")
+    # imprimir: el diálogo modal sale en blanco, así que se imprime una copia en la página (se simula window.print)
+    p.evaluate("window.print = () => { window.__imp = 1; }")
+    p.click("[data-hm-imprimir]")
+    p.emulate_media(media="print")
+    imp = p.evaluate("""() => { const c = document.querySelector('.hm-impresion'); if (!c) return null;
+      const vis = (e) => getComputedStyle(e).display !== 'none';
+      return {visible: vis(c), bloques: c.querySelectorAll('.hm-bloque').length, lista: c.querySelectorAll('.hm__lista li').length,
+              botones: [...c.querySelectorAll('.hm-boton')].filter(vis).length, otros: [...document.body.children].filter(e => e !== c && vis(e)).length}; }""")
+    p.emulate_media(media="screen")
+    revisar(p.evaluate("window.__imp") == 1, "«Imprimir» llama a la impresión")
+    revisar(imp and imp["visible"] and imp["bloques"] >= 2 and imp["lista"] >= 1, f"al imprimir se ve el horario (cuadro y lista): {imp}")
+    revisar(imp and imp["botones"] == 0 and imp["otros"] == 0, "al imprimir no salen botones ni el resto de la página")
+    p.evaluate("window.dispatchEvent(new Event('afterprint'))")
+    revisar(p.evaluate("!document.querySelector('.hm-impresion')"), "tras imprimir se quita la copia")
     p.click("[data-hm-cerrar]")
     p.evaluate("document.querySelector('[data-hm-vaciar]').click()")
     siglas = datos["pareja"]["k"].split("|")[0]

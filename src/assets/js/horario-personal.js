@@ -354,8 +354,21 @@
     else if (t.hasAttribute("data-hm-copiar-texto")) copiar(comoTexto(), "Horario copiado como texto.");
     else if (t.hasAttribute("data-hm-vaciar")) { cambiar([], "Se quitaron todos los cursos."); cerrar(); }
     else if (t.hasAttribute("data-hm-imprimir")) {
+      // El diálogo modal vive en la «capa superior» del navegador y sale en blanco al imprimir: se imprime una copia en la página.
+      var copia = document.createElement("div");
+      copia.className = "hm-impresion";
+      Array.prototype.forEach.call(raiz.children, function (n) {
+        if (n.matches(".hm__acciones, .hm__cab")) {
+          if (n.matches(".hm__cab")) { var h = n.querySelector("h2"); if (h) { var t = document.createElement("h2"); t.textContent = h.textContent; copia.appendChild(t); } }
+          return;
+        }
+        copia.appendChild(n.cloneNode(true));
+      });
+      document.body.appendChild(copia);
       document.documentElement.classList.add("hm-imprimiendo");
-      var fin = function () { document.documentElement.classList.remove("hm-imprimiendo"); window.removeEventListener("afterprint", fin); };
+      var fin = function () {
+        document.documentElement.classList.remove("hm-imprimiendo"); copia.remove(); window.removeEventListener("afterprint", fin);
+      };
       window.addEventListener("afterprint", fin);
       window.print();
     } else if (t === raiz && e.target === raiz) cerrar(); // clic en el fondo

@@ -1187,12 +1187,16 @@ body.hm-con-barra { padding-bottom: 5rem; }
 .hm-item__choque { color: var(--hm-peligro); font-weight: 700; }
 .hm-item__aula { margin-left: 10px; }
 .hm-item .hm-boton { grid-column: 2; grid-row: 1 / span 3; }
+.hm-impresion { display: none; }
 .hm__acciones { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 18px; }
 @media print {
-  .hm-imprimiendo body * { visibility: hidden; }
-  .hm-imprimiendo .hm, .hm-imprimiendo .hm * { visibility: visible; }
-  .hm-imprimiendo .hm { position: absolute; left: 0; top: 0; width: 100%; height: auto; max-height: none; overflow: visible; box-shadow: none; }
-  .hm-imprimiendo .hm .hm-boton, .hm-imprimiendo .hm__acciones { display: none; }
+  .hm-imprimiendo body > *:not(.hm-impresion) { display: none !important; }
+  .hm-imprimiendo .hm-impresion { display: block; color: #000; background: #fff; padding: 0; }
+  .hm-impresion .hm-boton { display: none; }
+  .hm-impresion .hm__sub { break-after: avoid; }
+  .hm-impresion .hm__lista li { break-inside: avoid; }
+  .hm-impresion h2 { margin: 0 0 8px; font-size: 1.25rem; }
+  .hm-impresion .hm__cuadro { overflow: visible; }
   .hm-bloque, .hm-item { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
 }
 
