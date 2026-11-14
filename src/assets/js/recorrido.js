@@ -898,12 +898,43 @@ if (datos.campus.plaza_entrada) {
   });
   tex.wrapS = tex.wrapT = THREE.RepeatWrapping; tex.repeat.set(1 / TESELA, 1 / TESELA);
   const forma = new THREE.Shape(poligono.map(([x, z]) => new THREE.Vector2(x, -z)));
-  const geo = new THREE.ShapeGeometry(forma).rotateX(-Math.PI / 2).translate(0, 0.04, 0);
+  // La plaza es un polígono de pocos triángulos y el terreno sube y baja bajo ella: si no se divide en piezas chicas, el
+  // terreno asoma por el medio y solo se ven los extremos (el «parche gris»). Con piezas de ~1 m, «asentar» la dobla bien.
+  const teselar = (g0, paso) => {
+    const P = g0.attributes.position, U = g0.attributes.uv, I = g0.index, pos = [], uv = [], v = new THREE.Vector3(), w = new THREE.Vector3();
+    const punto = (a, b, c, i, j, n) => {
+      return [0, 1, 2].map((e) => {
+        const f = e === 0 ? "getX" : e === 1 ? "getY" : "getZ";
+        return P[f](a) + (P[f](b) - P[f](a)) * i / n + (P[f](c) - P[f](a)) * j / n;
+      });
+    };
+    const uvPunto = (a, b, c, i, j, n) => [0, 1].map((e) => {
+      const f = e === 0 ? "getX" : "getY";
+      return U[f](a) + (U[f](b) - U[f](a)) * i / n + (U[f](c) - U[f](a)) * j / n;
+    });
+    for (let t = 0; t < I.count; t += 3) {
+      const a = I.getX(t), b = I.getX(t + 1), c = I.getX(t + 2);
+      v.fromBufferAttribute(P, a); w.fromBufferAttribute(P, b); const ab = v.distanceTo(w);
+      v.fromBufferAttribute(P, c); const bc = v.distanceTo(w); w.fromBufferAttribute(P, a); const ca = v.distanceTo(w);
+      const n = Math.max(1, Math.ceil(Math.max(ab, bc, ca) / paso));
+      const emitir = (...vs) => { for (const [i, j] of vs) { pos.push(...punto(a, b, c, i, j, n)); uv.push(...uvPunto(a, b, c, i, j, n)); } };
+      for (let i = 0; i < n; i++) for (let j = 0; j < n - i; j++) {
+        emitir([i, j], [i + 1, j], [i, j + 1]);
+        if (i + j < n - 1) emitir([i + 1, j], [i + 1, j + 1], [i, j + 1]);
+      }
+    }
+    const g = new THREE.BufferGeometry();
+    g.setAttribute("position", new THREE.Float32BufferAttribute(pos, 3));
+    g.setAttribute("uv", new THREE.Float32BufferAttribute(uv, 2));
+    g.computeVertexNormals();
+    return g;
+  };
+  const geo = teselar(new THREE.ShapeGeometry(forma), 1).rotateX(-Math.PI / 2).translate(0, 0.04, 0);
   const plaza = new THREE.Group();
   const piso = new THREE.Mesh(geo, new THREE.MeshLambertMaterial({ map: tex, polygonOffset: true, polygonOffsetFactor: -1, polygonOffsetUnits: -2 }));
   piso.receiveShadow = true; plaza.add(piso);
   const [[ax, az], [bx, bz]] = borde_zacate, L = Math.hypot(bx - ax, bz - az);
-  const banda = new THREE.Mesh(new THREE.BoxGeometry(L, 0.06, 0.4), new THREE.MeshLambertMaterial({ color: 0xc47876 }));
+  const banda = new THREE.Mesh(new THREE.BoxGeometry(L, 0.06, 0.4, Math.ceil(L / 1.2), 1, 1), new THREE.MeshLambertMaterial({ color: 0xc47876 }));
   banda.position.set((ax + bx) / 2, 0.05, (az + bz) / 2); banda.rotation.y = Math.atan2(-(bz - az), bx - ax); banda.receiveShadow = true;
   plaza.add(banda);
   escena.add(plaza);

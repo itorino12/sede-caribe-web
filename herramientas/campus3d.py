@@ -1365,12 +1365,6 @@ def main(pdf, sat=None):
     if len(extra["cerca"]) > 1:
         cerca.append([a_metros(float(x), float(y)) for x, y in extra["cerca"]])
         pass
-    # (anotaciones) la cerca de la ruta 32 sigue, pegada al borde sur de esa calle interna, hasta una pared que sostiene el portón
-    # de entrada a la Universidad, junto a la calle que baja a la entrada
-    fin_cerca = min((t[k] for t in cerca for k in (0, -1)), key=lambda q: math.dist(q, (-101.25, -102.5)))
-    if math.dist(fin_cerca, (-101.25, -102.5)) < 6:
-        cerca.append([fin_cerca, (-99.2, Z_CERCA_CALLE), (X_PARED_PORTON - 2.75, Z_CERCA_CALLE)])
-        elementos.append({"tipo": "muro", "id": None, "p": [X_PARED_PORTON, Z_CERCA_CALLE], "giro": 0, "largo": 5.5, "alto": 2.4, "grueso": 0.5})
     # la cerca empalma con los postes del portón de la pista y del de residencias
     for pe in (porton["postes"] if porton else []) + (porton_res["postes"] if porton_res else []):
         mejor = min(((t, k) for t in cerca for k in (0, -1)), key=lambda tk: math.dist(tk[0][tk[1]], pe))
@@ -1409,6 +1403,13 @@ def main(pdf, sat=None):
             porton_n["p"] = [round((E_[0] + M_[0]) / 2, 2), round((E_[1] + M_[1]) / 2, 2)]
             porton_n["giro"] = round(math.atan2(-uz_p, ux_p), 3)
             porton_n["hoja"] = round(L_p / 2 - 0.1, 2)
+    # (anotaciones) la cerca de la ruta 32 sigue, pegada al borde sur de esa calle interna, hasta una pared que sostiene el portón
+    # de entrada a la Universidad, junto a la calle que baja a la entrada. Va DESPUÉS de calcular el portón del acceso, que toma
+    # como referencia el último tramo de `cerca` (la franja de zacate): no se puede agregar antes.
+    fin_cerca = min((t[k] for t in cerca for k in (0, -1)), key=lambda q: math.dist(q, (-101.25, -102.5)))
+    if math.dist(fin_cerca, (-101.25, -102.5)) < 6:
+        cerca.append([fin_cerca, (-99.2, Z_CERCA_CALLE), (X_PARED_PORTON - 2.75, Z_CERCA_CALLE)])
+        elementos.append({"tipo": "muro", "id": None, "p": [X_PARED_PORTON, Z_CERCA_CALLE], "giro": 0, "largo": 5.5, "alto": 2.4, "grueso": 0.5})
     # (anotaciones) mallas de la zona de residencias, iguales a la perimetral. Las dos que bordean la quebrada
     # arrancan pegadas a la baranda este del puente (36); la del norte sube luego hasta la cerca de la ruta 32 y la
     # del sur cierra con la que baja hasta la cerca del sur. Otra rodea las residencias por el norte, llega a un
