@@ -30,6 +30,8 @@ import relieve
 
 RAIZ = Path(__file__).resolve().parent.parent
 ESCALA = 0.25            # metros por píxel del croquis (aprox.: el gimnasio queda de ~49 x 38 m)
+Z_CERCA_CALLE = -95.2        # cerca al borde sur de la calle interna que sale a la ruta 32 (oeste de la calle de la Biblioteca)
+X_PARED_PORTON = -59.6       # pared que sostiene el portón de esa calle, junto a la calle que baja a la entrada
 ORIGEN = (1200, 1500)    # píxel del croquis que queda en el centro de la maqueta
 RECORTE = (0, 850, 2165, 3248)   # zona del croquis que es mapa (sin títulos ni leyendas)
 PISO = 4.2               # altura de un piso, en metros
@@ -754,6 +756,8 @@ def lugares_nuevos(calles, quebrada, lejos_carretera, y_ruta32):
                 (b[0] - nx_ * wb / 2, b[1] - nz_ * wb / 2), (a[0] - nx_ * wa / 2, a[1] - nz_ * wa / 2)]
     for pol_ in (tira_((110.5, -16.6), (158.6, -12.5), 6.4, 5.0), [(-2.6, -111.9), (4.12, -115.38), (4.75, -121.8), (-1.6, -121.8)]):
         cv2.fillPoly(calles_extra, [np.array([a_px(x, z) for x, z in pol_], np.int32)], 255)
+    # (anotaciones) la calle interna que sale al oeste de la calle de la Biblioteca no terminaba en nada: sigue hasta la ruta 32
+    cv2.fillPoly(calles_extra, [np.array([a_px(x, z) for x, z in [(-97.4, -107.0), (-88.5, -107.0), (-88.5, -101.0), (-97.4, -101.0)]], np.int32)], 255)
     cv2.line(despejar, a_px(110.5, -16.6), a_px(158.6, -12.5), 1, int(12 / ESCALA))
     raya_ = lambda a, b: cv2.line(rayas, tuple(int(round(k * 2)) for k in a_px(*a)), tuple(int(round(k * 2)) for k in a_px(*b)), 255, 2)
     # (anotaciones) entrada asfaltada desde la calle hasta las aulas 18 a 23 (25)
@@ -1361,6 +1365,12 @@ def main(pdf, sat=None):
     if len(extra["cerca"]) > 1:
         cerca.append([a_metros(float(x), float(y)) for x, y in extra["cerca"]])
         pass
+    # (anotaciones) la cerca de la ruta 32 sigue, pegada al borde sur de esa calle interna, hasta una pared que sostiene el portón
+    # de entrada a la Universidad, junto a la calle que baja a la entrada
+    fin_cerca = min((t[k] for t in cerca for k in (0, -1)), key=lambda q: math.dist(q, (-101.25, -102.5)))
+    if math.dist(fin_cerca, (-101.25, -102.5)) < 6:
+        cerca.append([fin_cerca, (-99.2, Z_CERCA_CALLE), (X_PARED_PORTON - 2.75, Z_CERCA_CALLE)])
+        elementos.append({"tipo": "muro", "id": None, "p": [X_PARED_PORTON, Z_CERCA_CALLE], "giro": 0, "largo": 5.5, "alto": 2.4, "grueso": 0.5})
     # la cerca empalma con los postes del portón de la pista y del de residencias
     for pe in (porton["postes"] if porton else []) + (porton_res["postes"] if porton_res else []):
         mejor = min(((t, k) for t in cerca for k in (0, -1)), key=lambda tk: math.dist(tk[0][tk[1]], pe))

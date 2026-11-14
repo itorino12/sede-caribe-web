@@ -1715,8 +1715,15 @@ if (datos.campus.parqueo) {
   function portonPeatonal({ p, giro, ancho = 1.4 }) {
     const g = portonVerde(false, ancho / 2); g.position.set(p[0], 0, p[1]); g.rotation.y = giro; escena.add(g);
   }
+  // pared de concreto (anotaciones): la que sostiene un portón; larga en x antes de girar
+  function muro({ p, giro = 0, largo, alto, grueso }) {
+    const m = new THREE.Mesh(new THREE.BoxGeometry(largo, alto, grueso), mate(0xe9e7e0, { roughness: 0.9 }));
+    m.position.y = alto / 2;
+    const g = new THREE.Group(); g.add(m); g.position.set(p[0], 0, p[1]); g.rotation.y = giro;
+    registrar(g, null);
+  }
   for (const el of datos.campus.elementos || []) {
-    const hacer = { pasillo, caseta, parqueo, bancas, escalera, rampa, descanso, mesas, explanada, alcantarilla, jardin, pluma, comedor, tanque,
+    const hacer = { muro, pasillo, caseta, parqueo, bancas, escalera, rampa, descanso, mesas, explanada, alcantarilla, jardin, pluma, comedor, tanque,
       acera, cebra, porton_peatonal: portonPeatonal, puente_peatonal: puentePeatonal, arbol_grande: arbolGrande,
       ruedas_tren: ruedasTren, congos, carport }[el.tipo];
     if (hacer) hacer(el);
