@@ -227,6 +227,7 @@ main:focus { outline: none; }
 .portada__acciones { display: flex; flex-wrap: wrap; gap: 8px 22px; margin: 0; font-weight: 700; }
 .portada__acciones a { color: #fff; text-decoration-color: currentColor; text-decoration-thickness: 2px; text-underline-offset: 4px; }
 .portada__acciones a:hover { text-decoration-thickness: 3px; }
+.buscador-portada-visible .buscar-boton { visibility: hidden; }  /* la portada ya muestra su propio buscador */
 /* Foto según el modo: la entrada de día en claro y de noche en oscuro (en «Visítenos», al revés) */
 .foto-noche { display: none; }
 :root[data-tema="oscuro"] .foto-dia { display: none; }

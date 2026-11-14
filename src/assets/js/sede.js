@@ -88,6 +88,14 @@
     d.showModal(); campo.value = q; buscar(q); campo.focus();
   });
 
+  // ---------- portada: una sola búsqueda a la vista (la lupa del encabezado se oculta mientras se ve el buscador de la portada)
+  var buscarPortada = $(".portada__buscar");
+  if (buscarPortada && "IntersectionObserver" in window) {
+    new IntersectionObserver(function (e) {
+      document.body.classList.toggle("buscador-portada-visible", e[0].isIntersecting);
+    }).observe(buscarPortada);
+  }
+
   // ---------- filtros por botón (carreras por área, noticias por tema)
   $$("[data-filtro]").forEach(function (grupo) {
     var objetivo = document.getElementById(grupo.dataset.filtro);
