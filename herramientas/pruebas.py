@@ -330,6 +330,74 @@ def propuestas(nav, base):
     c.close()
 
 
+def visita(nav, base):
+    """Visita guiada: avanza sola, pausa, salta, cede ante la persona, termina; también sin WebGL y en celular."""
+    print("Visita guiada")
+    c, p, e = pagina(nav, base + "recorrido.html")
+    p.wait_for_selector(".mapa3d--listo", timeout=120000)
+    titulo = lambda: p.inner_text(".mapa3d__ficha-titulo")
+    cuenta = lambda: p.inner_text("[data-visita-cuenta]")
+    nombres = p.evaluate("JSON.parse(document.getElementById('datos-campus').textContent).lugares.sort((a,b)=>a.id-b.id).map(l=>[l.nombre, l.texto||''])")
+    p.click("[data-visita-iniciar]"); p.wait_for_timeout(1500)
+    revisar(p.is_visible("[data-visita-barra]") and cuenta() == f"1 / {len(nombres)}" and titulo() == nombres[0][0], f"empieza en el lugar 1 ({cuenta()}, {titulo()})")
+    revisar(p.evaluate("document.activeElement.matches('[data-visita-pausa]')"), "el foco pasa al botón de pausa")
+    revisar(not p.is_visible("[data-vista-general]") and not p.is_visible(".mapa3d__zonas"), "durante la visita se apartan vista general y zonas")
+    p.screenshot(path=str(SALIDA / "visita.png"))
+    p.click("[data-visita-despues]"); p.wait_for_timeout(300)
+    revisar(titulo() == nombres[1][0] and cuenta().startswith("2 /"), "Siguiente pasa al lugar 2")
+    p.click("[data-visita-antes]"); p.wait_for_timeout(300)
+    revisar(titulo() == nombres[0][0] and p.is_disabled("[data-visita-antes]"), "Anterior vuelve al 1 y en el primero se desactiva")
+    # la cámara gira alrededor mientras sigue la visita y se queda quieta en pausa
+    ang = "document.querySelector('.mapa3d__brujula').style.transform"
+    p.wait_for_timeout(1200); a0 = p.evaluate(ang); p.wait_for_timeout(1000); a1 = p.evaluate(ang)
+    revisar(a0 != a1, "en cada lugar la cámara gira despacio")
+    p.click("[data-visita-pausa]"); p.wait_for_timeout(500)
+    ang = "Math.round(parseFloat(document.querySelector('.mapa3d__brujula').style.transform.slice(7)) * 10)"
+    a0 = p.evaluate(ang); p.wait_for_timeout(1000); a1 = p.evaluate(ang)
+    revisar(p.get_attribute("[data-visita-pausa]", "aria-pressed") == "true" and a0 == a1, "Pausa detiene el giro")
+    p.wait_for_timeout(9000)
+    revisar(cuenta().startswith("1 /"), "en pausa no avanza")
+    # avance automático: el lugar con la ficha más corta dura 8 s
+    corto = min(range(len(nombres)), key=lambda i: len((nombres[i][0] + " " + nombres[i][1]).split()))
+    for _ in range(corto): p.click("[data-visita-despues]")
+    p.click("[data-visita-pausa]")
+    p.wait_for_timeout(9500)
+    revisar(cuenta().startswith(f"{corto + 2} /"), f"avanza solo después de leer ({cuenta()})")
+    p.click(".lugares [data-lugar='10']"); p.wait_for_timeout(500)
+    revisar(p.get_attribute("[data-visita-pausa]", "aria-pressed") == "true" and cuenta().startswith("10 /"), "elegir otro lugar pausa la visita en ese lugar")
+    p.click("[data-visita-pausa]"); p.wait_for_timeout(400)
+    revisar(cuenta().startswith("11 /"), "al seguir, continúa con el siguiente al elegido")
+    p.add_script_tag(content=leer_axe())
+    v = p.evaluate("axe.run(document.querySelector('.ancho'), {runOnly:['wcag2a','wcag2aa','wcag21aa','wcag22aa']}).then(r=>r.violations.map(v=>v.id+' ('+v.nodes.length+')'))")
+    revisar(not v, f"axe con la visita en marcha {', '.join(v)}")
+    p.click("[data-visita-fin]"); p.wait_for_timeout(300)
+    revisar(not p.is_visible("[data-visita-barra]") and p.is_visible("[data-vista-general]") and "Visita guiada" in p.inner_text("[data-visita-iniciar]"), "Terminar quita la barra y devuelve los botones")
+    p.click("[data-visita-iniciar]"); p.wait_for_timeout(300); p.click(".mapa3d__ficha-cerrar"); p.wait_for_timeout(300)
+    revisar(not p.is_visible("[data-visita-barra]"), "cerrar la ficha termina la visita")
+    revisar(not e, f"visita sin errores {e[:1]}")
+    c.close()
+
+    c, p, e = pagina(nav, base + "recorrido.html#visita", {"width": 360, "height": 740}, is_mobile=True, has_touch=True)
+    p.wait_for_selector(".mapa3d--listo", timeout=120000); p.wait_for_timeout(2000)
+    revisar(p.is_visible("[data-visita-barra]") and not p.locator(".mapa3d__ficha").is_hidden(), "#visita la inicia sola (celular)")
+    b = p.locator("[data-visita-barra]").bounding_box(); q = p.locator("[data-pantalla]").bounding_box(); f = p.locator(".mapa3d__ficha").bounding_box()
+    revisar(b["x"] + b["width"] <= q["x"] and b["y"] + b["height"] <= f["y"], "en celular la barra no tapa pantalla completa ni la ficha")
+    p.locator(".mapa3d__escena").screenshot(path=str(SALIDA / "visita-celular.png"))
+    revisar(not e, f"visita en celular sin errores {e[:1]}")
+    c.close()
+
+    sin3d = nav.browser_type.launch(args=["--disable-webgl", "--disable-3d-apis"])
+    c, p, e = pagina(sin3d, base + "recorrido.html")
+    p.wait_for_selector(".mapa3d--giro", timeout=30000)
+    p.click("[data-visita-iniciar]"); p.wait_for_timeout(500)
+    revisar(p.inner_text(".mapa3d__ficha-titulo") == nombres[0][0], "sin WebGL la visita abre la ficha del lugar 1")
+    p.click("[data-visita-despues]"); p.wait_for_timeout(300)
+    revisar(p.inner_text(".mapa3d__ficha-titulo") == nombres[1][0], "sin WebGL Siguiente funciona")
+    p.locator(".mapa3d__escena").screenshot(path=str(SALIDA / "visita-sin3d.png"))
+    revisar(not e, f"visita sin WebGL sin errores {e[:1]}")
+    c.close(); sin3d.close()
+
+
 def completa(nav, base):
     print("Recorrido: ficha, pantalla completa y zonas")
     c, p, e = pagina(nav, base + "recorrido.html#lugar-1")
@@ -378,6 +446,7 @@ def completa(nav, base):
     armador(nav, base)
     busqueda(nav, base)
     propuestas(nav, base)
+    visita(nav, base)
 
     print("Accesibilidad (axe)")
     axe = leer_axe()
@@ -429,6 +498,7 @@ def main():
     a = argparse.ArgumentParser()
     a.add_argument("--completa", action="store_true")
     a.add_argument("--vista")
+    a.add_argument("--solo", choices=["visita", "busqueda", "armador", "propuestas", "asistente"], help="una sola prueba, sin la rápida")
     a.add_argument("--camara", action="append", default=[], help="objetivo y cámara: TX,TY,TZ,CX,CY,CZ (se puede repetir)")
     args = a.parse_args()
     if not (RAIZ / "dist" / "index.html").exists():
@@ -437,7 +507,10 @@ def main():
     s, base = servidor()
     with sync_playwright() as pw:
         nav = pw.chromium.launch(args=GL)
-        rapida(nav, base)
+        if args.solo:
+            globals()[args.solo](nav, base)
+        else:
+            rapida(nav, base)
         if args.completa:
             completa(nav, base)
         if args.vista:

@@ -1349,3 +1349,29 @@ body.hm-con-barra { padding-bottom: 5rem; }
 .red:hover .red__ir span, .red:focus-visible .red__ir span { transform: translateX(6px); }
 :root[data-tema="oscuro"] .red--tiktok { --c: #444; }
 .redes-portada { padding-block: 8px 24px; }
+
+/* Visita guiada del recorrido (recorrido-visita.js) */
+.visita { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 14px; margin: 0 0 14px; }
+.visita__iniciar { min-height: 44px; }
+.visita__ayuda { margin: 0; flex: 1 1 260px; font-size: var(--t-sm); color: var(--tinta-2); }
+.visita-barra { position: absolute; top: 12px; left: 12px; z-index: 3; display: flex; align-items: center; gap: 6px; padding: 4px 6px 7px;
+  border-radius: 24px; background: rgba(255,255,255,.95); box-shadow: 0 2px 10px rgba(0,30,60,.2); overflow: hidden; }
+.visita-barra[hidden] { display: none; }
+:root[data-tema="oscuro"] .visita-barra { background: var(--papel); }
+.visita-barra__cuenta { min-width: 3.4em; text-align: center; font-size: var(--t-sm); font-weight: 700; font-variant-numeric: tabular-nums; color: var(--tinta); }
+.visita-barra__pausa svg { width: 20px; height: 20px; }
+.visita-barra__icono-seguir, .mapa3d--visita-pausada .visita-barra__icono-pausa { display: none; }
+.mapa3d--visita-pausada .visita-barra__icono-seguir { display: block; }
+.visita-barra button:disabled { opacity: .4; cursor: default; }
+/* línea de tiempo del lugar: se llena mientras dura; en pausa se detiene */
+.visita-barra__tiempo { position: absolute; left: 14px; right: 14px; bottom: 3px; height: 3px; border-radius: 2px; background: var(--zona, #005DA4);
+  transform-origin: left; animation: visita-tiempo var(--visita-ms, 10s) linear forwards; }
+.mapa3d--visita-pausada .visita-barra__tiempo { animation-play-state: paused; }
+@keyframes visita-tiempo { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+:root[data-movimiento="no"] .visita-barra__tiempo { display: none; }
+/* durante la visita la cámara la lleva la visita: se apartan brújula, acercar, alejar, vista general y zonas */
+.mapa3d--visita .mapa3d__brujula, .mapa3d--visita [data-acercar], .mapa3d--visita [data-alejar],
+.mapa3d--visita [data-vista-general], .mapa3d--visita .mapa3d__zonas { display: none; }
+/* sin 3D la barra va arriba de la maqueta giratoria, en su propio renglón */
+.mapa3d--giro .visita-barra { position: relative; top: auto; left: auto; order: -1; align-self: flex-start; margin: 8px; }
+@media (prefers-reduced-motion: reduce) { .visita-barra__tiempo { display: none; } }

@@ -5,7 +5,7 @@ Sitio estático (Python + Jinja2). El contenido sale de Google Drive; la vista p
 ## Comandos
 - Compilar: `python3 build.py --vista-previa` (sale en `dist/`).
 - Rehacer la maqueta 3D: `herramientas/rehacer_maqueta.sh`. Regenera los datos desde `herramientas/fuentes/` y rehace las imágenes de respaldo; tarda unos 2,5 min. Con `--sin-fotos` solo regenera los datos y compila, para probar.
-- Probar: `python3 herramientas/pruebas.py`, que es la prueba rápida. Para cambios mayores, `--completa`: celular, ficha, pantalla completa, zonas, respaldos sin 3D y axe. Para ver una zona de la maqueta desde arriba, `--vista=X,Z,ALTO`; en vista oblicua, `--camara=TX,TY,TZ,CX,CY,CZ` (objetivo y cámara; se puede repetir). Las capturas quedan en `.cache/pruebas/`.
+- Probar: `python3 herramientas/pruebas.py`, que es la prueba rápida. Para cambios mayores, `--completa`: celular, ficha, pantalla completa, zonas, respaldos sin 3D y axe. Para ver una zona de la maqueta desde arriba, `--vista=X,Z,ALTO`; en vista oblicua, `--camara=TX,TY,TZ,CX,CY,CZ` (objetivo y cámara; se puede repetir). Las capturas quedan en `.cache/pruebas/`. `--solo=visita|busqueda|armador|propuestas|asistente` corre una sola prueba.
 
 - Rótulos QR de los lugares: `python3 herramientas/qr_lugares.py [--base URL] --verificar` (PDF en `.cache/qr-lugares.pdf`; usa `base_url` de la hoja; `--verificar` decodifica cada QR).
 - Revisar enlaces: `python3 herramientas/verificar_enlaces.py` (después de compilar; `--externos` revisa internet; `--autoprueba` se prueba a sí mismo). Corre solo en GitHub antes de publicar y cada lunes para los externos.
@@ -21,6 +21,7 @@ Sitio estático (Python + Jinja2). El contenido sale de Google Drive; la vista p
   - `recorrido-config.js`: prioridad de los números y `FRENTE_PORTADA`.
   - `recorrido-ficha.js`: la ficha de cada lugar.
   - `recorrido-giro.js` y `portada-giro.js`: los respaldos sin 3D.
+  - `recorrido-visita.js`: visita guiada (pasa por los lugares con el botón `[data-lugar]` de la lista, sirve sin 3D; en 3D pide el giro con el evento `visita-giro`; `recorrido.html#visita` la inicia sola). Prueba sola: `pruebas.py --solo=visita`.
   - `recorrido-busqueda.js`: buscador de lugares, aulas y dependencias (lee `#datos-campus`; al elegir activa el botón `[data-lugar]` de la lista, así sirve también sin 3D).
 - Relieve y quebrada: del plano de conjunto de la OEPI (2010, `herramientas/fuentes/plano-oepi-2010.pdf`). `herramientas/relieve_oepi.py` saca cotas, curvas y cauce a `fuentes/relieve-oepi.json` (las cotas se leyeron a mano y están escritas en el script); `herramientas/relieve.py` los lleva a la maqueta (placa delgada con los edificios comunes y el puente) y arma la malla de alturas (`relieve` en `campus3d.json`, decímetros). Del plano solo se usan relieve y quebrada: su infraestructura es vieja.
   - En el visor, `alturaEn(x, z)` da la altura del terreno. Al final del armado, «asentar»: un lugar con altura (< 75 m) se sube entero y el terreno se empareja bajo su huella (`userData.talud` cambia el talud); lo lineal (`userData.lineal`: pasillos, aceras, cercas) y lo plano a ras del suelo siguen el terreno tramo a tramo. Lo que se agregue después se arma en y = 0, como siempre.

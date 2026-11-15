@@ -2049,6 +2049,17 @@ if (PORTADA) {
   controles.enableZoom = false; controles.enablePan = false;
   controles.minPolarAngle = controles.maxPolarAngle = 0.98;   // solo gira alrededor, sin inclinarse
 }
+// visita guiada (recorrido-visita.js): en cada lugar, ya llegada la cámara, gira despacio alrededor
+let visitaGira = false;
+if (!PORTADA) {
+  controles.autoRotateSpeed = 0.8;   // unos 75 s por vuelta
+  raiz.addEventListener("visita-giro", (e) => {
+    visitaGira = !!e.detail && !sinMovimiento;
+    // en pausa se detiene en seco: un paso sin amortiguación consume la inercia que quedaba del giro
+    if (!visitaGira) { controles.autoRotate = false; controles.enableDamping = false; controles.update(); controles.enableDamping = !sinMovimiento; }
+    pedirDibujo();
+  });
+}
 
 // ---------- marcas numeradas (botones HTML encima del lienzo)
 // Cada número tiene un ancla 3D fija (sobre el punto más alto de su lugar) que se calcula una sola vez. En cada
@@ -2362,6 +2373,7 @@ function dibujar(ahora) {
     camara.position.lerpVectors(viaje.de[1], viaje.a[1], s);
     if (k >= 1) viaje = null; else seguir = true;
   }
+  if (!PORTADA) controles.autoRotate = visitaGira && !viaje;
   if (controles.update(paso)) seguir = true;   // con amortiguación, sigue hasta detenerse
   const d = camara.position.distanceTo(controles.target);
   escena.fog.near = d * 1.2; escena.fog.far = d * 3;

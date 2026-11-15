@@ -12,6 +12,11 @@
     <p id="busqueda-estado" class="busqueda__estado" data-busqueda-estado role="status"></p>
     <ul class="busqueda__lista" data-busqueda-lista></ul>
   </form>
+  <div class="visita">
+    <button type="button" class="boton visita__iniciar" data-visita-iniciar><span aria-hidden="true">▶</span> Visita guiada</button>
+    <p class="visita__ayuda">Recorre los lugares uno por uno y muestra la ficha de cada uno. Se puede pausar, saltar o terminar en cualquier momento.</p>
+    <p class="oculto" role="status" data-visita-estado></p>
+  </div>
   {% set portada = False %}{% include "_mapa3d.html" %}
 
   <section class="lugares" aria-labelledby="lugares-titulo">
@@ -33,6 +38,7 @@
 </div>
 <script type="application/json" id="datos-campus">{{ {"campus": campus3d, "lugares": lugares}|tojson }}</script>
 <script type="module" src="{{ raiz }}assets/js/recorrido-busqueda.js"></script>
+<script type="module" src="{{ raiz }}assets/js/recorrido-visita.js"></script>
 <script type="module">
   // si la maqueta 3D no llega a cargar (red o caché del navegador), queda la maqueta giratoria y no un cuadro vacío
   const js = (ruta) => new URL(ruta, document.baseURI).href;

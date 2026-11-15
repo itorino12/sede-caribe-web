@@ -14,6 +14,19 @@
           <svg class="mapa3d__icono-cerrar" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M9 4v5H4M15 4v5h5M9 20v-5H4M15 20v-5h5"/></svg>
         </button>
       </div>
+      {% if not portada %}
+      <div class="visita-barra" data-visita-barra role="group" aria-label="Visita guiada" hidden>
+        <button type="button" class="mapa3d__redondo" data-visita-antes aria-label="Lugar anterior">‹</button>
+        <button type="button" class="mapa3d__redondo visita-barra__pausa" data-visita-pausa aria-pressed="false" aria-label="Pausar la visita">
+          <svg class="visita-barra__icono-pausa" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 5h3.5v14H7zM13.5 5H17v14h-3.5z" fill="currentColor"/></svg>
+          <svg class="visita-barra__icono-seguir" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z" fill="currentColor"/></svg>
+        </button>
+        <button type="button" class="mapa3d__redondo" data-visita-despues aria-label="Lugar siguiente">›</button>
+        <span class="visita-barra__cuenta" data-visita-cuenta></span>
+        <button type="button" class="mapa3d__redondo" data-visita-fin aria-label="Terminar la visita">×</button>
+        <span class="visita-barra__tiempo" data-visita-tiempo aria-hidden="true"></span>
+      </div>
+      {% endif %}
       <div class="mapa3d__zonas" role="group" aria-label="Ir a una zona del campus">
         {% for z in [1, 2, 3, 4] %}<button type="button" class="mapa3d__zona mapa3d__chip--z{{ z }}" data-zona="{{ z }}" aria-pressed="false"><span class="mapa3d__chip"></span>Zona {{ z }}</button>{% endfor %}
       </div>

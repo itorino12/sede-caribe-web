@@ -146,6 +146,9 @@ En la portada, un congo anda colgado de una rama. Al tocarlo se baja y abre un c
   - En la VM, `bash herramientas/probar_congo.sh --en-vivo` revisa el servicio y hace una pregunta real.
 - **Requisitos de la VM:** unos 1,5 GB de RAM para el servicio. Salida HTTPS a `generativelanguage.googleapis.com` y `pypi.org`, y a `huggingface.co` la primera vez, para bajar el modelo de búsqueda (~220 MB).
 
+### Visita guiada
+En el recorrido, «Visita guiada» pasa por los 37 lugares en orden: abre la ficha de cada uno, la deja el tiempo de leerla (de 8 a 20 s, según el largo del texto) y, en 3D, gira despacio alrededor. Tiene anterior, pausa, siguiente y terminar. Si la persona toca la maqueta o la ficha, se pausa; si elige otro lugar, al seguir continúa desde ahí; cerrar la ficha la termina. Con la pestaña oculta espera. `recorrido.html#visita` la inicia sola (útil para una pantalla en la entrada). Funciona igual sin 3D.
+
 ### Rótulos QR del campus
 `python3 herramientas/qr_lugares.py --verificar` genera `.cache/qr-lugares.pdf` (A4, 6 rótulos por página, guías de corte): un QR por lugar que abre `recorrido.html#lugar-N`. Usa `base_url` de la hoja de configuración; si se imprime antes de que el dominio oficial esté en uso, los QR no abrirán nada hasta entonces (`--base` permite generar con otra dirección, por ejemplo la vista previa). Los lugares y números salen de `lugares.json`: si cambia la numeración, hay que reimprimir.
 
