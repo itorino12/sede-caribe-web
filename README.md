@@ -27,6 +27,8 @@ Carpeta raíz del sitio, compartida como **Lector** con la cuenta de servicio de
 Sitio web Sede del Caribe/
 ├── Contenido del sitio        Hoja de cálculo (una pestaña por tabla)
 ├── Páginas/                   Un Documento de Google por página de texto largo
+│   └── docencia/              Una carpeta por carrera con el PDF de su plan de estudios (no se sincroniza:
+│                              el sitio enlaza cada PDF por su dirección de Drive, que no cambia al moverlo)
 ├── Imágenes/                  Fotos de noticias y páginas
 └── Guía para editores         Cómo publicar, paso a paso
 ```
