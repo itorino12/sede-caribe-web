@@ -31,6 +31,20 @@
     });
   });
   document.addEventListener("click", function (e) { if (!e.target.closest(".menu__item--sub")) cerrarSubs(); });
+  // Al desplazar la página con el menú desplegado (submenús en PC, panel en celular), el menú se cierra.
+  // Se ignoran movimientos de menos de 24 px para no cerrarlo por un roce.
+  var yMenu = 0;
+  document.addEventListener("click", function () { yMenu = window.scrollY; }, true);
+  window.addEventListener("scroll", function () {
+    if (Math.abs(window.scrollY - yMenu) < 24) return;
+    var hayAbierto = subs.some(function (b) { return b.getAttribute("aria-expanded") === "true"; });
+    if (hayAbierto) cerrarSubs();
+    if (menu && menu.classList.contains("abierto")) {
+      menu.classList.remove("abierto");
+      if (botonMenu) botonMenu.setAttribute("aria-expanded", "false");
+    }
+    yMenu = window.scrollY;
+  }, { passive: true });
   document.addEventListener("keydown", function (e) {
     if (e.key === "Escape") { var abierto = subs.filter(function (b) { return b.getAttribute("aria-expanded") === "true"; })[0]; if (abierto) { cerrarSubs(); abierto.focus(); } }
   });
