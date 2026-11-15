@@ -337,40 +337,47 @@ def visita(nav, base):
     p.wait_for_selector(".mapa3d--listo", timeout=120000)
     titulo = lambda: p.inner_text(".mapa3d__ficha-titulo")
     cuenta = lambda: p.inner_text("[data-visita-cuenta]")
+    # clic directo en el DOM: el clic de Playwright espera a que el botón esté quieto y, con la escena girando
+    # en una máquina sin GPU, eso tarda más que el tiempo de un lugar
+    pulsar = lambda sel: p.evaluate("s => document.querySelector(s).click()", sel)
     nombres = p.evaluate("JSON.parse(document.getElementById('datos-campus').textContent).lugares.sort((a,b)=>a.id-b.id).map(l=>[l.nombre, l.texto||''])")
     p.click("[data-visita-iniciar]"); p.wait_for_timeout(1500)
     revisar(p.is_visible("[data-visita-barra]") and cuenta() == f"1 / {len(nombres)}" and titulo() == nombres[0][0], f"empieza en el lugar 1 ({cuenta()}, {titulo()})")
     revisar(p.evaluate("document.activeElement.matches('[data-visita-pausa]')"), "el foco pasa al botón de pausa")
     revisar(not p.is_visible("[data-vista-general]") and not p.is_visible(".mapa3d__zonas"), "durante la visita se apartan vista general y zonas")
     p.screenshot(path=str(SALIDA / "visita.png"))
-    p.click("[data-visita-despues]"); p.wait_for_timeout(300)
-    revisar(titulo() == nombres[1][0] and cuenta().startswith("2 /"), "Siguiente pasa al lugar 2")
-    p.click("[data-visita-antes]"); p.wait_for_timeout(300)
+    # los saltos se prueban en pausa: con la escena girando, en una máquina sin GPU cada clic tarda tanto que la visita avanzaría sola
+    pulsar("[data-visita-pausa]"); p.wait_for_timeout(300)
+    revisar(p.get_attribute("[data-visita-pausa]", "aria-pressed") == "true", "Pausa queda marcada")
+    pulsar("[data-visita-despues]"); p.wait_for_timeout(300)
+    revisar(titulo() == nombres[1][0] and cuenta().startswith("2 /"), f"Siguiente pasa al lugar 2 ({cuenta()}, {titulo()})")
+    pulsar("[data-visita-antes]"); p.wait_for_timeout(300)
     revisar(titulo() == nombres[0][0] and p.is_disabled("[data-visita-antes]"), "Anterior vuelve al 1 y en el primero se desactiva")
-    # la cámara gira alrededor mientras sigue la visita y se queda quieta en pausa
-    ang = "document.querySelector('.mapa3d__brujula').style.transform"
-    p.wait_for_timeout(1200); a0 = p.evaluate(ang); p.wait_for_timeout(1000); a1 = p.evaluate(ang)
-    revisar(a0 != a1, "en cada lugar la cámara gira despacio")
-    p.click("[data-visita-pausa]"); p.wait_for_timeout(500)
-    ang = "Math.round(parseFloat(document.querySelector('.mapa3d__brujula').style.transform.slice(7)) * 10)"
-    a0 = p.evaluate(ang); p.wait_for_timeout(1000); a1 = p.evaluate(ang)
-    revisar(p.get_attribute("[data-visita-pausa]", "aria-pressed") == "true" and a0 == a1, "Pausa detiene el giro")
     p.wait_for_timeout(9000)
     revisar(cuenta().startswith("1 /"), "en pausa no avanza")
+    # la cámara gira alrededor mientras sigue la visita y se queda quieta en pausa
+    crudo = "document.querySelector('.mapa3d__brujula').style.transform"   # sin GPU hay pocos cuadros: se compara sin redondear
+    pulsar("[data-visita-pausa]"); p.wait_for_timeout(1500)
+    a0 = p.evaluate(crudo); p.wait_for_timeout(1500); a1 = p.evaluate(crudo)
+    revisar(a0 != a1, "en cada lugar la cámara gira despacio")
+    ang = "Math.round(parseFloat(document.querySelector('.mapa3d__brujula').style.transform.slice(7)) * 10)"
+    pulsar("[data-visita-pausa]"); p.wait_for_timeout(500)
+    a0 = p.evaluate(ang); p.wait_for_timeout(1000); a1 = p.evaluate(ang)
+    revisar(a0 == a1, "Pausa detiene el giro")
     # avance automático: el lugar con la ficha más corta dura 8 s
     corto = min(range(len(nombres)), key=lambda i: len((nombres[i][0] + " " + nombres[i][1]).split()))
-    for _ in range(corto): p.click("[data-visita-despues]")
-    p.click("[data-visita-pausa]")
+    for _ in range(corto): pulsar("[data-visita-despues]")
+    pulsar("[data-visita-pausa]")
     p.wait_for_timeout(9500)
     revisar(cuenta().startswith(f"{corto + 2} /"), f"avanza solo después de leer ({cuenta()})")
     p.click(".lugares [data-lugar='10']"); p.wait_for_timeout(500)
     revisar(p.get_attribute("[data-visita-pausa]", "aria-pressed") == "true" and cuenta().startswith("10 /"), "elegir otro lugar pausa la visita en ese lugar")
-    p.click("[data-visita-pausa]"); p.wait_for_timeout(400)
+    pulsar("[data-visita-pausa]"); p.wait_for_timeout(400)
     revisar(cuenta().startswith("11 /"), "al seguir, continúa con el siguiente al elegido")
     p.add_script_tag(content=leer_axe())
     v = p.evaluate("axe.run(document.querySelector('.ancho'), {runOnly:['wcag2a','wcag2aa','wcag21aa','wcag22aa']}).then(r=>r.violations.map(v=>v.id+' ('+v.nodes.length+')'))")
     revisar(not v, f"axe con la visita en marcha {', '.join(v)}")
-    p.click("[data-visita-fin]"); p.wait_for_timeout(300)
+    pulsar("[data-visita-fin]"); p.wait_for_timeout(300)
     revisar(not p.is_visible("[data-visita-barra]") and p.is_visible("[data-vista-general]") and "Visita guiada" in p.inner_text("[data-visita-iniciar]"), "Terminar quita la barra y devuelve los botones")
     p.click("[data-visita-iniciar]"); p.wait_for_timeout(300); p.click(".mapa3d__ficha-cerrar"); p.wait_for_timeout(300)
     revisar(not p.is_visible("[data-visita-barra]"), "cerrar la ficha termina la visita")
@@ -391,11 +398,48 @@ def visita(nav, base):
     p.wait_for_selector(".mapa3d--giro", timeout=30000)
     p.click("[data-visita-iniciar]"); p.wait_for_timeout(500)
     revisar(p.inner_text(".mapa3d__ficha-titulo") == nombres[0][0], "sin WebGL la visita abre la ficha del lugar 1")
-    p.click("[data-visita-despues]"); p.wait_for_timeout(300)
+    pulsar("[data-visita-despues]"); p.wait_for_timeout(300)
     revisar(p.inner_text(".mapa3d__ficha-titulo") == nombres[1][0], "sin WebGL Siguiente funciona")
     p.locator(".mapa3d__escena").screenshot(path=str(SALIDA / "visita-sin3d.png"))
     revisar(not e, f"visita sin WebGL sin errores {e[:1]}")
     c.close(); sin3d.close()
+
+
+def sin_conexion(nav, base):
+    """Sitio sin conexión: guardar, recorrido 3D sin red, página no guardada, aviso, borrar."""
+    print("Sin conexión")
+    c, p, e = pagina(nav, base + "sin-conexion.html")
+    p.evaluate("navigator.serviceWorker.ready"); p.reload(); p.wait_for_timeout(500)
+    revisar(p.evaluate("!!navigator.serviceWorker.controller"), "el service worker controla la página")
+    revisar("MB" in p.inner_text("[data-sc-guardar]"), "el botón dice cuánto pesa: " + p.inner_text("[data-sc-guardar]"))
+    p.click("[data-sc-guardar]")
+    p.wait_for_function("document.querySelector('[data-sc-estado]').textContent.startsWith('Listo')", timeout=90000)
+    revisar("Listo: ya puede" in p.inner_text("[data-sc-estado]"), "guarda el paquete: " + p.inner_text("[data-sc-estado]"))
+    revisar(p.locator("[data-sc-lista] li").count() >= 9, f"lista lo guardado ({p.locator('[data-sc-lista] li').count()} páginas)")
+    p.add_script_tag(content=leer_axe())
+    v = p.evaluate("axe.run(document.querySelector('main'), {runOnly:['wcag2a','wcag2aa','wcag21aa','wcag22aa']}).then(r=>r.violations.map(v=>v.id+' ('+v.nodes.length+')'))")
+    revisar(not v, f"axe en sin-conexion.html {', '.join(v)}")
+    c.set_offline(True)
+    p.goto(base + "recorrido.html#lugar-5", wait_until="domcontentloaded")
+    try:
+        p.wait_for_selector(".mapa3d--listo", timeout=60000); listo = True
+    except Exception:
+        listo = False
+    revisar(listo, "sin red, el recorrido 3D carga desde lo guardado")
+    p.wait_for_timeout(1500)
+    revisar(p.evaluate("!document.querySelector('.mapa3d__ficha').hidden"), "sin red, la ficha del lugar abre")
+    revisar(p.is_visible("[data-sin-red]"), "sin red, aparece el aviso de copia guardada")
+    p.goto(base + "directorio.html", wait_until="domcontentloaded")
+    revisar(p.locator("main h1").count() == 1 and p.evaluate("getComputedStyle(document.body).fontFamily").startswith("\"Source"), "sin red, el directorio se ve con su estilo")
+    p.goto(base + "noticias.html", wait_until="domcontentloaded"); p.wait_for_timeout(500)
+    revisar("sin-conexion.html?pedida=" in p.url and p.is_visible("[data-sc-pedida]"), "una página no guardada lleva a «qué hay guardado»: " + p.url[-45:])
+    p.screenshot(path=str(SALIDA / "sin-conexion.png"), full_page=True)
+    c.set_offline(False)
+    p.goto(base + "sin-conexion.html"); p.wait_for_timeout(500)
+    p.click("[data-sc-borrar]"); p.wait_for_timeout(800)
+    revisar(p.evaluate("caches.keys().then(ks => Promise.all(ks.filter(n => n.startsWith('sede-')).map(n => caches.open(n).then(c => c.keys())))).then(l => l.flat().length)") == 0 and "Todavía nada" in p.inner_text("[data-sc-lista]"), "Borrar deja vacío lo guardado")
+    revisar(not e, f"sin conexión sin errores {e[:1]}")
+    c.close()
 
 
 def completa(nav, base):
@@ -447,6 +491,7 @@ def completa(nav, base):
     busqueda(nav, base)
     propuestas(nav, base)
     visita(nav, base)
+    sin_conexion(nav, base)
 
     print("Accesibilidad (axe)")
     axe = leer_axe()
@@ -498,7 +543,7 @@ def main():
     a = argparse.ArgumentParser()
     a.add_argument("--completa", action="store_true")
     a.add_argument("--vista")
-    a.add_argument("--solo", choices=["visita", "busqueda", "armador", "propuestas", "asistente"], help="una sola prueba, sin la rápida")
+    a.add_argument("--solo", choices=["sin_conexion", "visita", "busqueda", "armador", "propuestas", "asistente"], help="una sola prueba, sin la rápida")
     a.add_argument("--camara", action="append", default=[], help="objetivo y cámara: TX,TY,TZ,CX,CY,CZ (se puede repetir)")
     args = a.parse_args()
     if not (RAIZ / "dist" / "index.html").exists():

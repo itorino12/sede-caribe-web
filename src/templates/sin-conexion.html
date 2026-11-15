@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% from "_macros.html" import encabezado with context %}
+{% block contenido %}
+{{ encabezado("Usar el sitio sin conexión", [], raiz, "Guarde en este teléfono o computadora las páginas de más uso, para consultarlas aunque no tenga señal ni datos.") }}
+<div class="ancho pagina">
+  <div class="prosa sc" data-sin-conexion>
+    <p class="sc__aviso" data-sc-pedida hidden></p>
+    <p>Las páginas que usted abre quedan guardadas solas. Con el botón se guardan de una vez las de más consulta: la portada, el recorrido 3D del campus, los horarios, el directorio, la agenda, las carreras y el contacto. Cada vez que vuelva a tener conexión, el sitio muestra lo más reciente.</p>
+    <p class="sc__nota">No incluye los documentos PDF, los videos ni el asistente (el congo), que necesitan conexión.</p>
+    <div class="sc__panel" data-sc-panel hidden>
+      <label class="sc__fotos"><input type="checkbox" data-sc-fotos> Incluir las fotos de los lugares y noticias <span data-sc-tam-fotos></span></label>
+      <div class="sc__botones">
+        <button type="button" class="boton" data-sc-guardar>Guardar en este dispositivo <span data-sc-tam></span></button>
+        <button type="button" class="boton boton--secundario" data-sc-borrar hidden>Borrar lo guardado</button>
+      </div>
+      <progress data-sc-avance max="1" value="0" hidden aria-label="Avance al guardar"></progress>
+      <p class="sc__estado" role="status" data-sc-estado></p>
+      <h2>Guardado en este dispositivo</h2>
+      <ul class="sc__lista" data-sc-lista></ul>
+    </div>
+    <p data-sc-sin-soporte hidden>Este navegador no permite guardar el sitio para usarlo sin conexión. Las páginas se verán solo con conexión.</p>
+  </div>
+</div>
+<script src="{{ raiz }}assets/js/sin-conexion.js" defer></script>
+{% endblock %}

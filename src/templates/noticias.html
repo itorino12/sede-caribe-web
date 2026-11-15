@@ -11,6 +11,7 @@
     {% for n in noticias %}<div data-area="{{ n.categoria }}">{{ tarjeta_noticia(n, raiz) }}</div>{% endfor %}
   </div>
   {% if not noticias %}<p class="vacio">Todavía no hay noticias publicadas.</p>{% endif %}
+  <p class="noticias__suscribir">Para recibirlas sin entrar al sitio: <a href="{{ raiz }}noticias.xml">suscribirse por RSS</a> (en un lector de noticias o un canal de Telegram) · <a href="{{ raiz }}agenda.ics">agregar la agenda a su calendario</a></p>
   <section class="llamado">
     <h2>¿Tiene una noticia de su unidad?</h2>
     <p>El personal y el estudiantado pueden solicitar cobertura a la Unidad de Comunicación Estudiantil. Se atiende por orden de llegada y según la disponibilidad del equipo.</p>

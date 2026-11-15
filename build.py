@@ -19,6 +19,7 @@ Reglas que se aplican al compilar (las mismas que se explican a quienes editan e
     - La agenda muestra lo que está en curso, lo próximo y, plegado, lo anterior. En «Esta semana», un plazo de
       más de una semana aparece solo el día que abre y el día que cierra.
 """
+import os
 import calendar, hashlib, html, json, re, shutil, sys, unicodedata
 from datetime import date, datetime, timedelta, timezone
 from pathlib import Path
@@ -471,13 +472,56 @@ def ics(eventos, sitio):
 
 
 def rss(noticias, sitio):
+    """Noticias en RSS 2.0, con la foto de cada una (enclosure) y la dirección propia del canal (atom:link)."""
     base = sitio["base_url"]
+    def foto(n):
+        f = (n.get("img") or {}).get(1280) or (n.get("img") or {}).get(640)
+        if not f or not (DIST / f).exists():
+            return ""
+        return f'<enclosure url="{base}/{f}" length="{(DIST / f).stat().st_size}" type="image/webp"/>'
+    fecha_rss = lambda d: f"{datetime.combine(d, datetime.min.time(), CR):%a, %d %b %Y %H:%M:%S %z}"
     items = "".join(
         f"<item><title>{html.escape(n['titulo'])}</title><link>{base}/noticias/{n['id']}.html</link>"
-        f"<guid>{base}/noticias/{n['id']}.html</guid><pubDate>{datetime.combine(n['f'], datetime.min.time(), CR):%a, %d %b %Y %H:%M:%S %z}</pubDate>"
-        f"<description>{html.escape(n.get('resumen', ''))}</description></item>" for n in noticias[:30])
-    return (f'<?xml version="1.0" encoding="UTF-8"?><rss version="2.0"><channel><title>Noticias de la UCR, Sede del Caribe</title>'
-            f"<link>{base}/noticias.html</link><description>{html.escape(sitio['descripcion'])}</description><language>es-CR</language>{items}</channel></rss>")
+        f"<guid isPermaLink=\"true\">{base}/noticias/{n['id']}.html</guid><pubDate>{fecha_rss(n['f'])}</pubDate>"
+        + (f"<category>{html.escape(n['categoria'])}</category>" if n.get("categoria") else "")
+        + f"<description>{html.escape(n.get('resumen', ''))}</description>{foto(n)}</item>" for n in noticias[:30])
+    ultima = f"<lastBuildDate>{fecha_rss(noticias[0]['f'])}</lastBuildDate>" if noticias else ""
+    return (f'<?xml version="1.0" encoding="UTF-8"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel>'
+            f"<title>Noticias de la UCR, Sede del Caribe</title><link>{base}/noticias.html</link>"
+            f'<atom:link href="{base}/noticias.xml" rel="self" type="application/rss+xml"/>'
+            f"<description>{html.escape(sitio['descripcion'])}</description><language>es-CR</language>{ultima}{items}</channel></rss>")
+
+
+# Lo que guarda el botón de sin-conexion.html: las páginas de más uso y lo que necesitan para verse (sin PDF, videos ni
+# audio). Las fotos (la medida de 640 px) van en una lista aparte, opcional, porque pesan más que todo lo demás.
+SIN_CONEXION = ["index.html", "recorrido.html", "horarios.html", "directorio.html", "agenda.html", "contacto.html",
+                "carreras.html", "estudiar.html", "sin-conexion.html"]
+
+
+def paquete_sin_conexion(version):
+    paginas = [p for p in SIN_CONEXION if (DIST / p).exists()] + sorted(
+        p.name for p in DIST.glob("horarios-*.html"))
+    patron = re.compile(r"((?:assets|media)/[\w./-]+?\.(?:css|json|js|webp|png|jpg|svg|woff2))(?![\w])")
+    rutas = set()
+    for p in paginas:
+        rutas.update(m.group(1) for m in patron.finditer((DIST / p).read_text(encoding="utf-8")))
+    cola = [r for r in rutas if r.endswith(".js")]
+    while cola:   # los módulos que se importan entre sí
+        j = DIST / cola.pop()
+        if j.exists():
+            for m in re.finditer(r"[\"']\./((?:vendor/)?[\w.-]+\.js)", j.read_text(encoding="utf-8")):
+                r = Path(os.path.normpath(j.parent / m.group(1))).relative_to(DIST).as_posix()
+                if r not in rutas:
+                    rutas.add(r); cola.append(r)
+    for m in re.finditer(r"url\([\"']?\.\./((?:fonts|img)/[^\"')]+)", (DIST / "assets/css/sede.css").read_text(encoding="utf-8")):
+        rutas.add("assets/" + m.group(1))
+    rutas = {r for r in rutas if (DIST / r).exists() and "/og-" not in r}
+    fotos = sorted(r for r in rutas if r.startswith("media/") and r.endswith("-640.webp"))
+    recursos = sorted(r for r in rutas if not r.startswith("media/"))
+    tam = lambda lista: sum((DIST / r).stat().st_size for r in lista)
+    con_v = lambda r: f"{r}?v={version}" if re.match(r"assets/(css|js)/", r) else r
+    return {"version": version, "paginas": paginas, "recursos": [con_v(r) for r in recursos], "fotos": fotos,
+            "bytes": tam(paginas) + tam(recursos), "bytes_fotos": tam(fotos)}
 
 
 def main():
@@ -532,6 +576,7 @@ def main():
         ("recorrido.html", "recorrido.html", "Recorrido por la Sede", "Maqueta 3D del campus de la Sede del Caribe: edificios, aulas, laboratorios y servicios.",
          {"lugares": recorrido["lugares"], "campus3d": recorrido["campus"]}),
         ("accesibilidad.html", "accesibilidad.html", "Accesibilidad", "Compromiso de accesibilidad del sitio.", {}),
+        ("sin-conexion.html", "sin-conexion.html", "Usar el sitio sin conexión", "Guardar en el teléfono las páginas de más uso para verlas sin señal ni datos.", {}),
         ("404.html", "404.html", "Página no encontrada", "La página que busca no existe o cambió de dirección.", {}),
     ]
     paginas += [(f"carreras/{x['id']}.html", "carrera.html", x["nombre"], x.get("resumen") or f"{x['grados']} en {x['nombre']}, UCR Sede del Caribe.", {"carrera": x})
@@ -575,6 +620,8 @@ def main():
     (DIST / "noticias.xml").write_text(rss(c["noticias"], sitio), encoding="utf-8")
     base = sitio["base_url"].rstrip("/")
     urls = "".join(f"<url><loc>{base}/{s if s != 'index.html' else ''}</loc><lastmod>{HOY}</lastmod></url>" for s, *_ in paginas if s != "404.html")
+    (DIST / "sin-conexion.json").write_text(json.dumps(paquete_sin_conexion(version), ensure_ascii=False), encoding="utf-8")
+    (DIST / "sw.js").write_text((SRC / "sw.js").read_text(encoding="utf-8").replace("__VERSION__", version), encoding="utf-8")
     (DIST / "sitemap.xml").write_text(f'<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">{urls}</urlset>', encoding="utf-8")
     # La vista previa no debe aparecer en buscadores: el sitio oficial será sedecaribe.ucr.ac.cr
     robots = "User-agent: *\nDisallow: /\n" if VISTA_PREVIA else f"User-agent: *\nAllow: /\nSitemap: {base}/sitemap.xml\n"

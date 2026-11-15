@@ -5,9 +5,10 @@ Sitio estático (Python + Jinja2). El contenido sale de Google Drive; la vista p
 ## Comandos
 - Compilar: `python3 build.py --vista-previa` (sale en `dist/`).
 - Rehacer la maqueta 3D: `herramientas/rehacer_maqueta.sh`. Regenera los datos desde `herramientas/fuentes/` y rehace las imágenes de respaldo; tarda unos 2,5 min. Con `--sin-fotos` solo regenera los datos y compila, para probar.
-- Probar: `python3 herramientas/pruebas.py`, que es la prueba rápida. Para cambios mayores, `--completa`: celular, ficha, pantalla completa, zonas, respaldos sin 3D y axe. Para ver una zona de la maqueta desde arriba, `--vista=X,Z,ALTO`; en vista oblicua, `--camara=TX,TY,TZ,CX,CY,CZ` (objetivo y cámara; se puede repetir). Las capturas quedan en `.cache/pruebas/`. `--solo=visita|busqueda|armador|propuestas|asistente` corre una sola prueba.
+- Probar: `python3 herramientas/pruebas.py`, que es la prueba rápida. Para cambios mayores, `--completa`: celular, ficha, pantalla completa, zonas, respaldos sin 3D y axe. Para ver una zona de la maqueta desde arriba, `--vista=X,Z,ALTO`; en vista oblicua, `--camara=TX,TY,TZ,CX,CY,CZ` (objetivo y cámara; se puede repetir). Las capturas quedan en `.cache/pruebas/`. `--solo=sin_conexion|visita|busqueda|armador|propuestas|asistente` corre una sola prueba.
 
 - Rótulos QR de los lugares: `python3 herramientas/qr_lugares.py [--base URL] --verificar` (PDF en `.cache/qr-lugares.pdf`; usa `base_url` de la hoja; `--verificar` decodifica cada QR).
+- Sin conexión: `src/sw.js` → `dist/sw.js`; páginas del botón «Guardar» en `SIN_CONEXION` (build.py). Prueba: `pruebas.py --solo=sin_conexion`. Si se cambia el nombre de un CSS/JS básico, revisar `ESENCIAL` en sw.js.
 - Revisar enlaces: `python3 herramientas/verificar_enlaces.py` (después de compilar; `--externos` revisa internet; `--autoprueba` se prueba a sí mismo). Corre solo en GitHub antes de publicar y cada lunes para los externos.
 - Visitas propias sin cookies: `visitas.js` + `POST /api/visita` + `GET /api/admin/visitas` (ver README, «Visitas y enlaces»). No guardar IP ni navegador ahí.
 

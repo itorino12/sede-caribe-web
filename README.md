@@ -146,6 +146,12 @@ En la portada, un congo anda colgado de una rama. Al tocarlo se baja y abre un c
   - En la VM, `bash herramientas/probar_congo.sh --en-vivo` revisa el servicio y hace una pregunta real.
 - **Requisitos de la VM:** unos 1,5 GB de RAM para el servicio. Salida HTTPS a `generativelanguage.googleapis.com` y `pypi.org`, y a `huggingface.co` la primera vez, para bajar el modelo de búsqueda (~220 MB).
 
+### Sitio sin conexión
+`src/sw.js` (build.py lo publica en la raíz como `sw.js`, con la versión de los recursos) guarda cada página que se abre y lo que necesita; sin señal, muestra la copia guardada con un aviso arriba, y si la página no está guardada lleva a `sin-conexion.html`, que dice qué sí hay. En esa página, un botón guarda de una vez las páginas de más uso (lista `SIN_CONEXION` en build.py; el detalle y el peso salen en `sin-conexion.json`), con las fotos como opción. Las páginas siempre se piden primero a la red, así que con conexión se ve lo último. PDF, videos, audio, `.ics`, `.xml` y la API no se guardan. En el servidor, `sw.js` va con `Cache-Control: no-cache` (nginx-sede.conf).
+
+### RSS y calendario
+`noticias.xml` (RSS 2.0, con la foto de cada noticia) y `agenda.ics` se generan en cada compilación; los enlaces están en el pie y en Noticias. No hay RSS de avisos: son pocos y temporales.
+
 ### Visita guiada
 En el recorrido, «Visita guiada» pasa por los 37 lugares en orden: abre la ficha de cada uno, la deja el tiempo de leerla (de 8 a 20 s, según el largo del texto) y, en 3D, gira despacio alrededor. Tiene anterior, pausa, siguiente y terminar. Si la persona toca la maqueta o la ficha, se pausa; si elige otro lugar, al seguir continúa desde ahí; cerrar la ficha la termina. Con la pestaña oculta espera. `recorrido.html#visita` la inicia sola (útil para una pantalla en la entrada). Funciona igual sin 3D.
 

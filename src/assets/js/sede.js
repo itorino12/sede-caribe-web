@@ -282,4 +282,13 @@
     });
     addEventListener("resize", function () { if (visor.open) grande.ir(grande.actual, true); });
   }
+
+  // ---------- sin conexión: sw.js guarda las páginas vistas (y las de sin-conexion.html); sin señal se avisa arriba
+  if ("serviceWorker" in navigator && /^https?:$/.test(location.protocol)) {
+    navigator.serviceWorker.register(raiz + "sw.js", { scope: raiz || "./" }).catch(function () {});
+  }
+  var avisoRed = $("[data-sin-red]");
+  var marcarRed = function () { if (avisoRed) avisoRed.hidden = navigator.onLine; };
+  addEventListener("online", marcarRed); addEventListener("offline", marcarRed);
+  marcarRed();
 })();

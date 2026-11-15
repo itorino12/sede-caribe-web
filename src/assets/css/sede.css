@@ -1375,3 +1375,18 @@ body.hm-con-barra { padding-bottom: 5rem; }
 /* sin 3D la barra va arriba de la maqueta giratoria, en su propio renglón */
 .mapa3d--giro .visita-barra { position: relative; top: auto; left: auto; order: -1; align-self: flex-start; margin: 8px; }
 @media (prefers-reduced-motion: reduce) { .visita-barra__tiempo { display: none; } }
+
+/* Sin conexión (sw.js, sin-conexion.html) */
+.sin-red { margin: 0; padding: 10px var(--gutter, 16px); background: #FFF3C4; color: #3D2E00; font-size: var(--t-sm); text-align: center; border-bottom: 1px solid #E5C65A; }
+.sin-red[hidden] { display: none; }
+.sin-red a { color: inherit; font-weight: 700; }
+.sc__aviso { padding: 12px 14px; border-left: 4px solid #C98A00; background: var(--niebla); font-weight: 600; }
+.sc__nota { color: var(--tinta-2); font-size: var(--t-sm); }
+.sc__panel { margin-top: 18px; }
+.sc__fotos { display: flex; gap: 8px; align-items: center; margin-bottom: 12px; }
+.sc__fotos input { width: 20px; height: 20px; }
+.sc__botones { display: flex; flex-wrap: wrap; gap: 10px; }
+.sc__panel progress { width: 100%; max-width: 420px; height: 10px; margin-top: 12px; }
+.sc__estado { min-height: 1.4em; font-weight: 600; }
+.sc__lista { columns: 2 220px; }
+.noticias__suscribir { margin: 22px 0 0; font-size: var(--t-sm); color: var(--tinta-2); }
