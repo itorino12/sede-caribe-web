@@ -12,6 +12,9 @@
 @font-face{font-family:"Source Sans 3";src:url("../fonts/source-sans-3-latin-600-normal.woff2") format("woff2");font-weight:600;font-display:swap}
 @font-face{font-family:"Source Sans 3";src:url("../fonts/source-sans-3-latin-700-normal.woff2") format("woff2");font-weight:700;font-display:swap}
 @font-face{font-family:"Source Sans 3";src:url("../fonts/source-sans-3-latin-900-normal.woff2") format("woff2");font-weight:900;font-display:swap}
+/* Mientras llega Source Sans, la letra del sistema con sus mismas medidas: así el texto no salta al cambiar de letra.
+   Ascenso 1024 y descenso 400 (de 1000) salen del archivo de Source Sans; 93,75 % iguala su ancho promedio al de Arial y Roboto. */
+@font-face{font-family:"Source Sans 3 respaldo";src:local("Arial"),local("ArialMT"),local("Roboto"),local("Helvetica Neue"),local("Helvetica"),local("Liberation Sans");size-adjust:93.75%;ascent-override:109.23%;descent-override:42.67%;line-gap-override:0%}
 
 :root {
   --azul: #005DA4;          /* azul UCR: titulares, enlaces, franja de la semana */
@@ -37,7 +40,7 @@
   /* Cabecera (logo y menú): blanca, con la línea celeste del identificador oficial */
   --cab-fondo: var(--papel); --cab-texto: var(--tinta); --cab-texto-2: #666; --cab-linea: var(--linea); --cab-ident: var(--celeste); --cab-boton: var(--azul);
 
-  --f: "Source Sans 3", "Myriad Pro", Arial, sans-serif;
+  --f: "Source Sans 3", "Source Sans 3 respaldo", "Myriad Pro", Arial, sans-serif;
   --t-xs: .875rem; --t-sm: 1rem; --t-base: 1.125rem; --t-md: 1.3125rem;
   --t-lg: 1.625rem; --t-xl: 2.125rem; --t-2xl: 2.75rem;
   --ancho: 1240px;

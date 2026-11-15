@@ -46,6 +46,19 @@ def servidor():
     return s, f"http://127.0.0.1:{s.server_address[1]}/"
 
 
+def esperar(p, condicion, ms=20000, arg=None):
+    """Espera hasta que la condición JS sea verdadera (o pase el tiempo) en vez de una pausa fija: en una máquina lenta o
+    sin GPU las pausas fijas dan falsas fallas, y en una rápida hacen esperar de más. Devuelve si se cumplió."""
+    try:
+        p.wait_for_function(condicion, arg=arg, timeout=ms)
+        return True
+    except Exception:
+        return False
+
+
+FICHA_ABIERTA = "!document.querySelector('.mapa3d__ficha').hidden"
+
+
 def pagina(nav, url, vp=None, previa=None, **ctx):
     c = nav.new_context(viewport=vp or {"width": 1366, "height": 900}, **ctx)
     if previa:
@@ -275,8 +288,8 @@ def busqueda(nav, base):
     revisar(textos("laboratorio"), "«laboratorio» halla resultados")
     revisar(textos("BIBLIOTECA") and textos("biblioteca")[0] == textos("BIBLIOTECA")[0], "no distingue mayúsculas")
     revisar(textos("zzzz") == [] and "Sin resultados" in p.inner_text("[data-busqueda-estado]"), "sin coincidencias lo dice con texto")
-    textos("laboratorio"); p.keyboard.press("Enter"); p.wait_for_timeout(2500)
-    revisar(p.evaluate("!document.querySelector('.mapa3d__ficha').hidden"), "Enter en el primer resultado abre la ficha del lugar")
+    textos("laboratorio"); p.keyboard.press("Enter")
+    revisar(esperar(p, FICHA_ABIERTA), "Enter en el primer resultado abre la ficha del lugar")
     revisar(p.evaluate("document.querySelectorAll('.busqueda__lista button').length") == 0, "al elegir, la lista de resultados se cierra")
     textos("aula"); p.keyboard.press("ArrowDown"); revisar(p.evaluate("document.activeElement.closest('.busqueda__lista') !== null"), "la flecha abajo pasa a los resultados")
     p.keyboard.press("Escape"); revisar(p.evaluate("document.activeElement.id") == "busqueda-q", "Escape vuelve al cuadro")
@@ -341,7 +354,7 @@ def visita(nav, base):
     # en una máquina sin GPU, eso tarda más que el tiempo de un lugar
     pulsar = lambda sel: p.evaluate("s => document.querySelector(s).click()", sel)
     nombres = p.evaluate("JSON.parse(document.getElementById('datos-campus').textContent).lugares.sort((a,b)=>a.id-b.id).map(l=>[l.nombre, l.texto||''])")
-    p.click("[data-visita-iniciar]"); p.wait_for_timeout(1500)
+    p.click("[data-visita-iniciar]"); esperar(p, "document.querySelector('[data-visita-cuenta]').textContent.startsWith('1 /')")
     revisar(p.is_visible("[data-visita-barra]") and cuenta() == f"1 / {len(nombres)}" and titulo() == nombres[0][0], f"empieza en el lugar 1 ({cuenta()}, {titulo()})")
     revisar(p.evaluate("document.activeElement.matches('[data-visita-pausa]')"), "el foco pasa al botón de pausa")
     revisar(not p.is_visible("[data-vista-general]") and not p.is_visible(".mapa3d__zonas"), "durante la visita se apartan vista general y zonas")
@@ -385,8 +398,8 @@ def visita(nav, base):
     c.close()
 
     c, p, e = pagina(nav, base + "recorrido.html#visita", {"width": 360, "height": 740}, is_mobile=True, has_touch=True)
-    p.wait_for_selector(".mapa3d--listo", timeout=120000); p.wait_for_timeout(2000)
-    revisar(p.is_visible("[data-visita-barra]") and not p.locator(".mapa3d__ficha").is_hidden(), "#visita la inicia sola (celular)")
+    p.wait_for_selector(".mapa3d--listo", timeout=120000)
+    revisar(esperar(p, "!document.querySelector('[data-visita-barra]').hidden && " + FICHA_ABIERTA), "#visita la inicia sola (celular)")
     b = p.locator("[data-visita-barra]").bounding_box(); q = p.locator("[data-pantalla]").bounding_box(); f = p.locator(".mapa3d__ficha").bounding_box()
     revisar(b["x"] + b["width"] <= q["x"] and b["y"] + b["height"] <= f["y"], "en celular la barra no tapa pantalla completa ni la ficha")
     p.locator(".mapa3d__escena").screenshot(path=str(SALIDA / "visita-celular.png"))
@@ -396,7 +409,7 @@ def visita(nav, base):
     sin3d = nav.browser_type.launch(args=["--disable-webgl", "--disable-3d-apis"])
     c, p, e = pagina(sin3d, base + "recorrido.html")
     p.wait_for_selector(".mapa3d--giro", timeout=30000)
-    p.click("[data-visita-iniciar]"); p.wait_for_timeout(500)
+    p.click("[data-visita-iniciar]"); esperar(p, "t => document.querySelector('.mapa3d__ficha-titulo').textContent === t", arg=nombres[0][0])
     revisar(p.inner_text(".mapa3d__ficha-titulo") == nombres[0][0], "sin WebGL la visita abre la ficha del lugar 1")
     pulsar("[data-visita-despues]"); p.wait_for_timeout(300)
     revisar(p.inner_text(".mapa3d__ficha-titulo") == nombres[1][0], "sin WebGL Siguiente funciona")
@@ -409,8 +422,8 @@ def sin_conexion(nav, base):
     """Sitio sin conexión: guardar, recorrido 3D sin red, página no guardada, aviso, borrar."""
     print("Sin conexión")
     c, p, e = pagina(nav, base + "sin-conexion.html")
-    p.evaluate("navigator.serviceWorker.ready"); p.reload(); p.wait_for_timeout(500)
-    revisar(p.evaluate("!!navigator.serviceWorker.controller"), "el service worker controla la página")
+    p.evaluate("navigator.serviceWorker.ready"); p.reload()
+    revisar(esperar(p, "!!navigator.serviceWorker.controller"), "el service worker controla la página")
     revisar("MB" in p.inner_text("[data-sc-guardar]"), "el botón dice cuánto pesa: " + p.inner_text("[data-sc-guardar]"))
     p.click("[data-sc-guardar]")
     p.wait_for_function("document.querySelector('[data-sc-estado]').textContent.startsWith('Listo')", timeout=90000)
@@ -426,17 +439,16 @@ def sin_conexion(nav, base):
     except Exception:
         listo = False
     revisar(listo, "sin red, el recorrido 3D carga desde lo guardado")
-    p.wait_for_timeout(1500)
-    revisar(p.evaluate("!document.querySelector('.mapa3d__ficha').hidden"), "sin red, la ficha del lugar abre")
+    revisar(esperar(p, FICHA_ABIERTA), "sin red, la ficha del lugar abre")
     revisar(p.is_visible("[data-sin-red]"), "sin red, aparece el aviso de copia guardada")
     p.goto(base + "directorio.html", wait_until="domcontentloaded")
     revisar(p.locator("main h1").count() == 1 and p.evaluate("getComputedStyle(document.body).fontFamily").startswith("\"Source"), "sin red, el directorio se ve con su estilo")
-    p.goto(base + "noticias.html", wait_until="domcontentloaded"); p.wait_for_timeout(500)
+    p.goto(base + "noticias.html", wait_until="domcontentloaded"); esperar(p, "!document.querySelector('[data-sc-pedida]')?.hidden")
     revisar("sin-conexion.html?pedida=" in p.url and p.is_visible("[data-sc-pedida]"), "una página no guardada lleva a «qué hay guardado»: " + p.url[-45:])
     p.screenshot(path=str(SALIDA / "sin-conexion.png"), full_page=True)
     c.set_offline(False)
     p.goto(base + "sin-conexion.html"); p.wait_for_timeout(500)
-    p.click("[data-sc-borrar]"); p.wait_for_timeout(800)
+    p.click("[data-sc-borrar]"); esperar(p, "document.querySelector('[data-sc-lista]').textContent.includes('Todavía nada')")
     revisar(p.evaluate("caches.keys().then(ks => Promise.all(ks.filter(n => n.startsWith('sede-')).map(n => caches.open(n).then(c => c.keys())))).then(l => l.flat().length)") == 0 and "Todavía nada" in p.inner_text("[data-sc-lista]"), "Borrar deja vacío lo guardado")
     revisar(not e, f"sin conexión sin errores {e[:1]}")
     c.close()
@@ -446,15 +458,15 @@ def completa(nav, base):
     print("Recorrido: ficha, pantalla completa y zonas")
     c, p, e = pagina(nav, base + "recorrido.html#lugar-1")
     p.wait_for_selector(".mapa3d--listo", timeout=120000)
-    p.wait_for_timeout(1500)
-    revisar(p.evaluate("!document.querySelector('.mapa3d__ficha').hidden"), "#lugar-1 abre la ficha")
+    revisar(esperar(p, FICHA_ABIERTA), "#lugar-1 abre la ficha")
     revisar(p.evaluate("document.querySelectorAll('.mapa3d__ficha-dependencias li').length") > 0, "la ficha muestra aulas y dependencias")
     p.click(".mapa3d__ficha-cerrar")
-    p.click("[data-pantalla]"); p.wait_for_timeout(800)
-    revisar(p.evaluate("!!document.fullscreenElement"), "pantalla completa")
-    p.click("[data-pantalla]"); p.wait_for_timeout(500)
-    p.click("[data-zona='3']"); p.wait_for_timeout(2000)
-    revisar(p.evaluate("document.querySelector('[data-zona=\"3\"]').getAttribute('aria-pressed')") == "true", "botón de zona")
+    p.click("[data-pantalla]")
+    revisar(esperar(p, "!!document.fullscreenElement"), "pantalla completa")
+    p.click("[data-pantalla]"); esperar(p, "!document.fullscreenElement")
+    p.click("[data-zona='3']")
+    revisar(esperar(p, "document.querySelector('[data-zona=\"3\"]').getAttribute('aria-pressed') === 'true'"), "botón de zona")
+    p.wait_for_timeout(1500)   # que termine el vuelo de la cámara antes de la captura
     p.locator(".mapa3d__escena").screenshot(path=str(SALIDA / "zona3.png"))
     revisar(not e, f"sin errores {e[:1]}")
     c.close()
@@ -469,21 +481,20 @@ def completa(nav, base):
 
     print("Respaldos de la portada")
     c, p, _ = pagina(nav, base + "index.html", previa="Object.defineProperty(navigator,'deviceMemory',{get:()=>2})")
-    p.wait_for_timeout(6000)
+    esperar(p, "!!document.querySelector('.portada__foto--3d')?.dataset.giro")
     revisar(estado_portada(p)["respaldo"], "2 GB de memoria → vistas de respaldo")
     c.close()
     c, p, _ = pagina(nav, base + "index.html", previa="Object.defineProperty(navigator,'connection',{get:()=>({saveData:true})})")
-    p.wait_for_timeout(6000)
+    esperar(p, "!!document.querySelector('.portada__foto--3d')?.dataset.giro")
     revisar(estado_portada(p)["respaldo"], "ahorro de datos → vistas de respaldo")
     c.close()
     sin3d = nav.browser_type.launch(args=["--disable-webgl", "--disable-3d-apis"])
     c, p, _ = pagina(sin3d, base + "index.html")
-    p.wait_for_timeout(6000)
+    esperar(p, "!!document.querySelector('.portada__foto--3d')?.dataset.giro")
     revisar(estado_portada(p)["respaldo"], "sin WebGL → vistas de respaldo")
     c.close()
     c, p, e = pagina(sin3d, base + "recorrido.html")
-    p.wait_for_timeout(4000)
-    revisar(p.evaluate("document.querySelector('.mapa3d').classList.contains('mapa3d--giro')"), "recorrido sin WebGL → maqueta giratoria")
+    revisar(esperar(p, "document.querySelector('.mapa3d').classList.contains('mapa3d--giro')"), "recorrido sin WebGL → maqueta giratoria")
     c.close(); sin3d.close()
 
     asistente(nav, base)

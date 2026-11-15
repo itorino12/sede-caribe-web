@@ -41,10 +41,11 @@
 
   <header class="cabecera">
     <div class="ancho cabecera__fila">
-      <a class="firma" href="{{ raiz }}index.html" aria-label="Inicio, Universidad de Costa Rica, Sede del Caribe">
-        <img class="firma__escudo firma__escudo--claro" src="{{ raiz }}assets/img/firma-ucr-negro.png" alt="" width="191" height="72">
-        <img class="firma__escudo firma__escudo--oscuro" src="{{ raiz }}assets/img/firma-ucr-blanco.png" alt="" width="191" height="72">
-        <span class="ident"><span class="ident__sigla">SC</span><span class="ident__linea"></span><span class="ident__nombre">Sede del<strong>Caribe</strong></span></span>
+      <a class="firma" href="{{ raiz }}index.html">
+        {# el nombre del enlace sale de lo que se ve (logo y «SC Sede del Caribe»), como pide WCAG 2.5.3; «inicio» va oculto al final #}
+        <img class="firma__escudo firma__escudo--claro" src="{{ raiz }}assets/img/firma-ucr-negro.webp" alt="Universidad de Costa Rica" width="191" height="72" loading="lazy">
+        <img class="firma__escudo firma__escudo--oscuro" src="{{ raiz }}assets/img/firma-ucr-blanco.webp" alt="Universidad de Costa Rica" width="191" height="72" loading="lazy">
+        <span class="ident"><span class="ident__sigla">SC</span><span class="ident__linea"></span><span class="ident__nombre">Sede del <strong>Caribe</strong></span></span><span class="oculto">, página de inicio</span>
       </a>
       <button class="menu-boton" type="button" aria-controls="menu" aria-expanded="false" data-menu>
         <span class="menu-boton__icono" aria-hidden="true"></span><span>Menú</span>
@@ -103,7 +104,7 @@
   <footer class="pie">
     <div class="ancho pie__rejilla">
       <div class="pie__sede">
-        <p class="pie__firma"><img src="{{ raiz }}assets/img/firma-ucr-blanco.png" alt="Universidad de Costa Rica" width="212" height="80"></p>
+        <p class="pie__firma"><img src="{{ raiz }}assets/img/firma-ucr-blanco.webp" alt="Universidad de Costa Rica" width="212" height="80" loading="lazy"></p>
         <p class="pie__nombre">Sede del Caribe</p>
         <p>{{ sitio.direccion }}</p>
         <p><a href="{{ sitio.telefono|tel }}">Central telefónica {{ sitio.telefono }}</a><br>

@@ -47,6 +47,8 @@ La fila 1 son los encabezados (se pueden escribir con tildes y mayúsculas). Las
 | enlaces | Sistemas y trámites | grupo, titulo, url, descripcion |
 | hitos | Línea de tiempo de la historia | anio, texto |
 | cifras | Datos de la Sede | valor, etiqueta, fuente |
+| lugares | Lugares del recorrido 3D (37) | id, zona, nombre, texto, enlace, foto360, fotos, fotos_alt |
+| proyectos | Proyectos de acción social | publicar, id, codigo, nombre, modalidad (tcu, extension-cultural o extension-docente), resumen, lugares, poblacion, aliados, temas, carreras, coordinador, correo, documento, fotos, fotos_alt, enlace |
 
 ### Reglas de publicación
 
@@ -168,6 +170,15 @@ En `horarios.html` y `horarios-<ciclo>.html` (guía de Registro, `horarios_sitio
 
 - **Visitas (sin cookies, sin terceros):** `src/assets/js/visitas.js` envía a `POST /api/visita` solo la ruta (sin parámetros ni ancla), el dominio de origen y si la pantalla es de celular. Se omite en la vista previa y si el navegador pide «No rastrear» (DNT o GPC). El servidor (`servidor/congo/congo/servicios/visitas.py`) cuenta por día, ruta, origen y dispositivo en `/var/lib/sede-congo/visitas.sqlite3`; **no guarda IP, navegador ni textos de búsqueda**, descarta robots y cuenta visitantes distintos con un identificador temporal que vive solo en memoria y cambia cada día. Se apaga con `CONGO_VISITAS=0`. Informe (misma clave y red que el resto de la administración): `curl -H "X-Congo-Clave: …" "https://sedecaribe.ucr.ac.cr/api/admin/visitas?dias=30"` (nginx solo lo deja pasar desde la red de la UCR; también sirve desde la VM con `http://127.0.0.1:8787`). Pasa por la CSP sin cambios (`connect-src 'self'`). Ojo: nginx pide recargar (`nginx -t && systemctl reload nginx`) y el servicio, reiniciarse tras actualizar.
 - **Verificador de enlaces:** `python3 herramientas/verificar_enlaces.py` (después de compilar) revisa enlaces internos, imágenes, scripts, estilos y anclas; las `#lugar-N` del recorrido se validan contra `src/data/lugares.json`. Los que dependen del Joomla anterior (`/images/…`, `/index.php/…`) salen aparte. `--externos` comprueba cada enlace de internet; `--estricto` convierte avisos en error; `--autoprueba` lo prueba con un sitio de muestra. En GitHub: `vista-previa.yml` corre la revisión interna antes de publicar (un enlace interno roto detiene el despliegue) y `enlaces.yml` revisa los externos cada lunes y abre, actualiza o cierra un aviso (issue).
+
+### Antes de apagar el Joomla: conservar /images/
+El sitio nuevo y muchos correos, publicaciones y resultados de Google enlazan archivos del Joomla anterior bajo `https://sedecaribe.ucr.ac.cr/images/…` (planes de estudio, resoluciones, declaraciones juradas). El servidor nuevo los sirve en la misma dirección desde `/var/www/sede-legado/images/` (regla en `nginx-sede.conf`). Antes de cambiar el dominio al servidor nuevo, hay que copiar ahí la carpeta `images` completa del Joomla, por ejemplo desde el servidor viejo:
+
+```
+rsync -a usuario@servidor-joomla:/ruta/del/joomla/images/ /var/www/sede-legado/images/
+```
+
+Si no se copia, esos enlaces dan error 404 apenas el dominio apunte al servidor nuevo. Las páginas de artículos del Joomla (`/index.php/…`) no se pueden conservar: se redirigen a la sección equivalente del sitio nuevo.
 
 ## Poner en marcha el servidor
 

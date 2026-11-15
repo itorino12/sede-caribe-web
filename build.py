@@ -161,7 +161,7 @@ def lugares_campus():
             for i, nombre in enumerate(nombres):
                 f = imagen(nombre)
                 if f:
-                    fotos.append({"s": f[640], "m": f[1280], "g": f[1920], "alt": alts[i] if i < len(alts) and alts[i] else f"{l['nombre']}, foto {i + 1}"})
+                    fotos.append({"s": f[640], "i": f[960], "m": f[1280], "g": f[1920], "alt": alts[i] if i < len(alts) and alts[i] else f"{l['nombre']}, foto {i + 1}"})
             video = (medios_de(f"lugar-{int(l['id'])}") or {}).get("video")  # el afiche y demás van solo en la página
             salida.append({**l, "id": int(l["id"]), "zona": int(l.get("zona") or 0), "fotos": fotos, **({"video": video} if video else {})})
         except (KeyError, ValueError):
@@ -213,6 +213,14 @@ def leer_pagina(nombre):
     return ""
 
 
+ANCHOS = (640, 960, 1280, 1920, 2560)   # 960: en celulares comunes (DPR ~2) la de 640 se queda corta y la de 1280 sobra
+
+
+def srcset(f, raiz="", hasta=2560):
+    """«media/x-640.webp 640w, media/x-960.webp 960w, …» con las medidas de la imagen hasta «hasta»."""
+    return ", ".join(f"{raiz}{f[a]} {a}w" for a in ANCHOS if a <= hasta and f.get(a))
+
+
 def imagen(nombre, ancho_max=1600):
     """Una imagen subida a la carpeta «Imágenes» del Drive → dos versiones WebP en dist/media.
     Devuelve None si no existe, para que la plantilla simplemente no muestre imagen."""
@@ -234,15 +242,15 @@ def imagen(nombre, ancho_max=1600):
     medidas = cache / f"{huella}.json"
     salida = {}
     (DIST / "media").mkdir(parents=True, exist_ok=True)
-    viejas = {a: next(iter(cache.glob(f"*-{huella}-{a}.webp")), None) for a in (640, 1280, 1920, 2560)}
+    viejas = {a: next(iter(cache.glob(f"*-{huella}-{a}.webp")), None) for a in ANCHOS}
     for ancho, f in viejas.items():   # cachés guardadas con el nombre anterior
         if f and not (cache / f"{huella}-{ancho}.webp").exists():
             f.rename(cache / f"{huella}-{ancho}.webp")
     viejo_json = next(iter(cache.glob(f"*-{huella}.json")), None)
     if viejo_json and not medidas.exists():
         viejo_json.rename(medidas)
-    if medidas.exists() and all((cache / f"{huella}-{a}.webp").exists() for a in (640, 1280, 1920, 2560)):
-        for ancho in (640, 1280, 1920, 2560):
+    if medidas.exists() and all((cache / f"{huella}-{a}.webp").exists() for a in ANCHOS):
+        for ancho in ANCHOS:
             shutil.copy2(cache / f"{huella}-{ancho}.webp", DIST / "media" / f"{base}-{ancho}.webp")
             salida[ancho] = f"media/{base}-{ancho}.webp"
         salida.update(json.loads(medidas.read_text()))
@@ -250,7 +258,7 @@ def imagen(nombre, ancho_max=1600):
     with Image.open(origen) as im:
         im = ImageOps.exif_transpose(im).convert("RGB")
         # 2560 px para pantallas grandes o de alta densidad (portada a todo lo ancho en PC)
-        for ancho in (640, 1280, 1920, 2560):
+        for ancho in ANCHOS:
             copia = im.copy()
             if copia.width > ancho:
                 copia = copia.resize((ancho, round(copia.height * ancho / copia.width)), Image.LANCZOS)
@@ -546,7 +554,7 @@ def main():
 
     env = Environment(loader=FileSystemLoader(SRC / "templates"), autoescape=select_autoescape(["html"]),
                       trim_blocks=True, lstrip_blocks=True)
-    env.filters.update(fecha_larga=fecha_larga, fecha_corta=fecha_corta, dia_semana=dia_semana, mes=mes,
+    env.filters.update(srcset=srcset, fecha_larga=fecha_larga, fecha_corta=fecha_corta, dia_semana=dia_semana, mes=mes,
                        tel=lambda t: "tel:+506" + re.sub(r"\D", "", t or ""))
     env.globals.update(sitio=sitio, hoy=HOY, MESES=MESES, ahora=AHORA, ejemplos=EJEMPLOS, vista_previa=VISTA_PREVIA, origen=origen,
                        unidades_publicadas={u["id"] for u in c["unidades"]})  # el menú omite las que no tienen página

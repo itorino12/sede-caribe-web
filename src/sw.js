@@ -13,7 +13,7 @@ const MARCA = BASE + "__sin-conexion-guardado";   // fecha y páginas del últim
 const ESENCIAL = [`assets/css/sede.css?v=${VERSION}`, `assets/js/tema.js?v=${VERSION}`,
   `assets/js/sede.js?v=${VERSION}`, `assets/js/sin-conexion.js?v=${VERSION}`,
   "assets/fonts/source-sans-3-latin-400-normal.woff2", "assets/fonts/source-sans-3-latin-700-normal.woff2",
-  "assets/fonts/source-sans-3-latin-900-normal.woff2", "assets/img/firma-ucr-negro.png", "assets/img/firma-ucr-blanco.png",
+  "assets/fonts/source-sans-3-latin-900-normal.woff2", "assets/img/firma-ucr-negro.webp", "assets/img/firma-ucr-blanco.webp",
   "assets/img/favicon.svg"];
 
 const versionada = (u) => /\/assets\/(css|js)\//.test(u.pathname);

@@ -13,7 +13,7 @@
   {% include "_avisos.html" %}
   {% if n.img %}
   <figure class="articulo__figura ancho">
-    <img src="{{ raiz }}{{ n.img[1280] }}" srcset="{{ raiz }}{{ n.img[640] }} 640w, {{ raiz }}{{ n.img[1280] }} 1280w" sizes="(min-width: 1000px) 960px, 100vw" alt="{{ n.imagen_alt }}" width="1280" height="{{ (1280 * n.img.h / n.img.w)|round|int }}">
+    <img src="{{ raiz }}{{ n.img[1280] }}" srcset="{{ n.img|srcset(raiz, 1280) }}" sizes="(min-width: 1000px) 960px, 100vw" alt="{{ n.imagen_alt }}" width="1280" height="{{ (1280 * n.img.h / n.img.w)|round|int }}">
   </figure>
   {% endif %}
   <div class="ancho articulo__cuerpo">

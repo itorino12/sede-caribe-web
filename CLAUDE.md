@@ -48,4 +48,7 @@ Sitio estático (Python + Jinja2). El contenido sale de Google Drive; la vista p
 ## Reglas
 - JorjaniEsp también sube cambios. Antes de hacer push: `git fetch`; si hay cambios, `git pull --rebase` y, si hay conflicto en `campus3d.json`, regenerarlo en vez de fusionarlo a mano.
 - No subir capturas ni scripts temporales. Las pruebas que se repiten van en `herramientas/`.
+- En `pruebas.py`, esperar condiciones con `esperar(p, "js")` y no pausas fijas: en máquinas lentas o sin GPU dan falsas fallas. Para botones dentro de la escena 3D girando, clic en el DOM (`pulsar`).
+- Fotos: `build.py` hace cada una en 640, 960, 1280, 1920 y 2560 px (`ANCHOS`); en plantillas, `{{ foto|srcset(raiz, hasta) }}` en vez de escribir el srcset a mano.
+- Enlaces al Joomla viejo (`https://sedecaribe.ucr.ac.cr/images/…`): el servidor nuevo los sirve desde `/var/www/sede-legado` (README, «Antes de apagar el Joomla»).
 - Mensajes de commit en español. Al usuario se le responde en español y de usted.

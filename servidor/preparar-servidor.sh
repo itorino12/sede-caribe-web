@@ -11,7 +11,7 @@ apt-get install -y nginx git rsync python3-venv ufw fail2ban unattended-upgrades
 dpkg-reconfigure -f noninteractive unattended-upgrades
 
 id sedeweb >/dev/null 2>&1 || useradd --system --home /opt/sede-web --shell /usr/sbin/nologin sedeweb
-mkdir -p /opt/sede-web /var/www/sede /etc/sede-web
+mkdir -p /opt/sede-web /var/www/sede /var/www/sede-legado/images /etc/sede-web
 chown sedeweb:sedeweb /opt/sede-web /var/www/sede
 chmod 750 /etc/sede-web && chown root:sedeweb /etc/sede-web
 

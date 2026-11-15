@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 {% from "_macros.html" import tarjeta_noticia, redes_sociales with context %}
-{% macro foto(f, alt, tam, carga='lazy') %}<img src="{{ f[1280] }}" srcset="{{ f[640] }} 640w, {{ f[1280] }} 1280w, {{ f[1920] }} 1920w, {{ f[2560] }} 2560w" sizes="{{ tam }}" alt="{{ alt }}" width="{{ f.w }}" height="{{ f.h }}" loading="{{ carga }}"{% if carga == 'eager' %} fetchpriority="high"{% endif %}>{% endmacro %}
+{% macro foto(f, alt, tam, carga='lazy') %}<img src="{{ f[1280] }}" srcset="{{ f|srcset }}" sizes="{{ tam }}" alt="{{ alt }}" width="{{ f.w }}" height="{{ f.h }}" loading="{{ carga }}"{% if carga == 'eager' %} fetchpriority="high"{% endif %}>{% endmacro %}
 {% block cabeza %}<link rel="preload" as="image" href="{{ raiz }}assets/img/portada-maqueta.webp">{% endblock %}
 {% block contenido %}
 <section class="portada" aria-labelledby="portada-titulo">

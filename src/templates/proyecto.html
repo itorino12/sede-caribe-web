@@ -16,7 +16,7 @@
       {% endif %}
       {% if p.medios.afiche %}{% set a = p.medios.afiche %}
       <figure class="medios__item">
-        <a href="{{ raiz }}{{ a[1920] }}"><img src="{{ raiz }}{{ a[1280] }}" srcset="{{ raiz }}{{ a[640] }} 640w, {{ raiz }}{{ a[1280] }} 1280w" sizes="(max-width: 720px) 90vw, 320px" width="{{ a.w }}" height="{{ a.h }}" alt="{{ a.alt }}" loading="lazy"></a>
+        <a href="{{ raiz }}{{ a[1920] }}"><img src="{{ raiz }}{{ a[1280] }}" srcset="{{ a|srcset(raiz, 1280) }}" sizes="(max-width: 720px) 90vw, 320px" width="{{ a.w }}" height="{{ a.h }}" alt="{{ a.alt }}" loading="lazy"></a>
         <figcaption>Afiche del CIUB.{% if a.nota %} {{ a.nota }}{% endif %}</figcaption>
       </figure>
       {% endif %}

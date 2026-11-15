@@ -43,7 +43,7 @@ export class Carrusel {
       li.setAttribute("aria-label", `${i + 1} de ${fotos.length}`);
       const img = document.createElement("img");
       img.src = raiz.dataset.raiz + (this.grande ? f.m : f.s);
-      img.srcset = `${raiz.dataset.raiz + f.s} 640w, ${raiz.dataset.raiz + f.m} 1280w, ${raiz.dataset.raiz + f.g} 1920w`;
+      img.srcset = [[f.s, 640], [f.i, 960], [f.m, 1280], [f.g, 1920]].filter((x) => x[0]).map((x) => `${raiz.dataset.raiz + x[0]} ${x[1]}w`).join(", ");
       img.sizes = this.grande ? "100vw" : "420px";
       img.alt = f.alt; img.loading = i ? "lazy" : "eager"; img.decoding = "async";
       img.addEventListener("error", fotoPerdida, { once: true });

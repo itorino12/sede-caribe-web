@@ -60,11 +60,11 @@
 </section>
 {% endmacro %}
 
-{% macro tarjeta_noticia(n, raiz, grande=false) %}
+{% macro tarjeta_noticia(n, raiz, grande=false, primera=false) %}
 <article class="nota{% if grande %} nota--grande{% endif %}">
   {% if n.img %}
-  <img class="nota__img" src="{{ raiz }}{{ n.img[640] }}" srcset="{{ raiz }}{{ n.img[640] }} 640w, {{ raiz }}{{ n.img[1280] }} 1280w"
-       sizes="{{ '(min-width: 900px) 50vw, 100vw' if grande else '(min-width: 900px) 25vw, 100vw' }}" alt="{{ n.imagen_alt }}" loading="lazy" width="640" height="{{ (640 * n.img.h / n.img.w)|round|int }}">
+  <img class="nota__img" src="{{ raiz }}{{ n.img[640] }}" srcset="{{ n.img|srcset(raiz, 1280) }}"
+       sizes="{{ '(min-width: 900px) 50vw, 100vw' if grande else '(min-width: 900px) 25vw, 100vw' }}" alt="{{ n.imagen_alt }}" {% if primera %}fetchpriority="high"{% else %}loading="lazy"{% endif %} width="640" height="{{ (640 * n.img.h / n.img.w)|round|int }}">
   {% endif %}
   <p class="nota__meta"><a href="{{ raiz }}noticias.html?categoria={{ n.categoria|urlencode }}">{{ n.categoria }}</a> <time datetime="{{ n.f.isoformat() }}">{{ n.f|fecha_larga }}</time></p>
   <h3 class="nota__titulo"><a href="{{ raiz }}noticias/{{ n.id }}.html">{{ n.titulo }}</a></h3>
@@ -88,7 +88,7 @@
 
 {% macro encabezado(titulo, migas, raiz, bajada='', foto=None, foto_alt='') %}
 <header class="encabezado{% if foto %} encabezado--foto{% endif %}">
-  {% if foto %}<img src="{{ raiz }}{{ foto[1920] }}" srcset="{{ raiz }}{{ foto[640] }} 640w, {{ raiz }}{{ foto[1280] }} 1280w, {{ raiz }}{{ foto[1920] }} 1920w" sizes="100vw" alt="{{ foto_alt }}" width="{{ foto.w }}" height="{{ foto.h }}">{% endif %}
+  {% if foto %}<img src="{{ raiz }}{{ foto[1920] }}" srcset="{{ foto|srcset(raiz, 1920) }}" sizes="100vw" alt="{{ foto_alt }}" width="{{ foto.w }}" height="{{ foto.h }}">{% endif %}
   <div class="ancho">
     {% if migas %}
     <nav class="migas" aria-label="Ruta"><ol><li><a href="{{ raiz }}index.html">Inicio</a></li>{% for t, u in migas %}<li><a href="{{ raiz }}{{ u }}">{{ t }}</a></li>{% endfor %}</ol></nav>
@@ -105,7 +105,7 @@
 {% if fotos %}
 <div class="carrusel carrusel--pagina{% if fotos|length < 2 %} carrusel--una{% endif %}" data-galeria role="group" aria-roledescription="carrusel" aria-label="{{ titulo }}">
   <ul class="carrusel__pista" tabindex="0">
-    {% for f in fotos %}<li class="carrusel__foto" aria-label="{{ loop.index }} de {{ fotos|length }}"><a href="{{ raiz }}{{ f[1920] }}" data-m="{{ raiz }}{{ f[1280] }}" data-s="{{ raiz }}{{ f[640] }}"><img src="{{ raiz }}{{ f[1280] }}" srcset="{{ raiz }}{{ f[640] }} 640w, {{ raiz }}{{ f[1280] }} 1280w" sizes="(min-width: 1100px) 700px, 100vw" alt="{{ f.alt }}" width="{{ f.w }}" height="{{ f.h }}"{% if not loop.first %} loading="lazy"{% endif %}></a></li>{% endfor %}
+    {% for f in fotos %}<li class="carrusel__foto" aria-label="{{ loop.index }} de {{ fotos|length }}"><a href="{{ raiz }}{{ f[1920] }}" data-m="{{ raiz }}{{ f[1280] }}" data-s="{{ raiz }}{{ f[640] }}"><img src="{{ raiz }}{{ f[1280] }}" srcset="{{ f|srcset(raiz, 1280) }}" sizes="(min-width: 1100px) 700px, 100vw" alt="{{ f.alt }}" width="{{ f.w }}" height="{{ f.h }}"{% if not loop.first %} loading="lazy"{% endif %}></a></li>{% endfor %}
   </ul>
   <button type="button" class="carrusel__boton carrusel__boton--antes" data-antes aria-label="Foto anterior">‹</button>
   <button type="button" class="carrusel__boton carrusel__boton--despues" data-despues aria-label="Foto siguiente">›</button>

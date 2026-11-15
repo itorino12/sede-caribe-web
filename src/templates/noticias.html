@@ -7,8 +7,9 @@
     <button type="button" aria-pressed="true" data-valor="">Todas</button>
     {% for cat in categorias %}<button type="button" aria-pressed="false" data-valor="{{ cat }}">{{ cat }}</button>{% endfor %}
   </div>
+  <h2 class="oculto">Noticias publicadas</h2>
   <div class="rejilla-noticias" id="noticias">
-    {% for n in noticias %}<div data-area="{{ n.categoria }}">{{ tarjeta_noticia(n, raiz) }}</div>{% endfor %}
+    {% for n in noticias %}<div data-area="{{ n.categoria }}">{{ tarjeta_noticia(n, raiz, primera=loop.first) }}</div>{% endfor %}
   </div>
   {% if not noticias %}<p class="vacio">Todavía no hay noticias publicadas.</p>{% endif %}
   <p class="noticias__suscribir">Para recibirlas sin entrar al sitio: <a href="{{ raiz }}noticias.xml">suscribirse por RSS</a> (en un lector de noticias o un canal de Telegram) · <a href="{{ raiz }}agenda.ics">agregar la agenda a su calendario</a></p>
