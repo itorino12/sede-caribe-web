@@ -8,9 +8,13 @@
 
   // ---------- menú principal y submenús
   var botonMenu = $("[data-menu]"), menu = $("#menu");
+  // Al abrir o cerrar el panel cambia la altura de la cabecera y el navegador reajusta el desplazamiento;
+  // ese salto no debe contar como «el usuario desplazó la página» (si no, el menú se cierra al abrirlo).
+  var quietoHasta = 0;
   if (botonMenu) botonMenu.addEventListener("click", function () {
     var abierto = menu.classList.toggle("abierto");
     botonMenu.setAttribute("aria-expanded", abierto);
+    quietoHasta = Date.now() + 400;
   });
   var subs = $$("[data-sub]");
   var cerrarSubs = function (excepto) { subs.forEach(function (b) { if (b !== excepto) b.setAttribute("aria-expanded", "false"); }); $$("[data-sub2]").forEach(function (b) { b.setAttribute("aria-expanded", "false"); }); };
@@ -19,6 +23,7 @@
       e.stopPropagation();
       cerrarSubs(b);
       b.setAttribute("aria-expanded", b.getAttribute("aria-expanded") !== "true");
+      quietoHasta = Date.now() + 400;
     });
   });
   var subs2 = $$("[data-sub2]");
@@ -28,6 +33,7 @@
       var abrir = b.getAttribute("aria-expanded") !== "true";
       subs2.forEach(function (o) { o.setAttribute("aria-expanded", "false"); });
       b.setAttribute("aria-expanded", abrir);
+      quietoHasta = Date.now() + 400;
     });
   });
   document.addEventListener("click", function (e) { if (!e.target.closest(".menu__item--sub")) cerrarSubs(); });
@@ -36,6 +42,7 @@
   var yMenu = 0;
   document.addEventListener("click", function () { yMenu = window.scrollY; }, true);
   window.addEventListener("scroll", function () {
+    if (Date.now() < quietoHasta) { yMenu = window.scrollY; return; }
     if (Math.abs(window.scrollY - yMenu) < 24) return;
     var hayAbierto = subs.some(function (b) { return b.getAttribute("aria-expanded") === "true"; });
     if (hayAbierto) cerrarSubs();
