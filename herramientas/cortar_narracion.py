@@ -1,10 +1,12 @@
 #!/usr/bin/env python3
 """Corta la narración del recorrido (un solo audio de ElevenLabs) en un audio por lugar.
 
-    python3 herramientas/cortar_narracion.py NARRACION.mp3 [--musica MUSICA.mp3] [--probar]
+    python3 herramientas/cortar_narracion.py PARTE1.mp3 [PARTE2.mp3 …] [--musica MUSICA.mp3] [--probar]
 
-El audio se generó leyendo herramientas/fuentes/narracion/guion.txt (bienvenida, lugares 1 a 37 y despedida) con
-una pausa larga entre uno y otro. Se corta en las N−1 pausas más largas (N = filas del guion) y se revisa que cada
+ElevenLabs acepta hasta 5000 caracteres por audio, así que el guion (herramientas/fuentes/narracion/guion.txt:
+bienvenida, lugares 1 a 37 y despedida) se genera en dos partes: la primera hasta el lugar 19 y la segunda desde
+el 20 (constante PARTE1). Entre una fila y otra hay una pausa larga.
+Cada audio se corta en sus pausas más largas y se revisa que cada
 trozo dure lo que se espera por su número de palabras; si alguno no cuadra, no escribe nada.
 Salida: src/assets/media/narracion/{inicio,lugar-01…lugar-37,fin}.m4a y las duraciones en
 src/assets/js/recorrido-narracion.js. Con --musica, además src/assets/media/visita-musica.m4a.
@@ -52,25 +54,66 @@ def silencios(archivo, umbral_db=-40, minimo=0.5):
     return list(zip(inicios, finales))
 
 
-def cortes(archivo, n):
+def cortes(archivo, palabras):
+    """Tramos del audio, uno por fila del guion (palabras = nº de palabras de cada fila).
+
+    La pausa entre filas sale de unos 1,3 s, pero alguna puede salir más corta; por eso se elige el conjunto de
+    pausas (de 0,3 s o más) que reparte el audio en tramos proporcionales a las palabras de cada fila, con
+    preferencia por las pausas largas (programación dinámica)."""
+    n = len(palabras)
     total = duracion(archivo)
-    sil = silencios(archivo)
-    # se descartan el silencio del principio y el del final
-    medio = [s for s in sil if s[0] > 0.3 and s[1] < total - 0.3]
-    if len(medio) < n - 1:
-        sys.exit(f"Hay {len(medio)} pausas y se necesitan {n - 1}. ¿Es el audio correcto?")
-    largos = sorted(sorted(medio, key=lambda s: s[1] - s[0], reverse=True)[: n - 1])
-    menor_corte = min(b - a for a, b in largos)
-    siguiente = sorted((b - a for a, b in medio), reverse=True)[n - 1] if len(medio) >= n else 0
-    print(f"Pausa de corte más corta: {menor_corte:.2f} s; la pausa más larga que no se cortó: {siguiente:.2f} s")
-    if siguiente and menor_corte - siguiente < 0.15:
-        sys.exit("Las pausas entre lugares no se distinguen bien de las pausas dentro de un texto. Revise el audio.")
+    sil = [s for s in silencios(archivo, -35, 0.3) if s[0] > 0.3 and s[1] < total - 0.3]
+    if len(sil) < n - 1:
+        sys.exit(f"Hay {len(sil)} pausas y se necesitan {n - 1}. ¿Es el audio correcto?")
+    seg_por_palabra = (total - 1.3 * (n - 1)) / sum(palabras)
+    INF = float("inf")
+    # mejor[i][k]: costo mínimo de cortar en la pausa i habiendo cerrado las filas 0..k
+    mejor = [[INF] * n for _ in sil]
+    atras = [[None] * n for _ in sil]
+    for i, (a, b) in enumerate(sil):
+        esperado = palabras[0] * seg_por_palabra
+        mejor[i][0] = ((a - esperado) / esperado) ** 2 - 0.5 * min(b - a, 1.5)
+        for k in range(1, n - 1):
+            for h in range(i):
+                if mejor[h][k - 1] == INF:
+                    continue
+                largo = a - sil[h][1]
+                esperado = palabras[k] * seg_por_palabra
+                costo = mejor[h][k - 1] + ((largo - esperado) / esperado) ** 2 - 0.5 * min(b - a, 1.5)
+                if costo < mejor[i][k]:
+                    mejor[i][k], atras[i][k] = costo, h
+    fin = INF; mejor_i = None
+    for i, (a, b) in enumerate(sil):
+        if mejor[i][n - 2] == INF:
+            continue
+        largo = total - b
+        esperado = palabras[n - 1] * seg_por_palabra
+        costo = mejor[i][n - 2] + ((largo - esperado) / esperado) ** 2
+        if costo < fin:
+            fin, mejor_i = costo, i
+    if mejor_i is None:
+        sys.exit("No se pudo repartir el audio en las filas del guion.")
+    elegidas, i = [], mejor_i
+    for k in range(n - 2, -1, -1):
+        elegidas.append(sil[i]); i = atras[i][k]
+    elegidas.reverse()
     tramos, desde = [], 0.0
-    for a, b in largos:
+    for a, b in elegidas:
         tramos.append((max(0.0, desde), a + 0.25))
         desde = b - 0.15
     tramos.append((desde, total))
     return tramos
+
+
+PARTE1 = 20   # filas de la primera parte: bienvenida y lugares 1 a 19; el resto va en la segunda
+
+
+def repartir(archivos, filas):
+    if len(archivos) == 1:
+        return [(archivos[0], filas)]
+    if len(archivos) != 2:
+        sys.exit("Solo se admiten una o dos partes.")
+    return [(archivos[0], filas[:PARTE1]), (archivos[1], filas[PARTE1:])]
 
 
 def revisar(tramos, filas):
@@ -97,25 +140,30 @@ def codificar(origen, destino, desde=None, hasta=None, filtros="", canales=1, kb
 
 def main():
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
-    ap.add_argument("narracion", type=Path)
+    ap.add_argument("narracion", type=Path, nargs="+")
     ap.add_argument("--musica", type=Path)
     ap.add_argument("--probar", action="store_true")
     a = ap.parse_args()
 
     filas = guion()
-    tramos = cortes(a.narracion, len(filas))
-    malos = revisar(tramos, filas)
+    partes = repartir(a.narracion, filas)
+    tramos, filas_orden = [], []
+    for archivo, parte in partes:
+        tramos += [(archivo, d, h) for d, h in cortes(archivo, [len(t.split()) for _, t in parte])]
+        filas_orden += parte
+    malos = revisar([(d, h) for _, d, h in tramos], filas_orden)
     if malos:
         sys.exit(f"Cortes dudosos en: {', '.join(malos)}. No se escribió nada.")
     if a.probar:
         return
+    filas = filas_orden
 
     SALIDA.mkdir(parents=True, exist_ok=True)
     durs = {}
-    for (desde, hasta), (clave, _) in zip(tramos, filas):
+    for (origen, desde, hasta), (clave, _) in zip(tramos, filas):
         destino = SALIDA / f"{nombre(clave)}.m4a"
         largo = hasta - desde
-        codificar(a.narracion, destino, desde, hasta,
+        codificar(origen, destino, desde, hasta,
                   f"loudnorm=I=-16:TP=-1.5:LRA=11,afade=t=in:d=0.05,afade=t=out:st={max(0, largo - 0.2):.3f}:d=0.2")
         durs[int(clave) if clave.isdigit() else clave] = round(duracion(destino), 2)
     cuerpo = ",\n".join(f"  {json.dumps(k) if isinstance(k, str) else k}: {v}" for k, v in durs.items())
