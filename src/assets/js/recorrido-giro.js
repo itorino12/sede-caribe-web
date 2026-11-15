@@ -61,6 +61,7 @@ function elegir(id) {
   elegidoGiro = id; mostrar(actual);
   rellenarFicha(l);
   botones.forEach((b, k) => b.setAttribute("aria-pressed", String(k === id)));
+  raiz.dispatchEvent(new CustomEvent("lugar-elegido", { detail: { id } }));   // narración (recorrido-audio.js)
 }
 ficha.querySelector(".mapa3d__ficha-cerrar").addEventListener("click", () => {
   ficha.hidden = true;

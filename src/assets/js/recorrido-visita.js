@@ -2,6 +2,9 @@
 // alrededor. Elige cada lugar con el mismo botón [data-lugar] de la lista, así sirve igual con o sin 3D.
 // Si la persona toca la maqueta o la ficha, la visita se pausa; con los botones de zona, vista general o cerrar, termina.
 // recorrido.html#visita la inicia sola (para una pantalla en la entrada, por ejemplo).
+// Con sonido, narra cada lugar con música de fondo (recorrido-audio.js) y espera a que termine la narración.
+import { audioVisita } from "./recorrido-audio.js";
+
 const raiz = document.querySelector("[data-recorrido]");
 const barra = raiz?.querySelector("[data-visita-barra]");
 const iniciar = document.querySelector("[data-visita-iniciar]");
@@ -16,8 +19,11 @@ if (raiz && barra && iniciar) {
   const estado = document.querySelector("[data-visita-estado]");
   const textoIniciar = iniciar.innerHTML;
   // tiempo en cada lugar: lo que toma leer la ficha (unas 3 palabras por segundo), entre 8 y 20 segundos
-  const duracion = (l) => Math.min(20, Math.max(8, 4 + `${l.nombre} ${l.texto || ""}`.split(/\s+/).length / 3)) * 1000;
+  // con narración, al menos lo que dura el audio más un respiro antes de pasar al siguiente
+  const lectura = (l) => Math.min(20, Math.max(8, 4 + `${l.nombre} ${l.texto || ""}`.split(/\s+/).length / 3)) * 1000;
+  const duracion = (l, primero) => { const a = audioVisita.duracion(l.id, primero); return a ? Math.max(lectura(l), a + 1500) : lectura(l); };
 
+  let primeroConSaludo = false;
   let activa = false, pausada = false, indice = 0, reloj = null, t0 = 0, restante = 0, propio = false, porPestana = false;
   const en3d = () => raiz.classList.contains("mapa3d--listo") && !raiz.classList.contains("mapa3d--sin-3d");
   const girar = (si) => raiz.dispatchEvent(new CustomEvent("visita-giro", { detail: si }));
@@ -48,7 +54,8 @@ if (raiz && barra && iniciar) {
     if (!en3d()) ficha.scrollIntoView({ block: "nearest" });
     cuenta.textContent = `${indice + 1} / ${orden.length}`;
     barra.querySelector("[data-visita-antes]").disabled = indice === 0;
-    const ms = duracion(l);
+    const ms = duracion(l, primeroConSaludo);
+    primeroConSaludo = false;
     barraTiempo(ms);
     if (pausada) { restante = ms; clearTimeout(reloj); } else { programar(ms); girar(true); }
   }
@@ -57,12 +64,12 @@ if (raiz && barra && iniciar) {
     pausada = true;
     clearTimeout(reloj);
     restante = Math.max(0, restante - (performance.now() - t0));
-    girar(false); mostrarEstado();
+    girar(false); mostrarEstado(); audioVisita.pausar();
     if (motivo !== "pestaña") avisar("Visita en pausa.");
   }
   function seguir() {
     if (!activa || !pausada) return;
-    pausada = false; mostrarEstado();
+    pausada = false; mostrarEstado(); audioVisita.seguir();
     // si en la pausa la persona eligió otro lugar, la visita sigue con el que viene después de ese
     if (restante <= 0) { ir(indice + 1); return; }
     programar(restante); girar(true);
@@ -70,6 +77,7 @@ if (raiz && barra && iniciar) {
   }
   function empezar(desde = 0) {
     activa = true; pausada = false;
+    primeroConSaludo = true; audioVisita.empezar();
     raiz.classList.add("mapa3d--visita");
     barra.hidden = false;
     iniciar.innerHTML = "Terminar la visita guiada";
@@ -80,7 +88,7 @@ if (raiz && barra && iniciar) {
   function terminar(completa) {
     if (!activa) return;
     activa = false; pausada = false;
-    clearTimeout(reloj); girar(false);
+    clearTimeout(reloj); girar(false); audioVisita.terminar(completa);
     raiz.classList.remove("mapa3d--visita", "mapa3d--visita-pausada");
     barra.hidden = true;
     iniciar.innerHTML = textoIniciar;

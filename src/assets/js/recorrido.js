@@ -2155,6 +2155,7 @@ function elegir(id, volar) {
   techo.color.setHex(g.userData.alto < 1 ? techo.userData.original : colores.elegido);
   pared.color.setHex(colores.paredElegida);
   rellenarFicha(l);
+  raiz.dispatchEvent(new CustomEvent("lugar-elegido", { detail: { id } }));   // narración (recorrido-audio.js)
   if (volar) {
     const c = g.userData.centro;
     const dir = camara.position.clone().sub(controles.target).normalize();

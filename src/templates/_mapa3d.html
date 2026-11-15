@@ -9,6 +9,12 @@
         <button type="button" class="mapa3d__redondo" data-acercar aria-label="Acercar">+</button>
         <button type="button" class="mapa3d__redondo" data-alejar aria-label="Alejar">−</button>
         <button type="button" class="boton boton--secundario" data-vista-general>Vista general</button>
+        {% if not portada %}
+        <button type="button" class="mapa3d__redondo mapa3d__sonido" data-sonido hidden aria-pressed="true" aria-label="Silenciar la narración">
+          <svg class="mapa3d__icono-sonido" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9.5h3.5L12 5.5v13l-4.5-4H4z" fill="currentColor"/><path d="M15.5 9a4 4 0 0 1 0 6M18 6.5a7.5 7.5 0 0 1 0 11"/></svg>
+          <svg class="mapa3d__icono-mudo" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9.5h3.5L12 5.5v13l-4.5-4H4z" fill="currentColor"/><path d="M16 9.5l5 5M21 9.5l-5 5"/></svg>
+        </button>
+        {% endif %}
         <button type="button" class="mapa3d__redondo mapa3d__pantalla" data-pantalla aria-pressed="false" aria-label="Ver la maqueta en pantalla completa">
           <svg class="mapa3d__icono-abrir" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></svg>
           <svg class="mapa3d__icono-cerrar" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M9 4v5H4M15 4v5h5M9 20v-5H4M15 20v-5h5"/></svg>

@@ -348,6 +348,8 @@ def visita(nav, base):
     """Visita guiada: avanza sola, pausa, salta, cede ante la persona, termina; también sin WebGL y en celular."""
     print("Visita guiada")
     c, p, e = pagina(nav, base + "recorrido.html")
+    pedidos = []   # los audios no salen en Resource Timing: se miran las peticiones
+    p.on("request", lambda r: pedidos.append(r.url))
     p.wait_for_selector(".mapa3d--listo", timeout=120000)
     titulo = lambda: p.inner_text(".mapa3d__ficha-titulo")
     cuenta = lambda: p.inner_text("[data-visita-cuenta]")
@@ -359,6 +361,15 @@ def visita(nav, base):
     revisar(p.is_visible("[data-visita-barra]") and cuenta() == f"1 / {len(nombres)}" and titulo() == nombres[0][0], f"empieza en el lugar 1 ({cuenta()}, {titulo()})")
     revisar(p.evaluate("document.activeElement.matches('[data-visita-pausa]')"), "el foco pasa al botón de pausa")
     revisar(not p.is_visible("[data-vista-general]") and not p.is_visible(".mapa3d__zonas"), "durante la visita se apartan vista general y zonas")
+    # narración y música (solo si ya hay audios publicados): se piden la bienvenida y la música
+    if p.evaluate("!document.querySelector('[data-sonido]').hidden"):
+        pedido = lambda fin: any(u.split("?")[0].endswith(fin) for u in pedidos)
+        for _ in range(40):
+            if pedido("narracion/inicio.m4a") and pedido("visita-musica.m4a"):
+                break
+            p.wait_for_timeout(200)
+        revisar(pedido("narracion/inicio.m4a") and pedido("visita-musica.m4a"), "la visita pide la bienvenida narrada y la música")
+        revisar(p.get_attribute("[data-sonido]", "aria-pressed") == "true", "botón de sonido activado")
     p.screenshot(path=str(SALIDA / "visita.png"))
     # los saltos se prueban en pausa: con la escena girando, en una máquina sin GPU cada clic tarda tanto que la visita avanzaría sola
     pulsar("[data-visita-pausa]"); p.wait_for_timeout(300)

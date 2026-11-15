@@ -1,0 +1,39 @@
+inicio	Bienvenidos a la visita guiada por la Sede del Caribe de la Universidad de Costa Rica. Lo acompañamos lugar por lugar.
+1	Este es el pabellón de las aulas 1 a 7, en lo alto del talud. El Aula 5 es el Laboratorio de Cómputo 1. Desde las oficinas administrativas se sube por una escalera techada o por una rampa accesible.
+2	Aquí están las oficinas administrativas: Recepción, Registro, Becas, Acción Social, Vida Estudiantil y la Dirección de la Sede.
+3	Esta es la soda y el comedor estudiantil, rodeados de bosque. Un buen lugar para recargar energías.
+4	En este edificio de seis lados está la Coordinación de Docencia, junto con Audiovisuales y la Sala de Profesores.
+5	Justo detrás de la Coordinación de Docencia están los baños, a los que se llega por un pasillo techado.
+6	Al final de la calle interna hay cuatro espacios de parqueo, de frente a la Coordinación de Docencia.
+7	Este camino techado viene desde la entrada: cruza la calle sobre la alcantarilla de la quebrada y llega hasta las oficinas administrativas.
+8	Este es el parqueo administrativo, frente a las oficinas. Tres de sus espacios están bajo un techo de lámina verde.
+9	Desde la punta del pabellón de aulas sale este sendero, que sube por el zacate y se mete al bosque del Jardín Etnobotánico.
+10	Por este pasillo techado, frente a las oficinas administrativas, se llega a la soda y al comedor.
+11	Esta torre blanca es la caseta de arriba: abajo tiene cuartos eléctricos y arriba una caseta con escalera azul. En el árbol de al lado se han visto congos.
+12	Aquí puede ver el Auditorio, donde se hacen graduaciones y otros eventos de la Sede. Tiene 117 butacas y, en su fachada, un mural sobre la historia del Caribe.
+13	Esta es la entrada principal de la Sede del Caribe, junto a la ruta 32.
+14	En este pabellón están las aulas 8 a 12, con zonas verdes y mesas a su alrededor.
+15	En el pabellón de las aulas 13 a 17 están las coordinaciones de carrera, el Laboratorio de Química y el Laboratorio de Cómputo 2.
+16	Aquí están el consultorio médico, el consultorio odontológico y otras oficinas.
+17	Esta es la piscina de la Sede, con su deck de granito y la malla verde alrededor. A un costado están los baños y, al otro, un parqueo iluminado.
+18	Este camino baja desde la entrada principal junto a la calle interna. El primer tramo es una acera abierta y, desde donde llega el pasillo de las aulas, sigue techado.
+19	En este punto la quebrada pasa por un tubo bajo la calle. Encima, una plataforma de concreto con guía táctil une los dos pasillos techados, y de aquí sale el sendero hacia la explanada.
+20	Por la rampa entre muros celestes se sube a la explanada, una gran planicie con bancas y un higuerón enorme. Un lugar tranquilo para descansar.
+21	En la isla de zacate de la entrada está la caseta del guarda, que vigila el acceso al campus.
+22	En el ala baja del Auditorio están sus baños, con entrada propia bajo el alero.
+23	Este es el parqueo de la piscina, asfaltado e iluminado, del lado que da al gimnasio.
+24	Esta es la biblioteca de la Sede, con un colorido mural de mosaico en uno de sus costados.
+25	En este edificio nuevo están las aulas 18 a 23, repartidas en dos pisos. El Aula 20 es el Laboratorio de Cómputo 3.
+26	Este es el edificio de Ingeniería. Abajo están el Laboratorio de Ingeniería Química y el Simulador de Navegación; arriba, Orientación, el Laboratorio de Física y el Laboratorio de Cómputo 4.
+27	Este es el gimnasio de la Sede: una nave techada para deportes, con sala de pesas y máquinas de ejercicio al aire libre.
+28	Esta casita blanca es la bodega de la Coordinación de Acción Social, junto a las mesas de concreto.
+29	Este puente peatonal cruza la ruta 32 frente a la Sede. Sus rampas corren junto a la carretera, fuera de la cerca.
+30	Estas son las Residencias Estudiantiles, donde viven estudiantes dentro del campus.
+31	Este es el Centro Infantil Universitario Bilingüe, el CIUB, con su área de juegos para los niños.
+32	Sobre este talud está el Laboratorio de Investigación de la Sede, con escalera y rampa de acceso desde la calle.
+33	Esta es la entrada por residencias: tiene un portón para vehículos y una acera con guía táctil para personas con discapacidad visual.
+34	Frente al CIUB y las residencias está el área de picnic, con mesas de concreto, un rancho de palma y juegos infantiles.
+35	Aquí está la planta de tratamiento de aguas residuales de la Sede, junto a la calle que baja hacia las residencias.
+36	Por este puente, la calle interna cruza la quebrada. Tiene defensas amarillas y una acera con baranda y guía táctil.
+37	Esta es la pista atlética, con una cancha de fútbol en el centro. Se entra por el portón junto a la carretera.
+fin	Aquí termina la visita guiada. Gracias por recorrer la Sede del Caribe. ¡Hasta pronto!

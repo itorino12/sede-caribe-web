@@ -18,7 +18,7 @@ const ESENCIAL = [`assets/css/sede.css?v=${VERSION}`, `assets/js/tema.js?v=${VER
 
 const versionada = (u) => /\/assets\/(css|js)\//.test(u.pathname);
 const esFoto = (u) => u.pathname.startsWith(new URL(BASE).pathname + "media/");
-const directo = (u) => /\.(pdf|mp4|mp3|webm|ics|xml)$/i.test(u.pathname) || /\/(estado|sin-conexion)\.json$/.test(u.pathname) || u.pathname.includes("/api/");
+const directo = (u) => /\.(pdf|mp4|mp3|m4a|aac|ogg|webm|ics|xml)$/i.test(u.pathname) || /\/(estado|sin-conexion)\.json$/.test(u.pathname) || u.pathname.includes("/api/");
 function clave(u) {
   const k = new URL(u); k.hash = "";
   if (versionada(k)) k.search = "";
