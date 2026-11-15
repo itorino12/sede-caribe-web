@@ -6,8 +6,19 @@
 <section class="portada" aria-labelledby="portada-titulo">
   <div class="portada__rejilla">
     <div class="portada__texto">
+      {% if noticias %}
+      {# la noticia más reciente (fecha más nueva; en empate, la destacada). «titular_portada» es un titular corto
+         opcional de la hoja; si está vacío se usa el título completo #}
+      {% set n = noticias[0] %}
+      <h1 id="portada-titulo" class="oculto">Universidad de Costa Rica, Sede del Caribe</h1>
+      <article class="portada__noticia">
+        <h2 class="portada__noticia-titulo"><a href="noticias/{{ n.id }}.html">{{ n|titular_portada }}</a></h2>
+        {% if n.resumen %}<p class="portada__noticia-resumen">{{ n.resumen }} <a class="portada__noticia-enlace" href="noticias/{{ n.id }}.html">Leer la noticia<span class="oculto">: {{ n|titular_portada }}</span> →</a></p>{% endif %}
+      </article>
+      {% else %}
       <h1 id="portada-titulo">En Limón<span>desde 1975.</span></h1>
       <p class="portada__bajada">{{ carreras|length }} carreras en Limón y Siquirres, residencias dentro del campus y medio siglo de historia con la provincia.</p>
+      {% endif %}
       <form class="portada__buscar" role="search" data-busqueda-directa>
         <label for="portada-buscar">¿Qué necesita encontrar?</label>
         <div class="portada__campo">
@@ -90,16 +101,17 @@
   </div>
 </section>
 
-{% if noticias %}
+{# la más reciente ya está arriba, en la portada: aquí siguen las demás #}
+{% if noticias|length > 1 %}
 <section class="bloque ancho" aria-labelledby="noticias-titulo">
   <div class="bloque__cabeza">
-    <h2 id="noticias-titulo">Noticias</h2>
+    <h2 id="noticias-titulo">Más noticias</h2>
     <a href="noticias.html">Todas las noticias</a>
   </div>
   <div class="noticias-portada">
-    {{ tarjeta_noticia(noticias[0], '', grande=true) }}
+    {{ tarjeta_noticia(noticias[1], '', grande=true) }}
     <div class="noticias-portada__lista">
-      {% for n in noticias[1:5] %}{{ tarjeta_noticia(n, '') }}{% endfor %}
+      {% for n in noticias[2:6] %}{{ tarjeta_noticia(n, '') }}{% endfor %}
     </div>
   </div>
 </section>

@@ -41,7 +41,7 @@ La fila 1 son los encabezados (se pueden escribir con tildes y mayúsculas). Las
 |---|---|---|
 | config | Datos generales | clave, valor |
 | avisos | Franja de aviso urgente o aviso en «Hoy en la Sede» | publicar, tipo (urgente o informativo), titulo, texto, enlace_texto, enlace, desde, hasta |
-| noticias | Noticias | publicar, id, fecha, categoria, titulo, resumen, cuerpo, documento, imagen, imagen_alt, autor, destacada, fotos (galería: archivos de Imágenes separados por comas), fotos_alt (separadas por \|) |
+| noticias | Noticias | publicar, id, fecha, categoria, titulo, resumen, cuerpo, documento, imagen, imagen_alt, autor, destacada, fotos (galería: archivos de Imágenes separados por comas), fotos_alt (separadas por \|), titular_portada (opcional: titular corto para la portada, unos 70 caracteres) |
 | eventos | Agenda | publicar, id, fecha, hora, fecha_fin, titulo, lugar, categoria, descripcion, enlace, enlace_texto, organiza |
 | carreras | Oferta académica | publicar, id, nombre, grados, codigo, area, recintos, coordinacion, correo, extension, resumen, plan_url, documento |
 | unidades | Coordinaciones, recintos y servicios | publicar, id, nombre, grupo (Gobierno, Coordinaciones, Recintos o Servicios), responsable, cargo, correo, extension, edificio, resumen, documento |
@@ -56,6 +56,7 @@ La fila 1 son los encabezados (se pueden escribir con tildes y mayúsculas). Las
 
 - Una fila sale en el sitio solo si **publicar** dice `sí`. Así, la columna funciona como aprobación.
 - Una noticia con **fecha futura** queda programada y aparece ese día.
+- La portada muestra arriba la noticia más reciente (en empate de fecha, la destacada): miniatura, **titular_portada** (o el título, si está vacío) y las primeras tres líneas del **resumen**. Debajo, «Más noticias» sigue con las demás. Sin noticias publicadas, vuelve el mensaje «En Limón desde 1975».
 - Un aviso se muestra solo entre su fecha **desde** y su fecha **hasta**, y luego desaparece sin que nadie lo borre.
 - La agenda muestra arriba los plazos en curso, luego las próximas actividades por mes (con minicalendario y filtro por tema) y, plegadas al final, las anteriores. En «Esta semana», un plazo de más de una semana aparece solo el día que abre y el día que cierra.
 - La columna **documento** apunta a un Documento de Google de la carpeta «Páginas» por su nombre (por ejemplo, `historia`). Si una noticia tiene documento, se usa en lugar de la columna «cuerpo».

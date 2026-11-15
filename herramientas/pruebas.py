@@ -104,6 +104,14 @@ def rapida(nav, base):
     c, p, e = pagina(nav, base + "index.html")
     p.wait_for_selector(".mapa3d--listo", timeout=120000)
     revisar(not e, f"portada sin errores {e[:1]}")
+    noticia = p.evaluate("""(() => { const a = document.querySelector('.portada__noticia-titulo a');
+        const resto = [...document.querySelectorAll('.noticias-portada .nota__titulo a')].map(x => x.getAttribute('href'));
+        return a && { href: a.getAttribute('href'), repetida: resto.includes(a.getAttribute('href')),
+                      cabe: a.closest('.portada__noticia').getBoundingClientRect().right <= innerWidth }; })()""")
+    if noticia:
+        revisar(not noticia["repetida"], "la noticia de la portada no se repite en «Más noticias»")
+        revisar(noticia["cabe"], "la noticia de la portada cabe en la pantalla")
+    p.locator(".portada").screenshot(path=str(SALIDA / "portada.png"))
     c.close()
     c, p, e = pagina(nav, base + "recorrido.html")
     p.wait_for_selector(".mapa3d--listo", timeout=120000)

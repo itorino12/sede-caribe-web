@@ -13,7 +13,8 @@
   "autor": "",
   "destacada": "",
   "fotos": "",
-  "fotos_alt": ""
+  "fotos_alt": "",
+  "titular_portada": "Concurso de ingreso 2027"
  },
  {
   "publicar": "sí",
@@ -29,7 +30,8 @@
   "autor": "",
   "destacada": "",
   "fotos": "",
-  "fotos_alt": ""
+  "fotos_alt": "",
+  "titular_portada": "Informática Empresarial reacreditada hasta 2030"
  },
  {
   "publicar": "sí",
@@ -45,7 +47,8 @@
   "autor": "Consejo de Carrera Intersedes de Informática Empresarial",
   "destacada": "",
   "fotos": "noticias/registro-elegibles-2026-afiche.jpg",
-  "fotos_alt": "Afiche completo de la convocatoria. Postulaciones del 23 de octubre al 20 de noviembre, hasta las 11:00 p. m., por el formulario oficial. Áreas del Plan 07: Conocimientos Básicos para la Informática, Gestión de la Informática en las Organizaciones, Desarrollo de Software, Ingeniería de Datos y Arquitectura e Infraestructura de Sistemas Computacionales. Grado mínimo: licenciatura o maestría reconocida por CONESUP o CONARE en el área del perfil. Documentos en un solo archivo .zip. La inscripción no implica nombramiento. Información en informaticaempresarial.ucr.ac.cr; consultas a consejoinformaticaempresarial@ucr.ac.cr."
+  "fotos_alt": "Afiche completo de la convocatoria. Postulaciones del 23 de octubre al 20 de noviembre, hasta las 11:00 p. m., por el formulario oficial. Áreas del Plan 07: Conocimientos Básicos para la Informática, Gestión de la Informática en las Organizaciones, Desarrollo de Software, Ingeniería de Datos y Arquitectura e Infraestructura de Sistemas Computacionales. Grado mínimo: licenciatura o maestría reconocida por CONESUP o CONARE en el área del perfil. Documentos en un solo archivo .zip. La inscripción no implica nombramiento. Información en informaticaempresarial.ucr.ac.cr; consultas a consejoinformaticaempresarial@ucr.ac.cr.",
+  "titular_portada": "Docentes para el Plan 07"
  },
  {
   "publicar": "sí",
@@ -61,7 +64,8 @@
   "autor": "",
   "destacada": "sí",
   "fotos": "noticias/graduacion-octubre-2026-mesa.jpg, noticias/graduacion-octubre-2026-mensaje.jpg",
-  "fotos_alt": "Una persona graduada habla desde el podio durante el acto; a la derecha, la mesa principal frente a los estandartes de la Sede del Caribe.|Mensaje desde el podio durante el acto de graduación, junto a la bandera de Costa Rica."
+  "fotos_alt": "Una persona graduada habla desde el podio durante el acto; a la derecha, la mesa principal frente a los estandartes de la Sede del Caribe.|Mensaje desde el podio durante el acto de graduación, junto a la bandera de Costa Rica.",
+  "titular_portada": "27 nuevos graduados en octubre"
  },
  {
   "publicar": "sí",
@@ -77,7 +81,8 @@
   "autor": "",
   "destacada": "",
   "fotos": "",
-  "fotos_alt": ""
+  "fotos_alt": "",
+  "titular_portada": "Ingeniería en Procesos de Manufactura"
  },
  {
   "publicar": "sí",

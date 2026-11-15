@@ -118,6 +118,16 @@ def texto_plano(h):
     return re.sub(r"\s+", " ", html.unescape(re.sub(r"<[^>]+>", " ", h))).strip()
 
 
+def titular_portada(n, maximo=5):
+    """Titular corto de la portada: la columna «titular_portada» (máximo 5 palabras); si falta o se pasa, el título recortado."""
+    t = (n.get("titular_portada") or "").strip()
+    if t and len(t.split()) <= maximo:
+        return t
+    palabras = (t or n["titulo"]).split()
+    print(f"  ! titular de portada sin definir o de más de {maximo} palabras: «{n['titulo'][:50]}»")
+    return " ".join(palabras[:maximo]).rstrip(",:;.") + ("…" if len(palabras) > maximo else "")
+
+
 def fecha_larga(d):
     return f"{d.day} de {MESES[d.month - 1]} de {d.year}" if d else ""
 
@@ -554,7 +564,7 @@ def main():
 
     env = Environment(loader=FileSystemLoader(SRC / "templates"), autoescape=select_autoescape(["html"]),
                       trim_blocks=True, lstrip_blocks=True)
-    env.filters.update(srcset=srcset, fecha_larga=fecha_larga, fecha_corta=fecha_corta, dia_semana=dia_semana, mes=mes,
+    env.filters.update(titular_portada=titular_portada, srcset=srcset, fecha_larga=fecha_larga, fecha_corta=fecha_corta, dia_semana=dia_semana, mes=mes,
                        tel=lambda t: "tel:+506" + re.sub(r"\D", "", t or ""))
     env.globals.update(sitio=sitio, hoy=HOY, MESES=MESES, ahora=AHORA, ejemplos=EJEMPLOS, vista_previa=VISTA_PREVIA, origen=origen,
                        unidades_publicadas={u["id"] for u in c["unidades"]})  # el menú omite las que no tienen página

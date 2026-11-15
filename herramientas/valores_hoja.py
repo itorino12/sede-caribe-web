@@ -21,7 +21,7 @@ ENCABEZADOS = {
     "config": ["clave", "valor"],
     "avisos": ["publicar", "tipo", "titulo", "texto", "enlace_texto", "enlace", "desde", "hasta"],
     "noticias": ["publicar", "id", "fecha", "categoria", "titulo", "resumen", "cuerpo", "documento", "imagen", "imagen_alt",
-                 "autor", "destacada", "fotos", "fotos_alt"],
+                 "autor", "destacada", "fotos", "fotos_alt", "titular_portada"],
     "eventos": ["publicar", "id", "fecha", "hora", "fecha_fin", "titulo", "lugar", "categoria", "descripcion", "enlace",
                 "enlace_texto", "organiza"],
     "carreras": ["publicar", "id", "nombre", "grados", "codigo", "area", "recintos", "coordinacion", "correo", "extension",
