@@ -8,7 +8,7 @@
     <div class="portada__texto">
       {% if noticias %}
       {# las tres noticias más recientes (fecha más nueva; en empate, la destacada) en un carrusel. «titular_portada» es un
-         titular corto (máximo 5 palabras) de la hoja. Sin JavaScript se ve solo la primera; portada-noticias.js lo vuelve carrusel #}
+         titular corto (máximo 5 palabras) de la hoja. Sin JavaScript se ve solo la primera; portada-noticias.js lo vuelve carrusel (un botón «siguiente») #}
       {% set ultimas = noticias[:3] %}
       <h1 id="portada-titulo" class="oculto">Universidad de Costa Rica, Sede del Caribe</h1>
       <div class="portada__noticias" data-carrusel-noticias role="group" aria-roledescription="carrusel" aria-label="Últimas noticias">
@@ -20,14 +20,7 @@
           </div>
           {% endfor %}
         </div>
-        {% if ultimas|length > 1 %}
-        <div class="portada__noticias-mando" hidden>
-          <button type="button" class="portada__noticias-boton" data-antes aria-label="Noticia anterior"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m15 5-7 7 7 7"/></svg></button>
-          <ul class="portada__noticias-puntos">{% for n in ultimas %}<li><button type="button" data-ir="{{ loop.index0 }}" aria-label="Noticia {{ loop.index }} de {{ ultimas|length }}"></button></li>{% endfor %}</ul>
-          <button type="button" class="portada__noticias-boton" data-despues aria-label="Noticia siguiente"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m9 5 7 7-7 7"/></svg></button>
-          <button type="button" class="portada__noticias-boton portada__noticias-pausa" data-pausa aria-label="Pausar el cambio automático" aria-pressed="false"><svg class="pausa" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M8 5v14M16 5v14"/></svg><svg class="seguir" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M8 5v14l11-7z"/></svg></button>
-        </div>
-        {% endif %}
+        {% if ultimas|length > 1 %}<button type="button" class="portada__noticias-siguiente" data-despues aria-label="Noticia siguiente" hidden><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m9 5 7 7-7 7"/></svg></button>{% endif %}
       </div>
       {% else %}
       <h1 id="portada-titulo">En Limón<span>desde 1975.</span></h1>
@@ -115,7 +108,20 @@
   </div>
 </section>
 
-{# en la portada solo van las tres noticias más recientes (el carrusel de arriba); el resto está en Noticias #}
+{% if noticias %}
+<section class="bloque ancho" aria-labelledby="noticias-titulo">
+  <div class="bloque__cabeza">
+    <h2 id="noticias-titulo">Noticias</h2>
+    <a href="noticias.html">Todas las noticias</a>
+  </div>
+  <div class="noticias-portada">
+    {{ tarjeta_noticia(noticias[0], '', grande=true) }}
+    <div class="noticias-portada__lista">
+      {% for n in noticias[1:5] %}{{ tarjeta_noticia(n, '') }}{% endfor %}
+    </div>
+  </div>
+</section>
+{% endif %}
 
 <section class="carreras-portada" aria-labelledby="carreras-titulo">
   <div class="ancho">
