@@ -243,17 +243,23 @@ main:focus { outline: none; }
 .portada__campo input:focus-visible { outline: none; }
 .portada__campo:focus-within { outline: 3px solid var(--foco); outline-offset: 2px; }
 .portada__campo .boton, :root[data-tema="oscuro"] .portada__campo .boton { border-radius: 0 2px 2px 0; min-height: 0; background: var(--banda); border-color: var(--banda); color: var(--sobre-banda); }
-/* tres botones del mismo ancho total que la barra de búsqueda, blancos como el campo; ícono arriba del texto */
+/* tres botones del mismo ancho total que la barra de búsqueda: delgados, translúcidos y con un tinte pastel muy suave de cada
+   uno de los tres colores de la combinación activa (franja, segundo acento y filete); el texto queda oscuro para leerse bien */
 .portada__acciones { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; max-width: 520px; margin: 0; }
-.portada__acciones a { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px; min-height: 78px;
-  padding: 10px 6px; border-radius: 4px; background: #fff; color: #0C344E; text-decoration: none; text-align: center;
-  font-weight: 700; font-size: clamp(.86rem, 2.7vw, 1rem); line-height: 1.15; box-shadow: 0 2px 10px rgba(0, 0, 0, .25);
+.portada__acciones a { --tinte: var(--banda); display: flex; align-items: center; justify-content: center; gap: 8px; min-height: 46px;
+  padding: 6px 10px; border-radius: 4px; border: 1px solid rgba(255, 255, 255, .55); color: #0C344E; text-decoration: none;
+  background: color-mix(in srgb, color-mix(in srgb, var(--tinte) 13%, #fff) 84%, transparent);
+  -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px);
+  font-weight: 700; font-size: clamp(.84rem, 2.6vw, .98rem); line-height: 1.15; text-align: left;
   transition: background .15s, transform .15s, box-shadow .15s; }
-.portada__acciones svg { width: 28px; height: 28px; flex: none; fill: none; stroke: var(--azul); stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
-:root[data-tema="oscuro"] .portada__acciones svg { stroke: #02477B; }   /* el botón sigue blanco en modo oscuro */
-.portada__acciones a:hover { transform: translateY(-2px); box-shadow: 0 6px 16px rgba(0, 0, 0, .3); }
+.portada__acciones a:nth-child(2) { --tinte: var(--musgo); }
+.portada__acciones a:nth-child(3) { --tinte: var(--filete); }
+.portada__acciones svg { width: 22px; height: 22px; flex: none; fill: none; stroke: var(--azul); stroke-width: 1.9; stroke-linecap: round; stroke-linejoin: round; }
+:root[data-tema="oscuro"] .portada__acciones svg { stroke: #02477B; }   /* el botón sigue claro en modo oscuro */
+.portada__acciones a:hover { background: color-mix(in srgb, var(--tinte) 10%, #fff); transform: translateY(-1px); box-shadow: 0 4px 12px rgba(0, 0, 0, .25); }
 .portada__acciones a:hover span { text-decoration: underline; text-underline-offset: 3px; }
 :root[data-quieto] .portada__acciones a:hover { transform: none; }
+:root[data-contraste] .portada__acciones a { background: #fff; border-color: #0C344E; -webkit-backdrop-filter: none; backdrop-filter: none; }
 @media (prefers-reduced-motion: reduce) { .portada__acciones a { transition: none; } .portada__acciones a:hover { transform: none; } }
 .buscador-portada-visible .buscar-boton { visibility: hidden; }  /* la portada ya muestra su propio buscador */
 /* Foto según el modo: la entrada de día en claro y de noche en oscuro (en «Visítenos», al revés) */
