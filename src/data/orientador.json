@@ -385,6 +385,13 @@
       "naturaleza": 1,
       "normas": 1
     },
+    "ingenieria-procesos-manufactura": {
+      "tecnologia": 3,
+      "ciencia": 2,
+      "numeros": 2,
+      "normas": 1,
+      "negocios": 1
+    },
     "marina-civil": {
       "mar": 3,
       "tecnologia": 1,

@@ -206,8 +206,9 @@
         "creditos": 3,
         "optativo": false,
         "area": "PED",
-        "req": [],
-        "coreq_texto": "FD-0548 ---"
+        "req": [
+          "FD-0548"
+        ]
       },
       {
         "sigla": "LM-1002",
@@ -216,8 +217,10 @@
         "creditos": 8,
         "optativo": false,
         "area": "LEN",
-        "req": [],
-        "coreq_texto": "- LM-1001 ---"
+        "req": [
+          "LM-1001"
+        ],
+        "req_texto": "- LM-1001"
       },
       {
         "sigla": "FD-0152",
@@ -226,8 +229,9 @@
         "creditos": 3,
         "optativo": false,
         "area": "PED",
-        "req": [],
-        "coreq_texto": "FD-0548 ---"
+        "req": [
+          "FD-0548"
+        ]
       },
       {
         "sigla": "FD-5051",
@@ -246,8 +250,9 @@
         "creditos": 2,
         "optativo": false,
         "area": "LEN",
-        "req": [],
-        "coreq_texto": "LM-1002 ---"
+        "req": [
+          "LM-1002"
+        ]
       },
       {
         "sigla": "LM-1230",
@@ -256,8 +261,9 @@
         "creditos": 5,
         "optativo": false,
         "area": "LEN",
-        "req": [],
-        "coreq_texto": "LM-1002 ---"
+        "req": [
+          "LM-1002"
+        ]
       },
       {
         "sigla": "LM-1235",
@@ -266,8 +272,9 @@
         "creditos": 3,
         "optativo": false,
         "area": "LEN",
-        "req": [],
-        "coreq_texto": "LM-1002 ---"
+        "req": [
+          "LM-1002"
+        ]
       },
       {
         "sigla": "LM-1246",
@@ -276,8 +283,9 @@
         "creditos": 2,
         "optativo": false,
         "area": "LEN",
-        "req": [],
-        "coreq_texto": "LM-1002 ---"
+        "req": [
+          "LM-1002"
+        ]
       },
       {
         "sigla": "SR-I",
@@ -286,8 +294,9 @@
         "creditos": 2,
         "optativo": false,
         "area": "FG",
-        "req": [],
-        "coreq_texto": "EG-II ---"
+        "req": [
+          "EG-II"
+        ]
       },
       {
         "sigla": "OE-0342",
@@ -296,8 +305,10 @@
         "creditos": 3,
         "optativo": false,
         "area": "PED",
-        "req": [],
-        "coreq_texto": "FD-0152, FD-5051 ---"
+        "req": [
+          "FD-0152",
+          "FD-5051"
+        ]
       },
       {
         "sigla": "EA-0350",
@@ -306,8 +317,10 @@
         "creditos": 3,
         "optativo": false,
         "area": "DID",
-        "req": [],
-        "coreq_texto": "FD-0152, FD-5051 ---"
+        "req": [
+          "FD-0152",
+          "FD-5051"
+        ]
       },
       {
         "sigla": "LM-0353",
@@ -317,14 +330,15 @@
         "optativo": false,
         "area": "LEN",
         "req": [
+          "LM-1230",
+          "LM-0352",
           "LM-1235"
         ],
-        "req_texto": "LM-1234, LM-1235",
+        "req_texto": "LM-1230, LM-0352 o LM-1234, LM-1235",
         "coreq": [
           "LM-1240",
           "LM-1245"
-        ],
-        "coreq_texto": "LM-1230, LM-0352 o LM-1240, LM-1245"
+        ]
       },
       {
         "sigla": "LM-1240",
@@ -334,14 +348,16 @@
         "optativo": false,
         "area": "LEN",
         "req": [
+          "LM-1230",
+          "LM-0352",
           "LM-1235"
         ],
-        "req_texto": "LM-1234, LM-1235",
+        "req_texto": "LM-1230, LM-0352 o LM-1234, LM-1235",
         "coreq": [
           "LM-0353",
           "LM-1245"
         ],
-        "coreq_texto": "LM-1230, LM-0352 o LM-0353 o LM-1244, LM-1245"
+        "coreq_texto": "LM-0353 o LM-1244, LM-1245"
       },
       {
         "sigla": "LM-1245",
@@ -351,14 +367,16 @@
         "optativo": false,
         "area": "LEN",
         "req": [
+          "LM-1230",
+          "LM-0352",
           "LM-1235"
         ],
-        "req_texto": "LM-1234, LM-1235",
+        "req_texto": "LM-1230, LM-0352 o LM-1234, LM-1235",
         "coreq": [
           "LM-1240",
           "LM-0353"
         ],
-        "coreq_texto": "LM-1230, LM-0352 o LM-1240, LM-0353 o LM-1244"
+        "coreq_texto": "LM-1240, LM-0353 o LM-1244"
       },
       {
         "sigla": "FD-0530",
@@ -367,8 +385,10 @@
         "creditos": 3,
         "optativo": false,
         "area": "DID",
-        "req": [],
-        "coreq_texto": "OE-0342, EA-0350 ---"
+        "req": [
+          "OE-0342",
+          "EA-0350"
+        ]
       },
       {
         "sigla": "LM-0354",
@@ -378,10 +398,11 @@
         "optativo": false,
         "area": "LEN",
         "req": [
+          "LM-1240",
+          "LM-1245",
           "LM-0353"
         ],
-        "req_texto": "LM-0353 o LM-1244",
-        "coreq_texto": "LM-1240, LM-1245, ---"
+        "req_texto": "LM-1240, LM-1245, LM-0353 o LM-1244"
       },
       {
         "sigla": "LM-1243",
@@ -390,8 +411,9 @@
         "creditos": 2,
         "optativo": false,
         "area": "LIT",
-        "req": [],
-        "coreq_texto": "LM-1246 ---"
+        "req": [
+          "LM-1246"
+        ]
       },
       {
         "sigla": "LM-1351",
@@ -401,10 +423,11 @@
         "optativo": false,
         "area": "LEN",
         "req": [
+          "LM-1240",
+          "LM-0353",
           "LM-1245"
         ],
-        "req_texto": "LM-1244, LM-1245",
-        "coreq_texto": "LM-1240, LM-0353 o ---"
+        "req_texto": "LM-1240, LM-0353 o LM-1244, LM-1245"
       },
       {
         "sigla": "LM-1352",
@@ -414,10 +437,11 @@
         "optativo": false,
         "area": "LEN",
         "req": [
+          "LM-1240",
+          "LM-0353",
           "LM-1245"
         ],
-        "req_texto": "LM-1244, LM-1245",
-        "coreq_texto": "LM-1240, LM-0353 o ---"
+        "req_texto": "LM-1240, LM-0353 o LM-1244, LM-1245"
       },
       {
         "sigla": "FD-0540",
@@ -426,8 +450,9 @@
         "creditos": 6,
         "optativo": false,
         "area": "DID",
-        "req": [],
-        "coreq_texto": "FD-0530 ---"
+        "req": [
+          "FD-0530"
+        ]
       },
       {
         "sigla": "LM-0355",
@@ -437,10 +462,11 @@
         "optativo": false,
         "area": "LEN",
         "req": [
+          "LM-1351",
+          "LM-1352",
           "LM-0354"
         ],
-        "req_texto": "LM-0354 o LM-1353",
-        "coreq_texto": "LM-1351, LM-1352, ---"
+        "req_texto": "LM-1351, LM-1352, LM-0354 o LM-1353"
       },
       {
         "sigla": "LM-1354",
@@ -449,8 +475,9 @@
         "creditos": 3,
         "optativo": false,
         "area": "LIT",
-        "req": [],
-        "coreq_texto": "LM-1240 ---"
+        "req": [
+          "LM-1240"
+        ]
       },
       {
         "sigla": "LM-1361",
@@ -460,10 +487,11 @@
         "optativo": false,
         "area": "LEN",
         "req": [
+          "LM-1351",
+          "LM-1352",
           "LM-0354"
         ],
-        "req_texto": "LM-0354 o LM-1353",
-        "coreq_texto": "LM-1351, LM-1352, ---"
+        "req_texto": "LM-1351, LM-1352, LM-0354 o LM-1353"
       },
       {
         "sigla": "LM-1362",
@@ -473,10 +501,11 @@
         "optativo": false,
         "area": "LEN",
         "req": [
+          "LM-1351",
+          "LM-1352",
           "LM-0354"
         ],
-        "req_texto": "LM-0354 o LM-1353",
-        "coreq_texto": "LM-1351, LM-1352, ---"
+        "req_texto": "LM-1351, LM-1352, LM-0354 o LM-1353"
       },
       {
         "sigla": "RP-",
@@ -486,7 +515,6 @@
         "optativo": false,
         "area": "FG",
         "req": [],
-        "coreq_texto": "--- ---",
         "nota": "Se elige entre la oferta de la Sede para cada ciclo."
       },
       {
@@ -508,8 +536,9 @@
         "creditos": 4,
         "optativo": false,
         "area": "DID",
-        "req": [],
-        "coreq_texto": "FD-0540 ---"
+        "req": [
+          "FD-0540"
+        ]
       },
       {
         "sigla": "LM-1364",
@@ -559,8 +588,9 @@
         "creditos": 2,
         "optativo": false,
         "area": "FG",
-        "req": [],
-        "coreq_texto": "SR-I ---"
+        "req": [
+          "SR-I"
+        ]
       },
       {
         "sigla": "OE-1012",
@@ -569,8 +599,10 @@
         "creditos": 3,
         "optativo": false,
         "area": "PED",
-        "req": [],
-        "coreq_texto": "FD-0152 o FD-0023 ---"
+        "req": [
+          "FD-0152"
+        ],
+        "req_texto": "FD-0152 o FD-0023"
       },
       {
         "sigla": "FD-0544",

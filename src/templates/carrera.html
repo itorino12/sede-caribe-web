@@ -88,7 +88,7 @@
           <h3 id="malla-panel-t">Cómo leer la malla</h3>
           <p id="malla-ayuda">Cada tarjeta es un curso. El color indica su área y el número, sus créditos. Al elegir uno, las flechas muestran qué cursos lo anteceden y cuáles se abren al aprobarlo.</p>
           <p class="malla-panel__leyenda"><span class="marca marca--req">Requisito</span> <span class="marca marca--abre">Se abre al aprobarlo</span></p>
-          <p>Los optativos, con borde punteado, se eligen entre los cursos de cada área de tendencia.</p>
+          {% if m.optativos %}<p>Los optativos, con borde punteado, se eligen de la lista que sigue a la malla.</p>{% endif %}
         </div>
       </aside>
     </div>

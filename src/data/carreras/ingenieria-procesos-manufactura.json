@@ -1,0 +1,1019 @@
+{
+  "fuente": "Estructura curricular del plan 600402, plan 01 (Informe Curricular CEA-62-2026), y Resolución VD-13893-2026 de la Vicerrectoría de Docencia. Cupos de ingreso 2027 según las normas de admisión de la UCR.",
+  "lema": "Formación para diseñar, operar y mejorar los procesos que transforman materiales en productos",
+  "cifras": [
+    {
+      "valor": "180",
+      "etiqueta": "créditos: 144 del bachillerato y 36 de la licenciatura"
+    },
+    {
+      "valor": "5 años",
+      "etiqueta": "en 13 ciclos, tres de ellos interciclos"
+    },
+    {
+      "valor": "300 h",
+      "etiqueta": "de Trabajo Comunal Universitario"
+    },
+    {
+      "valor": "35",
+      "etiqueta": "cupos de ingreso 2027 en el Recinto de Limón"
+    }
+  ],
+  "planes": [
+    {
+      "nombre": "Plan de estudios",
+      "detalle": "Código 600402 · CEA-62-2026 · PDF",
+      "url": "https://drive.google.com/file/d/1tYvCAAqiG7EjdWU-sOZqfrhae55XCp5N/view",
+      "principal": true
+    },
+    {
+      "nombre": "Resolución de creación de la carrera",
+      "detalle": "VD-13893-2026 · 30 de octubre de 2026 · PDF",
+      "url": "https://drive.google.com/file/d/12rX4qSZ5KFuFRIU_MjEcbREoV2qGz0NZ/view"
+    }
+  ],
+  "malla": {
+    "plan": "Plan 01",
+    "total": 180,
+    "tcu": 300,
+    "resumen_creditos": "180 créditos: 144 del bachillerato en once ciclos (tres son interciclos) y 36 de la licenciatura en dos ciclos.",
+    "nota_fuente": "Fuente: estructura curricular del plan de Bachillerato y Licenciatura en Ingeniería en Procesos de Manufactura, código 600402, plan 01 (Informe Curricular CEA-62-2026). Las siglas que siguen a «o» en los requisitos son cursos equivalentes de otros planes.",
+    "areas": [
+      {
+        "id": "MAT",
+        "nombre": "Matemática y ciencias básicas",
+        "corto": "Ciencias básicas",
+        "color": "#3B6E2C",
+        "oscuro": "#8CC27A",
+        "descripcion": "Precálculo, cálculo, álgebra lineal, ecuaciones diferenciales, química general y orgánica, física con laboratorios e informática.",
+        "creditos": 39
+      },
+      {
+        "id": "PRO",
+        "nombre": "Procesos y materiales",
+        "corto": "Procesos",
+        "color": "#0A6AA6",
+        "oscuro": "#5AAEE0",
+        "descripcion": "Diseño para manufactura, ciencia de materiales, mecánica y los tres cursos de procesos de manufactura.",
+        "creditos": 21
+      },
+      {
+        "id": "AUT",
+        "nombre": "Automatización y manufactura digital",
+        "corto": "Automatización",
+        "color": "#A8550A",
+        "oscuro": "#E8A060",
+        "descripcion": "Operación y control de procesos, automatización industrial, modelado y simulación, manufactura digital y trazabilidad.",
+        "creditos": 23
+      },
+      {
+        "id": "CAL",
+        "nombre": "Calidad, metrología y datos",
+        "corto": "Calidad y datos",
+        "color": "#5A47A6",
+        "oscuro": "#A595E6",
+        "descripcion": "Estadística aplicada, metrología, ingeniería de calidad, diseño de experimentos, validación y regulación, y analítica de datos.",
+        "creditos": 21
+      },
+      {
+        "id": "GES",
+        "nombre": "Gestión, sostenibilidad y profundización",
+        "corto": "Gestión y sostenibilidad",
+        "color": "#00796B",
+        "oscuro": "#4DB6A8",
+        "descripcion": "Planeación de la producción, seguridad industrial, manufactura sostenible, innovación, proyectos, evaluación técnico-económica y las optativas de profundización.",
+        "creditos": 27
+      },
+      {
+        "id": "PRA",
+        "nombre": "Práctica integrada e investigación",
+        "corto": "Práctica integrada",
+        "color": "#B0306A",
+        "oscuro": "#E58BB5",
+        "descripcion": "Introducción a la carrera, las tres prácticas integradas en la industria y el seminario de investigación aplicada.",
+        "creditos": 16
+      },
+      {
+        "id": "ING",
+        "nombre": "Inglés para manufactura",
+        "corto": "Inglés",
+        "color": "#7A5C00",
+        "oscuro": "#D9B550",
+        "descripcion": "Cuatro cursos de inglés técnico para manufactura, del IV al X ciclo.",
+        "creditos": 12
+      },
+      {
+        "id": "FG",
+        "nombre": "Formación general",
+        "corto": "Formación general",
+        "color": "#5F6B78",
+        "oscuro": "#A9B4BF",
+        "descripcion": "Cursos integrados de humanidades, arte, repertorio, actividad deportiva y seminarios de realidad nacional, comunes a toda la Universidad.",
+        "creditos": 21
+      }
+    ],
+    "ciclos": [
+      {
+        "n": "I",
+        "anio": 1,
+        "nombre": "I ciclo",
+        "verano": false,
+        "creditos": 16
+      },
+      {
+        "n": "II",
+        "anio": 1,
+        "nombre": "II ciclo",
+        "verano": false,
+        "creditos": 14
+      },
+      {
+        "n": "III",
+        "anio": 1,
+        "nombre": "III ciclo (interciclo)",
+        "verano": true,
+        "creditos": 4
+      },
+      {
+        "n": "IV",
+        "anio": 2,
+        "nombre": "IV ciclo",
+        "verano": false,
+        "creditos": 17
+      },
+      {
+        "n": "V",
+        "anio": 2,
+        "nombre": "V ciclo",
+        "verano": false,
+        "creditos": 18
+      },
+      {
+        "n": "VI",
+        "anio": 2,
+        "nombre": "VI ciclo (interciclo)",
+        "verano": true,
+        "creditos": 3
+      },
+      {
+        "n": "VII",
+        "anio": 3,
+        "nombre": "VII ciclo",
+        "verano": false,
+        "creditos": 18
+      },
+      {
+        "n": "VIII",
+        "anio": 3,
+        "nombre": "VIII ciclo",
+        "verano": false,
+        "creditos": 17
+      },
+      {
+        "n": "IX",
+        "anio": 3,
+        "nombre": "IX ciclo (interciclo)",
+        "verano": true,
+        "creditos": 5
+      },
+      {
+        "n": "X",
+        "anio": 4,
+        "nombre": "X ciclo",
+        "verano": false,
+        "creditos": 17
+      },
+      {
+        "n": "XI",
+        "anio": 4,
+        "nombre": "XI ciclo",
+        "verano": false,
+        "creditos": 15
+      },
+      {
+        "n": "XII",
+        "anio": 5,
+        "nombre": "XII ciclo",
+        "verano": false,
+        "tramo": "Licenciatura",
+        "creditos": 18
+      },
+      {
+        "n": "XIII",
+        "anio": 5,
+        "nombre": "XIII ciclo",
+        "verano": false,
+        "tramo": "Licenciatura",
+        "creditos": 18
+      }
+    ],
+    "cursos": [
+      {
+        "sigla": "EG-I",
+        "nombre": "Curso Integrado de Humanidades I",
+        "ciclo": "I",
+        "creditos": 6,
+        "optativo": false,
+        "area": "FG",
+        "req": []
+      },
+      {
+        "sigla": "EG-",
+        "nombre": "Curso de Arte",
+        "ciclo": "I",
+        "creditos": 2,
+        "optativo": false,
+        "area": "FG",
+        "req": [],
+        "nota": "Se elige entre la oferta de la Sede para cada ciclo."
+      },
+      {
+        "sigla": "MA-0001",
+        "nombre": "Precálculo",
+        "ciclo": "I",
+        "creditos": 0,
+        "optativo": false,
+        "area": "MAT",
+        "req": [],
+        "nota": "Con nota igual o superior a 7,0 en la prueba DiMa se da por aprobado (resolución VD-R-9190-2015)."
+      },
+      {
+        "sigla": "QU-0114",
+        "nombre": "Química General Intensiva",
+        "ciclo": "I",
+        "creditos": 4,
+        "optativo": false,
+        "area": "MAT",
+        "req": [],
+        "coreq": [
+          "QU-0115"
+        ]
+      },
+      {
+        "sigla": "QU-0115",
+        "nombre": "Laboratorio de Química General Intensiva",
+        "ciclo": "I",
+        "creditos": 1,
+        "optativo": false,
+        "area": "MAT",
+        "req": [],
+        "coreq": [
+          "QU-0114"
+        ]
+      },
+      {
+        "sigla": "IPM-001",
+        "nombre": "Introducción a la Ingeniería en Procesos de Manufactura",
+        "ciclo": "I",
+        "creditos": 3,
+        "optativo": false,
+        "area": "PRA",
+        "req": []
+      },
+      {
+        "sigla": "EG-II",
+        "nombre": "Curso Integrado de Humanidades II",
+        "ciclo": "II",
+        "creditos": 6,
+        "optativo": false,
+        "area": "FG",
+        "req": [
+          "EG-I"
+        ]
+      },
+      {
+        "sigla": "EF-",
+        "nombre": "Actividad Deportiva",
+        "ciclo": "II",
+        "creditos": 0,
+        "optativo": false,
+        "area": "FG",
+        "req": []
+      },
+      {
+        "sigla": "MA-1001",
+        "nombre": "Cálculo I",
+        "ciclo": "II",
+        "creditos": 3,
+        "optativo": false,
+        "area": "MAT",
+        "req": [
+          "MA-0001"
+        ]
+      },
+      {
+        "sigla": "QU-0210",
+        "nombre": "Fundamentos de Química Orgánica",
+        "ciclo": "II",
+        "creditos": 4,
+        "optativo": false,
+        "area": "MAT",
+        "req": [
+          "QU-0114",
+          "QU-0115"
+        ],
+        "req_texto": "(QU-0114, QU-0115) o (QU-0102, QU-0103)",
+        "coreq": [
+          "QU-0211"
+        ]
+      },
+      {
+        "sigla": "QU-0211",
+        "nombre": "Laboratorio de Fundamentos de Química Orgánica",
+        "ciclo": "II",
+        "creditos": 1,
+        "optativo": false,
+        "area": "MAT",
+        "req": [
+          "QU-0114",
+          "QU-0115"
+        ],
+        "req_texto": "(QU-0114, QU-0115) o (QU-0102, QU-0103)",
+        "coreq": [
+          "QU-0210"
+        ]
+      },
+      {
+        "sigla": "MA-1002",
+        "nombre": "Cálculo II",
+        "ciclo": "III",
+        "creditos": 4,
+        "optativo": false,
+        "area": "MAT",
+        "req": [
+          "MA-1001"
+        ],
+        "req_texto": "MA-1001 o MA-1101"
+      },
+      {
+        "sigla": "IPM-002",
+        "nombre": "Diseño para Manufactura y Documentación Técnica",
+        "ciclo": "IV",
+        "creditos": 3,
+        "optativo": false,
+        "area": "PRO",
+        "req": [
+          "IPM-001"
+        ]
+      },
+      {
+        "sigla": "FS-0210",
+        "nombre": "Física General I",
+        "ciclo": "IV",
+        "creditos": 3,
+        "optativo": false,
+        "area": "MAT",
+        "req": [
+          "MA-1001"
+        ],
+        "req_texto": "MA-1001 o MA-0250 o MA-1210 o MA-1101",
+        "coreq": [
+          "FS-0211"
+        ]
+      },
+      {
+        "sigla": "FS-0211",
+        "nombre": "Laboratorio de Física General I",
+        "ciclo": "IV",
+        "creditos": 1,
+        "optativo": false,
+        "area": "MAT",
+        "req": [
+          "MA-1001"
+        ],
+        "req_texto": "MA-1001 o MA-0250 o MA-1210 o MA-1101",
+        "coreq": [
+          "FS-0210"
+        ],
+        "coreq_texto": "FS-0210 o FS-0227"
+      },
+      {
+        "sigla": "MA-1004",
+        "nombre": "Álgebra Lineal",
+        "ciclo": "IV",
+        "creditos": 3,
+        "optativo": false,
+        "area": "MAT",
+        "req": []
+      },
+      {
+        "sigla": "LM-3045",
+        "nombre": "Inglés para Manufactura I",
+        "ciclo": "IV",
+        "creditos": 3,
+        "optativo": false,
+        "area": "ING",
+        "req": [
+          "IPM-001"
+        ],
+        "req_texto": "IPM-001, LM-1031",
+        "nota": "Antes de matricularlo se hace el Examen de Diagnóstico de Inglés (EDI): con banda mayor a A2 se lleva este curso; si no, primero LM-1031 Inglés Intensivo I, cuyos créditos no cuentan en el plan."
+      },
+      {
+        "sigla": "CI-0202",
+        "nombre": "Principios de Informática",
+        "ciclo": "IV",
+        "creditos": 4,
+        "optativo": false,
+        "area": "MAT",
+        "req": [
+          "MA-1001"
+        ],
+        "req_texto": "MA-0205 o MA-0225 o MA-0230 o MA-1001 o MA-1210 o CA-0151 o MA-0155"
+      },
+      {
+        "sigla": "IPM-003",
+        "nombre": "Ciencia de Materiales en Procesos de Manufactura",
+        "ciclo": "V",
+        "creditos": 4,
+        "optativo": false,
+        "area": "PRO",
+        "req": [
+          "IPM-002"
+        ],
+        "coreq": [
+          "IPM-004"
+        ]
+      },
+      {
+        "sigla": "IPM-004",
+        "nombre": "Estadística Aplicada a Procesos de Manufactura",
+        "ciclo": "V",
+        "creditos": 3,
+        "optativo": false,
+        "area": "CAL",
+        "req": [
+          "MA-1001"
+        ]
+      },
+      {
+        "sigla": "MA-1003",
+        "nombre": "Cálculo III",
+        "ciclo": "V",
+        "creditos": 4,
+        "optativo": false,
+        "area": "MAT",
+        "req": [
+          "MA-1002"
+        ],
+        "coreq_texto": "MA-1004 o MA-0307 (el plan lo ubica en el ciclo anterior)"
+      },
+      {
+        "sigla": "FS-0310",
+        "nombre": "Física General II",
+        "ciclo": "V",
+        "creditos": 3,
+        "optativo": false,
+        "area": "MAT",
+        "req": [
+          "FS-0210",
+          "FS-0211",
+          "MA-1002"
+        ],
+        "req_texto": "FS-0210, FS-0211, MA-1002 o MA-2210 o MA-0350",
+        "coreq": [
+          "FS-0311"
+        ]
+      },
+      {
+        "sigla": "FS-0311",
+        "nombre": "Laboratorio de Física General II",
+        "ciclo": "V",
+        "creditos": 1,
+        "optativo": false,
+        "area": "MAT",
+        "req": [
+          "FS-0210",
+          "FS-0211",
+          "MA-1002"
+        ],
+        "req_texto": "FS-0210 o FS-0227 o FS-0211, MA-1002 o MA-2210 o MA-0350",
+        "coreq": [
+          "FS-0310"
+        ],
+        "coreq_texto": "FS-0310 o FS-0327"
+      },
+      {
+        "sigla": "RP-",
+        "nombre": "Repertorio",
+        "ciclo": "V",
+        "creditos": 3,
+        "optativo": false,
+        "area": "FG",
+        "req": [],
+        "nota": "Se elige entre la oferta de la Sede para cada ciclo."
+      },
+      {
+        "sigla": "MA-2210",
+        "nombre": "Ecuaciones Diferenciales Aplicadas",
+        "ciclo": "VI",
+        "creditos": 3,
+        "optativo": false,
+        "area": "MAT",
+        "req": [
+          "MA-1001"
+        ],
+        "req_texto": "MA-0225 o MA-0230 o MA-1210 o MA-1001"
+      },
+      {
+        "sigla": "LM-3046",
+        "nombre": "Inglés para Manufactura II",
+        "ciclo": "VII",
+        "creditos": 3,
+        "optativo": false,
+        "area": "ING",
+        "req": [
+          "IPM-003",
+          "LM-3045"
+        ]
+      },
+      {
+        "sigla": "IPM-030",
+        "nombre": "Fundamentos de Mecánica para Procesos de Manufactura",
+        "ciclo": "VII",
+        "creditos": 3,
+        "optativo": false,
+        "area": "PRO",
+        "req": [
+          "FS-0210",
+          "FS-0211",
+          "IPM-003"
+        ]
+      },
+      {
+        "sigla": "IPM-005",
+        "nombre": "Procesos de Manufactura I",
+        "ciclo": "VII",
+        "creditos": 4,
+        "optativo": false,
+        "area": "PRO",
+        "req": [
+          "MA-2210",
+          "FS-0310"
+        ]
+      },
+      {
+        "sigla": "IPM-006",
+        "nombre": "Fundamentos de Metrología para Procesos de Manufactura",
+        "ciclo": "VII",
+        "creditos": 4,
+        "optativo": false,
+        "area": "CAL",
+        "req": [
+          "IPM-002",
+          "IPM-004"
+        ],
+        "coreq": [
+          "IPM-005"
+        ]
+      },
+      {
+        "sigla": "IPM-007",
+        "nombre": "Operación y Control de Procesos de Manufactura",
+        "ciclo": "VII",
+        "creditos": 4,
+        "optativo": false,
+        "area": "AUT",
+        "req": [
+          "IPM-002"
+        ],
+        "coreq": [
+          "IPM-005"
+        ]
+      },
+      {
+        "sigla": "IPM-008",
+        "nombre": "Ingeniería de Calidad en Manufactura",
+        "ciclo": "VIII",
+        "creditos": 3,
+        "optativo": false,
+        "area": "CAL",
+        "req": [
+          "IPM-007",
+          "IPM-004"
+        ]
+      },
+      {
+        "sigla": "IPM-009",
+        "nombre": "Diseño de Experimentos de Procesos de Manufactura",
+        "ciclo": "VIII",
+        "creditos": 4,
+        "optativo": false,
+        "area": "CAL",
+        "req": [
+          "IPM-004",
+          "IPM-007"
+        ]
+      },
+      {
+        "sigla": "IPM-010",
+        "nombre": "Automatización Industrial I",
+        "ciclo": "VIII",
+        "creditos": 4,
+        "optativo": false,
+        "area": "AUT",
+        "req": [
+          "IPM-007"
+        ],
+        "coreq": [
+          "IPM-009"
+        ]
+      },
+      {
+        "sigla": "IPM-011",
+        "nombre": "Procesos de Manufactura II",
+        "ciclo": "VIII",
+        "creditos": 4,
+        "optativo": false,
+        "area": "PRO",
+        "req": [
+          "IPM-005",
+          "IPM-030"
+        ]
+      },
+      {
+        "sigla": "SR-I",
+        "nombre": "Seminario de Realidad Nacional I",
+        "ciclo": "VIII",
+        "creditos": 2,
+        "optativo": false,
+        "area": "FG",
+        "req": [
+          "EG-II"
+        ]
+      },
+      {
+        "sigla": "LM-3047",
+        "nombre": "Inglés para Manufactura III",
+        "ciclo": "IX",
+        "creditos": 3,
+        "optativo": false,
+        "area": "ING",
+        "req": [
+          "IPM-006",
+          "LM-3046"
+        ]
+      },
+      {
+        "sigla": "IPM-012",
+        "nombre": "Práctica Integrada de Procesos de Manufactura I: Inserción Observacional",
+        "ciclo": "IX",
+        "creditos": 2,
+        "optativo": false,
+        "area": "PRA",
+        "req": [
+          "IPM-011",
+          "IPM-006",
+          "IPM-010"
+        ]
+      },
+      {
+        "sigla": "IPM-013",
+        "nombre": "Modelado y Simulación de Procesos de Manufactura",
+        "ciclo": "X",
+        "creditos": 3,
+        "optativo": false,
+        "area": "AUT",
+        "req": [
+          "IPM-009"
+        ]
+      },
+      {
+        "sigla": "IPM-014",
+        "nombre": "Procesos de Manufactura III",
+        "ciclo": "X",
+        "creditos": 3,
+        "optativo": false,
+        "area": "PRO",
+        "req": [
+          "IPM-011",
+          "IPM-003"
+        ]
+      },
+      {
+        "sigla": "IPM-015",
+        "nombre": "Automatización Industrial II",
+        "ciclo": "X",
+        "creditos": 3,
+        "optativo": false,
+        "area": "AUT",
+        "req": [
+          "IPM-012"
+        ]
+      },
+      {
+        "sigla": "IPM-016",
+        "nombre": "Planeación y Control de la Producción",
+        "ciclo": "X",
+        "creditos": 3,
+        "optativo": false,
+        "area": "GES",
+        "req": [
+          "IPM-007",
+          "IPM-004"
+        ]
+      },
+      {
+        "sigla": "SR-II",
+        "nombre": "Seminario de Realidad Nacional II",
+        "ciclo": "X",
+        "creditos": 2,
+        "optativo": false,
+        "area": "FG",
+        "req": [
+          "SR-I"
+        ]
+      },
+      {
+        "sigla": "LM-3048",
+        "nombre": "Inglés para Manufactura IV",
+        "ciclo": "X",
+        "creditos": 3,
+        "optativo": false,
+        "area": "ING",
+        "req": [
+          "LM-3047",
+          "IPM-012"
+        ]
+      },
+      {
+        "sigla": "IPM-017",
+        "nombre": "Validación y Regulación de Procesos de Manufactura",
+        "ciclo": "XI",
+        "creditos": 3,
+        "optativo": false,
+        "area": "CAL",
+        "req": [
+          "IPM-008",
+          "IPM-009"
+        ]
+      },
+      {
+        "sigla": "IPM-018",
+        "nombre": "Seguridad Industrial y Gestión del Riesgo en Manufactura",
+        "ciclo": "XI",
+        "creditos": 3,
+        "optativo": false,
+        "area": "GES",
+        "req": [
+          "IPM-015"
+        ]
+      },
+      {
+        "sigla": "IPM-019",
+        "nombre": "Manufactura Sostenible y Eficiencia Energética",
+        "ciclo": "XI",
+        "creditos": 3,
+        "optativo": false,
+        "area": "GES",
+        "req": [
+          "IPM-007",
+          "IPM-003"
+        ]
+      },
+      {
+        "sigla": "IPM-020",
+        "nombre": "Laboratorio Integrado de Automatización y Control",
+        "ciclo": "XI",
+        "creditos": 2,
+        "optativo": false,
+        "area": "AUT",
+        "req": [
+          "IPM-015"
+        ]
+      },
+      {
+        "sigla": "IPM-021",
+        "nombre": "Práctica Integrada de Procesos de Manufactura II: Participación Técnica Supervisada",
+        "ciclo": "XI",
+        "creditos": 2,
+        "optativo": false,
+        "area": "PRA",
+        "req": [
+          "IPM-012",
+          "IPM-008"
+        ],
+        "coreq": [
+          "IPM-017"
+        ]
+      },
+      {
+        "sigla": "OPT-XI-1",
+        "nombre": "Optativa de Profundización I",
+        "ciclo": "XI",
+        "creditos": 2,
+        "optativo": true,
+        "area": "GES",
+        "req": [],
+        "etiqueta": "Optativo",
+        "nota": "Se elige un curso de la lista de optativas de profundización."
+      },
+      {
+        "sigla": "IPM-022",
+        "nombre": "Innovación y Desarrollo Tecnológico en Manufactura",
+        "ciclo": "XII",
+        "creditos": 4,
+        "optativo": false,
+        "area": "GES",
+        "req": [
+          "IPM-021",
+          "IPM-013"
+        ]
+      },
+      {
+        "sigla": "IPM-023",
+        "nombre": "Gestión de Proyectos en Manufactura",
+        "ciclo": "XII",
+        "creditos": 3,
+        "optativo": false,
+        "area": "GES",
+        "req": [
+          "IPM-012",
+          "IPM-016"
+        ]
+      },
+      {
+        "sigla": "IPM-024",
+        "nombre": "Analítica de Datos de Procesos de Manufactura",
+        "ciclo": "XII",
+        "creditos": 4,
+        "optativo": false,
+        "area": "CAL",
+        "req": [
+          "IPM-013",
+          "IPM-016"
+        ]
+      },
+      {
+        "sigla": "IPM-025",
+        "nombre": "Seminario de Investigación Aplicada en Manufactura",
+        "ciclo": "XII",
+        "creditos": 3,
+        "optativo": false,
+        "area": "PRA",
+        "req": [
+          "IPM-013"
+        ]
+      },
+      {
+        "sigla": "OPT-XII-1",
+        "nombre": "Optativa de Profundización II",
+        "ciclo": "XII",
+        "creditos": 2,
+        "optativo": true,
+        "area": "GES",
+        "req": [],
+        "etiqueta": "Optativo",
+        "nota": "Se elige un curso de la lista de optativas de profundización."
+      },
+      {
+        "sigla": "OPT-XII-2",
+        "nombre": "Optativa de Profundización III",
+        "ciclo": "XII",
+        "creditos": 2,
+        "optativo": true,
+        "area": "GES",
+        "req": [],
+        "etiqueta": "Optativo",
+        "nota": "Se elige un curso de la lista de optativas de profundización."
+      },
+      {
+        "sigla": "IPM-026",
+        "nombre": "Evaluación Técnico-económica de Procesos de Manufactura",
+        "ciclo": "XIII",
+        "creditos": 3,
+        "optativo": false,
+        "area": "GES",
+        "req": [
+          "IPM-023",
+          "IPM-019"
+        ]
+      },
+      {
+        "sigla": "IPM-027",
+        "nombre": "Práctica Integrada de Procesos de Manufactura III: Integración Profesional",
+        "ciclo": "XIII",
+        "creditos": 6,
+        "optativo": false,
+        "area": "PRA",
+        "req": [
+          "IPM-025",
+          "IPM-021"
+        ],
+        "coreq": [
+          "IPM-026"
+        ]
+      },
+      {
+        "sigla": "IPM-028",
+        "nombre": "Manufactura Digital y Trazabilidad Inteligente",
+        "ciclo": "XIII",
+        "creditos": 4,
+        "optativo": false,
+        "area": "AUT",
+        "req": [
+          "IPM-020",
+          "IPM-013"
+        ]
+      },
+      {
+        "sigla": "IPM-029",
+        "nombre": "Simulación y Optimización de Sistemas Productivos",
+        "ciclo": "XIII",
+        "creditos": 3,
+        "optativo": false,
+        "area": "AUT",
+        "req": [
+          "IPM-013"
+        ],
+        "coreq": [
+          "IPM-028"
+        ]
+      },
+      {
+        "sigla": "OPT-XIII-1",
+        "nombre": "Optativa de Profundización IV",
+        "ciclo": "XIII",
+        "creditos": 2,
+        "optativo": true,
+        "area": "GES",
+        "req": [],
+        "etiqueta": "Optativo",
+        "nota": "Se elige un curso de la lista de optativas de profundización."
+      }
+    ],
+    "optativos": {
+      "OPT": [
+        {
+          "sigla": "IPM-031",
+          "nombre": "Manufactura Avanzada: Ecosistema Regional en Dispositivos Médicos y Semiconductores",
+          "creditos": 2,
+          "req_texto": "IPM-014"
+        },
+        {
+          "sigla": "IPM-032",
+          "nombre": "Bioeconomía Aplicada a Procesos de Manufactura",
+          "creditos": 2,
+          "req_texto": "IPM-014"
+        },
+        {
+          "sigla": "IPM-033",
+          "nombre": "Economía Circular Aplicada en Manufactura",
+          "creditos": 2,
+          "req_texto": "IPM-014"
+        },
+        {
+          "sigla": "IPM-034",
+          "nombre": "Análisis de Ciclo de Vida e Impacto Ambiental en Manufactura",
+          "creditos": 2,
+          "req_texto": "IPM-014, IPM-016"
+        },
+        {
+          "sigla": "IPM-035",
+          "nombre": "Diseño de Procesos de Manufactura Sostenibles",
+          "creditos": 2,
+          "req_texto": "IPM-014, IPM-019"
+        },
+        {
+          "sigla": "IPM-036",
+          "nombre": "Gestión de la Innovación en Procesos de Manufactura",
+          "creditos": 2,
+          "req_texto": "IPM-014, IPM-022"
+        },
+        {
+          "sigla": "IPM-037",
+          "nombre": "Eficiencia y Auditoría Energética para Procesos de Manufactura",
+          "creditos": 2,
+          "req_texto": "IPM-014, IPM-019"
+        },
+        {
+          "sigla": "IPM-038",
+          "nombre": "Inteligencia Artificial para la Optimización de Procesos de Manufactura",
+          "creditos": 2,
+          "req_texto": "IPM-014, IPM-024"
+        },
+        {
+          "sigla": "IPM-039",
+          "nombre": "Diseño de Dispositivos Médicos",
+          "creditos": 2,
+          "req_texto": "IPM-017"
+        },
+        {
+          "sigla": "IPM-040",
+          "nombre": "Ingeniería de Datos en Procesos de Manufactura",
+          "creditos": 2,
+          "req_texto": "IPM-024"
+        }
+      ]
+    },
+    "titulo_optativos": "Lista de optativas",
+    "listas_optativos": [
+      {
+        "id": "OPT",
+        "titulo": "Optativas de profundización",
+        "nota": "Se eligen cuatro cursos de 2 créditos: uno en el XI ciclo, dos en el XII y uno en el XIII.",
+        "color_de": "GES"
+      }
+    ]
+  }
+}

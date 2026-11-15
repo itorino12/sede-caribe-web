@@ -27,7 +27,8 @@ GL = ["--use-gl=angle", "--use-angle=swiftshader", "--enable-unsafe-swiftshader"
 PAGINAS_AXE = ["index.html", "horarios.html", "horarios-iiic-2026.html", "estudiar.html", "carreras.html", "admision.html", "la-sede.html", "noticias.html", "agenda.html", "directorio.html",
                "enlaces.html", "contacto.html", "accesibilidad.html", "recorrido.html",
                "unidades/accion-social.html", "accion-social/tcu.html", "accion-social/extension-docente.html", "accion-social/proyectos/tc-479.html",
-               "unidades/educacion-continua.html", "unidades/laboratorios.html", "carreras/informatica-empresarial.html", "carreras/contaduria-publica.html", "carreras/administracion-aduanera.html"]
+               "unidades/educacion-continua.html", "unidades/laboratorios.html", "carreras/informatica-empresarial.html", "carreras/contaduria-publica.html", "carreras/administracion-aduanera.html",
+               "carreras/ingenieria-procesos-manufactura.html", "noticias/ingenieria-procesos-manufactura-2027.html"]
 fallas = []
 
 

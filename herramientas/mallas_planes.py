@@ -42,6 +42,7 @@ def siglas_en(txt):
 def limpia(txt):
     t = re.sub(r"\s+", " ", txt or "").strip()
     t = re.sub(r"([A-Z]{1,3}-)\s(\d)", r"\1\2", t)
+    t = re.sub(r"\s+,", ",", t)  # «MA-2210 , FS-0310»
     return "" if re.fullmatch(r"-+", t) else t
 
 

@@ -1,0 +1,168 @@
+             ESTRUCTURA CURRICULAR DEL PLAN DE ESTUDIOS DE BACHILLERATO Y LICENCIATURA EN INGENIERÍA EN PROCESOS DE MANUFACTURA
+                                                               CÓDIGO 600402, PLAN 01
+
+NIVEL Y                                                                  HORAS
+                                       NOMBRE DEL CURSO                                            REQUISITOS                  CORREQUISITOS       CRÉDITOS
+ SIGLA                                                                 T P L TP
+PRIMER AÑO
+I CICLO
+
+EG-I         CURSO INTEGRADO DE HUMANIDADES I                          -   -   -   -                    ---                         ---               6
+EG-          CURSO DE ARTE                                             -   -   -   -                    ---                         ---               2
+MA-0001      PRECÁLCULO                                                5   -   -   -                    ---                         ---              0 /a
+QU-0114      QUÍMICA GENERAL INTENSIVA                                 6   -   -   -                    ---                       QU-0115             4
+QU-0115      LABORATORIO DE QUÍMICA GENERAL INTENSIVA                  -   -   3   -                    ---                       QU-0114             1
+IPM-001      INTRODUCCIÓN A LA INGENIERÍA EN PROCESOS DE MANUFACTURA   -   -   -   4                    ---                         ---               3
+                                                                                                                                 SUBTOTAL            16
+
+II CICLO
+EG-II        CURSO INTEGRADO DE HUMANIDADES II                         8   -   -   -                   EG-I                          ---              6
+EF-          ACTIVIDAD DEPORTIVA                                       -   -   2   -                     ---                         ---              0
+MA-1001      CÁLCULO I                                                 5   -   -   -                 MA-0001                         ---              3
+QU-0210      FUNDAMENTOS DE QUÍMICA ORGÁNICA                           6   -   -   -           (QU-0114 , QU-0115) o               QU-0211            4
+                                                                                                (QU-0102 , QU-0103)
+QU-0211      LABORATORIO DE FUNDAMENTOS DE QUÍMICA ORGÁNICA            1   -   3   -           (QU-0114 , QU-0115) o               QU-0210            1
+                                                                                                (QU-0102 , QU-0103)
+                                                                                                                                 SUBTOTAL             14
+III CICLO (INTERCICLO)
+MA-1002      CÁLCULO II                                                5   -   -   -            MA-1001 o MA-1101                   ---               4
+                                                                                                                                 SUBTOTAL             4
+SEGUNDO AÑO
+IV CICLO
+IPM-002  DISEÑO PARA MANUFACTURA Y DOCUMENTACIÓN TÉCNICA               -   -   -   3                  IPM-001                         ---             3
+FS-0210      FÍSICA GENERAL I                                          4   -   -   -   MA-1001 o MA-0250 o MA-1210 o MA-1101        FS-0211           3
+FS-0211      LABORATORIO DE FÍSICA GENERAL I                           -   -   3   -   MA-1001 o MA-0250 o MA-1210 o MA-1101   FS-0210 o FS-0227      1
+MA-1004      ÁLGEBRA LINEAL                                            5   -   -   -                     ---                          ---             3
+LM-3045      INGLÉS PARA MANUFACTURA I                                 4   -   -   -              IPM-001, LM-1031                    ---            3 /b
+CI-0202      PRINCIPIOS DE INFORMÁTICA                                 4   -   -   -   MA-0205 o MA-0225 o MA-0230 o MA-1001          ---             4
+                                                                                           o MA-1210 o CA-0151 o MA-0155
+                                                                                                                                 SUBTOTAL             17
+Según Informe Curricular CEA-62-2026
+NIVEL Y                                                              HORAS
+                                       NOMBRE DEL CURSO                                       REQUISITOS                  CORREQUISITOS         CRÉDITOS
+ SIGLA                                                             T P L TP
+V CICLO
+IPM-003      CIENCIA DE MATERIALES EN PROCESOS DE MANUFACTURA      3   -   2   -                  IPM-002                      IPM-004             4
+IPM-004      ESTADÍSTICA APLICADA A PROCESOS DE MANUFACTURA        4   -   -   -                 MA-1001                          ---              3
+MA-1003      CÁLCULO III                                           5   -   -   -                 MA-1002                  MA-1004 o MA-0307/c      4
+FS-0310      FÍSICA GENERAL II                                     4   -   -   -        FS-0210, FS-0211, MA-1002              FS-0311             3
+                                                                                           o MA-2210 o MA-0350
+FS-0311      LABORATORIO DE FÍSICA GENERAL II                      -   -   3   -   FS-0210 o FS-0227 o FS-0211, MA-1002    FS-0310 o FS-0327       1
+                                                                                           o MA-2210 o MA-0350
+RP-          REPERTORIO                                            1   -   2   -                                                                   3
+                                                                                                                              SUBTOTAL             18
+VI CICLO (INTERCICLO)
+MA-2210     ECUACIONES DIFERENCIALES APLICADAS                     5   -   -   -      MA-0225 o MA-0230 o MA-1210                 ---              3
+                                                                                               o MA-1001
+                                                                                                                              SUBTOTAL             3
+
+TERCER AÑO
+VII CICLO
+LM-3046   INGLÉS PARA MANUFACTURA II                               4   -   -   -            IPM-003, LM-3045                       ---             3
+IPM-030   FUNDAMENTOS DE MECÁNICA PARA PROCESOS DE MANUFACTURA     3   2   -   -        FS-0210, FS-0211, IPM-003                  ---             3
+IPM-005   PROCESOS DE MANUFACTURA I                                -   -   -   5            MA-2210 , FS-0310                      ---             4
+IPM-006   FUNDAMENTOS DE METROLOGÍA PARA PROCESOS DE MANUFACTURA   3   -   1   -            IPM-002, IPM-004                    IPM-005            4
+IPM-007   OPERACIÓN Y CONTROL DE PROCESOS DE MANUFACTURA           3   1   -   -                 IPM-002                        IPM-005            4
+                                                                                                                              SUBTOTAL             18
+VIII CICLO
+IPM-008    INGENIERÍA DE CALIDAD EN MANUFACTURA                    3   -   -   -            IPM-007, IPM-004                       ---             3
+IPM-009    DISEÑO DE EXPERIMENTOS DE PROCESOS DE MANUFACTURA       2   -   3   -            IPM-004, IPM-007                       ---             4
+IPM-010    AUTOMATIZACIÓN INDUSTRIAL I                             3   3   -   -                IPM-007                         IPM-009            4
+IPM-011    PROCESOS DE MANUFACTURA II                              -   -   -   5            IPM-005, IPM-030                       ---             4
+SR-I       SEMINARIO DE REALIDAD NACIONAL I                        2   -   -   -                  EG-II                            ---             2
+                                                                                                                              SUBTOTAL             17
+Según Informe Curricular CEA-62-2026
+NIVEL Y                                                                   HORAS
+                                       NOMBRE DEL CURSO                                      REQUISITOS               CORREQUISITOS      CRÉDITOS
+ SIGLA                                                                  T P L TP
+
+IX CICLO (INTERCICLO)
+LM-3047     INGLÉS PARA MANUFACTURA III                                 4   -   -   -       IPM-006, LM-3046                ---             3
+IPM-012     PRÁCTICA INTEGRADA DE PROCESOS DE MANUFACTURA I:            -   -   -   5   IPM-011, IPM-006, IPM-010           ---             2
+            INSERCIÓN OBSERVACIONAL
+                                                                                                                         SUBTOTAL           5
+
+CUARTO AÑO
+X CICLO
+IPM-013 MODELADO Y SIMULACIÓN DE PROCESOS DE MANUFACTURA                -   -   -   5          IPM-009                      ---             3
+IPM-014 PROCESOS DE MANUFACTURA III                                     -   -   -   5      IPM-011, IPM-003                 ---             3
+IPM-015 AUTOMATIZACIÓN INDUSTRIAL II                                    3   3   -   -          IPM-012                      ---             3
+IPM-016 PLANEACIÓN Y CONTROL DE LA PRODUCCIÓN                           3   -   -   -      IPM-007, IPM-004                 ---             3
+SR-II   SEMINARIO DE REALIDAD NACIONAL II                               2   -   -   -            SR-I                       ---             2
+LM-3048 INGLÉS PARA MANUFACTURA IV                                      4   -   -   -      LM-3047, IPM-012                 ---             3
+                                                                                                                         SUBTOTAL           17
+
+XI CICLO
+IPM-017      VALIDACIÓN Y REGULACIÓN DE PROCESOS DE MANUFACTURA         3   -   -   -       IPM-008, IPM-009                 ---            3
+IPM-018      SEGURIDAD INDUSTRIAL Y GESTIÓN DEL RIESGO EN MANUFACTURA   3   -   -   -           IPM-015                      ---            3
+IPM-019      MANUFACTURA SOSTENIBLE Y EFICIENCIA ENERGÉTICA             3   -   -   -       IPM-007, IPM-003                 ---            3
+IPM-020      LABORATORIO INTEGRADO DE AUTOMATIZACIÓN Y CONTROL          -   -   4   -           IPM-015                      ---            2
+IPM-021      PRÁCTICA INTEGRADA DE PROCESOS DE MANUFACTURA II:          -   -   -   5       IPM-012, IPM-008              IPM-017           2
+             PARTICIPACIÓN TÉCNICA SUPERVISADA
+OP-          OPTATIVA DE PROFUNDIZACIÓN I                               2   -   -   -              ---                       ---            2
+                                                                                                                         SUBTOTAL           15
+                                                                                                                    TOTAL BACHILLERATO     144
+
+QUINTO AÑO
+XII CICLO
+IPM-022   INNOVACIÓN Y DESARROLLO TECNOLÓGICO EN MANUFACTURA            -   -   -   4       IPM-021, IPM-013                ---             4
+IPM-023   GESTIÓN DE PROYECTOS EN MANUFACTURA                           3   -   -   -       IPM-012, IPM-016                ---             3
+IPM-024   ANALÍTICA DE DATOS DE PROCESOS DE MANUFACTURA                 -   -   -   4       IPM-013, IPM-016                ---             4
+IPM-025   SEMINARIO DE INVESTIGACIÓN APLICADA EN MANUFACTURA            -   -   -   3           IPM-013                     ---             3
+OP-       OPTATIVA DE PROFUNDIZACIÓN II                                 2   -   -   -              ---                      ---             2
+OP-       OPTATIVA DE PROFUNDIZACIÓN III                                2   -   -   -              ---                      ---             2
+                                                                                                                         SUBTOTAL           18
+Según Informe Curricular CEA-62-2026
+NIVEL Y                                                                                                       HORAS
+                                              NOMBRE DEL CURSO                                                                                REQUISITOS                              CORREQUISITOS   CRÉDITOS
+ SIGLA                                                                                                      T P L TP
+XIII CICLO
+IPM-026    EVALUACIÓN TÉCNICO-ECONÓMICA DE PROCESOS DE MANUFACTURA                                          3   -    -    -                  IPM-023, IPM-019                               ---          3
+IPM-027    PRÁCTICA INTEGRADA DE PROCESOS DE MANUFACTURA III:                                               -   -    -   15                  IPM-025, IPM-021                            IPM-026         6
+           INTEGRACIÓN PROFESIONAL
+IPM-028    MANUFACTURA DIGITAL Y TRAZABILIDAD INTELIGENTE                                                   -   -    -    4                  IPM-020, IPM-013                             ---            4
+IPM-029    SIMULACIÓN Y OPTIMIZACIÓN DE SISTEMAS PRODUCTIVOS                                                -   -    -    4                      IPM-013                               IPM-028           3
+OP-        OPTATIVA DE PROFUNDIZACIÓN IV                                                                    2   -    -    -                         ---                                   ---            2
+                                                                                                                                                                                    SUBTOTAL             18
+                                                                                                                                                                                TOTAL LICENCIATURA       36
+                                                                                                                                               TOTAL DEL PLAN DE ESTUDIOS                               180
+
+
+a/ Si el o la estudiante obtiene en la prueba DiMa una nota igual o superior a 7.0 se le dará por aprobado el curso MA-0001, según lo dispuesto en la resolución VD-R-9190-2015.
+b/ Previo a la matrícula del curso de LM-3045 INGLÉS PARA MANUFACTURA I, el estudiantado deberá realizar el Examen de Diagnóstico de Inglés (EDI).
+El estudiantado que apruebe el EDI con una banda mayor a A2, podrá llevar LM-3045 INGLÉS PARA MANUFACTURA I, de lo contrario,
+ deberá llevar primeramente el curso LM-1031 INGLÉS INTENSIVO I. Los créditos de este curso nivelatorio no forman parte de los créditos totales de la estructura curricular.
+/c El correquisito MA-1004 se encuentra en el ciclo anterior
+Para optar por el título de Bachillerato en Ingeniería en Procesos de Manufactura el estudiantado deberá completar 300 horas de Trabajo Comunal Universitario.
+Conforme al Estatuto Orgánico y al Reglamento de Trabajos Finales de Graduación, la Universidad de Costa Rica establece como requisito de Graduación para obtener el grado de
+licenciatura, las siguientes opciones de Trabajo Final de Graduación: Tesis de Graduación, Seminario de Graduación, Proyecto de Graduación y Práctica Dirigida de Graduación.
+Corresponde a la Unidad Académica indicar cuál o cuáles de estas opciones podrá matricular su población estudiantil.
+Para hacer la presentación pública (defensa) del trabajo final de graduación, el/la estudiante deberá haber concluido satisfactoriamente, sin excepción, todos los requisitos de su
+plan de estudios. Si la defensa es exitosa, en el acto se declarará que el postulante es acreedor del grado de licenciado en el área respectiva, quedando pendiente únicamente la
+ obligación de asistir a un Acto Público de Graduación, para ser juramentado y recibir el diploma correspondiente.
+
+Según Informe Curricular CEA-62-2026
+                                                               LISTA DE CURSOS OPTATIVOS
+                                                                            HORAS
+ SIGLA                                 NOMBRE DEL CURSO                                             REQUISITOS        CORREQUISITOS   CRÉDITOS
+                                                                          T P L TP
+
+IPM-031     MANUFACTURA AVANZADA: ECOSISTEMA REGIONAL EN DISPOSITIVOS MÉDICOS Y SEMICONDUCTORES  - - -      2               IPM-014             ---           2
+IPM-032     BIOECONOMÍA APLICADA A PROCESOS DE MANUFACTURA                  - - -      2               IPM-014             ---           2
+IPM-033     ECONOMÍA CIRCULAR APLICADA EN MANUFACTURA                       - - -      2               IPM-014             ---           2
+IPM-034     ANÁLISIS DE CICLO DE VIDA E IMPACTO AMBIENTAL EN MANUFACTURA    - - -      2           IPM-014, IPM-016        ---           2
+IPM-035     DISEÑO DE PROCESOS DE MANUFACTURA SOSTENIBLES                   - - -      2           IPM-014, IPM-019        ---           2
+IPM-036     GESTIÓN DE LA INNOVACIÓN EN PROCESOS DE MANUFACTURA             - - -      2           IPM-014, IPM-022        ---           2
+IPM-037     EFICIENCIA Y AUDITORÍA ENERGÉTICA PARA PROCESOS DE MANUFACTURA  - - -      2           IPM-014, IPM-019        ---           2
+IPM-038     INTELIGENCIA ARTIFICIAL PARA LA OPTIMIZACIÓN DE PROCESOS        - - -      2           IPM-014, IPM-024        ---           2
+            DE MANUFACTURA
+IPM-039     DISEÑO DE DISPOSITIVOS MÉDICOS                                  - - -      2               IPM-017             ---           2
+IPM-040     INGENIERÍA DE DATOS EN PROCESOS DE MANUFACTURA                  - - -      2               IPM-024             ---           2
+                                                                            - - -      -                  ---              ---
+                                                                                                          ---              ---
+                                                                                                          ---              ---
+                                                                            -   -   -   -                 ---              ---
+Actualizado por MVG, 26/10/2026
+
+Según Informe Curricular CEA-62-2026
+

@@ -20,7 +20,8 @@ def parse(path):
         if re.fullmatch(r'TOTAL.*',u) or re.match(r'^TOTAL ',u): ciclo=None if False else ciclo; 
         if 'SUBTOTAL' in u:
             n=re.findall(r'\d+',u.split('SUBTOTAL')[1]); subt[(bloque,ciclo)]=int(n[-1]); ult=None; continue
-        mh=re.search(r'(?<!CO)REQUISITOS',u); mc=re.search(r'CORREQUISITOS',u)
+        # columnas medidas sobre la línea sin recortar: hay planes con el encabezado muy sangrado (600402)
+        ul=l.upper(); mh=re.search(r'(?<![A-Z])REQUISITOS',ul); mc=re.search(r'CORREQUISITOS',ul)
         if mh and mc: hr=mh.start()+4; hc=mc.start()+6; ult=None; continue
         if re.search(r'^TOTAL|\bTOTAL\b.*\d|SEGÚN INFORME|NIVEL Y|^SIGLA|^NOTAS|ACTUALIZADO|^EN:|NOMBRE DEL CURSO',u): ult=None; continue
         if re.match(r'^\d ?AÑO|^(PRIMER|SEGUNDO|TERCER|CUARTO|QUINTO|SEXTO) AÑO',u): ult=None; continue
@@ -32,8 +33,9 @@ def parse(path):
                 sig=mm.group(1).replace(' ',''); 
                 resto=t[1:]
                 nombre=mm.group(2) if mm.group(2) else resto.pop(0)[1]
-                if re.fullmatch(r'\d+',resto[-1][1]) and len(resto)>=2:
-                    cred=int(resto[-1][1]); medio=resto[:-1]
+                mcr=re.fullmatch(r'(\d+)(?:\s*/\s*[a-z])?',resto[-1][1])   # «3 /b»: créditos con llamada de nota
+                if mcr and len(resto)>=2:
+                    cred=int(mcr.group(1)); medio=resto[:-1]
                     horas=[x for x in medio if re.fullmatch(r'[-\s\d]+',x[1]) and not re.fullmatch(r'-{3,}',x[1])]
                     celdas=[x for x in medio if x not in horas]
                     rq=[];co=[]
@@ -41,12 +43,13 @@ def parse(path):
                         c=x+len(s_)/2
                         (rq if abs(c-hr)<=abs(c-hc) else co).append((x,s_))
                     rtxt=' '.join(s_ for _,s_ in rq); ctxt=' '.join(s_ for _,s_ in co)
-                    ult={'sigla':sig,'nombre':nombre,'ciclo':ciclo if not (lista and not ciclo) else None,'lista':lista if not ciclo else None,'bloque':bloque,'cred':cred,'req':rtxt or '---','coreq':ctxt or '---','rc':hr-4,'cc':hc-4,'horas':' '.join(x[1] for x in horas)}
+                    ult={'sigla':sig,'nombre':nombre,'ciclo':ciclo if not (lista and not ciclo) else None,'lista':lista if not ciclo else None,'bloque':bloque,'cred':cred,'req':rtxt or '---','coreq':ctxt or '---','rc':min([x for x,_ in rq],default=hr-4),'cc':min([x for x,_ in co],default=hc-4),'horas':' '.join(x[1] for x in horas)}
                     cursos.append(ult); continue
         if ult:
             # continuación
             for x,s in t:
                 if re.fullmatch(r'[-\s\d]+',s): continue
+                # continuación: la columna se decide por dónde empieza el requisito o el correquisito en la línea del curso
                 if x>=ult['cc']-4: ult['coreq']=(ult['coreq']+' '+s) if ult['coreq'] not in('---','----') else s
                 elif x>=ult['rc']-4: ult['req']=(ult['req']+' '+s) if ult['req'] not in('---','----') else s
                 else: ult['nombre']+=' '+s

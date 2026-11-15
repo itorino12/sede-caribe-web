@@ -414,3 +414,71 @@ CARRERAS["ingenieria-quimica"] = dict(
     fijo={"XS-0217": dict(req=[])},
     notas={"EG-": NOTA_OFERTA, "RP-": NOTA_OFERTA, "IQ-9500": "Las tres modalidades de graduación se detallan en el plan; se cursa una.", "XS-0217": "El requisito oficial usa equivalencias de planes anteriores; revise la ficha.",
            "OPT-VII-1": "Se elige un curso de la lista de optativos.", "OPT-IX-1": "Se elige un curso de la lista de optativos.", "OPT-X-1": "Se elige un curso de la lista de optativos."})
+
+# ---------------------------------------------------------------- Ingeniería en Procesos de Manufactura (estructura curricular)
+# 13 ciclos en cinco años, con tres interciclos (III, VI y IX); la licenciatura son el XII y el XIII.
+# Los optativos de la lista traen la columna de horas «2» pegada a los requisitos (y en IPM-031, en los correquisitos).
+_IPM_ANIO = {"I": 1, "II": 1, "III": 1, "IV": 2, "V": 2, "VI": 2, "VII": 3, "VIII": 3, "IX": 3, "X": 4, "XI": 4, "XII": 5, "XIII": 5}
+_IPM_VERANO = ("III", "VI", "IX")
+
+
+def _ipm_fuente():
+    import os
+    from plan_texto import parse
+    cursos, sub = parse(os.path.join(os.path.dirname(__file__), "fuentes", "planes", "manufactura.txt"))
+    for x in cursos:
+        if x["sigla"] == "OP-":
+            x["sigla"] = "OPT"
+        if x["lista"]:
+            todo = " ".join(t for t in (x["req"], x["coreq"]) if t and not re.fullmatch(r"-+", t.strip()))
+            x["req"] = re.sub(r"^\s*\d+\s+", "", re.sub(r"\s*-{3}\s*$", "", todo)).strip()
+            x["coreq"] = ""
+    return cursos, sub
+
+
+def _ipm_ciclos(cursos):
+    orden = []
+    for x in cursos:
+        if x["ciclo"] not in orden:
+            orden.append(x["ciclo"])
+    out = []
+    for n in orden:
+        d = {"n": n, "anio": _IPM_ANIO[n], "nombre": n + " ciclo" + (" (interciclo)" if n in _IPM_VERANO else ""), "verano": n in _IPM_VERANO}
+        if n in ("XII", "XIII"):
+            d["tramo"] = "Licenciatura"
+        out.append(d)
+    return out
+
+
+_IPM_OPT = "Se elige un curso de la lista de optativas de profundización."
+CARRERAS["ingenieria-procesos-manufactura"] = dict(
+    id="ingenieria-procesos-manufactura", fuente=_ipm_fuente, plan="Plan 01", total=180, tcu=300,
+    resumen="180 créditos: 144 del bachillerato en once ciclos (tres son interciclos) y 36 de la licenciatura en dos ciclos.",
+    nota_fuente="Fuente: estructura curricular del plan de Bachillerato y Licenciatura en Ingeniería en Procesos de Manufactura, código 600402, plan 01 (Informe Curricular CEA-62-2026). Las siglas que siguen a «o» en los requisitos son cursos equivalentes de otros planes.",
+    areas=[
+        dict(id="MAT", nombre="Matemática y ciencias básicas", corto="Ciencias básicas", paleta=5,
+             descripcion="Precálculo, cálculo, álgebra lineal, ecuaciones diferenciales, química general y orgánica, física con laboratorios e informática."),
+        dict(id="PRO", nombre="Procesos y materiales", corto="Procesos", paleta=0,
+             descripcion="Diseño para manufactura, ciencia de materiales, mecánica y los tres cursos de procesos de manufactura."),
+        dict(id="AUT", nombre="Automatización y manufactura digital", corto="Automatización", paleta=3,
+             descripcion="Operación y control de procesos, automatización industrial, modelado y simulación, manufactura digital y trazabilidad."),
+        dict(id="CAL", nombre="Calidad, metrología y datos", corto="Calidad y datos", paleta=2,
+             descripcion="Estadística aplicada, metrología, ingeniería de calidad, diseño de experimentos, validación y regulación, y analítica de datos."),
+        dict(id="GES", nombre="Gestión, sostenibilidad y profundización", corto="Gestión y sostenibilidad", paleta=1,
+             descripcion="Planeación de la producción, seguridad industrial, manufactura sostenible, innovación, proyectos, evaluación técnico-económica y las optativas de profundización."),
+        dict(id="PRA", nombre="Práctica integrada e investigación", corto="Práctica integrada", paleta=4,
+             descripcion="Introducción a la carrera, las tres prácticas integradas en la industria y el seminario de investigación aplicada."),
+        dict(id="ING", nombre="Inglés para manufactura", corto="Inglés", paleta=6,
+             descripcion="Cuatro cursos de inglés técnico para manufactura, del IV al X ciclo."),
+        FG],
+    area_de=reglas([("GES", r"^OPT"), ("FG", FG_RE), ("ING", r"^LM-"), ("MAT", r"^(MA|QU|FS|CI)-"),
+                    ("PRA", r"^IPM-0(01|12|21|25|27)\b"), ("CAL", r"^IPM-0(04|06|08|09|17|24)\b"),
+                    ("AUT", r"^IPM-0(07|10|13|15|20|28|29)\b"), ("GES", r"^IPM-0(16|18|19|22|23|26)\b"), ("PRO", r".")], "PRO"),
+    ciclos=_ipm_ciclos, ciclo_de=lambda x: x["ciclo"],
+    lista_de=lambda x: "OPT", titulo_optativos="Lista de optativas",
+    listas_optativos=[dict(id="OPT", titulo="Optativas de profundización", nota="Se eligen cuatro cursos de 2 créditos: uno en el XI ciclo, dos en el XII y uno en el XIII.", color_de="GES")],
+    fijo={"MA-1003": dict(coreq_texto="MA-1004 o MA-0307 (el plan lo ubica en el ciclo anterior)")},
+    notas={"EG-": NOTA_OFERTA, "RP-": NOTA_OFERTA,
+           "MA-0001": "Con nota igual o superior a 7,0 en la prueba DiMa se da por aprobado (resolución VD-R-9190-2015).",
+           "LM-3045": "Antes de matricularlo se hace el Examen de Diagnóstico de Inglés (EDI): con banda mayor a A2 se lleva este curso; si no, primero LM-1031 Inglés Intensivo I, cuyos créditos no cuentan en el plan.",
+           "OPT-XI-1": _IPM_OPT, "OPT-XII-1": _IPM_OPT, "OPT-XII-2": _IPM_OPT, "OPT-XIII-1": _IPM_OPT})

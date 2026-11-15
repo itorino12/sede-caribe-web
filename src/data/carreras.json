@@ -76,6 +76,21 @@
  },
  {
   "publicar": "sí",
+  "id": "ingenieria-procesos-manufactura",
+  "nombre": "Ingeniería en Procesos de Manufactura",
+  "grados": "Bachillerato y Licenciatura",
+  "codigo": "600402",
+  "area": "Ingeniería y tecnología",
+  "recintos": "Limón",
+  "coordinacion": "Mag. José Alberto Castillo Benavides",
+  "correo": "jose.castillobenavides@ucr.ac.cr",
+  "extension": "2511-7348",
+  "resumen": "Forma profesionales que diseñan, operan y mejoran los procesos industriales que transforman materiales en productos, con calidad, automatización y sostenibilidad. Carrera nueva: abre en 2027.",
+  "plan_url": "https://drive.google.com/file/d/1tYvCAAqiG7EjdWU-sOZqfrhae55XCp5N/view",
+  "documento": "ingenieria-procesos-manufactura"
+ },
+ {
+  "publicar": "sí",
   "id": "marina-civil",
   "nombre": "Ingeniería Marítima",
   "grados": "Licenciatura con énfasis en Náutica y Transporte Marítimo y en Máquinas Marinas",
