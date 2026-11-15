@@ -142,7 +142,7 @@ directorio = (
     D("Dirección", [("2511-7303", "Dirección, secretaría ejecutiva", "Administrativo"), ("2511-7338", "Dirección, asistente", "Administrativo")]) +
     D("Acción Social", [("2511-7349", "Coordinación de Acción Social", "Administrativo"), ("2511-7307", "Coordinación de Acción Social, asistente", "Administrativo"),
                         ("2511-7313", "Extensión docente, extensión cultural y TCU", "Pabellón 1"), ("2511-7331", "Centro Infantil Universitario Bilingüe", "Residencias estudiantiles"),
-                        ("2511-7330", "Educación Continua (cursos cortos)", "Edificio de Docencia")]) +
+                        ("2511-7330", "Educación Continua", "Edificio de Docencia")]) +
     D("Administración", [("2511-7321", "Coordinación de Administración", "Administrativo"), ("2511-7353", "Asistente administrativa", "Administrativo"),
                          ("2511-7322", "Unidad de Compras Especializadas, encargado", "Administrativo"), ("2511-7306", "Unidad de Compras Especializadas, asistente", "Administrativo"),
                          ("2511-7305", "Administración de red", "Administrativo"), ("2511-7327", "Activos fijos", "Gimnasio"), ("2511-7345", "Bodega", "Gimnasio"),
@@ -165,7 +165,7 @@ directorio = (
     D("Seguridad", [("2511-7350", "Oficiales de seguridad, entrada", "Entrada"), ("2511-7318", "Oficiales de seguridad, residencias", "Residencias estudiantiles"),
                     ("2511-7340", "Oficiales de seguridad, edificio administrativo", "Administrativo")]) +
     D("Siquirres", [("2511-7397", "Coordinación del Aula Desconcentrada", "Siquirres"), ("2511-7399", "Aula Desconcentrada, asistente", "Siquirres"),
-                    ("2511-7398", "Apoyo estudiantil y cursos cortos", "Siquirres")]) +
+                    ("2511-7398", "Apoyo estudiantil y Educación Continua", "Siquirres")]) +
     D("Otros", [("2511-7356", "SINDEU", "Pabellón 1"), ("2511-7333", "AUDEL", "Pabellón 1"), ("2511-7332", "Soda de la Sede", "Administrativo"),
                 ("2511-7370", "Junta Administradora del Fondo de Ahorro y Préstamo", "Pabellón 1")])
 )

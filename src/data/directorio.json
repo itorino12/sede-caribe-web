@@ -36,9 +36,9 @@
  },
  {
   "unidad": "Acción Social",
-  "oficina": "Educación Continua (cursos cortos)",
+  "oficina": "Educación Continua",
   "extension": "2511-7330",
-  "edificio": "Pabellón II",
+  "edificio": "Edificio de Docencia",
   "correo": "cursoscortos.sedecaribe@ucr.ac.cr"
  },
  {
@@ -400,7 +400,7 @@
  },
  {
   "unidad": "Siquirres",
-  "oficina": "Apoyo estudiantil y cursos cortos",
+  "oficina": "Apoyo estudiantil y Educación Continua",
   "extension": "2511-7398",
   "edificio": "Siquirres",
   "correo": ""
