@@ -744,6 +744,8 @@ html.sin-desplazar, html.sin-desplazar body { overflow: hidden; }
 .busqueda label { display: block; font-weight: 700; margin-bottom: 6px; }
 .busqueda__campo { position: relative; }
 .busqueda input { width: 100%; font: inherit; padding: 11px 44px 11px 14px; border: 1px solid var(--linea); border-radius: 10px; background: var(--papel); color: var(--tinta); min-height: 46px; }
+/* el buscador de lugares ya tiene su propio botón para borrar: se quita la × del navegador (salían dos) */
+#busqueda-q::-webkit-search-cancel-button { -webkit-appearance: none; appearance: none; display: none; }
 .busqueda__limpiar { position: absolute; right: 4px; top: 50%; transform: translateY(-50%); width: 40px; height: 40px; border: 0; background: none; color: var(--tinta-2); font-size: 1.5rem; line-height: 1; cursor: pointer; border-radius: 8px; }
 .busqueda__estado { margin: 6px 0 0; font-size: var(--t-xs); color: var(--tinta-2); min-height: 1.2em; }
 .busqueda__lista { list-style: none; margin: 4px 0 0; padding: 0; display: grid; gap: 0; border-radius: 10px; }

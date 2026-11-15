@@ -2124,12 +2124,14 @@ function resolverEncimados() {
   }
   moverMarcas();
 }
+// Con la cámara quieta se programa una sola espera: los congos redibujan cada 40 ms y, si cada cuadro la
+// reiniciara, la espera nunca se cumpliría y los números no aparecerían cerca de ellos (zonas 1 y 2).
 let esperaQuieta = null;
 function camaraQuieta() {
-  clearTimeout(esperaQuieta);
-  esperaQuieta = setTimeout(resolverEncimados, MARCAS.esperaMs);
+  if (esperaQuieta !== null) return;
+  esperaQuieta = setTimeout(() => { esperaQuieta = null; resolverEncimados(); }, MARCAS.esperaMs);
 }
-function camaraEnMovimiento() { clearTimeout(esperaQuieta); }
+function camaraEnMovimiento() { clearTimeout(esperaQuieta); esperaQuieta = null; }
 
 // ---------- elegir un edificio: lo resalta, muestra la ficha y acerca la cámara
 let elegido = null;
@@ -2143,6 +2145,8 @@ function elegir(id, volar) {
   const g = edificios.find((x) => x.userData.id === id);
   const l = lugares.get(id);
   if (!g || !l) return;
+  // un lugar de otra zona suelta el botón de zona (si no, «Zona 4» seguía marcada con un lugar de la zona 2)
+  if (zonaActiva !== null && l.zona !== zonaActiva) marcarZona(null);
   elegido = g;
   const mElegida = marcas.get(id);
   if (mElegida) mElegida.tapada = false;
@@ -2155,7 +2159,17 @@ function elegir(id, volar) {
     const c = g.userData.centro;
     const dir = camara.position.clone().sub(controles.target).normalize();
     const suelo0 = alturaEn(c.x, c.z);
-    viajar(new THREE.Vector3(c.x, suelo0, c.z), new THREE.Vector3(c.x, suelo0, c.z).addScaledVector(dir, 120));
+    const objetivo = new THREE.Vector3(c.x, suelo0, c.z);
+    // En PC la ficha ocupa la izquierda de la maqueta: el lugar se centra en lo que queda libre a la derecha,
+    // si no, quedaba a medias debajo de la ficha (p. ej. la Entrada principal).
+    const rf = ficha.getBoundingClientRect(), rl = lienzo.getBoundingClientRect();
+    const tapa = ficha.hidden ? 0 : rf.right - rl.left;
+    if (tapa > 0 && rl.width - tapa >= 300 && rf.height > rl.height * 0.4) {
+      const metrosPorPx = (2 * 120 * Math.tan(THREE.MathUtils.degToRad(camara.fov / 2))) / rl.height;
+      const derecha = new THREE.Vector3().crossVectors(camara.up, dir).normalize();   // derecha de la pantalla
+      objetivo.addScaledVector(derecha, -(tapa / 2) * metrosPorPx);
+    }
+    viajar(objetivo, objetivo.clone().addScaledVector(dir, 120));
   }
   pedirDibujo();
 }

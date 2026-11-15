@@ -507,6 +507,12 @@ def completa(nav, base):
     revisar(esperar(p, "document.querySelector('[data-zona=\"3\"]').getAttribute('aria-pressed') === 'true'"), "botón de zona")
     p.wait_for_timeout(1500)   # que termine el vuelo de la cámara antes de la captura
     p.locator(".mapa3d__escena").screenshot(path=str(SALIDA / "zona3.png"))
+    # con cada zona elegida se ven sus números (cerca de los congos, que redibujan sin parar, no aparecían)
+    for z in (1, 2, 3, 4):
+        p.click(f"[data-zona='{z}']")
+        js = (f"[...document.querySelectorAll('.mapa3d__chip--z{z}.mapa3d__marca')]"
+              ".filter(b => !b.classList.contains('mapa3d__marca--oculta')).length >= 3")
+        revisar(esperar(p, js, 8000), f"zona {z}: se ven sus números")
     revisar(not e, f"sin errores {e[:1]}")
     c.close()
 

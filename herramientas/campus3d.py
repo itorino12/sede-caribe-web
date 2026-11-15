@@ -68,7 +68,7 @@ NUMERACION = {int(k): v for k, v in NUMERACION.items()}
 # es un piso (sin nombre si el edificio es de uno); cada espacio, [nombre, uso o detalle].
 DEPENDENCIAS = {
     1: [{"piso": None, "espacios": [["Aula 1", None], ["Aula 2", None], ["Aula 3", None], ["Aula 4", None],
-                                    ["Aula 5", "Laboratorio de Cómputo #1"], ["Aula 6", None], ["Aula 7", None], ["Servicios sanitarios", None]]}],
+                                    ["Aula 5", "Laboratorio de Cómputo 1"], ["Aula 6", None], ["Aula 7", None], ["Servicios sanitarios", None]]}],
     2: [{"piso": None, "espacios": [["Recepción", None], ["Registro", None], ["Becas", None], ["OAF", None], ["Acción Social", None],
                                     ["Vida Estudiantil", None], ["Oficinas", "Psicología y Trabajo Social"],
                                     ["Coordinación de Administración", None], ["Dirección", None]]}],
@@ -76,13 +76,13 @@ DEPENDENCIAS = {
     4: [{"piso": None, "espacios": [["Coordinación de Docencia", None], ["Audiovisuales", None], ["Tecnologías de la Información", None],
                                     ["Sala de Profesores", None]]}],
     7: [{"piso": None, "espacios": [["Aula 8", None], ["Aula 9", None], ["Aula 10", None], ["Aula 11", None], ["Aula 12", None]]}],
-    8: [{"piso": None, "espacios": [["Aula 13", "Coordinaciones de carrera"], ["Aula 14", "Laboratorio de Química"], ["Aula 15", "Laboratorio de Cómputo #2"],
+    8: [{"piso": None, "espacios": [["Aula 13", "Coordinaciones de carrera"], ["Aula 14", "Laboratorio de Química"], ["Aula 15", "Laboratorio de Cómputo 2"],
                                     ["Aula 16", None], ["Aula 17", None]]}],
     9: [{"piso": None, "espacios": [["Oficinas administrativas", None], ["Consultorio Médico", None], ["Consultorio Odontológico", None]]}],
-    12: [{"piso": "Piso 1", "espacios": [["Aula 18", None], ["Aula 19", None], ["Aula 20", "Laboratorio de Cómputo #3"]]},
+    12: [{"piso": "Piso 1", "espacios": [["Aula 18", None], ["Aula 19", None], ["Aula 20", "Laboratorio de Cómputo 3"]]},
          {"piso": "Piso 2", "espacios": [["Aula 21", None], ["Aula 22", None], ["Aula 23", None]]}],
     13: [{"piso": "Piso 1", "espacios": [["Laboratorio de Ingeniería Química", None], ["Simulador de Navegación", None]]},
-         {"piso": "Piso 2", "espacios": [["Orientación", None], ["Aula 24", "Laboratorio de Cómputo #4"], ["Laboratorio de Física", None], ["Otros simuladores", None]]}],
+         {"piso": "Piso 2", "espacios": [["Orientación", None], ["Aula 24", "Laboratorio de Cómputo 4"], ["Laboratorio de Física", None], ["Otros simuladores", None]]}],
 }
 
 # Edificios: número del croquis, forma y pisos. rect = (cx, cy, largo, ancho, giro en grados, horario)
