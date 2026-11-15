@@ -301,16 +301,27 @@ main:focus { outline: none; }
 .bloque__cabeza a { font-weight: 700; }
 
 .perfiles { padding-block: clamp(36px, 5vw, 56px) 0; }
-.perfiles__rejilla { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 32px; }
-.perfiles nav::before, .area__titulo::before, .unidades li::before { content: ""; display: block; height: 10px; margin-bottom: 12px; background: var(--c, var(--filete)); height: 4px; width: 56px; }
-.perfiles nav:nth-child(2) { --c: var(--azul); }
-.perfiles nav:nth-child(3) { --c: var(--musgo); }
-.perfiles nav:nth-child(4) { --c: var(--azul); }
-.perfiles h3 { font-size: var(--t-md); margin-bottom: 8px; }
-.perfiles ul { list-style: none; padding: 0; margin: 0; }
-.perfiles li { padding: 3px 0; }
-@media (max-width: 900px) { .perfiles__rejilla { grid-template-columns: 1fr 1fr; } }
-@media (max-width: 520px) { .perfiles__rejilla { grid-template-columns: 1fr; gap: 24px; } }
+.area__titulo::before, .unidades li::before { content: ""; display: block; height: 10px; margin-bottom: 12px; background: var(--c, var(--filete)); height: 4px; width: 56px; }
+/* accesos por perfil: matriz de 2 × 2 (también en el celular), cada tarjeta con su color de acento */
+.perfiles__rejilla { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: clamp(10px, 2vw, 24px); }
+.perfiles__tarjeta { --c: var(--azul); position: relative; padding: clamp(14px, 2.4vw, 26px) clamp(12px, 2.4vw, 28px) clamp(10px, 1.8vw, 20px);
+  background: var(--niebla); border: 1px solid var(--linea); border-top: 4px solid var(--c); border-radius: 10px; }
+.perfiles__tarjeta:nth-child(2) { --c: var(--musgo); }
+.perfiles__tarjeta:nth-child(3) { --c: var(--azul-hondo); }
+.perfiles__tarjeta:nth-child(4) { --c: var(--musgo); }
+:root[data-tema="oscuro"] .perfiles__tarjeta:nth-child(3) { --c: var(--azul); }
+.perfiles h3 { font-size: clamp(1.02rem, 2.2vw, var(--t-md)); line-height: 1.2; margin: 0 0 clamp(6px, 1vw, 12px); }
+.perfiles ul { list-style: none; padding: 0; margin: 0; display: grid; gap: 2px; }
+.perfiles__tarjeta a { display: flex; align-items: center; gap: clamp(8px, 1.4vw, 12px); min-height: 44px; padding: 6px 8px; margin-inline: -8px;
+  border-radius: 8px; color: var(--enlace); text-decoration: none; font-size: clamp(.9rem, 1.9vw, 1.05rem); line-height: 1.25; font-weight: 600; }
+.perfiles__tarjeta a span { text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 3px; text-decoration-color: color-mix(in srgb, currentColor 35%, transparent); }
+.perfiles__tarjeta a:hover { background: var(--papel); }
+.perfiles__tarjeta a:hover span { text-decoration-color: currentColor; }
+.perfiles__icono { flex: none; width: clamp(30px, 4.6vw, 38px); height: clamp(30px, 4.6vw, 38px); padding: clamp(5px, .9vw, 7px); border-radius: 50%;
+  background: var(--papel); color: var(--c); box-shadow: 0 0 0 1px var(--linea);
+  fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+:root[data-contraste] .perfiles__icono { box-shadow: 0 0 0 1px currentColor; }
+@media (max-width: 330px) { .perfiles__rejilla { grid-template-columns: 1fr; } }
 
 .nota__meta { display: flex; flex-wrap: wrap; gap: 2px 12px; font-size: var(--t-sm); color: var(--tinta-2); margin-bottom: 6px; }
 .nota__meta a { font-weight: 700; text-decoration: none; color: var(--verde-texto); }

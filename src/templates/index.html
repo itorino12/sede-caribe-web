@@ -56,17 +56,36 @@
   </div>
 </section>
 
+{# accesos por perfil: matriz de 2 × 2; cada enlace con su ícono (símbolos SVG de abajo, trazo con currentColor) #}
+{% macro acceso(href, icono, texto) %}<li><a href="{{ href }}"><svg class="perfiles__icono" aria-hidden="true" focusable="false"><use href="#pi-{{ icono }}"/></svg><span>{{ texto }}</span></a></li>{% endmacro %}
+<svg class="oculto" aria-hidden="true" focusable="false">
+  <defs>
+    <symbol id="pi-birrete" viewBox="0 0 24 24"><path d="M2 9.5 12 5l10 4.5-10 4.5L2 9.5Z"/><path d="M6.5 11.5v4.2c1.4 1.4 3.3 2.1 5.5 2.1s4.1-.7 5.5-2.1v-4.2"/><path d="M22 9.5v5"/></symbol>
+    <symbol id="pi-brujula" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="m15.5 8.5-2 5-5 2 2-5 5-2Z"/></symbol>
+    <symbol id="pi-pasos" viewBox="0 0 24 24"><rect x="5" y="4" width="14" height="17" rx="2"/><path d="M9 4V3h6v1"/><path d="m8.5 10 1.5 1.5 3-3M8.5 16l1.5 1.5 3-3"/><path d="M15 10.5h1M15 16.5h1"/></symbol>
+    <symbol id="pi-casa" viewBox="0 0 24 24"><path d="M3.5 11 12 4l8.5 7"/><path d="M5.5 9.5V20h13V9.5"/><path d="M12 17.5s-3-1.8-3-3.8a1.6 1.6 0 0 1 3-.8 1.6 1.6 0 0 1 3 .8c0 2-3 3.8-3 3.8Z"/></symbol>
+    <symbol id="pi-matricula" viewBox="0 0 24 24"><rect x="3.5" y="5" width="17" height="15" rx="2"/><path d="M3.5 10h17M8 3v4M16 3v4"/><path d="M12 13v4.5M9.75 15.25h4.5"/></symbol>
+    <symbol id="pi-portatil" viewBox="0 0 24 24"><rect x="4.5" y="5" width="15" height="10" rx="1.5"/><path d="M2.5 19h19l-1.5-3H4l-1.5 3Z"/></symbol>
+    <symbol id="pi-sistemas" viewBox="0 0 24 24"><rect x="4" y="4" width="6.5" height="6.5" rx="1.5"/><rect x="13.5" y="4" width="6.5" height="6.5" rx="1.5"/><rect x="4" y="13.5" width="6.5" height="6.5" rx="1.5"/><rect x="13.5" y="13.5" width="6.5" height="6.5" rx="1.5"/></symbol>
+    <symbol id="pi-mundo" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.5 2.6 3.7 5.6 3.7 9s-1.2 6.4-3.7 9c-2.5-2.6-3.7-5.6-3.7-9S9.5 5.6 12 3Z"/></symbol>
+    <symbol id="pi-telefono" viewBox="0 0 24 24"><path d="M6.5 3.5h3l1.5 4-2 1.3a10.5 10.5 0 0 0 6.2 6.2l1.3-2 4 1.5v3a2 2 0 0 1-2.2 2A16.5 16.5 0 0 1 4.5 5.7a2 2 0 0 1 2-2.2Z"/></symbol>
+    <symbol id="pi-gafete" viewBox="0 0 24 24"><rect x="4" y="5.5" width="16" height="14" rx="2"/><path d="M9.5 5.5V3.5h5v2"/><circle cx="9.5" cy="12" r="2"/><path d="M6.5 16.5c.5-1.5 1.6-2.3 3-2.3s2.5.8 3 2.3M14.5 11h3M14.5 14h3"/></symbol>
+    <symbol id="pi-libro" viewBox="0 0 24 24"><path d="M12 6.5C10 5 7.5 4.5 3.5 4.5v13.5c4 0 6.5.5 8.5 2 2-1.5 4.5-2 8.5-2V4.5c-4 0-6.5.5-8.5 2Z"/><path d="M12 6.5V20"/></symbol>
+    <symbol id="pi-comunidad" viewBox="0 0 24 24"><circle cx="12" cy="8" r="2.8"/><path d="M6.5 19.5c.6-3 2.7-4.7 5.5-4.7s4.9 1.7 5.5 4.7"/><circle cx="5" cy="10" r="2"/><circle cx="19" cy="10" r="2"/><path d="M1.8 17c.4-1.8 1.6-2.8 3.2-2.8M22.2 17c-.4-1.8-1.6-2.8-3.2-2.8"/></symbol>
+    <symbol id="pi-agenda" viewBox="0 0 24 24"><rect x="3.5" y="5" width="17" height="15" rx="2"/><path d="M3.5 10h17M8 3v4M16 3v4"/><path d="m12 12.5.9 1.9 2.1.3-1.5 1.5.4 2.1-1.9-1-1.9 1 .4-2.1-1.5-1.5 2.1-.3.9-1.9Z"/></symbol>
+  </defs>
+</svg>
 <section class="perfiles ancho" aria-labelledby="perfiles-titulo">
   <h2 id="perfiles-titulo" class="oculto">Accesos por perfil</h2>
   <div class="perfiles__rejilla">
-    <nav aria-labelledby="pf-1"><h3 id="pf-1">Quiero estudiar aquí</h3>
-      <ul><li><a href="carreras.html">Carreras y planes de estudio</a></li><li><a href="estudiar.html">¿Qué carrera es para usted?</a></li><li><a href="admision.html">Pasos de admisión</a></li><li><a href="unidades/vida-estudiantil.html">Becas y residencias</a></li></ul></nav>
-    <nav aria-labelledby="pf-2"><h3 id="pf-2">Ya estudio aquí</h3>
-      <ul><li><a href="https://ematricula.ucr.ac.cr/ematricula/">ematrícula</a></li><li><a href="https://mediacionvirtual.ucr.ac.cr/login/">Mediación Virtual</a></li><li><a href="enlaces.html#estudiantes">Todos los sistemas y trámites</a></li></ul></nav>
-    <nav aria-labelledby="pf-3"><h3 id="pf-3">Trabajo en la UCR</h3>
-      <ul><li><a href="https://portal.ucr.ac.cr">Portal universitario</a></li><li><a href="directorio.html">Directorio de extensiones</a></li><li><a href="enlaces.html#personal-universitario">Sistemas del personal</a></li></ul></nav>
-    <nav aria-labelledby="pf-4"><h3 id="pf-4">Soy de la comunidad</h3>
-      <ul><li><a href="unidades/educacion-continua.html">Cursos libres</a></li><li><a href="unidades/accion-social.html">Proyectos con comunidades</a></li><li><a href="agenda.html">Actividades abiertas</a></li></ul></nav>
+    <nav class="perfiles__tarjeta" aria-labelledby="pf-1"><h3 id="pf-1">Quiero estudiar aquí</h3>
+      <ul>{{ acceso("carreras.html", "birrete", "Carreras y planes de estudio") }}{{ acceso("estudiar.html", "brujula", "¿Qué carrera es para usted?") }}{{ acceso("admision.html", "pasos", "Pasos de admisión") }}{{ acceso("unidades/vida-estudiantil.html", "casa", "Becas y residencias") }}</ul></nav>
+    <nav class="perfiles__tarjeta" aria-labelledby="pf-2"><h3 id="pf-2">Ya estudio aquí</h3>
+      <ul>{{ acceso("https://ematricula.ucr.ac.cr/ematricula/", "matricula", "ematrícula") }}{{ acceso("https://mediacionvirtual.ucr.ac.cr/login/", "portatil", "Mediación Virtual") }}{{ acceso("enlaces.html#estudiantes", "sistemas", "Todos los sistemas y trámites") }}</ul></nav>
+    <nav class="perfiles__tarjeta" aria-labelledby="pf-3"><h3 id="pf-3">Trabajo en la UCR</h3>
+      <ul>{{ acceso("https://portal.ucr.ac.cr", "mundo", "Portal universitario") }}{{ acceso("directorio.html", "telefono", "Directorio de extensiones") }}{{ acceso("enlaces.html#personal-universitario", "gafete", "Sistemas del personal") }}</ul></nav>
+    <nav class="perfiles__tarjeta" aria-labelledby="pf-4"><h3 id="pf-4">Soy de la comunidad</h3>
+      <ul>{{ acceso("unidades/educacion-continua.html", "libro", "Cursos libres") }}{{ acceso("unidades/accion-social.html", "comunidad", "Proyectos con comunidades") }}{{ acceso("agenda.html", "agenda", "Actividades abiertas") }}</ul></nav>
   </div>
 </section>
 
