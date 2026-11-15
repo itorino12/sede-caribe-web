@@ -1163,6 +1163,24 @@ body.hm-con-barra { padding-bottom: 5rem; }
 .hm__cab { position: sticky; top: -16px; z-index: 2; display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 8px 0; background: var(--papel); }
 .hm__cab h2 { margin: 0; font-size: var(--t-lg); }
 .hm__aviso { margin: 4px 0; font-size: var(--t-xs); color: var(--tinta-2); }
+.hp-entrada { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; }
+.hp__buscar label { display: block; font-weight: 700; margin: 10px 0 6px; }
+.hp__buscar input { width: 100%; font: inherit; padding: 10px 14px; border: 1px solid var(--linea); border-radius: 10px; background: var(--papel); color: var(--tinta); min-height: 44px; }
+.hp__sug, .hp__elegidos, .hp__det { list-style: none; margin: 4px 0 0; padding: 0; }
+.hp__sug:empty { display: none; }
+.hp__sug button { width: 100%; text-align: left; padding: 9px 8px; background: none; border: 0; border-bottom: 1px solid var(--linea); font: inherit; color: inherit; cursor: pointer; }
+.hp__sug button:hover { background: var(--niebla); }
+.hp__vacio { color: var(--tinta-2); font-size: var(--t-xs); padding: 6px 0; }
+.hp__elegidos { display: grid; gap: 6px; }
+.hp__elegidos li:not(.hp__vacio) { display: flex; justify-content: space-between; align-items: center; gap: 10px; padding: 6px 0; border-bottom: 1px solid var(--linea); }
+.hp__orden { border: 0; margin: 14px 0 4px; padding: 0; display: flex; flex-wrap: wrap; gap: 6px 18px; }
+.hp__orden legend { font-weight: 700; padding: 0; margin-bottom: 4px; }
+.hp__orden label { display: inline-flex; align-items: center; gap: 6px; min-height: 36px; }
+.hp__opciones { list-style: none; margin: 8px 0 0; padding: 0; display: grid; gap: 14px; }
+.hp__op { border: 1px solid var(--linea); border-radius: 10px; padding: 12px 14px; display: grid; gap: 8px; }
+.hp__res { margin: 0; }
+.hp__det { display: grid; gap: 4px; font-size: var(--t-xs); }
+.hp__op .hm-boton { justify-self: start; }
 .hm__estado { min-height: 1.3em; margin: 6px 0; font-size: var(--t-xs); font-weight: 600; }
 .hm__choques { margin: 8px 0; padding: 10px 14px; border: 2px solid var(--hm-peligro); border-radius: 6px; font-size: var(--t-sm); }
 .hm__choques:empty { display: none; }

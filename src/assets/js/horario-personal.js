@@ -383,6 +383,13 @@
   } else {
     sel = validas(leerGuardado());
   }
+  /* Lo que usa el proponedor de horarios (horario-propuestas.js) */
+  window.sedeHorario = {
+    clave: clavePagina, grupos: grupos, porCurso: porCurso, hhmm: hhmm, duracion: duracion, numeros: numeros,
+    textoFranjas: textoFranjas, etiqueta: etiqueta,
+    actual: function () { return sel.slice(); },
+    aplicar: function (lista, mensaje) { cambiar(validas(lista), mensaje); abrir(); }
+  };
   pintar();
   if (compartido) abrir();
 })();

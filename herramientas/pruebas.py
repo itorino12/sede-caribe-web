@@ -284,6 +284,52 @@ def busqueda(nav, base):
     c.close()
 
 
+def propuestas(nav, base):
+    """Proponer horarios: combinaciones sin choques, parejas juntas, diagnóstico y accesibilidad."""
+    print("Proponer horarios")
+    c, p, e = pagina(nav, base + "horarios.html")
+    p.evaluate("localStorage.clear()"); p.reload(); p.wait_for_timeout(500)
+    par = p.evaluate("""() => {
+      const g = window.sedeHorario.grupos, por = window.sedeHorario.porCurso, ab = {};
+      for (const s in por) { const us = por[s].filter(k => !g[k].cerrado); if (us.length) ab[s] = us; }
+      const choca = (a, b) => g[a].franjas.some(x => g[b].franjas.some(y => x.d.some(d => y.d.includes(d)) && x.i < y.f && y.i < x.f));
+      const ss = Object.keys(ab); let libre = null, siempre = null;
+      for (let i = 0; i < ss.length; i++) for (let j = i + 1; j < ss.length; j++) {
+        const comp = ab[ss[i]].some(a => ab[ss[j]].some(b => !choca(a, b)));
+        if (comp && !libre) libre = [ss[i], ss[j]];
+        if (!comp && !siempre) siempre = [ss[i], ss[j]];
+      }
+      const pareja = ss.find(s => ab[s].some(k => g[k].nums.length > 1));
+      return {libre, siempre, pareja};
+    }""")
+    revisar(par["libre"] and par["siempre"], f"hay cursos para probar ({par})")
+    def agregar(sigs):
+        for s in sigs:
+            p.fill("#hp-q", s); p.keyboard.press("Enter")
+    RESUMEN = "document.querySelector('[data-hm-resumen]').textContent"
+    p.click("[data-hp-abrir]")
+    agregar(par["libre"])
+    revisar("combinaci" in p.inner_text(".hp .hm__estado") and p.locator(".hp__op").count() >= 1, "dos cursos compatibles dan opciones: " + p.inner_text(".hp .hm__estado")[:80])
+    p.add_script_tag(content=leer_axe())
+    v = p.evaluate("axe.run(document.querySelector('dialog.hp'), {runOnly:['wcag2a','wcag2aa','wcag21aa','wcag22aa']}).then(r=>r.violations.map(v=>v.id+' ('+v.nodes.length+')'))")
+    revisar(not v, f"axe en el proponedor {', '.join(v)}")
+    p.locator("[data-usar='0']").click(); p.wait_for_timeout(400)
+    revisar("2 cursos" in p.evaluate(RESUMEN), "«Usar esta opción» carga los dos cursos en Mi horario: " + p.evaluate(RESUMEN))
+    revisar(p.inner_text("[data-hm-choques]").strip() == "", "la opción cargada no tiene choques")
+    p.evaluate("document.querySelector('[data-hm-vaciar]').click()")
+    p.click("[data-hp-abrir]")
+    p.evaluate("document.querySelectorAll('[data-quitar]').forEach(b => b.click())")
+    agregar(par["siempre"])
+    t = p.inner_text(".hp .hm__estado")
+    revisar("No hay ninguna combinación" in t and "chocan" in t, "dos cursos que siempre chocan lo explican: " + t[:100])
+    if par["pareja"]:
+        p.evaluate("document.querySelectorAll('[data-quitar]').forEach(b => b.click())")
+        agregar([par["pareja"], par["libre"][1] if par["libre"][0] == par["pareja"] else par["libre"][0]])
+        revisar(p.locator(".hp__op").count() == 0 or "Grupos" in p.inner_text(".hp__op") or "Grupo " in p.inner_text(".hp__op"), "una opción muestra los grupos de cada curso")
+    revisar(not e, f"proponedor sin errores {e[:1]}")
+    c.close()
+
+
 def completa(nav, base):
     print("Recorrido: ficha, pantalla completa y zonas")
     c, p, e = pagina(nav, base + "recorrido.html#lugar-1")
@@ -331,6 +377,7 @@ def completa(nav, base):
     asistente(nav, base)
     armador(nav, base)
     busqueda(nav, base)
+    propuestas(nav, base)
 
     print("Accesibilidad (axe)")
     axe = leer_axe()
