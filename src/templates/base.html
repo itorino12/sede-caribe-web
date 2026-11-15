@@ -32,10 +32,11 @@
 
   <div class="util">
     <div class="ancho util__fila">
-      <a class="util__ucr" href="https://www.ucr.ac.cr">Universidad de Costa Rica</a>
+      <a class="util__ucr" href="https://www.ucr.ac.cr"><span class="util__largo">Universidad de Costa Rica</span><span class="util__corto" aria-hidden="true">UCR</span></a>
       <a href="{{ raiz }}enlaces.html#estudiantes">Estudiantes</a>
       <a href="{{ raiz }}enlaces.html#personal-universitario">Personal</a>
       <a href="{{ raiz }}directorio.html">Directorio</a>
+      <button type="button" class="util__colores" data-abrir="panel-colores" aria-controls="panel-colores" aria-expanded="false"><span class="util__puntos" aria-hidden="true"><i></i><i></i><i></i></span>Colores</button>
       <button type="button" data-abrir="panel-a11y" aria-controls="panel-a11y" aria-expanded="false">Accesibilidad</button>
     </div>
   </div>
@@ -148,6 +149,12 @@
     <ul class="buscador__resultados" id="buscador-resultados"></ul>
   </dialog>
 
+  <dialog class="panel-a11y panel-colores" id="panel-colores" aria-labelledby="panel-colores-titulo" aria-describedby="panel-colores-nota">
+    <h2 id="panel-colores-titulo">Colores del sitio</h2>
+    <p id="panel-colores-nota">Elija la combinación que más le guste: se aplica al instante y se recuerda en este dispositivo. Todas salen de la paleta oficial de la UCR.</p>
+    {{ selector_colores("Combinaciones de colores") }}
+    <form method="dialog"><button class="boton boton--claro">Listo</button></form>
+  </dialog>
   <dialog class="panel-a11y" id="panel-a11y" aria-labelledby="panel-a11y-titulo">
     <h2 id="panel-a11y-titulo">Accesibilidad</h2>
     <fieldset><legend>Tamaño del texto</legend>
@@ -155,9 +162,6 @@
     </fieldset>
     <fieldset><legend>Modo de color</legend>
       <div class="segmentos"><button type="button" data-tema="claro">Claros</button><button type="button" data-tema="oscuro">Oscuros</button></div>
-    </fieldset>
-    <fieldset><legend>Combinación de colores</legend>
-      {{ selector_colores("Combinación de colores del sitio") }}
     </fieldset>
     <fieldset><legend>Ajustes</legend>
       <label class="interruptor"><input type="checkbox" data-opcion="contraste"> Alto contraste</label>

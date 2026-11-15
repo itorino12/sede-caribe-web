@@ -216,11 +216,11 @@
 {% endif %}
 {% endmacro %}
 
-{# Menú de combinaciones de colores (portada y panel de accesibilidad). La lista debe coincidir con herramientas/paletas.py. #}
+{# Menú de combinaciones de colores (ventana «Colores» de la barra de arriba). La lista debe coincidir con herramientas/paletas.py. #}
 {% macro selector_colores(etiqueta) %}
 <ul class="colores" role="list" aria-label="{{ etiqueta }}">
-  {% for clave, nombre in [("institucional", "Institucional"), ("azul", "Azul UCR"), ("caribe", "Verde Caribe"), ("tierra", "Tierra"), ("celeste", "Celeste")] %}
-  <li><button type="button" data-colores="{{ clave }}" aria-pressed="false"><span class="colores__muestra" aria-hidden="true"><i></i><i></i><i></i></span>{{ nombre }}</button></li>
+  {% for clave, nombre, simple in [("institucional", "Clásico de la U", "Institucional"), ("azul", "Noche en el muelle", "Azul UCR"), ("caribe", "Congo en la rama", "Verde Caribe"), ("tierra", "Rice and beans", "Tierra"), ("celeste", "Pipa fría", "Celeste")] %}
+  <li><button type="button" data-colores="{{ clave }}" aria-pressed="false"><span class="colores__muestra" aria-hidden="true"><i></i><i></i><i></i></span><span class="colores__texto"><span class="colores__nombre">{{ nombre }}</span> <span class="colores__simple">{{ simple }}</span></span></button></li>
   {% endfor %}
 </ul>
 {% endmacro %}

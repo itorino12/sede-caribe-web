@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% from "_macros.html" import tarjeta_noticia, redes_sociales, selector_colores with context %}
+{% from "_macros.html" import tarjeta_noticia, redes_sociales with context %}
 {% macro foto(f, alt, tam, carga='lazy') %}<img src="{{ f[1280] }}" srcset="{{ f|srcset }}" sizes="{{ tam }}" alt="{{ alt }}" width="{{ f.w }}" height="{{ f.h }}" loading="{{ carga }}"{% if carga == 'eager' %} fetchpriority="high"{% endif %}>{% endmacro %}
 {% block cabeza %}<link rel="preload" as="image" href="{{ raiz }}assets/img/portada-maqueta.webp">{% endblock %}
 {% block contenido %}
@@ -86,10 +86,6 @@
       <ul>{{ acceso("https://portal.ucr.ac.cr", "mundo", "Portal universitario") }}{{ acceso("directorio.html", "telefono", "Directorio de extensiones") }}{{ acceso("enlaces.html#personal-universitario", "gafete", "Sistemas del personal") }}</ul></nav>
     <nav class="perfiles__tarjeta" aria-labelledby="pf-4"><h3 id="pf-4">Soy de la comunidad</h3>
       <ul>{{ acceso("unidades/educacion-continua.html", "libro", "Cursos libres") }}{{ acceso("unidades/accion-social.html", "comunidad", "Proyectos con comunidades") }}{{ acceso("agenda.html", "agenda", "Actividades abiertas") }}</ul></nav>
-  </div>
-  <div class="colores-portada">
-    <h2 id="colores-titulo">Colores del sitio</h2>
-    {{ selector_colores("Colores del sitio") }}
   </div>
 </section>
 

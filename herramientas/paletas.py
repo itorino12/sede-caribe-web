@@ -41,7 +41,7 @@ FONDOS = {"claro": {"papel": "#FFFFFF", "niebla": "#F2F6F9"}, "oscuro": {"papel"
 #   filete: rayas decorativas · cab-boton: botón del menú (ícono blanco)
 PALETAS = {
     "azul": {
-        "nombre": "Azul UCR",
+        "nombre": "Noche en el muelle", "simple": "Azul UCR",
         "claro": dict(azul="azul2", enlace="azul2", **{"sobre-acento": "blanco", "banda": "azul1", "sobre-banda": "blanco",
                       "sobre-banda-2": "celeste3", "azul-hondo": "azul1", "pie-texto": "celeste3", "musgo": "azul1",
                       "filete": "celeste", "cab-boton": "azul2", "franja": "azul2"}),
@@ -50,7 +50,7 @@ PALETAS = {
                        "verde-texto": "verde", "filete": "celeste", "cab-boton": "azul2", "franja": "azul1"}),
     },
     "caribe": {
-        "nombre": "Verde Caribe",
+        "nombre": "Congo en la rama", "simple": "Verde Caribe",
         "claro": dict(azul="azul1", enlace="azul2", **{"sobre-acento": "blanco", "banda": "verde4", "sobre-banda": "blanco",
                       "sobre-banda-2": "blanco", "azul-hondo": "azul1", "pie-texto": "verde2", "musgo": "verde4",
                       "filete": "verde", "cab-boton": "verde4", "franja": "verde4"}),
@@ -59,7 +59,7 @@ PALETAS = {
                        "verde-texto": "verde", "filete": "verde", "cab-boton": "verde4", "franja": "verde4"}),
     },
     "tierra": {
-        "nombre": "Tierra",
+        "nombre": "Rice and beans", "simple": "Tierra",
         "claro": dict(azul="cafe2", enlace="cafe2", **{"sobre-acento": "blanco", "banda": "cafe2", "sobre-banda": "blanco",
                       "sobre-banda-2": "naranja1", "azul-hondo": "cafe3", "pie-texto": "gris1", "musgo": "cafe1",
                       "filete": "naranja3", "cab-boton": "cafe2", "franja": "cafe2"}),
@@ -68,7 +68,7 @@ PALETAS = {
                        "verde-texto": "verde", "filete": "naranja3", "cab-boton": "cafe2", "franja": "cafe2"}),
     },
     "celeste": {
-        "nombre": "Celeste",
+        "nombre": "Pipa fría", "simple": "Celeste",
         "claro": dict(azul="azul2", enlace="azul2", **{"sobre-acento": "blanco", "banda": "celeste", "sobre-banda": "azul1",
                       "sobre-banda-2": "azul1", "azul-hondo": "azul1", "pie-texto": "celeste2", "musgo": "azul1",
                       "filete": "celeste", "cab-boton": "azul2", "franja": "azul2"}),
@@ -103,7 +103,7 @@ def revisar():
     fallas = []
     plantilla = (CSS.parent.parent.parent / "templates" / "_macros.html").read_text(encoding="utf-8")
     for clave, p in PALETAS.items():   # el menú de la plantilla debe ofrecer cada combinación, con su nombre
-        if f'("{clave}", "{p["nombre"]}")' not in plantilla:
+        if f'("{clave}", "{p["nombre"]}", "{p["simple"]}")' not in plantilla:
             fallas.append(f"El menú de _macros.html no ofrece «{clave}» ({p['nombre']})")
     for clave, p in PALETAS.items():
         for modo in ("claro", "oscuro"):
