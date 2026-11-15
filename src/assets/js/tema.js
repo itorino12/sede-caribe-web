@@ -5,6 +5,7 @@
     var p = JSON.parse(localStorage.getItem("sc-a11y") || "{}");
     if (p.tema === "oscuro") r.dataset.tema = "oscuro";  // el sitio es claro salvo que la persona elija lo contrario
     if (p.escala) r.style.setProperty("--escala", p.escala);
+    if (p.paleta) r.dataset.paleta = p.paleta;   // combinación de colores (herramientas/paletas.py)
     ["contraste", "subrayado", "quieto"].forEach(function (k) { if (p[k]) r.setAttribute("data-" + k, ""); });
   } catch (e) { /* sin almacenamiento: se usan los valores por defecto */ }
 })();

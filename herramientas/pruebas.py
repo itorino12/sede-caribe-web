@@ -454,6 +454,40 @@ def sin_conexion(nav, base):
     c.close()
 
 
+def paletas(nav, base):
+    """Combinaciones de colores: el menú de la portada las aplica y recuerda; axe (contraste incluido) con cada una."""
+    print("Combinaciones de colores")
+    sys.path.insert(0, str(RAIZ / "herramientas"))
+    import paletas as pal
+    revisar(not pal.revisar(), "contraste calculado de todas las combinaciones (paletas.py)")
+    c, p, e = pagina(nav, base + "index.html", {"width": 390, "height": 844})
+    p.evaluate("localStorage.clear()"); p.reload()
+    for clave in pal.PALETAS:
+        p.click(f".colores-portada [data-colores='{clave}']")
+        revisar(p.evaluate("document.documentElement.dataset.paleta") == clave, f"el menú aplica «{clave}»")
+        p.locator(".perfiles").screenshot(path=str(SALIDA / f"paleta-{clave}.png"))
+    p.goto(base + "agenda.html", wait_until="domcontentloaded")
+    revisar(p.evaluate("document.documentElement.dataset.paleta") == list(pal.PALETAS)[-1], "la combinación se recuerda en otras páginas")
+    revisar(p.get_attribute(f"#panel-a11y [data-colores='{list(pal.PALETAS)[-1]}']", "aria-pressed") == "true", "el panel de accesibilidad marca la elegida")
+    p.evaluate("document.querySelector(\"#panel-a11y [data-colores='institucional']\").click()")
+    revisar(p.evaluate("!document.documentElement.dataset.paleta"), "«Institucional» vuelve a los colores de siempre")
+    revisar(not e, f"combinaciones sin errores {e[:1]}")
+    c.close()
+    axe = leer_axe()
+    for clave in pal.PALETAS:
+        for tema in ("claro", "oscuro"):
+            c = nav.new_context(viewport={"width": 1280, "height": 900})
+            c.add_init_script(f"localStorage.setItem('sc-a11y', JSON.stringify({{paleta: '{clave}', tema: '{tema}'}}))")
+            malas = []
+            for url in ("index.html", "agenda.html", "unidades/vida-estudiantil.html", "carreras/informatica-empresarial.html", "horarios.html"):
+                p = c.new_page(); p.goto(base + url, wait_until="domcontentloaded"); p.add_script_tag(content=axe)
+                v = p.evaluate("axe.run({runOnly:['wcag2a','wcag2aa','wcag21aa','wcag22aa']}).then(r=>r.violations.map(v=>v.id+' ('+v.nodes.length+')'))")
+                malas += [f"{url}: {x}" for x in v]
+                p.close()
+            revisar(not malas, f"axe con «{clave}» en {tema}: {'; '.join(malas[:4])}")
+            c.close()
+
+
 def completa(nav, base):
     print("Recorrido: ficha, pantalla completa y zonas")
     c, p, e = pagina(nav, base + "recorrido.html#lugar-1")
@@ -503,6 +537,7 @@ def completa(nav, base):
     propuestas(nav, base)
     visita(nav, base)
     sin_conexion(nav, base)
+    paletas(nav, base)
 
     print("Accesibilidad (axe)")
     axe = leer_axe()
@@ -554,7 +589,7 @@ def main():
     a = argparse.ArgumentParser()
     a.add_argument("--completa", action="store_true")
     a.add_argument("--vista")
-    a.add_argument("--solo", choices=["sin_conexion", "visita", "busqueda", "armador", "propuestas", "asistente"], help="una sola prueba, sin la rápida")
+    a.add_argument("--solo", choices=["paletas", "sin_conexion", "visita", "busqueda", "armador", "propuestas", "asistente"], help="una sola prueba, sin la rápida")
     a.add_argument("--camara", action="append", default=[], help="objetivo y cámara: TX,TY,TZ,CX,CY,CZ (se puede repetir)")
     args = a.parse_args()
     if not (RAIZ / "dist" / "index.html").exists():

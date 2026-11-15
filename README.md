@@ -148,6 +148,9 @@ En la portada, un congo anda colgado de una rama. Al tocarlo se baja y abre un c
   - En la VM, `bash herramientas/probar_congo.sh --en-vivo` revisa el servicio y hace una pregunta real.
 - **Requisitos de la VM:** unos 1,5 GB de RAM para el servicio. Salida HTTPS a `generativelanguage.googleapis.com` y `pypi.org`, y a `huggingface.co` la primera vez, para bajar el modelo de búsqueda (~220 MB).
 
+### Combinaciones de colores
+En la portada («Colores del sitio») y en el panel de Accesibilidad se elige entre Institucional (la de siempre), Azul UCR, Verde Caribe, Tierra y Celeste. Se recuerda en el navegador y se combina con el modo claro u oscuro y con el alto contraste. Todas salen de la paleta del Manual de identidad visual de la UCR (lista accesible del Centro de Informática, 2025) y se definen en `herramientas/paletas.py`, que comprueba que cada par de texto y fondo cumpla WCAG AA antes de escribir el CSS. Para agregar o cambiar una: editar `PALETAS` ahí y la lista de `selector_colores` en `_macros.html`, y correr el script.
+
 ### Sitio sin conexión
 `src/sw.js` (build.py lo publica en la raíz como `sw.js`, con la versión de los recursos) guarda cada página que se abre y lo que necesita; sin señal, muestra la copia guardada con un aviso arriba, y si la página no está guardada lleva a `sin-conexion.html`, que dice qué sí hay. En esa página, un botón guarda de una vez las páginas de más uso (lista `SIN_CONEXION` en build.py; el detalle y el peso salen en `sin-conexion.json`), con las fotos como opción. Las páginas siempre se piden primero a la red, así que con conexión se ve lo último. PDF, videos, audio, `.ics`, `.xml` y la API no se guardan. En el servidor, `sw.js` va con `Cache-Control: no-cache` (nginx-sede.conf).
 

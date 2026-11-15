@@ -173,11 +173,18 @@
   function guardar() { try { localStorage.setItem("sc-a11y", JSON.stringify(pref)); } catch (e) {} }
   function marcar() {
     $$("[data-escala]").forEach(function (b) { b.setAttribute("aria-pressed", String(b.dataset.escala === String(pref.escala || "1"))); });
-    $$("[data-tema]").forEach(function (b) { b.setAttribute("aria-pressed", String(b.dataset.tema === (pref.tema || "claro"))); });
+    $$("button[data-tema]").forEach(function (b) { b.setAttribute("aria-pressed", String(b.dataset.tema === (pref.tema || "claro"))); });
     $$("[data-opcion]").forEach(function (c) { c.checked = !!pref[c.dataset.opcion]; });
+    $$("[data-colores]").forEach(function (b) { b.setAttribute("aria-pressed", String(b.dataset.colores === (pref.paleta || "institucional"))); });
   }
   $$("[data-escala]").forEach(function (b) { b.addEventListener("click", function () { pref.escala = b.dataset.escala; r.style.setProperty("--escala", pref.escala); guardar(); marcar(); }); });
-  $$("[data-tema]").forEach(function (b) { b.addEventListener("click", function () { pref.tema = b.dataset.tema; if (pref.tema === "oscuro") r.dataset.tema = "oscuro"; else delete r.dataset.tema; guardar(); marcar(); }); });
+  $$("button[data-tema]").forEach(function (b) { b.addEventListener("click", function () { pref.tema = b.dataset.tema; if (pref.tema === "oscuro") r.dataset.tema = "oscuro"; else delete r.dataset.tema; guardar(); marcar(); }); });
+  // combinación de colores: el mismo menú está en la portada y en este panel; «institucional» es la de siempre
+  $$("[data-colores]").forEach(function (b) { b.addEventListener("click", function () {
+    var v = b.dataset.colores;
+    if (v === "institucional") { delete pref.paleta; delete r.dataset.paleta; } else { pref.paleta = v; r.dataset.paleta = v; }
+    guardar(); marcar();
+  }); });
   $$("[data-opcion]").forEach(function (c) { c.addEventListener("change", function () {
     pref[c.dataset.opcion] = c.checked; if (c.checked) r.setAttribute("data-" + c.dataset.opcion, ""); else r.removeAttribute("data-" + c.dataset.opcion); guardar();
   }); });

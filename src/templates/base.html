@@ -1,3 +1,4 @@
+{% from "_macros.html" import selector_colores %}
 <!doctype html>
 <html lang="es-CR">
 <head>
@@ -152,8 +153,11 @@
     <fieldset><legend>Tamaño del texto</legend>
       <div class="segmentos"><button type="button" data-escala="1">Normal</button><button type="button" data-escala="1.15">Grande</button><button type="button" data-escala="1.3">Muy grande</button></div>
     </fieldset>
-    <fieldset><legend>Colores</legend>
+    <fieldset><legend>Modo de color</legend>
       <div class="segmentos"><button type="button" data-tema="claro">Claros</button><button type="button" data-tema="oscuro">Oscuros</button></div>
+    </fieldset>
+    <fieldset><legend>Combinación de colores</legend>
+      {{ selector_colores("Combinación de colores del sitio") }}
     </fieldset>
     <fieldset><legend>Ajustes</legend>
       <label class="interruptor"><input type="checkbox" data-opcion="contraste"> Alto contraste</label>
