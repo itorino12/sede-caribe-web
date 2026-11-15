@@ -98,20 +98,50 @@ def menu(nav, base):
     c.close()
 
 
+def carrusel_portada(p):
+    """Carrusel de las últimas noticias de la portada: controles, pausa, noticias ocultas inertes."""
+    activa = "[...document.querySelectorAll('.portada__noticia')].findIndex(d => d.classList.contains('activa'))"
+    revisar(esperar(p, "!document.querySelector('.portada__noticias-mando').hidden"), "carrusel de la portada: controles visibles")
+    p.click("[data-pausa]")   # se detiene primero, para que las comprobaciones no dependan del reloj
+    revisar(p.get_attribute("[data-pausa]", "aria-pressed") == "true", "carrusel: el botón de pausa queda activado")
+    n = p.evaluate("document.querySelectorAll('.portada__noticia').length")
+    p.click("[data-ir='0']")
+    revisar(p.evaluate(activa) == 0, "carrusel: el primer punto muestra la primera noticia")
+    p.click("[data-despues]")
+    revisar(p.evaluate(activa) == 1, "carrusel: «siguiente» pasa a la segunda")
+    p.click("[data-antes]"); p.click("[data-antes]")
+    revisar(p.evaluate(activa) == n - 1, "carrusel: «anterior» desde la primera da la vuelta a la última")
+    revisar(p.evaluate("[...document.querySelectorAll('.portada__noticia')].every((d, k) => d.inert === (k !== " + str(n - 1) + "))"), "carrusel: las noticias que no se ven quedan inertes")
+    revisar(p.evaluate("document.querySelectorAll('.portada__noticias-puntos [aria-current]').length") == 1, "carrusel: un solo punto marcado")
+    revisar(p.evaluate("(() => { const a = [...document.querySelectorAll('.portada__noticia')].map(d => d.offsetHeight); return Math.max(...a) - Math.min(...a) <= 1; })()"), "carrusel: todas las noticias ocupan la misma altura (nada salta al cambiar)")
+    p.focus("[data-despues]"); p.keyboard.press("ArrowLeft")
+    revisar(p.evaluate(activa) == n - 2, "carrusel: la flecha izquierda del teclado retrocede")
+    p.click("[data-pausa]")   # reanudar: debe avanzar solo
+    antes = p.evaluate(activa)
+    p.mouse.move(2, 2)
+    p.evaluate("document.activeElement && document.activeElement.blur()")
+    revisar(esperar(p, f"[...document.querySelectorAll('.portada__noticia')].findIndex(d => d.classList.contains('activa')) !== {antes}", 15000), "carrusel: cambia solo cada pocos segundos")
+    p.click("[data-pausa]")
+
+
 def rapida(nav, base):
     menu(nav, base)
     print("Portada y recorrido (PC)")
     c, p, e = pagina(nav, base + "index.html")
     p.wait_for_selector(".mapa3d--listo", timeout=120000)
     revisar(not e, f"portada sin errores {e[:1]}")
-    noticia = p.evaluate("""(() => { const a = document.querySelector('.portada__noticia-titulo a');
-        const resto = [...document.querySelectorAll('.noticias-portada .nota__titulo a')].map(x => x.getAttribute('href'));
-        return a && { href: a.getAttribute('href'), repetida: resto.includes(a.getAttribute('href')),
-                      cabe: a.closest('.portada__noticia').getBoundingClientRect().right <= innerWidth }; })()""")
-    if noticia:
-        revisar(not noticia["repetida"], "la noticia de la portada no se repite en «Más noticias»")
-        revisar(noticia["cabe"], "la noticia de la portada cabe en la pantalla")
+    revisar(p.evaluate("document.querySelectorAll('.portada__noticia').length") <= 3, "el carrusel de la portada tiene como máximo 3 noticias")
+    revisar(p.evaluate("document.querySelectorAll('.noticias-portada, .nota').length") == 0, "la portada no muestra más noticias que las del carrusel")
+    if p.evaluate("document.querySelectorAll('.portada__noticia').length") > 1:
+        carrusel_portada(p)
+    revisar(p.evaluate("document.querySelector('.portada__noticias').getBoundingClientRect().right <= innerWidth"), "el carrusel de la portada cabe en la pantalla")
     p.locator(".portada").screenshot(path=str(SALIDA / "portada.png"))
+    c.close()
+    # con «reducir movimiento» el carrusel no cambia solo: arranca en pausa
+    c, p, _ = pagina(nav, base + "index.html", reduced_motion="reduce")
+    if p.locator("[data-pausa]").count():
+        revisar(esperar(p, "!document.querySelector('.portada__noticias-mando').hidden"), "carrusel con «reducir movimiento»: controles visibles")
+        revisar(p.get_attribute("[data-pausa]", "aria-pressed") == "true", "carrusel con «reducir movimiento»: arranca en pausa")
     c.close()
     c, p, e = pagina(nav, base + "recorrido.html")
     p.wait_for_selector(".mapa3d--listo", timeout=120000)

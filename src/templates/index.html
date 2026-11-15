@@ -7,14 +7,28 @@
   <div class="portada__rejilla">
     <div class="portada__texto">
       {% if noticias %}
-      {# la noticia más reciente (fecha más nueva; en empate, la destacada). «titular_portada» es un titular corto
-         opcional de la hoja; si está vacío se usa el título completo #}
-      {% set n = noticias[0] %}
+      {# las tres noticias más recientes (fecha más nueva; en empate, la destacada) en un carrusel. «titular_portada» es un
+         titular corto (máximo 5 palabras) de la hoja. Sin JavaScript se ve solo la primera; portada-noticias.js lo vuelve carrusel #}
+      {% set ultimas = noticias[:3] %}
       <h1 id="portada-titulo" class="oculto">Universidad de Costa Rica, Sede del Caribe</h1>
-      <article class="portada__noticia">
-        <h2 class="portada__noticia-titulo"><a href="noticias/{{ n.id }}.html">{{ n|titular_portada }}</a></h2>
-        {% if n.resumen %}<p class="portada__noticia-resumen">{{ n.resumen }} <a class="portada__noticia-enlace" href="noticias/{{ n.id }}.html">Leer la noticia<span class="oculto">: {{ n|titular_portada }}</span> →</a></p>{% endif %}
-      </article>
+      <div class="portada__noticias" data-carrusel-noticias role="group" aria-roledescription="carrusel" aria-label="Últimas noticias">
+        <div class="portada__noticias-pista">
+          {% for n in ultimas %}
+          <div class="portada__noticia" role="group" aria-roledescription="diapositiva" aria-label="{{ loop.index }} de {{ ultimas|length }}">
+            <h2 class="portada__noticia-titulo"><a href="noticias/{{ n.id }}.html">{{ n|titular_portada }}</a></h2>
+            {% if n.resumen %}<p class="portada__noticia-resumen">{{ n.resumen }} <a class="portada__noticia-enlace" href="noticias/{{ n.id }}.html">Leer la noticia<span class="oculto">: {{ n|titular_portada }}</span> →</a></p>{% endif %}
+          </div>
+          {% endfor %}
+        </div>
+        {% if ultimas|length > 1 %}
+        <div class="portada__noticias-mando" hidden>
+          <button type="button" class="portada__noticias-boton" data-antes aria-label="Noticia anterior"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m15 5-7 7 7 7"/></svg></button>
+          <ul class="portada__noticias-puntos">{% for n in ultimas %}<li><button type="button" data-ir="{{ loop.index0 }}" aria-label="Noticia {{ loop.index }} de {{ ultimas|length }}"></button></li>{% endfor %}</ul>
+          <button type="button" class="portada__noticias-boton" data-despues aria-label="Noticia siguiente"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m9 5 7 7-7 7"/></svg></button>
+          <button type="button" class="portada__noticias-boton portada__noticias-pausa" data-pausa aria-label="Pausar el cambio automático" aria-pressed="false"><svg class="pausa" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M8 5v14M16 5v14"/></svg><svg class="seguir" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M8 5v14l11-7z"/></svg></button>
+        </div>
+        {% endif %}
+      </div>
       {% else %}
       <h1 id="portada-titulo">En Limón<span>desde 1975.</span></h1>
       <p class="portada__bajada">{{ carreras|length }} carreras en Limón y Siquirres, residencias dentro del campus y medio siglo de historia con la provincia.</p>
@@ -101,21 +115,7 @@
   </div>
 </section>
 
-{# la más reciente ya está arriba, en la portada: aquí siguen las demás #}
-{% if noticias|length > 1 %}
-<section class="bloque ancho" aria-labelledby="noticias-titulo">
-  <div class="bloque__cabeza">
-    <h2 id="noticias-titulo">Más noticias</h2>
-    <a href="noticias.html">Todas las noticias</a>
-  </div>
-  <div class="noticias-portada">
-    {{ tarjeta_noticia(noticias[1], '', grande=true) }}
-    <div class="noticias-portada__lista">
-      {% for n in noticias[2:6] %}{{ tarjeta_noticia(n, '') }}{% endfor %}
-    </div>
-  </div>
-</section>
-{% endif %}
+{# en la portada solo van las tres noticias más recientes (el carrusel de arriba); el resto está en Noticias #}
 
 <section class="carreras-portada" aria-labelledby="carreras-titulo">
   <div class="ancho">
@@ -215,4 +215,5 @@
     setTimeout(() => { if (!document.querySelector(".mapa3d--listo, .mapa3d--sin-3d")) respaldo(); }, 15000);
   }, 400));
 </script>
+<script src="{{ raiz }}assets/js/portada-noticias.js" defer></script>
 {% endblock %}

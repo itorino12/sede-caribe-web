@@ -56,7 +56,7 @@ La fila 1 son los encabezados (se pueden escribir con tildes y mayúsculas). Las
 
 - Una fila sale en el sitio solo si **publicar** dice `sí`. Así, la columna funciona como aprobación.
 - Una noticia con **fecha futura** queda programada y aparece ese día.
-- La portada muestra arriba la noticia más reciente (en empate de fecha, la destacada): miniatura, **titular_portada** (o el título, si está vacío) y las primeras tres líneas del **resumen**. Debajo, «Más noticias» sigue con las demás. Sin noticias publicadas, vuelve el mensaje «En Limón desde 1975».
+- La portada muestra arriba un carrusel con las **tres noticias más recientes** (en empate de fecha, la destacada): cada una con **titular_portada** (o el título, recortado a 5 palabras, si está vacío), el **resumen** y el enlace «Leer la noticia». Cambia solo cada 8 s; se detiene con el cursor encima, con el botón de pausa, con «reducir movimiento» o con el ajuste «quieto» (`portada-noticias.js`). La portada no muestra más de esas tres; las demás están en Noticias. Sin noticias publicadas, vuelve el mensaje «En Limón desde 1975».
 - Un aviso se muestra solo entre su fecha **desde** y su fecha **hasta**, y luego desaparece sin que nadie lo borre.
 - La agenda muestra arriba los plazos en curso, luego las próximas actividades por mes (con minicalendario y filtro por tema) y, plegadas al final, las anteriores. En «Esta semana», un plazo de más de una semana aparece solo el día que abre y el día que cierra.
 - La columna **documento** apunta a un Documento de Google de la carpeta «Páginas» por su nombre (por ejemplo, `historia`). Si una noticia tiene documento, se usa en lugar de la columna «cuerpo».
