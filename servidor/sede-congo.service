@@ -8,6 +8,9 @@ User=sedeweb
 Group=sedeweb
 EnvironmentFile=/etc/sede-web/sede.env
 Environment=CONGO_DATOS=/var/lib/sede-congo
+# Hugging Face (descarga del modelo de búsqueda) guarda sus archivos auxiliares en HF_HOME; por omisión es /opt/sede-web/.cache,
+# que con ProtectSystem=strict es de solo lectura y la descarga falla con «Read-only file system».
+Environment=HF_HOME=/var/lib/sede-congo/hf
 WorkingDirectory=/opt/sede-web/servidor/congo
 ExecStart=/opt/sede-web/servidor/congo/.venv/bin/python -m congo
 # congo sale solo cuando su código cambia (git pull); systemd lo vuelve a arrancar
