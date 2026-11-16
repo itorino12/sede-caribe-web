@@ -12,6 +12,7 @@ Sitio estático (Python + Jinja2). El contenido sale de Google Drive; la vista p
 - Sin conexión: `src/sw.js` → `dist/sw.js`; páginas del botón «Guardar» en `SIN_CONEXION` (build.py). Prueba: `pruebas.py --solo=sin_conexion`. Si se cambia el nombre de un CSS/JS básico, revisar `ESENCIAL` en sw.js.
 - Combinaciones de colores (botón «Colores» de la barra de arriba, ventana `#panel-colores`): se definen solo en `herramientas/paletas.py`, con colores de la paleta UCR; `python3 herramientas/paletas.py` comprueba el contraste y reescribe el bloque `paletas: inicio … fin` de sede.css (no editarlo a mano). Prueba: `pruebas.py --solo=paletas` (axe con cada una en claro y oscuro).
 - Revisar enlaces: `python3 herramientas/verificar_enlaces.py` (después de compilar; `--externos` revisa internet; `--autoprueba` se prueba a sí mismo). Corre solo en GitHub antes de publicar y cada lunes para los externos.
+- Política de seguridad del servidor: `python3 herramientas/probar_csp.py` (después de compilar) sirve `dist/` con las cabeceras de `servidor/sede-cabeceras.conf` y avisa de violaciones y errores de JavaScript. Nada de `<script>` con código en línea en las plantillas (van en `assets/js/`, ver `portada-arranque.js`); `style="…"` se permite solo como atributo (`style-src-attr`). GitHub Pages no manda esa política: un fallo así solo se ve en el servidor.
 - Visitas propias sin cookies: `visitas.js` + `POST /api/visita` + `GET /api/admin/visitas` (ver README, «Visitas y enlaces»). No guardar IP ni navegador ahí.
 
 ## Maqueta 3D
