@@ -504,7 +504,7 @@ def rss(noticias, sitio):
         + (f"<category>{html.escape(n['categoria'])}</category>" if n.get("categoria") else "")
         + f"<description>{html.escape(n.get('resumen', ''))}</description>{foto(n)}</item>" for n in noticias[:30])
     ultima = f"<lastBuildDate>{fecha_rss(noticias[0]['f'])}</lastBuildDate>" if noticias else ""
-    return (f'<?xml version="1.0" encoding="UTF-8"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel>'
+    return (f'<?xml version="1.0" encoding="UTF-8"?><?xml-stylesheet type="text/xsl" href="noticias.xsl"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel>'
             f"<title>Noticias de la UCR, Sede del Caribe</title><link>{base}/noticias.html</link>"
             f'<atom:link href="{base}/noticias.xml" rel="self" type="application/rss+xml"/>'
             f"<description>{html.escape(sitio['descripcion'])}</description><language>es-CR</language>{ultima}{items}</channel></rss>")
@@ -636,6 +636,7 @@ def main():
     (DIST / "assets/js/indice.js").write_text("window.INDICE=" + json.dumps(indice, ensure_ascii=False) + ";", encoding="utf-8")
     (DIST / "agenda.ics").write_text(ics(c["eventos"], sitio), encoding="utf-8")
     (DIST / "noticias.xml").write_text(rss(c["noticias"], sitio), encoding="utf-8")
+    shutil.copy(SRC / "rss.xsl", DIST / "noticias.xsl")   # cómo se ve el feed al abrirlo en un navegador
     base = sitio["base_url"].rstrip("/")
     urls = "".join(f"<url><loc>{base}/{s if s != 'index.html' else ''}</loc><lastmod>{HOY}</lastmod></url>" for s, *_ in paginas if s != "404.html")
     (DIST / "sin-conexion.json").write_text(json.dumps(paquete_sin_conexion(version), ensure_ascii=False), encoding="utf-8")
