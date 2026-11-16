@@ -80,7 +80,7 @@ def pdf(datos):
         raise ArchivoInvalido("PDF protegido con contraseña")
     bloques = []
     for i, pagina in enumerate(doc, start=1):
-        t = _limpio(pagina.get_text("text", sort=True))
+        t = _limpio(pagina.get_text("text"))
         if t:
             bloques.append(Bloque(t, pagina=i))
     if not bloques:

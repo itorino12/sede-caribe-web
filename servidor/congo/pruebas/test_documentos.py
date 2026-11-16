@@ -90,3 +90,18 @@ def test_reprocesar_y_eliminar(repo):
     doc = repo.registro.listar()[0]
     assert repo.reprocesar(doc["id"])["fragmentos"] == doc["fragmentos"]
     assert repo.eliminar(doc["id"]) and repo.registro.listar() == [] and repo.vectores.contar() == 0
+
+
+def test_pdf_dos_columnas_conserva_el_orden_de_los_articulos():
+    """Los reglamentos de la UCR vienen en dos columnas: ordenar por posición mezclaba una con otra."""
+    import pymupdf
+    doc = pymupdf.open()
+    p = doc.new_page()
+    izq = "ARTÍCULO 1. Objeto\nEste reglamento regula la sede.\nARTÍCULO 2. Funciones\nLa sede tiene funciones propias."
+    der = "ARTÍCULO 3. Gobierno\nEl Consejo de Sede gobierna.\nARTÍCULO 4. Dirección\nLa dirección representa a la sede."
+    p.insert_textbox(pymupdf.Rect(40, 50, 290, 800), izq, fontsize=10)
+    p.insert_textbox(pymupdf.Rect(310, 50, 560, 800), der, fontsize=10)
+    frags = fragmentar(extractores.extraer("r.pdf", doc.tobytes()))
+    secciones = [f.seccion for f in frags if f.seccion]
+    assert secciones == ["Artículo 1", "Artículo 2", "Artículo 3", "Artículo 4"]
+    assert "Consejo de Sede" in next(f.texto for f in frags if f.seccion == "Artículo 3")
