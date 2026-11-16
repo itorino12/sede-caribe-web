@@ -67,11 +67,11 @@
 
   // ---------- buscador del sitio (índice generado al compilar)
   var campo = $("#buscador-campo"), lista = $("#buscador-resultados"), estado = $("#buscador-estado");
-  function buscar(q) {
+  // consulta compartida con la barra de la portada: el mismo índice, el mismo orden y los mismos extractos
+  function consultar(q, maximo) {
     var indice = window.INDICE || [];
     var terminos = normal(q).split(/\s+/).filter(function (t) { return t.length > 1; });
-    lista.innerHTML = "";
-    if (!terminos.length) { estado.textContent = ""; return; }
+    if (!terminos.length) return { terminos: terminos, res: [] };
     var res = indice.map(function (e) {
       var t = normal(e.t), x = normal(e.x), p = 0;
       for (var i = 0; i < terminos.length; i++) {
@@ -79,14 +79,28 @@
         if (t.indexOf(k) > -1) p += 10; else if (x.indexOf(k) > -1) p += 1; else return null;
       }
       return { e: e, p: p };
-    }).filter(Boolean).sort(function (a, b) { return b.p - a.p; }).slice(0, 12);
-    estado.textContent = res.length ? res.length + (res.length === 1 ? " resultado" : " resultados") : "No hay resultados. Pruebe con otra palabra o revise el directorio.";
+    }).filter(Boolean).sort(function (a, b) { return b.p - a.p; }).slice(0, maximo);
+    return { terminos: terminos, res: res };
+  }
+  function extracto(x, termino) {
+    var i = normal(x).indexOf(termino);
+    return (i > 60 ? "…" : "") + x.substr(Math.max(0, i - 60), 160) + "…";
+  }
+  function elemento(r, terminos) {
+    var a = document.createElement("a"), s = document.createElement("strong"), sp = document.createElement("span");
+    a.href = raiz + r.e.u; s.textContent = r.e.t; sp.textContent = extracto(r.e.x, terminos[0]);
+    a.appendChild(s); a.appendChild(sp);
+    return a;
+  }
+  var SIN_RESULTADOS = "No hay resultados. Pruebe con otra palabra o revise el directorio.";
+  function buscar(q) {
+    var c = consultar(q, 12), res = c.res;
+    lista.innerHTML = "";
+    if (!c.terminos.length) { estado.textContent = ""; return; }
+    estado.textContent = res.length ? res.length + (res.length === 1 ? " resultado" : " resultados") : SIN_RESULTADOS;
     res.forEach(function (r) {
-      var li = document.createElement("li"), a = document.createElement("a"), s = document.createElement("strong"), sp = document.createElement("span");
-      a.href = raiz + r.e.u; s.textContent = r.e.t;
-      var x = r.e.x, i = normal(x).indexOf(terminos[0]);
-      sp.textContent = (i > 60 ? "…" : "") + x.substr(Math.max(0, i - 60), 160) + "…";
-      a.appendChild(s); a.appendChild(sp); li.appendChild(a); lista.appendChild(li);
+      var li = document.createElement("li");
+      li.appendChild(elemento(r, c.terminos)); lista.appendChild(li);
     });
   }
   if (campo) {
@@ -103,11 +117,26 @@
       e.preventDefault(); var d = $("#buscador"); if (d && !d.open) { d.showModal(); campo.focus(); }
     }
   });
+  // ---------- barra de la portada: al tocarla se abre el mismo cuadro de búsqueda en vivo de la barra superior.
+  // Se abre con el clic o el toque, o al escribir; no al recibir el foco con el teclado (WCAG 3.2.1), y así
+  // tampoco se reabre cuando el cuadro se cierra y el foco vuelve aquí.
   var directa = $("[data-busqueda-directa]");
-  if (directa) directa.addEventListener("submit", function (e) {
-    e.preventDefault(); var q = $("input", directa).value; var d = $("#buscador");
-    d.showModal(); campo.value = q; buscar(q); campo.focus();
-  });
+  if (directa && campo) {
+    var entrada = $("input", directa), dialogo = $("#buscador");
+    var abrirBuscador = function () {
+      if (!dialogo.showModal || dialogo.open) return;
+      var q = entrada.value;
+      entrada.value = "";   // el texto pasa al cuadro del buscador
+      dialogo.showModal(); campo.value = q; buscar(q); campo.focus();
+      campo.setSelectionRange(q.length, q.length);
+    };
+    entrada.addEventListener("click", abrirBuscador);
+    entrada.addEventListener("input", abrirBuscador);
+    dialogo.addEventListener("close", function () { if (document.body.contains(entrada) && dialogo.dataset.desde === "portada") entrada.focus(); });
+    directa.addEventListener("submit", function (e) { e.preventDefault(); abrirBuscador(); });
+    entrada.addEventListener("click", function () { dialogo.dataset.desde = "portada"; }, true);
+    dialogo.addEventListener("close", function () { delete dialogo.dataset.desde; });
+  }
 
   // ---------- portada: una sola búsqueda a la vista (la lupa del encabezado se oculta mientras se ve el buscador de la portada)
   var buscarPortada = $(".portada__buscar");

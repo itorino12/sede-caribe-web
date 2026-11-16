@@ -99,27 +99,55 @@ def menu(nav, base):
 
 
 def carrusel_portada(p):
-    """Carrusel de las últimas noticias de la portada: un solo botón «siguiente» que da la vuelta; sin cambio automático."""
+    """Carrusel de las últimas noticias de la portada: un solo botón «siguiente» que da la vuelta; pasa solo cada 5 s salvo «quieto»."""
     activa = "[...document.querySelectorAll('.portada__noticia')].findIndex(d => d.classList.contains('activa'))"
     revisar(esperar(p, "!document.querySelector('[data-despues]').hidden"), "carrusel de la portada: botón «siguiente» visible")
     n = p.evaluate("document.querySelectorAll('.portada__noticia').length")
+    p.evaluate("document.documentElement.setAttribute('data-quieto', '')")   # sin cambio automático: la navegación no depende del reloj
     revisar(p.evaluate("document.querySelectorAll('.portada__noticias button').length") == 1, "carrusel: no tiene más controles que el botón «siguiente»")
-    revisar(p.evaluate(activa) == 0, "carrusel: empieza en la noticia más reciente")
+    inicio = p.evaluate(activa)   # el cambio automático pudo avanzar mientras cargaba el 3D; todo se mide desde aquí
     for k in range(1, n):
         p.click("[data-despues]")
-        revisar(p.evaluate(activa) == k, f"carrusel: «siguiente» pasa a la noticia {k + 1}")
+        revisar(p.evaluate(activa) == (inicio + k) % n, f"carrusel: «siguiente» avanza una noticia ({k} de {n - 1})")
     p.click("[data-despues]")
-    revisar(p.evaluate(activa) == 0, "carrusel: después de la última vuelve a la primera")
-    revisar(p.evaluate("[...document.querySelectorAll('.portada__noticia')].every((d, k) => d.inert === (k !== 0))"), "carrusel: las noticias que no se ven quedan inertes")
+    revisar(p.evaluate(activa) == inicio, "carrusel: después de la última vuelve a la primera")
+    revisar(p.evaluate("[...document.querySelectorAll('.portada__noticia')].every((d, k) => d.inert === (k !== " + str(inicio) + "))"), "carrusel: las noticias que no se ven quedan inertes")
     revisar(p.evaluate("(() => { const a = [...document.querySelectorAll('.portada__noticia')].map(d => d.offsetHeight); return Math.max(...a) - Math.min(...a) <= 1; })()"), "carrusel: todas las noticias ocupan la misma altura (nada salta al cambiar)")
     revisar(p.evaluate("(() => { const b = document.querySelector('[data-despues]').getBoundingClientRect(), t = document.querySelector('.portada__noticia.activa .portada__noticia-titulo a').getBoundingClientRect(); return b.left >= t.right - 1 || b.top >= t.bottom; })()"),
             "carrusel: el botón no tapa el titular")
     p.focus("[data-despues]"); p.keyboard.press("ArrowLeft")
-    revisar(p.evaluate(activa) == n - 1, "carrusel: la flecha izquierda del teclado retrocede (y da la vuelta)")
-    p.click("[data-despues]")
-    estable = p.evaluate(activa)
-    p.wait_for_timeout(1200)
-    revisar(p.evaluate(activa) == estable, "carrusel: no cambia solo")
+    revisar(p.evaluate(activa) == (inicio - 1) % n, "carrusel: la flecha izquierda del teclado retrocede (y da la vuelta)")
+    p.evaluate("document.documentElement.removeAttribute('data-quieto')")
+    # cambia solo cada 5 s; con el cursor dentro se detiene; con «Detener animaciones» no cambia
+    p.mouse.move(2, 2); p.evaluate("document.activeElement && document.activeElement.blur()")
+    antes = p.evaluate(activa)
+    revisar(esperar(p, f"[...document.querySelectorAll('.portada__noticia')].findIndex(d => d.classList.contains('activa')) !== {antes}", 9000), "carrusel: pasa solo a la siguiente en unos 5 s")
+    p.hover(".portada__noticias"); estable = p.evaluate(activa); p.wait_for_timeout(5600)
+    revisar(p.evaluate(activa) == estable, "carrusel: con el cursor encima no cambia solo")
+    p.mouse.move(2, 2)
+    p.evaluate("document.documentElement.setAttribute('data-quieto', '')")
+    estable = p.evaluate(activa); p.wait_for_timeout(5600)
+    revisar(p.evaluate(activa) == estable, "carrusel: con «Detener animaciones» no cambia solo")
+    p.evaluate("document.documentElement.removeAttribute('data-quieto')")
+    revisar(esperar(p, f"[...document.querySelectorAll('.portada__noticia')].findIndex(d => d.classList.contains('activa')) !== {estable}", 9000), "carrusel: al desactivar «Detener animaciones» vuelve a cambiar solo")
+
+
+def busqueda_portada(p):
+    """Barra de búsqueda de la portada: al tocarla abre el mismo cuadro en vivo de la barra superior."""
+    entrada = "#portada-buscar"
+    revisar(not p.evaluate("document.getElementById('buscador').open"), "búsqueda de la portada: el cuadro empieza cerrado")
+    p.click(entrada)
+    revisar(esperar(p, "document.getElementById('buscador').open", 3000), "búsqueda de la portada: al tocar la barra se abre el cuadro de búsqueda, sin escribir")
+    revisar(p.evaluate("document.activeElement.id") == "buscador-campo", "búsqueda de la portada: el foco pasa al campo del cuadro")
+    p.keyboard.type("matricula", delay=20)
+    revisar(esperar(p, "document.querySelectorAll('#buscador-resultados a').length > 0", 5000), "búsqueda de la portada: muestra resultados en vivo mientras se escribe")
+    p.keyboard.press("Escape"); p.keyboard.press("Escape")   # el primero borra el texto del campo de búsqueda, el segundo cierra
+    revisar(esperar(p, "!document.getElementById('buscador').open", 3000), "búsqueda de la portada: Escape cierra el cuadro")
+    revisar(p.evaluate("document.activeElement.id") == "portada-buscar" and not p.evaluate("document.getElementById('buscador').open"), "búsqueda de la portada: al cerrar, el foco vuelve a la barra y no se reabre solo")
+    p.keyboard.type("bibliot", delay=20)
+    revisar(esperar(p, "document.getElementById('buscador').open && document.getElementById('buscador-campo').value === 'bibliot'", 3000), "búsqueda de la portada: escribir en la barra abre el cuadro con lo escrito")
+    p.keyboard.press("Enter")
+    revisar(esperar(p, "location.pathname.indexOf('index.html') < 0 || location.href.indexOf('index.html#') < 0 && !document.getElementById('buscador').open", 10000), "búsqueda de la portada: Enter va al primer resultado")
 
 
 def rapida(nav, base):
@@ -134,6 +162,7 @@ def rapida(nav, base):
         carrusel_portada(p)
     revisar(p.evaluate("document.querySelector('.portada__noticias').getBoundingClientRect().right <= innerWidth"), "el carrusel de la portada cabe en la pantalla")
     p.locator(".portada").screenshot(path=str(SALIDA / "portada.png"))
+    busqueda_portada(p)   # al final: termina navegando a un resultado
     c.close()
     c, p, e = pagina(nav, base + "recorrido.html")
     p.wait_for_selector(".mapa3d--listo", timeout=120000)
