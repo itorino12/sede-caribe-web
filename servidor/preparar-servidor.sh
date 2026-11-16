@@ -31,9 +31,9 @@ fi
 RAIZ=$(findmnt -no SOURCE /)
 if lvs "$RAIZ" >/dev/null 2>&1; then
   PV=$(pvs --noheadings -o pv_name -S "vg_name=$(lvs --noheadings -o vg_name "$RAIZ" | xargs)" | head -1 | xargs)
-  DISCO="/dev/$(lsblk -no pkname "$PV")"
+  DISCO="/dev/$(lsblk -dno pkname "$PV")"
   PART=$(cat "/sys/class/block/$(basename "$PV")/partition")
-  growpart "$DISCO" "$PART" || true      # sale con error si ya ocupa todo: no es un problema
+  growpart "$DISCO" "$PART" || echo "growpart: sin cambios (¿la partición ya ocupa todo el disco?)"
   pvresize "$PV"
   lvextend -r -l +100%FREE "$RAIZ" || true
 fi
