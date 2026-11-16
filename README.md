@@ -198,6 +198,8 @@ Si no se copia, esos enlaces dan error 404 apenas el dominio apunte al servidor 
 8. Asistente: escribir `GEMINI_API_KEY`, `CONGO_CLAVE_ADMIN` (`openssl rand -hex 24`) y `CONGO_DRIVE_CARPETA` en `/etc/sede-web/sede.env`. Compartir la carpeta «Documentos del congo» con la cuenta de servicio, como Lector. Luego ejecutar `sudo systemctl restart sede-congo` y `bash herramientas/probar_congo.sh --en-vivo`.
 9. Calibrar `CONGO_UMBRAL` con preguntas reales. El valor por omisión (0,45) es un punto de partida: no se ha medido con los documentos de la Sede.
 
+**Publicar ya y aplicar cambios de configuración:** `sudo bash /opt/sede-web/servidor/desplegar.sh` (con `--congo` si cambió `sede.env`). Hace lo mismo que el temporizador y además copia a su lugar la configuración de nginx y de los servicios que haya cambiado en el repositorio, probando antes con `nginx -t`. No toca `nginx-sede.conf` si el sitio ya tiene HTTPS: lo avisa para revisarlo a mano.
+
 `servidor/nginx-sede.conf` ya redirige las direcciones del sitio Joomla anterior (`/index.php/...`) a sus equivalentes nuevas, para no romper enlaces compartidos.
 
 **Pasar el Drive a una cuenta institucional:** compartir la nueva carpeta con la misma cuenta de servicio y cambiar `SEDE_DRIVE_CARPETA`. No hay que tocar código.
