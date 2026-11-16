@@ -2507,6 +2507,20 @@
  },
  {
   "publicar": "sí",
+  "id": "2026-11-16-resultado-de-la-prueba-de-aptitud-academica",
+  "fecha": "2026-11-16",
+  "hora": "16:00",
+  "fecha_fin": "",
+  "titulo": "Resultado de la Prueba de Aptitud Académica",
+  "lugar": "En línea",
+  "categoria": "Admisión",
+  "descripcion": "Proceso de Admisión 2026-2027. Para quienes resulten elegibles, la Sede ofrece charlas informativas el 3 y el 4 de diciembre.",
+  "enlace": "",
+  "enlace_texto": "",
+  "organiza": "Oficina de Registro e Información (ORI)"
+ },
+ {
+  "publicar": "sí",
   "id": "2026-11-18-posgrado-prematricula-ordinaria-del-i-cuatrimestre-2027",
   "fecha": "2026-11-18",
   "hora": "",
@@ -2728,6 +2742,34 @@
   "enlace": "https://ematricula.ucr.ac.cr",
   "enlace_texto": "ematricula.ucr.ac.cr",
   "organiza": "Oficina de Registro e Información (ORI)"
+ },
+ {
+  "publicar": "sí",
+  "id": "2026-12-03-charla-informativa-sobre-el-proceso-de-admision",
+  "fecha": "2026-12-03",
+  "hora": "14:00",
+  "fecha_fin": "",
+  "titulo": "Charla informativa sobre el proceso de admisión",
+  "lugar": "Auditorio",
+  "categoria": "Admisión",
+  "descripcion": "Sesión de asesoría sobre el proceso de admisión a la UCR, dirigida a estudiantes elegibles. Hay dos horarios (jueves 3 de diciembre, 2:00 p. m., y viernes 4 de diciembre, 10:00 a. m.); basta con asistir a uno.",
+  "enlace": "",
+  "enlace_texto": "",
+  "organiza": "Sede del Caribe"
+ },
+ {
+  "publicar": "sí",
+  "id": "2026-12-04-charla-informativa-sobre-el-proceso-de-admision",
+  "fecha": "2026-12-04",
+  "hora": "10:00",
+  "fecha_fin": "",
+  "titulo": "Charla informativa sobre el proceso de admisión",
+  "lugar": "Auditorio",
+  "categoria": "Admisión",
+  "descripcion": "Sesión de asesoría sobre el proceso de admisión a la UCR, dirigida a estudiantes elegibles. Hay dos horarios (jueves 3 de diciembre, 2:00 p. m., y viernes 4 de diciembre, 10:00 a. m.); basta con asistir a uno.",
+  "enlace": "",
+  "enlace_texto": "",
+  "organiza": "Sede del Caribe"
  },
  {
   "publicar": "sí",
