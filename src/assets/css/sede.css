@@ -269,6 +269,17 @@ main:focus { outline: none; }
 .portada__campo .boton, :root[data-tema="oscuro"] .portada__campo .boton { border-radius: 0 2px 2px 0; min-height: 0; background: var(--banda); border-color: var(--banda); color: var(--sobre-banda); }
 /* tres botones del mismo ancho total que la barra de búsqueda: delgados, translúcidos y con un tinte pastel muy suave de cada
    uno de los tres colores de la combinación activa (franja, segundo acento y filete); el texto queda oscuro para leerse bien */
+/* resultados en vivo bajo la barra de la portada: capa superior (popover), colocada por JavaScript bajo el cuadro */
+.portada__resultados { position: fixed; inset: auto; margin: 0; padding: 4px; overflow: auto; box-sizing: border-box; background: var(--papel); color: var(--tinta);
+  border: 2px solid var(--linea); border-radius: 4px; box-shadow: 0 12px 32px rgba(0, 0, 0, .35); }
+.portada__resultados[hidden] { display: none; }
+.portada__resultados ul { list-style: none; margin: 0; padding: 0; }
+.portada__resultados li + li { border-top: 1px solid var(--linea); }
+.portada__resultados a { display: block; padding: 10px 10px; color: inherit; text-decoration: none; border-left: 4px solid transparent; }
+.portada__resultados a:hover, .portada__resultados a.activo { background: var(--niebla); border-left-color: var(--azul); }
+.portada__resultados strong { display: block; color: var(--tinta); }
+.portada__resultados a span { display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; overflow: hidden; font-size: var(--t-sm); color: var(--tinta-2); }
+.portada__resultados-vacio { padding: 12px 10px; font-size: var(--t-sm); color: var(--tinta-2); }
 .portada__acciones { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; max-width: 520px; margin: 0; }
 .portada__acciones a { --tinte: var(--banda); display: flex; align-items: center; justify-content: center; gap: 8px; min-height: 46px;
   padding: 6px 10px; border-radius: 4px; border: 1px solid rgba(255, 255, 255, .55); color: #0C344E; text-decoration: none;

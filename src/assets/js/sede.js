@@ -68,15 +68,18 @@
   // ---------- buscador del sitio (índice generado al compilar)
   var campo = $("#buscador-campo"), lista = $("#buscador-resultados"), estado = $("#buscador-estado");
   // consulta compartida con la barra de la portada: el mismo índice, el mismo orden y los mismos extractos
-  function consultar(q, maximo) {
+  function consultar(q, maximo, minimo) {
     var indice = window.INDICE || [];
-    var terminos = normal(q).split(/\s+/).filter(function (t) { return t.length > 1; });
+    minimo = minimo || 2;
+    var terminos = normal(q).split(/\s+/).filter(function (t) { return t.length >= minimo; });
     if (!terminos.length) return { terminos: terminos, res: [] };
     var res = indice.map(function (e) {
       var t = normal(e.t), x = normal(e.x), p = 0;
       for (var i = 0; i < terminos.length; i++) {
         var k = terminos[i];
-        if (t.indexOf(k) > -1) p += 10; else if (x.indexOf(k) > -1) p += 1; else return null;
+        if (k.length === 1) {   // una sola letra: solo títulos con una palabra que empieza con ella
+          if (new RegExp("(^|[^a-z0-9])" + k).test(t)) p += t.indexOf(k) === 0 ? 12 : 10; else return null;
+        } else if (t.indexOf(k) > -1) p += 10; else if (x.indexOf(k) > -1) p += 1; else return null;
       }
       return { e: e, p: p };
     }).filter(Boolean).sort(function (a, b) { return b.p - a.p; }).slice(0, maximo);
@@ -117,25 +120,95 @@
       e.preventDefault(); var d = $("#buscador"); if (d && !d.open) { d.showModal(); campo.focus(); }
     }
   });
-  // ---------- barra de la portada: al tocarla se abre el mismo cuadro de búsqueda en vivo de la barra superior.
-  // Se abre con el clic o el toque, o al escribir; no al recibir el foco con el teclado (WCAG 3.2.1), y así
-  // tampoco se reabre cuando el cuadro se cierra y el foco vuelve aquí.
+  // ---------- barra de la portada: lista desplegable con resultados en vivo desde la primera letra.
+  // Es un «combobox»: el foco se queda en el cuadro y las flechas recorren los resultados. La lista va en la capa
+  // superior del navegador (popover) porque la portada recorta lo que se sale de ella.
   var directa = $("[data-busqueda-directa]");
   if (directa && campo) {
-    var entrada = $("input", directa), dialogo = $("#buscador");
-    var abrirBuscador = function () {
-      if (!dialogo.showModal || dialogo.open) return;
-      var q = entrada.value;
-      entrada.value = "";   // el texto pasa al cuadro del buscador
-      dialogo.showModal(); campo.value = q; buscar(q); campo.focus();
-      campo.setSelectionRange(q.length, q.length);
+    var entrada = $("input", directa), marco = $(".portada__campo", directa);
+    var panel = document.createElement("div"), ul = document.createElement("ul"), avisoVivo = document.createElement("p");
+    var hay = typeof panel.showPopover === "function";
+    var activo = -1, esperaPortada, abierta = false, hechos = [], pintada = null;
+    panel.className = "portada__resultados"; panel.id = "portada-resultados";
+    if (hay) panel.setAttribute("popover", "manual");
+    panel.hidden = true;
+    ul.setAttribute("role", "listbox"); ul.setAttribute("aria-label", "Resultados de la búsqueda");
+    avisoVivo.className = "oculto"; avisoVivo.setAttribute("aria-live", "polite"); avisoVivo.setAttribute("role", "status");
+    panel.appendChild(ul); directa.appendChild(panel); directa.appendChild(avisoVivo);
+    entrada.setAttribute("role", "combobox"); entrada.setAttribute("aria-autocomplete", "list"); entrada.setAttribute("aria-haspopup", "listbox");
+    entrada.setAttribute("aria-controls", panel.id); entrada.setAttribute("aria-expanded", "false");
+    panel.addEventListener("mousedown", function (e) { e.preventDefault(); });   // elegir con el ratón no le quita el foco al cuadro
+
+    var colocar = function () {
+      if (!abierta) return;
+      var r = marco.getBoundingClientRect(), alto = (window.visualViewport ? window.visualViewport.height : innerHeight);
+      panel.style.left = r.left + "px"; panel.style.top = (r.bottom + 6) + "px"; panel.style.width = r.width + "px";
+      panel.style.maxHeight = Math.max(150, Math.min(alto - r.bottom - 16, 440)) + "px";
     };
-    entrada.addEventListener("click", abrirBuscador);
-    entrada.addEventListener("input", abrirBuscador);
-    dialogo.addEventListener("close", function () { if (document.body.contains(entrada) && dialogo.dataset.desde === "portada") entrada.focus(); });
-    directa.addEventListener("submit", function (e) { e.preventDefault(); abrirBuscador(); });
-    entrada.addEventListener("click", function () { dialogo.dataset.desde = "portada"; }, true);
-    dialogo.addEventListener("close", function () { delete dialogo.dataset.desde; });
+    var marcar = function (i) {
+      var ops = $$("a", ul);
+      activo = ops.length ? (i + ops.length) % ops.length : -1;
+      ops.forEach(function (a, k) { a.setAttribute("aria-selected", k === activo ? "true" : "false"); a.classList.toggle("activo", k === activo); });
+      if (activo > -1) { entrada.setAttribute("aria-activedescendant", ops[activo].id); ops[activo].scrollIntoView({ block: "nearest" }); }
+      else entrada.removeAttribute("aria-activedescendant");
+    };
+    var cerrar = function () {
+      if (!abierta) return;
+      abierta = false; activo = -1; hechos = [];
+      entrada.setAttribute("aria-expanded", "false"); entrada.removeAttribute("aria-activedescendant");
+      if (hay && panel.matches(":popover-open")) panel.hidePopover();
+      panel.hidden = true;
+    };
+    var abrir = function () {
+      abierta = true; panel.hidden = false;
+      if (hay && !panel.matches(":popover-open")) panel.showPopover();
+      entrada.setAttribute("aria-expanded", "true");
+      colocar();
+    };
+    var pintar = function () {
+      var q = entrada.value, c = consultar(q, 8, 1);
+      pintada = q;
+      if (!c.terminos.length) { cerrar(); avisoVivo.textContent = ""; return; }
+      ul.innerHTML = ""; activo = -1; entrada.removeAttribute("aria-activedescendant");
+      hechos = c.res;
+      if (!c.res.length) {
+        var vacio = document.createElement("li"); vacio.className = "portada__resultados-vacio"; vacio.setAttribute("role", "presentation");
+        vacio.textContent = SIN_RESULTADOS; ul.appendChild(vacio);
+        avisoVivo.textContent = SIN_RESULTADOS;
+      } else {
+        c.res.forEach(function (r, k) {
+          var li = document.createElement("li"), a = elemento(r, c.terminos);
+          li.setAttribute("role", "presentation"); a.setAttribute("role", "option"); a.id = "portada-resultado-" + k; a.tabIndex = -1; a.setAttribute("aria-selected", "false");
+          li.appendChild(a); ul.appendChild(li);
+        });
+        avisoVivo.textContent = c.res.length + (c.res.length === 1 ? " resultado" : " resultados") + ". Use las flechas para elegir.";
+      }
+      abrir();
+    };
+    // desde la primera letra: sin espera larga (el índice está en memoria; 60 ms solo agrupa teclas muy seguidas)
+    entrada.addEventListener("input", function () { clearTimeout(esperaPortada); esperaPortada = setTimeout(pintar, 60); });
+    entrada.addEventListener("focus", function () { if (entrada.value && !abierta) pintar(); });
+    entrada.addEventListener("keydown", function (e) {
+      if (e.key === "ArrowDown" && abierta && hechos.length) { e.preventDefault(); marcar(activo + 1); }
+      else if (e.key === "ArrowUp" && abierta && hechos.length) { e.preventDefault(); marcar(activo < 0 ? -1 : activo - 1); }
+      else if (e.key === "Escape" && abierta) { e.preventDefault(); e.stopPropagation(); cerrar(); }
+    });
+    directa.addEventListener("focusout", function (e) { if (!directa.contains(e.relatedTarget)) cerrar(); });
+    window.addEventListener("resize", colocar);
+    window.addEventListener("scroll", colocar, { passive: true });
+    if (window.visualViewport) window.visualViewport.addEventListener("resize", colocar);
+
+    directa.addEventListener("submit", function (e) {
+      e.preventDefault();
+      clearTimeout(esperaPortada);
+      if (!entrada.value.trim()) { entrada.focus(); return; }
+      if (pintada !== entrada.value) pintar();   // si no, se conserva la opción elegida con las flechas
+      var ops = $$("a", ul), a = ops[activo > -1 ? activo : 0];
+      if (a) { location.href = a.href; return; }
+      // sin coincidencias: se abre el cuadro completo de la barra, que explica qué hacer
+      cerrar(); var q = entrada.value, d = $("#buscador");
+      d.showModal(); campo.value = q; buscar(q); campo.focus();
+    });
   }
 
   // ---------- portada: una sola búsqueda a la vista (la lupa del encabezado se oculta mientras se ve el buscador de la portada)

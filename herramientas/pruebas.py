@@ -133,21 +133,31 @@ def carrusel_portada(p):
 
 
 def busqueda_portada(p):
-    """Barra de búsqueda de la portada: al tocarla abre el mismo cuadro en vivo de la barra superior."""
+    """Barra de búsqueda de la portada: lista desplegable en vivo desde la primera letra, teclado y salida."""
     entrada = "#portada-buscar"
-    revisar(not p.evaluate("document.getElementById('buscador').open"), "búsqueda de la portada: el cuadro empieza cerrado")
-    p.click(entrada)
-    revisar(esperar(p, "document.getElementById('buscador').open", 3000), "búsqueda de la portada: al tocar la barra se abre el cuadro de búsqueda, sin escribir")
-    revisar(p.evaluate("document.activeElement.id") == "buscador-campo", "búsqueda de la portada: el foco pasa al campo del cuadro")
-    p.keyboard.type("matricula", delay=20)
-    revisar(esperar(p, "document.querySelectorAll('#buscador-resultados a').length > 0", 5000), "búsqueda de la portada: muestra resultados en vivo mientras se escribe")
-    p.keyboard.press("Escape"); p.keyboard.press("Escape")   # el primero borra el texto del campo de búsqueda, el segundo cierra
-    revisar(esperar(p, "!document.getElementById('buscador').open", 3000), "búsqueda de la portada: Escape cierra el cuadro")
-    revisar(p.evaluate("document.activeElement.id") == "portada-buscar" and not p.evaluate("document.getElementById('buscador').open"), "búsqueda de la portada: al cerrar, el foco vuelve a la barra y no se reabre solo")
-    p.keyboard.type("bibliot", delay=20)
-    revisar(esperar(p, "document.getElementById('buscador').open && document.getElementById('buscador-campo').value === 'bibliot'", 3000), "búsqueda de la portada: escribir en la barra abre el cuadro con lo escrito")
+    revisar(not p.is_visible("#portada-resultados"), "búsqueda de la portada: sin texto no hay lista")
+    p.click(entrada); p.keyboard.type("b", delay=20)
+    revisar(esperar(p, "document.querySelectorAll('#portada-resultados a[role=option]').length > 0", 5000), "búsqueda de la portada: con la primera letra ya muestra resultados")
+    revisar(p.evaluate("[...document.querySelectorAll('#portada-resultados a[role=option] strong')].every(s => /(^|[^a-z0-9])b/i.test(s.textContent.normalize('NFD').replace(/[\\u0300-\\u036f]/g, '')))"), "búsqueda de la portada: con una letra solo salen títulos con una palabra que empieza con ella")
+    p.keyboard.type("ibliot", delay=20)
+    revisar(esperar(p, "document.querySelectorAll('#portada-resultados a[role=option]').length > 0", 5000), "búsqueda de la portada: sigue mostrando resultados al escribir más")
+    revisar(p.get_attribute(entrada, "aria-expanded") == "true", "búsqueda de la portada: el cuadro anuncia que la lista está abierta")
+    revisar(p.evaluate("(() => { const l = document.querySelector('#portada-resultados').getBoundingClientRect(), c = document.querySelector('.portada__campo').getBoundingClientRect(); return l.top >= c.bottom - 1 && l.left >= 0 && l.right <= innerWidth + 1 && l.bottom <= innerHeight + 1; })()"), "búsqueda de la portada: la lista queda justo bajo el cuadro y dentro de la pantalla")
+    revisar(p.evaluate("document.activeElement.id") == "portada-buscar", "búsqueda de la portada: el foco sigue en el cuadro")
+    revisar(p.evaluate("(() => { const r = document.querySelector('#portada-resultados').getBoundingClientRect(), el = document.elementFromPoint(r.left + 20, r.top + 12); return !!(el && el.closest('#portada-resultados')); })()"), "búsqueda de la portada: la lista se ve por encima del resto (no queda recortada)")
+    p.keyboard.press("ArrowDown")
+    revisar(p.evaluate("(() => { const id = document.getElementById('portada-buscar').getAttribute('aria-activedescendant'); const a = id && document.getElementById(id); return !!a && a.getAttribute('aria-selected') === 'true'; })()"), "búsqueda de la portada: la flecha abajo marca el primer resultado")
+    p.keyboard.press("Escape")
+    revisar(p.get_attribute(entrada, "aria-expanded") == "false" and not p.is_visible("#portada-resultados"), "búsqueda de la portada: Escape cierra la lista")
+    revisar(p.evaluate("document.activeElement.id") == "portada-buscar", "búsqueda de la portada: Escape deja el foco en el cuadro")
+    p.fill(entrada, ""); p.keyboard.type("zzqqxx", delay=20)
+    revisar(esperar(p, "!!document.querySelector('.portada__resultados-vacio')", 5000), "búsqueda de la portada: sin coincidencias lo dice con texto")
+    p.fill(entrada, ""); p.keyboard.type("bibliot", delay=20)
+    esperar(p, "document.querySelectorAll('#portada-resultados a[role=option]').length > 0", 5000)
+    p.keyboard.press("ArrowDown")
+    destino = p.evaluate("document.querySelector('#portada-resultados a.activo').href")
     p.keyboard.press("Enter")
-    revisar(esperar(p, "location.pathname.indexOf('index.html') < 0 || location.href.indexOf('index.html#') < 0 && !document.getElementById('buscador').open", 10000), "búsqueda de la portada: Enter va al primer resultado")
+    revisar(esperar(p, f"location.href === {destino!r}", 10000), "búsqueda de la portada: Enter va al resultado elegido con las flechas")
 
 
 def rapida(nav, base):
