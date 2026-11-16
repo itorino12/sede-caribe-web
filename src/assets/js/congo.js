@@ -102,11 +102,11 @@ const FORMAS = {
   manto: [[-40, 56], [-20, 64], [4, 64], [22, 60], [30, 66], [22, 80], [2, 87], [-22, 85], [-40, 76], [-49, 63]],
   coronilla: [[-6, -6], [-4, -20], [6, -29], [18, -30], [28, -24], [32, -14], [30, -4], [20, 4], [4, 4]],
   cara: [[14, -24], [24, -25], [31, -19], [35, -10], [37.5, -3], [36, 3], [31, 7], [24, 8.5], [17, 6], [13, -2], [11, -14]],
-  barba: [[10, 0], [24, 7], [33, 8], [31, 17], [25, 27], [14, 30], [6, 22], [4, 10]],
+  barba: [[10, 0], [24, 7], [32, 8], [30, 14], [25, 20], [15, 22], [8, 16], [5, 8]], // corta: la barba larga lo hacía ver bravo
   menton: [[23, 6], [34, 5], [32, 10], [25, 11.5]],
 };
 const LARGO = { brazo: 34, antebrazo: 32, muslo: 32, pierna: 30 };
-const COLOR = { cerca: "#1d1714", lejos: "#0d0a08", pelo: "#3d322b", peloLejos: "#211a16", piel: "#100c0b" };
+const COLOR = { cerca: "#261c17", lejos: "#120d0b", pelo: "#4a3b31", peloLejos: "#261e19", piel: "#2a1f1a" };
 
 function extremidad(tipo, lado, semilla) {
   const g = [-1, 0]; // manos y pies van hacia la varita: el pelo cae hacia el cuerpo
@@ -125,9 +125,11 @@ function extremidad(tipo, lado, semilla) {
 }
 
 function ojo(x, y, r, id) {
-  return `<g transform="translate(${x},${y})"><circle r="${r}" fill="url(#cg-iris)"/><circle r="${f(r * 0.45)}" fill="#0a0604"/>`
-    + `<circle cx="${f(-r * 0.3)}" cy="${f(-r * 0.32)}" r="${f(r * 0.26)}" fill="#fff" opacity=".9"/>`
-    + `<ellipse data-parpado="${id}" rx="${f(r + 0.6)}" ry="${f(r + 0.6)}" fill="#171210" transform="scale(1,0)"/></g>`;
+  // ojos grandes y con dos reflejos: es lo que más lo hace ver amable
+  return `<g transform="translate(${x},${y})"><circle r="${f(r + 0.5)}" fill="#2a1f1a"/><circle r="${r}" fill="url(#cg-iris)"/><circle r="${f(r * 0.55)}" fill="#120a06"/>`
+    + `<circle cx="${f(-r * 0.32)}" cy="${f(-r * 0.36)}" r="${f(r * 0.34)}" fill="#fff"/>`
+    + `<circle cx="${f(r * 0.34)}" cy="${f(r * 0.3)}" r="${f(r * 0.14)}" fill="#fff" opacity=".8"/>`
+    + `<ellipse data-parpado="${id}" rx="${f(r + 0.7)}" ry="${f(r + 0.7)}" fill="#5b463b" transform="scale(1,0)"/></g>`;
 }
 
 // la rama cruza la portada entre la capa de atrás y la de adelante del congo
@@ -179,8 +181,8 @@ const VB = { x: -130, y: -14, w: 260, h: 264 };
 
 const SVG_ATRAS = `<svg viewBox="${VB.x} ${VB.y} ${VB.w} ${VB.h}" aria-hidden="true" focusable="false">
 <defs>
-  <radialGradient id="cg-iris" cx=".45" cy=".4" r=".6"><stop offset="0" stop-color="#8a5326"/><stop offset=".7" stop-color="#4a2a12"/><stop offset="1" stop-color="#1b0f07"/></radialGradient>
-  <radialGradient id="cg-cara" cx=".6" cy=".35" r=".75"><stop offset="0" stop-color="#3b322e"/><stop offset=".55" stop-color="#1a1513"/><stop offset="1" stop-color="#0b0908"/></radialGradient>
+  <radialGradient id="cg-iris" cx=".45" cy=".4" r=".6"><stop offset="0" stop-color="#b9783c"/><stop offset=".7" stop-color="#7a4a22"/><stop offset="1" stop-color="#3b2312"/></radialGradient>
+  <radialGradient id="cg-cara" cx=".6" cy=".35" r=".75"><stop offset="0" stop-color="#8d7262"/><stop offset=".55" stop-color="#65503f"/><stop offset="1" stop-color="#47372d"/></radialGradient>
   <radialGradient id="cg-brillo" cx=".5" cy=".5" r=".5"><stop offset="0" stop-color="#8c7a6c" stop-opacity=".38"/><stop offset="1" stop-color="#8c7a6c" stop-opacity="0"/></radialGradient>
   <linearGradient id="cg-manto" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#4a2a14"/><stop offset=".45" stop-color="#8a5527"/><stop offset="1" stop-color="#b47a3c"/></linearGradient>
 </defs>
@@ -206,16 +208,16 @@ const SVG_FRENTE = `<svg viewBox="${VB.x} ${VB.y} ${VB.w} ${VB.h}" aria-hidden="
       <ellipse cx="12" cy="-20" rx="11" ry="8" fill="url(#cg-brillo)"/>
       <g data-boca opacity="0"><ellipse cx="30" cy="7" rx="6" ry="4.5" fill="#3a0d0e"/><path d="M33.5,4.2l.8,3.2l.9,-3.1M26,4.5l.7,2.6l.8,-2.5" fill="#e3d8c6"/></g>
       <g data-mandibula>
-        <path d="${peludo(FORMAS.barba, 3.6, 17)}" fill="#130f0d"/>
+        <path d="${peludo(FORMAS.barba, 2.6, 17)}" fill="#1f1713"/>
         <path d="${hebras(FORMAS.barba, 22, 7, 100, 8, 0.6)}" stroke="#352b25" stroke-width=".8" fill="none" opacity=".8"/>
-        <path d="${peludo(FORMAS.menton, 0.3, 19)}" fill="#1c1715"/>
+        <path d="${peludo(FORMAS.menton, 0.3, 19)}" fill="#47372d"/>
       </g>
       <path d="${peludo(FORMAS.cara, 0.35, 23)}" fill="url(#cg-cara)"/>
-      <path d="M13.5,-18.5Q22,-23 31.5,-17.5" stroke="#3c3330" stroke-width="2.4" fill="none" stroke-linecap="round"/>
-      <path d="M15,-8q6,3 13,1.5M30,-6q3,2 5.5,1" stroke="#2a2321" stroke-width=".7" fill="none" stroke-linecap="round"/>
-      ${ojo(20.5, -13.5, 3, "n")}${ojo(29.2, -13, 2.3, "f")}
-      <ellipse cx="35.6" cy="-2.6" rx="1.1" ry=".7" fill="#050303"/><ellipse cx="33.4" cy="-2.2" rx=".9" ry=".6" fill="#050303"/>
-      <path data-labios d="M35.5,4.6Q30.5,7.6 24.5,6.6" stroke="#060404" stroke-width="1.2" fill="none" stroke-linecap="round"/>
+      <path d="M15.5,-19.5Q20.5,-22.5 25,-20.5M27.5,-19Q30.5,-20.5 33,-18.5" stroke="#3a2c24" stroke-width="1" fill="none" stroke-linecap="round"/>
+      <ellipse cx="18.5" cy="-3.5" rx="3.6" ry="2.2" fill="#e8908a" opacity=".35"/>
+      ${ojo(20.5, -12.5, 4.3, "n")}${ojo(30, -12, 3.3, "f")}
+      <ellipse cx="35.4" cy="-2.8" rx=".8" ry=".55" fill="#2a1d17"/><ellipse cx="33.5" cy="-2.4" rx=".7" ry=".5" fill="#2a1d17"/>
+      <path data-labios d="M35.6,3.2Q31,8.2 25.8,4.8" stroke="#2a1d17" stroke-width="1.2" fill="none" stroke-linecap="round"/>
     </g>
   </g>
   ${extremidad("brazo", "n", 11)}
