@@ -35,7 +35,7 @@ def main():
         b = p.chromium.launch(args=["--use-gl=angle", "--use-angle=swiftshader", "--enable-unsafe-swiftshader"])
         pg = b.new_page(viewport={"width": ANCHO, "height": 1100})
         pg.goto(f"http://127.0.0.1:{servidor.server_address[1]}/index.html#captura-portada")
-        pg.add_style_tag(content=f".portada__rejilla{{min-height:{ALTO}px!important;height:{ALTO}px}}.portada__foto::after,.portada__texto,.portada__recorrido-boton,.portada__maqueta-fija{{display:none!important}}")
+        pg.add_style_tag(content=f".portada__rejilla{{min-height:{ALTO}px!important;height:{ALTO}px}}.portada__foto::after,.portada__texto,.portada__recorrido-boton,.portada__maqueta-fija,.congo,.congo-vara,.congo-boton{{display:none!important}}")   # el congo de la rama es DOM encima del lienzo: sin ocultarlo, la captura lo hornea en las imágenes de respaldo
         pg.wait_for_function("window.__giro", timeout=60000)
         pg.wait_for_timeout(4000)   # textura del suelo y mural
         pg.evaluate("() => { const g = window.__giro; g.dibujarYa(); }")
