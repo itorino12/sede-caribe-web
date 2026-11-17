@@ -2,7 +2,7 @@
 // Uso: node herramientas/probar_declaracion.mjs
 import fs from "fs";
 import { fileURLToPath } from "url";
-import { revisar, leerObservacion, escribirObservacion, minutos, fraccion } from "../src/assets/js/declaracion-reglas.js";
+import { revisar, leerObservacion, escribirObservacion, minutos, fraccion, horaEstandar } from "../src/assets/js/declaracion-reglas.js";
 
 const raiz = fileURLToPath(new URL("..", import.meta.url));
 const ejemplo = JSON.parse(fs.readFileSync(raiz + "herramientas/fuentes/declaracion/ejemplo-orh.json", "utf8"));
@@ -23,6 +23,11 @@ const o2 = leerObservacion("Coordinación de Carrera: L 08 a 12 y 13 a 17, M 17 
 ok(o2.tramos.length === 4 && o2.notas.length === 1, "paréntesis no se leen como horas", JSON.stringify(o2.tramos));
 ok(leerObservacion("Clases: L-V 1 a 3").tramos.every((t) => t.de === 13 * 60), "«1 a 3» es de la tarde y L-V son cinco días");
 ok(minutos("8") === 480 && minutos("13:30") === 810 && minutos("1330") === 810, "lectura de horas");
+for (const [t, m] of [["17:00:00", 1020], ["5:00 p.m.", 1020], ["5 pm", 1020], ["5:00 p. m.", 1020], ["17h", 1020], ["17:00 hrs", 1020],
+  ["17.00", 1020], ["12 m.d.", 720], ["12 md", 720], ["8 a.m.", 480], ["12:00 a.m.", 0], ["0800", 480], ["8", 480]])
+  ok(minutos(t) === m, `hora «${t}»`, String(minutos(t)));
+ok(minutos("25:00") === null && minutos("8:75") === null && minutos("5 md") === null && minutos("ocho") === null, "horas imposibles no se leen");
+ok(horaEstandar("08:00") && horaEstandar("17:30") && !horaEstandar("8:00") && !horaEstandar("17:00:00") && !horaEstandar("5:00 p.m."), "formato estándar HH:MM");
 ok(fraccion("1/2") === 0.5 && fraccion("1 TC") === 1 && fraccion("½") === 0.5, "lectura de jornadas");
 const esc = escribirObservacion("IF0004 Desarrollo de Software II", [
   { dia: "K", de: 480, a: 720, actividad: "contacto" }, { dia: "J", de: 480, a: 720, actividad: "contacto" },
@@ -39,8 +44,15 @@ ok(r.totales.ucr === 2400 && r.totales.total === 3000, "totales del ejemplo");
 ok(r.verificar.some((v) => v.regla === "B8"), "contradicción de categoría (B8)");
 ok(r.faltaFirma.length === 2, "faltan dos firmas");
 
+// horas con segundos o en 12 horas: se aceptan (sin B11 grave), con una recomendación menor
+let d = copia(); d.filas[2].dias.M = { de: "17:00:00", a: "21:00:00" }; d.filas[3].dias.K = { de: "3:00 p.m.", a: "8:00" };
+r = revisar(d);
+ok(!r.errores.some((e) => e.regla === "B11" && e.gravedad === "grave") && !reglas(r).includes("B1") && !reglas(r).includes("B4"), "horas raras se leen bien", reglas(r).join(","));
+ok(r.errores.some((e) => e.regla === "B11" && e.gravedad === "menor" && /17:00:00/.test(e.texto) && /se leyó 15:00–20:00/.test(e.texto)), "y se pide estandarizarlas");
+ok(r.nivel === "regular", "solo correcciones menores", r.nivel);
+
 // B4: Observaciones distintas de la tabla («V 14 a 19» con tabla 14:00–17:00)
-let d = copia(); d.observaciones[1] = d.observaciones[1].replace("V 14 a 17", "V 14 a 19");
+d = copia(); d.observaciones[1] = d.observaciones[1].replace("V 14 a 17", "V 14 a 19");
 r = revisar(d);
 ok(reglas(r).includes("B4") && r.nivel === "mal", "B4 por horario distinto", reglas(r).join(","));
 

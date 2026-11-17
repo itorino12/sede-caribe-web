@@ -15,18 +15,30 @@ const ACTIVIDADES = { contacto: "Contacto", consulta: "Consulta", preparacion: "
 
 // ---------- utilidades de horas, fechas y jornadas ----------
 
+// Acepta las formas en que se escriben las horas: 08:00, 8:00, 8, 0800, 08.00, 17:00:00, 8 a.m., 5:00 p. m.,
+// 12 m.d., 17h, 17:00 hrs. El formato correcto del formulario es HH:MM en 24 horas (ver horaEstandar).
 export function minutos(txt) {
   if (txt == null) return null;
-  const t = String(txt).trim().toLowerCase().replace(/\s+/g, "").replace(/h(rs?)?$/, "");
+  let t = String(txt).trim().toLowerCase().replace(/\u00a0/g, " ");
   if (!t) return null;
-  let m = t.match(/^(\d{1,2})(?:[:.](\d{1,2}))?(a\.?m\.?|p\.?m\.?|md|m\.d\.)?$/) || t.match(/^(\d{2})(\d{2})$/);
+  t = t.replace(/\s*(horas|hrs?\.?|h)$/, "").replace(/\s+/g, "");
+  let suf = "";
+  const ms = t.match(/(a\.?m\.?|p\.?m\.?|m\.?d\.?|m\.?)$/);
+  if (ms && /\d/.test(t.slice(0, ms.index))) { suf = ms[1].replace(/\./g, ""); t = t.slice(0, ms.index); }
+  const m = t.match(/^(\d{1,2})(?:[:.](\d{2}))?(?::(\d{2}))?$/) || t.match(/^(\d{2})(\d{2})$/);
   if (!m) return null;
-  let h = +m[1], mi = m[2] ? +m[2] : 0;
-  const suf = m[3] || "";
-  if (suf.startsWith("p") && h < 12) h += 12;
-  if (suf.startsWith("a") && h === 12) h = 0;
-  if (h > 24 || mi > 59) return null;
+  let h = +m[1];
+  const mi = m[2] ? +m[2] : 0, seg = m[3] ? +m[3] : 0;
+  if (suf === "pm" && h < 12) h += 12;
+  if (suf === "am" && h === 12) h = 0;
+  if ((suf === "md" || suf === "m") && h !== 12) return null;
+  if (h > 24 || mi > 59 || seg > 59 || (h === 24 && (mi || seg))) return null;
   return h * 60 + mi;
+}
+
+// ¿Está escrita como pide el formulario? HH:MM en 24 horas (08:00, 17:30).
+export function horaEstandar(txt) {
+  return /^([01]\d|2[0-3]):[0-5]\d$/.test(String(txt ?? "").trim());
 }
 
 export function hora(min) {
@@ -224,8 +236,11 @@ export function revisar(decl) {
       const dias = {};
       for (const d of DIAS) {
         const x = f.dias?.[d] || {};
-        const de = minutos(x.de), a = minutos(x.a);
-        if (x.de || x.a) dias[d] = { de, a, deTxt: x.de || "", aTxt: x.a || "" };
+        let de = minutos(x.de), a = minutos(x.a), doce = false;
+        // 12 horas sin a.m./p.m.: «1:00 a 5:00» es de 13:00 a 17:00; «8:00 a 2:00», de 08:00 a 14:00
+        if (de != null && a != null && a <= de && a < 12 * 60 && a + 12 * 60 > de) { a += 12 * 60; doce = true; }
+        if (de != null && a != null && de >= 60 && de < 7 * 60 && a <= 12 * 60 && a > de) { de += 12 * 60; a += 12 * 60; doce = true; }
+        if (x.de || x.a) dias[d] = { de, a, deTxt: x.de || "", aTxt: x.a || "", doce };
       }
       const vacia = !f.lugar && !f.cargo && !f.jornada && !f.desde && !f.hasta && !Object.keys(dias).length;
       if (vacia) continue;
@@ -250,10 +265,20 @@ export function revisar(decl) {
     if (f.jornada && f.frac == null) err("B1", "grave", donde, `La jornada «${f.jornada}» no es una fracción de tiempo completo.`, `Use una de estas: ${JORNADAS.join(", ")}.`);
     for (const d of Object.keys(f.dias)) {
       const x = f.dias[d];
-      if (x.de == null || x.a == null) err("B11", "grave", `${donde}, ${NOMBRE_DIA[d]}`, `Horario incompleto o ilegible: «${x.deTxt || "—"}» a «${x.aTxt || "—"}».`, "Escriba la hora de inicio y la de fin en formato de 24 horas (por ejemplo 13:00).");
+      if (x.de == null || x.a == null) err("B11", "grave", `${donde}, ${NOMBRE_DIA[d]}`, `Horario incompleto o ilegible: «${x.deTxt || "—"}» a «${x.aTxt || "—"}».`, "Escriba la hora de inicio y la de fin como HH:MM en 24 horas (por ejemplo 13:00).");
       else if (x.a <= x.de) err("B11", "grave", `${donde}, ${NOMBRE_DIA[d]}`, `La hora final (${hora(x.a)}) no es posterior a la inicial (${hora(x.de)}).`, "Corrija el horario; use formato de 24 horas.");
     }
   }
+
+  // 1b. horas escritas fuera del formato HH:MM de 24 horas: se leen igual, pero se pide estandarizarlas
+  const raras = [];
+  for (const f of filas) for (const d of Object.keys(f.dias)) {
+    const x = f.dias[d];
+    if (x.de == null || x.a == null) continue;
+    const malas = [x.deTxt, x.aTxt].filter((v) => v && !horaEstandar(v));
+    if (malas.length || x.doce) raras.push(`${f.seccion === "ucr" ? "UCR" : "otras"} fila ${f.n}, ${NOMBRE_DIA[d]}: «${x.deTxt}» a «${x.aTxt}»${x.doce ? ` (se leyó ${hora(x.de)}–${hora(x.a)})` : ""}`);
+  }
+  if (raras.length) err("B11", "menor", "Horas", `Hay horas fuera del formato del formulario; se leyeron igual, pero un revisor puede objetarlas: ${raras.slice(0, 6).join("; ")}${raras.length > 6 ? `; y ${raras.length - 6} más` : ""}.`, "Escriba todas las horas como HH:MM en 24 horas, con dos cifras y sin segundos ni a.m./p.m. (por ejemplo 08:00, 13:00, 17:30).");
 
   // 2. fechas (B6, B7)
   const formatos = new Set();
