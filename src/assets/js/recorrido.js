@@ -194,6 +194,20 @@ function fachadaSur(contorno, frente = [0, 1]) {   // frente: hacia dónde debe 
   }
   return mejor;
 }
+// la fachada cuya normal apunta más hacia «frente», sin importar el largo (para una punta del edificio)
+function fachadaMirando(contorno, frente) {
+  const f = fachadaSur(contorno, frente);
+  const cx = contorno.reduce((s, p) => s + p[0], 0) / contorno.length, cz = contorno.reduce((s, p) => s + p[1], 0) / contorno.length;
+  let mejor = -2;
+  for (let i = 0; i < contorno.length; i++) {
+    const a = contorno[i], b = contorno[(i + 1) % contorno.length], largo = Math.hypot(b[0] - a[0], b[1] - a[1]);
+    let nx = -(b[1] - a[1]) / largo, nz = (b[0] - a[0]) / largo;
+    if (nx * ((a[0] + b[0]) / 2 - cx) + nz * ((a[1] + b[1]) / 2 - cz) < 0) { nx = -nx; nz = -nz; }
+    const p = nx * frente[0] + nz * frente[1];
+    if (p > mejor) { mejor = p; Object.assign(f, { a, b, largo, nx, nz }); }
+  }
+  return f;
+}
 // Galería: columnas de acero, balcón corrido con baranda y escalera exterior (edificio 12)
 function galeria(grupo, vol, alto, pisos) {
   const f = fachadaSur(vol.contorno), fondo = 2.6, dx = (f.b[0] - f.a[0]) / f.largo, dz = (f.b[1] - f.a[1]) / f.largo;
@@ -420,10 +434,127 @@ function entrada(grupo, e) {
   }
 }
 
+// Balcones (anotaciones; foto del edificio nuevo): en una punta del edificio, uno a ras del primer piso y otro en el
+// segundo, losa de concreto en voladizo con baranda de tubo gris y columnas de acero en las esquinas
+function balcones(grupo, vol, alto, pisos, frente) {
+  const f = fachadaMirando(vol.contorno, frente), dx = (f.b[0] - f.a[0]) / f.largo, dz = (f.b[1] - f.a[1]) / f.largo;
+  const ang = Math.atan2(-dz, dx), fondo = 2.4, largo = f.largo - 0.6;
+  const cx = (f.a[0] + f.b[0]) / 2, cz = (f.a[1] + f.b[1]) / 2;
+  const en = (u, v, y) => [cx + dx * u + f.nx * v, y, cz + dz * u + f.nz * v];
+  const pieza = (w, h, d, mat, u, v, y) => { const m = new THREE.Mesh(new THREE.BoxGeometry(w, h, d), mat); m.position.set(...en(u, v, y)); m.rotation.y = ang; m.castShadow = !liviano; grupo.add(m); };
+  const tubo = new THREE.MeshStandardMaterial({ color: 0x6b7278, roughness: 0.5, metalness: 0.5 });
+  for (let p = 0; p < pisos; p++) {
+    const y = p === 0 ? 0.45 : (alto / pisos) * p;
+    pieza(largo, 0.25, fondo, losa, 0, fondo / 2, y);                                      // losa
+    for (const h of [0.5, 1.0]) pieza(largo, 0.06, 0.06, tubo, 0, fondo - 0.05, y + h);   // baranda al frente
+    for (const lado of [-1, 1]) for (const h of [0.5, 1.0]) pieza(0.06, 0.06, fondo, tubo, lado * largo / 2, fondo / 2, y + h);
+    const n = Math.max(2, Math.round(largo / 1.2));
+    for (let i = 0; i <= n; i++) pieza(0.04, 1.0, 0.04, tubo, -largo / 2 + (largo * i) / n, fondo - 0.05, y + 0.5);
+  }
+  for (const lado of [-1, 1]) pieza(0.25, alto, 0.25, acero, lado * largo / 2, fondo, alto / 2);   // columnas
+}
+
+// Mural de mosaico (foto): en la pared que da al frente indicado, entre el zócalo y el alero, con la puerta al
+// centro. Olas de colores (azul, rojo, naranja) con un ave, una banda amarilla con cuadros negros que serpentea,
+// fondo de teselas verdes con palmas, un remolino morado con una media luna roja y un girasol
+function texturaMosaico(W, H) {
+  return texturaDibujada(W, H, (x) => {
+    let semilla = 7;
+    const azar = () => { semilla = (semilla * 16807) % 2147483647; return semilla / 2147483647; };
+    x.fillStyle = "#3d4a33"; x.fillRect(0, 0, W, H);                                   // fondo de teselas oscuras
+    for (let i = 0; i < W * H / 60; i++) {                                              // teselas verdes y ocres
+      const t = azar(); x.fillStyle = t < 0.4 ? "#56683f" : t < 0.7 ? "#43502f" : t < 0.85 ? "#7a6a3a" : "#2c3426";
+      x.fillRect(azar() * W, azar() * H, 3 + azar() * 4, 3 + azar() * 4);
+    }
+    const ola = (color, y0, amp, grosor, fase, hasta = W) => {
+      x.fillStyle = color; x.beginPath(); x.moveTo(0, y0 + grosor);
+      for (let px = 0; px <= hasta; px += 8) x.lineTo(px, y0 + Math.sin(px / W * 6.2 + fase) * amp);
+      for (let px = hasta; px >= 0; px -= 8) x.lineTo(px, y0 + grosor + Math.sin(px / W * 6.2 + fase) * amp * 0.8);
+      x.closePath(); x.fill();
+    };
+    // a la izquierda: olas azul, roja y naranja que suben desde abajo
+    x.save(); x.beginPath(); x.rect(0, 0, W * 0.32, H); x.clip();
+    ola("#e8722c", H * 0.05, H * 0.12, H * 0.42, 0.3); ola("#2f5fb4", H * 0.18, H * 0.16, H * 0.38, 1.4);
+    ola("#d8382f", H * 0.55, H * 0.12, H * 0.3, 2.6); ola("#3a73d0", H * 0.78, H * 0.08, H * 0.3, 0.4);
+    x.restore();
+    // ave blanca sobre el azul
+    x.strokeStyle = "#f2f2ee"; x.lineWidth = H * 0.025; x.beginPath();
+    x.moveTo(W * 0.07, H * 0.42); x.quadraticCurveTo(W * 0.1, H * 0.3, W * 0.12, H * 0.4); x.quadraticCurveTo(W * 0.14, H * 0.3, W * 0.17, H * 0.38); x.stroke();
+    // banda amarilla con cuadros negros, que serpentea de izquierda a derecha
+    x.lineCap = "round"; x.strokeStyle = "#1c1c18"; x.lineWidth = H * 0.16;
+    const banda = (px) => H * (0.45 + Math.sin(px / W * 9 + 0.8) * 0.28);
+    x.beginPath(); for (let px = W * 0.12; px <= W * 0.72; px += 6) x.lineTo(px, banda(px)); x.stroke();
+    x.strokeStyle = "#f0c12e"; x.lineWidth = H * 0.12;
+    x.beginPath(); for (let px = W * 0.12; px <= W * 0.72; px += 6) x.lineTo(px, banda(px)); x.stroke();
+    x.fillStyle = "#1c1c18";
+    for (let px = W * 0.13; px <= W * 0.71; px += H * 0.1) x.fillRect(px - H * 0.025, banda(px) - H * 0.025, H * 0.05, H * 0.05);
+    // palmas
+    const palma = (px, py, r) => {
+      x.strokeStyle = "#7d8f3c"; x.lineWidth = H * 0.018;
+      x.beginPath(); x.moveTo(px, py + r * 1.6); x.lineTo(px, py); x.stroke();
+      for (let k = 0; k < 7; k++) { const a = Math.PI * (1.05 + k * 0.15); x.beginPath(); x.moveTo(px, py); x.quadraticCurveTo(px + Math.cos(a) * r * 0.7, py + Math.sin(a) * r * 0.9 - r * 0.3, px + Math.cos(a) * r, py + Math.sin(a) * r * 0.6 + r * 0.2); x.stroke(); }
+    };
+    palma(W * 0.34, H * 0.3, H * 0.28); palma(W * 0.5, H * 0.32, H * 0.25);
+    // a la derecha: remolino morado y rosado, media luna roja y girasol
+    x.fillStyle = "#7e5a9e"; x.beginPath(); x.ellipse(W * 0.79, H * 0.5, W * 0.11, H * 0.46, 0, 0, Math.PI * 2); x.fill();
+    x.fillStyle = "#b0849f"; x.beginPath(); x.ellipse(W * 0.76, H * 0.42, W * 0.06, H * 0.28, 0.3, 0, Math.PI * 2); x.fill();
+    x.strokeStyle = "#d8302a"; x.lineWidth = H * 0.1; x.beginPath(); x.arc(W * 0.83, H * 0.55, H * 0.36, Math.PI * 0.95, Math.PI * 2.05); x.stroke();
+    x.fillStyle = "#e3a21e";
+    for (let k = 0; k < 18; k++) { const a = (k / 18) * Math.PI * 2; x.beginPath(); x.ellipse(W * 0.885 + Math.cos(a) * H * 0.15, H * 0.52 + Math.sin(a) * H * 0.15, H * 0.08, H * 0.03, a, 0, Math.PI * 2); x.fill(); }
+    x.fillStyle = "#4a3418"; x.beginPath(); x.arc(W * 0.885, H * 0.52, H * 0.1, 0, Math.PI * 2); x.fill();
+    // abajo, triángulos azules y morados
+    for (const [px, c] of [[0.58, "#3b63b8"], [0.66, "#5d4b9a"], [0.95, "#3b63b8"]]) { x.fillStyle = c; x.beginPath(); x.moveTo(W * px, H); x.lineTo(W * (px + 0.04), H * 0.82); x.lineTo(W * (px + 0.09), H); x.fill(); }
+    // juntas de mosaico: puntitos claros
+    x.fillStyle = "rgba(240,236,220,0.18)";
+    for (let i = 0; i < W * H / 220; i++) x.fillRect(azar() * W, azar() * H, 1.5, 1.5);
+  });
+}
+function muralMosaico(grupo, vol, alto, frente) {
+  const f = fachadaMirando(vol.contorno, frente), ang = Math.atan2(f.nx, f.nz);
+  const largo = f.largo * 0.86, altoM = alto - 1.25;
+  const mural = new THREE.Mesh(new THREE.PlaneGeometry(largo, altoM), new THREE.MeshStandardMaterial({ map: texturaMosaico(2048, Math.round(2048 * altoM / largo)), roughness: 0.6 }));
+  const cx = (f.a[0] + f.b[0]) / 2, cz = (f.a[1] + f.b[1]) / 2;
+  mural.position.set(cx + f.nx * 0.14, 0.75 + altoM / 2, cz + f.nz * 0.14); mural.rotation.y = ang; grupo.add(mural);
+  // puerta al centro (marco negro y vidrio oscuro) y zócalo de concreto con su acera
+  const dx = (f.b[0] - f.a[0]) / f.largo, dz = (f.b[1] - f.a[1]) / f.largo, angF = Math.atan2(-dz, dx);
+  const marco = new THREE.Mesh(new THREE.BoxGeometry(1.4, 2.4, 0.1), new THREE.MeshStandardMaterial({ color: 0x1d2024, roughness: 0.4 }));
+  marco.position.set(cx + f.nx * 0.18, 0.75 + 1.2, cz + f.nz * 0.18); marco.rotation.y = angF; grupo.add(marco);
+  const vidrioP = new THREE.Mesh(new THREE.BoxGeometry(1.1, 2.1, 0.04), new THREE.MeshStandardMaterial({ color: 0x2b3a44, roughness: 0.15, metalness: 0.3 }));
+  vidrioP.position.set(cx + f.nx * 0.24, 0.75 + 1.15, cz + f.nz * 0.24); vidrioP.rotation.y = angF; grupo.add(vidrioP);
+  const zocalo = new THREE.Mesh(new THREE.BoxGeometry(f.largo, 0.75, 0.3), new THREE.MeshStandardMaterial({ color: 0xb9b7b0, roughness: 0.95 }));
+  zocalo.position.set(cx + f.nx * 0.15, 0.37, cz + f.nz * 0.15); zocalo.rotation.y = angF; grupo.add(zocalo);
+  const acera = new THREE.Mesh(new THREE.BoxGeometry(f.largo, 0.12, 2.2), new THREE.MeshStandardMaterial({ color: 0xc4bfb4, roughness: 0.95 }));
+  acera.position.set(cx + f.nx * 1.4, 0.06, cz + f.nz * 1.4); acera.rotation.y = angF; grupo.add(acera);
+}
+// Puerta de entrada de la biblioteca (foto): en la esquina entre los dos cuerpos, bajo un alero blanco: reja
+// de barrotes negros, ventanal de dos hojas a un lado, pared celeste del otro y piso de adoquín al frente
+function puertaBiblioteca(grupo, vol, { cerca, frente }) {
+  const f = fachadaMirando(vol.contorno, frente), dx = (f.b[0] - f.a[0]) / f.largo, dz = (f.b[1] - f.a[1]) / f.largo;
+  const t = Math.max(1.5, Math.min(f.largo - 1.5, (cerca[0] - f.a[0]) * dx + (cerca[1] - f.a[1]) * dz));
+  const ang = Math.atan2(-dz, dx);
+  const en = (u, v, y) => [f.a[0] + dx * (t + u) + f.nx * v, y, f.a[1] + dz * (t + u) + f.nz * v];
+  const pieza = (w, h, d, mat, u, v, y) => { const m = new THREE.Mesh(new THREE.BoxGeometry(w, h, d), mat); m.position.set(...en(u, v, y)); m.rotation.y = ang; m.castShadow = !liviano; grupo.add(m); return m; };
+  const negro = new THREE.MeshStandardMaterial({ color: 0x24272b, roughness: 0.5, metalness: 0.3 });
+  const blancoA = new THREE.MeshStandardMaterial({ color: 0xf1f1ed, roughness: 0.7 });
+  const celesteP = new THREE.MeshStandardMaterial({ color: 0x8ec6ec, roughness: 0.85 });
+  const vidrioO = new THREE.MeshStandardMaterial({ color: 0x3a4650, roughness: 0.15, metalness: 0.3 });
+  pieza(3.0, 2.6, 0.1, new THREE.MeshStandardMaterial({ color: 0x15171a, roughness: 0.6 }), 0, 0.12, 1.3);   // vano oscuro
+  for (let i = 0; i <= 12; i++) pieza(0.05, 2.5, 0.05, negro, -1.4 + (2.8 * i) / 12, 0.22, 1.25);             // reja
+  for (const y of [0.1, 1.25, 2.45]) pieza(2.9, 0.07, 0.07, negro, 0, 0.22, y);
+  pieza(2.4, 1.3, 0.06, vidrioO, -2.9, 0.12, 2.0);                                                            // ventanal de al lado
+  pieza(2.5, 0.08, 0.1, negro, -2.9, 0.15, 1.35);
+  pieza(4.0, 2.4, 0.08, celesteP, 3.8, 0.11, 1.2);                                                            // pared celeste
+  pieza(9.0, 0.18, 1.6, blancoA, 0, 0.8, 3.15);                                                               // alero blanco
+  pieza(9.0, 0.35, 0.08, blancoA, 0, 1.6, 3.0);
+  pieza(9.5, 0.1, 5.0, new THREE.MeshStandardMaterial({ color: 0xa9a59c, roughness: 0.95 }), 0, 2.5, 0.05);   // adoquín
+  const bolardo = new THREE.MeshStandardMaterial({ color: 0x3a3d40, roughness: 0.5 });
+  for (const u of [-3.6, 3.2]) pieza(0.16, 0.9, 0.16, bolardo, u, 4.6, 0.45);
+}
+
 // Parasoles curvos de lámina blanca frente a la fachada (edificio 13): paneles altos que se arquean hacia afuera
-function parasoles(grupo, vol, alto) {
-  const f = fachadaSur(vol.contorno), dx = (f.b[0] - f.a[0]) / f.largo, dz = (f.b[1] - f.a[1]) / f.largo;
-  const cuantos = 3, ancho = (f.largo / cuantos) * 0.82, altoP = alto * 0.9;
+function parasoles(grupo, vol, alto, frente, cuantos = 3) {
+  const f = frente ? fachadaMirando(vol.contorno, frente) : fachadaSur(vol.contorno), dx = (f.b[0] - f.a[0]) / f.largo, dz = (f.b[1] - f.a[1]) / f.largo;
+  const ancho = (f.largo / cuantos) * 0.82, altoP = alto * 0.9;
   for (let i = 0; i < cuantos; i++) {
     const g = new THREE.PlaneGeometry(ancho, altoP, 1, 10);
     const p = g.attributes.position;
@@ -657,7 +788,10 @@ for (const e of datos.campus.edificios) {
       grupo.add(l);
     }
     if (estilo.galeria) e.volumenes.forEach((vol) => galeria(grupo, vol, e.alto, Math.max(e.pisos, 1)));
-    if (estilo.parasoles) e.volumenes.forEach((vol) => parasoles(grupo, vol, e.alto));
+    if (estilo.parasoles) e.volumenes.forEach((vol) => parasoles(grupo, vol, e.alto, estilo.parasoles_frente, estilo.parasoles_n));
+    if (estilo.balcones) e.volumenes.forEach((vol) => balcones(grupo, vol, e.alto, Math.max(e.pisos, 1), estilo.balcones.frente));
+    if (estilo.mural_mosaico) muralMosaico(grupo, e.volumenes[0], e.alto, estilo.mural_mosaico.frente);
+    if (estilo.puerta_biblioteca) puertaBiblioteca(grupo, e.volumenes[0], estilo.puerta_biblioteca);
     if (estilo.entrada) entrada(grupo, e);
     if (estilo.talud) {   // el edificio se para sobre un talud de zacate, con escalera y rampa al frente
       const t = estilo.talud, c = e.volumenes[0].contorno;
@@ -719,12 +853,13 @@ for (const e of datos.campus.edificios) {
       const planta = new THREE.Mesh(new THREE.BoxGeometry(3, 1.5, 1.2), new THREE.MeshStandardMaterial({ color: 0xd8261c, roughness: 0.5 }));
       planta.position.set(...enFachada(haciaCalle, 0.9, 5, 0.75)); planta.rotation.y = angF(haciaCalle); grupo.add(planta);
     }
-    if (estilo.cupula) {   // torrecita de ventilación sobre la cumbrera
+    if (estilo.cupula) {   // torrecita de ventilación sobre la cumbrera (con dos cuerpos, sobre el primero: [x, z, cumbre])
+      const [qx, qz, qy] = Array.isArray(estilo.cupula) ? estilo.cupula : [e.centro[0], e.centro[1], e.cumbre];
       const torre = new THREE.Mesh(new THREE.BoxGeometry(2.6, 1.6, 2.6), celeste);
-      torre.position.set(e.centro[0], e.cumbre + 0.5, e.centro[1]);
+      torre.position.set(qx, qy + 0.5, qz);
       const tapa = new THREE.Mesh(new THREE.ConeGeometry(2.6, 1.2, 4), new THREE.MeshStandardMaterial({ color: 0x4d5a63 }));
       tapa.rotation.y = Math.PI / 4;
-      tapa.position.set(e.centro[0], e.cumbre + 1.9, e.centro[1]);
+      tapa.position.set(qx, qy + 1.9, qz);
       torre.castShadow = tapa.castShadow = true;
       grupo.add(torre, tapa);
     }

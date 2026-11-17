@@ -133,14 +133,20 @@ EDIFICIOS = [
     # (anotaciones) la biblioteca es más grande: un cuerpo ancho hacia la ruta 32 y otro más angosto hacia la calle
     {"id": 11, "rect": (1510, 1113, 128, 78, -6), "rect_arboles": (1510, 1113, 128, 78, -6),
      "alas": [(1516.6, 1061.5, 174.9, 81.8, -6), (1523.2, 1120.6, 86.2, 53.6, -6)], "pisos": 1, "linterna": 0.55,
-     "estilo": {"techo": "#5f9a58", "zocalo": "#a9d4ef", "ventanas": "vidrio", "cupula": True}},
+     # (anotaciones y fotos) la puerta de entrada va en la esquina entre los dos cuerpos, bajo un alero blanco, y el
+     # mural de mosaico en la pared del cuerpo ancho que da al oeste
+     "estilo": {"techo": "#5f9a58", "zocalo": "#a9d4ef", "ventanas": "vidrio", "cupula": True,
+                "puerta_biblioteca": {"cerca": [88.5, -98.0], "frente": [0, 1]}, "mural_mosaico": {"frente": [-1, 0]}}},
     # 12 y 13 (fotos): el edificio nuevo de dos pisos. Aulas con losa plana volada, galerías y escaleras
     # exteriores; laboratorios con techo de una sola agua, ventanales verdes y parasoles curvos blancos.
     # (anotaciones) las aulas 18 a 23 siguen hacia el oeste hasta cerca de la biblioteca
     {"id": 12, "rect": (1703.5, 1072.8, 173, 39, -2), "rect_arboles": (1726, 1072, 128, 39, -2), "pisos": 2,
-     "estilo": {"forma_techo": "plano", "galeria": True, "techo": "#dcdfe2"}},
+     # (anotaciones) balcones con baranda en la punta este, la que da a los laboratorios, en los dos pisos
+     "estilo": {"forma_techo": "plano", "galeria": True, "techo": "#dcdfe2", "balcones": {"frente": [1, 0]}}},
     {"id": 13, "rect": (1786, 1130, 113, 51, -10), "pisos": 2,
-     "estilo": {"forma_techo": "una_agua", "parasoles": True, "ventanas": "vidrio_verde", "techo": "#d6dadd"}},
+     # (anotaciones) los parasoles van en la punta este, cuatro paneles
+     "estilo": {"forma_techo": "una_agua", "parasoles": True, "parasoles_frente": [1, 0], "parasoles_n": 4,
+                "ventanas": "vidrio_verde", "techo": "#d6dadd"}},
     # Gimnasio (fotos): nave alta con techo de cuatro aguas de lámina verde y linternilla de ventilación,
     # viga perimetral de concreto sobre columnas que forma un corredor abierto, paredes blancas con franja celeste
     {"id": 14, "rect": (1689, 1292, 151, 196, 12.5), "pisos": 1, "alto": 9, "linterna": 0.6,
@@ -262,6 +268,9 @@ LLANOS = [
     {"pol": [(82.1, -15.8), (78.1, -26.6), (87.0, -30.2), (102.7, -23.1), (108.0, -15.3), (106.7, -7.7), (96.6, -8.6)],
      "nivel": 0.0, "suave": 8.0},
     {"pol": [(103.0, -17.0), (117.0, -17.0), (118.5, 6.0), (104.0, 6.0)], "nivel": 0.0, "suave": 8.0},
+    # (anotaciones) el zacate y la calle entre el parqueo de la piscina, la calle de la bodega y la orilla
+    {"pol": [(88.5, -32.8), (94.8, -39.5), (105.1, -44.9), (122.2, -43.5), (129.5, -36.2), (126.8, -20.4),
+             (111.6, -6.9), (101.3, -8.0), (93.2, -9.1), (83.8, -11.9), (83.4, -18.0)], "nivel": 0.0, "suave": 6.0},
     {"pol": [(120.0, 8.0), (133.7, 11.0), (144.0, 11.5), (157.8, 13.0), (169.0, 18.0), (181.0, 23.5), (183.0, 31.5),
              (174.0, 42.0), (164.0, 52.0), (149.0, 54.0), (129.0, 53.0), (126.0, 40.0), (123.0, 25.0), (121.0, 14.0)],
      "nivel": 2.5, "suave": 6.0},
@@ -650,9 +659,11 @@ def lugares_nuevos(calles, quebrada, lejos_carretera, y_ruta32):
     # (anotaciones) mesas redondas de concreto alrededor de Docencia (4): al sur, junto al camino techado, y al este,
     # hacia la quebrada; dos quedan bajo la copa de un árbol, que se conserva
     docencia_ = [[-147.0, 20.7], [-131.3, 15.2], [-118.4, 10.7], [-112.7, -8.0]]
-    for x, z in docencia_:
+    # (anotaciones) mesas entre la calle de la alcantarilla (19) y la quebrada, del lado del pasillo techado
+    quebrada_ = [[-27.0, -24.2], [-45.5, 2.9], [-44.8, 18.2], [-62.5, 21.2]]
+    for x, z in docencia_ + quebrada_:
         cv2.circle(despejar_post, a_px(x, z), int(1.8 / ESCALA), 1, -1)
-    elem.append({"tipo": "mesas", "id": None, "puntos": M(mesas) + nuevas + docencia_})
+    elem.append({"tipo": "mesas", "id": None, "puntos": M(mesas) + nuevas + docencia_ + quebrada_})
     # (anotaciones y revisión) paso de cebra frente al pórtico: cruza las dos calles que rodean la isla de zacate,
     # cada una en ángulo recto (no en diagonal, que lo llevaba debajo del alero del 13), y una acera une los dos
     # cruces por la isla. Del lado oeste llega al zacate frente a la caseta del guarda, con una acera corta hasta
@@ -912,6 +923,9 @@ def edificio_json(e):
     pts = [p for v in vol for p in v["contorno"]]
     centro = [round(sum(p[0] for p in pts) / len(pts), 2), round(sum(p[1] for p in pts) / len(pts), 2)]
     estilo = dict(e.get("estilo", {}))
+    if estilo.get("cupula") and "alas" in e:   # la torrecita va sobre la linternilla del primer cuerpo, no en el aire
+        _, _, c0 = volumenes({**e, "alas": e["alas"][:1]}, alto)
+        estilo["cupula"] = [*a_metros(*e["alas"][0][:2]), round(c0, 2)]
     if "banos" in estilo:   # tramo del extremo que ocupan los baños, y la cara del extremo (para el rótulo)
         cx, cy, l, a, g = e["rect"]
         b, c_, s_ = estilo["banos"], math.cos(math.radians(g)), math.sin(math.radians(g))
@@ -1500,6 +1514,18 @@ def main(pdf, sat=None):
     pts_ex += [tuple(p) for p in np.argwhere(extra["plaza"] > 0)[:, ::-1][::50]]
     pts_ex += [(x / ESCALA + ORIGEN[0], z / ESCALA + ORIGEN[1]) for x, z in sendero["puntos"]]
     casco = cv2.convexHull(np.array(pts_ex, np.float32))[:, 0]
+    # (anotaciones) el parqueo frente a Docencia y el asfalto que lo rodea quedan llanos, al nivel del parqueo
+    # administrativo
+    par_ = {el["id"]: el for el in elementos if el["tipo"] == "parqueo"}
+    if 25 in par_ and 34 in par_:
+        p6_, p8_ = par_[25], par_[34]
+        esq6_ = caja_m(p6_["centro"], -p6_["giro"], p6_["largo"] + 2, p6_["ancho"] + 2)
+        rojo_ = [(-101.3, 23.2), (-93.0, 21.6), (-92.4, 29.2), (-96.4, 37.4), (-109.1, 42.0), (-115.1, 38.2), (-122.0, 32.4)]
+        casco6_ = cv2.convexHull(np.array(esq6_ + rojo_, np.float32))[:, 0]
+        muestras8_ = [(p8_["centro"][0] + math.cos(-p8_["giro"]) * u + math.sin(-p8_["giro"]) * v,
+                       p8_["centro"][1] - math.sin(-p8_["giro"]) * u + math.cos(-p8_["giro"]) * v)
+                      for u in np.linspace(-p8_["largo"] / 2, p8_["largo"] / 2, 7) for v in np.linspace(-p8_["ancho"] / 2, p8_["ancho"] / 2, 4)]
+        plataformas.append({"pol": [tuple(map(float, q)) for q in casco6_], "nivel_de": muestras8_, "suave": 5.0})
     i_excavado = len(plataformas)
     # (anotaciones) la plaza y el frente del auditorio quedan llanos, al nivel de la calle y de la entrada
     plataformas.append({"pol": [a_metros(float(x), float(y)) for x, y in casco], "nivel": NIVEL_ENTRADA, "suave": 2.0})
