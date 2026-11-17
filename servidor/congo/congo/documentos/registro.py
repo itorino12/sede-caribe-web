@@ -44,12 +44,17 @@ VACIAS = set(("el la los las un una unos unas de del al a en y o u que como cual
               "dias tardes noches ucr sede caribe esta este estos estas eso esa ese hacer tiene debo").split())
 
 
+def raiz(t):
+    """Raíz de un término: sin las dos últimas letras, mínimo 4 («solicito» → solici, «beca» → beca)."""
+    return t[:max(4, len(t) - 2)]
+
+
 def _raiz(t):
-    """Término de búsqueda por prefijo, sin la terminación: «solicito» → solici* (solicitud, solicitar),
-    «beca» → beca* (becas, becado), «psicologica» → psicologi* (psicología). Lo muy corto va exacto."""
+    """Término de búsqueda por prefijo: solici* (solicitud, solicitar), beca* (becas, becado),
+    psicologi* (psicología). Lo muy corto y los números van exactos."""
     if len(t) < 4 or t.isdigit():
         return f'"{t}"'
-    return f'"{t[:max(4, len(t) - 2)]}"*'
+    return f'"{raiz(t)}"*'
 
 
 def ahora():

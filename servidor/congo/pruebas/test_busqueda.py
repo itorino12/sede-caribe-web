@@ -49,3 +49,15 @@ def test_la_pagina_del_sitio_no_queda_tapada_por_los_reglamentos(repo):
     assert any("Walter Anderson" in x.fragmento["texto"] for x in h)
     d = rec.diagnostico("¿Quién es el director de la Sede?")
     assert d["umbral"] == 0.2 and d["por_significado"] and d["por_palabras"]
+
+
+def test_pagina_con_todos_los_terminos_entra_aunque_el_significado_puntue_bajo(repo):
+    """«¿Cómo solicito una beca?» sacaba 0,06 por significado contra «Solicitud y renovación» de Becas."""
+    from congo.documentos.extractores import Bloque
+    repo.incorporar_bloques({"id": "sitio-becas", "nombre": "Becas", "categoria": "institucional"},
+                            [Bloque("La solicitud y la renovación se gestionan en el sistema de la OBAS.",
+                                    seccion="Solicitud y renovación")], "hb")
+    rec = Recuperacion(repo.registro, repo.embebedor, repo.vectores, umbral=0.99)  # nada pasa por significado
+    assert [h.fragmento["doc_id"] for h in rec.buscar("¿Cómo solicito una beca?")] == ["sitio-becas"]
+    assert rec.buscar("¿Cómo renuevo el pasaporte?") == []  # «pasaporte» no está: no basta un término
+    assert rec.buscar("beca") == []  # un solo término no alcanza

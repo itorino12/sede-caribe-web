@@ -6,7 +6,10 @@ el chat responde que no tiene esa información, sin llamar al modelo.
 Además de la búsqueda por palabras en todo, hay otra solo en lo institucional: sin ella, los cientos de reglamentos
 dejan fuera de los candidatos a la página del sitio que responde (p. ej. «director» aparece en casi todos).
 """
+import re
 from dataclasses import dataclass
+
+from ..documentos.registro import normal, raiz, terminos
 
 K_RRF = 60
 POR_VECTOR = 40
@@ -18,6 +21,15 @@ class Hallazgo:
     fragmento: dict      # fila de registro.fragmentos(): texto, página, sección, documento…
     similitud: float
     puntaje: float       # fusión RRF
+
+
+def cubre(consulta, texto):
+    """True si el texto contiene la raíz de todos los términos de la consulta, y son al menos dos."""
+    ts = list(dict.fromkeys(terminos(consulta)))
+    if len(ts) < 2:
+        return False
+    palabras = set(re.split(r"[^a-z0-9]+", normal(texto)))
+    return all(any(p.startswith(raiz(t)) for p in palabras) if len(t) >= 4 else t in palabras for t in ts)
 
 
 class Recuperacion:
@@ -50,6 +62,12 @@ class Recuperacion:
         texto_top = {f for lista in listas_texto for f in lista[:3]}
         validos = [f for f in puntaje
                    if similitud.get(f, -1) >= self.umbral or (f in texto_top and similitud.get(f, -1) >= self.umbral - 0.1)]
+        # el modelo de significado a veces puntúa muy bajo preguntas cortas («¿Cómo solicito una beca?»: 0,06
+        # contra la sección que responde). Si una página del sitio contiene todos los términos de la pregunta
+        # (al menos dos), entra igual: el modelo de lenguaje decide si responde o dice que no sabe.
+        if categoria is None and len(listas_texto) > 1:
+            validos += [f["fid"] for f in self.registro.fragmentos(listas_texto[1][:3])
+                        if f["fid"] not in validos and cubre(consulta, f"{f['nombre']} {f['seccion'] or ''} {f['texto']}")]
 
         filas = self.registro.fragmentos(validos)  # descarta lo que no esté vigente
         if categoria:
