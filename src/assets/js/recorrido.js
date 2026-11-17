@@ -332,67 +332,71 @@ function entrada(grupo, e) {
   const acero = new THREE.MeshStandardMaterial({ color: 0xc9cdd1, metalness: 0.45, roughness: 0.35 });
   const caja = (w, h, p, mat) => new THREE.Mesh(new THREE.BoxGeometry(w, h, p), mat);   // w: este-oeste, p: norte-sur
 
-  // --- parada techada (fotos y anotaciones): es una isla abierta, no un cuarto. Piso de concreto con cordón amarillo,
-  // el lado del campus (sur) en curva; losa blanca volada encima; del lado de la carretera una hilera de hojas
-  // blancas de concreto (columnas) con bancas de cemento entre ellas; al oeste un tramo con bancas corridas, un
-  // marco blanco de paso y una palma; del lado del campus, columnas de acero azul en V. Solo la punta este, junto al
-  // carril, es un cuarto blanco (el del guarda y los directorios)
+  // --- parada techada (fotos de la Sede): losa blanca delgada y plana, volada hacia la carretera, con cielo blanco,
+  // vigas oscuras y lámparas cuadradas; al frente, columnas de acero gris oscuro en V, cada par en un cuadro de zacate;
+  // piso de adoquín en espiga con cordón amarillo. Al fondo, una hilera de hojas blancas delgadas y, entre ellas,
+  // tablones grises de concreto con una banca al pie de cada uno (se ve el campus entre ellos). En las dos puntas, un
+  // muro blanco con el directorio azul
   const alto = e.alto;
-  const azulCol = new THREE.MeshStandardMaterial({ color: 0x3d5878, roughness: 0.5, metalness: 0.35 });
-  const cemento = new THREE.MeshStandardMaterial({ color: 0xb9b8b2, roughness: 0.95 });
+  const grisO = new THREE.MeshStandardMaterial({ color: 0x4a525b, roughness: 0.5, metalness: 0.35 });
+  const tablon = new THREE.MeshStandardMaterial({ color: 0x9a9893, roughness: 0.95 });
   const amarilloC = new THREE.MeshStandardMaterial({ color: 0xf0c419, roughness: 0.7 });
-  const curva = (t) => -P2 - 2.4 * Math.sin(Math.PI * t) ** 0.8;      // borde sur de la isla, abombado hacia el campus
-  {
-    const forma = new THREE.Shape(), n = 24, xW = -L2 - 0.6, xE = L2 + 0.2;
-    forma.moveTo(xW, P2 + 0.9); forma.lineTo(xE, P2 + 0.9);
-    for (let i = 0; i <= n; i++) { const t = 1 - i / n; forma.lineTo(xW + (xE - xW) * t, curva(t)); }
-    const piso = new THREE.Mesh(new THREE.ExtrudeGeometry(forma, { depth: 0.18, bevelEnabled: false }), cemento);
-    piso.rotation.x = Math.PI / 2; piso.position.set(0, 0.18, 0);
-    const cont = new THREE.Group(); cont.add(piso);
-    for (let i = 0; i < n; i++) {                                       // cordón amarillo por la curva
-      const t0 = 1 - i / n, t1 = 1 - (i + 1) / n, a0 = xW + (xE - xW) * t0, a1 = xW + (xE - xW) * t1, b0 = curva(t0), b1 = curva(t1);
-      const Lc = Math.hypot(a1 - a0, b1 - b0), c = new THREE.Mesh(new THREE.BoxGeometry(Lc + 0.05, 0.22, 0.2), amarilloC);
-      c.position.set((a0 + a1) / 2, 0.11, -(b0 + b1) / 2); c.rotation.y = Math.atan2(b1 - b0, a1 - a0); cont.add(c);
+  const adoquin = texturaDibujada(256, 256, (x, W, H) => {   // espiga de ladrillo rojizo y gris
+    x.fillStyle = "#6f6467"; x.fillRect(0, 0, W, H);
+    const tonos = ["#958589", "#8a7f84", "#9c8b88", "#857d83", "#a08f8e"];
+    let k = 0;
+    for (let fy = -2; fy < 18; fy++) for (let fx = -2; fx < 18; fx++) {
+      x.fillStyle = tonos[(k++ * 7) % tonos.length];
+      const bx = fx * 16 + (fy % 2) * 8, by = fy * 16;
+      if ((fx + fy) % 2) x.fillRect(bx + 1, by + 1, 30, 14); else x.fillRect(bx + 1, by + 1, 14, 30);
     }
-    cont.position.copy(en(0, 0, 0)); cont.rotation.y = giroD; grupo.add(cont);   // marco local: x = este, -z = norte
-  }
-  // losa blanca, también volada sobre la curva
-  poner(caja(largo + 1.6, 0.28, prof + 4.6, losaBlanca), -0.3, -0.25, alto + 0.14);
-  for (let i = 0; i < 6; i++) poner(caja(1.2, 0.04, 0.3, new THREE.MeshBasicMaterial({ color: 0xffffff })), -L2 + 3 + i * 3.6, -0.4, alto - 0.01, false);   // lámparas
-  // cuarto del guarda en la punta este: muro blanco con el directorio
-  const aC = L2 - 3.6;
-  poner(caja(L2 - aC, alto, prof - 0.4, blanco), (L2 + aC) / 2, 0, alto / 2);
+  });
+  adoquin.wrapS = adoquin.wrapT = THREE.RepeatWrapping;
+  const bS0 = -P2 - 0.6, bN0 = P2 + 3.3, aW0 = -L2 - 0.4, aE0 = L2 + 0.1, bFin = -P2 + 0.6;
+  const piso = caja(aE0 - aW0, 0.16, bN0 - bS0, new THREE.MeshStandardMaterial({ map: adoquin, roughness: 0.95 }));
+  adoquin.repeat.set((aE0 - aW0) / 2.4, (bN0 - bS0) / 2.4);
+  poner(piso, (aW0 + aE0) / 2, (bS0 + bN0) / 2, 0.08, false);
+  poner(caja(aE0 - aW0 + 0.2, 0.2, 0.2, amarilloC), (aW0 + aE0) / 2, bN0 + 0.1, 0.1, false);   // cordón amarillo al frente
+  poner(caja(0.2, 0.2, bN0 - bS0, amarilloC), aW0 - 0.1, (bS0 + bN0) / 2, 0.1, false);           // y en la punta oeste
+  // losa: delgada, plana, volada al frente; vigas oscuras por debajo y lámparas cuadradas
+  const yL = alto + 0.15;
+  poner(caja(aE0 - aW0 + 1.2, 0.3, bN0 - bS0 + 0.6, losaBlanca), (aW0 + aE0) / 2, (bS0 + bN0) / 2 + 0.2, yL);
+  for (const b of [bFin + 0.6, bN0 - 0.9]) poner(caja(aE0 - aW0, 0.22, 0.14, grisO), (aW0 + aE0) / 2, b, yL - 0.26, false);
+  for (let a = aW0 + 2; a < aE0 - 1; a += 3.2) poner(caja(0.12, 0.2, bN0 - bS0 - 0.6, grisO), a, (bS0 + bN0) / 2, yL - 0.25, false);
+  const luz = new THREE.MeshBasicMaterial({ color: 0xffffff });
+  for (let a = aW0 + 2.8; a < aE0 - 1.5; a += 4.4) for (const b of [bFin + 1.9, bN0 - 1.6]) poner(caja(0.9, 0.04, 0.9, luz), a, b, yL - 0.16, false);
+  // muros blancos de las puntas con el directorio azul hacia la carretera
   const dir = new THREE.MeshBasicMaterial({ map: texturaDirectorio() });
-  poner(new THREE.Mesh(new THREE.PlaneGeometry(0.55, 1.45), dir), aC + 1.2, P2 - 0.18, 1.55, false);
-  // hojas blancas del lado de la carretera, con bancas de cemento entre ellas (de la foto de noche)
-  const aW0 = -L2 + 5.2, paso = 1.25, nHojas = Math.floor((aC - 0.4 - aW0) / paso) + 1;
-  const hojas = new THREE.InstancedMesh(new THREE.BoxGeometry(0.22, alto - 0.05, 0.55), blanco, nHojas);
-  const qGiro = new THREE.Quaternion().setFromAxisAngle(new THREE.Vector3(0, 1, 0), giro), uno = new THREE.Vector3(1, 1, 1);
-  for (let i = 0; i < nHojas; i++) hojas.setMatrixAt(i, new THREE.Matrix4().compose(en(aW0 + i * paso, P2 + 0.1, (alto - 0.05) / 2), qGiro, uno));
-  hojas.castShadow = !liviano; grupo.add(hojas);
-  const banca = (a, b, largoB, haciaNorte = true) => {
-    poner(caja(largoB, 0.12, 0.45, cemento), a, b, 0.46);
-    for (const s of [-1, 1]) poner(caja(0.16, 0.4, 0.4, cemento), a + s * (largoB / 2 - 0.25), b, 0.2);
-    if (!haciaNorte) return;
-  };
-  for (let i = 0; i < nHojas - 1; i += 2) banca(aW0 + (i + 1) * paso, P2 - 0.25, paso * 1.6);
-  // tramo oeste: bancas corridas bajo la losa, el marco de paso y la palma
-  banca(-L2 + 1.6, P2 - 0.3, 3.2); banca(-L2 + 1.6, -0.8, 3.2);
-  poner(caja(0.25, alto - 0.2, 0.3, blanco), -L2 + 3.6, P2 + 0.1, (alto - 0.2) / 2);
-  poner(caja(0.25, alto - 0.2, 0.3, blanco), -L2 + 4.9, P2 + 0.1, (alto - 0.2) / 2);
-  poner(caja(1.55, 0.3, 0.3, blanco), -L2 + 4.25, P2 + 0.1, alto - 0.35);
-  // bancas del lado del campus, siguiendo la curva
-  for (const t of [0.22, 0.42, 0.62]) { const a = -L2 - 0.6 + (largo + 0.8) * t; banca(a, curva(t) + 1.2, 2.2); }
-  // columnas de acero azul en V del lado del campus, sobre la curva
-  for (const t of [0.12, 0.34, 0.56, 0.78]) {
-    const a = -L2 - 0.6 + (largo + 0.8) * t, b = curva(t) + 0.6;
+  const aMuroE = aE0 - 2.4, aMuroW = aW0 + 0.25;
+  poner(caja(aE0 - aMuroE, alto, 1.4, blanco), (aE0 + aMuroE) / 2, bFin, alto / 2);
+  poner(new THREE.Mesh(new THREE.PlaneGeometry(0.75, 1.5), dir), (aE0 + aMuroE) / 2, bFin + 0.71, 1.6, false);
+  poner(caja(0.5, alto, 1.4, blanco), aMuroW, bFin, alto / 2);
+  // hojas blancas, tablones grises y bancas
+  const a0 = aW0 + 0.5, a1 = aMuroE, paso = 1.15, n = Math.floor((a1 - a0) / paso);
+  const qG = new THREE.Quaternion().setFromAxisAngle(new THREE.Vector3(0, 1, 0), giro), uno = new THREE.Vector3(1, 1, 1);
+  const hojas = new THREE.InstancedMesh(new THREE.BoxGeometry(0.14, alto, 0.7), blanco, n + 1);
+  const tablones = new THREE.InstancedMesh(new THREE.BoxGeometry(0.42, alto * 0.72, 0.16), tablon, n);
+  const asientos = new THREE.InstancedMesh(new THREE.BoxGeometry(paso - 0.3, 0.08, 0.42), tablon, n);
+  const patas = new THREE.InstancedMesh(new THREE.BoxGeometry(0.1, 0.42, 0.34), tablon, n * 2);
+  for (let i = 0; i <= n; i++) hojas.setMatrixAt(i, new THREE.Matrix4().compose(en(a0 + i * paso, bFin, alto / 2), qG, uno));
+  for (let i = 0; i < n; i++) {
+    const a = a0 + (i + 0.5) * paso;
+    tablones.setMatrixAt(i, new THREE.Matrix4().compose(en(a, bFin - 0.12, 0.16 + alto * 0.36), qG, uno));
+    asientos.setMatrixAt(i, new THREE.Matrix4().compose(en(a, bFin + 0.38, 0.46), qG, uno));
+    for (const s of [0, 1]) patas.setMatrixAt(i * 2 + s, new THREE.Matrix4().compose(en(a + (s ? 1 : -1) * (paso / 2 - 0.3), bFin + 0.38, 0.21), qG, uno));
+  }
+  for (const m of [hojas, tablones, asientos, patas]) { m.castShadow = !liviano; m.receiveShadow = true; grupo.add(m); }
+  // columnas en V al frente, sobre un cuadro de zacate
+  const zacateC = new THREE.MeshLambertMaterial({ color: 0x5f8a3e });
+  for (let a = aW0 + 2.2; a < aE0 - 1; a += 5.2) {
+    const b = bN0 - 0.9;
+    poner(caja(0.8, 0.04, 0.8, zacateC), a, b, 0.17, false);
+    poner(caja(0.35, 0.1, 0.35, grisO), a, b, 0.2, false);
     for (const abre of [-1, 1]) {
-      const h = Math.hypot(alto, 1.0), c = caja(0.16, h, 0.16, azulCol);
-      c.position.copy(en(a + abre * 0.5, b, alto / 2)); c.rotation.set(0, giroD, 0); c.rotateZ(abre * Math.atan2(1.0, alto)); c.castShadow = !liviano; grupo.add(c);
+      const h = Math.hypot(yL - 0.2, 1.1), c = caja(0.16, h, 0.16, grisO);
+      c.position.copy(en(a + abre * 0.55, b, (yL + 0.2) / 2)); c.rotation.set(0, giroD, 0); c.rotateZ(-abre * Math.atan2(1.1, yL - 0.2)); c.castShadow = !liviano; grupo.add(c);   // juntas abajo, abiertas arriba
     }
   }
-  const colO = caja(0.16, alto + 0.3, 0.16, acero);
-  colO.position.copy(en(-L2 + 1.2, P2 + 1.5, (alto + 0.1) / 2)); colO.rotation.set(0, giro, 0); colO.rotateZ(-0.12); colO.castShadow = !liviano; grupo.add(colO);
 
   // --- portal del carril de entrada: dos pilares de concreto con dintel, de la punta este de la caseta a la isla del este
   const aP = L2 + 0.3, aQ = L2 + 7.9, altoPortal = 3.5;
