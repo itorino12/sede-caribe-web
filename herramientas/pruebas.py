@@ -648,7 +648,7 @@ def declaracion(nav, base):
         const zona = (y0, y1) => { const d = x.getImageData(0, Math.round(y0 * c.height), c.width, Math.round((y1 - y0) * c.height)).data; let n = 0; for (let k = 0; k < d.length; k += 4) if (d[k] < 200) n++; return n; };
         return { persona: zona(0.25, 0.30), firmas: zona(0.80, 0.99), tabla: zona(0.45, 0.50) }; })()""")
     revisar(tapado["persona"] < 50 and tapado["firmas"] < 50 and tapado["tabla"] > 500, f"datos personales y firmas tapados, tabla visible {tapado}")
-    revisar(esperar(p, "/no está disponible/.test(document.querySelector('#dj-estado').textContent)", 5000) and p.is_disabled("#dj-leer"), "sin servidor de la Sede no se envía nada")
+    revisar(esperar(p, "/no está disponible/.test(document.querySelector('#dj-estado').textContent)", 5000) and p.is_hidden("#dj-leer") and p.is_hidden("#dj-acepto"), "sin servidor de la Sede no se ofrece el envío")
     p.locator("#dj-envio").screenshot(path=str(SALIDA / "declaracion-tapada.png"))
     p.click('[data-modo="formulario"]')
     revisar(esperar(p, "document.querySelector('[data-p=nombre]').value === 'Persona de Prueba'", 3000), "al volver, el borrador propio sigue ahí")

@@ -19,6 +19,8 @@
 .dj-archivo input { font: inherit; font-weight: 400; }
 .dj-envio { margin-top: 12px; }
 .dj-envio img { display: block; max-width: 100%; width: 900px; border: 1px solid var(--linea); background: #fff; margin: 8px 0 12px; }
+.dj-envio [hidden] { display: none !important; }
+.dj-envio .boton:disabled { opacity: .45; cursor: not-allowed; filter: grayscale(.6); }
 .dj-acepto { display: flex; gap: 8px; align-items: flex-start; margin-bottom: 12px; }
 .dj-acepto input { margin-top: .3em; }
 .dj-estado:empty { display: none; }

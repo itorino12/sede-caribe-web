@@ -30,6 +30,7 @@ function fallo(e) {
 
 function limpiarEnvio() {
   pendiente = null;
+  $("#dj-leer").hidden = false; $(".dj-acepto").hidden = false;
   $("#dj-envio").hidden = true;
   $("#dj-acepto").checked = false;
   $("#dj-leer").disabled = true;
@@ -142,8 +143,9 @@ function preparar(lienzo, textos, firmas, nombre, nota) {
   ctx.hayServidor().then((s) => {
     if (s) estado(`Listo para leer «${nombre}».${nota} Revise la imagen y acepte el envío.`);
     else {
-      estado(`Este PDF no lo generó esta página, y leerlo necesita la IA del servidor de la Sede, que no está disponible en esta dirección.${nota} Puede llenar el formulario con los datos de su declaración y la revisión es la misma.`);
-      $("#dj-leer").disabled = true; $("#dj-acepto").disabled = true;
+      estado(`Este PDF no lo generó esta página, y leerlo necesita la IA del servidor de la Sede, que no está disponible en esta dirección (la vista previa no tiene servidor). Arriba se ve lo que se enviaría.${nota} Mientras tanto, puede llenar el formulario con los datos de su declaración: la revisión es la misma.`);
+      $("#dj-leer").disabled = true;
+      $("#dj-leer").hidden = true; $(".dj-acepto").hidden = true;
     }
   });
   $("#dj-envio").scrollIntoView({ behavior: "smooth", block: "nearest" });
