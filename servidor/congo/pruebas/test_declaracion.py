@@ -15,10 +15,11 @@ from congo.proveedores.gemini import Gemini
 IMAGEN = base64.b64encode(b"\xff\xd8\xff\xe0" + b"0" * 200).decode()
 LEIDO = {"es_declaracion": True, "unidad": "Sede del Caribe",
          "filas": [{"seccion": "ucr", "lugar": "Sede del Caribe (Limón)", "cargo": "Interino 2", "jornada": "1/2",
-                    "desde": "20-7-2026", "hasta": "31-12-2026", "martes_de": "08:00", "martes_a": "15:00",
-                    "lunes_de": "", "lunes_a": ""},
+                    "desde": "20-7-2026", "hasta": "31-12-2026",
+                    "horario": [{"dia": "martes", "de": "08:00", "a": "15:00"}, {"dia": "lunes", "de": "", "a": ""},
+                                {"dia": "domingo", "de": "08:00", "a": "09:00"}]},
                    {"seccion": "otras", "lugar": "FUNDEVI", "cargo": "Coordinador 8723-4075", "jornada": "1/4",
-                    "desde": "20-7-2026", "hasta": "31-12-2026", "jueves_de": "15:00", "jueves_a": "20:00"}],
+                    "desde": "20-7-2026", "hasta": "31-12-2026", "horario": [{"dia": "jueves", "de": "15:00", "a": "20:00"}]}],
          "observaciones": ["IF0004 Desarrollo de Software II: Contacto: K 8 a 12", ""],
          "legibilidad": ["Cargo de la fila 2 en letra muy pequeña"], "dudas": []}
 
@@ -38,12 +39,17 @@ def test_extraer_normaliza_y_enmascara(entorno):
                                                "texto": "Correo: alguien@ucr.ac.cr Observaciones: IF0004"})
     assert r.status_code == 200, r.text
     d = r.json()["datos"]
-    assert d["filas"][0]["dias"] == {"K": {"de": "08:00", "a": "15:00"}}  # días vacíos fuera
+    assert d["filas"][0]["dias"] == {"K": {"de": "08:00", "a": "15:00"}}  # días vacíos y desconocidos fuera
+    assert d["filas"][1]["dias"] == {"J": {"de": "15:00", "a": "20:00"}}
     assert d["filas"][1]["seccion"] == "otras" and "8723" not in d["filas"][1]["cargo"]  # teléfono enmascarado
     assert d["observaciones"] == ["IF0004 Desarrollo de Software II: Contacto: K 8 a 12"]
     sistema, partes = prov.llamadas[-1]
     assert partes[0]["inlineData"]["data"] == IMAGEN and "alguien@ucr.ac.cr" not in partes[1]["text"]
     assert "Nunca invente" in sistema
+
+    from congo.rutas.declaracion import ESQUEMA_EXTRAER
+    dia = ESQUEMA_EXTRAER["properties"]["filas"]["items"]["properties"]["horario"]["items"]
+    assert dia["required"] == ["dia", "de", "a"]  # con horas opcionales, Gemini omitía las «A»
 
 
 def test_revisar_no_envia_datos_personales(entorno):

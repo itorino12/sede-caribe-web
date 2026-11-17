@@ -165,6 +165,14 @@ async function enviar() {
   const d = j.datos;
   if (!d.es_declaracion || !d.filas.length) { estado("La IA no reconoce en el archivo el formulario de la Declaración Jurada de la ORH."); b.disabled = false; return; }
   const notas = d.legibilidad.map((t) => ({ regla: "B11", texto: t })).concat(d.dudas.map((t) => ({ regla: "Lectura", texto: `Valor dudoso: ${t}` })));
+  // Una hora «De» sin su «A» (o al revés) casi siempre es la IA que no leyó la celda, no un error del formulario.
+  const nombres = { L: "lunes", K: "martes", M: "miércoles", J: "jueves", V: "viernes", S: "sábado" };
+  const cuenta = { ucr: 0, otras: 0 };
+  const huecos = d.filas.flatMap((f) => {
+    const n = ++cuenta[f.seccion];
+    return Object.entries(f.dias || {}).filter(([, v]) => !v.de || !v.a).map(([k]) => `${f.seccion === "ucr" ? "UCR" : "otras"} fila ${n}, ${nombres[k]}`);
+  });
+  if (huecos.length) notas.unshift({ regla: "Lectura", texto: `La IA dejó incompletas estas celdas: ${huecos.join("; ")}. Lo más probable es que no las haya leído bien: compárelas con su PDF y corríjalas antes de creer los errores que dependen de ellas.` });
   ctx.cargarLeido(d, { firmas: pendiente.firmas, archivo: pendiente.nombre, notas });
   estado(`Se leyó «${pendiente.nombre}». Revise los valores en el formulario: la IA puede equivocarse al leer.`);
   limpiarEnvio();
