@@ -332,20 +332,65 @@ function entrada(grupo, e) {
   const acero = new THREE.MeshStandardMaterial({ color: 0xc9cdd1, metalness: 0.45, roughness: 0.35 });
   const caja = (w, h, p, mat) => new THREE.Mesh(new THREE.BoxGeometry(w, h, p), mat);   // w: este-oeste, p: norte-sur
 
-  // --- caseta: losa delgada volada (más al norte), fondo oscuro tras la celosía, lamas, directorios y columna inclinada
+  // --- parada techada (fotos y anotaciones): es una isla abierta, no un cuarto. Piso de concreto con cordón amarillo,
+  // el lado del campus (sur) en curva; losa blanca volada encima; del lado de la carretera una hilera de hojas
+  // blancas de concreto (columnas) con bancas de cemento entre ellas; al oeste un tramo con bancas corridas, un
+  // marco blanco de paso y una palma; del lado del campus, columnas de acero azul en V. Solo la punta este, junto al
+  // carril, es un cuarto blanco (el del guarda y los directorios)
   const alto = e.alto;
-  poner(caja(largo + 1.6, 0.28, prof + 2.6, losaBlanca), -0.3, 0.75, alto + 0.14);
-  const fondo = new THREE.MeshStandardMaterial({ color: 0x8c9399, roughness: 0.9 });
-  const aL0 = L2 - 1.4, aL1 = -L2 * 0.05;                     // tramo con celosía (desde el pilar hacia el oeste)
-  poner(caja(aL0 - aL1, alto - 0.1, 0.06), (aL0 + aL1) / 2, P2 + 0.03, (alto - 0.1) / 2, false).material = fondo;
-  const nLamas = Math.round((aL0 - aL1) / 0.42), lamas = new THREE.InstancedMesh(new THREE.BoxGeometry(0.14, alto - 0.12, 0.32), blanco, nLamas);
-  for (let i = 0; i < nLamas; i++) {
-    const p = en(aL1 + (i + 0.5) * ((aL0 - aL1) / nLamas), P2 + 0.32, (alto - 0.12) / 2);
-    lamas.setMatrixAt(i, new THREE.Matrix4().compose(p, new THREE.Quaternion().setFromAxisAngle(new THREE.Vector3(0, 1, 0), giro), new THREE.Vector3(1, 1, 1)));
+  const azulCol = new THREE.MeshStandardMaterial({ color: 0x3d5878, roughness: 0.5, metalness: 0.35 });
+  const cemento = new THREE.MeshStandardMaterial({ color: 0xb9b8b2, roughness: 0.95 });
+  const amarilloC = new THREE.MeshStandardMaterial({ color: 0xf0c419, roughness: 0.7 });
+  const curva = (t) => -P2 - 2.4 * Math.sin(Math.PI * t) ** 0.8;      // borde sur de la isla, abombado hacia el campus
+  {
+    const forma = new THREE.Shape(), n = 24, xW = -L2 - 0.6, xE = L2 + 0.2;
+    forma.moveTo(xW, P2 + 0.9); forma.lineTo(xE, P2 + 0.9);
+    for (let i = 0; i <= n; i++) { const t = 1 - i / n; forma.lineTo(xW + (xE - xW) * t, curva(t)); }
+    const piso = new THREE.Mesh(new THREE.ExtrudeGeometry(forma, { depth: 0.18, bevelEnabled: false }), cemento);
+    piso.rotation.x = Math.PI / 2; piso.position.set(0, 0.18, 0);
+    const cont = new THREE.Group(); cont.add(piso);
+    for (let i = 0; i < n; i++) {                                       // cordón amarillo por la curva
+      const t0 = 1 - i / n, t1 = 1 - (i + 1) / n, a0 = xW + (xE - xW) * t0, a1 = xW + (xE - xW) * t1, b0 = curva(t0), b1 = curva(t1);
+      const Lc = Math.hypot(a1 - a0, b1 - b0), c = new THREE.Mesh(new THREE.BoxGeometry(Lc + 0.05, 0.22, 0.2), amarilloC);
+      c.position.set((a0 + a1) / 2, 0.11, -(b0 + b1) / 2); c.rotation.y = Math.atan2(b1 - b0, a1 - a0); cont.add(c);
+    }
+    cont.position.copy(en(0, 0, 0)); cont.rotation.y = giroD; grupo.add(cont);   // marco local: x = este, -z = norte
   }
-  lamas.castShadow = !liviano; grupo.add(lamas);
+  // losa blanca, también volada sobre la curva
+  poner(caja(largo + 1.6, 0.28, prof + 4.6, losaBlanca), -0.3, -0.25, alto + 0.14);
+  for (let i = 0; i < 6; i++) poner(caja(1.2, 0.04, 0.3, new THREE.MeshBasicMaterial({ color: 0xffffff })), -L2 + 3 + i * 3.6, -0.4, alto - 0.01, false);   // lámparas
+  // cuarto del guarda en la punta este: muro blanco con el directorio
+  const aC = L2 - 3.6;
+  poner(caja(L2 - aC, alto, prof - 0.4, blanco), (L2 + aC) / 2, 0, alto / 2);
   const dir = new THREE.MeshBasicMaterial({ map: texturaDirectorio() });
-  for (const a of [L2 - 0.7, -L2 + 2.6]) poner(new THREE.Mesh(new THREE.PlaneGeometry(0.55, 1.45), dir), a, P2 + 0.02, 1.55, false);
+  poner(new THREE.Mesh(new THREE.PlaneGeometry(0.55, 1.45), dir), aC + 1.2, P2 - 0.18, 1.55, false);
+  // hojas blancas del lado de la carretera, con bancas de cemento entre ellas (de la foto de noche)
+  const aW0 = -L2 + 5.2, paso = 1.25, nHojas = Math.floor((aC - 0.4 - aW0) / paso) + 1;
+  const hojas = new THREE.InstancedMesh(new THREE.BoxGeometry(0.22, alto - 0.05, 0.55), blanco, nHojas);
+  const qGiro = new THREE.Quaternion().setFromAxisAngle(new THREE.Vector3(0, 1, 0), giro), uno = new THREE.Vector3(1, 1, 1);
+  for (let i = 0; i < nHojas; i++) hojas.setMatrixAt(i, new THREE.Matrix4().compose(en(aW0 + i * paso, P2 + 0.1, (alto - 0.05) / 2), qGiro, uno));
+  hojas.castShadow = !liviano; grupo.add(hojas);
+  const banca = (a, b, largoB, haciaNorte = true) => {
+    poner(caja(largoB, 0.12, 0.45, cemento), a, b, 0.46);
+    for (const s of [-1, 1]) poner(caja(0.16, 0.4, 0.4, cemento), a + s * (largoB / 2 - 0.25), b, 0.2);
+    if (!haciaNorte) return;
+  };
+  for (let i = 0; i < nHojas - 1; i += 2) banca(aW0 + (i + 1) * paso, P2 - 0.25, paso * 1.6);
+  // tramo oeste: bancas corridas bajo la losa, el marco de paso y la palma
+  banca(-L2 + 1.6, P2 - 0.3, 3.2); banca(-L2 + 1.6, -0.8, 3.2);
+  poner(caja(0.25, alto - 0.2, 0.3, blanco), -L2 + 3.6, P2 + 0.1, (alto - 0.2) / 2);
+  poner(caja(0.25, alto - 0.2, 0.3, blanco), -L2 + 4.9, P2 + 0.1, (alto - 0.2) / 2);
+  poner(caja(1.55, 0.3, 0.3, blanco), -L2 + 4.25, P2 + 0.1, alto - 0.35);
+  // bancas del lado del campus, siguiendo la curva
+  for (const t of [0.22, 0.42, 0.62]) { const a = -L2 - 0.6 + (largo + 0.8) * t; banca(a, curva(t) + 1.2, 2.2); }
+  // columnas de acero azul en V del lado del campus, sobre la curva
+  for (const t of [0.12, 0.34, 0.56, 0.78]) {
+    const a = -L2 - 0.6 + (largo + 0.8) * t, b = curva(t) + 0.6;
+    for (const abre of [-1, 1]) {
+      const h = Math.hypot(alto, 1.0), c = caja(0.16, h, 0.16, azulCol);
+      c.position.copy(en(a + abre * 0.5, b, alto / 2)); c.rotation.set(0, giroD, 0); c.rotateZ(abre * Math.atan2(1.0, alto)); c.castShadow = !liviano; grupo.add(c);
+    }
+  }
   const colO = caja(0.16, alto + 0.3, 0.16, acero);
   colO.position.copy(en(-L2 + 1.2, P2 + 1.5, (alto + 0.1) / 2)); colO.rotation.set(0, giro, 0); colO.rotateZ(-0.12); colO.castShadow = !liviano; grupo.add(colO);
 
@@ -698,7 +743,7 @@ for (const e of datos.campus.edificios) {
   } else {
     const pisos = Math.max(e.pisos, 1), altoPiso = e.alto / pisos;
     for (const vol of e.volumenes) {
-      grupo.add(prisma(vol.contorno, vol.alto, vol.desde, mat.pared));
+      if (!estilo.entrada) grupo.add(prisma(vol.contorno, vol.alto, vol.desde, mat.pared));   // la parada de la entrada es abierta
       if (vol.linterna) {   // ventanas corridas de la linternilla
         grupo.add(prisma(vol.contorno, vol.alto * 0.55, vol.desde + vol.alto * 0.25, celosia, 0.05));
         continue;
