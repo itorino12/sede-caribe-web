@@ -26,6 +26,9 @@ def cabeceras():
 
 
 class Manejador(http.server.SimpleHTTPRequestHandler):
+    # como el nginx de Ubuntu 24.04: .mjs no está en mime.types y sale como binario (con nosniff, el navegador no lo ejecuta)
+    extensions_map = {**http.server.SimpleHTTPRequestHandler.extensions_map, ".mjs": "application/octet-stream"}
+
     def end_headers(self):
         for nombre, valor in cabeceras():
             if nombre != "Strict-Transport-Security":   # sobre HTTP local no aplica

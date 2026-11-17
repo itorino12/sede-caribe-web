@@ -37,8 +37,8 @@ function limpiarEnvio() {
 }
 
 async function pdfjs() {
-  const m = await import("./vendor/pdfjs/pdf.min.mjs");
-  m.GlobalWorkerOptions.workerSrc = new URL("./vendor/pdfjs/pdf.worker.min.mjs", import.meta.url).href;
+  const m = await import("./vendor/pdfjs/pdf.min.js");
+  m.GlobalWorkerOptions.workerSrc = new URL("./vendor/pdfjs/pdf.worker.min.js", import.meta.url).href;
   return m;
 }
 
