@@ -118,6 +118,19 @@ def texto_plano(h):
     return re.sub(r"\s+", " ", html.unescape(re.sub(r"<[^>]+>", " ", h))).strip()
 
 
+AGENDA_DE_PAGINA = re.compile(r'<h2[^>]*>\s*Próximas actividades\s*</h2>\s*<ul class="agenda">.*?</ul>', re.S)
+TITULO_H2 = re.compile(r"<h2\b[^>]*>(.*?)</h2>", re.S)
+
+
+def secciones_congo(h):
+    """Texto completo de una página para el congo, partido por sus <h2>: [{"h": encabezado, "x": texto}].
+    Sin el bloque «Próximas actividades»: la agenda ya es un documento aparte y aquí solo mete ruido."""
+    partes = TITULO_H2.split(AGENDA_DE_PAGINA.sub(" ", h))
+    salida = [{"h": "", "x": texto_plano(partes[0])}]
+    salida += [{"h": texto_plano(partes[i]), "x": texto_plano(partes[i + 1])} for i in range(1, len(partes) - 1, 2)]
+    return [s for s in salida if s["x"]]
+
+
 def titular_portada(n, maximo=5):
     """Titular corto de la portada: la columna «titular_portada» (máximo 5 palabras); si falta o se pasa, el título recortado."""
     t = (n.get("titular_portada") or "").strip()
@@ -608,7 +621,7 @@ def main():
                  {"p": p, "m": next(m for m in c["modalidades"] if m["id"] == p["modalidad"])})
                 for m in c["modalidades"] for p in m["proyectos"] if not p.get("enlace")]
 
-    indice = []
+    indice, congo = [], []
     for salida, plantilla, titulo, desc, extra in paginas:
         prof = salida.count("/")
         raiz = "../" * prof
@@ -620,6 +633,8 @@ def main():
         if salida != "404.html":
             m = re.search(r"<main[^>]*>(.*)</main>", texto, re.S)
             indice.append({"t": titulo, "u": salida, "x": texto_plano(m.group(1) if m else texto)[:4000]})
+            if salida not in ("index.html", "agenda.html", "directorio.html"):  # esas dos salen del índice, fila por fila
+                congo.append({"t": titulo, "u": salida, "s": secciones_congo(m.group(1) if m else texto)})
     for u in c["unidades"]:  # direcciones viejas de las unidades repetidas: llevan a la página que sí existe
         if u.get("enlace"):
             destino = DIST / "unidades" / f"{u['id']}.html"
@@ -634,6 +649,9 @@ def main():
             indice.append({"t": f"{f['oficina']} (ext. {f['extension']})", "u": "directorio.html", "x": f"{g} {f['edificio']} {f['correo']}"})
 
     (DIST / "assets/js/indice.js").write_text("window.INDICE=" + json.dumps(indice, ensure_ascii=False) + ";", encoding="utf-8")
+    # el congo lee las páginas completas de aquí; el índice del buscador las recorta a 4000 caracteres
+    (DIST / "congo").mkdir(exist_ok=True)
+    (DIST / "congo/paginas.json").write_text(json.dumps(congo, ensure_ascii=False), encoding="utf-8")
     (DIST / "agenda.ics").write_text(ics(c["eventos"], sitio), encoding="utf-8")
     (DIST / "noticias.xml").write_text(rss(c["noticias"], sitio), encoding="utf-8")
     shutil.copy(SRC / "rss.xsl", DIST / "noticias.xsl")   # cómo se ve el feed al abrirlo en un navegador

@@ -63,10 +63,13 @@ class Sincronizador:
             return {"estado": f"no existe {ruta}"}
         texto = ruta.read_text(encoding="utf-8")
         entradas = json.loads(texto[texto.index("=") + 1:].rstrip().rstrip(";"))
+        # páginas completas, partidas por encabezado (build.py); el índice del buscador las corta a 4000 caracteres
+        completas = ruta.parents[2] / "congo" / "paginas.json"
+        paginas = {p["u"]: p for p in json.loads(completas.read_text(encoding="utf-8"))} if completas.exists() else {}
         grupos = {}
         for e in entradas:
             u, t, x = e.get("u", ""), e.get("t", ""), e.get("x", "")
-            if u == "index.html" or not t:
+            if u == "index.html" or not t or u in paginas:
                 continue
             if u == "directorio.html":
                 clave = ("sitio-directorio", "Directorio de oficinas", "directorio.html", "contactos")
@@ -78,14 +81,25 @@ class Sincronizador:
                 clave = (f"sitio-{slug(u.removesuffix('.html'))}", t, u, "general")
                 linea = x
             grupos.setdefault(clave, []).append(linea)
+        documentos = [(clave, [Bloque("\n".join(lineas), seccion=clave[1])]) for clave, lineas in grupos.items()]
+        for u, p in paginas.items():
+            if u == "index.html" or not p.get("t"):
+                continue
+            # un bloque por encabezado: el fragmento queda con su tema («Contacto», «Requisitos»…) y no mezcla otros
+            bloques = [Bloque(s["x"], seccion=s["h"] or p["t"]) for s in p.get("s", []) if s.get("x")]
+            if bloques:
+                documentos.append(((f"sitio-{slug(u.removesuffix('.html'))}", p["t"], u, "general"), bloques))
         informe, vistos = {"nuevos": 0, "actualizados": 0, "sin_cambios": 0, "retirados": 0}, set()
-        for (doc_id, nombre, url, sub), lineas in grupos.items():
+        for (doc_id, nombre, url, sub), bloques in documentos:
             vistos.add(doc_id)
-            contenido = "\n".join(lineas)
+            contenido = json.dumps([(b.seccion, b.texto) for b in bloques], ensure_ascii=False)
             meta = {"id": doc_id, "nombre": nombre, "categoria": "institucional", "subcategoria": sub, "url": url,
                     "origen": "sitio"}
-            bloques = [Bloque(contenido, seccion=nombre)]
-            r = self.repo.incorporar_bloques(meta, bloques, hashlib.sha256(contenido.encode()).hexdigest())
+            try:
+                r = self.repo.incorporar_bloques(meta, bloques, hashlib.sha256(contenido.encode()).hexdigest())
+            except ArchivoInvalido:  # una página casi vacía no debe detener las demás
+                informe.setdefault("omitidas", []).append(url)
+                continue
             informe["sin_cambios" if r.estado == "sin_cambios" else "nuevos" if r.estado == "nuevo" else "actualizados"] += 1
         for d in self.repo.registro.listar(origen="sitio"):
             if d["id"] not in vistos:

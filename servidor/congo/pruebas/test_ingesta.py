@@ -23,6 +23,25 @@ def test_paginas_del_sitio(repo, tmp_path):
     assert sinc.sitio()["retirados"] == 2
 
 
+def test_paginas_completas_por_encabezado(repo, tmp_path):
+    """Con congo/paginas.json, la página entra completa y partida por encabezado (no el texto recortado del índice)."""
+    web = tmp_path / "web"
+    (web / "assets" / "js").mkdir(parents=True)
+    (web / "congo").mkdir()
+    entradas = [{"t": "Dirección de la Sede", "u": "unidades/direccion.html", "x": "texto recortado"},
+                {"t": "Registro (ext. 3021)", "u": "directorio.html", "x": "Vida Estudiantil"}]
+    (web / "assets/js/indice.js").write_text("window.INDICE=" + json.dumps(entradas) + ";", encoding="utf-8")
+    paginas = [{"t": "Dirección de la Sede", "u": "unidades/direccion.html",
+                "s": [{"h": "", "x": "La Dirección conduce la Sede y coordina sus cinco áreas."},
+                      {"h": "Contacto", "x": "Director Ing. Walter Anderson Rivera, MBA. Teléfono 2511-7303."}]},
+               {"t": "Vacía", "u": "vacia.html", "s": [{"h": "", "x": ""}]}]
+    (web / "congo/paginas.json").write_text(json.dumps(paginas), encoding="utf-8")
+    informe = Sincronizador(repo, Config(web=web)).sitio()
+    assert informe["nuevos"] == 2  # la dirección y el directorio; la página sin texto no entra
+    filas = repo.registro.fragmentos(repo.registro.buscar_texto("Walter Anderson"))
+    assert filas and filas[0]["seccion"] == "Contacto" and "recortado" not in filas[0]["texto"]
+
+
 class DriveFalso(Sincronizador):
     archivos, metadatos, contenidos = [], {}, {}
 

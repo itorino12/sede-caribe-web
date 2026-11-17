@@ -1,0 +1,29 @@
+# Preguntas para calibrar el umbral del congo (herramientas/calibrar_congo.py).
+# Formato: pregunta | id del documento que debería responderla (basta el comienzo) | o «-» si la Sede no tiene por qué saberla.
+¿Cómo solicito una beca? | sitio-unidades-becas
+¿Quién es el director de la Sede? | sitio-unidades-direccion
+¿Cuál es el teléfono de Registro? | sitio-unidades-registro
+¿Dónde queda la biblioteca? | sitio-unidades-biblioteca
+¿Qué horario tiene la biblioteca? | sitio-unidades-biblioteca
+¿Cómo ingreso a la universidad? | sitio-admision
+¿Qué carreras hay en la Sede del Caribe? | sitio-carreras
+¿Qué se estudia en Informática Empresarial? | sitio-carreras-informatica-empresarial
+¿Quién puede vivir en las residencias? | sitio-unidades-residencias
+¿Cómo saco cita en el consultorio médico? | sitio-unidades-consultorio-medico
+¿Hay atención psicológica para estudiantes? | sitio-unidades-psicologia
+¿Qué es el TCU? | sitio-accion-social-tcu
+¿Cuándo es la solicitud de beca socioeconómica para 2027? | sitio-agenda
+¿Cuál es la extensión de la Oficina de Becas? | sitio-directorio
+¿Qué laboratorios tiene la Sede? | sitio-unidades-laboratorios
+¿Puedo usar la piscina? | sitio-unidades-piscina
+¿Qué cursos ofrece Educación Continua? | sitio-unidades-educacion-continua
+¿Cómo llego a la Sede? | sitio-contacto
+¿Qué pasa si repruebo un curso tres veces? | reg-regimen-academico-estudiantil
+¿Cuántos créditos puedo matricular? | reg-regimen-academico-estudiantil
+¿Cómo se reconoce un curso de otra universidad? | reg-reconocimiento
+¿Cuántas horas debe durar el TCU? | reg-trabajo-comunal
+¿Qué sanciones hay por plagio en un examen? | reg-orden-y-disciplina
+¿Cuál es la receta del pan bon? | -
+¿Quién ganó el último mundial de fútbol? | -
+¿Cuál es la capital de Australia? | -
+¿Cómo arreglo el aire acondicionado de mi carro? | -

@@ -31,3 +31,21 @@ def test_filtro_de_categoria_y_vigencia(repo):
     doc = next(d for d in repo.registro.listar() if d["subcategoria"] == "matricula")
     repo.cambiar_vigencia(doc["id"], "derogado")
     assert all(h.fragmento["doc_id"] != doc["id"] for h in rec.buscar("matrícula extraordinaria"))
+
+
+def test_la_pagina_del_sitio_no_queda_tapada_por_los_reglamentos(repo):
+    """«director» aparece en todos los reglamentos: sin la búsqueda solo institucional, la página quedaba fuera."""
+    from congo.documentos.extractores import Bloque
+    for i in range(30):
+        repo.incorporar_bloques({"id": f"reg-{i}", "nombre": f"Reglamento del instituto {i}", "categoria": "normativa"},
+                                [Bloque("El director del instituto convoca al consejo. El director preside. " * 3,
+                                        seccion=f"Artículo {i}")], f"h{i}")
+    repo.incorporar_bloques({"id": "sitio-direccion", "nombre": "Dirección de la Sede", "categoria": "institucional"},
+                            [Bloque("La Dirección conduce la Sede y coordina sus cinco áreas.", seccion="Dirección de la Sede"),
+                             Bloque("Director Ing. Walter Anderson Rivera, MBA. Teléfono 2511-7303.", seccion="Contacto")],
+                            "hd")
+    rec = Recuperacion(repo.registro, repo.embebedor, repo.vectores, umbral=0.2)
+    h = rec.buscar("¿Quién es el director de la Sede?")
+    assert any("Walter Anderson" in x.fragmento["texto"] for x in h)
+    d = rec.diagnostico("¿Quién es el director de la Sede?")
+    assert d["umbral"] == 0.2 and d["por_significado"] and d["por_palabras"]

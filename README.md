@@ -141,7 +141,8 @@ En la portada, un congo anda colgado de una rama. Al tocarlo se baja y abre un c
   - `POST /api/search` y `GET /api/health`.
   - Administración, que exige la cabecera `X-Congo-Clave` y nginx solo la deja pasar desde la red de la UCR:
     - `POST /api/documents/upload`, `GET /api/documents[/{id}]`, `PATCH /api/documents/{id}` (vigencia), `DELETE /api/documents/{id}` y `POST /api/documents/{id}/reprocess`.
-    - `GET /api/admin/stats`, `GET /api/admin/unanswered`, `GET /api/admin/categories` y `POST /api/admin/sync`.
+    - `GET /api/admin/stats`, `GET /api/admin/unanswered`, `GET /api/admin/categories`, `POST /api/admin/sync` y `POST /api/admin/calibrar` (similitudes sin umbral, para `herramientas/calibrar_congo.py`).
+- **Qué lee del sitio:** `dist/congo/paginas.json` (build.py): cada página completa, partida por sus `<h2>` y sin «Próximas actividades». El índice del buscador (`indice.js`, recortado a 4000 caracteres) solo se usa para la agenda y el directorio. En la búsqueda hay una pasada por palabras solo en lo institucional y un cupo de 2 fragmentos del sitio, para que los reglamentos no tapen la página que responde.
   - Documentación OpenAPI en `/api/docs` con `CONGO_DOCS=1`.
 - **Llave y privacidad:** `GEMINI_API_KEY` en `/etc/sede-web/sede.env`. Se saca en aistudio.google.com/apikey, sin activar facturación. En el nivel gratuito, Google puede usar y revisar lo que recibe: por eso se ocultan los datos personales y solo se indexan documentos públicos. Con `CONGO_PROVEEDOR=claude` y `ANTHROPIC_API_KEY` se usa Claude, que es de pago. Todas las variables están en `servidor/congo/congo/config.py`.
 - **Topes:** 30 preguntas por hora por persona y 1000 por día en total, además del límite de nginx.
@@ -196,7 +197,7 @@ Si no se copia, esos enlaces dan error 404 apenas el dominio apunte al servidor 
 6. `sudo certbot --nginx -d sedecaribe.ucr.ac.cr`
 7. Probar: `sudo systemctl start sede-actualizar && journalctl -u sede-actualizar -n 30 --no-pager`
 8. Asistente: escribir `GEMINI_API_KEY`, `CONGO_CLAVE_ADMIN` (`openssl rand -hex 24`) y `CONGO_DRIVE_CARPETA` en `/etc/sede-web/sede.env`. Compartir la carpeta «Documentos del congo» con la cuenta de servicio, como Lector. Luego ejecutar `sudo systemctl restart sede-congo` y `bash herramientas/probar_congo.sh --en-vivo`.
-9. Calibrar `CONGO_UMBRAL` con preguntas reales. El valor por omisión (0,45) es un punto de partida: no se ha medido con los documentos de la Sede.
+9. Calibrar `CONGO_UMBRAL` con preguntas reales. El valor por omisión (0,45) es un punto de partida: no se ha medido con los documentos de la Sede. En la VM, con el servicio en marcha: `sudo python3 herramientas/calibrar_congo.py` (preguntas en `herramientas/fuentes/congo-preguntas.txt`, una por línea con el documento que debería responderla); sugiere el umbral.
 
 **Publicar ya y aplicar cambios de configuración:** `sudo bash /opt/sede-web/servidor/desplegar.sh` (con `--congo` si cambió `sede.env`). Hace lo mismo que el temporizador y además copia a su lugar la configuración de nginx y de los servicios que haya cambiado en el repositorio, probando antes con `nginx -t`. No toca `nginx-sede.conf` si el sitio ya tiene HTTPS: lo avisa para revisarlo a mano.
 

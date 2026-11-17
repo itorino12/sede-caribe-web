@@ -1,5 +1,6 @@
 """Administración: estadísticas, preguntas sin respuesta, categorías y sincronización. Exigen X-Congo-Clave."""
 from fastapi import APIRouter, Depends, Request
+from pydantic import BaseModel, Field
 from starlette.concurrency import run_in_threadpool
 
 from .documentos import exigir_clave
@@ -39,3 +40,14 @@ def visitas(request: Request, dias: int = 30):
     if v is None:
         return {"success": False, "error": "el conteo de visitas está apagado (CONGO_VISITAS=0)"}
     return {"success": True, **v.informe(dias)}
+
+
+class Calibracion(BaseModel):
+    preguntas: list[str] = Field(min_length=1, max_length=60)
+
+
+@rutas.post("/calibrar", summary="Similitudes sin umbral de varias preguntas, para fijar CONGO_UMBRAL")
+async def calibrar(request: Request, c: Calibracion):
+    rec = request.app.state.s.recuperacion
+    salida = await run_in_threadpool(lambda: [dict(pregunta=p[:300], **rec.diagnostico(p[:300])) for p in c.preguntas])
+    return {"success": True, "umbral": rec.umbral, "resultados": salida}
