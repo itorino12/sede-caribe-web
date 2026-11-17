@@ -59,14 +59,13 @@ def main():
         print(f"{'  ok   ' if sim >= umbral else '  BAJO '} {sim:5.2f}  (mejor {mejor:.2f})  {pregunta}")
     print()
     if propias and ajenas:
-        piso = sorted(propias)[max(0, len(propias) // 10 - 1)] if len(propias) >= 10 else min(propias)
         techo = max(ajenas)
+        sugerido = round(techo + 0.05, 2)  # un poco por encima de la mejor pregunta ajena
+        bajo = sum(1 for x in propias if x < sugerido)
         print(f"Documento esperado: mínimo {min(propias):.2f}, mediana {statistics.median(propias):.2f}. Ajenas: máximo {techo:.2f}.")
-        if piso > techo:
-            print(f"Umbral sugerido: {round((piso + techo) / 2, 2)} (CONGO_UMBRAL en /etc/sede-web/sede.env y reiniciar sede-congo).")
-        else:
-            print("No hay un umbral que separe bien: las ajenas puntúan tanto como las propias. "
-                  "Conviene dejarlo cerca del mínimo de las propias y que el modelo diga «no sé» cuando no aplica.")
+        print(f"Umbral sugerido: {sugerido} (CONGO_UMBRAL en /etc/sede-web/sede.env y reiniciar sede-congo). "
+              f"Con ese valor {bajo} de {len(propias)} preguntas propias quedan por debajo: ahí el problema es el contenido "
+              "o cómo se encuentra, no el umbral.")
     if faltan:
         print(f"{len(faltan)} pregunta(s) sin su documento entre los mejores: el problema ahí es el contenido o los nombres, no el umbral.")
 

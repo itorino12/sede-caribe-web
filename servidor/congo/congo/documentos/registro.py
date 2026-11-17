@@ -44,6 +44,14 @@ VACIAS = set(("el la los las un una unos unas de del al a en y o u que como cual
               "dias tardes noches ucr sede caribe esta este estos estas eso esa ese hacer tiene debo").split())
 
 
+def _raiz(t):
+    """Término de búsqueda por prefijo, sin la terminación: «solicito» → solici* (solicitud, solicitar),
+    «beca» → beca* (becas, becado), «psicologica» → psicologi* (psicología). Lo muy corto va exacto."""
+    if len(t) < 4 or t.isdigit():
+        return f'"{t}"'
+    return f'"{t[:max(4, len(t) - 2)]}"*'
+
+
 def ahora():
     return datetime.datetime.now(datetime.timezone.utc).isoformat(timespec="seconds")
 
@@ -67,6 +75,19 @@ class Registro:
         self.db.execute("PRAGMA journal_mode=WAL")
         self.db.executescript(ESQUEMA)
         self.candado = threading.RLock()
+        if self.db.execute("PRAGMA user_version").fetchone()[0] < 1:
+            self._rehacer_fts()
+
+    def _rehacer_fts(self):
+        """Versión 1: la búsqueda por palabras también ve el nombre del documento y la sección («Becas.
+        Solicitud y renovación»), no solo el texto. Se rehace una vez sobre lo que ya estaba guardado."""
+        self.db.execute("BEGIN")
+        self.db.execute("DELETE FROM fragmentos_fts")
+        self.db.execute("""INSERT INTO fragmentos_fts (fid, texto)
+                           SELECT f.fid, coalesce(d.nombre, '') || '. ' || coalesce(f.seccion, '') || char(10) || f.texto
+                           FROM fragmentos f LEFT JOIN documentos d ON d.id = f.doc_id""")
+        self.db.execute("PRAGMA user_version = 1")
+        self.db.execute("COMMIT")
 
     # ---------- documentos ----------
     def obtener(self, doc_id):
@@ -140,12 +161,14 @@ class Registro:
     def guardar_fragmentos(self, doc_id, filas):
         """filas: [(fid, n, texto, pagina, seccion, hoja, filas)]"""
         with self.candado:
+            nombre = (self.db.execute("SELECT nombre FROM documentos WHERE id = ?", (doc_id,)).fetchone() or [""])[0]
             self.db.execute("BEGIN")
             try:
                 for fid, n, texto, pagina, seccion, hoja, rango in filas:
                     self.db.execute("INSERT INTO fragmentos VALUES (?,?,?,?,?,?,?,?)",
                                     (fid, doc_id, n, texto, pagina, seccion, hoja, rango))
-                    self.db.execute("INSERT INTO fragmentos_fts (fid, texto) VALUES (?, ?)", (fid, texto))
+                    self.db.execute("INSERT INTO fragmentos_fts (fid, texto) VALUES (?, ?)",
+                                    (fid, f"{nombre or ''}. {seccion or ''}\n{texto}"))
                 self.db.execute("UPDATE documentos SET fragmentos = ? WHERE id = ?", (len(filas), doc_id))
                 self.db.execute("COMMIT")
             except Exception:
@@ -178,7 +201,7 @@ class Registro:
         ts = terminos(consulta)
         if not ts:
             return []
-        expresion = " OR ".join(f'"{t}"*' if len(t) > 4 else f'"{t}"' for t in dict.fromkeys(ts))
+        expresion = " OR ".join(_raiz(t) for t in dict.fromkeys(ts))
         sql = """SELECT fragmentos_fts.fid FROM fragmentos_fts JOIN fragmentos f ON f.fid = fragmentos_fts.fid
                  JOIN documentos d ON d.id = f.doc_id WHERE fragmentos_fts MATCH ? AND d.vigencia = 'vigente'"""
         args = [expresion]
