@@ -2384,11 +2384,11 @@
   "id": "2026-10-26-graduacion-ordinaria-de-octubre-en-las-sedes-regionales",
   "fecha": "2026-10-26",
   "hora": "",
-  "fecha_fin": "2026-10-30",
+  "fecha_fin": "2026-10-31",
   "titulo": "Graduación ordinaria de octubre en las Sedes Regionales",
   "lugar": "",
   "categoria": "Graduación",
-  "descripcion": "La Sede comunica la fecha y la hora de su acto.",
+  "descripcion": "La Sede comunica la fecha y la hora de su acto. Período ampliado hasta el sábado 31 de octubre (Modificación IV del calendario).",
   "enlace": "",
   "enlace_texto": "",
   "organiza": "Dirección de la Sede"
@@ -2546,6 +2546,20 @@
   "enlace": "https://ematricula.ucr.ac.cr",
   "enlace_texto": "ematricula.ucr.ac.cr",
   "organiza": "Oficina de Registro e Información (ORI)"
+ },
+ {
+  "publicar": "sí",
+  "id": "2026-11-20-dia-institucional-del-voluntariado-universitario",
+  "fecha": "2026-11-20",
+  "hora": "",
+  "fecha_fin": "",
+  "titulo": "Día Institucional del Voluntariado Universitario",
+  "lugar": "",
+  "categoria": "Institucional",
+  "descripcion": "Declarado por el Consejo Universitario (sesión 6968) a partir de 2026; se celebra cada 20 de noviembre.",
+  "enlace": "",
+  "enlace_texto": "",
+  "organiza": "Universidad de Costa Rica"
  },
  {
   "publicar": "sí",
@@ -3039,6 +3053,20 @@
  },
  {
   "publicar": "sí",
+  "id": "2026-12-30-deposito-de-beneficios-complementarios-primera-entrega-iii-ciclo-2026",
+  "fecha": "2026-12-30",
+  "hora": "",
+  "fecha_fin": "",
+  "titulo": "Depósito de beneficios complementarios (primera entrega), III ciclo 2026",
+  "lugar": "",
+  "categoria": "Becas",
+  "descripcion": "Gastos de carrera, alimentación y otros beneficios (depósito único), con matrícula ordinaria e inclusión. Cubre del 4 al 31 de enero de 2027. Hay cinco días hábiles para presentar recursos.",
+  "enlace": "",
+  "enlace_texto": "",
+  "organiza": "Oficina de Becas y Atención Socioeconómica (OBAS)"
+ },
+ {
+  "publicar": "sí",
   "id": "2027-01-04-becas-por-actividades-universitarias-documentos-y-declaracion-de-titulos-iii-ci",
   "fecha": "2027-01-04",
   "hora": "",
@@ -3049,20 +3077,6 @@
   "descripcion": "Convenios con otras instituciones, designaciones de horas (P-9) para la beca de participación, acciones de personal (P-6) para la beca estímulo y declaración jurada de títulos. De 8:00 a. m. a 5:00 p. m.",
   "enlace": "https://becas.ucr.ac.cr",
   "enlace_texto": "becas.ucr.ac.cr",
-  "organiza": "Oficina de Becas y Atención Socioeconómica (OBAS)"
- },
- {
-  "publicar": "sí",
-  "id": "2027-01-04-deposito-de-beneficios-complementarios-primera-entrega-iii-ciclo-2026",
-  "fecha": "2027-01-04",
-  "hora": "",
-  "fecha_fin": "",
-  "titulo": "Depósito de beneficios complementarios (primera entrega), III ciclo 2026",
-  "lugar": "",
-  "categoria": "Becas",
-  "descripcion": "Gastos de carrera, alimentación y otros beneficios. Hay cinco días hábiles para presentar recursos.",
-  "enlace": "",
-  "enlace_texto": "",
   "organiza": "Oficina de Becas y Atención Socioeconómica (OBAS)"
  },
  {
@@ -5717,10 +5731,10 @@
   "fecha": "2027-11-20",
   "hora": "",
   "fecha_fin": "",
-  "titulo": "Voluntariado Universitario",
+  "titulo": "Día Institucional del Voluntariado Universitario",
   "lugar": "",
   "categoria": "Institucional",
-  "descripcion": "",
+  "descripcion": "Declarado por el Consejo Universitario (sesión 6968) a partir de 2026; se celebra cada 20 de noviembre.",
   "enlace": "",
   "enlace_texto": "",
   "organiza": "Universidad de Costa Rica"
