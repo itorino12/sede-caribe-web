@@ -1173,6 +1173,8 @@ if (datos.campus.puente) {
   const { centro: [px, pz], eje } = datos.campus.puente;
   const puente = new THREE.Group();
   puente.userData.talud = 8;   // sobre la calle (en terraplén, ver relieve.py): el terreno empata con él sin lomo
+  // la quebrada pasa abierta bajo el puente: se asienta a la altura de sus extremos y solo se empareja el terreno ahí
+  puente.userData.extremos = [eje[0], eje[eje.length - 1]];
   const concreto = new THREE.MeshStandardMaterial({ color: 0xc9c7c0, roughness: 0.9 });
   const asfalto = new THREE.MeshStandardMaterial({ color: 0x55595f, roughness: 0.95 });
   const amarillo = new THREE.MeshStandardMaterial({ color: 0xf2c200, roughness: 0.5, metalness: 0.2 });
@@ -1192,8 +1194,8 @@ if (datos.campus.puente) {
     const cx = (ax + bx) / 2, cz = (az + bz) / 2, borde = i === 0 || i === eje.length - 2;
     caja(CALZADA, 0.04, L, asfalto, 0, 0.07, ang, cx, cz);                    // calzada a ras de la calle
     if (borde) continue;                                                       // los extremos solo empatan el asfalto
-    if (lados.length > 1) caja(CALZADA + 2 * ACERA + 0.6, 0.9, L, concreto, 0, -0.4, ang, cx, cz);   // tablero
-    else caja(CALZADA + ACERA + 0.6, 0.9, L, concreto, lados[0] * ACERA / 2, -0.4, ang, cx, cz);
+    if (lados.length > 1) caja(CALZADA + 2 * ACERA + 0.6, 0.5, L, concreto, 0, -0.2, ang, cx, cz);   // tablero
+    else caja(CALZADA + ACERA + 0.6, 0.5, L, concreto, lados[0] * ACERA / 2, -0.2, ang, cx, cz);
     for (const x of [CALZADA / 2 + 0.1, -CALZADA / 2 - 0.1]) {                 // defensas amarillas
       caja(0.12, 0.35, L, amarillo, x, 0.65, ang, cx, cz);
       caja(0.15, 0.75, 0.15, amarillo, x, 0.42, ang, ax, az);
@@ -1462,8 +1464,9 @@ if (datos.campus.parqueo) {
     } else if (uso === "banos_mural") {   // baño del pabellón 7: dos aguas, alero celeste, celosías y mural
       bloque(largo, alto, ancho, mate(0xdfeaf4));
       bloque(largo + 0.08, 0.5, ancho + 0.08, celosia, 0, alto - 0.4);
-      const mural = new THREE.Mesh(new THREE.PlaneGeometry(largo * 0.85, alto * 0.6), new THREE.MeshBasicMaterial({ map: texturaMural(11, "#cfe3f5") }));
-      mural.position.set(0, alto * 0.42, ancho / 2 + 0.05); g.add(mural);
+      // (anotaciones) el mural va en la punta oeste, la que da al pasillo techado
+      const mural = new THREE.Mesh(new THREE.PlaneGeometry(ancho * 0.85, alto * 0.6), new THREE.MeshBasicMaterial({ map: texturaMural(11, "#cfe3f5") }));
+      mural.position.set(-largo / 2 - 0.05, alto * 0.42, 0); mural.rotation.y = -Math.PI / 2; g.add(mural);
       techoM = mate(0x8f9c98, { metalness: 0.25 });
       for (const lado of [-1, 1]) { const t = bloque(largo + 1.2, 0.08, ancho / 2 + 1, techoM, 0, alto + 0.45, lado * (ancho / 4 + 0.3)); t.rotation.x = lado * 0.22; }
       bloque(largo + 1.25, 0.3, 0.1, mate(0xa9d4ef), 0, alto + 0.05, ancho / 2 + 0.95);
@@ -2097,6 +2100,12 @@ if (datos.campus.parqueo) {
     if (caja.isEmpty()) return;
     caja.getSize(tam); caja.getCenter(centro);
     if (tam.y < 0.8 && caja.min.y < 0.6) { piezasPlanas(o); return; }   // a ras del suelo: se dobla
+    if (o.userData.extremos) {   // puente: altura de los extremos; el terreno se empareja solo en los estribos
+      const [a, b] = o.userData.extremos, hA = alturaEn(a[0], a[1]), hB = alturaEn(b[0], b[1]);
+      const estribo = ([x, z]) => [[x - 4, z - 4], [x + 4, z - 4], [x + 4, z + 4], [x - 4, z + 4]];
+      enteros.push({ o, h: (hA + hB) / 2, huella: null, estribos: [envolvente(estribo(a)), envolvente(estribo(b))] });
+      return;
+    }
     if (Math.max(tam.x, tam.z) <= UNIDAD) { enteros.push({ o, h: alturaEn(centro.x, centro.z), huella: huella(o) }); return; }
     if (o.children.length) { [...o.children].forEach(clasificar); return; }
     if (o.isMesh) aDoblar.push(o);
@@ -2104,6 +2113,7 @@ if (datos.campus.parqueo) {
   escena.children.slice(inicioCampus).forEach(clasificar);
   // 2. emparejar el terreno bajo los lugares que se suben enteros
   for (const e of enteros) if (e.huella) aplanar(e.huella, e.h, e.o.userData.talud || TALUD);
+  for (const e of enteros) for (const q of e.estribos || []) aplanar(q, e.h, 4);
   // 2b. bajo aceras y pisos de pasillo el terreno toma la rasante del camino: la altura del terreno en sus puntos,
   // suavizada; así no asoma el zacate sobre el camino ni una losa se clava en una zanja
   const nivelarFranja = (pts, ancho) => {

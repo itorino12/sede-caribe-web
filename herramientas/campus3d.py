@@ -140,7 +140,8 @@ EDIFICIOS = [
     # 12 y 13 (fotos): el edificio nuevo de dos pisos. Aulas con losa plana volada, galerías y escaleras
     # exteriores; laboratorios con techo de una sola agua, ventanales verdes y parasoles curvos blancos.
     # (anotaciones) las aulas 18 a 23 siguen hacia el oeste hasta cerca de la biblioteca
-    {"id": 12, "rect": (1703.5, 1072.8, 173, 39, -2), "rect_arboles": (1726, 1072, 128, 39, -2), "pisos": 2,
+    # (anotaciones) corrido unos 7 m al norte, hacia la cerca de la ruta 32
+    {"id": 12, "rect": (1703.5, 1044.8, 173, 39, -2), "rect_arboles": (1726, 1072, 128, 39, -2), "pisos": 2,
      # (anotaciones) balcones con baranda en la punta este, la que da a los laboratorios, en los dos pisos
      "estilo": {"forma_techo": "plano", "galeria": True, "techo": "#dcdfe2", "balcones": {"frente": [1, 0]}}},
     {"id": 13, "rect": (1786, 1130, 113, 51, -10), "pisos": 2,
@@ -271,9 +272,18 @@ LLANOS = [
     # (anotaciones) el zacate y la calle entre el parqueo de la piscina, la calle de la bodega y la orilla
     {"pol": [(88.5, -32.8), (94.8, -39.5), (105.1, -44.9), (122.2, -43.5), (129.5, -36.2), (126.8, -20.4),
              (111.6, -6.9), (101.3, -8.0), (93.2, -9.1), (83.8, -11.9), (83.4, -18.0)], "nivel": 0.0, "suave": 6.0},
-    {"pol": [(120.0, 8.0), (133.7, 11.0), (144.0, 11.5), (157.8, 13.0), (169.0, 18.0), (181.0, 23.5), (183.0, 31.5),
-             (174.0, 42.0), (164.0, 52.0), (149.0, 54.0), (129.0, 53.0), (126.0, 40.0), (123.0, 25.0), (121.0, 14.0)],
-     "nivel": 2.5, "suave": 6.0},
+    # (anotaciones) la bodega de Acción Social, su calle y el zacate de alrededor, llanos al nivel de la calle
+    {"pol": [(110.0, -27.0), (178.0, -27.0), (178.0, -0.6), (164.0, 0.6), (148.0, 0.6), (132.0, -2.4), (124.0, -4.9),
+             (116.0, -7.6), (110.0, -9.0)], "nivel": 0.0, "suave": 4.0},
+    # (anotaciones) entre las dos mallas al este del puente la quebrada corre en su cauce, sin la cañada honda del
+    # plano: las orillas quedan llanas un metro abajo de la calle y el cauce se excava ahí
+    {"pol": [(117.0, -5.0), (124.0, -2.3), (132.0, 0.2), (140.0, 2.4), (148.0, 3.2), (156.0, 3.7), (164.0, 3.2),
+             (172.0, 2.4), (180.0, 1.2), (188.0, 0.0), (196.0, -1.0), (209.0, -1.4), (264.0, -6.0), (264.0, 12.0),
+             (209.0, 17.0), (180.0, 21.3), (169.0, 16.0), (157.8, 11.0), (144.1, 9.4), (133.7, 8.8), (122.0, 7.9),
+             (117.5, 2.0), (116.5, -1.5)], "nivel": -1.0, "suave": 5.0},
+    {"pol": [(120.0, 11.0), (133.7, 14.0), (144.0, 14.5), (157.8, 16.0), (169.0, 21.0), (181.0, 26.5), (183.0, 31.5),
+             (174.0, 42.0), (164.0, 52.0), (149.0, 54.0), (129.0, 53.0), (126.0, 40.0), (123.0, 25.0), (121.0, 16.0)],
+     "nivel": 2.5, "suave": 3.0},
 ]
 # explanada (anotaciones): todo el zacate abierto dentro de la vuelta del sendero, que la delimita al este
 # la explanada es la cima del cerro emparejada: es parte del relieve (plataforma a nivel), sin taludes propios.
@@ -656,6 +666,10 @@ def lugares_nuevos(calles, quebrada, lejos_carretera, y_ruta32):
     a_px = lambda x, z: (int(round(x / ESCALA + ORIGEN[0])), int(round(z / ESCALA + ORIGEN[1])))
     for x, z in nuevas:   # sin árboles encima de las mesas nuevas
         cv2.circle(despejar, a_px(x, z), int(4.5 / ESCALA), 1, -1)
+    # (anotaciones) las tres de la orilla de la piscina quedaban en el cauce: van en el zacate, entre la acera y la quebrada
+    nuevas = nuevas[:4] + [[82.0, -15.2], [87.0, -14.8], [92.0, -14.0]]
+    for x, z in nuevas[4:]:
+        cv2.circle(despejar_post, a_px(x, z), int(1.8 / ESCALA), 1, -1)
     # (anotaciones) mesas redondas de concreto alrededor de Docencia (4): al sur, junto al camino techado, y al este,
     # hacia la quebrada; dos quedan bajo la copa de un árbol, que se conserva
     docencia_ = [[-147.0, 20.7], [-131.3, 15.2], [-118.4, 10.7], [-112.7, -8.0]]
@@ -772,7 +786,7 @@ def lugares_nuevos(calles, quebrada, lejos_carretera, y_ruta32):
     cv2.line(despejar, a_px(110.5, -16.6), a_px(158.6, -12.5), 1, int(12 / ESCALA))
     raya_ = lambda a, b: cv2.line(rayas, tuple(int(round(k * 2)) for k in a_px(*a)), tuple(int(round(k * 2)) for k in a_px(*b)), 255, 2)
     # (anotaciones) entrada asfaltada desde la calle hasta las aulas 18 a 23 (25)
-    entrada25 = [(127.6, -101.4), (133.6, -101.6), (133.6, -85.0), (127.6, -85.0)]
+    entrada25 = [(127.6, -108.4), (133.6, -108.6), (133.6, -85.0), (127.6, -85.0)]
     cv2.fillPoly(calles_extra, [np.array([a_px(x, z) for x, z in entrada25], np.int32)], 255)
     cv2.fillPoly(despejar_post, [np.array([a_px(x, z) for x, z in entrada25], np.int32)], 1)
     # (anotaciones y fotos) parqueo techado entre la biblioteca y esa entrada: losa de asfalto desde la acera de la
@@ -1533,6 +1547,9 @@ def main(pdf, sat=None):
     cima = int(np.argmin([math.dist(p, a_metros(*CIMA_SENDERO)) for p in sendero["puntos"]]))
     rampas = [{"puntos": sendero["puntos"], "ancho": sendero["ancho"] + 2, "desde": i_excavado, "hasta": i_explanada, "cima": cima}]
     tubo = cv2.bitwise_or(cv2.bitwise_or(calles, acceso), cv2.bitwise_or(carretera, extra["calles_extra"]))
+    # (anotaciones) bajo el puente de residencias la quebrada pasa abierta, no entubada: ahí se excava el cauce
+    ej_ = np.array(PUENTE["eje"], np.float32)
+    cv2.polylines(tubo, [np.round(ej_[2:-2]).astype(np.int32)], False, 0, int(12 / ESCALA))
     for el in elementos:   # pasillos y aceras cruzan la quebrada sobre una alcantarilla: ahí tampoco se excava
         if el["tipo"] in ("pasillo", "acera") and len(el.get("puntos", [])) > 1:
             pts = np.array([(x / ESCALA + ORIGEN[0], z / ESCALA + ORIGEN[1]) for x, z in el["puntos"]], np.int32)
