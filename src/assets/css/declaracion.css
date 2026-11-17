@@ -32,8 +32,10 @@
 .dj-marco { overflow-x: auto; padding: 14px 70px 10px 14px; background: #E9EEF2; border-radius: 10px; margin-bottom: 12px; }
 :root[data-tema="oscuro"] .dj-marco { background: #1E1E1E; }
 .dj-marco:focus-visible { outline: 3px solid var(--foco); outline-offset: 2px; }
-.dj-hoja { width: 716.5pt; background: #fff; color: #000; border: 1.5pt solid #000; font-family: Arial, Helvetica, sans-serif;
+.dj-hoja { position: relative; width: 716.5pt; background: #fff; color: #000; font-family: Arial, Helvetica, sans-serif;
   font-size: 8pt; line-height: 1.2; box-shadow: 0 2px 10px rgba(0, 0, 0, .12); }
+/* el marco va encima: las tablas sobresalen a la derecha (columna «Detalle») y tapaban el borde */
+.dj-hoja::after { content: ""; position: absolute; inset: 0; border: 1.5pt solid #000; pointer-events: none; z-index: 2; }
 .dj-hoja input, .dj-hoja textarea, .dj-hoja select { color: #000; background: transparent; font-family: Arial, Helvetica, sans-serif; }
 .dj-hoja input:focus, .dj-hoja textarea:focus { outline: 2px solid #E89B00; outline-offset: -2px; background: #FFF8E6; }
 
