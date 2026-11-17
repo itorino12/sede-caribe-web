@@ -607,6 +607,7 @@ def main():
         ("recorrido.html", "recorrido.html", "Recorrido por la Sede", "Maqueta 3D del campus de la Sede del Caribe: edificios, aulas, laboratorios y servicios.",
          {"lugares": recorrido["lugares"], "campus3d": recorrido["campus"]}),
         ("accesibilidad.html", "accesibilidad.html", "Accesibilidad", "Compromiso de accesibilidad del sitio.", {}),
+        ("declaracion-jurada.html", "declaracion.html", "Declaración Jurada de Horario y Jornada", "Formulario de la Declaración Jurada de Horario y Jornada de Trabajo (ORH) con revisión de jornada, traslapes y Observaciones, y descarga en PDF.", {}),
         ("sin-conexion.html", "sin-conexion.html", "Usar el sitio sin conexión", "Guardar en el teléfono las páginas de más uso para verlas sin señal ni datos.", {}),
         ("404.html", "404.html", "Página no encontrada", "La página que busca no existe o cambió de dirección.", {}),
     ]

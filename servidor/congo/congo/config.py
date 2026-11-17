@@ -6,6 +6,7 @@ Variables (todas opcionales salvo la llave del proveedor elegido):
   CONGO_MODELO_GEMINI    gemini-flash-latest
   ANTHROPIC_API_KEY      llave de Claude, si CONGO_PROVEEDOR=claude
   CONGO_MODELO_CLAUDE    claude-haiku-5-5
+  CONGO_MODELO_DECLARACION  modelo de Gemini para leer declaraciones juradas subidas (por omisión, el del chat)
   CONGO_DATOS            carpeta de datos (/var/lib/sede-congo)
   CONGO_EMBEDDINGS       modelo de fastembed (sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2) o «hash» (pruebas)
   CONGO_UMBRAL           similitud mínima para usar un fragmento (0.45); calibrar con documentos reales
@@ -47,6 +48,7 @@ class Config:
     gemini_modelo: str = "gemini-flash-latest"
     claude_llave: str = ""
     claude_modelo: str = "claude-haiku-5-5"
+    modelo_declaracion: str = ""
     datos: Path = Path("/var/lib/sede-congo")
     embeddings: str = "sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2"
     umbral: float = 0.45
@@ -71,6 +73,7 @@ class Config:
             gemini_modelo=e.get("CONGO_MODELO_GEMINI", "gemini-flash-latest"),
             claude_llave=e.get("ANTHROPIC_API_KEY", "").strip(),
             claude_modelo=e.get("CONGO_MODELO_CLAUDE", "claude-haiku-5-5"),
+            modelo_declaracion=e.get("CONGO_MODELO_DECLARACION", "").strip(),
             datos=Path(e.get("CONGO_DATOS", "/var/lib/sede-congo")),
             embeddings=e.get("CONGO_EMBEDDINGS", cls.embeddings),
             umbral=float(e.get("CONGO_UMBRAL", "0.45")),

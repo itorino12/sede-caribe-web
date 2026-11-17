@@ -16,7 +16,7 @@ from pathlib import Path
 RAIZ = Path(__file__).resolve().parent.parent
 DIST = RAIZ / "dist"
 MUESTRA = ["index.html", "recorrido.html", "carreras/informatica-empresarial.html", "horarios.html",
-           "noticias.html", "agenda.html", "estudiar.html"]
+           "noticias.html", "agenda.html", "estudiar.html", "declaracion-jurada.html"]
 
 
 def cabeceras():
@@ -32,6 +32,17 @@ class Manejador(http.server.SimpleHTTPRequestHandler):
                 self.send_header(nombre, valor)
         super().end_headers()
 
+    def do_GET(self):
+        if self.path == "/api/health":  # como el congo en marcha: la página no registra un 404 en la consola
+            cuerpo = b'{"status":"ok"}'
+            self.send_response(200)
+            self.send_header("Content-Type", "application/json")
+            self.send_header("Content-Length", str(len(cuerpo)))
+            self.end_headers()
+            self.wfile.write(cuerpo)
+            return
+        super().do_GET()
+
     def log_message(self, *a):
         pass
 
@@ -46,13 +57,26 @@ def main():
     with sync_playwright() as p:
         nav = p.chromium.launch(args=["--use-gl=swiftshader", "--enable-unsafe-swiftshader"])
         for pag in paginas:
-            ctx = nav.new_context(viewport={"width": 1280, "height": 900})
+            ctx = nav.new_context(viewport={"width": 1280, "height": 900}, accept_downloads=True)
             hoja = ctx.new_page()
             avisos = []
             hoja.on("console", lambda m: avisos.append(m.text) if m.type == "error" else None)
             hoja.on("pageerror", lambda e: avisos.append(f"JavaScript: {e}"))
             hoja.goto(base + pag, wait_until="load")
             hoja.wait_for_timeout(4000)   # tiempo a congo.js, la maqueta y los carruseles
+            if pag == "declaracion-jurada.html":  # pdf-lib, el adjunto y pdf.js (con su worker) bajo la política
+                with hoja.expect_download() as d:
+                    hoja.click("#dj-pdf")
+                ruta = DIST.parent / ".cache" / "csp-declaracion.pdf"
+                d.value.save_as(ruta)
+                hoja.click('[data-modo="pdf"]')
+                hoja.set_input_files("#dj-archivo", str(ruta))
+                for _ in range(60):  # wait_for_function usa eval, que la política bloquea
+                    if "generó esta página" in hoja.locator("#dj-estado").inner_text():
+                        break
+                    hoja.wait_for_timeout(250)
+                else:
+                    avisos.append("no se pudo leer el PDF generado (pdf.js)")
             avisos = sorted(set(a[:220] for a in avisos))
             print(f"{'OK ' if not avisos else 'FALLA'} {pag}")
             for a in avisos:

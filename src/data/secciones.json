@@ -30,6 +30,11 @@
        "interno": "unidades/auditorio.html"
       },
       {
+       "nombre": "Declaración Jurada",
+       "detalle": "Llene la declaración de horario y jornada, revísela y descárguela en PDF.",
+       "interno": "declaracion-jurada.html"
+      },
+      {
        "nombre": "Aula de Siquirres",
        "detalle": "La oferta académica de la Sede en Siquirres.",
        "interno": "unidades/siquirres.html"

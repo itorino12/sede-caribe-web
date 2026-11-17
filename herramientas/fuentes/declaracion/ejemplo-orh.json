@@ -1,0 +1,21 @@
+{
+  "origen": "pdf",
+  "persona": {"nombre": "Persona de Ejemplo", "identificacion": "0-0000-0000", "telefono": "0000-0000", "unidad": "Sede del Caribe", "correo": "ejemplo@ucr.ac.cr"},
+  "filas": [
+    {"seccion": "ucr", "lugar": "Sede del Caribe (Limón)", "cargo": "Interino Licenciado", "jornada": "1/2", "desde": "20-7-2026", "hasta": "31-12-2026",
+     "dias": {"K": {"de": "08:00", "a": "15:00"}, "M": {"de": "08:00", "a": "17:00"}, "J": {"de": "08:00", "a": "15:00"}}},
+    {"seccion": "ucr", "lugar": "Sede del Caribe (Limón)", "cargo": "Coordinación de Consejo de Carrera", "jornada": "1/8", "desde": "20-7-2026", "hasta": "31-12-2026",
+     "dias": {"V": {"de": "08:00", "a": "14:00"}}},
+    {"seccion": "ucr", "lugar": "Sede del Caribe (Limón)", "cargo": "Coordinación de Carrera", "jornada": "3/8", "desde": "20-7-2026", "hasta": "31-12-2026",
+     "dias": {"L": {"de": "08:00", "a": "17:00"}, "M": {"de": "17:00", "a": "21:00"}, "V": {"de": "14:00", "a": "17:00"}}},
+    {"seccion": "otras", "lugar": "FUNDEVI", "cargo": "Coordinador", "jornada": "1/4", "desde": "20-7-2026", "hasta": "31-12-2026",
+     "dias": {"K": {"de": "15:00", "a": "20:00"}, "J": {"de": "15:00", "a": "20:00"}}}
+  ],
+  "observaciones": [
+    "IF0004 Desarrollo de Software II: Contacto: K,J 8 a 12 - Atención: K,J 13 a 15 – Preparación: M 08 a 12 y 13 a 17",
+    "Coordinación de Carrera Informática Empresarial: L 08 a 12 y 13 a 17, M 17 a 21 y V 14 a 17 (Con base a acuerdo CTRSA-126-2025 trasladado al Régimen Salarial Académico)",
+    "Coordinación de Consejo de Carrera Informática Empresarial: V 08 a 12, V 13 a 14",
+    "ED204 Educación Continua Sede del Caribe: K 15 a 20, J 15 a 20"
+  ],
+  "firmas": {"declarante": true, "superior": false, "jefatura": false}
+}

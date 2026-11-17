@@ -24,7 +24,7 @@ from playwright.sync_api import sync_playwright
 RAIZ = Path(__file__).resolve().parent.parent
 SALIDA = RAIZ / ".cache" / "pruebas"
 GL = ["--use-gl=angle", "--use-angle=swiftshader", "--enable-unsafe-swiftshader"]
-PAGINAS_AXE = ["index.html", "horarios.html", "horarios-iiic-2026.html", "estudiar.html", "carreras.html", "admision.html", "la-sede.html", "noticias.html", "agenda.html", "directorio.html",
+PAGINAS_AXE = ["index.html", "horarios.html", "declaracion-jurada.html", "horarios-iiic-2026.html", "estudiar.html", "carreras.html", "admision.html", "la-sede.html", "noticias.html", "agenda.html", "directorio.html",
                "enlaces.html", "contacto.html", "accesibilidad.html", "recorrido.html",
                "unidades/accion-social.html", "accion-social/tcu.html", "accion-social/extension-docente.html", "accion-social/proyectos/tc-479.html",
                "unidades/educacion-continua.html", "unidades/laboratorios.html", "carreras/informatica-empresarial.html", "carreras/contaduria-publica.html", "carreras/administracion-aduanera.html",
@@ -574,6 +574,102 @@ def paletas(nav, base):
             c.close()
 
 
+def declaracion(nav, base):
+    """Declaración Jurada (declaracion-jurada.html): detalle de un curso, Observaciones automáticas, errores (A4, B1),
+    PDF con campos de firma y datos adjuntos, lectura del PDF propio, tapado de datos personales, celular y axe."""
+    import io
+    import pypdf
+    print("Declaración Jurada")
+    c, p, e = pagina(nav, base + "declaracion-jurada.html", accept_downloads=True)
+    revisar(esperar(p, "document.querySelectorAll('.dj-tabla tbody tr').length === 8"), "la hoja tiene 4 filas UCR y 4 de otras instituciones")
+    filas = p.locator(".dj-tabla tbody tr")
+
+    def fila(i, lugar, cargo, jornada, dias):
+        f = filas.nth(i)
+        for campo, v in (("lugar", lugar), ("cargo", cargo), ("jornada", jornada), ("desde", "20/7/2026"), ("hasta", "31/12/2026")):
+            f.locator(f'[data-c="{campo}"]').fill(v)
+        for d, (de, a) in dias.items():
+            f.locator(f'[data-d="{d}"][data-x="de"]').fill(de)
+            f.locator(f'[data-d="{d}"][data-x="a"]').fill(a)
+            f.locator(f'[data-d="{d}"][data-x="a"]').dispatch_event("change")
+    p.fill('[data-p="nombre"]', "Persona de Prueba")
+    fila(0, "Sede del Caribe (Limón)", "Interino 2", "1/2", {"K": ("8", "15"), "M": ("8", "17"), "J": ("8", "15")})
+    fila(1, "Sede del Caribe (Limón)", "Coordinación de Consejo de Carrera", "1/8", {"V": ("8", "14")})
+    fila(2, "Sede del Caribe (Limón)", "Coordinación de Carrera", "3/8", {"L": ("8", "17"), "M": ("17", "21"), "V": ("14", "17")})
+    fila(4, "FUNDEVI", "Coordinador", "1/4", {"K": ("15", "20"), "J": ("15", "20")})
+    revisar(filas.nth(0).locator('[data-d="K"][data-x="de"]').input_value() == "08:00", "«8» se normaliza a 08:00")
+    # detalle del curso: contacto, consulta y preparación
+    filas.nth(0).locator("[data-detalle-de]").click()
+    p.select_option('#dj-detalle [data-g="tipo"]', "curso")
+    p.fill('#dj-detalle [data-g="etiqueta"]', "IF0004 Desarrollo de Software II")
+    for d, acts in (("K", ["contacto", "consulta"]), ("J", ["contacto", "consulta"]), ("M", ["preparacion", "preparacion"])):
+        for i, act in enumerate(acts):
+            p.select_option(f'#dj-detalle [data-t="{d}|{i}|act"]', act)
+    p.wait_for_timeout(400)
+    obs = p.input_value("#dj-obs")
+    revisar("IF0004 Desarrollo de Software II: Contacto: K, J 08 a 12 – Consulta: K, J 13 a 15 – Preparación: M 08 a 12 y 13 a 17" in obs, "Observación del curso escrita sola")
+    revisar("Coordinación de Carrera: L 08 a 12 y 13 a 17, M 17 a 21, V 14 a 17" in obs, "almuerzo descontado en las Observaciones")
+    revisar(esperar(p, "document.querySelector('.dj-veredicto--bien')", 3000), "veredicto «Se puede firmar» " + p.inner_text(".dj-veredicto")[:60])
+    p.screenshot(path=str(SALIDA / "declaracion.png"), full_page=True)
+    # un traslape con la fundación
+    f4 = filas.nth(4).locator('[data-d="K"][data-x="de"]')
+    f4.fill("14:00"); f4.dispatch_event("change")
+    revisar(esperar(p, "document.querySelector('.dj-veredicto--mal') && /A4/.test(document.querySelector('.dj-errores').textContent) && /B1/.test(document.querySelector('.dj-errores').textContent)", 3000), "traslape (A4) y hora de más (B1) detectados")
+    f4.fill("15:00"); f4.dispatch_event("change")
+    esperar(p, "document.querySelector('.dj-veredicto--bien')", 3000)
+    # PDF
+    with p.expect_download() as d:
+        p.click("#dj-pdf")
+    ruta = SALIDA / "declaracion.pdf"
+    d.value.save_as(ruta)
+    pdf = pypdf.PdfReader(ruta)
+    campos = pdf.get_fields() or {}
+    revisar(len(pdf.pages) == 1 and float(pdf.pages[0].mediabox.width) == 792, "PDF de una página, carta horizontal")
+    revisar(sorted(k for k, v in campos.items() if v.get("/FT") == "/Sig") == ["FirmaDeclarante", "FirmaSuperior", "VistoBuenoJefatura"], f"PDF con los tres campos de firma {list(campos)}")
+    revisar("declaracion.json" in (pdf.attachments or {}), "PDF con los datos adjuntos")
+    texto = pdf.pages[0].extract_text()
+    revisar("Persona de Prueba" in texto and "IF0004 Desarrollo de Software II" in texto and "20/7/2026" in texto, "el PDF trae nombre, Observaciones y fechas")
+    revisar(not e, f"sin errores de JavaScript {e[:1]}")
+    # el PDF propio se vuelve a leer sin IA
+    p.click('[data-modo="pdf"]')
+    p.set_input_files("#dj-archivo", str(ruta))
+    revisar(esperar(p, "/generó esta página/.test(document.querySelector('#dj-estado').textContent)", 8000), "el PDF generado se lee sin IA")
+    revisar(esperar(p, "document.querySelector('.dj-veredicto--bien')", 3000), "y su revisión da el mismo veredicto")
+    # un PDF ajeno (sin datos adjuntos): vista con los datos tapados y sin servidor de IA
+    ajeno = pypdf.PdfWriter()
+    ajeno.add_page(pdf.pages[0])
+    ajeno.add_metadata({"/Title": "ajeno"})
+    b = io.BytesIO(); ajeno.write(b)
+    (SALIDA / "declaracion-ajena.pdf").write_bytes(b.getvalue())
+    p.set_input_files("#dj-archivo", str(SALIDA / "declaracion-ajena.pdf"))
+    revisar(esperar(p, "!document.querySelector('#dj-envio').hidden && document.querySelector('#dj-vista').naturalWidth > 1000", 10000), "PDF ajeno: muestra la imagen que se enviaría")
+    tapado = p.evaluate("""(() => { const i = document.querySelector('#dj-vista'), c = document.createElement('canvas');
+        c.width = i.naturalWidth; c.height = i.naturalHeight; const x = c.getContext('2d'); x.drawImage(i, 0, 0);
+        const zona = (y0, y1) => { const d = x.getImageData(0, Math.round(y0 * c.height), c.width, Math.round((y1 - y0) * c.height)).data; let n = 0; for (let k = 0; k < d.length; k += 4) if (d[k] < 200) n++; return n; };
+        return { persona: zona(0.25, 0.30), firmas: zona(0.80, 0.99), tabla: zona(0.45, 0.50) }; })()""")
+    revisar(tapado["persona"] < 50 and tapado["firmas"] < 50 and tapado["tabla"] > 500, f"datos personales y firmas tapados, tabla visible {tapado}")
+    revisar(esperar(p, "/no está disponible/.test(document.querySelector('#dj-estado').textContent)", 5000) and p.is_disabled("#dj-leer"), "sin servidor de la Sede no se envía nada")
+    p.locator("#dj-envio").screenshot(path=str(SALIDA / "declaracion-tapada.png"))
+    p.click('[data-modo="formulario"]')
+    revisar(esperar(p, "document.querySelector('[data-p=nombre]').value === 'Persona de Prueba'", 3000), "al volver, el borrador propio sigue ahí")
+    axe = leer_axe()
+    for esquema in ("light", "dark"):
+        p.emulate_media(color_scheme=esquema)
+        p.evaluate("document.documentElement.dataset.tema = matchMedia('(prefers-color-scheme: dark)').matches ? 'oscuro' : 'claro'")
+        filas.nth(0).locator("[data-detalle-de]").click() if p.is_hidden("#dj-detalle") else None
+        p.evaluate("scrollTo(0, 0)")  # la cabecera fija tapa filas si la página quedó desplazada
+        p.add_script_tag(content=axe)
+        v = p.evaluate("axe.run(document.querySelector('main'), {runOnly:['wcag2a','wcag2aa','wcag21aa','wcag22aa']}).then(r=>r.violations.map(v=>v.id+' ('+v.nodes.length+')'))")
+        revisar(not v, f"axe en la declaración, {esquema}: {', '.join(v)}")
+    c.close()
+    c, p, e = pagina(nav, base + "declaracion-jurada.html", {"width": 390, "height": 844}, is_mobile=True, has_touch=True)
+    esperar(p, "document.querySelectorAll('.dj-tabla tbody tr').length")
+    revisar(p.evaluate("document.documentElement.scrollWidth <= innerWidth + 1"), "celular: la página no se desborda (la hoja se desplaza dentro de su marco)")
+    p.screenshot(path=str(SALIDA / "declaracion-celular.png"))
+    revisar(not e, f"celular sin errores {e[:1]}")
+    c.close()
+
+
 def completa(nav, base):
     print("Recorrido: ficha, pantalla completa y zonas")
     c, p, e = pagina(nav, base + "recorrido.html#lugar-1")
@@ -625,6 +721,7 @@ def completa(nav, base):
 
     asistente(nav, base)
     armador(nav, base)
+    declaracion(nav, base)
     busqueda(nav, base)
     propuestas(nav, base)
     visita(nav, base)
@@ -681,7 +778,7 @@ def main():
     a = argparse.ArgumentParser()
     a.add_argument("--completa", action="store_true")
     a.add_argument("--vista")
-    a.add_argument("--solo", choices=["paletas", "sin_conexion", "visita", "busqueda", "armador", "propuestas", "asistente"], help="una sola prueba, sin la rápida")
+    a.add_argument("--solo", choices=["declaracion", "paletas", "sin_conexion", "visita", "busqueda", "armador", "propuestas", "asistente"], help="una sola prueba, sin la rápida")
     a.add_argument("--camara", action="append", default=[], help="objetivo y cámara: TX,TY,TZ,CX,CY,CZ (se puede repetir)")
     args = a.parse_args()
     if not (RAIZ / "dist" / "index.html").exists():

@@ -7,8 +7,8 @@ class Falso(Proveedor):
     nombre = "falso"
     modelo = "falso"
 
-    def __init__(self, respuesta=None, error=None):
-        self.respuesta, self.error = respuesta, error
+    def __init__(self, respuesta=None, error=None, json_respuesta=None):
+        self.respuesta, self.error, self.json_respuesta = respuesta, error, json_respuesta
         self.llamadas = []
 
     def generar(self, sistema, mensajes):
@@ -18,6 +18,12 @@ class Falso(Proveedor):
         texto = self.respuesta or "Según la normativa, el trámite se hace ante Registro [F1]."
         for i in range(0, len(texto), 7):
             yield texto[i:i + 7]
+
+    def generar_json(self, sistema, partes, esquema, modelo="", max_tokens=4096):
+        self.llamadas.append((sistema, partes))
+        if self.error:
+            raise self.error
+        return self.json_respuesta or {}
 
 
 def crear(config):

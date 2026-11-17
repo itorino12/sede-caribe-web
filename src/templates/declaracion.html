@@ -1,0 +1,107 @@
+{% extends "base.html" %}
+{% from "_macros.html" import encabezado with context %}
+{% block cabeza %}<link rel="stylesheet" href="{{ raiz }}assets/css/declaracion.css">{% endblock %}
+{% block contenido %}
+{{ encabezado("Declaración Jurada de Horario y Jornada", [("Docencia", "unidades/docencia.html")], raiz, "Llene la declaración en el mismo formulario de la Oficina de Recursos Humanos, revísela contra las reglas de jornada y descárguela en PDF para entregarla en Docencia. También puede subir una declaración ya hecha para revisarla.") }}
+<div class="ancho pagina dj" id="dj" data-raiz="{{ raiz }}">
+
+  <div class="dj-modos" role="group" aria-label="Qué quiere hacer">
+    <button type="button" class="dj-modo" data-modo="formulario" aria-pressed="true">
+      <strong>Llenar el formulario</strong><span>Lo llena aquí, se revisa mientras escribe y genera el PDF.</span>
+    </button>
+    <button type="button" class="dj-modo" data-modo="pdf" aria-pressed="false">
+      <strong>Revisar un PDF</strong><span>Sube la declaración que ya tiene y se revisa con las mismas reglas.</span>
+    </button>
+  </div>
+
+  <section class="dj-subir" id="dj-subir" hidden aria-labelledby="dj-subir-t">
+    <h2 id="dj-subir-t">Revisar una declaración ya hecha</h2>
+    <p>Suba el PDF del formulario de la ORH (o una foto clara de la página). Si el PDF lo generó esta página, se lee directamente. Si no, la página lo convierte en imagen, <strong>tapa en blanco sus datos personales y las firmas</strong>, le muestra lo que se enviaría y, solo si usted acepta, lo lee con inteligencia artificial (Gemini). Nada se guarda en el servidor.</p>
+    <label class="dj-archivo">
+      <span>Archivo de la declaración (PDF, JPG o PNG)</span>
+      <input type="file" id="dj-archivo" accept="application/pdf,image/jpeg,image/png">
+    </label>
+    <div class="dj-envio" id="dj-envio" hidden>
+      <p><strong>Esto es lo que se enviaría a la IA.</strong> Revise que no se vean su nombre, identificación, teléfono, correo ni firmas.</p>
+      <img id="dj-vista" alt="Vista de la página que se enviaría, con los datos personales tapados">
+      <label class="dj-acepto"><input type="checkbox" id="dj-acepto"> Acepto enviar esta imagen a Gemini (Google) para leer la tabla y las Observaciones.</label>
+      <button type="button" class="boton" id="dj-leer" disabled>Leer con IA</button>
+    </div>
+    <p class="dj-estado" id="dj-estado" role="status" aria-live="polite"></p>
+  </section>
+
+  <p class="dj-aviso" id="dj-aviso" hidden></p>
+  <noscript><p class="dj-aviso">Esta herramienta necesita JavaScript. Sin él, puede descargar el formulario de la ORH y revisarlo con las reglas de abajo.</p></noscript>
+
+  <div class="dj-marco" id="dj-marco" tabindex="0" aria-label="Formulario de la declaración (se desplaza a los lados en pantallas pequeñas)"></div>
+
+  <div class="dj-acciones-hoja">
+    <label class="dj-opcion">Jornada nombrada en la UCR
+      <select id="dj-nombrada"><option value="">No la indico</option>{% for j in ["1/8", "1/4", "3/8", "1/2", "5/8", "3/4", "7/8", "1 TC"] %}<option>{{ j }}</option>{% endfor %}</select>
+    </label>
+    <label class="dj-opcion dj-opcion--check"><input type="checkbox" id="dj-cuarto"> Tengo aprobado el 1/4 adicional para cursos (Vicerrectoría de Docencia)</label>
+  </div>
+
+  <section class="dj-detalle" id="dj-detalle" hidden aria-labelledby="dj-detalle-t"></section>
+
+  <div class="dj-botones">
+    <button type="button" class="boton" id="dj-pdf">Generar PDF</button>
+    <button type="button" class="boton boton--secundario" id="dj-ia" hidden>Pedir comentarios a la IA</button>
+    <button type="button" class="boton boton--secundario" id="dj-borrar">Empezar de nuevo</button>
+  </div>
+
+  <section class="dj-resultado" id="dj-resultado" aria-labelledby="dj-resultado-t">
+    <h2 id="dj-resultado-t">Revisión</h2>
+    <div id="dj-revision" aria-live="polite"></div>
+  </section>
+
+  <section class="dj-reglas prosa" aria-labelledby="dj-reglas-t">
+    <h2 id="dj-reglas-t">Qué se revisa</h2>
+    <p>La revisión aplica las reglas que usa una jefatura, la ORH o una auditoría. Cada hallazgo cita su código.</p>
+    <details>
+      <summary>Normativa: límites de jornada (A)</summary>
+      <ul>
+        <li><strong>A1.</strong> La jornada máxima en la UCR es 1 tiempo completo (40 h semanales), sumando propiedad, interinazgo, docencia y administración.</li>
+        <li><strong>A2.</strong> Excepción: 1/4 adicional (hasta 1¼ TC) solo para impartir cursos, con aprobación de la Vicerrectoría de Docencia y demostración de inopia; no aplica a investigación ni acción social.</li>
+        <li><strong>A3.</strong> En instituciones estatales, nunca más de 66 horas reloj semanales (tiempo y medio).</li>
+        <li><strong>A4.</strong> Prohibida la superposición horaria con cualquier otro puesto, estatal o privado.</li>
+        <li><strong>A5.</strong> Se declaran todos los trabajos. Lo privado y las fundaciones no suman al tope de 66 h, pero se declaran y no pueden traslaparse.</li>
+        <li><strong>A6.</strong> La declaración se presenta una vez al año o dentro de los 15 días siguientes a cualquier cambio.</li>
+        <li><strong>A7.</strong> Omitir la declaración, falsearla o trabajar más de tiempo y medio en instituciones estatales es falta grave.</li>
+        <li><strong>A8.</strong> Vinculación remunerada (por ejemplo, FUNDEVI): sin superposición horaria y con la actividad en el plan de trabajo y en la declaración aprobados por la dirección de la unidad.</li>
+        <li><strong>A9.</strong> Más de un cargo público remunerado a la vez está prohibido, salvo para docentes de educación superior; dos puestos de gestión a la vez es zona gris (consulte a la Oficina Jurídica).</li>
+        <li><strong>A10 y A11.</strong> Referencias, no normas generales: 8 h diarias por patrono (Código de Trabajo) y la alerta interna de 12 h diarias y 60 h semanales.</li>
+      </ul>
+      <p>Fuentes: Reglamento del Artículo 41 del Convenio de Coordinación de la Educación Superior Universitaria Estatal; Reglamento para la asignación de un nombramiento adicional de hasta un cuarto de tiempo; Reglamento de vinculación remunerada con el sector externo; Ley 8422, art. 17; Circular SIA-UCR-0003-2023.</p>
+    </details>
+    <details>
+      <summary>Consistencia del formulario (B)</summary>
+      <ul>
+        <li><strong>B1.</strong> Horas de cada fila = fracción × 40: 1/8 = 5 h, 1/4 = 10 h, 3/8 = 15 h, 1/2 = 20 h, 1 TC = 40 h.</li>
+        <li><strong>B2.</strong> La suma de las filas de la UCR es la jornada nombrada.</li>
+        <li><strong>B3.</strong> El almuerzo (12:00–13:00) no cuenta. Un tramo que lo atraviesa se divide en Observaciones (por ejemplo «L 08 a 12 y 13 a 17»).</li>
+        <li><strong>B4.</strong> Las Observaciones dicen exactamente los mismos días y horas que la tabla.</li>
+        <li><strong>B5.</strong> No hay traslapes entre filas.</li>
+        <li><strong>B6.</strong> La vigencia cabe dentro del nombramiento que la respalda.</li>
+        <li><strong>B7.</strong> Todas las fechas en el mismo formato, d/m/aaaa.</li>
+        <li><strong>B8 y B9.</strong> La categoría coincide con la acción de personal y el cargo es el que realmente tendrá en el periodo.</li>
+        <li><strong>B10.</strong> Cada fila tiene respaldo: oficio, acuerdo, carga de investigación registrada o contrato con la fundación.</li>
+        <li><strong>B11.</strong> Texto legible y completo, y las tres firmas: persona declarante, superior jerárquico y visto bueno de la jefatura inmediata.</li>
+        <li><strong>B12.</strong> El plan de trabajo coincide con la declaración.</li>
+      </ul>
+    </details>
+    <details>
+      <summary>Carga docente (C)</summary>
+      <p>Criterio de la coordinación de carrera, aún no verificado en una norma escrita.</p>
+      <ul>
+        <li><strong>C1.</strong> Horas de contacto por jornada del curso: 1/2 = 7 u 8 h; 3/8 = 5 o 6 h; 1/4 = 3 o 4 h; 1/8 = 1 o 2 h.</li>
+        <li><strong>C2.</strong> Media hora de consulta por cada hora de contacto.</li>
+        <li><strong>C3.</strong> El resto de la jornada es preparación.</li>
+        <li><strong>C4.</strong> En verano (III ciclo) se revisa lo declarado con las mismas reglas, sin doblar nada adicional.</li>
+      </ul>
+    </details>
+    <p class="dj-limite">La revisión no sustituye el criterio de la Oficina de Recursos Humanos ni de la Oficina Jurídica. Ante dudas de incompatibilidad o de jornada total con fundaciones, consúltelas.</p>
+  </section>
+</div>
+<script type="module" src="{{ raiz }}assets/js/declaracion.js"></script>
+{% endblock %}

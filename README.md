@@ -139,6 +139,7 @@ En la portada, un congo anda colgado de una rama. Al tocarlo se baja y abre un c
 - **Otros endpoints:**
   - `POST /api/chat`: JSON con `answer`, `sources`, `confidence` y `requires_human_review`.
   - `POST /api/search` y `GET /api/health`.
+  - `POST /api/declaracion` (página de la Declaración Jurada): `{"modo":"extraer","imagen":"<JPEG base64>","texto":"…"}` lee la tabla y las Observaciones de un formulario de la ORH (el navegador ya tapó datos personales y firmas) y `{"modo":"revisar","declaracion":{…},"hallazgos":[…]}` devuelve comentarios que las reglas no calculan. Usa el cupo del chat; nada se guarda. nginx admite hasta 8 MB en esa ruta.
   - Administración, que exige la cabecera `X-Congo-Clave` y nginx solo la deja pasar desde la red de la UCR:
     - `POST /api/documents/upload`, `GET /api/documents[/{id}]`, `PATCH /api/documents/{id}` (vigencia), `DELETE /api/documents/{id}` y `POST /api/documents/{id}/reprocess`.
     - `GET /api/admin/stats`, `GET /api/admin/unanswered`, `GET /api/admin/categories`, `POST /api/admin/sync` y `POST /api/admin/calibrar` (similitudes sin umbral, para `herramientas/calibrar_congo.py`).

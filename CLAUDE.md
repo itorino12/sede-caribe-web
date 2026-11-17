@@ -5,7 +5,7 @@ Sitio estático (Python + Jinja2). El contenido sale de Google Drive; la vista p
 ## Comandos
 - Compilar: `python3 build.py --vista-previa` (sale en `dist/`).
 - Rehacer la maqueta 3D: `herramientas/rehacer_maqueta.sh`. Regenera los datos desde `herramientas/fuentes/` y rehace las imágenes de respaldo; tarda unos 2,5 min. Con `--sin-fotos` solo regenera los datos y compila, para probar.
-- Probar: `python3 herramientas/pruebas.py`, que es la prueba rápida. Para cambios mayores, `--completa`: celular, ficha, pantalla completa, zonas, respaldos sin 3D y axe. Para ver una zona de la maqueta desde arriba, `--vista=X,Z,ALTO`; en vista oblicua, `--camara=TX,TY,TZ,CX,CY,CZ` (objetivo y cámara; se puede repetir). Las capturas quedan en `.cache/pruebas/`. `--solo=paletas|sin_conexion|visita|busqueda|armador|propuestas|asistente` corre una sola prueba.
+- Probar: `python3 herramientas/pruebas.py`, que es la prueba rápida. Para cambios mayores, `--completa`: celular, ficha, pantalla completa, zonas, respaldos sin 3D y axe. Para ver una zona de la maqueta desde arriba, `--vista=X,Z,ALTO`; en vista oblicua, `--camara=TX,TY,TZ,CX,CY,CZ` (objetivo y cámara; se puede repetir). Las capturas quedan en `.cache/pruebas/`. `--solo=declaracion|paletas|sin_conexion|visita|busqueda|armador|propuestas|asistente` corre una sola prueba.
 
 - Arte de una noticia (1200×800, estilo de la Sede): `python3 herramientas/arte_noticia.py herramientas/fuentes/noticias/<id>.json` (escribe en `src/assets/fotos/noticias/`; lo importante dentro de la franja 16:10 que recorta el carrusel). Revisar la miniatura en `noticias.html`.
 - Rótulos QR de los lugares: `python3 herramientas/qr_lugares.py [--base URL] --verificar` (PDF en `.cache/qr-lugares.pdf`; usa `base_url` de la hoja; `--verificar` decodifica cada QR).
@@ -36,6 +36,12 @@ Sitio estático (Python + Jinja2). El contenido sale de Google Drive; la vista p
 - Entrada principal: `entrada()` en `recorrido.js`, hecha según la foto de la portada (pórtico, caseta con celosía, rótulo, astas, reflectores, flores, palmas). La plaza de adoquín de la isla sale de `ISLA_ENTRADA` en `campus3d.py` (`plaza_entrada` en el JSON). Vista de la foto: `--camara=-34,3.4,-96,-36,2.9,-121`.
 - Coordenadas en metros: x crece hacia el este y z hacia el sur. Zonas: 1 cian, 2 amarillo, 3 magenta, 4 negro.
 - Si se cambia la maqueta y no se rehacen las imágenes de respaldo, la portada y la versión sin 3D quedan desactualizadas.
+
+## Declaración Jurada (declaracion-jurada.html, en Docencia)
+- Réplica del formulario de la ORH. Reglas (A, B, C del revisor) en `src/assets/js/declaracion-reglas.js`, sin DOM; prueba: `node herramientas/probar_declaracion.mjs` (ejemplo con datos ficticios en `herramientas/fuentes/declaracion/`).
+- Página: `declaracion.js` (hoja, detalle por fila, Observaciones automáticas, borrador en localStorage); `declaracion-pdf.js` (pdf-lib, misma geometría en puntos que el original, tres campos de firma vacíos y `declaracion.json` adjunto); `declaracion-subir.js` (pdf.js: lee el adjunto sin IA; si no, tapa datos personales y firmas y, con permiso, manda la imagen a `POST api/declaracion`).
+- Los PDF de la ORH traen la tabla dibujada como trazos, no como texto: sin IA no se pueden leer. Servidor: `servidor/congo/congo/rutas/declaracion.py` (Gemini con salida JSON; `CONGO_MODELO_DECLARACION` opcional); las reglas que lee la IA están en `servicios/declaracion_reglas.md`.
+- Prueba en el navegador: `pruebas.py --solo=declaracion`.
 
 ## Asistente (el congo)
 - `src/assets/js/congo.js`: el congo y su rama (portada y panel); `src/assets/js/asistente.js`: el chat. Su contrato (`POST api/asistente`, texto por partes) no se cambia.

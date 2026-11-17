@@ -56,6 +56,39 @@ class Gemini(Proveedor):
         except httpx.HTTPError as e:
             raise ProveedorNoDisponible(f"sin conexión con Gemini: {type(e).__name__}") from e
 
+    def generar_json(self, sistema, partes, esquema, modelo="", max_tokens=4096):
+        """Respuesta única en JSON con `responseSchema` (salida estructurada de Gemini). Acepta imágenes."""
+        if not self.llave:
+            raise ProveedorNoDisponible("falta GEMINI_API_KEY")
+        cuerpo = {
+            "systemInstruction": {"parts": [{"text": sistema}]},
+            "contents": [{"role": "user", "parts": partes}],
+            "generationConfig": {"temperature": 0, "maxOutputTokens": max_tokens,
+                                 "responseMimeType": "application/json", "responseSchema": esquema},
+        }
+        url = f"{self.api}/models/{modelo or self.modelo}:generateContent"
+        try:
+            r = self.cliente.post(url, json=cuerpo, headers={"x-goog-api-key": self.llave},
+                                  timeout=httpx.Timeout(90.0, connect=10.0))
+        except httpx.TimeoutException as e:
+            raise ProveedorError("Gemini tardó demasiado en responder") from e
+        except httpx.HTTPError as e:
+            raise ProveedorNoDisponible(f"sin conexión con Gemini: {type(e).__name__}") from e
+        if r.status_code != 200:
+            self._error(r.status_code, r.content)
+        datos = r.json()
+        bloqueo = datos.get("promptFeedback", {}).get("blockReason")
+        if bloqueo:
+            raise ProveedorError(f"Gemini bloqueó la solicitud ({bloqueo})")
+        cand = (datos.get("candidates") or [{}])[0]
+        if cand.get("finishReason") == "MAX_TOKENS":
+            raise ProveedorError("la respuesta de Gemini quedó cortada")
+        texto = "".join(p.get("text", "") for p in cand.get("content", {}).get("parts", []) if not p.get("thought"))
+        try:
+            return json.loads(texto)
+        except ValueError as e:
+            raise ProveedorError("Gemini no devolvió JSON válido") from e
+
     @staticmethod
     def _error(codigo, cuerpo):
         try:

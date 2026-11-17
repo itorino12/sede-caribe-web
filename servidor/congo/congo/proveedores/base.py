@@ -30,5 +30,13 @@ class Proveedor:
         """
         raise NotImplementedError
 
+    def generar_json(self, sistema: str, partes: list[dict], esquema: dict, modelo: str = "", max_tokens: int = 4096) -> dict:
+        """Una sola respuesta en JSON que cumple `esquema` (formato de Gemini: OBJECT, ARRAY, STRING…).
+
+        partes: [{"text": "…"}] o [{"inlineData": {"mimeType": "image/jpeg", "data": "<base64>"}}].
+        Lo usa la revisión de la Declaración Jurada (rutas/declaracion.py). Por omisión no está disponible.
+        """
+        raise ProveedorNoDisponible(f"{self.nombre} no ofrece respuestas en JSON con imágenes")
+
     def disponible(self) -> bool:
         return True

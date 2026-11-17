@@ -22,6 +22,7 @@ from .servicios.visitas import Visitas
 
 log = logging.getLogger("congo")
 LIMITE_JSON = 64 * 1024
+LIMITE_DECLARACION = 8 * 1024 * 1024  # imagen de la página (JPEG en base64) y texto
 
 
 @dataclass
@@ -81,7 +82,9 @@ def crear_app(config=None, servicios=None):
 
     @app.middleware("http")
     async def limitar_tamano(request: Request, siguiente):
-        limite = config.max_mb * 1024 * 1024 + 64 * 1024 if request.url.path == "/api/documents/upload" else LIMITE_JSON
+        ruta = request.url.path
+        limite = (config.max_mb * 1024 * 1024 + 64 * 1024 if ruta == "/api/documents/upload"
+                  else LIMITE_DECLARACION if ruta == "/api/declaracion" else LIMITE_JSON)
         try:
             largo = int(request.headers.get("content-length") or 0)
         except ValueError:
@@ -98,8 +101,9 @@ def crear_app(config=None, servicios=None):
         log.exception("error no controlado en %s", request.url.path)  # sin el contenido de la pregunta
         return JSONResponse({"success": False, "error": "error interno"}, status_code=500)
 
-    from .rutas import admin, consultas, documentos, visitas
+    from .rutas import admin, consultas, declaracion, documentos, visitas
     app.include_router(consultas.rutas)
+    app.include_router(declaracion.rutas)
     app.include_router(visitas.rutas)
     app.include_router(documentos.rutas)
     app.include_router(admin.rutas)
