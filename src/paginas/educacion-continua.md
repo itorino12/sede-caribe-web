@@ -1,8 +1,21 @@
 Educación Continua abre las aulas de la Universidad de Costa Rica a cualquier persona que quiera aprender algo nuevo, ponerse al día en su trabajo o prepararse para conseguir uno. Es el proyecto ED-204 de [Extensión Docente](../accion-social/extension-docente.html), en la Coordinación de Acción Social, y ofrece cursos de 40 horas, presenciales y virtuales, en Limón, Siquirres y Talamanca.
 
-La oferta no se decide en una oficina. Antes de cada periodo se abre una prematrícula, y los cursos que se imparten son los que la comunidad pide. En 2025 se inscribieron más de 200 personas interesadas en cada ciclo, con picos de 285.
+La oferta no se decide en una oficina. Antes de cada periodo se abre una prematrícula, y los cursos que se imparten son los que la comunidad pide. En 2025, la prematrícula reunió a más de 200 personas interesadas en cada ciclo, con picos de 285.
 
 [[cifras]]
+
+## Un proyecto que se sostiene solo y crece
+
+Educación Continua no recibe presupuesto de la Sede: se financia con lo que pagan quienes se matriculan. Aun así, en 2025 sus ingresos por matrícula se multiplicaron por más de cinco respecto de 2024, y hoy ofrece grupos en Limón, Siquirres, Talamanca y en línea.
+
+- **Cursos que se abren con cupo.** Cada curso dura 40 horas y se imparte cuando reúne el cupo necesario.
+- **Calidad medida en cada grupo.** Al cierre de cada curso se evalúa a la persona docente.
+
+## Alianzas que llevan los cursos más lejos
+
+- **Instituto Mixto de Ayuda Social (IMAS):** cursos de razonamiento verbal y lógico-matemático para jóvenes de programas en Siquirres y Matina.
+- **Sector portuario:** un curso de maniobras del buque para pilotos prácticos de una empresa que opera en la Terminal de Contenedores de Moín, y un convenio con JAPDEVA que ya permitió impartir el módulo I de Salud Ocupacional.
+- **Palmeras de Matina:** cursos para población indígena de la comunidad.
 
 ## Quiénes llevan los cursos
 
@@ -64,7 +77,7 @@ Creación de cartas y menús, operaciones básicas y servicios en restaurantes, 
 
 ## Para instituciones y empresas
 
-Educación Continua también diseña capacitaciones para el personal de instituciones y empresas. En 2025 impartió un curso de maniobras del buque para los pilotos prácticos de una empresa que opera en la Terminal de Contenedores de Moín. También llevó cursos a jóvenes de programas del IMAS en Siquirres y Matina, y a población indígena de Palmeras de Matina. Si su organización necesita capacitar a su personal, escriba a la oficina.
+Educación Continua también diseña capacitaciones para el personal de instituciones y empresas. Ya lo ha hecho con el sector portuario, con programas del IMAS y con comunidades como Palmeras de Matina. Si su organización necesita capacitar a su personal, escriba a la oficina.
 
 ## Bolsa de docentes
 
