@@ -336,7 +336,7 @@
             },
             {
               "nombre": "Oficina de Orientación UCR",
-              "detalle": "Accesibilidad, gestiones estudiantiles y chat para personas admitidas.",
+              "detalle": "Accesibilidad y gestiones estudiantiles.",
               "enlace": "https://orientacion.ucr.ac.cr/"
             },
             {
@@ -876,10 +876,10 @@
               "enlace_texto": "Feria Vocacional UCR"
             },
             {
-              "titulo": "Chat para personas admitidas",
-              "texto": "Orientación atiende por chat a quienes ya fueron admitidas.",
-              "enlace": "https://orientacion.ucr.ac.cr/elegible/",
-              "enlace_texto": "Abrir el chat"
+              "titulo": "Orientación en la Sede",
+              "texto": "Si ya fue admitida, Orientación le atiende por llamada o WhatsApp al 2511-7323.",
+              "enlace": "https://wa.me/50625117323",
+              "enlace_texto": "Escribir por WhatsApp"
             },
             {
               "titulo": "Cómo ingresar",
