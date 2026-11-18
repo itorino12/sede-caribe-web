@@ -330,6 +330,7 @@ main:focus { outline: none; }
 .dia + .dia { border-left: 1px solid var(--linea-banda); padding-left: 18px; }
 .dia__nombre { display: block; font-weight: 700; text-transform: capitalize; }
 .dia__num { display: block; font-size: 2.9rem; font-weight: 900; line-height: 1; letter-spacing: -.04em; margin: 2px 0 8px; font-variant-numeric: tabular-nums; }
+.dia--hoy { background: rgba(0,0,0,.14); padding-left: 18px; }
 .dia--hoy .dia__num { text-decoration: underline; text-decoration-thickness: 4px; text-underline-offset: 6px; }
 .dia--hoy .dia__nombre::after { content: " (hoy)"; font-weight: 400; }
 .dia--pasado { opacity: .9; }
@@ -343,6 +344,7 @@ main:focus { outline: none; }
   .dia__nombre { grid-column: 1; font-size: var(--t-sm); }
   .dia__num { grid-column: 1; grid-row: 2; font-size: 2.2rem; margin: 0; }
   .dia ul { grid-column: 2; grid-row: 1 / span 2; }
+  .dia--hoy, .dia + .dia--hoy { padding-inline: 12px; margin-inline: -12px; }
 }
 
 /* -------- eventos (agenda y unidades) -------- */
