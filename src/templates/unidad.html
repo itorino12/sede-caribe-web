@@ -1,11 +1,11 @@
 {% extends "base.html" %}
-{% from "_macros.html" import encabezado, contacto, evento, galeria, bloque, redes_sociales with context %}
+{% from "_macros.html" import encabezado, contacto, evento, mosaico, bloque, redes_sociales with context %}
 {% block contenido %}
 {% set padre = ("Docencia", "unidades/docencia.html") if u.id in ["auditorio", "laboratorios"] else ("Vida Estudiantil", "unidades/vida-estudiantil.html") if u.grupo == "Vida estudiantil" or u.id in ["residencias", "gimnasio", "piscina"] else ("La Sede", "la-sede.html#coordinaciones") if u.grupo in ["Coordinaciones", "Gobierno", "Recintos"] else ("Campus y servicios", "la-sede.html#servicios") %}
 {{ encabezado(u.nombre, [padre], raiz, u.resumen) }}
 <div class="ancho pagina pagina--con-ficha">
   <div>
-  {{ galeria(u.fotos, raiz, "Fotos de " ~ u.nombre) }}
+  {{ mosaico(u.fotos, raiz, "Fotos de " ~ u.nombre) }}
   <div class="prosa{% if u.id == "vida-estudiantil" %} prosa--ancha{% endif %}">
     {{ u.html|safe }}
     {% if u.cifras %}

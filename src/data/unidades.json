@@ -218,7 +218,9 @@
   "documento": "educacion-continua",
   "id": "educacion-continua",
   "nombre": "Educación Continua",
-  "grupo": "Servicios"
+  "grupo": "Servicios",
+  "fotos": "unidades/educacion-continua/curso-fotografia-abril-2025.jpg, unidades/educacion-continua/operador-de-computadoras-siquirres-marzo-2025.jpg, unidades/educacion-continua/curso-de-ingles-cahuita-marzo-2025.jpg, unidades/educacion-continua/curso-de-ingles-marzo-2025.jpg, unidades/educacion-continua/operador-de-computadoras-marzo-2025.jpg",
+  "fotos_alt": "Participante del curso de fotografía apunta una cámara réflex en un estacionamiento rodeado de bosque|Afiche de bienvenida al curso Operador de Computadoras en Siquirres, con estudiantes sonrientes frente a sus equipos|Afiche del grupo del curso de inglés en Cahuita: estudiantes sentados en un aula de paredes verde lima|Afiche del grupo del curso de inglés en Limón: estudiantes en un laboratorio con audífonos y cubículos|Afiche del curso Operador de Computadoras en Limón, con dos fotos de estudiantes trabajando en el laboratorio"
  },
  {
   "publicar": "sí",

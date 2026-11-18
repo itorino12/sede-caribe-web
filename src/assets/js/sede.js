@@ -322,6 +322,7 @@
   var mover = !matchMedia("(prefers-reduced-motion: reduce)").matches && document.documentElement.dataset.movimiento !== "no";
   function carrusel(nodo) {
     var pista = nodo.querySelector(".carrusel__pista"), cuenta = nodo.querySelector(".carrusel__cuenta"), c = { actual: 0 };
+    if (!pista || !cuenta) { c.ir = function () {}; c.marcar = function () {}; return c; } // mosaico: sin pista, solo abre el visor
     var total = function () { return pista.children.length; };
     var marcar = function () { cuenta.textContent = total() > 1 ? (c.actual + 1) + " / " + total() : ""; };
     c.ir = function (i, ya) {

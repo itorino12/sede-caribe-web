@@ -955,6 +955,29 @@ html.sin-desplazar, html.sin-desplazar body { overflow: hidden; }
 .visor-fotos__cerrar { position: absolute; top: 12px; right: 12px; width: 48px; height: 48px; border-radius: 50%; border: 0; background: rgba(255,255,255,.92); color: #04203A; font-size: 1.8rem; line-height: 1; cursor: pointer; }
 .visor-fotos__cerrar:focus-visible { outline: 3px solid var(--foco); outline-offset: 2px; }
 
+/* mosaico de fotos de las páginas de proyecto: la disposición cambia con la cantidad (1 a 5); abre el visor en grande */
+.mosaico { display: grid; gap: 6px; margin: 0 0 28px; border-radius: 10px; overflow: hidden; }
+.mosaico .mosaico__foto { position: relative; flex: none; margin: 0; min-height: 0; background: var(--niebla); overflow: hidden; }
+.mosaico .mosaico__foto a { display: block; height: 100%; cursor: zoom-in; }
+.mosaico .mosaico__foto a:focus-visible { outline: 3px solid var(--foco); outline-offset: -3px; }
+.mosaico .mosaico__foto img { width: 100%; height: 100%; aspect-ratio: auto; object-fit: cover; transition: transform .35s ease; }
+.mosaico .mosaico__foto--completa img { object-fit: contain; }
+.mosaico .mosaico__foto--oculta { display: none; }
+.mosaico__mas { position: absolute; inset: 0; display: grid; place-items: center; background: rgba(4,32,58,.62); color: #fff; font-size: 1.8rem; font-weight: 800; }
+@media (hover: hover) and (prefers-reduced-motion: no-preference) { .mosaico .mosaico__foto a:hover img { transform: scale(1.04); } .mosaico .mosaico__foto--completa a:hover img { transform: none; } }
+.mosaico--1 .mosaico__foto { aspect-ratio: 16 / 9; }
+.mosaico--2 { grid-template-columns: 1fr 1fr; }
+.mosaico--2 .mosaico__foto { aspect-ratio: 4 / 3; }
+.mosaico--3 { grid-template-columns: 2fr 1fr; grid-template-rows: 1fr 1fr; aspect-ratio: 16 / 9; }
+.mosaico--3 .mosaico__foto:first-child { grid-row: 1 / 3; }
+.mosaico--4 { grid-template-columns: 1fr 1fr; grid-template-rows: 1fr 1fr; aspect-ratio: 16 / 10; }
+.mosaico--5 { grid-template-columns: repeat(4, 1fr); grid-template-rows: 2fr 1fr; aspect-ratio: 16 / 10; }
+.mosaico--5 .mosaico__foto:first-child { grid-column: 1 / -1; }
+@media (max-width: 560px) {
+  .mosaico--3 { aspect-ratio: 4 / 3; }
+  .mosaico--5 { aspect-ratio: 1 / 1; }
+}
+
 /* ---------- Página de carrera: cifras, mallas, malla interactiva, plan, acreditación e historia ---------- */
 .cifras--carrera { margin: 0 0 28px; }
 .cifras--carrera strong { font-size: var(--t-lg); }

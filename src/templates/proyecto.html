@@ -1,11 +1,11 @@
 {% extends "base.html" %}
-{% from "_macros.html" import encabezado, contacto, galeria with context %}
+{% from "_macros.html" import encabezado, contacto, mosaico with context %}
 {% block contenido %}
 {% set coord = unidad.get("accion-social") %}
 {{ encabezado(p.nombre, [("Acción Social", "unidades/accion-social.html"), (m.nombre, "accion-social/" ~ m.id ~ ".html")], raiz, p.resumen) }}
 <div class="ancho pagina pagina--con-ficha">
   <div>
-    {{ galeria(p.fotos, raiz, "Fotos de " ~ p.nombre) }}
+    {{ mosaico(p.fotos, raiz, "Fotos de " ~ p.nombre) }}
     {% if p.medios %}
     <div class="medios">
       {% if p.medios.video %}{% set v = p.medios.video %}

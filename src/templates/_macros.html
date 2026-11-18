@@ -114,6 +114,18 @@
 {% endif %}
 {% endmacro %}
 
+{# Mosaico de fotos para las páginas de proyecto: el diseño depende de cuántas fotos hay (1 a 5; con más, las demás quedan en el visor y la última muestra «+N»). Las fotos cuadradas o verticales se muestran completas sobre fondo tenue. Reutiliza el visor en grande de sede.js (data-galeria). #}
+{% macro mosaico(fotos, raiz, titulo='Fotos') %}
+{% if fotos %}
+{% set n = fotos|length %}{% set vis = [n, 5]|min %}
+<div class="mosaico mosaico--{{ vis }}" data-galeria role="group" aria-label="{{ titulo }}">
+  {% for f in fotos %}{% set resto = n - vis %}
+  <div class="mosaico__foto carrusel__foto{% if f.w / f.h < 1.2 %} mosaico__foto--completa{% endif %}{% if loop.index > vis %} mosaico__foto--oculta{% endif %}"><a href="{{ raiz }}{{ f[1920] }}" data-m="{{ raiz }}{{ f[1280] }}" data-s="{{ raiz }}{{ f[640] }}"{% if loop.index == vis and resto > 0 %} aria-label="{{ f.alt }}. Ver {{ resto }} fotos más"{% endif %}><img src="{{ raiz }}{{ f[960] }}" srcset="{{ f|srcset(raiz, 1280) }}" sizes="(min-width: 1100px) 520px, 100vw" alt="{{ f.alt }}" width="{{ f.w }}" height="{{ f.h }}"{% if loop.index > 1 %} loading="lazy"{% endif %}>{% if loop.index == vis and resto > 0 %}<span class="mosaico__mas" aria-hidden="true">+{{ resto }}</span>{% endif %}</a></div>
+  {% endfor %}
+</div>
+{% endif %}
+{% endmacro %}
+
 
 {# ---- Bloques de las páginas de Vida estudiantil (datos en src/data/vida-estudiantil.json, clave «paginas») ---- #}
 {% macro destino(x) %}{% if x.interno %}{{ raiz }}{{ x.interno }}{% elif x.enlace and x.enlace.startswith('@') %}{{ raiz }}{{ x.enlace[1:] }}{% else %}{{ x.enlace }}{% endif %}{% endmacro %}
