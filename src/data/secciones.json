@@ -479,8 +479,14 @@
        "enlace_texto": "Ver en el directorio"
       },
       {
-       "titulo": "Activos fijos y administración de red",
-       "texto": "Activos fijos: 2511-7327. Administración de red: 2511-7305. Ambas en el Gimnasio.",
+       "titulo": "Recurso Informático Desconcentrado (RID)",
+       "texto": "2511-7305. Gimnasio.",
+       "interno": "directorio.html?buscar=Recurso+Inform%C3%A1tico+Desconcentrado",
+       "enlace_texto": "Ver en el directorio"
+      },
+      {
+       "titulo": "Activos fijos",
+       "texto": "2511-7327. Gimnasio.",
        "interno": "directorio.html?buscar=Activos+fijos",
        "enlace_texto": "Ver en el directorio"
       },
