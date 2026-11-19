@@ -145,7 +145,7 @@ directorio = (
                         ("2511-7330", "Educación Continua", "Edificio de Docencia")]) +
     D("Administración", [("2511-7321", "Coordinación de Administración", "Administrativo"), ("2511-7353", "Asistente administrativa", "Administrativo"),
                          ("2511-7322", "Unidad de Compras Especializadas, encargado", "Administrativo"), ("2511-7306", "Unidad de Compras Especializadas, asistente", "Administrativo"),
-                         ("2511-7305", "Recurso Informático Desconcentrado (RID)", "Administrativo"), ("2511-7327", "Activos fijos", "Gimnasio"), ("2511-7345", "Bodega", "Gimnasio"),
+                         ("2511-7305", "Recurso Informático Desconcentrado (RID)", "Edificio de Docencia"), ("2511-7327", "Activos fijos", "Gimnasio"), ("2511-7345", "Bodega", "Gimnasio"),
                          ("2511-7329", "Servicios generales", "Pabellón 1"), ("2511-7328", "Oficina de Administración Financiera", "Administrativo"),
                          ("2511-7344", "Recursos humanos, encargada", "Administrativo"), ("2511-7324", "Recursos humanos, asistente", "Administrativo"),
                          ("2511-7352", "Mantenimiento", "Gimnasio"), ("2511-7300", "Central telefónica", "Administrativo")]) +
