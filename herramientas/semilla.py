@@ -25,7 +25,7 @@ config = [
     ("instagram", ""),
     ("youtube", ""),
     ("tiktok", ""),
-    ("formulario_cobertura", "https://forms.gle/TMtnbD1L5CJ7R7Z8A"),
+    ("formulario_cobertura", "https://docs.google.com/forms/d/e/1FAIpQLSdQyBIQ73YxPczJQruPuBzxHjFW6GDN5gg6UHaOeAAlC9vESA/viewform"),
     ("correo_comunicacion", ""),
 ]
 

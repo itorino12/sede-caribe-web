@@ -15,8 +15,8 @@
   <p class="noticias__suscribir">Para recibirlas sin entrar al sitio: <a href="{{ raiz }}noticias.xml">suscribirse por RSS</a> (en un lector de noticias o un canal de Telegram) · <a href="{{ raiz }}agenda.ics">agregar la agenda a su calendario</a></p>
   <section class="llamado">
     <h2>¿Tiene una noticia de su unidad?</h2>
-    <p>El personal y el estudiantado pueden solicitar cobertura a la Unidad de Comunicación Estudiantil. Se atiende por orden de llegada y según la disponibilidad del equipo.</p>
-    {% if sitio.formulario_cobertura %}<a class="boton" href="{{ sitio.formulario_cobertura }}">Solicitar cobertura</a>{% endif %}
+    <p>El personal de la Sede puede enviar la información de una actividad, un logro o una convocatoria para publicarla como noticia. La Coordinación redacta el texto con los datos recibidos y se publica cuando las autoridades dan el visto bueno; no se garantiza la publicación. El formulario pide iniciar sesión con una cuenta de Google para adjuntar las fotos.</p>
+    {% if sitio.formulario_cobertura %}<a class="boton" href="{{ sitio.formulario_cobertura }}" rel="noopener">Enviar información para una noticia</a>{% endif %}
   </section>
 </div>
 {% endblock %}
