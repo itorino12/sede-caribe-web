@@ -18,6 +18,12 @@
   {% endif %}
   <div class="ancho articulo__cuerpo">
     <div class="prosa">{{ n.html|safe }}</div>
+    {% if n.medios and n.medios.video %}{% set v = n.medios.video %}
+    <div class="medios medios--ancho"><figure class="medios__item">
+      <video controls preload="none" playsinline poster="{{ raiz }}{{ v.poster }}" aria-label="{{ v.descripcion }}"><source src="{{ raiz }}{{ v.src }}" type="video/mp4">Su navegador no reproduce video. <a href="{{ raiz }}{{ v.src }}">Descargar el video</a>.</video>
+      <figcaption>{{ v.descripcion }}</figcaption>
+    </figure></div>
+    {% endif %}
     {% if n.fotos %}
     <h2 class="proyectos__titulo">Galería</h2>
     {{ galeria(n.fotos, raiz, "Galería de " ~ n.titulo) }}

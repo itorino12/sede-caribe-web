@@ -347,7 +347,7 @@ def preparar(sitio, d):
             continue
         cuerpo = leer_pagina(n.get("documento")) or n.get("cuerpo", "")
         noticias.append({**n, "id": n.get("id") or slug(n["titulo"]), "f": f, "html": md(cuerpo),
-                         "img": imagen(n.get("imagen")), "fotos": fotos_de({**n, "id": n.get("id") or slug(n["titulo"])}, "noticias"), "destacada": str(n.get("destacada", "")).lower() in SI})
+                         "img": imagen(n.get("imagen")), "fotos": fotos_de({**n, "id": n.get("id") or slug(n["titulo"])}, "noticias"), "medios": medios_de(f"noticia-{n.get('id') or slug(n['titulo'])}"), "destacada": str(n.get("destacada", "")).lower() in SI})
     noticias.sort(key=lambda n: (n["f"], n["destacada"]), reverse=True)
 
     eventos, pasados = [], []
