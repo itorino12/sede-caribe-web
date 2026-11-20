@@ -131,8 +131,8 @@ def secciones_congo(h):
     return [s for s in salida if s["x"]]
 
 
-def titular_portada(n, maximo=5):
-    """Titular corto de la portada: la columna «titular_portada» (máximo 5 palabras); si falta o se pasa, el título recortado."""
+def titular_portada(n, maximo=10):
+    """Titular corto de la portada: la columna «titular_portada» (máximo 10 palabras, unos 70 caracteres); si falta o se pasa, el título recortado."""
     t = (n.get("titular_portada") or "").strip()
     if t and len(t.split()) <= maximo:
         return t

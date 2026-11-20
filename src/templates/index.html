@@ -8,7 +8,7 @@
     <div class="portada__texto">
       {% if noticias %}
       {# las tres noticias más recientes (fecha más nueva; en empate, la destacada) en un carrusel. «titular_portada» es un
-         titular corto (máximo 5 palabras) de la hoja. Sin JavaScript se ve solo la primera; portada-noticias.js lo vuelve carrusel (un botón «siguiente») #}
+         titular corto (máximo 10 palabras) de la hoja. Sin JavaScript se ve solo la primera; portada-noticias.js lo vuelve carrusel (un botón «siguiente») #}
       {% set ultimas = noticias[:3] %}
       <h1 id="portada-titulo" class="oculto">Universidad de Costa Rica, Sede del Caribe</h1>
       <div class="portada__noticias" data-carrusel-noticias role="group" aria-roledescription="carrusel" aria-label="Últimas noticias">
