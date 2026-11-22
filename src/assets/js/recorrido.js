@@ -280,9 +280,9 @@ function galeria(grupo, vol, alto, pisos, { aberturas = [], mover_postes: moverP
       const bc = bancaTubos(); bc.position.set(...en(u, fondo - 0.4, y)); bc.rotation.y = angulo; grupo.add(bc);
     }
   }
-  // (anotaciones) barandas atravesadas en el pasillo de abajo, de la pared a la orilla, en las x indicadas
+  // (anotaciones) barandas a los lados de la entrada asfaltada: salen de la orilla del pasillo hacia afuera, en las x
   for (const xb of barandasAbajo) {
-    const br = baranda(fondo + 0.1); br.position.set(...en(uDe(xb), (fondo + 0.1) / 2, 0.3));
+    const LB = 4.0, br = baranda(LB); br.position.set(...en(uDe(xb), fondo + 0.15 + LB / 2, 0.05));
     br.rotation.y = angulo + Math.PI / 2; grupo.add(br);
   }
   if (cerrarOeste) {
