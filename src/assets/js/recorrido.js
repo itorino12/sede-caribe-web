@@ -294,8 +294,8 @@ function galeria(grupo, vol, alto, pisos, { aberturas = [], mover_postes: moverP
 // gris); el de arriba vuelve desde el descanso hasta el pasillo del segundo piso, al lado. Gradas de granito
 // lavado sin contrahuella sobre dos zancas de acero gris; barandas de tubo gris con cinco barras a los dos lados
 // de cada tramo y alrededor del descanso; cuatro columnas redondas grises (las de adelante suben hasta un techo
-// plano blanco propio, más alto que el del edificio, con cercha de acero debajo); un alero de lámina ondulada
-// de una agua sobre el descanso de arriba y un bajante rojo en la columna del pasillo
+// plano blanco al nivel del techo del pasillo, al que llegan inclinadas desde el alero) y un alero de lámina
+// ondulada de una agua en la unión de las columnas rectas con las inclinadas
 function escaleraGaleria(grupo, { en, angulo, f, dx, dz, fondo, alto, alturaPiso, ESC }) {
   const gris = new THREE.MeshStandardMaterial({ color: 0x7d858c, roughness: 0.55, metalness: 0.45 });
   const granito = new THREE.MeshStandardMaterial({ color: 0xcfc8ba, roughness: 0.9 });
@@ -304,7 +304,6 @@ function escaleraGaleria(grupo, { en, angulo, f, dx, dz, fondo, alto, alturaPiso
     map: (() => { const t = texturaDibujada(64, 8, (x, w, h) => { const g = x.createLinearGradient(0, 0, w, 0);
       for (let i = 0; i <= 8; i++) g.addColorStop(i / 8, i % 2 ? "#9da2a6" : "#eef0f1"); x.fillStyle = g; x.fillRect(0, 0, w, h); });
       t.wrapS = t.wrapT = THREE.RepeatWrapping; t.repeat.set(8, 1); return t; })() });
-  const rojo = new THREE.MeshStandardMaterial({ color: 0xc0262d, roughness: 0.5 });
   // v hacia afuera = s · (z local de una pieza girada «angulo»)
   const s = Math.sign(f.nx * -dz + f.nz * dx) || 1;
   const caja = (w, h, d, mat, u, v, y, rx = 0, rz = 0) => {
@@ -355,32 +354,29 @@ function escaleraGaleria(grupo, { en, angulo, f, dx, dz, fondo, alto, alturaPiso
   for (const u of [uA, uB]) caja(0.12, 0.26, vD1 - vD0, gris, u, (vD0 + vD1) / 2, yD - 0.27);
   barandaRecta(uA, uB, vD1 - 0.03, yD);
   for (const u of [uA + 0.02, uB - 0.02]) barandaLado(u, vD0, vD1, yD);
-  // columnas: dos adelante, hasta el techo propio, y dos cortas bajo el borde de atrás del descanso
-  const yT = alto + 1.25, vC = vD1 + 0.15;
+  // (anotaciones) columnas de adelante: rectas del suelo hasta el alero de lámina y de ahí inclinadas hacia el
+  // edificio hasta el techo; dos cortas bajo el borde de atrás del descanso
+  const yJ = y2 + 2.35, yT = alto + 0.5, vC = vD1 + 0.15, vI = vC - 1.4;   // unión, techo (= el del pasillo), columnas
+  const unir = (u, vA, yA, vB, yB, r) => {                                          // tubo de (vA, yA) a (vB, yB)
+    const L = Math.hypot(vB - vA, yB - yA), m = new THREE.Mesh(new THREE.CylinderGeometry(r, r, L, 12), gris);
+    m.position.set(...en(u, (vA + vB) / 2, (yA + yB) / 2));
+    m.rotation.set(Math.atan2((vB - vA) * s, yB - yA), angulo, 0, "YXZ"); m.castShadow = !liviano; grupo.add(m);
+  };
   for (const u of [uA - 0.15, uB + 0.15]) {
-    tubo(0.13, yT, gris, u, vC, 0);
+    tubo(0.13, yJ, gris, u, vC, 0);
+    unir(u, vC, yJ, vI, yT - 0.1, 0.12);
     caja(0.45, 0.3, 0.45, new THREE.MeshStandardMaterial({ color: 0xbab6ac, roughness: 0.95 }), u, vC, 0.15);
     tubo(0.09, yD - 0.4, gris, u, vD0, 0);
   }
-  // techo plano blanco más alto que el del edificio, volado al frente, con cercha de acero debajo
-  const vT0 = fondo - 1.2, vT1 = vC + 1.0;
-  caja(W + 2.2, 0.32, vT1 - vT0, blanco, uM, (vT0 + vT1) / 2, yT + 0.16);
-  caja(W + 2.2, 0.12, vT1 - vT0, lamina, uM, (vT0 + vT1) / 2, yT - 0.06);
-  const cuerdaB = yT - 0.75;
-  caja(W + 0.6, 0.12, 0.12, gris, uM, vC, cuerdaB);
-  for (const u of [uA - 0.15, uB + 0.15]) caja(0.12, 0.12, vC - fondo + 0.3, gris, u, (vC + fondo) / 2, cuerdaB);
-  const nD = 4, paso = (W + 0.3) / nD;
-  for (let i = 0; i < nD; i++) {
-    const uc = uA - 0.15 + paso * (i + 0.5), L = Math.hypot(paso, 0.75);
-    caja(L, 0.08, 0.08, gris, uc, vC, cuerdaB + 0.37, 0, (i % 2 ? 1 : -1) * Math.atan2(0.75, paso));
-  }
-  // alero de lámina ondulada de una agua sobre la llegada al segundo piso, más bajo que el techo
-  const yA_ = y2 + 2.35, vA0 = fondo + 0.2, vA1 = vC + 0.9, caida = 0.45;
-  caja(W + 1.6, 0.04, Math.hypot(vA1 - vA0, caida), lamina, uM, (vA0 + vA1) / 2, yA_ - caida / 2, Math.atan2(caida, (vA1 - vA0) * s));
-  for (const u of [uA - 0.15, uB + 0.15]) caja(0.08, 0.1, vA1 - vA0, gris, u, (vA0 + vA1) / 2, yA_ - caida / 2 - 0.08, Math.atan2(caida, (vA1 - vA0) * s));
-  // bajante rojo junto al tramo de abajo, en la columna del pasillo
-  const uRojo = Math.max(ESC.abajo[1], ESC.arriba[1]) + 0.35;
-  tubo(0.07, alto + 0.4, rojo, uRojo, fondo - 0.05, 0);
+  // techo plano blanco al mismo nivel que el techo del pasillo, volado sobre la escalera, con viga gris debajo
+  const vT0 = fondo + 0.6, vT1 = vC + 0.4;
+  caja(W + 2.2, 0.2, vT1 - vT0, blanco, uM, (vT0 + vT1) / 2, yT);
+  caja(W + 2.2, 0.06, vT1 - vT0, lamina, uM, (vT0 + vT1) / 2, yT - 0.13);
+  caja(W + 0.6, 0.18, 0.14, gris, uM, vI, yT - 0.2);
+  // alero de lámina ondulada de una agua (fotos) en la unión de las columnas rectas con las inclinadas
+  const vA0 = fondo + 0.2, vA1 = vC + 1.2, caida = 0.45;
+  caja(W + 1.8, 0.04, Math.hypot(vA1 - vA0, caida), lamina, uM, (vA0 + vA1) / 2, yJ - caida / 2, Math.atan2(caida, (vA1 - vA0) * s));
+  for (const u of [uA - 0.15, uB + 0.15]) caja(0.08, 0.1, vA1 - vA0, gris, u, (vA0 + vA1) / 2, yJ - caida / 2 - 0.08, Math.atan2(caida, (vA1 - vA0) * s));
 }
 // Entrada principal (foto de la portada, de frente desde la ruta 32). De este a oeste: portón peatonal blanco y
 // muro blanco con el rótulo azul «UCR · Sede del Caribe»; el carril de entrada bajo una losa blanca delgada e
