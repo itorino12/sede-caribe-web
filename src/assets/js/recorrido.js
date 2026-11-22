@@ -557,6 +557,13 @@ function balcones(grupo, vol, alto, pisos, frente, unirGaleria = false) {
     }
   }
   for (const lado of [-1, 1]) pieza(0.25, alto, 0.25, acero, lado * largo / 2, fondo, alto / 2);   // columnas
+  if (unirGaleria) {
+    // (anotaciones) la esquina unida lleva su trozo de techo, a la altura del techo volado del pasillo, y un poste
+    // en la esquina de afuera
+    const uIni = sur * (f.largo / 2 - 0.3), uTecho = sur * (f.largo / 2 + FONDO_GALERIA + 0.8);
+    pieza(Math.abs(uTecho - uIni), 0.2, 3.2, losa, (uIni + uTecho) / 2, 1.6, alto + 0.5);
+    pieza(0.25, alto + 0.6, 0.25, acero, sur * (f.largo / 2 + FONDO_GALERIA), fondo, (alto + 0.6) / 2);
+  }
 }
 
 // Mural de mosaico (foto): en la pared que da al frente indicado, entre el zócalo y el alero, con la puerta al
@@ -2117,7 +2124,9 @@ if (datos.campus.parqueo) {
   }
   // pasarela entre dos edificios (anotaciones): en el primer piso un pasillo de concreto y en el segundo una losa
   // sobre columnas, techada; las dos con baranda de tubos a cada lado
-  function pasarela({ a, b, ancho = 3, piso = 4.2, nivel_de: nivelDe }) {
+  // Va escalada en alto como los edificios (EXAGERAR), así el piso de arriba empata con el pasillo del edificio y
+  // el techo queda a la altura del techo de los dos edificios
+  function pasarela({ a, b, ancho = 3, piso = 4.2, alto = 8.4, nivel_de: nivelDe }) {
     const g = new THREE.Group();
     const L = Math.hypot(b[0] - a[0], b[1] - a[1]), ang = Math.atan2(-(b[1] - a[1]), b[0] - a[0]);
     const gris = mate(0xa9a7a1, { roughness: 0.95 }), losaP = mate(0xd9d8d3, { roughness: 0.9 }), techoP = mate(0xd6dadd, { roughness: 0.7 });
@@ -2126,12 +2135,12 @@ if (datos.campus.parqueo) {
       pieza(L, grueso, ancho, mat, 0, y - grueso / 2, 0);
       for (const lado of [-1, 1]) { const br = baranda(L - 0.2); br.position.set(0, y, lado * (ancho / 2 - 0.08)); g.add(br); }
     }
-    const H = piso + 3.0;
+    const H = alto;
     for (const x of [-L / 2 + 0.3, 0, L / 2 - 0.3]) for (const lado of [-1, 1]) pieza(0.22, H, 0.22, tuboBaranda, x, H / 2, lado * (ancho / 2 + 0.15));
     for (const lado of [-1, 1]) pieza(L, 0.25, 0.18, tuboBaranda, 0, H - 0.1, lado * (ancho / 2 + 0.15));   // vigas
-    pieza(L + 0.4, 0.14, ancho + 1.0, techoP, 0, H + 0.1, 0);                                                // techo
+    pieza(L + 0.4, 0.5, ancho + 1.0, techoP, 0, H + 0.25, 0);                                                 // techo
     g.traverse((o) => { if (o.isMesh) { o.castShadow = !liviano; o.receiveShadow = true; } });
-    g.position.set((a[0] + b[0]) / 2, 0, (a[1] + b[1]) / 2); g.rotation.y = ang;
+    g.position.set((a[0] + b[0]) / 2, 0, (a[1] + b[1]) / 2); g.rotation.y = ang; g.scale.y = EXAGERAR;
     registrar(g, null);
     if (nivelDe) g.userData.nivelDe = nivelDe;
   }

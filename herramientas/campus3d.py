@@ -820,7 +820,7 @@ def lugares_nuevos(calles, quebrada, lejos_carretera, y_ruta32):
     # (anotaciones) pasarela entre el pasillo de 25 y el edificio 26: una abajo y otra techada en el segundo piso,
     # las dos con baranda
     elem.append({"tipo": "pasarela", "id": None, "a": [168.0, -107.0], "b": [168.0, -99.4], "ancho": 3.0, "piso": 4.2,
-                 "nivel_de": 25})
+                 "alto": 8.4, "nivel_de": 25})
     # (anotaciones) parqueo de busetas al oeste de la biblioteca, entre la calle y la cerca de la ruta 32: espacios
     # de 4,5 m de frente y 7,5 m de fondo con la trompa hacia la cerca
     t0_, t1_ = (26.0, -116.0), (60.5, -111.1)
