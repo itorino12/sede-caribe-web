@@ -147,7 +147,9 @@ EDIFICIOS = [
      # pasarela que lo une con 26
      "estilo": {"forma_techo": "plano", "galeria": {"aberturas": [[168.0, -109.5, 3.2]],
                                                    # (anotaciones) la segunda y tercera columna desde el oeste, corridas
-                                                   "mover_postes": [[132.2, 133.9], [137.0, 139.0]]}, "techo": "#dcdfe2",
+                                                   "mover_postes": [[132.2, 133.9], [137.0, 140.4]],
+                                                   # (anotaciones) sin la columna junto a la escalera
+                                                   "quitar_postes": [141.9]}, "techo": "#dcdfe2",
                 "balcones": {"frente": [1, 0], "unir_galeria": True}}},
     # (anotaciones) recto (sin giro) y algo más grande, donde lo marcó la Sede
     # (anotaciones) corrido 3,4 m al oeste, donde lo marcó la Sede, y unido a 25 por una pasarela en cada piso
@@ -769,7 +771,7 @@ def lugares_nuevos(calles, quebrada, lejos_carretera, y_ruta32):
     # calle de arriba hasta la esquina y baja junto al camino de la entrada hasta la acera que ya estaba; otra
     # corta llega a ella desde el extremo oeste del 9
     elem.append({"tipo": "acera", "id": None, "ancho": 1.8,
-                 "puntos": [[42.3, -90.86], [35.4, -91.2], [29.4, -94.6], [23.4, -97.2], [17.4, -99.7], [11.4, -102.6],
+                 "puntos": [[42.3, -90.86], [40.4, -93.3], [23.4, -97.2], [17.4, -99.7], [11.4, -102.6],
                             [6.2, -104.8], [3.8, -103.4], [1.8, -99.5], [-1.4, -95.0], [-3.2, -90.0], [-4.8, -86.0],
                             [-6.1, -82.0], [-7.5, -78.0], [-8.9, -74.0], [-10.1, -70.0], [-11.1, -66.0], [-11.66, -62.19]]})
     elem.append({"tipo": "acera", "id": None, "ancho": 1.8, "puntos": [[2.3, -80.5], [-6.1, -82.0]]})
@@ -789,7 +791,9 @@ def lugares_nuevos(calles, quebrada, lejos_carretera, y_ruta32):
     elem.append({"tipo": "acera", "id": None, "ancho": 1.8, "puntos": [[56.0, -85.2], [50.0, -81.0], [43.2, -79.0]]})
     # (anotaciones) tramo corto que sigue la acera de los baños de la piscina hasta la acera que bordea la malla
     elem.append({"tipo": "acera", "id": None, "ancho": 1.6, "puntos": [[53.01, -35.32], [51.19, -28.53]]})
-    # (anotaciones) la acera en diagonal desde la punta sur del 7 se quitó
+    # (anotaciones) la acera en diagonal desde la punta sur del 7 se quitó; un tramo une la esquina de la acera de
+    # la piscina con el final del pasillo techado de las aulas
+    elem.append({"tipo": "acera", "id": None, "ancho": 1.6, "puntos": [[51.1, -28.55], [42.4, -29.8]]})
     # (anotaciones) acera del lado oeste de la calle de residencias: arranca pasando el portón (33) y llega a un paso
     # de cebra que cruza a la acera del lado de las residencias
     elem.append({"tipo": "acera", "id": None, "ancho": 1.8,
@@ -1491,7 +1495,8 @@ def main(pdf, sat=None):
         [[115.73, -2.17], [118.3, 2.55], [122.8, 9.06], [133.7, 10.04], [144.1, 10.58], [157.8, 12.2], [169.0, 17.06],
          [180.78, 22.49], [185.24, 35.48], [187.9, 45.31], [193.16, 62.83], [196.52, 77.13], [200.05, 92.14],
          [202.84, 100.48], [206.28, 109.77]],
-        [[183.9, 31.56], [174.26, 42.06], [164.38, 52.5], [149.13, 54.5], [129.64, 54.0]],
+        # (anotaciones) el portón va en diagonal, cortando la esquina entre esta malla y la que sigue la calle
+        [[183.9, 31.56], [174.26, 42.06], [164.38, 52.5], [149.13, 54.5], [134.6, 54.1]],
         [[130.15, 59.5], [130.32, 61.97], [130.84, 66.0], [131.19, 70.03], [132.03, 74.01], [132.52, 77.96],
          [133.12, 81.98], [133.73, 85.9], [134.31, 89.94], [135.29, 93.97], [136.2, 98.1], [137.52, 101.99],
          [138.52, 105.98], [139.66, 110.08], [142.03, 113.97], [144.68, 117.72], [147.52, 121.85], [150.15, 125.65],
