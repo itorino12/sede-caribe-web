@@ -111,7 +111,7 @@ def armonica(h, fijo, vueltas=4000):
     return h
 
 
-def malla(terreno, muestras_xyz, plataformas, cauce, n_plano, calles, rampas=(), llanos=()):
+def malla(terreno, muestras_xyz, plataformas, cauce, n_plano, calles, rampas=(), llanos=(), someros=()):
     """Alturas (m, relativas a REFERENCIA) en una malla de PASO metros sobre el terreno de la maqueta.
     plataformas: lista de {"pol", "subir", "suave", "nivel" o "como"} (ver abajo): edificios, explanada, pista...
     rampas: lista de {"puntos", "ancho", "desde", "hasta", "cima"}: franjas que suben de una plataforma a otra.
@@ -120,7 +120,9 @@ def malla(terreno, muestras_xyz, plataformas, cauce, n_plano, calles, rampas=(),
     cauce, n_plano: eje de la quebrada (m) y cuántos de sus puntos vienen del plano (en ellos el fondo
     siempre baja; en la cola, que sale de la maqueta, sigue al terreno).
     calles: máscara (uint8) de las calles sobre el terreno de la maqueta, a cualquier resolución: ahí el
-    cauce va entubado y no se excava."""
+    cauce va entubado y no se excava.
+    someros: lista de {"x": (x0, x1), "hondo", "rampa"}: tramos (por x) donde el cauce es poco hondo bajo la
+    orilla aunque aguas arriba vaya más abajo; entra y sale del tramo en una rampa de ese largo (m)."""
     nx = int(round(terreno["ancho"] / PASO)) + 1
     nz = int(round(terreno["largo"] / PASO)) + 1
     xs = terreno["x"] + np.arange(nx) * PASO
@@ -207,6 +209,10 @@ def malla(terreno, muestras_xyz, plataformas, cauce, n_plano, calles, rampas=(),
     cj = np.clip(np.round((c[:, 0] - xs[0]) / PASO).astype(int), 0, nx - 1)
     fondo = h[ci, cj] - CAUCE["hondo"]
     fondo[:n_plano] = np.minimum.accumulate(fondo[:n_plano])
+    for so in someros:
+        (x0, x1), r = so["x"], max(so.get("rampa", 8.0), 1e-3)
+        w = np.clip((c[:, 0] - x0) / r, 0, 1) * np.clip((x1 - c[:, 0]) / r, 0, 1)
+        fondo = fondo + w * np.maximum(0, h[ci, cj] - so["hondo"] - fondo)
     linea = np.zeros(X.shape, np.uint8)
     linea[ci, cj] = 255
     d_cauce, idx = distance_transform_edt(linea == 0, return_indices=True)

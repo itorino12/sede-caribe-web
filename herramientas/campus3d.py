@@ -143,9 +143,13 @@ EDIFICIOS = [
     # (anotaciones) corrido unos 7 m al norte, hacia la cerca de la ruta 32
     {"id": 12, "rect": (1703.5, 1044.8, 173, 39, -2), "rect_arboles": (1726, 1072, 128, 39, -2), "pisos": 2,
      # (anotaciones) balcones con baranda en la punta este, la que da a los laboratorios, en los dos pisos
-     "estilo": {"forma_techo": "plano", "galeria": True, "techo": "#dcdfe2", "balcones": {"frente": [1, 0]}}},
+     # (anotaciones y foto) pasillo con baranda de tubos en los dos pisos del frente sur, abierto donde llega la
+     # pasarela que lo une con 26
+     "estilo": {"forma_techo": "plano", "galeria": {"aberturas": [[168.0, -109.5, 3.2]]}, "techo": "#dcdfe2",
+                "balcones": {"frente": [1, 0]}}},
     # (anotaciones) recto (sin giro) y algo más grande, donde lo marcó la Sede
-    {"id": 13, "rect": (1792.0, 1132.0, 124, 60, 0), "rect_arboles": (1786, 1130, 113, 51, -10), "pisos": 2,
+    # (anotaciones) corrido 3,4 m al oeste, donde lo marcó la Sede, y unido a 25 por una pasarela en cada piso
+    {"id": 13, "rect": (1778.4, 1132.0, 124, 60, 0), "rect_arboles": (1786, 1130, 113, 51, -10), "pisos": 2,
      # (anotaciones) los parasoles van en la punta este, cuatro paneles
      "estilo": {"forma_techo": "una_agua", "parasoles": True, "parasoles_frente": [1, 0], "parasoles_n": 4,
                 "ventanas": "vidrio_verde", "techo": "#d6dadd"}},
@@ -282,12 +286,14 @@ LLANOS = [
     {"pol": [(117.0, -5.0), (124.0, -2.3), (132.0, 0.2), (140.0, 2.4), (148.0, 3.2), (156.0, 3.7), (164.0, 3.2),
              (172.0, 2.4), (180.0, 1.2), (188.0, 0.0), (196.0, -1.0), (209.0, -1.4), (264.0, -6.0), (264.0, 12.0),
              (209.0, 17.0), (180.0, 21.3), (169.0, 16.0), (157.8, 11.0), (144.1, 9.4), (133.7, 8.8), (122.0, 7.9),
-             (117.5, 2.0), (116.5, -1.5)], "nivel": -0.8, "suave": 5.0},
+             (117.5, 2.0), (116.5, -1.5)], "nivel": -0.3, "suave": 5.0},
     # (anotaciones) sin pared entre la quebrada y el picnic: el zacate sube parejo desde la malla
     {"pol": [(120.0, 18.0), (133.7, 19.0), (144.0, 19.5), (157.8, 21.0), (169.0, 26.0), (181.0, 31.5), (183.0, 33.5),
              (174.0, 42.0), (164.0, 52.0), (149.0, 54.0), (129.0, 53.0), (126.0, 40.0), (123.0, 25.0), (121.0, 20.0)],
-     "nivel": 2.5, "suave": 9.0},
+     "nivel": 1.2, "suave": 12.0},
 ]
+# (anotaciones) al este del puente de residencias la quebrada va poco honda entre las dos mallas: sin zanja
+CAUCE_SOMERO = [{"x": (112.0, 178.0), "hondo": 1.1, "rampa": 9.0}]
 # explanada (anotaciones): todo el zacate abierto dentro de la vuelta del sendero, que la delimita al este
 # la explanada es la cima del cerro emparejada: es parte del relieve (plataforma a nivel), sin taludes propios.
 # El sendero que llega a ella sigue el terreno, que a lo largo del sendero sube parejo desde la plaza del auditorio
@@ -801,13 +807,18 @@ def lugares_nuevos(calles, quebrada, lejos_carretera, y_ruta32):
     cu_, su_ = math.cos(math.radians(g_c)), math.sin(math.radians(g_c))
     en_c = lambda u, v: (120.6 + cu_ * u - su_ * v, -93.0 + su_ * u + cu_ * v)   # u a lo largo, v hacia la calle
     losa_c = [en_c(-4.2, -7.7), en_c(4.2, -7.7), en_c(4.2, 7.9), en_c(-4.2, 7.9)]
-    cv2.fillPoly(calles_extra, [np.array([a_px(x, z) for x, z in losa_c], np.int32)], 255)
+    # (anotaciones) el parqueo se corrió hacia la calle; entre él y la biblioteca queda zacate (sin árboles nuevos)
     cv2.fillPoly(despejar_post, [np.array([a_px(x, z) for x, z in losa_c], np.int32)], 1)
+    losa_c = [en_c(-4.2, -0.9), en_c(4.2, -0.9), en_c(4.2, 7.9), en_c(-4.2, 7.9)]
+    cv2.fillPoly(calles_extra, [np.array([a_px(x, z) for x, z in losa_c], np.int32)], 255)
     for u in (-3.9, -1.3, 1.3, 3.9):
-        raya_(en_c(u, -7.4), en_c(u, -1.9))
-    c_t = en_c(0, -4.6)
+        raya_(en_c(u, -0.2), en_c(u, 5.3))
+    c_t = en_c(0, 3.0)
     elem.append({"tipo": "carport", "id": None, "p": [round(c_t[0], 2), round(c_t[1], 2)], "giro": round(math.radians(g_c), 3),
                  "largo": 8.4, "fondo": 6.6, "espacios": 3})
+    # (anotaciones) pasarela entre el pasillo de 25 y el edificio 26: una abajo y otra techada en el segundo piso,
+    # las dos con baranda
+    elem.append({"tipo": "pasarela", "id": None, "a": [168.0, -107.0], "b": [168.0, -99.4], "ancho": 3.0, "piso": 4.2})
     # (anotaciones) parqueo de busetas al oeste de la biblioteca, entre la calle y la cerca de la ruta 32: espacios
     # de 4,5 m de frente y 7,5 m de fondo con la trompa hacia la cerca
     t0_, t1_ = (26.0, -116.0), (60.5, -111.1)
@@ -1561,7 +1572,7 @@ def main(pdf, sat=None):
             pts = np.array([(x / ESCALA + ORIGEN[0], z / ESCALA + ORIGEN[1]) for x, z in el["puntos"]], np.int32)
             cv2.polylines(tubo, [pts], False, 255, int(el.get("ancho", 2) / ESCALA) + 4)
     info_r, alturas, _ = relieve.malla(terreno, relieve.muestras(datos_relieve, a_maqueta), plataformas, cauce_m, n_plano,
-                                      tubo[y0:y1, x0:x1], rampas, LLANOS)
+                                      tubo[y0:y1, x0:x1], rampas, LLANOS, CAUCE_SOMERO)
     print(f"Relieve: {info_r['nx']}x{info_r['nz']} celdas de {info_r['paso']} m, de {alturas.min():.1f} a {alturas.max():.1f} m")
 
     datos = {
