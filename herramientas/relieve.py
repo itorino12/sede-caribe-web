@@ -19,7 +19,7 @@ from scipy.ndimage import distance_transform_edt, gaussian_filter
 FUENTE = Path(__file__).resolve().parent / "fuentes" / "relieve-oepi.json"
 REFERENCIA = 96.0     # cota (m) que queda en y = 0: la explanada de las aulas y la piscina
 PASO = 2.0            # metros por celda de la malla de alturas
-CAUCE = {"hondo": 1.8, "ancho": 3.2, "borde": 2.5}   # cauce de la quebrada (m)
+CAUCE = {"hondo": 1.8, "ancho": 3.2, "borde": 5.0}   # cauce de la quebrada (m)
 # Puntos de control de la quebrada (plano en pt → maqueta en m). El puente: donde la quebrada pasa bajo la calle
 # de residencias. Al este del puente, el cauce va por el medio de las dos mallas que lo bordean (anotaciones de
 # la Sede, en campus3d.py): el punto medio entre ellas a x = 130, 150 y 170 m.

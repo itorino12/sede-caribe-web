@@ -679,12 +679,13 @@ for (const e of datos.campus.edificios) {
     const blancoV = new THREE.MeshStandardMaterial({ color: 0xf5f5f2, roughness: 0.85 });
     const grisV = new THREE.MeshStandardMaterial({ color: 0xa8b0b8, roughness: 0.85 });
     const laminaV = new THREE.MeshStandardMaterial({ color: 0xd6dade, roughness: 0.5, metalness: 0.3, side: THREE.DoubleSide });
-    for (const [t, largo] of [[-6, 7], [3.5, 10]]) {
+    // (anotaciones) más hacia el oeste y del tamaño marcado: unos 17,6 m de largo y 5 de fondo
+    for (const [t, largo] of [[-0.7, 7], [8.1, 10.6]]) {
       const caseta = new THREE.Group();
-      const zocalo = new THREE.Mesh(new THREE.BoxGeometry(largo, 1.8, 4), grisV); zocalo.position.y = 0.9; caseta.add(zocalo);
-      const muro = new THREE.Mesh(new THREE.BoxGeometry(largo, 1.4, 4), blancoV); muro.position.y = 2.5; caseta.add(muro);
-      const techo = new THREE.Mesh(new THREE.BoxGeometry(largo + 1.2, 0.12, 5.6), laminaV); techo.position.set(0, 3.45, 0.3); techo.rotation.x = -0.16; caseta.add(techo);
-      caseta.position.set(...sur.en(t, 14.5, 0)); caseta.rotation.y = sur.ang; grupo.add(caseta);
+      const zocalo = new THREE.Mesh(new THREE.BoxGeometry(largo, 1.8, 5), grisV); zocalo.position.y = 0.9; caseta.add(zocalo);
+      const muro = new THREE.Mesh(new THREE.BoxGeometry(largo, 1.4, 5), blancoV); muro.position.y = 2.5; caseta.add(muro);
+      const techo = new THREE.Mesh(new THREE.BoxGeometry(largo + 1.2, 0.12, 6.6), laminaV); techo.position.set(0, 3.45, 0.3); techo.rotation.x = -0.16; caseta.add(techo);
+      caseta.position.set(...sur.en(t, 15, 0)); caseta.rotation.y = sur.ang; grupo.add(caseta);
     }
     const toldo = new THREE.Mesh(new THREE.CylinderGeometry(2.4, 2.4, 6, 14, 1, true, -Math.PI / 2, Math.PI), new THREE.MeshStandardMaterial({ color: 0x8c8f88, roughness: 0.7, side: THREE.DoubleSide }));
     toldo.rotation.set(0, sur.ang, Math.PI / 2); toldo.position.set(...sur.en(-13, 14.5, 2.2)); grupo.add(toldo);
@@ -1181,6 +1182,8 @@ if (datos.campus.puente) {
   const gris = new THREE.MeshStandardMaterial({ color: 0xb8bdc2, roughness: 0.4, metalness: 0.5 });
   const blanco = new THREE.MeshLambertMaterial({ color: 0xf2f2f2 });
   const CALZADA = 5.8, ACERA = 1.8;
+  const mallaPuente = new THREE.MeshLambertMaterial({ color: 0x24533a, transparent: true, opacity: 0.5, side: THREE.DoubleSide, depthWrite: false });
+  const postePuente = new THREE.MeshLambertMaterial({ color: 0x1d4630 });
   // lado de la acera (anotaciones): solo del este, donde llega la acera de la calle que viene de la entrada por
   // residencias; del oeste no hay
   const lados = { este: [1], oeste: [-1], ambos: [-1, 1] }[datos.campus.puente.acera] || [-1];
@@ -1206,6 +1209,13 @@ if (datos.campus.puente) {
       caja(0.07, 0.07, L, amarillo, xb, 0.75, ang, cx, cz);
       caja(0.07, 0.07, L, gris, xb, 1.2, ang, cx, cz);
       caja(0.06, 1.5, 0.06, gris, xb, 0.55, ang, ax, az);
+      // (anotaciones) del lado de residencias, entre donde llegan las dos mallas de la quebrada, el puente lleva la
+      // misma malla verde por fuera de la baranda
+      if (lado > 0 && Math.max(az, bz) > -8.2 && Math.min(az, bz) < 0.8) {
+        const xm = lado * (CALZADA / 2 + ACERA + 0.32);
+        const m = caja(0.04, 2.2, L, mallaPuente, xm, 1.35, ang, cx, cz); m.castShadow = false;
+        caja(0.1, 2.4, 0.1, postePuente, xm, 1.25, ang, ax, az);
+      }
     }
   }
   // paso de cebra al norte del puente

@@ -44,7 +44,7 @@ PUENTE = {"centro": (1540, 1478), "largo": 46}      # puente de la calle interna
 # parqueo asfaltado al costado de la piscina que da al gimnasio (fotos), entre la malla y la calle
 # Medidas tomadas de la vista satelital (en metros, en el marco de la piscina: u al este, v al sur);
 # el borde este se recorta para que no se meta en la calle del croquis
-PARQUEO = {"u": (16.0, 37.0), "v": (-21.0, 10.0), "divisor": -8.0}
+PARQUEO = {"u": (14.5, 37.0), "v": (-21.0, 15.0), "divisor": -8.0}   # (anotaciones) más largo hacia el sur y hacia la piscina
 # (anotaciones) la piscina con su deck, malla, baños y vestidores va 5 m al este y 1,5 m al sur de donde estaba,
 # para dejar espacio libre (con mesas) entre ella y las aulas, y entre la malla y el adoquín del norte
 PISCINA_RECT = (1453, 1310, 60, 109, 15)
@@ -54,7 +54,7 @@ def piscina_a_px(u, v):
     cx, cy, _, _, g = PISCINA_RECT
     c, s_ = math.cos(math.radians(g)), math.sin(math.radians(g))
     return cx + (c * u - s_ * v) / ESCALA, cy + (s_ * u + c * v) / ESCALA
-PLANTA = {"centro": (1517, 1576), "giro": 76}        # planta de tratamiento, al oeste de la calle, pasando el puente
+PLANTA = {"centro": (1523, 1573), "giro": -68.7}        # planta de tratamiento, al oeste de la calle, pasando el puente
 # (anotaciones) más cerca de la calle de residencias, en el zacate entre la calle y donde estaba
 PLANTA_ARBOLES = {"centro": (1486, 1566)}            # donde estaba: el despeje de árboles sigue ahí (ver arriba)
 
@@ -144,13 +144,15 @@ EDIFICIOS = [
     {"id": 12, "rect": (1703.5, 1044.8, 173, 39, -2), "rect_arboles": (1726, 1072, 128, 39, -2), "pisos": 2,
      # (anotaciones) balcones con baranda en la punta este, la que da a los laboratorios, en los dos pisos
      "estilo": {"forma_techo": "plano", "galeria": True, "techo": "#dcdfe2", "balcones": {"frente": [1, 0]}}},
-    {"id": 13, "rect": (1786, 1130, 113, 51, -10), "pisos": 2,
+    # (anotaciones) recto (sin giro) y algo más grande, donde lo marcó la Sede
+    {"id": 13, "rect": (1792.0, 1132.0, 124, 60, 0), "rect_arboles": (1786, 1130, 113, 51, -10), "pisos": 2,
      # (anotaciones) los parasoles van en la punta este, cuatro paneles
      "estilo": {"forma_techo": "una_agua", "parasoles": True, "parasoles_frente": [1, 0], "parasoles_n": 4,
                 "ventanas": "vidrio_verde", "techo": "#d6dadd"}},
     # Gimnasio (fotos): nave alta con techo de cuatro aguas de lámina verde y linternilla de ventilación,
     # viga perimetral de concreto sobre columnas que forma un corredor abierto, paredes blancas con franja celeste
-    {"id": 14, "rect": (1689, 1292, 151, 196, 12.5), "pisos": 1, "alto": 9, "linterna": 0.6,
+    # (anotaciones) recto y corrido al sureste, donde lo marcó la Sede
+    {"id": 14, "rect": (1703.2, 1316.0, 151, 196, 0), "rect_arboles": (1689, 1292, 151, 196, 12.5), "pisos": 1, "alto": 9, "linterna": 0.6,
      "estilo": {"techo": "#8db38a", "corredor": True, "franja": "#4fa8e8", "rotulo": [-1, 0]}},
     # Bodega de Acción Social (foto): casita blanca de techo a dos aguas gris oscuro con alero blanco y portón negro
     {"id": 15, "rect": (1770, 1450, 59, 41, 0), "pisos": 1, "alto": 3.4,
@@ -280,10 +282,11 @@ LLANOS = [
     {"pol": [(117.0, -5.0), (124.0, -2.3), (132.0, 0.2), (140.0, 2.4), (148.0, 3.2), (156.0, 3.7), (164.0, 3.2),
              (172.0, 2.4), (180.0, 1.2), (188.0, 0.0), (196.0, -1.0), (209.0, -1.4), (264.0, -6.0), (264.0, 12.0),
              (209.0, 17.0), (180.0, 21.3), (169.0, 16.0), (157.8, 11.0), (144.1, 9.4), (133.7, 8.8), (122.0, 7.9),
-             (117.5, 2.0), (116.5, -1.5)], "nivel": -1.0, "suave": 5.0},
-    {"pol": [(120.0, 11.0), (133.7, 14.0), (144.0, 14.5), (157.8, 16.0), (169.0, 21.0), (181.0, 26.5), (183.0, 31.5),
-             (174.0, 42.0), (164.0, 52.0), (149.0, 54.0), (129.0, 53.0), (126.0, 40.0), (123.0, 25.0), (121.0, 16.0)],
-     "nivel": 2.5, "suave": 3.0},
+             (117.5, 2.0), (116.5, -1.5)], "nivel": -0.8, "suave": 5.0},
+    # (anotaciones) sin pared entre la quebrada y el picnic: el zacate sube parejo desde la malla
+    {"pol": [(120.0, 18.0), (133.7, 19.0), (144.0, 19.5), (157.8, 21.0), (169.0, 26.0), (181.0, 31.5), (183.0, 33.5),
+             (174.0, 42.0), (164.0, 52.0), (149.0, 54.0), (129.0, 53.0), (126.0, 40.0), (123.0, 25.0), (121.0, 20.0)],
+     "nivel": 2.5, "suave": 9.0},
 ]
 # explanada (anotaciones): todo el zacate abierto dentro de la vuelta del sendero, que la delimita al este
 # la explanada es la cima del cerro emparejada: es parte del relieve (plataforma a nivel), sin taludes propios.
@@ -756,6 +759,9 @@ def lugares_nuevos(calles, quebrada, lejos_carretera, y_ruta32):
     elem.append({"tipo": "acera", "id": None, "ancho": 1.8, "puntos": [[56.0, -85.2], [50.0, -81.0], [43.2, -79.0]]})
     # (anotaciones) tramo corto que sigue la acera de los baños de la piscina hasta la acera que bordea la malla
     elem.append({"tipo": "acera", "id": None, "ancho": 1.6, "puntos": [[53.01, -35.32], [51.19, -28.53]]})
+    # (anotaciones) acera en diagonal desde el pasillo del lado de la piscina, en la punta sur del 7, hasta la acera
+    # que bordea la malla de la piscina
+    elem.append({"tipo": "acera", "id": None, "ancho": 1.6, "puntos": [[41.6, -37.8], [46.5, -33.2], [51.2, -28.7]]})
     # (anotaciones) acera del lado oeste de la calle de residencias: arranca pasando el portón (33) y llega a un paso
     # de cebra que cruza a la acera del lado de las residencias
     elem.append({"tipo": "acera", "id": None, "ancho": 1.8,
