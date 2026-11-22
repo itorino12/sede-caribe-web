@@ -146,12 +146,13 @@ EDIFICIOS = [
      # (anotaciones y foto) pasillo con baranda de tubos en los dos pisos del frente sur, abierto donde llega la
      # pasarela que lo une con 26
      "estilo": {"forma_techo": "plano", "galeria": {"aberturas": [[168.0, -109.5, 3.2]]}, "techo": "#dcdfe2",
-                "balcones": {"frente": [1, 0]}}},
+                "balcones": {"frente": [1, 0], "unir_galeria": True}}},
     # (anotaciones) recto (sin giro) y algo más grande, donde lo marcó la Sede
     # (anotaciones) corrido 3,4 m al oeste, donde lo marcó la Sede, y unido a 25 por una pasarela en cada piso
-    {"id": 13, "rect": (1778.4, 1132.0, 124, 60, 0), "rect_arboles": (1786, 1130, 113, 51, -10), "pisos": 2,
-     # (anotaciones) los parasoles van en la punta este, cuatro paneles
-     "estilo": {"forma_techo": "una_agua", "parasoles": True, "parasoles_frente": [1, 0], "parasoles_n": 4,
+    # (anotaciones) 26 m de largo: el lado oeste queda donde estaba y el este se recorta
+    {"id": 13, "rect": (1768.4, 1132.0, 104, 60, 0), "rect_arboles": (1786, 1130, 113, 51, -10), "pisos": 2,
+     # (anotaciones) los parasoles van en la punta este: tres paneles anchos, casi de suelo a techo
+     "estilo": {"forma_techo": "una_agua", "parasoles": True, "parasoles_frente": [1, 0], "parasoles_n": 3,
                 "ventanas": "vidrio_verde", "techo": "#d6dadd"}},
     # Gimnasio (fotos): nave alta con techo de cuatro aguas de lámina verde y linternilla de ventilación,
     # viga perimetral de concreto sobre columnas que forma un corredor abierto, paredes blancas con franja celeste
@@ -818,7 +819,8 @@ def lugares_nuevos(calles, quebrada, lejos_carretera, y_ruta32):
                  "largo": 8.4, "fondo": 6.6, "espacios": 3})
     # (anotaciones) pasarela entre el pasillo de 25 y el edificio 26: una abajo y otra techada en el segundo piso,
     # las dos con baranda
-    elem.append({"tipo": "pasarela", "id": None, "a": [168.0, -107.0], "b": [168.0, -99.4], "ancho": 3.0, "piso": 4.2})
+    elem.append({"tipo": "pasarela", "id": None, "a": [168.0, -107.0], "b": [168.0, -99.4], "ancho": 3.0, "piso": 4.2,
+                 "nivel_de": 25})
     # (anotaciones) parqueo de busetas al oeste de la biblioteca, entre la calle y la cerca de la ruta 32: espacios
     # de 4,5 m de frente y 7,5 m de fondo con la trompa hacia la cerca
     t0_, t1_ = (26.0, -116.0), (60.5, -111.1)

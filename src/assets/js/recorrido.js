@@ -523,20 +523,38 @@ function entrada(grupo, e) {
 
 // Balcones (anotaciones; foto del edificio nuevo): en una punta del edificio, uno a ras del primer piso y otro en el
 // segundo, losa de concreto en voladizo con baranda de tubo gris y columnas de acero en las esquinas
-function balcones(grupo, vol, alto, pisos, frente) {
+function balcones(grupo, vol, alto, pisos, frente, unirGaleria = false) {
   const f = fachadaMirando(vol.contorno, frente), dx = (f.b[0] - f.a[0]) / f.largo, dz = (f.b[1] - f.a[1]) / f.largo;
   const ang = Math.atan2(-dz, dx), fondo = 2.4, largo = f.largo - 0.6;
   const cx = (f.a[0] + f.b[0]) / 2, cz = (f.a[1] + f.b[1]) / 2;
   const en = (u, v, y) => [cx + dx * u + f.nx * v, y, cz + dz * u + f.nz * v];
   const pieza = (w, h, d, mat, u, v, y) => { const m = new THREE.Mesh(new THREE.BoxGeometry(w, h, d), mat); m.position.set(...en(u, v, y)); m.rotation.y = ang; m.castShadow = !liviano; grupo.add(m); };
   const tubo = new THREE.MeshStandardMaterial({ color: 0x6b7278, roughness: 0.5, metalness: 0.5 });
+  // (anotaciones) unido al pasillo de la galería sur: la losa sigue por la esquina hasta la orilla del pasillo
+  // (2,6 m afuera de la fachada sur) y la baranda da la vuelta; del lado del pasillo no lleva baranda
+  const sur = dz > 0 ? 1 : -1, FONDO_GALERIA = 2.6;
+  const uFin = sur * (f.largo / 2 + FONDO_GALERIA + 0.25), uBal = sur * largo / 2;
   for (let p = 0; p < pisos; p++) {
-    const y = p === 0 ? 0.45 : (alto / pisos) * p;
+    // unido a la galería, la losa queda a ras del piso del pasillo (0,3 m abajo; arriba, el piso)
+    const y = unirGaleria ? (p === 0 ? 0.3 : (alto / pisos) * p) - 0.125 : p === 0 ? 0.45 : (alto / pisos) * p;
     pieza(largo, 0.25, fondo, losa, 0, fondo / 2, y);                                      // losa
     for (const h of [0.5, 1.0]) pieza(largo, 0.06, 0.06, tubo, 0, fondo - 0.05, y + h);   // baranda al frente
-    for (const lado of [-1, 1]) for (const h of [0.5, 1.0]) pieza(0.06, 0.06, fondo, tubo, lado * largo / 2, fondo / 2, y + h);
+    for (const lado of [-1, 1]) {
+      if (unirGaleria && lado === sur) continue;
+      for (const h of [0.5, 1.0]) pieza(0.06, 0.06, fondo, tubo, lado * largo / 2, fondo / 2, y + h);
+    }
     const n = Math.max(2, Math.round(largo / 1.2));
     for (let i = 0; i <= n; i++) pieza(0.04, 1.0, 0.04, tubo, -largo / 2 + (largo * i) / n, fondo - 0.05, y + 0.5);
+    if (unirGaleria) {
+      const L = Math.abs(uFin - uBal), um = (uFin + uBal) / 2;
+      pieza(L, 0.25, fondo, losa, um, fondo / 2, y);                                       // losa de la esquina
+      for (const h of [0.5, 1.0]) pieza(L, 0.06, 0.06, tubo, um, fondo - 0.05, y + h);     // baranda al este
+      const uR = sur * (f.largo / 2 + FONDO_GALERIA + 0.12);                               // y al sur, en línea con la del pasillo
+      for (const h of [0.5, 1.0]) pieza(0.06, 0.06, fondo, tubo, uR, fondo / 2, y + h);
+      const k = Math.max(1, Math.round(L / 1.2));
+      for (let i = 0; i <= k; i++) pieza(0.04, 1.0, 0.04, tubo, uBal + ((uFin - uBal) * i) / k, fondo - 0.05, y + 0.5);
+      for (let i = 0; i <= 2; i++) pieza(0.04, 1.0, 0.04, tubo, uR, (fondo * i) / 2, y + 0.5);
+    }
   }
   for (const lado of [-1, 1]) pieza(0.25, alto, 0.25, acero, lado * largo / 2, fondo, alto / 2);   // columnas
 }
@@ -746,7 +764,7 @@ function puertaBiblioteca(grupo, volumenes, { cerca, frente }) {
 // Parasoles curvos de lámina blanca frente a la fachada (edificio 13): paneles altos que se arquean hacia afuera
 function parasoles(grupo, vol, alto, frente, cuantos = 3) {
   const f = frente ? fachadaMirando(vol.contorno, frente) : fachadaSur(vol.contorno), dx = (f.b[0] - f.a[0]) / f.largo, dz = (f.b[1] - f.a[1]) / f.largo;
-  const ancho = (f.largo / cuantos) * 0.82, altoP = alto * 0.9;
+  const ancho = (f.largo / cuantos) * (cuantos <= 3 ? 0.94 : 0.82), altoP = alto * (cuantos <= 3 ? 0.97 : 0.9);
   for (let i = 0; i < cuantos; i++) {
     const g = new THREE.PlaneGeometry(ancho, altoP, 1, 10);
     const p = g.attributes.position;
@@ -754,7 +772,7 @@ function parasoles(grupo, vol, alto, frente, cuantos = 3) {
     g.computeVertexNormals();
     const panel = new THREE.Mesh(g, parasol);
     const t = (i + 0.5) / cuantos;
-    panel.position.set(f.a[0] + dx * f.largo * t + f.nx * 1.0, alto * 0.52, f.a[1] + dz * f.largo * t + f.nz * 1.0);
+    panel.position.set(f.a[0] + dx * f.largo * t + f.nx * 1.0, Math.max(alto * 0.52, altoP / 2 + 0.05), f.a[1] + dz * f.largo * t + f.nz * 1.0);
     panel.rotation.y = Math.atan2(f.nx, f.nz);
     panel.castShadow = true; grupo.add(panel);
   }
@@ -982,7 +1000,7 @@ for (const e of datos.campus.edificios) {
     }
     if (estilo.galeria) e.volumenes.forEach((vol) => galeria(grupo, vol, e.alto, Math.max(e.pisos, 1), estilo.galeria === true ? {} : estilo.galeria));
     if (estilo.parasoles) e.volumenes.forEach((vol) => parasoles(grupo, vol, e.alto, estilo.parasoles_frente, estilo.parasoles_n));
-    if (estilo.balcones) e.volumenes.forEach((vol) => balcones(grupo, vol, e.alto, Math.max(e.pisos, 1), estilo.balcones.frente));
+    if (estilo.balcones) e.volumenes.forEach((vol) => balcones(grupo, vol, e.alto, Math.max(e.pisos, 1), estilo.balcones.frente, !!estilo.balcones.unir_galeria));
     if (estilo.mural_mosaico) muralMosaico(grupo, e.volumenes[0], e.alto, estilo.mural_mosaico.frente);
     if (estilo.puerta_biblioteca) puertaBiblioteca(grupo, e.volumenes, estilo.puerta_biblioteca);
     if (estilo.entrada) entrada(grupo, e);
@@ -2099,7 +2117,7 @@ if (datos.campus.parqueo) {
   }
   // pasarela entre dos edificios (anotaciones): en el primer piso un pasillo de concreto y en el segundo una losa
   // sobre columnas, techada; las dos con baranda de tubos a cada lado
-  function pasarela({ a, b, ancho = 3, piso = 4.2 }) {
+  function pasarela({ a, b, ancho = 3, piso = 4.2, nivel_de: nivelDe }) {
     const g = new THREE.Group();
     const L = Math.hypot(b[0] - a[0], b[1] - a[1]), ang = Math.atan2(-(b[1] - a[1]), b[0] - a[0]);
     const gris = mate(0xa9a7a1, { roughness: 0.95 }), losaP = mate(0xd9d8d3, { roughness: 0.9 }), techoP = mate(0xd6dadd, { roughness: 0.7 });
@@ -2115,6 +2133,7 @@ if (datos.campus.parqueo) {
     g.traverse((o) => { if (o.isMesh) { o.castShadow = !liviano; o.receiveShadow = true; } });
     g.position.set((a[0] + b[0]) / 2, 0, (a[1] + b[1]) / 2); g.rotation.y = ang;
     registrar(g, null);
+    if (nivelDe) g.userData.nivelDe = nivelDe;
   }
   // portón peatonal (anotaciones): dos hojas angostas como las del portón grande, al final de la cerca
   function portonPeatonal({ p, giro, ancho = 1.4 }) {
@@ -2299,6 +2318,11 @@ if (datos.campus.parqueo) {
   };
   escena.children.slice(inicioCampus).forEach(clasificar);
   // 2. emparejar el terreno bajo los lugares que se suben enteros
+  // lo que va unido a un lugar (pasarelas) se sube a la misma altura que él, para que los pisos empaten
+  for (const e of enteros) if (e.o.userData.nivelDe) {
+    const ref = enteros.find((q) => q.o.userData.id === e.o.userData.nivelDe);
+    if (ref) e.h = ref.h;
+  }
   for (const e of enteros) if (e.huella) aplanar(e.huella, e.h, e.o.userData.talud || TALUD);
   for (const e of enteros) for (const q of e.estribos || []) aplanar(q, e.h, 4);
   // 2b. bajo aceras y pisos de pasillo el terreno toma la rasante del camino: la altura del terreno en sus puntos,
