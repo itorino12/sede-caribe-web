@@ -145,7 +145,9 @@ EDIFICIOS = [
      # (anotaciones) balcones con baranda en la punta este, la que da a los laboratorios, en los dos pisos
      # (anotaciones y foto) pasillo con baranda de tubos en los dos pisos del frente sur, abierto donde llega la
      # pasarela que lo une con 26
-     "estilo": {"forma_techo": "plano", "galeria": {"aberturas": [[168.0, -109.5, 3.2]]}, "techo": "#dcdfe2",
+     "estilo": {"forma_techo": "plano", "galeria": {"aberturas": [[168.0, -109.5, 3.2]],
+                                                   # (anotaciones) la segunda y tercera columna desde el oeste, corridas
+                                                   "mover_postes": [[132.2, 133.9], [137.0, 139.0]]}, "techo": "#dcdfe2",
                 "balcones": {"frente": [1, 0], "unir_galeria": True}}},
     # (anotaciones) recto (sin giro) y algo más grande, donde lo marcó la Sede
     # (anotaciones) corrido 3,4 m al oeste, donde lo marcó la Sede, y unido a 25 por una pasarela en cada piso
@@ -677,7 +679,10 @@ def lugares_nuevos(calles, quebrada, lejos_carretera, y_ruta32):
     for x, z in nuevas:   # sin árboles encima de las mesas nuevas
         cv2.circle(despejar, a_px(x, z), int(4.5 / ESCALA), 1, -1)
     # (anotaciones) las tres de la orilla de la piscina quedaban en el cauce: van en el zacate, entre la acera y la quebrada
-    nuevas = nuevas[:4] + [[82.0, -15.2], [87.0, -14.8], [92.0, -14.0]]
+    # (anotaciones) las tres entre el pasillo de las aulas y los baños de la piscina se corrieron 3 m al este
+    nuevas = nuevas[:1] + [[48.7, -65.5], [48.7, -60.0], [48.7, -54.5]] + [[82.0, -15.2], [87.0, -14.8], [92.0, -14.0]]
+    for x, z in nuevas[1:4]:
+        cv2.circle(despejar_post, a_px(x, z), int(4.5 / ESCALA), 1, -1)
     for x, z in nuevas[4:]:
         cv2.circle(despejar_post, a_px(x, z), int(1.8 / ESCALA), 1, -1)
     # (anotaciones) mesas redondas de concreto alrededor de Docencia (4): al sur, junto al camino techado, y al este,
@@ -741,7 +746,8 @@ def lugares_nuevos(calles, quebrada, lejos_carretera, y_ruta32):
     # Pasa pegada a la malla de la piscina (a unos 2,4 m), de modo que los vestidores, el toldo y las mesas quedan
     # detrás de ella, del lado de la quebrada (ver vestidores en recorrido.js)
     elem.append({"tipo": "acera", "id": None, "ancho": 1.8,
-                 "puntos": [[106.1, -11.8], [98.0, -14.6], [86.56, -19.89], [67.24, -25.07], [56.13, -28.04], [41.4, -29.5]]})
+                 "puntos": [[106.1, -11.8], [98.0, -14.6], [86.56, -19.89], [67.24, -25.07], [56.13, -28.04], [51.1, -28.55]]})
+    # (anotaciones) se quitó el último tramo, de la unión con la acera de los baños hasta la esquina sur del 7
     # (anotaciones) acera en la zona verde al norte del 9: sale del pasillo de los extremos de las aulas, bordea la
     # calle de arriba hasta la esquina y baja junto al camino de la entrada hasta la acera que ya estaba; otra
     # corta llega a ella desde el extremo oeste del 9
@@ -766,9 +772,7 @@ def lugares_nuevos(calles, quebrada, lejos_carretera, y_ruta32):
     elem.append({"tipo": "acera", "id": None, "ancho": 1.8, "puntos": [[56.0, -85.2], [50.0, -81.0], [43.2, -79.0]]})
     # (anotaciones) tramo corto que sigue la acera de los baños de la piscina hasta la acera que bordea la malla
     elem.append({"tipo": "acera", "id": None, "ancho": 1.6, "puntos": [[53.01, -35.32], [51.19, -28.53]]})
-    # (anotaciones) acera en diagonal desde el pasillo del lado de la piscina, en la punta sur del 7, hasta la acera
-    # que bordea la malla de la piscina
-    elem.append({"tipo": "acera", "id": None, "ancho": 1.6, "puntos": [[41.6, -37.8], [46.5, -33.2], [51.2, -28.7]]})
+    # (anotaciones) la acera en diagonal desde la punta sur del 7 se quitó
     # (anotaciones) acera del lado oeste de la calle de residencias: arranca pasando el portón (33) y llega a un paso
     # de cebra que cruza a la acera del lado de las residencias
     elem.append({"tipo": "acera", "id": None, "ancho": 1.8,

@@ -231,7 +231,7 @@ function bancaTubos() {
 // Galería (edificio 12, foto): pasillo corrido en los dos pisos del frente sur, con piso de concreto, baranda de
 // tubos al borde, columnas de acero, bancas y la losa del techo volada encima; escalera exterior en diagonal.
 // La baranda se abre donde llega una pasarela (aberturas: [x, z, ancho]) y arriba de la escalera.
-function galeria(grupo, vol, alto, pisos, { aberturas = [] } = {}) {
+function galeria(grupo, vol, alto, pisos, { aberturas = [], mover_postes: moverPostes = [] } = {}) {
   const f = fachadaSur(vol.contorno), fondo = 2.6, dx = (f.b[0] - f.a[0]) / f.largo, dz = (f.b[1] - f.a[1]) / f.largo;
   const angulo = Math.atan2(-dz, dx), alturaPiso = alto / pisos;
   const en = (u, v, y) => [f.a[0] + dx * u + f.nx * v, y, f.a[1] + dz * u + f.nz * v];
@@ -248,7 +248,14 @@ function galeria(grupo, vol, alto, pisos, { aberturas = [] } = {}) {
     return out;
   };
   const n = Math.max(2, Math.round(f.largo / 5));
-  for (let i = 0; i <= n; i++) pieza(0.3, alto + 0.6, 0.3, tuboBaranda, f.largo * i / n, fondo, (alto + 0.6) / 2);   // columnas
+  // columnas; mover_postes: [[x de antes, x nueva]] corre la columna más cercana a esa x (en la fachada)
+  const uDe = (x) => (x - f.a[0]) / dx;
+  const usCol = Array.from({ length: n + 1 }, (_, i) => f.largo * i / n);
+  for (const [xa, xb] of moverPostes) {
+    const k = usCol.reduce((m, u, i) => (Math.abs(u - uDe(xa)) < Math.abs(usCol[m] - uDe(xa)) ? i : m), 0);
+    usCol[k] = uDe(xb);
+  }
+  for (const u of usCol) pieza(0.3, alto + 0.6, 0.3, tuboBaranda, u, fondo, (alto + 0.6) / 2);
   for (let p = 0; p < pisos; p++) {
     const y = p === 0 ? 0.3 : alturaPiso * p;
     pieza(f.largo, p === 0 ? 0.3 : 0.3, fondo + 0.3, p === 0 ? concretoP : losa, f.largo / 2, (fondo + 0.3) / 2, y - 0.15);   // piso
