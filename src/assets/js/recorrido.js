@@ -231,7 +231,7 @@ function bancaTubos() {
 // Galería (edificio 12, foto): pasillo corrido en los dos pisos del frente sur, con piso de concreto, baranda de
 // tubos al borde, columnas de acero, bancas y la losa del techo volada encima; escalera exterior en diagonal.
 // La baranda se abre donde llega una pasarela (aberturas: [x, z, ancho]) y arriba de la escalera.
-function galeria(grupo, vol, alto, pisos, { aberturas = [], mover_postes: moverPostes = [], quitar_postes: quitarPostes = [], abrir_abajo: abrirAbajo = [], escalera: xEsc = null } = {}) {
+function galeria(grupo, vol, alto, pisos, { aberturas = [], mover_postes: moverPostes = [], quitar_postes: quitarPostes = [], abrir_abajo: abrirAbajo = [], escalera: xEsc = null, cerrar_oeste: cerrarOeste = false } = {}) {
   const f = fachadaSur(vol.contorno), fondo = 2.6, dx = (f.b[0] - f.a[0]) / f.largo, dz = (f.b[1] - f.a[1]) / f.largo;
   const angulo = Math.atan2(-dz, dx), alturaPiso = alto / pisos;
   const en = (u, v, y) => [f.a[0] + dx * u + f.nx * v, y, f.a[1] + dz * u + f.nz * v];
@@ -278,6 +278,16 @@ function galeria(grupo, vol, alto, pisos, { aberturas = [], mover_postes: moverP
       const u = f.largo * (k + 0.5) / n;
       if (huecos.some(([a, b]) => u > a - 1 && u < b + 1) || Math.abs(u - uEsc) < 4.5) continue;
       const bc = bancaTubos(); bc.position.set(...en(u, fondo - 0.4, y)); bc.rotation.y = angulo; grupo.add(bc);
+    }
+  }
+  if (cerrarOeste) {
+    // (anotaciones) en la punta oeste el techo del pasillo sigue hasta el borde del techo del edificio (la esquina
+    // quedaba sin techo) y el pasillo de arriba se cierra con baranda
+    const uW = dx > 0 ? 0 : f.largo, sW = dx > 0 ? -1 : 1, extra = 3.2;
+    pieza(extra, 0.2, fondo + 0.8 + extra, losa, uW + sW * extra / 2, (fondo + 0.8 + extra) / 2 - extra, alto + 0.5);
+    for (let p = 1; p < pisos; p++) {
+      const br = baranda(fondo + 0.1); br.position.set(...en(uW + sW * 0.1, (fondo + 0.1) / 2, alturaPiso * p));
+      br.rotation.y = angulo + Math.PI / 2; grupo.add(br);
     }
   }
   pieza(f.largo + 0.4, 0.2, fondo + 0.8, losa, f.largo / 2, (fondo + 0.8) / 2, alto + 0.5);   // techo volado
@@ -373,10 +383,12 @@ function escaleraGaleria(grupo, { en, angulo, f, dx, dz, fondo, alto, alturaPiso
   caja(W + 2.2, 0.2, vT1 - vT0, blanco, uM, (vT0 + vT1) / 2, yT);
   caja(W + 2.2, 0.06, vT1 - vT0, lamina, uM, (vT0 + vT1) / 2, yT - 0.13);
   caja(W + 0.6, 0.18, 0.14, gris, uM, vI, yT - 0.2);
-  // alero de lámina ondulada de una agua (fotos) en la unión de las columnas rectas con las inclinadas
-  const vA0 = fondo + 0.2, vA1 = vC + 1.2, caida = 0.45;
-  caja(W + 1.8, 0.04, Math.hypot(vA1 - vA0, caida), lamina, uM, (vA0 + vA1) / 2, yJ - caida / 2, Math.atan2(caida, (vA1 - vA0) * s));
-  for (const u of [uA - 0.15, uB + 0.15]) caja(0.08, 0.1, vA1 - vA0, gris, u, (vA0 + vA1) / 2, yJ - caida / 2 - 0.08, Math.atan2(caida, (vA1 - vA0) * s));
+  // (anotaciones) lámina ondulada sobre el tramo inclinado de las columnas, entre ellas, desde la unión hacia arriba
+  {
+    const t0 = 0.12, t1 = 0.6, vL0 = vC + (vI - vC) * t0, yL0 = yJ + (yT - 0.1 - yJ) * t0, vL1 = vC + (vI - vC) * t1, yL1 = yJ + (yT - 0.1 - yJ) * t1;
+    const L = Math.hypot(vL1 - vL0, yL1 - yL0), ang = Math.atan2(-(yL1 - yL0), (vL1 - vL0) * s);
+    caja(uB - uA + 0.3, 0.05, L, lamina, uM, (vL0 + vL1) / 2 + 0.12 * s * 0, (yL0 + yL1) / 2, ang);
+  }
 }
 // Entrada principal (foto de la portada, de frente desde la ruta 32). De este a oeste: portón peatonal blanco y
 // muro blanco con el rótulo azul «UCR · Sede del Caribe»; el carril de entrada bajo una losa blanca delgada e

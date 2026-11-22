@@ -141,11 +141,12 @@ EDIFICIOS = [
     # exteriores; laboratorios con techo de una sola agua, ventanales verdes y parasoles curvos blancos.
     # (anotaciones) las aulas 18 a 23 siguen hacia el oeste hasta cerca de la biblioteca
     # (anotaciones) corrido unos 7 m al norte, hacia la cerca de la ruta 32
-    {"id": 12, "rect": (1703.5, 1044.8, 173, 39, -2), "rect_arboles": (1726, 1072, 128, 39, -2), "pisos": 2,
+    # (anotaciones) 25 y 26 corridos 2,4 m al norte, hacia la cerca de la ruta 32
+    {"id": 12, "rect": (1703.5, 1035.2, 173, 39, -2), "rect_arboles": (1726, 1072, 128, 39, -2), "pisos": 2,
      # (anotaciones) balcones con baranda en la punta este, la que da a los laboratorios, en los dos pisos
      # (anotaciones y foto) pasillo con baranda de tubos en los dos pisos del frente sur, abierto donde llega la
      # pasarela que lo une con 26
-     "estilo": {"forma_techo": "plano", "galeria": {"aberturas": [[168.0, -109.5, 3.2]],
+     "estilo": {"forma_techo": "plano", "galeria": {"aberturas": [[168.0, -111.9, 3.2]], "cerrar_oeste": True,
                                                    # (anotaciones) la segunda y tercera columna desde el oeste, corridas
                                                    "mover_postes": [[132.2, 133.9], [137.0, 140.4]],
                                                    # (anotaciones) sin la columna junto a la escalera
@@ -158,7 +159,7 @@ EDIFICIOS = [
     # (anotaciones) recto (sin giro) y algo más grande, donde lo marcó la Sede
     # (anotaciones) corrido 3,4 m al oeste, donde lo marcó la Sede, y unido a 25 por una pasarela en cada piso
     # (anotaciones) 26 m de largo: el lado oeste queda donde estaba y el este se recorta
-    {"id": 13, "rect": (1768.4, 1132.0, 104, 60, 0), "rect_arboles": (1786, 1130, 113, 51, -10), "pisos": 2,
+    {"id": 13, "rect": (1768.4, 1122.4, 104, 60, 0), "rect_arboles": (1786, 1130, 113, 51, -10), "pisos": 2,
      # (anotaciones) los parasoles van en la punta este: tres paneles anchos, casi de suelo a techo
      "estilo": {"forma_techo": "una_agua", "parasoles": True, "parasoles_frente": [1, 0], "parasoles_n": 3,
                 "ventanas": "vidrio_verde", "techo": "#d6dadd"}},
@@ -848,7 +849,7 @@ def lugares_nuevos(calles, quebrada, lejos_carretera, y_ruta32):
                  "largo": 8.4, "fondo": 6.6, "espacios": 3})
     # (anotaciones) pasarela entre el pasillo de 25 y el edificio 26: una abajo y otra techada en el segundo piso,
     # las dos con baranda
-    elem.append({"tipo": "pasarela", "id": None, "a": [168.0, -107.0], "b": [168.0, -99.4], "ancho": 3.0, "piso": 4.2,
+    elem.append({"tipo": "pasarela", "id": None, "a": [168.0, -109.4], "b": [168.0, -101.8], "ancho": 3.0, "piso": 4.2,
                  "alto": 8.4, "nivel_de": 25})
     # (anotaciones) parqueo de busetas al oeste de la biblioteca, entre la calle y la cerca de la ruta 32: espacios
     # de 4,5 m de frente y 7,5 m de fondo con la trompa hacia la cerca
