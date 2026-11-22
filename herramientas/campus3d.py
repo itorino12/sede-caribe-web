@@ -290,10 +290,13 @@ LLANOS = [
              (172.0, 2.4), (180.0, 1.2), (188.0, 0.0), (196.0, -1.0), (209.0, -1.4), (264.0, -6.0), (264.0, 12.0),
              (209.0, 17.0), (180.0, 21.3), (169.0, 16.0), (157.8, 11.0), (144.1, 9.4), (133.7, 8.8), (122.0, 7.9),
              (117.5, 2.0), (116.5, -1.5)], "nivel": -0.3, "suave": 5.0},
+    # (anotaciones) el zacate de las mesas y el toldo, entre la acera y la quebrada, llano al nivel de la acera
+    {"pol": [(70.0, -24.5), (90.0, -23.0), (91.0, -16.0), (70.0, -16.0)], "nivel": 0.0, "suave": 3.0},
     # (anotaciones) sin pared entre la quebrada y el picnic: el zacate sube parejo desde la malla
     {"pol": [(120.0, 18.0), (133.7, 19.0), (144.0, 19.5), (157.8, 21.0), (169.0, 26.0), (181.0, 31.5), (183.0, 33.5),
              (174.0, 42.0), (164.0, 52.0), (149.0, 54.0), (129.0, 53.0), (126.0, 40.0), (123.0, 25.0), (121.0, 20.0)],
-     "nivel": 1.2, "suave": 12.0},
+     # (anotaciones) sube parejo hacia residencias: de la calle junto a la quebrada hasta cerca del nivel de los edificios
+     "nivel": 2.2, "rampa": [(140.0, 20.0), 2.2, (148.0, 52.0), 6.0], "suave": 10.0},
 ]
 # (anotaciones) al este del puente de residencias la quebrada va poco honda entre las dos mallas: sin zanja
 CAUCE_SOMERO = [{"x": (112.0, 178.0), "hondo": 1.1, "rampa": 9.0}]
@@ -576,6 +579,17 @@ def lugares_nuevos(calles, quebrada, lejos_carretera, y_ruta32):
     # (fotos) el sendero sube a la explanada entre muros celestes, con baranda gris, y entra a ella por el norte
     pasillo(junto_calle(SENDERO_EXPLANADA[:1], 9, calles) + SENDERO_EXPLANADA[1:] + [(856, 1170)], techo=False, ancho=2.0, subida=ALTO_EXPLANADA,
             cima=CIMA_SENDERO, limpiar=despejar_post)
+    # (anotaciones) detrás del auditorio el sendero va en dos tramos rectos: de la esquina del auditorio baja en
+    # diagonal hasta la vuelta y de ahí sigue derecho hasta donde dobla para entrar a la explanada
+    sen_ = elem[-1]
+    i_esq_ = min(range(len(sen_["puntos"])), key=lambda i: math.dist(sen_["puntos"][i], (-81.74, -40.61)))
+    nuevos_ = [[-66.0, -72.5], [-80.0, -87.6], [-83.06, -85.25], [-86.0, -82.5]]
+    sen_["puntos"] = sen_["puntos"][:i_esq_ + 1] + nuevos_
+    sen_["en_calle"] = sen_["en_calle"][:i_esq_ + 1] + [False] * len(nuevos_)
+    if sen_["alturas"]:
+        sen_["alturas"] = sen_["alturas"][:i_esq_ + 1] + [sen_["alturas"][-1]] * len(nuevos_)
+    cv2.polylines(despejar_post, [np.array([(x / ESCALA + ORIGEN[0], z / ESCALA + ORIGEN[1]) for x, z in sen_["puntos"]], np.int32)],
+                  False, 1, 34)
     viejo_ = suavizar(junto_calle(SENDERO_ANTERIOR[:1], 9, calles) + SENDERO_ANTERIOR[1:] + [(856, 1170)])
     cv2.polylines(despejar, [np.array(viejo_, np.int32)], False, 1, 34)
 
@@ -680,7 +694,8 @@ def lugares_nuevos(calles, quebrada, lejos_carretera, y_ruta32):
         cv2.circle(despejar, a_px(x, z), int(4.5 / ESCALA), 1, -1)
     # (anotaciones) las tres de la orilla de la piscina quedaban en el cauce: van en el zacate, entre la acera y la quebrada
     # (anotaciones) las tres entre el pasillo de las aulas y los baños de la piscina se corrieron 3 m al este
-    nuevas = nuevas[:1] + [[48.7, -65.5], [48.7, -60.0], [48.7, -54.5]] + [[82.0, -15.2], [87.0, -14.8], [92.0, -14.0]]
+    # (anotaciones) las tres de la orilla, junto al toldo de los vestidores, donde la acera ya no pasa
+    nuevas = nuevas[:1] + [[48.7, -65.5], [48.7, -60.0], [48.7, -54.5]] + [[82.6, -16.8], [87.2, -17.3], [73.2, -17.6]]
     for x, z in nuevas[1:4]:
         cv2.circle(despejar_post, a_px(x, z), int(4.5 / ESCALA), 1, -1)
     for x, z in nuevas[4:]:
@@ -746,7 +761,9 @@ def lugares_nuevos(calles, quebrada, lejos_carretera, y_ruta32):
     # Pasa pegada a la malla de la piscina (a unos 2,4 m), de modo que los vestidores, el toldo y las mesas quedan
     # detrás de ella, del lado de la quebrada (ver vestidores en recorrido.js)
     elem.append({"tipo": "acera", "id": None, "ancho": 1.8,
-                 "puntos": [[106.1, -11.8], [98.0, -14.6], [86.56, -19.89], [67.24, -25.07], [56.13, -28.04], [51.1, -28.55]]})
+                 "puntos": [[106.1, -11.8], [103.6, -16.3], [99.8, -18.9], [95.3, -20.2], [90.1, -21.0], [85.7, -21.6],
+                            [82.7, -22.5], [80.25, -23.3], [67.24, -25.07], [56.13, -28.04], [51.1, -28.55]]})
+    # (anotaciones) del puente a la esquina de la piscina la acera va más al norte, pegada al parqueo
     # (anotaciones) se quitó el último tramo, de la unión con la acera de los baños hasta la esquina sur del 7
     # (anotaciones) acera en la zona verde al norte del 9: sale del pasillo de los extremos de las aulas, bordea la
     # calle de arriba hasta la esquina y baja junto al camino de la entrada hasta la acera que ya estaba; otra
@@ -950,6 +967,8 @@ def lugares_nuevos(calles, quebrada, lejos_carretera, y_ruta32):
     # (fotos) sin techo; las rampas corren junto a la carretera, fuera de la cerca de la UCR
     elem.append({"tipo": "puente_peatonal", "id": 32, "p": a_metros(xp, yp), "giro": round(giro_calle, 3), "semiancho": round(semi, 2)})
     cv2.circle(despejar_post, PLANTA["centro"], int(12 / ESCALA), 1, -1)
+    # (anotaciones) sin el árbol frente al ala de baños del auditorio (22)
+    cv2.circle(despejar_post, (int(-50.78 / ESCALA + ORIGEN[0]), int(-24.39 / ESCALA + ORIGEN[1])), int(1.5 / ESCALA), 1, -1)
     return elem, {"despejar_post": despejar_post, "calles_extra": calles_extra, "asfalto": asfalto, "rayas": rayas, "lastre": lastre, "claro": claro, "despejar": despejar, "cerca": cerca_extra,
                   "plaza": claro_plaza}
 

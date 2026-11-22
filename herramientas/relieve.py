@@ -115,7 +115,8 @@ def malla(terreno, muestras_xyz, plataformas, cauce, n_plano, calles, rampas=(),
     """Alturas (m, relativas a REFERENCIA) en una malla de PASO metros sobre el terreno de la maqueta.
     plataformas: lista de {"pol", "subir", "suave", "nivel" o "como"} (ver abajo): edificios, explanada, pista...
     rampas: lista de {"puntos", "ancho", "desde", "hasta", "cima"}: franjas que suben de una plataforma a otra.
-    llanos: lista de {"pol", "nivel", "suave"}: zonas que quedan llanas a ese nivel (calles incluidas); se aplican
+    llanos: lista de {"pol", "nivel", "suave"[, "rampa": (p0, n0, p1, n1)]}: zonas que quedan llanas a ese nivel (o
+    en rampa pareja de n0 en p0 a n1 en p1; calles incluidas); se aplican
     después de las calles junto a la quebrada y antes del cauce, que se sigue excavando.
     cauce, n_plano: eje de la quebrada (m) y cuántos de sus puntos vienen del plano (en ellos el fondo
     siempre baja; en la cola, que sale de la maqueta, sigue al terreno).
@@ -202,7 +203,13 @@ def malla(terreno, muestras_xyz, plataformas, cauce, n_plano, calles, rampas=(),
         d = distance_transform_edt(m == 0) * PASO
         w = np.clip(1 - d / max(ll.get("suave", 8.0), 1e-3), 0, 1)
         w = w * w * (3 - 2 * w)
-        h = h * (1 - w) + ll["nivel"] * w
+        nivel = ll["nivel"]
+        if "rampa" in ll:   # nivel que cambia parejo de un punto a otro (proyección sobre esa recta)
+            (ax, az), na, (bx, bz), nb = ll["rampa"]
+            dx, dz = bx - ax, bz - az
+            t = np.clip(((X - ax) * dx + (Z - az) * dz) / (dx * dx + dz * dz), 0, 1)
+            nivel = na + (nb - na) * t
+        h = h * (1 - w) + nivel * w
     # cauce: el fondo baja siempre aguas abajo; se excava salvo bajo las calles (alcantarillas y puente)
     c = np.asarray(cauce, float)
     ci = np.clip(np.round((c[:, 1] - zs[0]) / PASO).astype(int), 0, nz - 1)

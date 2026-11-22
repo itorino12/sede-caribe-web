@@ -1351,6 +1351,7 @@ if (datos.campus.puente) {
   puente.userData.talud = 8;   // sobre la calle (en terraplén, ver relieve.py): el terreno empata con él sin lomo
   // la quebrada pasa abierta bajo el puente: se asienta a la altura de sus extremos y solo se empareja el terreno ahí
   puente.userData.extremos = [eje[0], eje[eje.length - 1]];
+  puente.userData.ejeTablero = eje.slice(1, -1);   // tramos con tablero (los extremos solo empatan el asfalto)
   const concreto = new THREE.MeshStandardMaterial({ color: 0xc9c7c0, roughness: 0.9 });
   const asfalto = new THREE.MeshStandardMaterial({ color: 0x55595f, roughness: 0.95 });
   const amarillo = new THREE.MeshStandardMaterial({ color: 0xf2c200, roughness: 0.5, metalness: 0.2 });
@@ -1394,9 +1395,11 @@ if (datos.campus.puente) {
       // (anotaciones) del lado de residencias el puente une las dos mallas de la quebrada con la misma malla
       // perimetral (panel verde, alambre de púas arriba y postes cada 3 m), por fuera de la baranda
       if (lado > 0 && mallaUne) {
-        const [z0, z1] = mallaUne, t0 = Math.max(0, (z0 - az) / (bz - az)), t1 = Math.min(1, (z1 - az) / (bz - az));
+        // el tramo se mide sobre la orilla del puente (corrida del eje), donde llegan las mallas
+        const xm = lado * (CALZADA / 2 + ACERA + 0.35), dzm = -Math.sin(ang) * xm;
+        const [z0, z1] = mallaUne, t0 = Math.max(0, (z0 - az - dzm) / (bz - az)), t1 = Math.min(1, (z1 - az - dzm) / (bz - az));
         if (t1 > t0) {
-          const xm = lado * (CALZADA / 2 + ACERA + 0.35), Lm = (t1 - t0) * (L - 0.08);
+          const Lm = (t1 - t0) * (L - 0.08);
           const qx = ax + (bx - ax) * (t0 + t1) / 2, qz = az + (bz - az) * (t0 + t1) / 2;
           const m = caja(0.02, 2.2, Lm, mallaPuente, xm, 0.25 + 1.15, ang, qx, qz); m.castShadow = false;
           caja(0.32, 0.32, Lm, puasPuente, xm, 0.25 + 2.52, ang, qx, qz);
@@ -1413,7 +1416,7 @@ if (datos.campus.puente) {
   for (let k = 0; k < 6; k++) caja(0.5, 0.04, 2.6, blanco, -CALZADA / 2 + 0.6 + k * 0.9, 0.1, angN, (nx + mx) / 2, (nz + mz) / 2);
   puente.traverse((o) => { if (o.isMesh) { o.castShadow = !liviano; o.receiveShadow = true; } });
   if (lugares.get(N.puente)) {
-    puente.userData = { id: N.puente, centro: new THREE.Vector3(px, 3, pz), mat: { pared: amarillo, techo: amarillo }, alto: 1 };
+    Object.assign(puente.userData, { id: N.puente, centro: new THREE.Vector3(px, 3, pz), mat: { pared: amarillo, techo: amarillo }, alto: 1 });
     puente.traverse((o) => { o.userData.edificio = puente; });
     edificios.push(puente);
   }
@@ -2275,12 +2278,12 @@ if (datos.campus.parqueo) {
       r.h[k] = r.h[k] * (1 - w) + nivel * w;
     }
   };
-  const doblar = (o) => {
+  const doblar = (o, altura = alturaEn) => {
     const geo = o.geometry.clone(), pos = geo.attributes.position, mw = o.matrixWorld, inversa = mw.clone().invert(), d = new THREE.Vector3();
     m3.setFromMatrix4(inversa);
     for (let i = 0; i < pos.count; i++) {
       p.fromBufferAttribute(pos, i).applyMatrix4(mw);
-      d.set(0, alturaEn(p.x, p.z), 0).applyMatrix3(m3);
+      d.set(0, altura(p.x, p.z), 0).applyMatrix3(m3);
       pos.setXYZ(i, pos.getX(i) + d.x, pos.getY(i) + d.y, pos.getZ(i) + d.z);
     }
     if (geo.attributes.normal) geo.computeVertexNormals();
@@ -2290,7 +2293,8 @@ if (datos.campus.parqueo) {
   // instancias: se suben a la altura de su centro; las cajas largas (losas, guías, techos y barandas de un pasillo)
   // se inclinan además a lo largo, con la pendiente, para que un tramo empate con el siguiente
   const u = new THREE.Vector3(), w = new THREE.Vector3(), qt = new THREE.Quaternion(), ARRIBA = new THREE.Vector3(0, 1, 0);
-  const instancias = (o, inclinarTodo) => {
+  const instancias = (o, inclinarTodo, alturaEn_ = alturaEn) => {
+    const alturaEn = alturaEn_;
     const par = o.geometry.parameters || {}, esCaja = o.geometry.type === "BoxGeometry";
     for (let i = 0; i < o.count; i++) {
       o.getMatrixAt(i, m4); m4.decompose(p, q, s);
@@ -2368,7 +2372,21 @@ if (datos.campus.parqueo) {
   for (const e of enteros) e.o.position.add(local(e.o.parent.matrixWorld, e.h));
   for (const o of aDoblar) doblar(o);
   for (const o of sueltas) instancias(o, false);
-  for (const g of lineales) g.traverse((x) => { if (x.isInstancedMesh) instancias(x, true); else if (x.isMesh) doblar(x); });
+  // lo lineal que llega al puente (las mallas de la quebrada, la acera de la calle) sube al nivel del tablero, para
+  // que empate con la malla y la acera del puente en vez de bajar a la orilla del cauce
+  const tableros = enteros.filter((e) => e.o.userData.extremos && e.o.userData.ejeTablero).map((e) => ({ h: e.h, eje: e.o.userData.ejeTablero }));
+  const distSeg = (x, z, [ax, az], [bx, bz]) => {
+    const dx = bx - ax, dz = bz - az, t = Math.max(0, Math.min(1, ((x - ax) * dx + (z - az) * dz) / (dx * dx + dz * dz)));
+    return Math.hypot(x - ax - dx * t, z - az - dz * t);
+  };
+  const alturaLineal = (x, z) => {
+    let h = alturaEn(x, z);
+    for (const t of tableros) for (let i = 0; i < t.eje.length - 1; i++) {
+      if (distSeg(x, z, t.eje[i], t.eje[i + 1]) < 5.6) { h = Math.max(h, t.h + 0.1); break; }
+    }
+    return h;
+  };
+  for (const g of lineales) g.traverse((x) => { if (x.isInstancedMesh) instancias(x, true, alturaLineal); else if (x.isMesh) doblar(x, alturaLineal); });
   levantarSuelo();
   // anclas de los números y de los congos: a la altura del terreno de su lugar
   const anclas = new Set();
