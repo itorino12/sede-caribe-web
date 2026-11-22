@@ -231,7 +231,7 @@ function bancaTubos() {
 // Galería (edificio 12, foto): pasillo corrido en los dos pisos del frente sur, con piso de concreto, baranda de
 // tubos al borde, columnas de acero, bancas y la losa del techo volada encima; escalera exterior en diagonal.
 // La baranda se abre donde llega una pasarela (aberturas: [x, z, ancho]) y arriba de la escalera.
-function galeria(grupo, vol, alto, pisos, { aberturas = [], mover_postes: moverPostes = [], quitar_postes: quitarPostes = [] } = {}) {
+function galeria(grupo, vol, alto, pisos, { aberturas = [], mover_postes: moverPostes = [], quitar_postes: quitarPostes = [], abrir_abajo: abrirAbajo = [] } = {}) {
   const f = fachadaSur(vol.contorno), fondo = 2.6, dx = (f.b[0] - f.a[0]) / f.largo, dz = (f.b[1] - f.a[1]) / f.largo;
   const angulo = Math.atan2(-dz, dx), alturaPiso = alto / pisos;
   const en = (u, v, y) => [f.a[0] + dx * u + f.nx * v, y, f.a[1] + dz * u + f.nz * v];
@@ -264,7 +264,7 @@ function galeria(grupo, vol, alto, pisos, { aberturas = [], mover_postes: moverP
     const y = p === 0 ? 0.3 : alturaPiso * p;
     pieza(f.largo, p === 0 ? 0.3 : 0.3, fondo + 0.3, p === 0 ? concretoP : losa, f.largo / 2, (fondo + 0.3) / 2, y - 0.15);   // piso
     // baranda al borde: abajo solo junto a las aberturas no; arriba, también abierta donde llega la escalera
-    const extra = p === 0 ? [[uEsc - 4.2, uEsc + 4.2]] : [[uEsc + 1.6, uEsc + 3.4]];
+    const extra = p === 0 ? [[uEsc - 4.2, uEsc + 4.2], ...abrirAbajo.map(([xa, xb]) => [uDe(xa), uDe(xb)].sort((a, b) => a - b))] : [[uEsc + 1.6, uEsc + 3.4]];
     for (const [a, b] of tramos(extra)) {
       const br = baranda(b - a); br.position.set(...en((a + b) / 2, fondo + 0.12, y)); br.rotation.y = angulo; grupo.add(br);
     }

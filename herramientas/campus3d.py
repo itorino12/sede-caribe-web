@@ -149,7 +149,9 @@ EDIFICIOS = [
                                                    # (anotaciones) la segunda y tercera columna desde el oeste, corridas
                                                    "mover_postes": [[132.2, 133.9], [137.0, 140.4]],
                                                    # (anotaciones) sin la columna junto a la escalera
-                                                   "quitar_postes": [141.9]}, "techo": "#dcdfe2",
+                                                   "quitar_postes": [141.9, 151.1],
+                                                   # (anotaciones) sin baranda abajo donde llega la entrada asfaltada
+                                                   "abrir_abajo": [[126.5, 134.5]]}, "techo": "#dcdfe2",
                 "balcones": {"frente": [1, 0], "unir_galeria": True}}},
     # (anotaciones) recto (sin giro) y algo más grande, donde lo marcó la Sede
     # (anotaciones) corrido 3,4 m al oeste, donde lo marcó la Sede, y unido a 25 por una pasarela en cada piso
@@ -771,7 +773,7 @@ def lugares_nuevos(calles, quebrada, lejos_carretera, y_ruta32):
     # calle de arriba hasta la esquina y baja junto al camino de la entrada hasta la acera que ya estaba; otra
     # corta llega a ella desde el extremo oeste del 9
     elem.append({"tipo": "acera", "id": None, "ancho": 1.8,
-                 "puntos": [[42.3, -90.86], [40.4, -93.3], [23.4, -97.2], [17.4, -99.7], [11.4, -102.6],
+                 "puntos": [[42.3, -90.86], [40.0, -93.3], [30.0, -94.1], [24.0, -94.7], [17.4, -99.7], [11.4, -102.6],
                             [6.2, -104.8], [3.8, -103.4], [1.8, -99.5], [-1.4, -95.0], [-3.2, -90.0], [-4.8, -86.0],
                             [-6.1, -82.0], [-7.5, -78.0], [-8.9, -74.0], [-10.1, -70.0], [-11.1, -66.0], [-11.66, -62.19]]})
     elem.append({"tipo": "acera", "id": None, "ancho": 1.8, "puntos": [[2.3, -80.5], [-6.1, -82.0]]})
