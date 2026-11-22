@@ -146,7 +146,7 @@ EDIFICIOS = [
      # (anotaciones) balcones con baranda en la punta este, la que da a los laboratorios, en los dos pisos
      # (anotaciones y foto) pasillo con baranda de tubos en los dos pisos del frente sur, abierto donde llega la
      # pasarela que lo une con 26
-     "estilo": {"forma_techo": "plano", "galeria": {"aberturas": [[168.0, -111.9, 3.2]], "cerrar_oeste": True,
+     "estilo": {"forma_techo": "plano", "galeria": {"aberturas": [[168.0, -111.9, 3.2]], "cerrar_oeste": True, "barandas_abajo": [127.6, 134.6],
                                                    # (anotaciones) la segunda y tercera columna desde el oeste, corridas
                                                    "mover_postes": [[132.2, 133.9], [137.0, 140.4]],
                                                    # (anotaciones) sin la columna junto a la escalera
