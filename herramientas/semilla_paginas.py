@@ -170,7 +170,7 @@ Creación de cartas y menús, operaciones básicas y servicios en restaurantes, 
 ## Por qué llevar un curso aquí
 
 - **Certificado de la Universidad de Costa Rica** para quienes aprueban.
-- **Grupos pequeños**, de 15 personas como máximo y unas nueve en promedio, con atención cercana.
+- **Grupos pequeños**, de 25 personas como máximo y unas nueve en promedio, con atención cercana.
 - **Horarios para quien trabaja o estudia**: mañana, tarde y noche entre semana, y sábados. Casi la mitad de las matrículas son en horario nocturno y más de un tercio, en sábado.
 - **Presencial o virtual**: cerca de cuatro de cada diez matrículas son en cursos virtuales, que se pueden llevar desde cualquier cantón.
 - **Docentes con experiencia** en su campo. De las 41 personas de la bolsa de docentes, 14 tienen maestría o doctorado.
