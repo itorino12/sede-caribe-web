@@ -167,9 +167,7 @@ EDIFICIOS = [
     # viga perimetral de concreto sobre columnas que forma un corredor abierto, paredes blancas con franja celeste
     # (anotaciones) recto y corrido al sureste, donde lo marcó la Sede
     {"id": 14, "rect": (1703.2, 1316.0, 151, 196, 0), "rect_arboles": (1689, 1292, 151, 196, 12.5), "pisos": 1, "alto": 9, "linterna": 0.6,
-     "estilo": {"techo": "#8db38a", "corredor": True, "franja": "#4fa8e8", "rotulo": [-1, 0],
-                # (anotaciones y foto) la entrada en la esquina noroeste: rótulo, portones azules y la gradería
-                "entrada_gimnasio": {"frente": [0, -1], "esquina": [-1, 0]}}},
+     "estilo": {"techo": "#8db38a", "corredor": True, "franja": "#4fa8e8", "rotulo": [-1, 0]}},
     # Bodega de Acción Social (foto): casita blanca de techo a dos aguas gris oscuro con alero blanco y portón negro
     {"id": 15, "rect": (1770, 1450, 59, 41, 0), "pisos": 1, "alto": 3.4,
      # (anotaciones) la entrada (el portón) está en la fachada oeste, la que da a la calle que viene del gimnasio

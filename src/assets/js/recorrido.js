@@ -898,59 +898,6 @@ function puertaBiblioteca(grupo, volumenes, { cerca, frente }) {
   for (const b of [2.75, 4.35]) pieza(0.05, 1.7, 0.05, negro, 0.25, b, 0.85, true);
 }
 
-// Entrada del gimnasio (foto): en la esquina, bajo la viga de concreto del corredor. En la cara indicada, desde la
-// esquina: un panel blanco con el rótulo «UCR / Sede del Caribe», luego dos portones de malla ciclón con marco de tubo
-// azul por los que se ve la gradería con su escalera amarilla, un basurero azul y un extintor; la orilla del corredor
-// lleva una franja amarilla y hay dos conos naranja. Sobre la otra cara sigue la pared blanca con la franja celeste
-function entradaGimnasio(grupo, vol, alto, { frente, esquina }) {
-  const f = fachadaMirando(vol.contorno, frente);
-  // a: la esquina pedida (la del lado de «esquina»), u crece alejándose de ella
-  let a = f.a, b = f.b;
-  if ((b[0] - a[0]) * esquina[0] + (b[1] - a[1]) * esquina[1] > 0) [a, b] = [b, a];
-  const ux = (b[0] - a[0]) / f.largo, uz = (b[1] - a[1]) / f.largo, ang = Math.atan2(-uz, ux);
-  const en = (u, v, y) => [a[0] + ux * u + f.nx * v, y, a[1] + uz * u + f.nz * v];
-  const pieza = (w, h, d, mat, u, v, y) => { const m = new THREE.Mesh(new THREE.BoxGeometry(w, h, d), mat); m.position.set(...en(u, v, y)); m.rotation.y = ang; m.castShadow = !liviano; m.receiveShadow = true; grupo.add(m); return m; };
-  const blancoG = new THREE.MeshStandardMaterial({ color: 0xf2f2ef, roughness: 0.8 });
-  const oscuro = new THREE.MeshStandardMaterial({ color: 0x24282c, roughness: 0.9 });
-  const azulT = new THREE.MeshStandardMaterial({ color: 0x1f63c6, roughness: 0.5, metalness: 0.3 });
-  const amarillo = new THREE.MeshStandardMaterial({ color: 0xf0c419, roughness: 0.6 });
-  const altoP = alto - 1.8;
-  // panel blanco con el rótulo, desde la esquina
-  pieza(4.6, altoP - 0.2, 0.12, blancoG, 3.0, 0.08, (altoP - 0.2) / 2);
-  const cv = document.createElement("canvas"); cv.width = 512; cv.height = 320;
-  const x = cv.getContext("2d"); x.fillStyle = "#ffffff"; x.fillRect(0, 0, 512, 320); x.fillStyle = "#3a8fd0"; x.textAlign = "center";
-  x.font = "600 120px 'Source Sans 3', Arial, sans-serif"; x.fillText("UCR", 256, 170);
-  x.font = "600 44px 'Source Sans 3', Arial, sans-serif"; x.fillText("SEDE DEL CARIBE", 256, 250);
-  const tex = new THREE.CanvasTexture(cv); tex.colorSpace = THREE.SRGBColorSpace;
-  const rot = new THREE.Mesh(new THREE.PlaneGeometry(3.4, 2.1), new THREE.MeshBasicMaterial({ map: tex }));
-  rot.position.set(...en(3.2, 0.16, 1.7)); rot.rotation.y = Math.atan2(f.nx, f.nz); grupo.add(rot);
-  // vano oscuro de la gradería, con la escalera amarilla y la pared blanca del fondo
-  const u0 = 5.6, u1 = 12.2, um = (u0 + u1) / 2;
-  pieza(u1 - u0, altoP, 0.1, oscuro, um, 0.06, altoP / 2);
-  pieza(2.2, altoP * 0.75, 0.08, blancoG, u1 - 1.4, 0.1, altoP * 0.375);
-  const esc = pieza(4.2, 0.12, 1.1, amarillo, um - 0.6, 0.6, altoP * 0.4); esc.rotation.set(0, ang, 0.62, "YXZ");
-  for (const k of [0, 1]) { const br = pieza(4.2, 0.05, 0.05, amarillo, um - 0.6, 0.15 + k * 0.9, altoP * 0.4 + 0.9); br.rotation.set(0, ang, 0.62, "YXZ"); }
-  // portones de malla ciclón con marco azul, dos hojas en cada uno
-  const malla = new THREE.MeshLambertMaterial({ color: 0x6f8fb0, transparent: true, opacity: 0.35, side: THREE.DoubleSide, depthWrite: false });
-  for (const [ua, ub] of [[u0 + 0.2, um - 0.1], [um + 0.1, u1 - 0.2]]) {
-    const w = ub - ua, uc = (ua + ub) / 2, h = 2.9;
-    const m = new THREE.Mesh(new THREE.PlaneGeometry(w - 0.1, h - 0.1), malla); m.position.set(...en(uc, 0.9, h / 2 + 0.05)); m.rotation.y = ang; grupo.add(m);
-    for (const y of [0.08, h / 2, h]) pieza(w, 0.07, 0.07, azulT, uc, 0.9, y);
-    for (const uu of [ua, uc, ub]) pieza(0.07, h, 0.07, azulT, uu, 0.9, h / 2);
-  }
-  // basurero azul y extintor rojo junto al portón
-  const bas = new THREE.Mesh(new THREE.CylinderGeometry(0.28, 0.25, 0.8, 12), new THREE.MeshStandardMaterial({ color: 0x1f4fa8, roughness: 0.6 }));
-  bas.position.set(...en(u0 + 1.2, 0.5, 0.4)); grupo.add(bas);
-  pieza(0.22, 0.5, 0.18, new THREE.MeshStandardMaterial({ color: 0xc0262d, roughness: 0.5 }), u0 + 2.2, 0.15, 1.3);
-  // franja amarilla en la orilla del corredor, por las dos caras de la esquina, y dos conos
-  pieza(u1 + 4, 0.03, 0.25, amarillo, (u1 + 4) / 2 - 0.4, 3.55, 0.03);
-  const cono = new THREE.MeshStandardMaterial({ color: 0xf26a21, roughness: 0.6 });
-  for (const [u, v] of [[1.2, 2.6], [u1 + 1.2, 3.9]]) {
-    const c = new THREE.Mesh(new THREE.ConeGeometry(0.17, 0.7, 12), cono); c.position.set(...en(u, v, 0.37)); grupo.add(c);
-    const base = new THREE.Mesh(new THREE.BoxGeometry(0.42, 0.04, 0.42), cono); base.position.set(...en(u, v, 0.02)); grupo.add(base);
-  }
-}
-
 // Parasoles curvos de lámina blanca frente a la fachada (edificio 13): paneles altos que se arquean hacia afuera
 function parasoles(grupo, vol, alto, frente, cuantos = 3) {
   const f = frente ? fachadaMirando(vol.contorno, frente) : fachadaSur(vol.contorno), dx = (f.b[0] - f.a[0]) / f.largo, dz = (f.b[1] - f.a[1]) / f.largo;
@@ -1223,7 +1170,6 @@ for (const e of datos.campus.edificios) {
     if (estilo.balcones) e.volumenes.forEach((vol) => balcones(grupo, vol, e.alto, Math.max(e.pisos, 1), estilo.balcones.frente, !!estilo.balcones.unir_galeria));
     if (estilo.mural_mosaico) muralMosaico(grupo, e.volumenes[0], e.alto, estilo.mural_mosaico.frente);
     if (estilo.puerta_biblioteca) puertaBiblioteca(grupo, e.volumenes, estilo.puerta_biblioteca);
-    if (estilo.entrada_gimnasio) entradaGimnasio(grupo, e.volumenes[0], e.alto, estilo.entrada_gimnasio);
     if (estilo.entrada) entrada(grupo, e);
     if (estilo.talud) {   // el edificio se para sobre un talud de zacate, con escalera y rampa al frente
       const t = estilo.talud, c = e.volumenes[0].contorno;
