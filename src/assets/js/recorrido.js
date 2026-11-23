@@ -96,8 +96,24 @@ const sueloGeo = (() => {
   return g;
 })();
 function levantarSuelo() {   // se llama de nuevo cuando «asentar» empareja el terreno
-  const pos = sueloGeo.attributes.position;
-  for (let i = 0; i < pos.count; i++) pos.setY(i, alturaEn(pos.getX(i), pos.getZ(i)));
+  const pos = sueloGeo.attributes.position, r = relieve;
+  // en celular y tableta la malla del suelo va cada 2 celdas del relieve: entre un vértice alto junto al camino y
+  // otro sobre el camino, el zacate se asomaba por encima del piso de los pasillos (fotos de la Sede, nov. 2026).
+  // Cada vértice que queda a una celda gruesa del piso de un pasillo o acera (r.bajo) baja hasta su rasante
+  const cerca = r && r.bajo && liviano ? 2 : 0;
+  for (let i = 0; i < pos.count; i++) {
+    const x = pos.getX(i), z = pos.getZ(i);
+    let h = alturaEn(x, z);
+    if (cerca) {
+      const i0 = Math.round((x - r.x) / r.paso), j0 = Math.round((z - r.z) / r.paso);
+      for (let j = j0 - cerca; j <= j0 + cerca; j++) for (let k = i0 - cerca; k <= i0 + cerca; k++) {
+        if (j < 0 || k < 0 || j >= r.nz || k >= r.nx) continue;
+        const c = j * r.nx + k;
+        if (r.bajo[c] && r.h[c] < h) h = r.h[c];
+      }
+    }
+    pos.setY(i, h);
+  }
   pos.needsUpdate = true;
   sueloGeo.computeVertexNormals(); sueloGeo.computeBoundingBox(); sueloGeo.computeBoundingSphere();
 }
@@ -969,11 +985,60 @@ function fachada26(grupo, vol, alto, pisos, { frente = [0, 1], paso_x: pasoX = n
   }
 }
 
+// Máquinas de ejercicio al aire libre (foto junto a los baños de la piscina): tubos azules con piezas amarillas,
+// cada una sobre su base de concreto. El frente (donde se sube la persona) mira a +z local
+function maquinaEjercicio(tipo) {
+  const g = new THREE.Group();
+  const azul = new THREE.MeshStandardMaterial({ color: 0x2f5fb0, roughness: 0.45, metalness: 0.3 });
+  const amarillo = new THREE.MeshStandardMaterial({ color: 0xe8c04a, roughness: 0.6 });
+  const concreto = new THREE.MeshStandardMaterial({ color: 0x9d9a92, roughness: 0.95 });
+  const tubo = (x0, y0, z0, x1, y1, z1, r, m = azul) => {   // tubo recto de un punto a otro
+    const a = new THREE.Vector3(x0, y0, z0), b = new THREE.Vector3(x1, y1, z1), L = a.distanceTo(b);
+    const t = new THREE.Mesh(new THREE.CylinderGeometry(r, r, L, 8), m);
+    t.position.copy(a).add(b).multiplyScalar(0.5);
+    t.quaternion.setFromUnitVectors(new THREE.Vector3(0, 1, 0), b.clone().sub(a).normalize()); g.add(t);
+  };
+  const caja = (w, h, d, m, x, y, z, rx = 0) => { const c = new THREE.Mesh(new THREE.BoxGeometry(w, h, d), m); c.position.set(x, y, z); c.rotation.x = rx; g.add(c); };
+  const base = (w, d) => caja(w, 0.12, d, concreto, 0, 0.06, 0);
+  if (tipo === "press") {   // poste central alto, arco arriba y dos asientos con respaldo, uno a cada lado
+    base(1.6, 0.9);
+    tubo(0, 0, 0, 0, 2.3, 0, 0.09);
+    tubo(-0.55, 2.25, 0, 0.55, 2.25, 0, 0.05); tubo(-0.55, 2.25, 0, -0.55, 2.05, 0, 0.05); tubo(0.55, 2.25, 0, 0.55, 2.05, 0, 0.05);
+    for (const s of [-1, 1]) {
+      tubo(0, 0.45, 0, s * 0.75, 0.45, 0, 0.04, amarillo);
+      caja(0.42, 0.06, 0.4, amarillo, s * 0.75, 0.5, 0.1);                 // asiento
+      caja(0.4, 0.5, 0.06, amarillo, s * 0.75, 0.85, -0.14, -0.12);       // respaldo
+      tubo(s * 0.55, 1.5, 0, s * 0.75, 1.2, 0.45, 0.03, amarillo);         // brazo
+      tubo(s * 0.75, 1.2, 0.45, s * 0.75, 0.9, 0.5, 0.03, amarillo);       // mango
+    }
+  } else if (tipo === "pendulo") {   // poste con manubrio arriba y dos pedales que cuelgan
+    base(1.0, 1.0);
+    tubo(0, 0, 0, 0, 1.6, 0, 0.08);
+    tubo(-0.3, 1.55, 0.12, 0.3, 1.55, 0.12, 0.03);
+    for (const s of [-1, 1]) { tubo(s * 0.12, 1.2, 0.05, s * 0.18, 0.25, 0.08, 0.03, amarillo); caja(0.22, 0.04, 0.32, amarillo, s * 0.18, 0.22, 0.1); }
+  } else if (tipo === "caminadora") {   // marco horizontal sobre dos postes, con dos pares de piernas colgantes
+    base(1.8, 0.8);
+    tubo(-0.7, 0, 0, -0.7, 1.45, 0, 0.07); tubo(0.7, 0, 0, 0.7, 1.45, 0, 0.07);
+    tubo(-0.85, 1.45, 0, 0.85, 1.45, 0, 0.06); tubo(-0.85, 1.25, 0.25, 0.85, 1.25, 0.25, 0.04);
+    for (const s of [-1, 1]) for (const d of [-0.12, 0.12]) { tubo(s * 0.35 + d, 1.4, 0, s * 0.35 + d * 1.4, 0.35, 0.05, 0.03); }
+    for (const s of [-1, 1]) caja(0.4, 0.04, 0.3, amarillo, s * 0.35, 0.33, 0.05);
+  } else if (tipo === "rueda") {   // rueda de hombros amarilla en un poste y al lado el asiento de piernas
+    base(2.2, 0.9);
+    tubo(-0.6, 0, 0, -0.6, 1.5, 0, 0.08);
+    const rueda = new THREE.Mesh(new THREE.TorusGeometry(0.45, 0.03, 6, 24), amarillo); rueda.position.set(-0.6, 1.55, 0.12); g.add(rueda);
+    for (let k = 0; k < 4; k++) { const r = new THREE.Mesh(new THREE.BoxGeometry(0.9, 0.025, 0.025), amarillo); r.position.set(-0.6, 1.55, 0.12); r.rotation.z = (k * Math.PI) / 4; g.add(r); }
+    tubo(0.5, 0, 0, 0.5, 0.7, 0, 0.07);
+    caja(0.45, 0.06, 0.45, amarillo, 0.5, 0.55, 0.05); caja(0.45, 0.45, 0.06, amarillo, 0.5, 0.85, -0.2, -0.25);
+    tubo(0.5, 0.45, 0.2, 0.5, 0.25, 0.65, 0.04, amarillo); caja(0.4, 0.05, 0.12, amarillo, 0.5, 0.25, 0.68);
+  }
+  g.traverse((o) => { if (o.isMesh) { o.castShadow = !liviano; o.receiveShadow = true; } });
+  return g;
+}
+
 // Coordinación de Docencia (edificio 4, fotos de nov. 2026): paredes blancas con ventanas altas de reja negra en
 // cada cara. En la cara donde llega el pasillo techado (puerta), puertas dobles de vidrio con marco de aluminio,
-// rótulo azul «Coordinación de Docencia» encima, ventanas de reja a los lados, bajante blanco, una condensadora y
-// el Punto Verde UCR (tres basureros, el azul de envases) a la izquierda del pasillo; la guía táctil amarilla sigue
-// hasta la puerta. En la cara de la ventanilla, el ventanal grande de reja con la ventanilla de atención, la pizarra
+// rótulo azul «Coordinación de Docencia» encima, ventanas de reja a los lados, bajante blanco y una condensadora;
+// la guía táctil amarilla sigue hasta la puerta. El Punto Verde va aparte, en el piso del pasillo (puntoVerde()). En la cara de la ventanilla, el ventanal grande de reja con la ventanilla de atención, la pizarra
 // de avisos, el dispensador de agua, el mueble de madera bajo la ventana, la banca negra de metal, las
 // condensadoras y una maceta. El corredor perimetral es de concreto con la guía amarilla cerca de la orilla.
 function docencia(grupo, vol, alto, { puerta = [0.5, 0.87], ventanilla = [1, 0] } = {}, alero = 2.8) {
@@ -1057,21 +1122,6 @@ function docencia(grupo, vol, alto, { puerta = [0.5, 0.87], ventanilla = [1, 0] 
     P.L / 2 - 0.7, 0.03, 1.7);
   // guía táctil desde el pasillo hasta la puerta, atravesando el corredor
   P.pieza(0.36, 0.02, alero + 0.4, amarillo, 0, (alero + 0.4) / 2, 0.17);
-  // Punto Verde UCR: a la izquierda del pasillo, antes del corredor: azul (envases) y dos negros (papel y ordinarios)
-  const uR = -3.7, vR = alero + 1.6;
-  [[0x1f62c4, 0], [0x3a3d40, 0.62], [0x2a2c2f, 1.24]].forEach(([col, du]) => {
-    P.pieza(0.55, 0.75, 0.5, new THREE.MeshStandardMaterial({ color: col, roughness: 0.55 }), uR + du, vR, 0.43);
-    P.pieza(0.58, 0.06, 0.53, new THREE.MeshStandardMaterial({ color: col === 0x1f62c4 ? 0x2a6fd0 : 0x1f2124, roughness: 0.5 }), uR + du, vR, 0.83);
-  });
-  P.pieza(1.9, 0.05, 0.6, new THREE.MeshStandardMaterial({ color: 0x5f6469, metalness: 0.4, roughness: 0.5 }), uR + 0.62, vR, 0.05);
-  for (const du of [-0.4, 1.64]) P.pieza(0.05, 1.45, 0.05, new THREE.MeshStandardMaterial({ color: 0x5f6469, metalness: 0.4 }), uR + du, vR - 0.2, 0.85);
-  P.pieza(2.1, 0.42, 0.04, cartel(2.1, 0.42, (x, w, h) => {
-    x.fillStyle = "#2f6f7a"; x.fillRect(0, 0, w, h);
-    const t = [["#2a6fc0", "ENVASES"], ["#3d4246", "PAPEL Y CARTÓN"], ["#2a2d30", "ORDINARIOS"]];
-    t.forEach(([col, txt], k) => { x.fillStyle = col; x.fillRect(k * w / 3 + 3, h * 0.24, w / 3 - 6, h * 0.72); x.fillStyle = "#fff"; x.font = `700 ${h * 0.2}px Arial, sans-serif`; x.textAlign = "center"; x.fillText(txt, k * w / 3 + w / 6, h * 0.5); });
-    x.fillStyle = "#cfe7b5"; x.font = `700 ${h * 0.15}px Arial, sans-serif`; x.textAlign = "center"; x.fillText("PUNTO VERDE UCR", w / 2, h * 0.17);
-  }), uR + 0.62, vR - 0.2, 1.25);
-
   // --- cara de la ventanilla
   const V = caraDe(ventanilla), uV = 0.9, anchoV = 3.0;
   ventanaReja(V, uV, anchoV, 0.95, alto * 0.42);
@@ -1271,6 +1321,13 @@ for (const e of datos.campus.edificios) {
     const mesaAzul = new THREE.MeshStandardMaterial({ color: 0x6fa8d6, roughness: 0.9 });
     const mesa = new THREE.Mesh(new THREE.CylinderGeometry(0.7, 0.7, 0.1, 14), mesaAzul); mesa.position.set(...oeste.en(sentido * 12, D + 4.5, 0.78)); grupo.add(mesa);
     const pata = new THREE.Mesh(new THREE.CylinderGeometry(0.2, 0.28, 0.75, 8), mesaAzul); pata.position.set(...oeste.en(sentido * 12, D + 4.5, 0.37)); grupo.add(pata);
+    // (fotos y anotaciones, nov. 2026) máquinas de ejercicio al aire libre en el zacate, a lo largo de la pared de
+    // afuera de los baños, desde el cuarto de máquinas hacia el norte: de cerca a lejos, el press de pecho de dos
+    // asientos, el péndulo, la caminadora aérea y la rueda con el asiento de piernas
+    [["press", 8.2], ["pendulo", 5.2], ["caminadora", 2.4], ["rueda", -0.8]].forEach(([tipo, t]) => {
+      const m = maquinaEjercicio(tipo);
+      m.position.set(...oeste.en(sentido * t, D + FONDO / 2 + 1.9, 0)); m.rotation.y = oeste.ang; grupo.add(m);
+    });
     // parqueo de bicicletas y motos: adoquín rojizo pegado a la calle, en la cara que mira a la biblioteca (norte)
     const norte = ladoHacia(-1);
     // (anotaciones) un poco más grande y separado de la malla
@@ -1928,7 +1985,7 @@ if (datos.campus.parqueo) {
     g.traverse((o) => { if (o.isMesh && !o.isInstancedMesh) { o.castShadow = !liviano && !o.material.transparent; o.receiveShadow = true; } });
     escena.add(g);
     if (id && lugares.get(id)) {
-      g.userData = { id, centro, mat, alto, menor: true };
+      g.userData = { ...g.userData, id, centro, mat, alto, menor: true };   // sin perder `lineal` y `franjas` (pasillos con número)
       g.traverse((o) => { o.userData.edificio = g; });
       edificios.push(g);
     }
@@ -2567,6 +2624,78 @@ if (datos.campus.parqueo) {
     registrar(g, null);
     if (nivelDe) g.userData.nivelDe = nivelDe;
   }
+  // Punto Verde UCR (foto, pasillo de Docencia): marco de tubo gris con patas en T y un riel arriba del que cuelgan
+  // los tres basureros (azul de envases, y negros de papel y cartón y de ordinarios); encima, en dos postes, el
+  // rótulo con la franja verde «Punto Verde UCR». Va en el piso del pasillo: x a lo largo de la fila, frente a +z
+  function puntoVerde({ p, giro = 0 }) {
+    const g = new THREE.Group();
+    const gris = mate(0x5f6469, { metalness: 0.4, roughness: 0.5 });
+    const caja = (w, h, d, m, x, y, z) => { const c = new THREE.Mesh(new THREE.BoxGeometry(w, h, d), m); c.position.set(x, y, z); g.add(c); return c; };
+    const Y = 0.13;   // sobre la losa del pasillo
+    [[0x1f62c4, 0x2a6fd0, -0.6], [0x2e3134, 0x3a3e42, 0], [0x24272a, 0x34383c, 0.6]].forEach(([cuerpo, tapa, x]) => {
+      caja(0.5, 0.78, 0.46, mate(cuerpo, { roughness: 0.55 }), x, Y + 0.24 + 0.39, 0.02);
+      caja(0.54, 0.07, 0.52, mate(tapa, { roughness: 0.5 }), x, Y + 1.06, 0.02);
+    });
+    caja(1.9, 0.05, 0.56, gris, 0, Y + 1.0, 0.02);                       // riel de donde cuelgan
+    for (const x of [-0.95, 0.95]) {
+      caja(0.05, 1.0, 0.05, gris, x, Y + 0.5, 0.02);                     // patas
+      caja(0.06, 0.05, 0.7, gris, x, Y + 0.03, 0.02);                    // pie en T
+      caja(0.05, 0.85, 0.05, gris, x, Y + 1.45, -0.18);                  // postes del rótulo
+    }
+    const cv = document.createElement("canvas"); cv.width = 512; cv.height = 128;
+    const x = cv.getContext("2d");
+    x.fillStyle = "#2f6f7a"; x.fillRect(0, 0, 512, 128);
+    x.fillStyle = "#7cc142"; x.fillRect(0, 0, 512, 22);
+    x.fillStyle = "#fff"; x.font = "700 15px Arial, sans-serif"; x.textAlign = "center"; x.fillText("PUNTO VERDE UCR", 256, 16);
+    [["#2a8fd6", "ENVASES"], ["#7b8086", "PAPEL Y CARTÓN"], ["#2a2d30", "ORDINARIOS"]].forEach(([c, t], k) => {
+      x.fillStyle = c; x.fillRect(4 + k * 168, 26, 164, 98);
+      x.fillStyle = "#fff"; x.font = "700 19px Arial, sans-serif"; x.fillText(t, 86 + k * 168, 66);
+    });
+    const tex = new THREE.CanvasTexture(cv); tex.colorSpace = THREE.SRGBColorSpace;
+    const rotulo = new THREE.Mesh(new THREE.BoxGeometry(2.0, 0.5, 0.04), [gris, gris, gris, gris, new THREE.MeshBasicMaterial({ map: tex }), gris]);
+    rotulo.position.set(0, Y + 1.65, -0.16); g.add(rotulo);
+    g.position.set(p[0], 0, p[1]); g.rotation.y = giro; registrar(g, null);
+  }
+  // parqueo de motos (foto, junto al pasillo 7 frente a Docencia): motos de frente al pasillo sobre el asfalto, rayas
+  // amarillas, el rótulo azul en su poste, un hito naranja y la marca azul del espacio accesible. x a lo largo del
+  // pasillo, el pasillo queda hacia -z
+  function motos({ p, giro = 0, largo = 8, n = 4 }) {
+    const g = new THREE.Group();
+    const amarillo = mate(0xe0b52a, { roughness: 0.8 }), negro = mate(0x1c1e20, { roughness: 0.5 });
+    const caja = (w, h, d, m, x, y, z) => { const c = new THREE.Mesh(new THREE.BoxGeometry(w, h, d), m); c.position.set(x, y, z); g.add(c); return c; };
+    for (let k = 0; k <= n; k++) caja(0.1, 0.02, 2.4, amarillo, -largo / 2 + (largo * k) / n, 0.03, 0);   // rayas
+    caja(largo, 0.02, 0.1, amarillo, 0, 0.03, 1.2);
+    caja(1.4, 0.02, 2.2, mate(0x3f8fd6, { roughness: 0.9 }), -largo / 2 - 0.9, 0.025, 0);              // espacio accesible
+    const tonos = [[0x9b1c24, 0x1c1e20], [0x1c1e20, 0x2a2d30], [0x1c1e20, 0xd8d8d6], [0x22252a, 0x1f4fa8]];
+    for (let k = 0; k < n; k++) {
+      const [c1, c2] = tonos[k % tonos.length], m = new THREE.Group(), x0 = -largo / 2 + (largo * (k + 0.5)) / n + (k % 2 ? 0.2 : -0.2);
+      for (const z of [-0.68, 0.68]) { const r = new THREE.Mesh(new THREE.CylinderGeometry(0.32, 0.32, 0.12, 14), negro); r.rotation.z = Math.PI / 2; r.position.set(0, 0.32, z); m.add(r); }
+      const tanque = new THREE.Mesh(new THREE.BoxGeometry(0.32, 0.3, 0.6), mate(c1, { roughness: 0.35, metalness: 0.3 })); tanque.position.set(0, 0.82, -0.2); m.add(tanque);
+      const motor = new THREE.Mesh(new THREE.BoxGeometry(0.28, 0.32, 0.6), mate(0x3a3d40, { metalness: 0.5, roughness: 0.4 })); motor.position.set(0, 0.5, 0); m.add(motor);
+      const asiento = new THREE.Mesh(new THREE.BoxGeometry(0.28, 0.1, 0.6), negro); asiento.position.set(0, 0.86, 0.32); m.add(asiento);
+      const cola = new THREE.Mesh(new THREE.BoxGeometry(0.22, 0.12, 0.35), mate(c2, { roughness: 0.4 })); cola.position.set(0, 0.85, 0.72); cola.rotation.x = -0.25; m.add(cola);
+      const horquilla = new THREE.Mesh(new THREE.CylinderGeometry(0.03, 0.03, 0.8, 6), mate(0xb9bec2, { metalness: 0.6 })); horquilla.position.set(0, 0.68, -0.6); horquilla.rotation.x = -0.35; m.add(horquilla);
+      const manubrio = new THREE.Mesh(new THREE.BoxGeometry(0.7, 0.04, 0.04), negro); manubrio.position.set(0, 1.08, -0.5); m.add(manubrio);
+      const faro = new THREE.Mesh(new THREE.BoxGeometry(0.18, 0.16, 0.08), mate(c1, { roughness: 0.4 })); faro.position.set(0, 0.95, -0.72); m.add(faro);
+      if (k < 2) { const casco = new THREE.Mesh(new THREE.SphereGeometry(0.15, 10, 8), negro); casco.position.set(0.12, 1.12, -0.48); m.add(casco); }
+      m.position.set(x0, 0, 0); m.rotation.z = (k % 2 ? 1 : -1) * 0.12;   // apoyadas en el parador
+      g.add(m);
+    }
+    // rótulo azul en su poste, junto a la orilla del pasillo, y el hito naranja con base negra
+    const poste = caja(0.06, 2.3, 0.06, mate(0x8c9196, { metalness: 0.5 }), -largo / 2 + largo * 0.5 - 0.35, 1.15, -1.3);
+    const cv = document.createElement("canvas"); cv.width = 128; cv.height = 192;
+    const x = cv.getContext("2d"); x.fillStyle = "#1f5aa8"; x.fillRect(0, 0, 128, 192); x.strokeStyle = "#fff"; x.lineWidth = 6; x.strokeRect(6, 6, 116, 180);
+    x.fillStyle = "#fff"; x.font = "700 22px Arial, sans-serif"; x.textAlign = "center"; x.fillText("PARQUEO", 64, 80); x.fillText("MOTOS", 64, 112);
+    const tex = new THREE.CanvasTexture(cv); tex.colorSpace = THREE.SRGBColorSpace;
+    const rotulo = new THREE.Mesh(new THREE.PlaneGeometry(0.4, 0.6), new THREE.MeshBasicMaterial({ map: tex, side: THREE.DoubleSide }));
+    rotulo.position.set(poste.position.x, 2.0, -1.26); g.add(rotulo);
+    const naranja = mate(0xe8542a, { roughness: 0.6 });
+    const hito = new THREE.Mesh(new THREE.CylinderGeometry(0.06, 0.08, 1.0, 10), naranja); hito.position.set(-largo / 2 - 0.9, 0.55, 0.3); g.add(hito);
+    caja(0.4, 0.05, 0.4, negro, -largo / 2 - 0.9, 0.03, 0.3);
+    for (const y of [0.75, 0.9]) caja(0.13, 0.05, 0.13, mate(0xf2f2f0), -largo / 2 - 0.9, y, 0.3);
+    g.traverse((o) => { if (o.isMesh) { o.castShadow = !liviano; o.receiveShadow = true; } });
+    g.position.set(p[0], 0, p[1]); g.rotation.y = giro; registrar(g, null);
+  }
   // parqueo de bicicletas (anotaciones y foto): losa de adoquín rojizo con tubos en U de acero inoxidable en fila
   function bicicletas({ p, largo, ancho, giro = 0, n = 5 }) {
     const g = new THREE.Group();
@@ -2643,7 +2772,7 @@ if (datos.campus.parqueo) {
   for (const el of datos.campus.elementos || []) {
     const hacer = { muro, pasillo, caseta, parqueo, bancas, escalera, rampa, descanso, mesas, explanada, alcantarilla, jardin, pluma, comedor, tanque,
       acera, cebra, porton_peatonal: portonPeatonal, puente_peatonal: puentePeatonal, arbol_grande: arbolGrande,
-      ruedas_tren: ruedasTren, congos, carport, pasarela, bicicletas, rampa_doble: rampaDoble }[el.tipo];
+      ruedas_tren: ruedasTren, congos, carport, pasarela, bicicletas, rampa_doble: rampaDoble, punto_verde: puntoVerde, motos }[el.tipo];
     if (hacer) hacer(el);
     else if (el.tipo === "porton") {   // acceso cerrado con portón (sin faroles)
       const g = portonVerde(false, el.hoja || 4.2); g.position.set(el.p[0], 0, el.p[1]); g.rotation.y = el.giro; escena.add(g);
@@ -2839,6 +2968,7 @@ if (datos.campus.parqueo) {
         const rasante = y[k] + (y[k + 1] - y[k]) * t2 - 0.03, c = j * r.nx + i;
         let w = d <= nucleo ? 1 : 1 - (d - nucleo) / (borde - nucleo); w = w * w * (3 - 2 * w);
         r.h[c] = r.h[c] * (1 - w) + rasante * w;
+        if (d <= ancho / 2 + 0.5) (r.bajo ||= new Uint8Array(r.nx * r.nz))[c] = 1;   // bajo el piso (ver levantarSuelo)
       }
     }
   };

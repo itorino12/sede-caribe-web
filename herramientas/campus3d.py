@@ -863,6 +863,11 @@ def lugares_nuevos(calles, quebrada, lejos_carretera, y_ruta32):
     # las dos con baranda
     # (anotaciones) parqueo de bicicletas al pie de la escalera de 25, junto a la entrada asfaltada
     elem.append({"tipo": "bicicletas", "id": None, "p": [135.6, -98.6], "largo": 6.4, "ancho": 2.8, "n": 5})
+    # (fotos y anotaciones, nov. 2026) Punto Verde UCR en el piso del pasillo techado de Docencia, a la izquierda al
+    # llegar a la puerta, con los basureros de frente al centro del pasillo (antes flotaba fuera del pasillo)
+    elem.append({"tipo": "punto_verde", "id": None, "p": [-127.82, 9.82], "giro": 1.925})
+    # (fotos y anotaciones) parqueo de motos en el asfalto, pegado al pasillo 7 frente a Docencia, de frente al pasillo
+    elem.append({"tipo": "motos", "id": None, "p": [-140.6, 28.5], "giro": 0.316, "largo": 8.0, "n": 4})
     # (anotaciones y fotos) rampa para personas con discapacidad entre 25 y 26, pegada a la cara norte de 26: sube
     # del suelo al oeste, da la vuelta en un descanso y llega al segundo piso de 26 junto a la pasarela
     elem.append({"tipo": "rampa_doble", "id": None, "x_este": 166.4, "x_oeste": 155.0, "z_pared": -101.9, "hacia": -1,
