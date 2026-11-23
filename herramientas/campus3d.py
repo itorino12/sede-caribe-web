@@ -164,7 +164,7 @@ EDIFICIOS = [
      "estilo": {"forma_techo": "una_agua", "parasoles": True, "parasoles_frente": [1, 0], "parasoles_n": 3,
                 "ventanas": "vidrio_verde", "techo": "#d6dadd",
                 # (anotaciones y fotos) la fachada sur, frente al gimnasio, con el paso y la torre blanca
-                "fachada_26": {"frente": [0, 1]}}},
+                "fachada_26": {"frente": [0, 1], "paso_x": 168.0}}},
     # Gimnasio (fotos): nave alta con techo de cuatro aguas de lámina verde y linternilla de ventilación,
     # viga perimetral de concreto sobre columnas que forma un corredor abierto, paredes blancas con franja celeste
     # (anotaciones) recto y corrido al sureste, donde lo marcó la Sede

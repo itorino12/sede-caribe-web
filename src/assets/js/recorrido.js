@@ -903,7 +903,7 @@ function puertaBiblioteca(grupo, volumenes, { cerca, frente }) {
 // de vidrio claro; el paso que atraviesa el edificio (abierto abajo, con su alerito gris y bajantes rojos); la torre
 // blanca con una columna de ventanitas cuadradas con marco gris; y el ala del este con vidrio abajo y arriba, con la
 // cercha de acero en la parte alta. Al frente, la acera al paso con su guía amarilla y lámparas de poste
-function fachada26(grupo, vol, alto, pisos, { frente = [0, 1] } = {}) {
+function fachada26(grupo, vol, alto, pisos, { frente = [0, 1], paso_x: pasoX = null } = {}) {
   const f = fachadaMirando(vol.contorno, frente);
   let a = f.a, b = f.b;
   if (b[0] < a[0]) [a, b] = [b, a];   // a: punta oeste
@@ -921,7 +921,9 @@ function fachada26(grupo, vol, alto, pisos, { frente = [0, 1] } = {}) {
   const v0 = 0.12;   // todo un poco por delante de la pared
   const montantes = (u0, u1, y0, h, paso) => { for (let u = u0; u <= u1 + 1e-6; u += paso) pieza(0.07, h, 0.05, grisF, u, v0 + 0.06, y0 + h / 2); };
   const s_ = L / 26;   // las medidas van pensadas para 26 m de largo
-  const W0 = 0, W1 = 10.5 * s_, C1 = 12.5 * s_, P1 = 15.5 * s_, T1 = 18.5 * s_, E1 = L;
+  // (anotaciones) el paso queda en línea con la pasarela que une 25 y 26 (paso_x: su x)
+  const uPc = pasoX == null ? 14 * s_ : (pasoX - a[0]) / ux;
+  const W0 = 0, C1 = uPc - 1.5, P1 = uPc + 1.5, W1 = C1 - 2 * s_, T1 = P1 + 3 * s_, E1 = L;
   // ala oeste: abajo vidrio oscuro; arriba antepecho blanco, ventanas oscuras y ventanitas cuadradas
   pieza(W1 - W0, P - 0.6, 0.06, negro, (W0 + W1) / 2, v0, 0.3 + (P - 0.6) / 2); montantes(W0 + 0.3, W1 - 0.3, 0.3, P - 0.6, 1.4);
   pieza(W1 - W0, 0.25, 0.3, grisF, (W0 + W1) / 2, v0 + 0.1, P - 0.1);
@@ -936,7 +938,8 @@ function fachada26(grupo, vol, alto, pisos, { frente = [0, 1] } = {}) {
   pieza(P1 - C1, P - 0.1, 0.1, new THREE.MeshStandardMaterial({ color: 0x2a2f33, roughness: 0.9 }), (C1 + P1) / 2, v0 + 0.02, (P - 0.1) / 2);
   pieza(P1 - C1 + 0.4, 0.14, 1.6, grisF, (C1 + P1) / 2, v0 + 0.8, P - 0.1);
   for (let k = 0; k < 4; k++) pieza(0.08, 0.14, 1.4, marco, C1 + 0.3 + k * (P1 - C1 - 0.6) / 3, v0 + 0.8, P - 0.25);
-  pieza(P1 - C1, P - 0.6, 0.06, claro, (C1 + P1) / 2, v0 - 0.02, P + (P - 0.6) / 2);
+  // arriba también abierto: es solo pasillo, vacío de lado a lado
+  pieza(P1 - C1, P - 0.2, 0.1, new THREE.MeshStandardMaterial({ color: 0x2a2f33, roughness: 0.9 }), (C1 + P1) / 2, v0 + 0.02, P + (P - 0.2) / 2);
   for (const u of [C1 + 0.15, P1 - 0.15]) pieza(0.1, alto, 0.1, rojo, u, v0 + 0.12, alto / 2);
   // torre blanca con columna de ventanitas cuadradas
   pieza(T1 - P1, alto + 0.3, 0.4, blancoF, (P1 + T1) / 2, v0 + 0.15, (alto + 0.3) / 2);
