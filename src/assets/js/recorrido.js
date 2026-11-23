@@ -2193,23 +2193,15 @@ if (datos.campus.parqueo) {
       bloque(6.5, 0.02, 0.3, amarilloG, fx + 3.25, 0.08, zV);
       bloque(0.3, 0.02, zB1 - zE0, amarilloG, fx + 5.8, 0.08, (zB1 + zE0) / 2);
       bloque(1.6, 0.02, 0.3, amarilloG, fx + 0.8, 0.08, zE1 - 1.25);
-      const celesteB = mate(0x7fa8cf, { roughness: 0.85 });
-      for (const [bx, bz] of [[fx + 4.4, zV + 2.4], [fx + 4.6, zV - 2.2]]) {
-        const b = new THREE.Group();
-        for (let k = 0; k < 3; k++) { const l = new THREE.Mesh(new THREE.BoxGeometry(0.16, 0.1, 1.9), celesteB); l.position.set(-0.2 + k * 0.2, 0.47, 0); b.add(l); }
-        for (const s_ of [-1, 1]) { const pt = new THREE.Mesh(new THREE.BoxGeometry(0.6, 0.45, 0.12), celesteB); pt.position.set(0, 0.22, s_ * 0.85); pt.rotation.x = s_ * 0.15; b.add(pt); }
-        b.position.set(bx, 0, bz); b.rotation.y = 0.05; g.add(b);
-      }
-      const poste = new THREE.Mesh(new THREE.CylinderGeometry(0.13, 0.13, 1.0, 12), mate(0x2b2f33)); poste.position.set(fx + 5.4, 0.55, zE1 - 1.2); g.add(poste);
-      const lamp = new THREE.Mesh(new THREE.CylinderGeometry(0.14, 0.14, 0.25, 12), mate(0xf2f2ee)); lamp.position.set(fx + 5.4, 1.17, zE1 - 1.2); g.add(lamp);
-      bloque(0.45, 0.1, 0.45, mate(0xb8b5ad), fx + 5.4, 0.05, zE1 - 1.2);
-      // parqueo de bicicletas junto a la calle, frente a los baños
-      bloque(2.6, 0.12, 4.0, mate(0x8e5a4c, { roughness: 0.95 }), fx + 5.0, 0.06, zB1 - 1.6);
-      bloque(2.7, 0.35, 0.15, mate(0xb8b5ad), fx + 5.0, 0.17, zB1 + 0.45);
+      // (anotaciones) sin bancas ni lámpara frente al ala; el parqueo de bicicletas va más afuera, en el zacate junto
+      // a la calle, frente a los baños
+      const xBici = fx + 15.0, zBici = zB0 + 1.2;
+      bloque(2.6, 0.12, 4.4, mate(0x8e5a4c, { roughness: 0.95 }), xBici, 0.06, zBici);
+      bloque(0.15, 0.35, 4.5, mate(0xb8b5ad), xBici - 1.35, 0.17, zBici);
       const inox = mate(0xd9dde1, { metalness: 0.7, roughness: 0.25 });
       for (let k = 0; k < 4; k++) {
         const u = new THREE.Mesh(new THREE.TorusGeometry(0.4, 0.035, 6, 14, Math.PI), inox);
-        u.position.set(fx + 4.6, 0.12, zB1 - 3.2 + k * 0.9); u.rotation.y = Math.PI / 2; g.add(u);
+        u.position.set(xBici - 0.3, 0.12, zBici - 1.5 + k * 1.0); u.rotation.y = Math.PI / 2; g.add(u);
       }
     } else if (uso === "torre") {   // caseta de arriba: dos niveles, cuartos eléctricos abajo, escalera metálica azul
       const azulEsc = mate(0x2f5fb0, { roughness: 0.5, metalness: 0.3 });
