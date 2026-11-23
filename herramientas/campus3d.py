@@ -703,6 +703,8 @@ def lugares_nuevos(calles, quebrada, lejos_carretera, y_ruta32):
     # (anotaciones) las tres entre el pasillo de las aulas y los baños de la piscina se corrieron 3 m al este
     # (anotaciones) las tres de la orilla, junto al toldo de los vestidores, donde la acera ya no pasa
     nuevas = nuevas[:1] + [[48.7, -65.5], [48.7, -60.0], [48.7, -54.5]] + [[82.6, -16.8], [87.2, -17.3], [73.2, -17.6]]
+    # (anotaciones) tres más en el zacate al oeste de la Biblioteca: dos junto a la cerca y una cerca de la entrada
+    nuevas += [[74.1, -118.2], [67.4, -118.5], [75.0, -91.6]]
     for x, z in nuevas[1:4]:
         cv2.circle(despejar_post, a_px(x, z), int(4.5 / ESCALA), 1, -1)
     for x, z in nuevas[4:]:
@@ -776,7 +778,7 @@ def lugares_nuevos(calles, quebrada, lejos_carretera, y_ruta32):
     # calle de arriba hasta la esquina y baja junto al camino de la entrada hasta la acera que ya estaba; otra
     # corta llega a ella desde el extremo oeste del 9
     elem.append({"tipo": "acera", "id": None, "ancho": 1.8,
-                 "puntos": [[42.3, -90.86], [41.0, -93.4], [40.0, -94.6], [32.0, -96.6], [24.0, -98.6], [17.4, -100.5], [11.4, -102.6],
+                 "puntos": [[42.3, -90.86], [41.0, -93.4], [40.0, -94.6], [31.55, -97.15], [23.1, -99.7], [14.65, -102.25],
                             [6.2, -104.8], [3.8, -103.4], [1.8, -99.5], [-1.4, -95.0], [-3.2, -90.0], [-4.8, -86.0],
                             [-6.1, -82.0], [-7.5, -78.0], [-8.9, -74.0], [-10.1, -70.0], [-11.1, -66.0], [-11.66, -62.19]]})
     elem.append({"tipo": "acera", "id": None, "ancho": 1.8, "puntos": [[2.3, -80.5], [-6.1, -82.0]]})

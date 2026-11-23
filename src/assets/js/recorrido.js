@@ -833,14 +833,14 @@ function puertaBiblioteca(grupo, volumenes, { cerca, frente }) {
   const rojizo = new THREE.MeshStandardMaterial({ color: 0x8a5a48, roughness: 0.95 });
   // plaza de adoquín en espiga, con cordón rojizo del lado del zacate
   const espiga = new THREE.MeshStandardMaterial({ map: texturaEspiga(), roughness: 0.95 });
-  const plaza = [[0, 0], [3.0, 0], [3.0, 1.5], [11.5, 14.2], [-0.2, 14.2], [-0.2, largoDer]];
+  const plaza = [[0, 0], [3.0, 0], [3.0, 1.5], [10.6, 12.8], [-0.2, 12.8], [-0.2, largoDer]];   // sin montarse en la acera
   plano(plaza, espiga, 0.08, 3.2);
   const cordon = (pa, pb) => {
     const L = Math.hypot(pb[0] - pa[0], pb[1] - pa[1]); const m = new THREE.Mesh(new THREE.BoxGeometry(L, 0.14, 0.25), rojizo);
     const [xa, za] = P(...pa), [xb, zb] = P(...pb);
     m.position.set((xa + xb) / 2, 0.08, (za + zb) / 2); m.rotation.y = Math.atan2(-(zb - za), xb - xa); grupo.add(m);
   };
-  cordon([3.0, 1.5], [11.5, 14.2]);
+  cordon([3.0, 1.5], [10.6, 12.8]);
   cordon([3.0, 0.1], [3.0, 1.5]);
   // a la izquierda: acera junto a la pared y jardín de piedras con macetas hasta el cordón
   pieza(9.0, 0.14, 1.5, concretoG, 7.5, 0.75, 0.07);
@@ -985,8 +985,38 @@ for (const e of datos.campus.edificios) {
       const techo = new THREE.Mesh(new THREE.BoxGeometry(largo + 1.2, 0.12, 6.6), laminaV); techo.position.set(0, 3.45, 0.3); techo.rotation.x = -0.16; caseta.add(techo);
       caseta.position.set(...sur.en(t, 15, 0)); caseta.rotation.y = sur.ang; grupo.add(caseta);
     }
-    const toldo = new THREE.Mesh(new THREE.CylinderGeometry(2.4, 2.4, 6, 14, 1, true, -Math.PI / 2, Math.PI), new THREE.MeshStandardMaterial({ color: 0x8c8f88, roughness: 0.7, side: THREE.DoubleSide }));
-    toldo.rotation.set(0, sur.ang, Math.PI / 2); toldo.position.set(...sur.en(-13, 14.5, 2.2)); grupo.add(toldo);
+    // (anotaciones) el toldo en arco se quitó. En el deck, del lado sur y junto a la malla, dos enrolladores de
+    // corcheras (foto): carrete con dos discos blancos, el eje sobre un marco con ruedas y las corcheras enrolladas
+    // en franjas azul, crema y roja
+    const corcheras = texturaDibujada(256, 128, (x, w, h) => {
+      const franjas = ["#2456b0", "#e9e2cc", "#2456b0", "#e9e2cc", "#2456b0", "#b5262c", "#e9e2cc", "#b5262c", "#b5262c"];
+      const a = w / franjas.length;
+      franjas.forEach((c_, i) => { x.fillStyle = c_; x.fillRect(i * a, 0, a + 1, h); });
+      for (let j = 0; j < h; j += 8) { x.fillStyle = "rgba(0,0,0,0.18)"; x.fillRect(0, j, w, 2); }   // los flotadores
+    });
+    const discoB = new THREE.MeshStandardMaterial({ color: 0xeeeeea, roughness: 0.6 });
+    const aceroC = new THREE.MeshStandardMaterial({ color: 0xb9bec3, roughness: 0.4, metalness: 0.6 });
+    const rollo = new THREE.MeshStandardMaterial({ map: corcheras, roughness: 0.7 });
+    for (const t of [-sur.L * 0.3, sur.L * 0.3]) {
+      const carrete = new THREE.Group();
+      const R = 0.78, AN = 1.5;
+      const cuerpo = new THREE.Mesh(new THREE.CylinderGeometry(R, R, AN, 24), [rollo, discoB, discoB]);
+      cuerpo.rotation.z = Math.PI / 2; cuerpo.position.y = R + 0.25; carrete.add(cuerpo);
+      for (const lado of [-1, 1]) {
+        const disco = new THREE.Mesh(new THREE.CylinderGeometry(R + 0.08, R + 0.08, 0.05, 28), discoB);
+        disco.rotation.z = Math.PI / 2; disco.position.set(lado * (AN / 2 + 0.04), R + 0.25, 0); carrete.add(disco);
+        for (const dz of [-0.45, 0.45]) {   // patas del marco en A y ruedas
+          const pata = new THREE.Mesh(new THREE.BoxGeometry(0.05, R + 0.35, 0.05), aceroC);
+          pata.position.set(lado * (AN / 2 + 0.12), (R + 0.25) / 2, dz * 0.6); pata.rotation.x = -dz * 0.5; carrete.add(pata);
+          const rueda = new THREE.Mesh(new THREE.CylinderGeometry(0.1, 0.1, 0.06, 12), new THREE.MeshStandardMaterial({ color: 0x2a2d30 }));
+          rueda.rotation.z = Math.PI / 2; rueda.position.set(lado * (AN / 2 + 0.12), 0.1, dz); carrete.add(rueda);
+        }
+      }
+      const eje = new THREE.Mesh(new THREE.CylinderGeometry(0.04, 0.04, AN + 0.4, 8), aceroC);
+      eje.rotation.z = Math.PI / 2; eje.position.y = R + 0.25; carrete.add(eje);
+      const base = new THREE.Mesh(new THREE.BoxGeometry(AN + 0.3, 0.05, 0.05), aceroC); base.position.y = 0.15; carrete.add(base);
+      carrete.position.set(...sur.en(t, 4.5, 0.3)); carrete.rotation.y = sur.ang; grupo.add(carrete);
+    }
     // baños de la piscina (fotos y satélite): al costado oeste, a lo largo de una acera con guía táctil.
     // Primero el cuarto de máquinas gris con celosías (extremo sur) y luego los baños blancos con zócalo gris,
     // puertas hacia la piscina y un alero oscuro sobre ellas
@@ -1641,6 +1671,9 @@ if (datos.campus.parqueo) {
     const xEste = xsRaya[xsRaya.length - 1];
     logo.rotation.set(-Math.PI / 2, 0, Math.PI);   // acostado en el suelo, se lee desde el pasillo norte
     logo.position.set((xEste + largo / 2) / 2, 0.035, divisor - 3.0); logo.receiveShadow = true; g.add(logo);
+    // (anotaciones) otro en el espacio del extremo este de la fila sur del centro, leído desde el pasillo sur
+    const logo2 = new THREE.Mesh(logo.geometry, logo.material);
+    logo2.rotation.set(-Math.PI / 2, 0, 0); logo2.position.set((xEste + largo / 2) / 2, 0.035, divisor + 2.7); logo2.receiveShadow = true; g.add(logo2);
   }
   // alumbrado: postes en el divisor y en el borde sur, cada uno con dos luminarias
   for (const [x, z] of [[-largo / 2 + 1.2, divisor], [largo / 2 - 1.2, divisor], [-largo / 2 + 1.2, ancho / 2 - 1], [largo / 2 - 1.2, ancho / 2 - 1]]) {
