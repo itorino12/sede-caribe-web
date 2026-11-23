@@ -170,7 +170,9 @@ EDIFICIOS = [
      "estilo": {"forma_techo": "una_agua", "parasoles": True, "parasoles_frente": [1, 0], "parasoles_n": 3,
                 "ventanas": "vidrio_verde", "techo": "#d6dadd",
                 # (anotaciones y fotos) la fachada sur, frente al gimnasio, con el paso y la torre blanca
-                "fachada_26": {"frente": [0, 1], "paso_x": 168.0}}},
+                "fachada_26": {"frente": [0, 1], "paso_x": 168.0},
+                # (anotaciones y foto) la cara oeste: velas de lamas arriba y ventanales abajo
+                "oeste_26": True}},
     # Gimnasio (fotos): nave alta con techo de cuatro aguas de lámina verde y linternilla de ventilación,
     # viga perimetral de concreto sobre columnas que forma un corredor abierto, paredes blancas con franja celeste
     # (anotaciones) recto y corrido al sureste, donde lo marcó la Sede
@@ -826,7 +828,8 @@ def lugares_nuevos(calles, quebrada, lejos_carretera, y_ruta32):
                             [-11.69, -99.52], [-13.56, -97.24], [-24.06, -83.19]]})
     # ruedas de tren (fotos): monumento en el zacate entre el parqueo de la piscina y la calle de la Biblioteca
     # (anotaciones) frente al parqueo, más al este y cerca de la acera
-    elem.append({"tipo": "ruedas_tren", "id": None, "p": [96.4, -70.5], "giro": 2.88})
+    # (anotaciones) corridas al sur y al oeste, al centro del zacate frente a la piscina
+    elem.append({"tipo": "ruedas_tren", "id": None, "p": [94.0, -66.0], "giro": 2.88})
     cv2.circle(despejar, a_px(96.4, -70.5), int(6 / ESCALA), 1, -1)
     # (anotaciones) calles nuevas: entrada asfaltada del gimnasio a la Bodega de Acción Social (sin los árboles que
     # había en el camino) y, en la entrada principal, la continuación de la calle hasta el portón (antes zacate)
@@ -870,10 +873,10 @@ def lugares_nuevos(calles, quebrada, lejos_carretera, y_ruta32):
     elem.append({"tipo": "motos", "id": None, "p": [-140.6, 28.5], "giro": 0.316, "largo": 8.0, "n": 4})
     # (anotaciones y fotos) rampa para personas con discapacidad entre 25 y 26, pegada a la cara norte de 26: sube
     # del suelo al oeste, da la vuelta en un descanso y llega al segundo piso de 26 junto a la pasarela
-    elem.append({"tipo": "rampa_doble", "id": None, "x_este": 166.4, "x_oeste": 155.0, "z_pared": -101.9, "hacia": -1,
+    elem.append({"tipo": "rampa_doble", "id": None, "x_este": 164.6, "x_oeste": 155.0, "z_pared": -101.9, "hacia": -1,
                  "ancho": 1.4, "piso": 4.2, "nivel_de": 26})
     elem.append({"tipo": "pasarela", "id": None, "a": [168.0, -109.4], "b": [168.0, -101.8], "ancho": 3.0, "piso": 4.2,
-                 "alto": 8.4, "nivel_de": 25})
+                 "alto": 8.4, "nivel_de": 25, "abrir_oeste": [5.8, 7.6]})
     # (anotaciones) parqueo de busetas al oeste de la biblioteca, entre la calle y la cerca de la ruta 32: espacios
     # de 4,5 m de frente y 7,5 m de fondo con la trompa hacia la cerca
     t0_, t1_ = (26.0, -116.0), (60.5, -111.1)
