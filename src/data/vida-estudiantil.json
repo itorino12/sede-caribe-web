@@ -161,8 +161,8 @@
   "ayuda": [
     {
       "nombre": "Emergencias",
-      "dato": "911",
-      "enlace": "tel:911"
+      "dato": "2511-4911",
+      "enlace": "tel:+50625114911"
     },
     {
       "nombre": "Seguridad de la Sede",
@@ -310,7 +310,7 @@
             },
             {
               "p": "¿Qué hago ante una emergencia en el campus?",
-              "r": "Llame al 911. Dentro del campus, avise a Seguridad (2511-7350) y al consultorio médico (2511-7351, Pabellón 1)."
+              "r": "Llame al 2511-4911. Dentro del campus, avise a Seguridad (2511-7350) y al consultorio médico (2511-7351, Pabellón 1)."
             },
             {
               "p": "¿Dónde encuentro la normativa y los formularios de la universidad?",
