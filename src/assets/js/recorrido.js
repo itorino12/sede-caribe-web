@@ -898,6 +898,74 @@ function puertaBiblioteca(grupo, volumenes, { cerca, frente }) {
   for (const b of [2.75, 4.35]) pieza(0.05, 1.7, 0.05, negro, 0.25, b, 0.85, true);
 }
 
+// Fachada sur del edificio 26 (fotos, representativa): de oeste a este, el ala de los laboratorios con el piso de
+// abajo de vidrio oscuro y arriba una banda de ventanas oscuras con una fila de ventanitas cuadradas encima; un cuerpo
+// de vidrio claro; el paso que atraviesa el edificio (abierto abajo, con su alerito gris y bajantes rojos); la torre
+// blanca con una columna de ventanitas cuadradas con marco gris; y el ala del este con vidrio abajo y arriba, con la
+// cercha de acero en la parte alta. Al frente, la acera al paso con su guía amarilla y lámparas de poste
+function fachada26(grupo, vol, alto, pisos, { frente = [0, 1] } = {}) {
+  const f = fachadaMirando(vol.contorno, frente);
+  let a = f.a, b = f.b;
+  if (b[0] < a[0]) [a, b] = [b, a];   // a: punta oeste
+  const L = f.largo, ux = (b[0] - a[0]) / L, uz = (b[1] - a[1]) / L, ang = Math.atan2(-uz, ux);
+  const en = (u, v, y) => [a[0] + ux * u + f.nx * v, y, a[1] + uz * u + f.nz * v];
+  const pieza = (w, h, d, mat, u, v, y) => { const m = new THREE.Mesh(new THREE.BoxGeometry(w, h, d), mat); m.position.set(...en(u, v, y)); m.rotation.y = ang; m.castShadow = !liviano; m.receiveShadow = true; grupo.add(m); return m; };
+  const P = alto / pisos;
+  const blancoF = new THREE.MeshStandardMaterial({ color: 0xeeeeea, roughness: 0.85 });
+  const grisF = new THREE.MeshStandardMaterial({ color: 0x5b6268, roughness: 0.6, metalness: 0.2 });
+  const negro = new THREE.MeshStandardMaterial({ color: 0x1d2328, roughness: 0.15, metalness: 0.4 });
+  const claro = new THREE.MeshStandardMaterial({ color: 0x7f97a3, roughness: 0.1, metalness: 0.3 });
+  const marco = new THREE.MeshStandardMaterial({ color: 0x8b9094, roughness: 0.8 });
+  const rojo = new THREE.MeshStandardMaterial({ color: 0xb3262c, roughness: 0.5 });
+  const amarillo = new THREE.MeshStandardMaterial({ color: 0xd9ad2b, roughness: 0.8 });
+  const v0 = 0.12;   // todo un poco por delante de la pared
+  const montantes = (u0, u1, y0, h, paso) => { for (let u = u0; u <= u1 + 1e-6; u += paso) pieza(0.07, h, 0.05, grisF, u, v0 + 0.06, y0 + h / 2); };
+  const s_ = L / 26;   // las medidas van pensadas para 26 m de largo
+  const W0 = 0, W1 = 10.5 * s_, C1 = 12.5 * s_, P1 = 15.5 * s_, T1 = 18.5 * s_, E1 = L;
+  // ala oeste: abajo vidrio oscuro; arriba antepecho blanco, ventanas oscuras y ventanitas cuadradas
+  pieza(W1 - W0, P - 0.6, 0.06, negro, (W0 + W1) / 2, v0, 0.3 + (P - 0.6) / 2); montantes(W0 + 0.3, W1 - 0.3, 0.3, P - 0.6, 1.4);
+  pieza(W1 - W0, 0.25, 0.3, grisF, (W0 + W1) / 2, v0 + 0.1, P - 0.1);
+  pieza(W1 - W0, 0.9, 0.08, blancoF, (W0 + W1) / 2, v0, P + 0.45);
+  pieza(W1 - W0 - 0.6, P - 1.9, 0.06, negro, (W0 + W1) / 2, v0 + 0.02, P + 0.9 + (P - 1.9) / 2); montantes(W0 + 0.3, W1 - 0.3, P + 0.9, P - 1.9, 1.0);
+  pieza(W1 - W0, 0.55, 0.06, blancoF, (W0 + W1) / 2, v0, alto - 0.65);
+  for (let u = W0 + 0.6; u < W1 - 0.3; u += 0.65) pieza(0.4, 0.36, 0.05, negro, u, v0 + 0.03, alto - 0.65);
+  // cuerpo de vidrio claro, los dos pisos
+  pieza(C1 - W1, alto - 0.6, 0.06, claro, (W1 + C1) / 2, v0, 0.3 + (alto - 0.6) / 2); montantes(W1, C1, 0.3, alto - 0.6, (C1 - W1) / 2);
+  pieza(C1 - W1, 0.18, 0.08, grisF, (W1 + C1) / 2, v0 + 0.03, P);
+  // paso que atraviesa el edificio: vano oscuro abajo, alerito gris volado, bajantes rojos a los lados
+  pieza(P1 - C1, P - 0.1, 0.1, new THREE.MeshStandardMaterial({ color: 0x2a2f33, roughness: 0.9 }), (C1 + P1) / 2, v0 + 0.02, (P - 0.1) / 2);
+  pieza(P1 - C1 + 0.4, 0.14, 1.6, grisF, (C1 + P1) / 2, v0 + 0.8, P - 0.1);
+  for (let k = 0; k < 4; k++) pieza(0.08, 0.14, 1.4, marco, C1 + 0.3 + k * (P1 - C1 - 0.6) / 3, v0 + 0.8, P - 0.25);
+  pieza(P1 - C1, P - 0.6, 0.06, claro, (C1 + P1) / 2, v0 - 0.02, P + (P - 0.6) / 2);
+  for (const u of [C1 + 0.15, P1 - 0.15]) pieza(0.1, alto, 0.1, rojo, u, v0 + 0.12, alto / 2);
+  // torre blanca con columna de ventanitas cuadradas
+  pieza(T1 - P1, alto + 0.3, 0.4, blancoF, (P1 + T1) / 2, v0 + 0.15, (alto + 0.3) / 2);
+  for (let k = 0; k < 5; k++) {
+    const y = 0.9 + k * (alto - 1.4) / 4;
+    pieza(0.75, 0.75, 0.08, marco, (P1 + T1) / 2, v0 + 0.37, y);
+    pieza(0.45, 0.45, 0.06, negro, (P1 + T1) / 2, v0 + 0.4, y);
+  }
+  // ala este: vidrio oscuro abajo y arriba, ventanitas, cercha de acero en lo alto
+  pieza(E1 - T1, P - 0.6, 0.06, negro, (T1 + E1) / 2, v0, 0.3 + (P - 0.6) / 2); montantes(T1 + 0.3, E1 - 0.3, 0.3, P - 0.6, 1.4);
+  pieza(E1 - T1, 0.6, 0.08, blancoF, (T1 + E1) / 2, v0, P + 0.3);
+  pieza(E1 - T1, P - 1.9, 0.06, negro, (T1 + E1) / 2, v0 + 0.02, P + 0.6 + (P - 1.9) / 2); montantes(T1 + 0.3, E1 - 0.3, P + 0.6, P - 1.9, 1.1);
+  for (let u = T1 + 0.5; u < E1 - 0.3; u += 0.65) pieza(0.4, 0.36, 0.05, negro, u, v0 + 0.03, alto - 0.95);
+  const yC = alto - 0.35, nC = Math.max(2, Math.round((E1 - T1) / 2.2)), pasoC = (E1 - T1) / nC;
+  pieza(E1 - T1, 0.08, 0.08, grisF, (T1 + E1) / 2, v0 + 0.1, yC + 0.25); pieza(E1 - T1, 0.08, 0.08, grisF, (T1 + E1) / 2, v0 + 0.1, yC - 0.25);
+  for (let k = 0; k < nC; k++) {
+    const d = pieza(Math.hypot(pasoC, 0.5), 0.06, 0.06, grisF, T1 + pasoC * (k + 0.5), v0 + 0.1, yC);
+    d.rotation.set(0, ang, (k % 2 ? 1 : -1) * Math.atan2(0.5, pasoC), "YXZ");
+  }
+  // acera al paso con guía amarilla, y lámparas de poste
+  const uP = (C1 + P1) / 2;
+  pieza(P1 - C1 + 0.6, 0.06, 7, new THREE.MeshStandardMaterial({ color: 0xbab7b0, roughness: 0.95 }), uP, 3.6, 0.03);
+  pieza(0.35, 0.02, 7, amarillo, uP + 0.5, 3.6, 0.07);
+  const posteL = new THREE.MeshStandardMaterial({ color: 0xc7cacc, roughness: 0.5, metalness: 0.3 });
+  for (const [u, v] of [[C1 - 1.2, 2.8], [P1 + 0.9, 5.5], [W1 - 4, 1.2]]) {
+    const pl = new THREE.Mesh(new THREE.CylinderGeometry(0.1, 0.1, 1.1, 10), posteL); pl.position.set(...en(u, v, 0.55)); grupo.add(pl);
+  }
+}
+
 // Parasoles curvos de lámina blanca frente a la fachada (edificio 13): paneles altos que se arquean hacia afuera
 function parasoles(grupo, vol, alto, frente, cuantos = 3) {
   const f = frente ? fachadaMirando(vol.contorno, frente) : fachadaSur(vol.contorno), dx = (f.b[0] - f.a[0]) / f.largo, dz = (f.b[1] - f.a[1]) / f.largo;
@@ -1170,6 +1238,7 @@ for (const e of datos.campus.edificios) {
     if (estilo.balcones) e.volumenes.forEach((vol) => balcones(grupo, vol, e.alto, Math.max(e.pisos, 1), estilo.balcones.frente, !!estilo.balcones.unir_galeria));
     if (estilo.mural_mosaico) muralMosaico(grupo, e.volumenes[0], e.alto, estilo.mural_mosaico.frente);
     if (estilo.puerta_biblioteca) puertaBiblioteca(grupo, e.volumenes, estilo.puerta_biblioteca);
+    if (estilo.fachada_26) fachada26(grupo, e.volumenes[0], e.alto, Math.max(e.pisos, 1), estilo.fachada_26);
     if (estilo.entrada) entrada(grupo, e);
     if (estilo.talud) {   // el edificio se para sobre un talud de zacate, con escalera y rampa al frente
       const t = estilo.talud, c = e.volumenes[0].contorno;
@@ -1218,18 +1287,12 @@ for (const e of datos.campus.edificios) {
       const anchoMural = haciaCalle.largo * 0.62;
       const mural = new THREE.Mesh(new THREE.PlaneGeometry(anchoMural, anchoMural / 4.15), new THREE.MeshBasicMaterial({ map: texMural }));
       mural.position.set(...enFachada(haciaCalle, 0.4, 0.06, anchoMural / 4.15 / 2 + 0.3)); mural.rotation.y = angF(haciaCalle); grupo.add(mural);
-      const parasol = new THREE.MeshStandardMaterial({ color: 0x8ec3e6, roughness: 0.6 });
-      for (let k = 0; k < 7; k++) {
-        const l = new THREE.Mesh(new THREE.BoxGeometry(3.2, 0.05, 0.55), parasol);
-        l.position.set(...enFachada(haciaCalle, 0.86, 0.35, 0.8 + k * 0.42)); l.rotation.set(0, angF(haciaCalle) + Math.PI / 2, 0); l.rotateX(-0.35); grupo.add(l);
-      }
+      // (anotaciones y foto) junto al ala de baños no hay parasoles ni la caja roja
       const acer = new THREE.MeshStandardMaterial({ color: 0x7d858c, roughness: 0.5, metalness: 0.4 });
       for (const t of [0.3, 0.7]) for (const lado of [-1, 1]) {   // columnas en V bajo el alero del lado del ala de baños
         const col = new THREE.Mesh(new THREE.CylinderGeometry(0.12, 0.12, e.alto + 0.2, 8), acer);
         col.position.set(...enFachada(haciaAla, t, 3.2, e.alto / 2)); col.rotation.set(0, angF(haciaAla), lado * 0.2); grupo.add(col);
       }
-      const planta = new THREE.Mesh(new THREE.BoxGeometry(3, 1.5, 1.2), new THREE.MeshStandardMaterial({ color: 0xd8261c, roughness: 0.5 }));
-      planta.position.set(...enFachada(haciaCalle, 0.9, 5, 0.75)); planta.rotation.y = angF(haciaCalle); grupo.add(planta);
     }
     if (estilo.cupula) {   // torrecita de ventilación sobre la cumbrera (con dos cuerpos, sobre el primero: [x, z, cumbre])
       const [qx, qz, qy] = Array.isArray(estilo.cupula) ? estilo.cupula : [e.centro[0], e.centro[1], e.cumbre];
@@ -1791,12 +1854,54 @@ if (datos.campus.parqueo) {
       const losa = bloque(largo + 2.2, 0.18, ancho + 1.6, techoM, 0.6, alto + 0.3); losa.rotation.z = 0.06;
       for (const z of [-ancho / 2 - 0.4, ancho / 2 + 0.4]) { const c = new THREE.Mesh(new THREE.CylinderGeometry(0.08, 0.08, alto + 0.4, 8), acero); c.position.set(largo / 2 + 1.2, (alto + 0.4) / 2, z); c.rotation.z = 0.25; g.add(c); }
       puerta(0, ancho / 2 + 0.05, vidrio);
-    } else if (uso === "ala_moderna") {   // ala de baños del Auditorio: blanca, celosías arriba, losa gris volada
-      bloque(largo, alto, ancho, pared);
-      bloque(largo + 0.08, 0.6, ancho + 0.08, mate(0xe9ebec), 0, alto - 0.55);
-      techoM = mate(0xd9dcdf);
-      bloque(largo + 3, 0.3, ancho + 2.4, techoM, 0, alto + 0.15);
-      for (const x of [-largo / 4, largo / 4]) puerta(x, ancho / 2 + 0.05, mate(0x6d7880));
+    } else if (uso === "ala_moderna") {
+      // ala de baños del Auditorio (foto): el frente es la punta +x. Bloque blanco con banda de celosías grises arriba
+      // y una tira de ventanitas; a su lado (hacia el Auditorio, -z) un paso techado con columnas de acero gris, el
+      // punto de reciclaje y un cuartito blanco con puerta oscura. El techo del paso es más alto, blanco con vigas
+      // oscuras por debajo y volado al frente. Adelante, en el zacate, dos bancas celestes y una lámpara de poste
+      const fx = largo / 2, zB0 = 6, zB1 = -1.5, zP0 = -1.5, zP1 = -4.5, zC1 = -6;
+      const anchoB = zB0 - zB1, zB = (zB0 + zB1) / 2;
+      bloque(largo, alto, anchoB, pared, 0, alto / 2, zB);
+      const celos = mate(0xd9dcdc), oscuro = mate(0x3c4247, { roughness: 0.5 });
+      bloque(largo + 0.1, 0.95, anchoB + 0.1, celos, 0, alto - 0.6, zB);
+      for (let k = 0; k < 6; k++) bloque(0.04, 0.03, anchoB - 0.3, oscuro, fx + 0.07, alto - 1.0 + k * 0.16, zB);   // lamas
+      for (let k = 0; k < 6; k++) bloque(0.04, 0.03, largo - 0.3, oscuro, 0, alto - 1.0 + k * 0.16, zB0 + 0.07).rotation.y = Math.PI / 2;
+      const nV = 8;   // tira de ventanitas abatibles
+      for (let k = 0; k < nV; k++) bloque(0.06, 0.32, anchoB / nV - 0.15, vidrio, fx + 0.04, 1.95, zB1 + (anchoB * (k + 0.5)) / nV);
+      bloque(0.08, 0.05, anchoB, oscuro, fx + 0.05, 1.77, zB);
+      techoM = mate(0xf0f0ec);
+      bloque(largo + 1.4, 0.22, anchoB + 1.0, techoM, 0.3, alto + 0.11, zB + 0.3);                 // losa del bloque
+      bloque(largo - 1, alto - 0.2, Math.abs(zC1 - zP1), pared, -0.5, (alto - 0.2) / 2, (zP1 + zC1) / 2);   // cuartito
+      puerta(fx - 0.96, (zP1 + zC1) / 2, oscuro, Math.PI / 2);
+      bloque(largo, 0.08, Math.abs(zP1 - zP0), mate(0xc8c4ba), 0, 0.04, (zP0 + zP1) / 2);           // piso del paso
+      bloque(0.3, 2.6, Math.abs(zP1 - zP0), mate(0x9aa0a3), -fx + 0.2, 1.3, (zP0 + zP1) / 2);       // muro del fondo
+      // techo alto del paso: losa blanca volada al frente con vigas oscuras por debajo
+      const yT = alto + 1.25, xT0 = -fx, xT1 = fx + 2.4, zT0 = zB1 + 1.2, zT1 = zC1 - 0.4;
+      bloque(xT1 - xT0, 0.18, zT0 - zT1, techoM, (xT0 + xT1) / 2, yT, (zT0 + zT1) / 2);
+      for (let x = xT0 + 0.5; x < xT1; x += 1.1) bloque(0.14, 0.2, zT0 - zT1, oscuro, x, yT - 0.18, (zT0 + zT1) / 2);
+      bloque(xT1 - xT0, 0.3, 0.12, techoM, (xT0 + xT1) / 2, yT - 0.05, zT1);
+      const acG = mate(0x8c9196, { roughness: 0.45, metalness: 0.5 });
+      for (const dz of [-0.2, 0.2]) {   // dos columnas redondas juntas, al frente del paso
+        const c = new THREE.Mesh(new THREE.CylinderGeometry(0.11, 0.11, yT, 10), acG); c.position.set(fx + 1.3, yT / 2, (zP0 + zP1) / 2 + dz); g.add(c);
+      }
+      bloque(0.7, 0.35, 0.9, mate(0xd8d6cf), fx + 1.3, 0.17, (zP0 + zP1) / 2);
+      // punto de reciclaje: tres basureros con su rótulo de colores
+      const colores = [0x2a6fc0, 0x4f9a3c, 0xe0b52a];
+      colores.forEach((c_, k) => bloque(0.55, 0.9, 0.5, mate(0x3a3e42), fx - 2.2, 0.45, zP1 + 0.6 + k * 0.6));
+      colores.forEach((c_, k) => bloque(0.05, 0.3, 0.55, mate(c_), fx - 1.92, 1.6, zP1 + 0.6 + k * 0.6));
+      // adelante: acera con guía amarilla al paso, dos bancas celestes y una lámpara de poste
+      bloque(3.5, 0.06, Math.abs(zP1 - zP0) + 1, mate(0xc8c4ba), fx + 1.75, 0.03, (zP0 + zP1) / 2);
+      bloque(3.5, 0.02, 0.25, mate(0xe0b52a), fx + 1.75, 0.07, (zP0 + zP1) / 2 + 0.9);
+      const celesteB = mate(0x9cc6e2, { roughness: 0.8 });
+      for (const [bx, bz, r] of [[fx + 3.4, 3.4, 0.25], [fx + 3.0, 0.3, -0.1]]) {
+        const b = new THREE.Group();
+        const asiento = new THREE.Mesh(new THREE.BoxGeometry(0.55, 0.12, 1.9), celesteB); asiento.position.y = 0.45; b.add(asiento);
+        for (const s_ of [-1, 1]) { const pata = new THREE.Mesh(new THREE.BoxGeometry(0.5, 0.45, 0.12), celesteB); pata.position.set(0, 0.22, s_ * 0.8); pata.rotation.x = s_ * 0.2; b.add(pata); }
+        b.position.set(bx, 0, bz); b.rotation.y = r; g.add(b);
+      }
+      const poste = new THREE.Mesh(new THREE.CylinderGeometry(0.12, 0.12, 1.0, 10), mate(0x2f3438)); poste.position.set(fx + 2.6, 0.55, -1.0); g.add(poste);
+      const lamp = new THREE.Mesh(new THREE.CylinderGeometry(0.13, 0.13, 0.22, 10), mate(0xf2f2ee)); lamp.position.set(fx + 2.6, 1.15, -1.0); g.add(lamp);
+      bloque(0.45, 0.1, 0.45, mate(0xb8b5ad), fx + 2.6, 0.05, -1.0);
     } else if (uso === "torre") {   // caseta de arriba: dos niveles, cuartos eléctricos abajo, escalera metálica azul
       const azulEsc = mate(0x2f5fb0, { roughness: 0.5, metalness: 0.3 });
       bloque(largo, elevada, ancho, pared, 0, elevada / 2);

@@ -162,7 +162,9 @@ EDIFICIOS = [
     {"id": 13, "rect": (1768.4, 1122.4, 104, 60, 0), "rect_arboles": (1786, 1130, 113, 51, -10), "pisos": 2,
      # (anotaciones) los parasoles van en la punta este: tres paneles anchos, casi de suelo a techo
      "estilo": {"forma_techo": "una_agua", "parasoles": True, "parasoles_frente": [1, 0], "parasoles_n": 3,
-                "ventanas": "vidrio_verde", "techo": "#d6dadd"}},
+                "ventanas": "vidrio_verde", "techo": "#d6dadd",
+                # (anotaciones y fotos) la fachada sur, frente al gimnasio, con el paso y la torre blanca
+                "fachada_26": {"frente": [0, 1]}}},
     # Gimnasio (fotos): nave alta con techo de cuatro aguas de lámina verde y linternilla de ventilación,
     # viga perimetral de concreto sobre columnas que forma un corredor abierto, paredes blancas con franja celeste
     # (anotaciones) recto y corrido al sureste, donde lo marcó la Sede
@@ -299,6 +301,8 @@ LLANOS = [
              (117.5, 2.0), (116.5, -1.5)], "nivel": -0.3, "suave": 5.0},
     # (anotaciones) el zacate de las mesas y el toldo, entre la acera y la quebrada, llano al nivel de la acera
     {"pol": [(70.0, -24.5), (90.0, -23.0), (91.0, -16.0), (70.0, -16.0)], "nivel": 0.0, "suave": 3.0},
+    # (anotaciones) frente a los edificios 25 y 26, entre ellos y la calle, todo llano (con los dos edificios)
+    {"pol": [(125.5, -123.0), (182.0, -125.0), (182.0, -84.5), (125.5, -84.5)], "nivel": -0.7, "suave": 5.0},
     # (anotaciones) sin pared entre la quebrada y el picnic: el zacate sube parejo desde la malla
     {"pol": [(120.0, 18.0), (133.7, 19.0), (144.0, 19.5), (157.8, 21.0), (169.0, 26.0), (181.0, 31.5), (183.0, 33.5),
              (174.0, 42.0), (164.0, 52.0), (149.0, 54.0), (129.0, 53.0), (126.0, 40.0), (123.0, 25.0), (121.0, 20.0)],
@@ -1197,6 +1201,15 @@ def main(pdf, sat=None):
     quebrada_arboles = np.zeros_like(calles)
     cv2.polylines(quebrada_arboles, [np.round([(x / ESCALA + ORIGEN[0], z / ESCALA + ORIGEN[1]) for x, z in cauce_m]).astype(np.int32)], False, 255, 13)
     cauce_m, n_plano = relieve.con_tramo_arriba(cauce_m, n_plano, QUEBRADA_ARRIBA)
+    # (anotaciones) entre la piscina y el puente de residencias la quebrada va unos metros más al sur: unos 2 m
+    # frente a las mesas y unos 4 m al pasar bajo el puente; se empareja sin quiebre antes y después
+    def corrimiento_(x):
+        if x < 72 or x > 124: return 0.0
+        if x < 84: return 2.0 * (x - 72) / 12
+        if x < 102: return 2.0 + 2.0 * (x - 84) / 18
+        if x < 114: return 4.0
+        return 4.0 * (124 - x) / 10
+    cauce_m = np.array([(x, z + corrimiento_(x)) for x, z in cauce_m])
     suave = np.array([(x / ESCALA + ORIGEN[0], z / ESCALA + ORIGEN[1]) for x, z in cauce_m], np.float32)
     cv2.polylines(quebrada, [np.round(suave).astype(np.int32)], False, 255, 13)
     lejos_carretera = cv2.distanceTransform((carretera == 0).astype(np.uint8), cv2.DIST_L2, 5)
