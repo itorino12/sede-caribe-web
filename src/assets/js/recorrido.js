@@ -969,6 +969,154 @@ function fachada26(grupo, vol, alto, pisos, { frente = [0, 1], paso_x: pasoX = n
   }
 }
 
+// Coordinación de Docencia (edificio 4, fotos de nov. 2026): paredes blancas con ventanas altas de reja negra en
+// cada cara. En la cara donde llega el pasillo techado (puerta), puertas dobles de vidrio con marco de aluminio,
+// rótulo azul «Coordinación de Docencia» encima, ventanas de reja a los lados, bajante blanco, una condensadora y
+// el Punto Verde UCR (tres basureros, el azul de envases) a la izquierda del pasillo; la guía táctil amarilla sigue
+// hasta la puerta. En la cara de la ventanilla, el ventanal grande de reja con la ventanilla de atención, la pizarra
+// de avisos, el dispensador de agua, el mueble de madera bajo la ventana, la banca negra de metal, las
+// condensadoras y una maceta. El corredor perimetral es de concreto con la guía amarilla cerca de la orilla.
+function docencia(grupo, vol, alto, { puerta = [0.5, 0.87], ventanilla = [1, 0] } = {}, alero = 2.8) {
+  const c = vol.contorno;
+  const reja = new THREE.MeshStandardMaterial({ color: 0x24282c, roughness: 0.6, metalness: 0.3 });
+  const oscuroV = new THREE.MeshStandardMaterial({ color: 0x2c3a44, roughness: 0.2, metalness: 0.3 });
+  const aluminio = new THREE.MeshStandardMaterial({ color: 0xc9ced2, roughness: 0.45, metalness: 0.15 });
+  const crema = new THREE.MeshStandardMaterial({ color: 0xdcd8cc, roughness: 0.7 });
+  const madera = new THREE.MeshStandardMaterial({ color: 0x9a6b3c, roughness: 0.7 });
+  const negro = new THREE.MeshStandardMaterial({ color: 0x1e2124, roughness: 0.5, metalness: 0.3 });
+  const amarillo = new THREE.MeshStandardMaterial({ color: 0xe0b52a, roughness: 0.8 });
+  const caraDe = (frente) => {
+    const f = fachadaMirando(c, frente), ux = (f.b[0] - f.a[0]) / f.largo, uz = (f.b[1] - f.a[1]) / f.largo;
+    const mx = (f.a[0] + f.b[0]) / 2, mz = (f.a[1] + f.b[1]) / 2, ang = Math.atan2(f.nx, f.nz);
+    // u: a lo largo de la cara desde el centro (positivo hacia la derecha de quien la mira), v: hacia afuera
+    const s = ux * f.nz - uz * f.nx > 0 ? 1 : -1;
+    const en = (u, v, y) => [mx + ux * u * s + f.nx * v, y, mz + uz * u * s + f.nz * v];
+    const pieza = (w, h, d, m, u, v, y, giro = 0) => {
+      const p = new THREE.Mesh(new THREE.BoxGeometry(w, h, d), m); p.position.set(...en(u, v, y)); p.rotation.y = ang + giro;
+      p.castShadow = !liviano; p.receiveShadow = true; grupo.add(p); return p;
+    };
+    return { f, en, pieza, ang, L: f.largo };
+  };
+  const cartel = (ancho, alto_, dibujar, w = 512) => {   // textura de canvas para rótulos y avisos
+    const cv = document.createElement("canvas"); cv.width = w; cv.height = Math.round((w * alto_) / ancho);
+    dibujar(cv.getContext("2d"), cv.width, cv.height);
+    const tex = new THREE.CanvasTexture(cv); tex.colorSpace = THREE.SRGBColorSpace;
+    return new THREE.MeshBasicMaterial({ map: tex });
+  };
+  // ventana alta con reja negra: vidrio oscuro, marco y barrotes verticales con dos travesaños
+  const ventanaReja = (K, u, ancho, y0, h) => {
+    K.pieza(ancho, h, 0.04, oscuroV, u, 0.03, y0 + h / 2);
+    K.pieza(ancho + 0.12, 0.06, 0.1, reja, u, 0.08, y0); K.pieza(ancho + 0.12, 0.06, 0.1, reja, u, 0.08, y0 + h);
+    K.pieza(0.06, h, 0.1, reja, u - ancho / 2, 0.08, y0 + h / 2); K.pieza(0.06, h, 0.1, reja, u + ancho / 2, 0.08, y0 + h / 2);
+    const n = Math.max(2, Math.round(ancho / 0.14));
+    for (let k = 1; k < n; k++) K.pieza(0.025, h, 0.025, reja, u - ancho / 2 + (ancho * k) / n, 0.1, y0 + h / 2);
+    for (const t of [0.33, 0.66]) K.pieza(ancho, 0.03, 0.03, reja, u, 0.1, y0 + h * t);
+  };
+  const condensadora = (K, u, v) => {
+    K.pieza(0.9, 0.62, 0.34, new THREE.MeshStandardMaterial({ color: 0xe9e9e4, roughness: 0.6 }), u, v, 0.33);
+    K.pieza(0.5, 0.5, 0.02, new THREE.MeshStandardMaterial({ color: 0x55595c, roughness: 0.8 }), u - 0.12, v + 0.18, 0.34);
+    K.pieza(0.8, 0.04, 0.4, negro, u, v, 0.02);
+  };
+  const cPuerta = fachadaMirando(c, puerta), cVent = fachadaMirando(c, ventanilla);
+  const mismaCara = (f, g) => f.a === g.a && f.b === g.b;
+  const caras = [];
+  for (let i = 0; i < c.length; i++) {   // una dirección hacia afuera por cara, para recorrerlas todas
+    const a = c[i], b = c[(i + 1) % c.length], L = Math.hypot(b[0] - a[0], b[1] - a[1]);
+    caras.push([(b[1] - a[1]) / L, -(b[0] - a[0]) / L]);
+  }
+  for (const n of caras) {
+    const K = caraDe(n);
+    if (mismaCara(K.f, cPuerta) || mismaCara(K.f, cVent)) continue;
+    // caras sin detalle: dos ventanas altas con reja
+    for (const u of [-K.L * 0.24, K.L * 0.24]) ventanaReja(K, u, Math.min(2.4, K.L * 0.3), alto * 0.5, alto * 0.24);
+  }
+
+  // --- cara de la puerta
+  const P = caraDe(puerta), anchoP = 1.7, altoP = 2.25;
+  P.pieza(anchoP + 0.3, altoP + 0.15, 0.08, aluminio, 0, 0.04, (altoP + 0.15) / 2);   // marco
+  for (const lado of [-1, 1]) {
+    P.pieza(anchoP / 2 - 0.1, altoP - 0.2, 0.05, oscuroV, lado * anchoP / 4, 0.09, altoP / 2);   // hojas de vidrio
+    P.pieza(0.04, 0.35, 0.06, aluminio, lado * 0.12, 0.13, 1.05);                               // haladeras
+  }
+  P.pieza(0.05, altoP, 0.07, aluminio, 0, 0.1, altoP / 2);
+  P.pieza(0.42, 0.14, 0.02, cartel(0.42, 0.14, (x, w, h) => { x.fillStyle = "#1f4f9a"; x.fillRect(0, 0, w, h); x.fillStyle = "#fff"; x.font = `700 ${h * 0.7}px Arial, sans-serif`; x.textAlign = "center"; x.fillText("HALE", w / 2, h * 0.78); }, 128),
+    -anchoP / 4, 0.12, 1.25);
+  // persiana de aluminio sobre la puerta con el rótulo azul
+  P.pieza(anchoP + 0.3, alto - altoP - 0.55, 0.06, aluminio, 0, 0.04, altoP + 0.15 + (alto - altoP - 0.55) / 2);
+  for (let k = 0; k < 5; k++) P.pieza(anchoP + 0.3, 0.02, 0.08, new THREE.MeshStandardMaterial({ color: 0x8f969b }), 0, 0.06, altoP + 0.3 + k * 0.2);
+  P.pieza(1.25, 0.42, 0.03, cartel(1.25, 0.42, (x, w, h) => {
+    x.fillStyle = "#ffffff"; x.fillRect(0, 0, w, h); x.fillStyle = "#1d4f9c"; x.fillRect(8, 8, w - 16, h - 16);
+    x.fillStyle = "#ffffff"; x.textAlign = "center"; x.font = `700 ${h * 0.26}px Arial, sans-serif`;
+    x.fillText("COORDINACIÓN", w / 2, h * 0.45); x.fillText("DE DOCENCIA", w / 2, h * 0.78);
+  }), 0, 0.12, altoP + 0.5);
+  for (const lado of [-1, 1]) ventanaReja(P, lado * (anchoP / 2 + 1.6), 2.3, alto * 0.62, alto * 0.2);
+  // bajante blanco a la izquierda, condensadora a la derecha, aviso pegado en la pared
+  P.pieza(0.12, alto, 0.12, new THREE.MeshStandardMaterial({ color: 0xf4f4f0, roughness: 0.6 }), -(anchoP / 2 + 0.55), 0.15, alto / 2);
+  condensadora(P, P.L / 2 - 1.1, 0.35);
+  P.pieza(0.4, 0.55, 0.02, cartel(0.4, 0.55, (x, w, h) => { x.fillStyle = "#f2f0e6"; x.fillRect(0, 0, w, h); x.fillStyle = "#e8c32c"; x.fillRect(0, 0, w, h * 0.25); x.fillStyle = "#555"; for (let k = 0; k < 8; k++) x.fillRect(w * 0.1, h * (0.35 + k * 0.07), w * (0.5 + (k % 3) * 0.12), h * 0.025); }, 128),
+    P.L / 2 - 0.7, 0.03, 1.7);
+  // guía táctil desde el pasillo hasta la puerta, atravesando el corredor
+  P.pieza(0.36, 0.02, alero + 0.4, amarillo, 0, (alero + 0.4) / 2, 0.17);
+  // Punto Verde UCR: a la izquierda del pasillo, antes del corredor: azul (envases) y dos negros (papel y ordinarios)
+  const uR = -3.7, vR = alero + 1.6;
+  [[0x1f62c4, 0], [0x3a3d40, 0.62], [0x2a2c2f, 1.24]].forEach(([col, du]) => {
+    P.pieza(0.55, 0.75, 0.5, new THREE.MeshStandardMaterial({ color: col, roughness: 0.55 }), uR + du, vR, 0.43);
+    P.pieza(0.58, 0.06, 0.53, new THREE.MeshStandardMaterial({ color: col === 0x1f62c4 ? 0x2a6fd0 : 0x1f2124, roughness: 0.5 }), uR + du, vR, 0.83);
+  });
+  P.pieza(1.9, 0.05, 0.6, new THREE.MeshStandardMaterial({ color: 0x5f6469, metalness: 0.4, roughness: 0.5 }), uR + 0.62, vR, 0.05);
+  for (const du of [-0.4, 1.64]) P.pieza(0.05, 1.45, 0.05, new THREE.MeshStandardMaterial({ color: 0x5f6469, metalness: 0.4 }), uR + du, vR - 0.2, 0.85);
+  P.pieza(2.1, 0.42, 0.04, cartel(2.1, 0.42, (x, w, h) => {
+    x.fillStyle = "#2f6f7a"; x.fillRect(0, 0, w, h);
+    const t = [["#2a6fc0", "ENVASES"], ["#3d4246", "PAPEL Y CARTÓN"], ["#2a2d30", "ORDINARIOS"]];
+    t.forEach(([col, txt], k) => { x.fillStyle = col; x.fillRect(k * w / 3 + 3, h * 0.24, w / 3 - 6, h * 0.72); x.fillStyle = "#fff"; x.font = `700 ${h * 0.2}px Arial, sans-serif`; x.textAlign = "center"; x.fillText(txt, k * w / 3 + w / 6, h * 0.5); });
+    x.fillStyle = "#cfe7b5"; x.font = `700 ${h * 0.15}px Arial, sans-serif`; x.textAlign = "center"; x.fillText("PUNTO VERDE UCR", w / 2, h * 0.17);
+  }), uR + 0.62, vR - 0.2, 1.25);
+
+  // --- cara de la ventanilla
+  const V = caraDe(ventanilla), uV = 0.9, anchoV = 3.0;
+  ventanaReja(V, uV, anchoV, 0.95, alto * 0.42);
+  V.pieza(anchoV + 0.2, 0.08, 0.3, crema, uV, 0.12, 0.92);   // repisa
+  V.pieza(0.85, 0.55, 0.05, new THREE.MeshStandardMaterial({ color: 0x111417, roughness: 0.3 }), uV - 0.5, 0.06, 1.25);   // ventanilla de atención
+  // guirnalda navideña sobre el ventanal (nov.–dic.)
+  V.pieza(anchoV, 0.12, 0.1, new THREE.MeshStandardMaterial({ color: 0x2f6b34, roughness: 0.9 }), uV, 0.16, 0.95 + alto * 0.42 - 0.05);
+  for (let k = 0; k < 5; k++) V.pieza(0.2, 0.2, 0.05, new THREE.MeshStandardMaterial({ color: 0xc8202a, roughness: 0.7 }), uV - anchoV / 2 + 0.3 + k * (anchoV - 0.6) / 4, 0.2, 0.95 + alto * 0.42 - 0.08);
+  ventanaReja(V, -V.L / 2 + 0.7, 0.9, alto * 0.6, alto * 0.22);   // ventanita de la esquina
+  // mueble de madera bajo el ventanal, banca negra de metal y condensadora al fondo
+  V.pieza(1.3, 0.75, 0.6, madera, uV - 0.6, 0.45, 0.42); V.pieza(1.4, 0.05, 0.68, new THREE.MeshStandardMaterial({ color: 0xb98c5a }), uV - 0.6, 0.45, 0.82);
+  const banca = new THREE.Group();
+  for (let k = 0; k < 4; k++) { const t = new THREE.Mesh(new THREE.BoxGeometry(1.3, 0.03, 0.08), negro); t.position.set(0, 0.45, -0.18 + k * 0.12); banca.add(t); }
+  for (let k = 0; k < 4; k++) { const t = new THREE.Mesh(new THREE.BoxGeometry(1.3, 0.08, 0.03), negro); t.position.set(0, 0.6 + k * 0.12, -0.24); t.rotation.x = -0.12; banca.add(t); }
+  for (const s of [-0.6, 0.6]) for (const d of [-0.18, 0.18]) { const p = new THREE.Mesh(new THREE.BoxGeometry(0.04, 0.45, 0.04), negro); p.position.set(s, 0.22, d); banca.add(p); }
+  banca.position.set(...V.en(uV + 1.3, 0.65, 0)); banca.rotation.y = V.ang; banca.traverse((o) => { o.castShadow = !liviano; }); grupo.add(banca);
+  condensadora(V, uV + 2.4, 0.3);
+  // a la izquierda: dispensador de agua, pizarra de avisos, aviso amarillo, condensadora y maceta
+  V.pieza(0.34, 1.0, 0.34, new THREE.MeshStandardMaterial({ color: 0xd9d6cd, roughness: 0.6 }), -1.2, 0.25, 0.5);
+  V.pieza(0.24, 0.12, 0.02, new THREE.MeshStandardMaterial({ color: 0x2f9fb0, roughness: 0.5 }), -1.2, 0.43, 0.92);
+  V.pieza(1.5, 0.95, 0.03, cartel(1.5, 0.95, (x, w, h) => {
+    x.fillStyle = "#f4f2ea"; x.fillRect(0, 0, w, h);
+    x.fillStyle = "#6c3a8f"; x.fillRect(w * 0.3, h * 0.04, w * 0.48, h * 0.62);
+    x.fillStyle = "#fff"; x.font = `700 ${h * 0.09}px Arial, sans-serif`; x.textAlign = "left";
+    ["Espacio", "libre de", "acoso", "sexual"].forEach((t, k) => x.fillText(t, w * 0.33, h * (0.16 + k * 0.12)));
+    x.fillStyle = "#2b3f6b"; x.fillRect(w * 0.79, h * 0.04, w * 0.18, h * 0.62);
+    x.fillStyle = "#e8c32c"; x.fillRect(w * 0.02, h * 0.04, w * 0.25, h * 0.92);
+    x.fillStyle = "#555"; for (let k = 0; k < 6; k++) x.fillRect(w * 0.05, h * (0.15 + k * 0.12), w * 0.18, h * 0.025);
+  }), -2.0, 0.03, 1.55);
+  V.pieza(0.42, 0.62, 0.02, cartel(0.42, 0.62, (x, w, h) => { x.fillStyle = "#f2f0e6"; x.fillRect(0, 0, w, h); x.fillStyle = "#e8b82a"; x.fillRect(0, 0, w, h * 0.18); x.fillStyle = "#555"; for (let k = 0; k < 9; k++) x.fillRect(w * 0.1, h * (0.26 + k * 0.07), w * 0.75, h * 0.025); }, 128),
+    -3.2, 0.03, 1.6);
+  condensadora(V, -V.L / 2 + 1.2, 0.35);
+  V.pieza(0.45, 0.4, 0.45, new THREE.MeshStandardMaterial({ color: 0x8a6a4c, roughness: 0.9 }), -2.6, 0.4, 0.2);
+  const hojas = new THREE.Mesh(new THREE.IcosahedronGeometry(0.42, 0), new THREE.MeshStandardMaterial({ color: 0x3f7a3a, roughness: 0.9, flatShading: true }));
+  hojas.position.set(...V.en(-2.6, 0.4, 0.75)); hojas.scale.y = 0.8; grupo.add(hojas);
+
+  // corredor perimetral: guía táctil amarilla cerca de la orilla, toda la vuelta
+  const g = desplazar(c, alero - 0.75);
+  for (let i = 0; i < g.length; i++) {
+    const a = g[i], b = g[(i + 1) % g.length], L = Math.hypot(b[0] - a[0], b[1] - a[1]);
+    const t = new THREE.Mesh(new THREE.BoxGeometry(0.3, 0.02, L + 0.3), amarillo);
+    t.position.set((a[0] + b[0]) / 2, 0.17, (a[1] + b[1]) / 2); t.rotation.y = Math.atan2(b[0] - a[0], b[1] - a[1]); t.receiveShadow = true; grupo.add(t);
+  }
+}
+
 // Parasoles curvos de lámina blanca frente a la fachada (edificio 13): paneles altos que se arquean hacia afuera
 function parasoles(grupo, vol, alto, frente, cuantos = 3) {
   const f = frente ? fachadaMirando(vol.contorno, frente) : fachadaSur(vol.contorno), dx = (f.b[0] - f.a[0]) / f.largo, dz = (f.b[1] - f.a[1]) / f.largo;
@@ -1222,12 +1370,12 @@ for (const e of datos.campus.edificios) {
     }
     if (estilo.columnas) for (const vol of e.volumenes) {   // corredor perimetral bajo el alero, con columnas delgadas
       const c = desplazar(vol.contorno, alero - 0.45), mat = new THREE.MeshStandardMaterial({ color: estilo.columnas, roughness: 0.6 });
-      const piso = prisma(desplazar(vol.contorno, alero - 0.2), 0.15, 0, new THREE.MeshStandardMaterial({ color: 0xb4614e, roughness: 0.9 }));
+      const piso = prisma(desplazar(vol.contorno, alero - 0.2), 0.15, 0, new THREE.MeshStandardMaterial({ color: estilo.piso_corredor || 0xb4614e, roughness: 0.9 }));
       piso.castShadow = false; grupo.add(piso);
       for (let i = 0; i < c.length; i++) {
         const a = c[i], b = c[(i + 1) % c.length], L = Math.hypot(b[0] - a[0], b[1] - a[1]), n = Math.max(1, Math.round(L / 4.5));
         for (let k = 0; k < n; k++) {
-          const t = k / n, col = new THREE.Mesh(new THREE.CylinderGeometry(0.11, 0.11, e.alto - 0.7, 8), mat);
+          const t = k / n, col = new THREE.Mesh(estilo.columnas_cuadradas ? new THREE.BoxGeometry(0.2, e.alto - 0.7, 0.2) : new THREE.CylinderGeometry(0.11, 0.11, e.alto - 0.7, 8), mat);
           col.position.set(a[0] + (b[0] - a[0]) * t, (e.alto - 0.7) / 2, a[1] + (b[1] - a[1]) * t); col.castShadow = !liviano; grupo.add(col);
         }
       }
@@ -1241,6 +1389,7 @@ for (const e of datos.campus.edificios) {
     if (estilo.balcones) e.volumenes.forEach((vol) => balcones(grupo, vol, e.alto, Math.max(e.pisos, 1), estilo.balcones.frente, !!estilo.balcones.unir_galeria));
     if (estilo.mural_mosaico) muralMosaico(grupo, e.volumenes[0], e.alto, estilo.mural_mosaico.frente);
     if (estilo.puerta_biblioteca) puertaBiblioteca(grupo, e.volumenes, estilo.puerta_biblioteca);
+    if (estilo.docencia) docencia(grupo, e.volumenes[0], e.alto, estilo.docencia, estilo.alero ?? 1.4);
     if (estilo.fachada_26) fachada26(grupo, e.volumenes[0], e.alto, Math.max(e.pisos, 1), estilo.fachada_26);
     if (estilo.entrada) entrada(grupo, e);
     if (estilo.talud) {   // el edificio se para sobre un talud de zacate, con escalera y rampa al frente

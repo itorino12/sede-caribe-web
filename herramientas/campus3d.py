@@ -106,8 +106,14 @@ EDIFICIOS = [
     # Coordinación de Docencia (fotos): hexágono con corredor perimetral de columnas azules y alero celeste,
     # techo verde agua en pirámide con una linternilla de ventanas arriba
     # (anotaciones) más atrás de lo que marca el croquis, lejos del pasillo 27, con su propio pasillo techado
+    # (fotos, nov. 2026) paredes blancas con ventanas de reja negra (sin la banda de celosía), columnas cuadradas
+    # celestes y corredor de concreto con guía táctil amarilla. `docencia`: la puerta de vidrio con su rótulo y el
+    # Punto Verde donde llega el pasillo techado, y en la cara de la ventanilla el ventanal de reja con la
+    # ventanilla de atención, avisos, dispensador de agua, mueble de madera y banca (ver docencia() en recorrido.js)
     {"id": 4, "hex": (672, 1490, 36), "pisos": 1,
-     "estilo": {"techo": "#6fa596", "fascia": "#a9d4ef", "alero": 2.8, "columnas": "#3f6f9e", "linterna_hex": True}},
+     "estilo": {"techo": "#6fa596", "fascia": "#a9d4ef", "alero": 2.8, "columnas": "#4a8cc4", "columnas_cuadradas": True,
+                "linterna_hex": True, "ventanas": "ninguna", "piso_corredor": "#c4c3bd",
+                "docencia": {"puerta": [0.5, 0.87], "ventanilla": [1, 0]}}},
     # Auditorio (fotos): blanco, franja alta de paneles grises, losa de techo muy volada sobre columnas de
     # acero en V, mural de cerámica hacia la calle y parasoles celestes junto a la puerta lateral
     # (fotos y anotaciones) más atrás que en el croquis: entre la fachada del mural y la calle hay una plaza
