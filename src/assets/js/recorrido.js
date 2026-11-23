@@ -898,6 +898,59 @@ function puertaBiblioteca(grupo, volumenes, { cerca, frente }) {
   for (const b of [2.75, 4.35]) pieza(0.05, 1.7, 0.05, negro, 0.25, b, 0.85, true);
 }
 
+// Entrada del gimnasio (foto): en la esquina, bajo la viga de concreto del corredor. En la cara indicada, desde la
+// esquina: un panel blanco con el rótulo «UCR / Sede del Caribe», luego dos portones de malla ciclón con marco de tubo
+// azul por los que se ve la gradería con su escalera amarilla, un basurero azul y un extintor; la orilla del corredor
+// lleva una franja amarilla y hay dos conos naranja. Sobre la otra cara sigue la pared blanca con la franja celeste
+function entradaGimnasio(grupo, vol, alto, { frente, esquina }) {
+  const f = fachadaMirando(vol.contorno, frente);
+  // a: la esquina pedida (la del lado de «esquina»), u crece alejándose de ella
+  let a = f.a, b = f.b;
+  if ((b[0] - a[0]) * esquina[0] + (b[1] - a[1]) * esquina[1] > 0) [a, b] = [b, a];
+  const ux = (b[0] - a[0]) / f.largo, uz = (b[1] - a[1]) / f.largo, ang = Math.atan2(-uz, ux);
+  const en = (u, v, y) => [a[0] + ux * u + f.nx * v, y, a[1] + uz * u + f.nz * v];
+  const pieza = (w, h, d, mat, u, v, y) => { const m = new THREE.Mesh(new THREE.BoxGeometry(w, h, d), mat); m.position.set(...en(u, v, y)); m.rotation.y = ang; m.castShadow = !liviano; m.receiveShadow = true; grupo.add(m); return m; };
+  const blancoG = new THREE.MeshStandardMaterial({ color: 0xf2f2ef, roughness: 0.8 });
+  const oscuro = new THREE.MeshStandardMaterial({ color: 0x24282c, roughness: 0.9 });
+  const azulT = new THREE.MeshStandardMaterial({ color: 0x1f63c6, roughness: 0.5, metalness: 0.3 });
+  const amarillo = new THREE.MeshStandardMaterial({ color: 0xf0c419, roughness: 0.6 });
+  const altoP = alto - 1.8;
+  // panel blanco con el rótulo, desde la esquina
+  pieza(4.6, altoP - 0.2, 0.12, blancoG, 3.0, 0.08, (altoP - 0.2) / 2);
+  const cv = document.createElement("canvas"); cv.width = 512; cv.height = 320;
+  const x = cv.getContext("2d"); x.fillStyle = "#ffffff"; x.fillRect(0, 0, 512, 320); x.fillStyle = "#3a8fd0"; x.textAlign = "center";
+  x.font = "600 120px 'Source Sans 3', Arial, sans-serif"; x.fillText("UCR", 256, 170);
+  x.font = "600 44px 'Source Sans 3', Arial, sans-serif"; x.fillText("SEDE DEL CARIBE", 256, 250);
+  const tex = new THREE.CanvasTexture(cv); tex.colorSpace = THREE.SRGBColorSpace;
+  const rot = new THREE.Mesh(new THREE.PlaneGeometry(3.4, 2.1), new THREE.MeshBasicMaterial({ map: tex }));
+  rot.position.set(...en(3.2, 0.16, 1.7)); rot.rotation.y = Math.atan2(f.nx, f.nz); grupo.add(rot);
+  // vano oscuro de la gradería, con la escalera amarilla y la pared blanca del fondo
+  const u0 = 5.6, u1 = 12.2, um = (u0 + u1) / 2;
+  pieza(u1 - u0, altoP, 0.1, oscuro, um, 0.06, altoP / 2);
+  pieza(2.2, altoP * 0.75, 0.08, blancoG, u1 - 1.4, 0.1, altoP * 0.375);
+  const esc = pieza(4.2, 0.12, 1.1, amarillo, um - 0.6, 0.6, altoP * 0.4); esc.rotation.set(0, ang, 0.62, "YXZ");
+  for (const k of [0, 1]) { const br = pieza(4.2, 0.05, 0.05, amarillo, um - 0.6, 0.15 + k * 0.9, altoP * 0.4 + 0.9); br.rotation.set(0, ang, 0.62, "YXZ"); }
+  // portones de malla ciclón con marco azul, dos hojas en cada uno
+  const malla = new THREE.MeshLambertMaterial({ color: 0x6f8fb0, transparent: true, opacity: 0.35, side: THREE.DoubleSide, depthWrite: false });
+  for (const [ua, ub] of [[u0 + 0.2, um - 0.1], [um + 0.1, u1 - 0.2]]) {
+    const w = ub - ua, uc = (ua + ub) / 2, h = 2.9;
+    const m = new THREE.Mesh(new THREE.PlaneGeometry(w - 0.1, h - 0.1), malla); m.position.set(...en(uc, 0.9, h / 2 + 0.05)); m.rotation.y = ang; grupo.add(m);
+    for (const y of [0.08, h / 2, h]) pieza(w, 0.07, 0.07, azulT, uc, 0.9, y);
+    for (const uu of [ua, uc, ub]) pieza(0.07, h, 0.07, azulT, uu, 0.9, h / 2);
+  }
+  // basurero azul y extintor rojo junto al portón
+  const bas = new THREE.Mesh(new THREE.CylinderGeometry(0.28, 0.25, 0.8, 12), new THREE.MeshStandardMaterial({ color: 0x1f4fa8, roughness: 0.6 }));
+  bas.position.set(...en(u0 + 1.2, 0.5, 0.4)); grupo.add(bas);
+  pieza(0.22, 0.5, 0.18, new THREE.MeshStandardMaterial({ color: 0xc0262d, roughness: 0.5 }), u0 + 2.2, 0.15, 1.3);
+  // franja amarilla en la orilla del corredor, por las dos caras de la esquina, y dos conos
+  pieza(u1 + 4, 0.03, 0.25, amarillo, (u1 + 4) / 2 - 0.4, 3.55, 0.03);
+  const cono = new THREE.MeshStandardMaterial({ color: 0xf26a21, roughness: 0.6 });
+  for (const [u, v] of [[1.2, 2.6], [u1 + 1.2, 3.9]]) {
+    const c = new THREE.Mesh(new THREE.ConeGeometry(0.17, 0.7, 12), cono); c.position.set(...en(u, v, 0.37)); grupo.add(c);
+    const base = new THREE.Mesh(new THREE.BoxGeometry(0.42, 0.04, 0.42), cono); base.position.set(...en(u, v, 0.02)); grupo.add(base);
+  }
+}
+
 // Parasoles curvos de lámina blanca frente a la fachada (edificio 13): paneles altos que se arquean hacia afuera
 function parasoles(grupo, vol, alto, frente, cuantos = 3) {
   const f = frente ? fachadaMirando(vol.contorno, frente) : fachadaSur(vol.contorno), dx = (f.b[0] - f.a[0]) / f.largo, dz = (f.b[1] - f.a[1]) / f.largo;
@@ -1170,6 +1223,7 @@ for (const e of datos.campus.edificios) {
     if (estilo.balcones) e.volumenes.forEach((vol) => balcones(grupo, vol, e.alto, Math.max(e.pisos, 1), estilo.balcones.frente, !!estilo.balcones.unir_galeria));
     if (estilo.mural_mosaico) muralMosaico(grupo, e.volumenes[0], e.alto, estilo.mural_mosaico.frente);
     if (estilo.puerta_biblioteca) puertaBiblioteca(grupo, e.volumenes, estilo.puerta_biblioteca);
+    if (estilo.entrada_gimnasio) entradaGimnasio(grupo, e.volumenes[0], e.alto, estilo.entrada_gimnasio);
     if (estilo.entrada) entrada(grupo, e);
     if (estilo.talud) {   // el edificio se para sobre un talud de zacate, con escalera y rampa al frente
       const t = estilo.talud, c = e.volumenes[0].contorno;
@@ -2310,6 +2364,68 @@ if (datos.campus.parqueo) {
     registrar(g, null);
     if (nivelDe) g.userData.nivelDe = nivelDe;
   }
+  // parqueo de bicicletas (anotaciones y foto): losa de adoquín rojizo con tubos en U de acero inoxidable en fila
+  function bicicletas({ p, largo, ancho, giro = 0, n = 5 }) {
+    const g = new THREE.Group();
+    const pad = new THREE.Mesh(new THREE.BoxGeometry(ancho, 0.08, largo), mate(0x8e5a4c, { roughness: 0.95 })); pad.position.y = 0.04; g.add(pad);
+    const inox = mate(0xd9dde1, { metalness: 0.7, roughness: 0.25 });
+    for (let k = 0; k < n; k++) {
+      const z = -largo / 2 + (largo * (k + 0.5)) / n;
+      const u = new THREE.Mesh(new THREE.TorusGeometry(0.42, 0.035, 6, 14, Math.PI), inox); u.position.set(0, 0.08, z); g.add(u);
+      for (const xx of [-0.42, 0.42]) { const pie = new THREE.Mesh(new THREE.CylinderGeometry(0.035, 0.035, 0.08, 6), inox); pie.position.set(xx, 0.04, z); g.add(pie); }
+    }
+    g.position.set(p[0], 0, p[1]); g.rotation.y = giro; registrar(g, null);
+  }
+  // rampa para personas con discapacidad (fotos, edificio 26): dos tramos paralelos pegados a la pared, el de afuera
+  // sube del suelo hasta un descanso en el otro extremo y el de adentro vuelve hasta el segundo piso, donde empata con
+  // la pasarela. Losa de concreto con guía táctil amarilla, barandas de tubo gris a los dos lados y columnas grises;
+  // debajo, piedra bola. Va escalada en alto como los edificios y asentada a la altura del edificio (nivel_de)
+  function rampaDoble({ x_este: xE, x_oeste: xW, z_pared: zp, hacia = -1, ancho = 1.5, piso = 4.2, nivel_de: nivelDe }) {
+    const g = new THREE.Group();
+    const concreto = mate(0xb7b4ad, { roughness: 0.95 }), gris = mate(0x6f7a85, { roughness: 0.45, metalness: 0.5 });
+    const amarillo = mate(0xe0b52a, { roughness: 0.7 }), piedra = mate(0x8b877f, { roughness: 1 });
+    const Z = (v) => zp + hacia * v;   // v: distancia desde la pared
+    const DESC = 2.0;                  // largo del descanso
+    const vIn = 0.15 + ancho / 2, vOut = 0.15 + ancho + 0.2 + ancho / 2, yD = piso / 2, y0 = 0.15;
+    const caja = (w, h, d, mat, x, y, z, rz = 0) => { const m = new THREE.Mesh(new THREE.BoxGeometry(w, h, d), mat); m.position.set(x, y, z); m.rotation.z = rz; g.add(m); return m; };
+    // tramo inclinado a lo largo de x, de (xa, ya) a (xb, yb), a distancia v de la pared
+    const tramo = (v, xa, ya, xb, yb) => {
+      const L = Math.hypot(xb - xa, yb - ya), rz = Math.atan2(yb - ya, xb - xa), xm = (xa + xb) / 2, ym = (ya + yb) / 2;
+      caja(L, 0.18, ancho, concreto, xm, ym - 0.09, Z(v), rz);
+      caja(L, 0.02, 0.3, amarillo, xm, ym + 0.01, Z(v), rz);                               // guía táctil
+      caja(L, 0.25, 0.14, gris, xm, ym - 0.3, Z(v + ancho / 2 - 0.1), rz);                   // viga de acero
+      for (const lado of [-1, 1]) {
+        const br = baranda(L - 0.1); br.position.set(xm, ym, Z(v + lado * (ancho / 2 - 0.05))); br.rotation.set(0, 0, rz);
+        if (hacia < 0) br.rotation.y = 0; g.add(br);
+      }
+    };
+    // de afuera: sube del suelo (este) al descanso (oeste); de adentro: del descanso al segundo piso (este)
+    tramo(vOut, xE, y0, xW, yD);
+    tramo(vIn, xW, yD, xE, piso);
+    // descanso al oeste, de lado a lado de los dos tramos, con baranda por fuera
+    const xD = xW - DESC / 2, vMax = vOut + ancho / 2;
+    caja(DESC, 0.2, vMax, concreto, xD, yD - 0.1, Z(vMax / 2));
+    const b1 = baranda(vMax); b1.position.set(xW - DESC, yD, Z(vMax / 2)); b1.rotation.y = Math.PI / 2; g.add(b1);
+    const b2 = baranda(DESC); b2.position.set(xD, yD, Z(vMax)); g.add(b2);
+    // columnas grises bajo la orilla de afuera y bajo el descanso
+    for (let x = xW - DESC + 0.2; x <= xE - 1.5; x += 3) {
+      const t = (x - xW) / (xE - xW), hAf = x < xW ? yD : yD + (y0 - yD) * t;
+      for (const v of x < xW ? [0.3, vMax - 0.2] : [vMax - 0.2]) {
+        const h = Math.max(0.2, (x < xW ? yD : v > vIn + ancho / 2 ? hAf : yD) - 0.3);
+        const c = new THREE.Mesh(new THREE.CylinderGeometry(0.09, 0.09, h, 10), gris); c.position.set(x, h / 2, Z(v)); g.add(c);
+      }
+    }
+    // piedra bola bajo la rampa
+    let semilla = 3; const azar = () => { semilla = (semilla * 16807) % 2147483647; return semilla / 2147483647; };
+    for (let k = 0; k < 40; k++) {
+      const pd = new THREE.Mesh(new THREE.SphereGeometry(0.16 + azar() * 0.1, 6, 4), piedra);
+      pd.position.set(xW - DESC + azar() * (xE - xW + DESC), 0.06, Z(0.2 + azar() * (vMax - 0.4))); pd.scale.y = 0.6; g.add(pd);
+    }
+    g.traverse((o) => { if (o.isMesh) { o.castShadow = !liviano; o.receiveShadow = true; } });
+    g.scale.y = EXAGERAR;
+    registrar(g, null);
+    if (nivelDe) g.userData.nivelDe = nivelDe;
+  }
   // portón peatonal (anotaciones): dos hojas angostas como las del portón grande, al final de la cerca
   function portonPeatonal({ p, giro, ancho = 1.4 }) {
     const g = portonVerde(false, ancho / 2); g.position.set(p[0], 0, p[1]); g.rotation.y = giro; escena.add(g);
@@ -2324,7 +2440,7 @@ if (datos.campus.parqueo) {
   for (const el of datos.campus.elementos || []) {
     const hacer = { muro, pasillo, caseta, parqueo, bancas, escalera, rampa, descanso, mesas, explanada, alcantarilla, jardin, pluma, comedor, tanque,
       acera, cebra, porton_peatonal: portonPeatonal, puente_peatonal: puentePeatonal, arbol_grande: arbolGrande,
-      ruedas_tren: ruedasTren, congos, carport, pasarela }[el.tipo];
+      ruedas_tren: ruedasTren, congos, carport, pasarela, bicicletas, rampa_doble: rampaDoble }[el.tipo];
     if (hacer) hacer(el);
     else if (el.tipo === "porton") {   // acceso cerrado con portón (sin faroles)
       const g = portonVerde(false, el.hoja || 4.2); g.position.set(el.p[0], 0, el.p[1]); g.rotation.y = el.giro; escena.add(g);

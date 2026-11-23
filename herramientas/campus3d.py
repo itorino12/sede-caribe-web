@@ -167,7 +167,9 @@ EDIFICIOS = [
     # viga perimetral de concreto sobre columnas que forma un corredor abierto, paredes blancas con franja celeste
     # (anotaciones) recto y corrido al sureste, donde lo marcó la Sede
     {"id": 14, "rect": (1703.2, 1316.0, 151, 196, 0), "rect_arboles": (1689, 1292, 151, 196, 12.5), "pisos": 1, "alto": 9, "linterna": 0.6,
-     "estilo": {"techo": "#8db38a", "corredor": True, "franja": "#4fa8e8", "rotulo": [-1, 0]}},
+     "estilo": {"techo": "#8db38a", "corredor": True, "franja": "#4fa8e8", "rotulo": [-1, 0],
+                # (anotaciones y foto) la entrada en la esquina noroeste: rótulo, portones azules y la gradería
+                "entrada_gimnasio": {"frente": [0, -1], "esquina": [-1, 0]}}},
     # Bodega de Acción Social (foto): casita blanca de techo a dos aguas gris oscuro con alero blanco y portón negro
     {"id": 15, "rect": (1770, 1450, 59, 41, 0), "pisos": 1, "alto": 3.4,
      # (anotaciones) la entrada (el portón) está en la fachada oeste, la que da a la calle que viene del gimnasio
@@ -851,6 +853,12 @@ def lugares_nuevos(calles, quebrada, lejos_carretera, y_ruta32):
                  "largo": 8.4, "fondo": 6.6, "espacios": 3})
     # (anotaciones) pasarela entre el pasillo de 25 y el edificio 26: una abajo y otra techada en el segundo piso,
     # las dos con baranda
+    # (anotaciones) parqueo de bicicletas al pie de la escalera de 25, junto a la entrada asfaltada
+    elem.append({"tipo": "bicicletas", "id": None, "p": [135.6, -98.6], "largo": 6.4, "ancho": 2.8, "n": 5})
+    # (anotaciones y fotos) rampa para personas con discapacidad entre 25 y 26, pegada a la cara norte de 26: sube
+    # del suelo al oeste, da la vuelta en un descanso y llega al segundo piso de 26 junto a la pasarela
+    elem.append({"tipo": "rampa_doble", "id": None, "x_este": 166.4, "x_oeste": 155.0, "z_pared": -101.9, "hacia": -1,
+                 "ancho": 1.4, "piso": 4.2, "nivel_de": 26})
     elem.append({"tipo": "pasarela", "id": None, "a": [168.0, -109.4], "b": [168.0, -101.8], "ancho": 3.0, "piso": 4.2,
                  "alto": 8.4, "nivel_de": 25})
     # (anotaciones) parqueo de busetas al oeste de la biblioteca, entre la calle y la cerca de la ruta 32: espacios
