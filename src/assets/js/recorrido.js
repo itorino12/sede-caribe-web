@@ -1742,7 +1742,7 @@ for (const e of datos.campus.edificios) {
     }
   }
   grupo.scale.y = EXAGERAR;
-  grupo.userData = { id: e.id, centro: new THREE.Vector3(e.centro[0], e.cumbre * EXAGERAR, e.centro[1]), mat, alto: e.alto };
+  grupo.userData = { id: e.id, centro: new THREE.Vector3(e.centro[0], e.cumbre * EXAGERAR, e.centro[1]), mat, alto: e.alto, talud: estilo.talud_suelo, huellaExacta: !!estilo.talud_suelo };
   grupo.traverse((o) => { o.userData.edificio = grupo; });
   escena.add(grupo);
   edificios.push(grupo);
@@ -2460,7 +2460,7 @@ if (datos.campus.parqueo) {
 
   // parqueo asfaltado (asfalto y rayas en la textura): topes amarillos, alumbrado verde y, si lleva, carport
   // de lámina verde a una agua sobre columnas azules con base amarilla. Sin carros.
-  function parqueo({ id, centro: [cx, cz], largo, ancho, giro, filas, techado, techado_desde = 0 }) {
+  function parqueo({ id, centro: [cx, cz], largo, ancho, giro, filas, techado, techado_desde = 0, postes = true }) {
     const g = new THREE.Group();
     const tope = mate(0xe6b800, { roughness: 0.7 }), verdePoste = mate(0x2f6b45, { roughness: 0.6 });
     for (const { z: zv, fondo, n } of filas) {
@@ -2479,7 +2479,7 @@ if (datos.campus.parqueo) {
         }
       }
     }
-    for (const x of [-largo / 2 + 0.8, largo / 2 - 0.8]) {
+    if (postes) for (const x of postes === "lejos" ? [largo / 2 - 0.8] : [-largo / 2 + 0.8, largo / 2 - 0.8]) {   // "lejos": solo el de la punta +x
       const poste = new THREE.Mesh(new THREE.CylinderGeometry(0.12, 0.16, 7.5, 8), verdePoste); poste.position.set(x, 3.75, -ancho / 2 + 0.6); g.add(poste);
       const lampara = new THREE.Mesh(new THREE.BoxGeometry(0.5, 0.12, 0.9), new THREE.MeshBasicMaterial({ color: 0xfff3c4 })); lampara.position.set(x, 7.4, -ancho / 2 + 1.1); g.add(lampara);
     }
@@ -2879,6 +2879,7 @@ if (datos.campus.parqueo) {
       }
       m.position.set(x, 0, z); m.rotation.y = giro; m.traverse((o) => { o.castShadow = !liviano; }); g.add(m);
     }
+    g.userData.talud = 1;   // sin lomo alrededor: el grupo es largo y con talud ancho subía el bajo de la soda
     registrar(g, null);
   }
   // entrada a Registro, Becas y demás (foto, nov. 2026): paso abierto bajo el edificio 2 con cielo blanco y la franja
@@ -3326,6 +3327,12 @@ if (datos.campus.parqueo) {
       if (!x.isMesh || !x.visible) return;
       b.setFromObject(x);
       if (b.isEmpty() || b.min.y > 0.6) return;
+      const pos = x.geometry?.attributes?.position;
+      if (o.userData.huellaExacta && pos && !x.isInstancedMesh && pos.count < 4000) {   // edificio girado: sus vértices, no la caja alineada a los ejes
+        const v = new THREE.Vector3();
+        for (let i = 0; i < pos.count; i++) { v.fromBufferAttribute(pos, i).applyMatrix4(x.matrixWorld); pts.push([v.x, v.z]); }
+        return;
+      }
       for (const [px, pz] of [[b.min.x, b.min.z], [b.max.x, b.min.z], [b.max.x, b.max.z], [b.min.x, b.max.z]]) pts.push([px, pz]);
     });
     if (pts.length < 3) return null;

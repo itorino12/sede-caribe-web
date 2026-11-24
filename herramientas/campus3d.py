@@ -96,7 +96,9 @@ EDIFICIOS = [
      "estilo": {"banos": {"extremo": -1, "fraccion": 0.21}, "loma": 3.5, "techo": "#7fae9f", "fascia": "#9acd3c",
                 "alero": 2.6, "pendiente": 0.16, "columnas": "#8ec3e6"}},
     {"id": 2, "rect": (601, 1753, 215, 52, 51), "pisos": 1,
-     "estilo": {"banos": {"extremo": -1, "fraccion": 0.2}, "techo": "#7fae9f", "fascia": "#9acd3c",
+     # (talud_suelo) terreno emparejado solo bajo su huella real (no la caja alineada a los ejes) y con talud corto: si no,
+     # tapaba el bajo de la soda y la escalera
+     "estilo": {"talud_suelo": 2.5, "banos": {"extremo": -1, "fraccion": 0.2}, "techo": "#7fae9f", "fascia": "#9acd3c",
                 "alero": 2.6, "pendiente": 0.16, "columnas": "#8ec3e6"}},
     # Soda y comedor: más al este de lo que marca el croquis, pasando la punta sureste del 2 (anotaciones)
     # Soda (fotos): columnas de concreto a la vista, celosías celestes, techo verde agua a cuatro aguas; está en
@@ -105,7 +107,7 @@ EDIFICIOS = [
     {"id": 3, "rect": (754.32, 1818.45, 66, 70, -39), "pisos": 1,
      # (fotos, nov. 2026) entrada donde llega el pasillo 10 (cara noroeste) y puerta hacia el comedor (cara noreste)
      "estilo": {"techo": "#7fae9f", "ventanas": "celeste", "alero": 1.6, "hundido": 1.6,
-                "soda": {"entrada": [-0.63, -0.78], "p_entrada": [-116.9, 72.8], "puerta": [0.78, -0.63]}}},
+                "soda": {"entrada": [-0.63, -0.78], "p_entrada": [-119.89, 75.1], "puerta": [0.78, -0.63]}}},
     # Coordinación de Docencia (fotos): hexágono con corredor perimetral de columnas azules y alero celeste,
     # techo verde agua en pirámide con una linternilla de ventanas arriba
     # (anotaciones) más atrás de lo que marca el croquis, lejos del pasillo 27, con su propio pasillo techado
@@ -320,6 +322,11 @@ LLANOS = [
              (174.0, 42.0), (164.0, 52.0), (149.0, 54.0), (129.0, 53.0), (126.0, 40.0), (123.0, 25.0), (121.0, 20.0)],
      # (anotaciones) sube parejo hacia residencias: de la calle junto a la quebrada hasta cerca del nivel de los edificios
      "nivel": 2.2, "rampa": [(140.0, 20.0), 2.2, (148.0, 52.0), 6.0], "suave": 10.0},
+    # (anotaciones, nov. 2026) la soda y el comedor van en un bajo poco hondo, unos 0,8 m bajo el parqueo; la escalera
+    # del final del parqueo baja a él
+    # (el borde junto al parqueo pasa justo por la punta de arriba de la escalera, de través)
+    {"pol": [(-136.56, 56.47), (-127.24, 48.93), (-114.0, 58.0), (-104.0, 54.0), (-87.0, 65.0), (-91.0, 82.0),
+             (-111.0, 98.0), (-125.0, 87.0), (-123.0, 77.0), (-130.0, 64.0)], "nivel": 3.0, "suave": 1.5},
 ]
 # (anotaciones) al este del puente de residencias la quebrada va poco honda entre las dos mallas: sin zanja
 CAUCE_SOMERO = [{"x": (112.0, 178.0), "hondo": 1.1, "rampa": 9.0}]
@@ -557,7 +564,7 @@ def lugares_nuevos(calles, quebrada, lejos_carretera, y_ruta32):
         cv2.fillPoly(despejar if limpiar is None else limpiar, [np.array(rect_contorno(p[0], p[1], largo / ESCALA + 56, ancho / ESCALA + 56, giro), np.int32)], 1)
         elem.append({"tipo": tipo, "id": id_, "p": a_metros(*p), "giro": round(math.radians(giro), 3), "largo": largo, "ancho": ancho, **extra})
 
-    def parqueo(id_, centro, largo, ancho, giro, filas, conexion=None, techado=False, techado_desde=0):
+    def parqueo(id_, centro, largo, ancho, giro, filas, conexion=None, techado=False, techado_desde=0, postes=True):
         """Parqueo asfaltado (largo x ancho en metros); filas = [(z del centro de la fila, fondo)] en metros,
         z medido hacia la izquierda del giro (como v en marco)."""
         cx, cy = centro
@@ -576,7 +583,7 @@ def lugares_nuevos(calles, quebrada, lejos_carretera, y_ruta32):
         if conexion:   # entrada de asfalto desde la calle
             cv2.line(asfalto, tuple(int(k) for k in conexion[0]), tuple(int(k) for k in conexion[1]), 255, 22)
         elem.append({"tipo": "parqueo", "id": id_, "centro": a_metros(cx, cy), "largo": largo, "ancho": ancho,
-                     "giro": round(math.radians(giro), 3), "filas": espacios, "techado": techado, "techado_desde": techado_desde})
+                     "giro": round(math.radians(giro), 3), "filas": espacios, "techado": techado, "techado_desde": techado_desde, "postes": postes})
 
     # --- pasillos techados (anotaciones): de la entrada bajan por el lado sureste de la calle (26), cruzan la
     # quebrada junto a la calle y siguen hacia el edificio administrativo (27) hasta la punta de la calle, donde
@@ -595,8 +602,8 @@ def lugares_nuevos(calles, quebrada, lejos_carretera, y_ruta32):
         p26["alturas"] = p26["alturas"][k26:]
     # (fotos, nov. 2026) llega hasta la puerta de la soda. (anotaciones) corrido 3 m hacia el parqueo (v 47 -> 59),
     # para que entre él y el edificio 2 quepan el busto, las mesas de concreto y la entrada a Registro; sale de la
-    # unión con el pasillo 7 en diagonal. (anotaciones) el último tramo va en diagonal hasta la entrada de la soda
-    p10 = pasillo([marco(2, -100, 47), marco(2, -86, 59), marco(2, 15, 59), marco(2, 40, 59), marco(2, 104, 76), marco(2, 112, 78)], 36,
+    # unión con el pasillo 7 en diagonal; (anotaciones) sigue recto hasta la soda (ya más corta)
+    p10 = pasillo([marco(2, -100, 47), marco(2, -86, 59), marco(2, 15, 59), marco(2, 32, 63), marco(2, 104, 63), marco(2, 112, 63)], 36,
                   cortar_en_calle=False)   # la diagonal del inicio roza el asfalto del parqueo: va completa
     A2, d2, n2 = (-161.61, 38.27), (0.629, 0.777), (0.777, -0.629)   # esquina noroeste del 2, a lo largo, hacia el pasillo
     franja = lambda u, v=4.75: [round(A2[0] + d2[0] * u + n2[0] * v, 2), round(A2[1] + d2[1] * u + n2[1] * v, 2)]
@@ -614,10 +621,12 @@ def lugares_nuevos(calles, quebrada, lejos_carretera, y_ruta32):
     elem.append({"tipo": "acera", "id": None, "ancho": 1.8, "puntos": [
         [round(fin10[0] - d2[0] * 2.6 + n2[0] * 1.3, 2), round(fin10[1] - d2[1] * 2.6 + n2[1] * 1.3, 2)], [-110.86, 64.49]]})
     # (anotaciones y foto) del final del parqueo baja una escalera y sigue un techito que se une al pasillo de la soda
+    # (anotaciones) la escalera baja del parqueo al bajo de la soda y el comedor (ver LLANOS); el techito es el ramal
+    # que sobresale del pasillo hacia ella
     ea, eb = marco(2, 12, 82), marco(2, 26, 82)
-    elem.append({"tipo": "escalera", "id": None, "p": a_metros((ea[0] + eb[0]) / 2, (ea[1] + eb[1]) / 2), "giro": round(math.radians(51 + 180), 3),
-                 "largo": 3.5, "ancho": 1.8, "alto": 0.9, "techado": False})
-    pasillo([marco(2, 26, 82), marco(2, 62, 82), marco(2, 76, 70)], cortar_en_calle=False)
+    elem.append({"tipo": "escalera", "id": None, "p": a_metros((ea[0] + eb[0]) / 2, (ea[1] + eb[1]) / 2), "giro": round(math.radians(51), 3),   # sube hacia el parqueo
+                 "largo": 3.5, "ancho": 1.8, "alto": 0.6, "techado": False})
+    pasillo([marco(2, 26, 82), marco(2, 95, 68)], cortar_en_calle=False)
     union7 = junto_calle([(1080, 1392)], 15, calles)
     pasillo([marco(7, -74, 6), marco(7, -90, 2), (1118, 1374)] + union7)
     # (anotaciones) el pasillo del lado de la piscina termina antes de la esquina sur del 7
@@ -695,8 +704,10 @@ def lugares_nuevos(calles, quebrada, lejos_carretera, y_ruta32):
     c34 = marco(2, -42, 81)
     # (anotaciones, nov. 2026) aquí solo los espacios del techado; los demás van aparte, más hacia la isla y de frente
     # al comedor. La explanada de asfalto sigue con el largo de antes (c34)
-    parqueo(34, marco(2, -62.8, 81), 14.5, 9.5, 51, [(-2.25, 5.0)], techado=4, techado_desde=1)
-    parqueo(None, marco(2, -8, 112), 13.0, 6.0, -39, [(0.0, 5.0)])
+    parqueo(34, marco(2, -62.8, 81), 14.5, 9.5, 51, [(-2.25, 5.0)], techado=4, techado_desde=1, postes=False)
+    # (anotaciones) los carros sin techo, pegados a la punta del techado que da a la soda, en fila hacia la isla y de
+    # frente al comedor
+    parqueo(None, marco(2, -22, 100), 17.1, 6.0, -39, [(0.0, 5.0)], postes="lejos")   # sin el poste junto al pasillo
     esquinas_ = rect_contorno(c25[0], c25[1], 11.9 / ESCALA + 8, 6.0 / ESCALA + 8, -39) + rect_contorno(c34[0], c34[1], 25.0 / ESCALA + 4, 9.5 / ESCALA + 4, 51)
     esquinas_ += [p_ for p_ in zip(*np.nonzero(calles[1570:1625, 640:830])[::-1])]   # borde de la calle, al norte
     esquinas_ = [(x + 640, y + 1570) if i_ >= 8 else (x, y) for i_, (x, y) in enumerate(esquinas_)]
