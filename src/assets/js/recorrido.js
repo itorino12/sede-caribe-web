@@ -2382,13 +2382,58 @@ if (datos.campus.parqueo) {
       bloque(Math.hypot(run, elevada), 0.05, 0.05, azulEsc, xTop - run / 2, elevada / 2 + 0.9, ze - 0.5).rotation.z = Math.atan2(elevada, run);
       const t = bloque(run + 1.4, 0.06, 1.6, mate(0x4a5056), xTop - run / 2 + 0.3, elevada + 2.4, ze); t.rotation.x = -0.25;
       puerta(largo / 2 - 0.45, -ancho / 2 - 0.05, azulEsc, 0, elevada);
-    } else if (uso === "banos_crema") {   // baño de Docencia: crema, techo verde a una agua con alero blanco
-      pared = mate(0xefe6c8);
+    } else if (uso === "banos_crema") {
+      // baño de Docencia (fotos, nov. 2026): blanco, techo verde a una agua con borde blanco; da a Docencia (+z) por
+      // un pasillo angosto de piso de cerámica blanca brillante, techado, abierto en las dos puntas hasta el zacate.
+      // En el baño, puertas corredizas de vidrio esmerilado con marco de aluminio y el rótulo de BAÑOS (una abierta, con
+      // el azulejo azul adentro); contra la pared de Docencia, los casilleros de correo con afiches, un armario blanco
+      // de metal, el rótulo amarillo de piso mojado y matas en macetas. En la punta de afuera, una pila de acero sobre
+      // ménsulas con un galón y una enredadera
+      pared = mate(0xf4f2e6);
       bloque(largo, alto, ancho, pared);
-      techoM = mate(0x4f8a62);
+      techoM = mate(0x2f6b45);
       const t = bloque(largo + 1.2, 0.12, ancho + 1.4, techoM, 0, alto + 0.25); t.rotation.x = 0.12;
       bloque(largo + 1.25, 0.25, 0.08, blanco, 0, alto + 0.05, ancho / 2 + 0.7);
-      for (const x of [-largo / 4, largo / 4]) puerta(x, ancho / 2 + 0.05, vidrio);
+      const zf = ancho / 2, zD = 6.5;   // frente del baño y pared de Docencia (cara noroeste)
+      const ceramica = mate(0xeef0ef, { roughness: 0.12, metalness: 0.15 }), alu = mate(0xbfc4c8, { roughness: 0.35, metalness: 0.6 });
+      const esmerilado = new THREE.MeshStandardMaterial({ color: 0xdfe6ea, roughness: 0.25, metalness: 0.1, transparent: true, opacity: 0.9 });
+      bloque(largo + 0.6, 0.18, zD - zf, ceramica, 0, 0.09, (zf + zD) / 2);                       // piso del pasillo
+      for (let k = 1; k < 6; k++) bloque(largo + 0.6, 0.005, 0.02, mate(0xc9ccca), 0, 0.185, zf + ((zD - zf) * k) / 6);   // juntas
+      bloque(largo + 0.6, 0.08, zD - zf - 1.2, mate(0x9fd8c0, { roughness: 0.6 }), 0, alto + 0.35, zf + (zD - zf - 1.2) / 2);   // techo verde menta
+      bloque(largo + 0.6, 0.06, zD - zf - 1.2, mate(0xf2f3f1, { roughness: 0.2, metalness: 0.2 }), 0, alto + 0.27, zf + (zD - zf - 1.2) / 2);
+      // puertas corredizas de vidrio esmerilado, una abierta
+      for (const [x, abierta] of [[-1.3, true], [0.2, false], [1.7, false]]) {
+        bloque(1.3, 2.3, 0.06, alu, x, 1.33, zf + 0.04);
+        bloque(1.16, 2.16, 0.04, abierta ? mate(0x2a5aa8, { roughness: 0.3 }) : esmerilado, x, 1.33, zf + 0.07);
+        if (abierta) bloque(1.16, 2.16, 0.04, esmerilado, x + 0.6, 1.33, zf + 0.12);
+        bloque(0.04, 0.5, 0.05, alu, x + (abierta ? 0.1 : 0.45), 1.2, zf + 0.16);
+      }
+      const rot = (w, h, dibujar) => { const cv = document.createElement("canvas"); cv.width = w; cv.height = h; dibujar(cv.getContext("2d"), w, h); const tx = new THREE.CanvasTexture(cv); tx.colorSpace = THREE.SRGBColorSpace; return new THREE.MeshBasicMaterial({ map: tx }); };
+      const banos = new THREE.Mesh(new THREE.PlaneGeometry(0.3, 0.42), rot(64, 96, (x, w, h) => { x.fillStyle = "#f4f6f4"; x.fillRect(0, 0, w, h); x.fillStyle = "#1f4f9a"; x.font = "700 13px Arial"; x.textAlign = "center"; x.fillText("BAÑOS", w / 2, 18); x.fillStyle = "#333"; for (let k = 0; k < 3; k++) x.fillRect(8 + k * 17, 30, 14, 20); x.fillStyle = "#3f8f3a"; x.fillRect(8, 60, 48, 28); }));
+      banos.position.set(-0.55, 2.05, zf + 0.1); g.add(banos);
+      // contra la pared de Docencia: casilleros de correo con afiches, armario blanco, rótulo de piso mojado y matas
+      const beige = mate(0xd6d2c3, { roughness: 0.6, metalness: 0.25 });
+      for (const x of [-1.6, -0.75]) {
+        bloque(0.8, 1.85, 0.42, beige, x, 1.05, zD - 0.25);
+        for (let f = 0; f < 6; f++) for (let c = 0; c < 3; c++) bloque(0.22, 0.24, 0.02, mate(0xc3bfb0), x - 0.26 + c * 0.26, 0.4 + f * 0.27, zD - 0.47);
+        for (const yy of [0.18, 0.12]) bloque(0.04, 0.45, 0.04, mate(0xa8a8a2), x + (yy > 0.15 ? -0.36 : 0.36), 0.22, zD - 0.3);
+      }
+      const afiche = (x, y, color, texto) => { const m = new THREE.Mesh(new THREE.PlaneGeometry(0.32, 0.42), rot(64, 84, (c, w, h) => { c.fillStyle = color; c.fillRect(0, 0, w, h); c.fillStyle = "#fff"; c.font = "700 9px Arial"; c.textAlign = "center"; c.fillText(texto, w / 2, 16); c.fillStyle = "#111"; c.fillRect(w * 0.55, h * 0.55, 22, 22); })); m.position.set(x, y, zD - 0.475); m.rotation.y = Math.PI; g.add(m); };
+      afiche(-1.6, 1.55, "#3d8fd0", "PARTICIPÁ"); afiche(-1.6, 0.75, "#4f7fbf", "LO QUE TE PASA");
+      bloque(0.7, 2.0, 0.45, mate(0xece9df, { roughness: 0.5, metalness: 0.2 }), 1.9, 1.15, zD - 0.3);   // armario blanco
+      for (const dx of [-0.3, 0.3]) bloque(0.04, 0.3, 0.04, mate(0x8a6a4a), 1.9 + dx, 0.15, zD - 0.3);
+      const aviso = new THREE.Mesh(new THREE.ConeGeometry(0.25, 0.7, 4), mate(0xf2c400, { roughness: 0.5 })); aviso.position.set(-2.3, 0.53, zD - 0.7); aviso.rotation.y = Math.PI / 4; aviso.scale.z = 0.4; g.add(aviso);
+      for (const [x, z] of [[-0.2, zD - 0.35], [0.9, zf + 0.35]]) {
+        const pot = new THREE.Mesh(new THREE.CylinderGeometry(0.16, 0.12, 0.3, 10), mate(0xc0612f)); pot.position.set(x, 0.33, z); g.add(pot);
+        for (let k = 0; k < 6; k++) { const h = bloque(0.05, 0.6, 0.02, mate(0x3f7a3a), x, 0.75, z); h.rotation.set((k % 3 - 1) * 0.4, k, (k % 2 ? 1 : -1) * 0.35); }
+      }
+      // pila de acero en la punta de afuera (-x), con su galón y la enredadera
+      const xS = -largo / 2 - 0.3;
+      bloque(0.55, 0.06, 1.0, alu, xS, 0.92, -0.2); bloque(0.45, 0.2, 0.45, alu, xS, 0.8, 0.05);
+      for (const dz of [-0.6, 0.25]) { const m = bloque(0.04, 0.55, 0.04, mate(0x7a7f84), xS + 0.05, 0.68, dz); m.rotation.z = 0.6; }
+      bloque(0.04, 0.3, 0.04, alu, xS + 0.2, 1.1, 0.05);
+      bloque(0.2, 0.3, 0.2, mate(0xf4f4f0, { roughness: 0.4 }), xS, 0.15, 0.55);
+      for (let k = 0; k < 5; k++) { const h = new THREE.Mesh(new THREE.IcosahedronGeometry(0.26, 0), mate(0x3f8a3a, { flatShading: true })); h.position.set(xS - 0.05, 0.25 + (k % 3) * 0.25, -1.0 - (k % 2) * 0.35 - Math.floor(k / 3) * 0.3); g.add(h); }
     } else if (uso === "banos_mural") {   // baño del pabellón 7: dos aguas, alero celeste, celosías y mural
       bloque(largo, alto, ancho, mate(0xdfeaf4));
       bloque(largo + 0.08, 0.5, ancho + 0.08, celosia, 0, alto - 0.4);

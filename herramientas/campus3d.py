@@ -898,8 +898,7 @@ def lugares_nuevos(calles, quebrada, lejos_carretera, y_ruta32):
     # llegar a la puerta, con los basureros de frente al centro del pasillo (antes flotaba fuera del pasillo)
     elem.append({"tipo": "punto_verde", "id": None, "p": [-127.82, 9.82], "giro": 1.925})
     # (fotos y anotaciones) parqueo de motos en el asfalto, pegado al pasillo 7 frente a Docencia, de frente al pasillo
-    # acera entre el corredor de Docencia (cara noroeste) y las puertas del baño, a todo lo largo del baño
-    elem.append({"tipo": "acera", "id": None, "ancho": 1.8, "puntos": [[-134.98, -13.65], [-140.18, -10.65]]})
+    # (fotos, nov. 2026) entre el corredor de Docencia y el baño, el pasillo de cerámica va con el baño (banos_crema)
     elem.append({"tipo": "motos", "id": None, "p": [-140.6, 28.5], "giro": 0.316, "largo": 8.0, "n": 4})
     # (anotaciones y fotos) rampa para personas con discapacidad entre 25 y 26, pegada a la cara norte de 26: sube
     # del suelo al oeste, da la vuelta en un descanso y llega al segundo piso de 26 junto a la pasarela
