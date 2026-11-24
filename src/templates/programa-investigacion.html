@@ -13,7 +13,8 @@
       <li class="proyecto-tarjeta">
         <div class="proyecto-tarjeta__texto">
           <p class="proyecto-tarjeta__codigo">{{ p.codigo }}</p>
-          <h3><a href="{{ raiz }}investigacion/proyectos/{{ p.id }}.html">{{ p.nombre }}</a></h3>
+          <h3><a href="{{ raiz }}investigacion/proyectos/{{ p.id }}.html">{{ p.corto }}</a></h3>
+          <p>{{ p.resumen }}</p>
           <p>Responsable: {{ p.responsable }}</p>
           {% if p.vigencia %}<p class="proyecto-tarjeta__lugar">Vigencia: {{ p.vigencia }}</p>{% endif %}
         </div>

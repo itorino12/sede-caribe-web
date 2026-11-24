@@ -2,12 +2,13 @@
 {% from "_macros.html" import encabezado, contacto with context %}
 {% block contenido %}
 {% set coord = unidad.get("investigacion") %}
-{{ encabezado(p.nombre, [("Investigación", "unidades/investigacion.html"), (g.nombre, "investigacion/" ~ g.id ~ ".html")], raiz, p.codigo) }}
+{{ encabezado(p.nombre, [("Investigación", "unidades/investigacion.html"), (g.nombre, "investigacion/" ~ g.id ~ ".html")], raiz, p.nombre_oficial) }}
 <div class="ancho pagina pagina--con-ficha">
   <div>
     <div class="prosa">
-      {% if p.descripcion %}<h2>De qué trata</h2><p>{{ p.descripcion }}</p>
-      {% else %}<p>Este proyecto está en proceso de inscripción ante la Vicerrectoría de Investigación. Cuando se apruebe, aquí se publicará su descripción.</p>{% endif %}
+      <h2>De qué trata</h2>
+      {% for par in p.texto %}<p>{{ par }}</p>{% endfor %}
+      {% if g.id == "en-inscripcion" %}<p>Este proyecto está en proceso de inscripción ante la Vicerrectoría de Investigación. Cuando se apruebe se ampliará esta descripción.</p>{% endif %}
     </div>
   </div>
   <div class="columna-ficha">

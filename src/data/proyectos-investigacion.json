@@ -38,131 +38,178 @@
    "id": "pry01-156-2026",
    "codigo": "Pry01-156-2026",
    "programa": "agroindustria",
-   "nombre": "Desarrollo de un formulado de biomasa microalgal a partir de una emulsión Pickering empleando nanocelulosa de rastrojo de piña como encapsulador de compuestos con actividad bioestimulante",
    "responsable": "César Augusto Bernal Samaniego",
    "colaboradores": [
     "Eddy Gabriel Jirón García",
     "Karina María Rodríguez Mora"
    ],
    "vigencia": "1 ene. 2026 – 31 dic. 2028",
-   "descripcion": "El presente proyecto tiene como objetivo el desarrollo de un formulado a base de biomasa microalgal con propiedades bioestimulantes, utilizando una emulsión Pickering como sistema de encapsulación y liberación controlada. Para estabilizar dicha emulsión, se empleará nanocelulosa obtenida del rastrojo de piña, un residuo agroindustrial de alta disponibilidad en regiones productoras. Este enfoque busca valorizar subproductos agrícolas a través de su transformación en materiales funcionales de alto valor agregado. Las emulsiones Pickering, estabilizadas por partículas sólidas en lugar de tensioactivos convencionales, ofrecen mayor estabilidad y protección de los compuestos activos. La nanocelulosa, por sus propiedades fisicoquímicas (biodegradabilidad, biocompatibilidad, alta área superficial y capacidad para formar redes estables), se plantea como un encapsulador ideal. En este caso, será utilizada para encapsular y proteger extractos obtenidos de microalgas, ricos en metabolitos con efectos bioestimulantes sobre el crecimiento vegetal (como fitohormonas, aminoácidos, antioxidantes, entre otros)."
+   "corto": "Biomasa microalgal bioestimulante con nanocelulosa de piña",
+   "resumen": "Un bioestimulante a base de microalgas, protegido con nanocelulosa del rastrojo de piña.",
+   "texto": [
+    "Este proyecto desarrolla un producto bioestimulante para plantas a partir de biomasa de microalgas. Los compuestos que ayudan al crecimiento vegetal, como fitohormonas, aminoácidos y antioxidantes, se encapsulan en una emulsión Pickering, un tipo de emulsión estabilizada con partículas sólidas y no con detergentes convencionales, que los protege y los libera de forma controlada.",
+    "Las partículas que estabilizan la emulsión son nanocelulosa sacada del rastrojo de piña, un residuo agroindustrial muy abundante en las zonas productoras. Así, el proyecto convierte un desecho agrícola en un material útil para la propia agricultura."
+   ],
+   "nombre_oficial": "Desarrollo de un formulado de biomasa microalgal a partir de una emulsión Pickering empleando nanocelulosa de rastrojo de piña como encapsulador de compuestos con actividad bioestimulante"
   },
   {
    "id": "pry01-1613-2026",
    "codigo": "Pry01-1613-2026",
    "programa": "agroindustria",
-   "nombre": "Evaluación de materiales porosos avanzados (MOFs/POPs) en la remoción de fármacos en medio acuoso",
    "responsable": "Emily Lorena Vargas Rodríguez",
    "colaboradores": [
     "Carlos Enrique Rojas Sánchez"
    ],
    "vigencia": "1 ene. 2026 – 31 dic. 2028",
-   "descripcion": "El presente proyecto busca desarrollar mediante métodos de síntesis sencillos, materiales porosos avanzados denominados MOFs (Metal Organic Frameworks) y POPs (Porous Organic Polymers) por sus siglas en inglés. Se busca que los materiales sintetizados sean robustos y eficaces, de modo que puedan evaluarse como herramientas para la remoción de contaminantes emergentes en medios acuosos. Asimismo, se llevará a cabo un análisis ecotoxicológico de los materiales antes y después de los procesos de adsorción, con el objetivo de determinar su seguridad y potencial impacto biológico. Dado que una de las prioridades de la investigación científica actual es la búsqueda de estrategias más seguras, selectivas y respetuosas con el medio ambiente, el proyecto también evaluará la capacidad de reutilización de los materiales sintetizados en diferentes ciclos de aplicación, promoviendo de esta manera un enfoque sostenible y coherente con los principios de la química verde."
+   "corto": "Materiales porosos para limpiar fármacos del agua",
+   "resumen": "Materiales porosos (MOFs y POPs) para retirar fármacos del agua, con prueba de su seguridad.",
+   "texto": [
+    "El proyecto sintetiza, con métodos sencillos, materiales porosos avanzados llamados MOFs y POPs y evalúa si sirven para retirar contaminantes emergentes, como los fármacos, de las aguas.",
+    "Además de medir qué tan bien atrapan estas sustancias, analiza la toxicidad de los materiales antes y después del proceso y comprueba si pueden reutilizarse en varios ciclos, siguiendo los principios de la química verde."
+   ],
+   "nombre_oficial": "Evaluación de materiales porosos avanzados (MOFs/POPs) en la remoción de fármacos en medio acuoso"
   },
   {
    "id": "pry01-1225-2025",
    "codigo": "Pry01-1225-2025",
    "programa": "agroindustria",
-   "nombre": "Evaluación de cladóceros como bioindicadores de la toxicidad total de efluentes de plantas de tratamiento de aguas residuales en la región Huetar Caribe",
    "responsable": "Carlos Enrique Rojas Sánchez",
    "colaboradores": [],
    "vigencia": "1 ene. 2026 – 31 dic. 2027",
-   "descripcion": "El presente proyecto pretende la evaluación de especies de cladóceros seleccionados como bioindicadores de la toxicidad total de efluentes de plantas de tratamiento aguas residuales como contraste a la medición de los parámetros físico-químicos de análisis obligatorio establecidos por el decreto Nº 33601-MINAE-S: Reglamento de vertido y reuso de aguas residuales, así como el análisis de su posible implementación como un parámetro ecotixicológico complementario en la normativa actual."
+   "corto": "Cladóceros como indicadores de toxicidad en aguas tratadas",
+   "resumen": "Pulgas de agua como indicador de la toxicidad de las aguas de plantas de tratamiento.",
+   "texto": [
+    "El proyecto evalúa especies de cladóceros, pequeños crustáceos de agua dulce, como indicadores biológicos de la toxicidad total de lo que sale de las plantas de tratamiento de aguas residuales de la región Huetar Caribe.",
+    "Sus resultados se comparan con los parámetros físico-químicos que obliga a medir el Reglamento de vertido y reuso de aguas residuales, para valorar si la prueba con cladóceros podría sumarse como un parámetro ecotoxicológico complementario en la normativa."
+   ],
+   "nombre_oficial": "Evaluación de cladóceros como bioindicadores de la toxicidad total de efluentes de plantas de tratamiento de aguas residuales en la región Huetar Caribe"
   },
   {
    "id": "pry01-1064-2026",
    "codigo": "Pry01-1064-2026",
    "programa": "agroindustria",
-   "nombre": "Potencial uso de hidrogeles dosificados con extractos de microalgas aplicados a la germinación",
    "responsable": "César Augusto Bernal Samaniego",
    "colaboradores": [
     "Karina María Rodríguez Mora",
     "Eddy Gabriel Jirón García"
    ],
    "vigencia": "1 ago. 2025 – 1 ago. 2027",
-   "descripcion": "Este proyecto tiene como finalidad evaluar el uso de hidrogeles cargados con extractos de microalgas como una alternativa sostenible para mejorar el proceso de germinación de semillas. Los hidrogeles son materiales poliméricos con una alta capacidad de retención de agua, que pueden liberar de manera controlada sustancias bioactivas. En este estudio, se aprovechan estas propiedades para suministrar compuestos naturales derivados de microalgas que actúan como bioestimulantes del crecimiento vegetal. Las microalgas son organismos microscópicos con alto contenido de nutrientes, aminoácidos, vitaminas y compuestos antioxidantes, lo que las convierte en una fuente prometedora para aplicaciones agrícolas. Al incorporar sus extractos en la matriz del hidrogel, se busca crear un sistema eficiente de liberación lenta que mantenga la humedad del sustrato, estimule la germinación y promueva un desarrollo radicular más fuerte."
+   "corto": "Hidrogeles con microalgas para la germinación",
+   "resumen": "Hidrogeles con extractos de microalgas que ayudan a las semillas a germinar.",
+   "texto": [
+    "El proyecto prueba hidrogeles, materiales que retienen mucha agua, cargados con extractos de microalgas como alternativa sostenible para mejorar la germinación de semillas.",
+    "Los extractos aportan nutrientes, aminoácidos, vitaminas y antioxidantes que estimulan el crecimiento. Con el hidrogel se liberan poco a poco, mientras el sustrato conserva la humedad, y se busca que la raíz se desarrolle con más fuerza."
+   ],
+   "nombre_oficial": "Potencial uso de hidrogeles dosificados con extractos de microalgas aplicados a la germinación"
   },
   {
    "id": "pry01-1137-2023",
    "codigo": "Pry01-1137-2023",
    "programa": "agroindustria",
-   "nombre": "Cálculo de la eficiencia energética y energía fotovoltaica en el bombeo de las ASADAS con pozo de la provincia de Limón",
    "responsable": "Olman Araya Mejías",
    "colaboradores": [
     "Silvia Palma Campos",
     "Emily Lorena Vargas Rodríguez"
    ],
    "vigencia": "1 ene. 2024 – 31 dic. 2026",
-   "descripcion": "El proyecto busca contribuir con el cálculo de a eficiencia energética en los sistemas de bombeo de agua potable en las asadas con pozo de la provincia de Limón"
+   "corto": "Eficiencia energética y energía solar en el bombeo de las ASADAS",
+   "resumen": "Cálculo de la eficiencia energética del bombeo de agua en las ASADAS con pozo de Limón.",
+   "texto": [
+    "El proyecto calcula qué tan eficiente es, en términos de energía, el bombeo de agua potable en las ASADAS que se abastecen de pozos en la provincia de Limón, y estudia el uso de energía fotovoltaica para hacerlo."
+   ],
+   "nombre_oficial": "Cálculo de la eficiencia energética y energía fotovoltaica en el bombeo de las ASADAS con pozo de la provincia de Limón"
   },
   {
    "id": "pry01-1038-2023",
    "codigo": "Pry01-1038-2023",
    "programa": "agroindustria",
-   "nombre": "Evaluación energética y huella de carbono de la Sede del Caribe",
    "responsable": "Olman Araya Mejías",
    "colaboradores": [
     "Emily Lorena Vargas Rodríguez",
     "José Alberto Castillo Benavides"
    ],
    "vigencia": "1 ene. 2024 – 31 dic. 2026",
-   "descripcion": "El proyecto busca contribuir con la eficiencia energética y el plan de mitigación de Carbono de la Universidad de Costa Rica Sede del Caribe."
+   "corto": "Energía y huella de carbono de la Sede",
+   "resumen": "Diagnóstico energético y huella de carbono de la Sede del Caribe.",
+   "texto": [
+    "El proyecto evalúa el consumo de energía y la huella de carbono de la Sede del Caribe. Sus resultados apoyan la eficiencia energética y el plan de mitigación de carbono de la Universidad de Costa Rica en la Sede."
+   ],
+   "nombre_oficial": "Evaluación energética y huella de carbono de la Sede del Caribe"
   },
   {
    "id": "pry01-1535-2024",
    "codigo": "Pry01-1535-2024",
    "programa": "agroindustria",
-   "nombre": "Desarrollo de bioadsorbentes para la remoción de sustancias farmacéuticas en medio acuoso implementando principios de economía circular en residuos biomásicos",
    "responsable": "Carlos Enrique Rojas Sánchez",
    "colaboradores": [
     "José Alberto Castillo Benavides"
    ],
    "vigencia": "2026",
-   "descripcion": "El presente proyecto pretende el desarrollo de rutas de remoción de fármacos de matrices acuosas mediante la transformación y valorización de residuos biomásicos comúnmente producidos por la agroindustria costarricense, bajo el principio de economía circular. Este proyecto se subdividirá en 4 etapas: la primera orientada a la definición de posibles residuos biomásicos con potencial para la remoción de sustancias farmacéuticas, así como la implementación de estrategias de valorización que mejoren su capacidad de remoción de las sustancias en cuestión. Como segunda fase se pretenden evaluar los productos obtenidos de los procesos de valorización en la remoción de contaminantes modelo de matrices acuosas. Seguidamente, se realizará una evaluación ecotoxicológica aguda de las aguas tratadas con las tecnologías implementadas anteriormente. Con los resultados obtenidos en las diferentes etapas del proyecto, finalmente, se seleccionarán las tecnologías con mejor capacidad de remoción y menor toxicidad asociada y se evaluarán con aguas residuales reales como miras a determinar su efectividad."
+   "corto": "Bioadsorbentes de residuos agrícolas contra fármacos en el agua",
+   "resumen": "Residuos agroindustriales convertidos en materiales que retiran fármacos del agua.",
+   "texto": [
+    "El proyecto busca rutas para retirar fármacos de las aguas a partir de residuos de biomasa que genera la agroindustria costarricense, bajo el principio de economía circular.",
+    "Avanza en cuatro etapas: elegir los residuos con más potencial y mejorarlos, probarlos con contaminantes modelo, evaluar la toxicidad aguda del agua tratada y, al final, ensayar las mejores tecnologías con aguas residuales reales."
+   ],
+   "nombre_oficial": "Desarrollo de bioadsorbentes para la remoción de sustancias farmacéuticas en medio acuoso implementando principios de economía circular en residuos biomásicos"
   },
   {
    "id": "pry01-804-2025",
    "codigo": "Pry01-804-2025",
    "programa": "agroindustria",
-   "nombre": "Aprovechamiento de la lignina de residuos agroindustriales de la provincia de Limón como potencial fuente de compuestos polifenólicos",
    "responsable": "Eddy Gabriel Jirón García",
    "colaboradores": [
     "Karina María Rodríguez Mora"
    ],
    "vigencia": "2026",
-   "descripcion": "Este proyecto busca un aprovechamiento completo de los residuos liognocelulósicos agroindustriales, enfocandose en la recuperación de la lignina para producir polifenoles. Esto debido a que diversos proyectos se han enfocado en la separación de la lignina y la celulosa de los residuos agroindustriales con el objetivo de producir materiales de mayor valor agregado como nanocelulosa. En estos métodos la lignina se desecha pese a ser el segundo polímero en abundancia en estos materiales luego de la celulosa, además de ser una fuente rica en polímeros fenolicos. Por lo cual se busca separar los polifenoles de la lignina de 2 residuos agroindustriales que han sido procesados anteriormente en la Sede Caribe para obtener nanocelulosa y compararlos con polifenoles aislados de lignina obtenida por otro método convencional con el fin de comparar dichos extractos polifenolicos por medio de la capacidad de estos de inhibir el crecimeinto de bacterias. De forma tal que se contribuya a la economía circular de los residuos agroindustriales al mismo tiempo que se busca una implementación que traiga beneficios a una de las principales actividades del país, la agricultura."
+   "corto": "Polifenoles de la lignina de residuos agroindustriales",
+   "resumen": "Polifenoles extraídos de la lignina de residuos agrícolas de Limón, probados contra bacterias.",
+   "texto": [
+    "Al producir nanocelulosa de residuos agroindustriales, la lignina, el segundo polímero más abundante de esos residuos, suele desecharse. Este proyecto la aprovecha para obtener polifenoles.",
+    "Trabaja con dos residuos que ya se procesaron en la Sede y compara los polifenoles obtenidos con los de lignina extraída por un método convencional, según su capacidad de frenar el crecimiento de bacterias. Aporta a la economía circular y a la agricultura."
+   ],
+   "nombre_oficial": "Aprovechamiento de la lignina de residuos agroindustriales de la provincia de Limón como potencial fuente de compuestos polifenólicos"
   },
   {
    "id": "pry01-1068-2025",
    "codigo": "Pry01-1068-2025",
    "programa": "empresariales",
-   "nombre": "Espacios de fortalecimiento y transferencia de conocimiento para el desarrollo social, empresarial y económico de los habitantes en la Región Caribe de Costa Rica",
    "responsable": "Diunia Rivera Chavarría",
    "colaboradores": [
     "Priscila María Arias Arias",
     "Walter Anderson Rivera"
    ],
    "vigencia": "2 ene. 2025 – 31 dic. 2026",
-   "descripcion": "Este proyecto forma parte del Programa de Investigaciones en Ciencias Empresariales, Económicas y Sociales de la Sede del Caribe. El fin de esta propuesta es promover la Investigación y difundir los resultados de los proyectos que conforman este programa y de otras investigaciones de la Universidad de Costa Rica que se relacionan con la temática. A través del desarrollo de conferencias, talleres, foros, se busca transferir el conocimiento y abordar temáticas que contribuyan con el desarrollo empresarial, económico y social de los habitantes de la región caribeña de Costa Rica."
+   "corto": "Transferencia de conocimiento para el desarrollo del Caribe",
+   "resumen": "Conferencias, talleres y foros para difundir la investigación del programa empresarial y social.",
+   "texto": [
+    "Este proyecto forma parte del Programa de Investigaciones en Ciencias Empresariales, Económicas y Sociales de la Sede. Promueve la investigación y difunde los resultados de los proyectos del programa y de otras investigaciones de la UCR sobre el tema.",
+    "Lo hace con conferencias, talleres y foros que transfieren conocimiento útil para el desarrollo empresarial, económico y social de la población de la región Caribe."
+   ],
+   "nombre_oficial": "Espacios de fortalecimiento y transferencia de conocimiento para el desarrollo social, empresarial y económico de los habitantes en la Región Caribe de Costa Rica"
   },
   {
    "id": "pry01-176-2024",
    "codigo": "Pry01-176-2024",
    "programa": "empresariales",
-   "nombre": "Análisis de las regiones del Caribe Central y Sur de la provincia de Limón como destinos atractivos para el turismo femenino: construcción socioeconómica de la zona, basado en las percepciones de seguridad de la turista que visita el Caribe de Costa Rica y mujeres emprendedoras del turismo con apoyo del ObturCaribe",
    "responsable": "Alejandra Tenorio Madrigal",
    "colaboradores": [
     "Bladimiro Antonio Argueta Corella",
     "Fernando Bermúdez Koumineva"
    ],
    "vigencia": "2026",
-   "descripcion": "El proyecto busca responder a la pregunta ¿La realidad social del Caribe es concordante con el estigma adjudicado a la provincia de Limón como zona de alta violencia e inseguridad? Se investigará sobre las percepciones de las mujeres turistas que visitan el Caribe Central y Sur del país. Paralelamente, se revisará el tema de la construcción social de las mujeres emprendedoras de la actividad turística y afines, en la región de estudio. Fundamentalmente, se desea recopilar la información necesaria para establecer si El Caribe de Costa Rica es o no un destino seguro para las mujeres que lo visitan. Por otra parte, se explorarán las distintas acciones y recursos existentes en las zonas turísticas de Costa Rica y el Caribe que tengan como fin hacer de estos destinos, lugares confiables para el turista en general, pero sobre todo para las mujeres. El estudio pretende generar insumos científicos y reales para ofrecer a los tomadores de decisiones, actores y representantes del turismo, que puedan coadyuvar en la revisión, mejora y/o creación de políticas y acciones concretas para conseguir un turismo y viaje seguro."
+   "corto": "Turismo femenino y seguridad en el Caribe",
+   "resumen": "¿Es el Caribe un destino seguro para las mujeres que lo visitan?",
+   "texto": [
+    "El proyecto parte de una pregunta: si la realidad social del Caribe corresponde con el estigma de zona violenta e insegura que pesa sobre Limón. Para responderla, recoge las percepciones de las mujeres turistas que visitan el Caribe Central y Sur.",
+    "También estudia cómo se han construido las mujeres emprendedoras del turismo y de actividades afines en la región, y qué acciones y recursos existen para hacer de los destinos lugares confiables. Busca dar a quienes toman decisiones y al sector turístico insumos para políticas y acciones de turismo seguro."
+   ],
+   "nombre_oficial": "Análisis de las regiones del Caribe Central y Sur de la provincia de Limón como destinos atractivos para el turismo femenino: construcción socioeconómica de la zona, basado en las percepciones de seguridad de la turista que visita el Caribe de Costa Rica y mujeres emprendedoras del turismo con apoyo del ObturCaribe"
   },
   {
    "id": "pry01-192-2024",
    "codigo": "Pry01-192-2024",
    "programa": "empresariales",
-   "nombre": "Observatorio de Turismo Sostenible del Caribe de Costa Rica (ObturCaribe): seguimiento y fortalecimiento de la actividad turística en el caribe costarricense",
    "responsable": "Bladimiro Argueta Corella",
    "colaboradores": [
     "Maylin de los Ángeles Mora Arias",
@@ -171,80 +218,116 @@
     "Rebeca Marina Sánchez Palma"
    ],
    "vigencia": "2026",
-   "descripcion": "Este proyecto se desarrolla con el fin de generar un proceso de investigación cooperativo desde el Observatorio de Turismo Sostenible del Caribe de Costa Rica -ObturCaribe-, que integre a actores e instituciones claves de la región Huetar Caribe con el fin de fortalecer las líneas de acción para el desarrollo de la actividad turística y sus elementos asociados, labor en la cual las tareas de recopilación, sistematización, actualización, producción y mantenimiento de la información vigente acerca de la actividad turística y temas relacionados directa e indirectamente con esta, constituirán la base y aporte del ObturCaribe, actualizándolos en coordinación con los aliados estratégicos participantes. Por sus antecedentes, el ObturCaribe, pretende una reestructuración de su agenda temática a la luz de los planes estratégicos, proyectos y leyes vigentes de las instituciones relacionadas a la actividad turística de la provincia. El proyecto pretende iniciar acciones de investigación en las zonas geográficas no abordadas en las etapas anteriores del OBTURCARIBE, como es el caso de Caribe Norte y robustecer el sistema de información del Observatorio de Turismo del Caribe, a fin de evidenciar los aspectos más relevantes de la agenda temática, operativizados en instrumentos de medición (índices e indicadores) que permitan visualizar con mayor precisión y desde diferentes dimensiones la actividad turística de la zona. Además, se propiciará que la información y el conocimiento de los temas relacionados con el Caribe de Costa Rica y su cultura llegue a diversos sectores nacionales e internacionales, y en general a la comunidad limonense, mediante un proceso de búsqueda de posicionamiento de la página web como referente valorado ampliamente y en general de la difusión de resultados de las investigaciones realizadas. En definitiva, el propósito es articular acciones relacionadas con el tema Turismo en la región Caribe, de forma tal que contribuya con la comprensión de dicha temática, propicie la toma decisiones de los actores políticos y técnicos basada en información fidedigna y coadyuve en la medida de lo posible, en la formulación de políticas públicas y acciones de las instituciones y organizaciones correspondientes."
+   "corto": "ObturCaribe: observatorio del turismo sostenible",
+   "resumen": "Observatorio que reúne y mantiene información sobre el turismo del Caribe.",
+   "texto": [
+    "El proyecto sostiene el Observatorio de Turismo Sostenible del Caribe de Costa Rica (ObturCaribe), una investigación cooperativa con actores e instituciones clave de la región Huetar Caribe para fortalecer el desarrollo de la actividad turística.",
+    "Recopila, sistematiza y actualiza información sobre el turismo, renueva la agenda temática del observatorio según los planes y leyes vigentes y extiende la investigación a zonas no abordadas antes, como el Caribe Norte."
+   ],
+   "nombre_oficial": "Observatorio de Turismo Sostenible del Caribe de Costa Rica (ObturCaribe): seguimiento y fortalecimiento de la actividad turística en el caribe costarricense"
   },
   {
    "id": "pry01-237-2027",
    "codigo": "Pry01-237-2027",
    "programa": "sin-programa",
-   "nombre": "Estudio del Procesamiento de Lenguaje Natural (PLN) en la gestión académica y administrativa de la Sede del Caribe de la Universidad de Costa Rica, para diagnosticar su influencia en la interpretación de la información institucional y en los procesos de toma de decisiones universitarias",
    "responsable": "Itorino Espinoza Torres",
    "colaboradores": [
     "Carlos Alberto Morales Castro",
     "Rodrigo Alonso Torres Sánchez"
    ],
    "vigencia": "1 abr. 2026 – 1 abr. 2028",
-   "descripcion": "El proyecto tiene como propósito analizar la gestión académica y administrativa de la Sede del Caribe de la Universidad de Costa Rica mediante el uso de técnicas de Procesamiento de Lenguaje Natural. En las sedes regionales universitarias, la atención de consultas normativas y la interpretación de la retroalimentación académica dependen principalmente de procesos manuales que dificultan el aprovechamiento sistemático de la información institucional disponible y limitan la toma de decisiones basada en evidencia. La investigación se desarrollará bajo un enfoque de investigación aplicada con intervención organizacional controlada. Para ello se emplearán prototipos funcionales de sistemas de lenguaje natural como instrumentos de análisis del funcionamiento administrativo y académico. El estudio no se centra en el desarrollo tecnológico como producto final, sino en examinar cómo la incorporación de análisis semántico automatizado modifica la eficiencia operativa, la interpretación de la información académica y los procesos de toma de decisiones institucionales. Se abordarán dos ámbitos organizacionales complementarios. Primero, la gestión administrativa de consultas estudiantiles mediante un sistema de consulta normativa en lenguaje natural, evaluando su incidencia en la carga operativa y en el acceso a la información oficial. Segundo, el análisis automatizado de comentarios cualitativos de evaluación docente, con el fin de identificar patrones pedagógicos y determinar su utilidad para la gestión académica. El proyecto incluirá un diagnóstico inicial de procesos, una fase piloto y un análisis comparativo antes y después de la incorporación de las herramientas. Los resultados permitirán caracterizar condiciones de adopción, beneficios y limitaciones del uso de Procesamiento de Lenguaje Natural en la gestión universitaria, generando conocimiento transferible para otras unidades académicas y sedes regionales."
+   "corto": "Lenguaje natural en la gestión académica de la Sede",
+   "resumen": "Procesamiento de lenguaje natural para estudiar las consultas y la retroalimentación en la Sede.",
+   "texto": [
+    "En las sedes regionales, la atención de consultas normativas y la lectura de la retroalimentación académica dependen sobre todo de trabajo manual, lo que limita el aprovechamiento de la información y las decisiones basadas en evidencia.",
+    "El proyecto usa técnicas de procesamiento de lenguaje natural, con prototipos funcionales como instrumentos de análisis, para estudiar cómo cambian la eficiencia operativa, la interpretación de la información académica y la toma de decisiones. No busca un producto tecnológico final, sino entender ese efecto en dos ámbitos: las consultas estudiantiles y el análisis de la retroalimentación."
+   ],
+   "nombre_oficial": "Estudio del Procesamiento de Lenguaje Natural (PLN) en la gestión académica y administrativa de la Sede del Caribe de la Universidad de Costa Rica, para diagnosticar su influencia en la interpretación de la información institucional y en los procesos de toma de decisiones universitarias"
   },
   {
    "id": "pry01-303-2025",
    "codigo": "Pry01-303-2025",
    "programa": "sin-programa",
-   "nombre": "Uso de refugios naturales y artificiales por anfibios presentes en la Sede del Caribe, UCR",
    "responsable": "Marco Barquero Arroyo",
    "colaboradores": [],
    "vigencia": "1 ene. 2026 – 31 jul. 2027",
-   "descripcion": "Los anfibios representan un grupo de vertebrados terrestres que enfrenta un grave riesgo de extinción. Disminuciones de poblaciones han ocurrido a nivel global, producidas por una gran variedad de factores generalmente de origen antropogénico. Diversos esfuerzos de conservación se han llevado a cabo para mitigar los impactos negativos sobre los anfibios, entre los que se cuenta proporcionar sitios que permitan la reproducción de las especies. Este proyecto pretende evaluar la eficacia de refugios como sitios reproductivos para anfibios, comparando refugios naturales y artificiales colocados en el bosque de la Sede del Caribe, UCR. Se espera que la información generada permita evaluar la efectividad de los refugios como herramienta para la conservación de anfibios, así como la producción de material informativo para la comunidad universitaria y el público general."
+   "corto": "Refugios para anfibios en el bosque de la Sede",
+   "resumen": "Compara refugios naturales y artificiales como sitios de reproducción de anfibios.",
+   "texto": [
+    "Los anfibios enfrentan un grave riesgo de extinción en todo el mundo. Una forma de ayudarlos es darles sitios donde reproducirse. El proyecto evalúa si los refugios sirven para eso, comparando refugios naturales con artificiales puestos en el bosque de la Sede del Caribe.",
+    "Los resultados dirán qué tan útiles son los refugios para conservar anfibios y servirán para preparar material informativo para la comunidad universitaria y el público."
+   ],
+   "nombre_oficial": "Uso de refugios naturales y artificiales por anfibios presentes en la Sede del Caribe, UCR"
   },
   {
    "id": "pry01-633-2027",
    "codigo": "Pry01-633-2027",
    "programa": "en-inscripcion",
-   "nombre": "Análisis de especies crípticas de Anolis presentes en Costa Rica a través de un enfoque de taxonomía integrativa",
    "responsable": "Dr. Marco Barquero Arroyo",
    "colaboradores": [],
    "vigencia": "",
-   "descripcion": ""
+   "corto": "Especies crípticas de Anolis en Costa Rica",
+   "resumen": "Taxonomía integrativa de especies crípticas de Anolis.",
+   "texto": [
+    "Propuesta que analiza especies crípticas de Anolis, un género de lagartijas, presentes en Costa Rica mediante un enfoque de taxonomía integrativa."
+   ],
+   "nombre_oficial": "Análisis de especies crípticas de Anolis presentes en Costa Rica a través de un enfoque de taxonomía integrativa"
   },
   {
    "id": "pry01-641-2027",
    "codigo": "Pry01-641-2027",
    "programa": "en-inscripcion",
-   "nombre": "Implicaciones socioeconómicas y ambientales de la gentrificación en el Caribe Sur de Talamanca: análisis de percepciones y proyecciones del desarrollo turístico en las comunidades de Cahuita, Puerto Viejo y Manzanillo",
    "responsable": "Mgtra. Alejandra Tenorio Madrigal",
    "colaboradores": [],
    "vigencia": "",
-   "descripcion": ""
+   "corto": "Gentrificación en el Caribe Sur de Talamanca",
+   "resumen": "Gentrificación y turismo en Cahuita, Puerto Viejo y Manzanillo.",
+   "texto": [
+    "Propuesta que analiza las implicaciones socioeconómicas y ambientales de la gentrificación en el Caribe Sur de Talamanca, a partir de las percepciones y las proyecciones del desarrollo turístico en las comunidades de Cahuita, Puerto Viejo y Manzanillo."
+   ],
+   "nombre_oficial": "Implicaciones socioeconómicas y ambientales de la gentrificación en el Caribe Sur de Talamanca: análisis de percepciones y proyecciones del desarrollo turístico en las comunidades de Cahuita, Puerto Viejo y Manzanillo"
   },
   {
    "id": "pry01-304-2027",
    "codigo": "Pry01-304-2027",
    "programa": "en-inscripcion",
-   "nombre": "Desarrollo local mediante estrategias de gobernanza de bienes de uso colectivo. Teoría y estudios de caso en comunidades que ofrecen servicios turísticos en Costa Rica y México",
    "responsable": "M.Sc. Julio Brenes Arroyo",
    "colaboradores": [],
    "vigencia": "",
-   "descripcion": ""
+   "corto": "Gobernanza de bienes de uso colectivo",
+   "resumen": "Desarrollo local mediante la gobernanza de bienes de uso colectivo en comunidades turísticas.",
+   "texto": [
+    "Propuesta sobre desarrollo local mediante estrategias de gobernanza de bienes de uso colectivo. Combina teoría con estudios de caso en comunidades que ofrecen servicios turísticos en Costa Rica y México."
+   ],
+   "nombre_oficial": "Desarrollo local mediante estrategias de gobernanza de bienes de uso colectivo. Teoría y estudios de caso en comunidades que ofrecen servicios turísticos en Costa Rica y México"
   },
   {
    "id": "pry01-1243-2027",
    "codigo": "Pry01-1243-2027",
    "programa": "en-inscripcion",
-   "nombre": "Desarrollo de un biorreactor abierto tipo raceway para la producción de biomasa microalgal con posible aplicación como materia prima para bioinsumos con función estimulante",
    "responsable": "M.Sc. Eddy Jirón García",
    "colaboradores": [],
    "vigencia": "",
-   "descripcion": ""
+   "corto": "Biorreactor raceway para microalgas",
+   "resumen": "Biorreactor abierto para producir biomasa de microalgas como materia prima de bioinsumos.",
+   "texto": [
+    "Propuesta para desarrollar un biorreactor abierto tipo raceway que produzca biomasa microalgal, con posible aplicación como materia prima para bioinsumos con función estimulante."
+   ],
+   "nombre_oficial": "Desarrollo de un biorreactor abierto tipo raceway para la producción de biomasa microalgal con posible aplicación como materia prima para bioinsumos con función estimulante"
   },
   {
    "id": "pry01-1480-2027",
    "codigo": "Pry01-1480-2027",
    "programa": "en-inscripcion",
-   "nombre": "Territorios, comunalidad, cuerpos, tierra, memoria y semilla: cartografías de resistencias y autonomía de mujeres indígenas sobre el presente y futuro de sus territorios. Provincia de Limón y cantón de Turrialba",
    "responsable": "Licda. Kattia Acuña",
    "colaboradores": [],
    "vigencia": "",
-   "descripcion": ""
+   "corto": "Resistencias y autonomía de mujeres indígenas",
+   "resumen": "Cartografías de las resistencias y la autonomía de mujeres indígenas en Limón y Turrialba.",
+   "texto": [
+    "Propuesta que elabora cartografías de las resistencias y la autonomía de mujeres indígenas sobre el presente y el futuro de sus territorios, en la provincia de Limón y el cantón de Turrialba, desde los territorios, la comunalidad, el cuerpo, la tierra, la memoria y la semilla."
+   ],
+   "nombre_oficial": "Territorios, comunalidad, cuerpos, tierra, memoria y semilla: cartografías de resistencias y autonomía de mujeres indígenas sobre el presente y futuro de sus territorios. Provincia de Limón y cantón de Turrialba"
   }
  ]
 }

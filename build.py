@@ -410,7 +410,7 @@ def preparar(sitio, d):
     inv = json.loads((SRC / "data" / "proyectos-investigacion.json").read_text(encoding="utf-8"))
     programas_inv = []
     for pr in inv["programas"]:
-        pr = {**pr, "proyectos": [p for p in inv["proyectos"] if p["programa"] == pr["id"]]}
+        pr = {**pr, "proyectos": [{**p, "nombre": f"{p['codigo']}: {p['corto']}"} for p in inv["proyectos"] if p["programa"] == pr["id"]]}
         pr["menu"] = (pr["nombre"], f"investigacion/{pr['id']}.html", [(p["nombre"], f"investigacion/proyectos/{p['id']}.html") for p in pr["proyectos"]], "Proyectos")
         programas_inv.append(pr)
 
