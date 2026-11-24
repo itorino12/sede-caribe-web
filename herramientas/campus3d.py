@@ -183,7 +183,10 @@ EDIFICIOS = [
     # viga perimetral de concreto sobre columnas que forma un corredor abierto, paredes blancas con franja celeste
     # (anotaciones) recto y corrido al sureste, donde lo marcó la Sede
     {"id": 14, "rect": (1703.2, 1316.0, 151, 196, 0), "rect_arboles": (1689, 1292, 151, 196, 12.5), "pisos": 1, "alto": 9, "linterna": 0.6,
-     "estilo": {"techo": "#8db38a", "corredor": True, "franja": "#4fa8e8", "rotulo": [-1, 0]}},
+     "estilo": {"techo": "#8db38a", "corredor": True, "franja": "#4fa8e8", "rotulo": [-1, 0],
+                # (anotaciones y fotos, nov. 2026) el rótulo una crujía más al norte; en la punta, bajo el corredor, el
+                # gimnasio de pesas (malla azul, rack, bicicletas, sacos de boxeo, banca, puerta del promotor deportivo)
+                "rotulo_t": 0.26, "pesas": [0.0, 0.15]}},
     # Bodega de Acción Social (foto): casita blanca de techo a dos aguas gris oscuro con alero blanco y portón negro
     {"id": 15, "rect": (1770, 1450, 59, 41, 0), "pisos": 1, "alto": 3.4,
      # (anotaciones) la entrada (el portón) está en la fachada oeste, la que da a la calle que viene del gimnasio
@@ -935,7 +938,7 @@ def lugares_nuevos(calles, quebrada, lejos_carretera, y_ruta32):
     elem.append({"tipo": "bicicletas", "id": None, "p": [135.6, -98.6], "largo": 6.4, "ancho": 2.8, "n": 5})
     # (fotos y anotaciones, nov. 2026) Punto Verde UCR en el piso del pasillo techado de Docencia, a la izquierda al
     # llegar a la puerta, con los basureros de frente al centro del pasillo (antes flotaba fuera del pasillo)
-    elem.append({"tipo": "punto_verde", "id": None, "p": [-126.21, 12.16], "giro": 1.925})   # (anotaciones) dentro del pasillo, más adelante
+    elem.append({"tipo": "punto_verde", "id": None, "p": [-125.57, 12.45], "giro": 1.725})   # (anotaciones) dentro del pasillo, más adelante
     # (fotos y anotaciones) parqueo de motos en el asfalto, pegado al pasillo 7 frente a Docencia, de frente al pasillo
     # (fotos, nov. 2026) entre el corredor de Docencia y el baño, el pasillo de cerámica va con el baño (banos_crema)
     elem.append({"tipo": "motos", "id": None, "p": [-140.6, 28.5], "giro": 0.316, "largo": 8.0, "n": 4})

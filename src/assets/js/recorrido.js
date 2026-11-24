@@ -1374,6 +1374,61 @@ function soda(grupo, vol, alto, { entrada = [-0.63, -0.78], p_entrada = null, pu
   P.pieza(0.5, alto - 0.1, 0.25, mat(0xa6a39c, { roughness: 1 }), 0.15, 0.12, (alto - 0.1) / 2); // pilar de concreto
 }
 
+// Gimnasio de pesas bajo el corredor del gimnasio (fotos, nov. 2026): en la punta, entre la pared y las columnas,
+// piso de concreto, jaulas de malla ciclón con marcos azules contra la pared, un rack de sentadillas negro con el
+// travesaño rojo, bicicletas de spinning rojas y negras, una barra con dos sacos de boxeo colgando, una banca, la
+// puerta gris del promotor deportivo con su rótulo y un extintor. t0..t1: tramo de la fachada (fracción de su largo)
+function gimnasioPesas(grupo, vol, alto, frente, [t0, t1]) {
+  const f = fachadaSur(vol.contorno, frente), dx = (f.b[0] - f.a[0]) / f.largo, dz = (f.b[1] - f.a[1]) / f.largo, ang = Math.atan2(f.nx, f.nz);
+  const en = (u, v, y) => [f.a[0] + dx * u + f.nx * v, y, f.a[1] + dz * u + f.nz * v];   // u: metros a lo largo, v: hacia afuera
+  const m = (c, x = {}) => new THREE.MeshStandardMaterial({ color: c, roughness: 0.6, ...x });
+  const caja = (w, h, d, mat, u, v, y, giro = 0) => { const b = new THREE.Mesh(new THREE.BoxGeometry(w, h, d), mat); b.position.set(...en(u, v, y)); b.rotation.y = ang + giro; b.castShadow = !liviano; b.receiveShadow = true; grupo.add(b); return b; };
+  const U0 = f.largo * t0 + 0.6, U1 = f.largo * t1, L = U1 - U0, uc = (U0 + U1) / 2;
+  const azul = m(0x4a8fc8, { metalness: 0.3 }), negro = m(0x1d1f22, { metalness: 0.4 }), rojo = m(0xd0262e, { metalness: 0.3 });
+  const malla = new THREE.MeshStandardMaterial({ color: 0x8fa6b8, roughness: 0.8, transparent: true, opacity: 0.35, side: THREE.DoubleSide, depthWrite: false });
+  caja(L, 0.08, 3.2, m(0xa9a8a2, { roughness: 0.95 }), uc, 1.6, 0.04);                              // piso de concreto
+  // jaulas de malla con marcos azules, a 0,8 m de la pared, dos tramos con un paso entre ellos
+  for (const [a, b] of [[U0 + 1.6, uc - 0.4], [uc + 0.6, U1 - 0.2]]) {
+    caja(b - a, 2.6, 0.02, malla, (a + b) / 2, 0.8, 1.3);
+    for (const y of [0.05, 1.3, 2.6]) caja(b - a, 0.06, 0.06, azul, (a + b) / 2, 0.8, y);
+    for (const u of [a, (a + b) / 2, b]) caja(0.06, 2.6, 0.06, azul, u, 0.8, 1.3);
+  }
+  // puerta gris del promotor deportivo, rótulo y extintor
+  caja(0.95, 2.1, 0.06, m(0x5d6266), U0 + 0.6, 0.03, 1.05);
+  const cv = document.createElement("canvas"); cv.width = 128; cv.height = 48; const x = cv.getContext("2d");
+  x.fillStyle = "#fff"; x.fillRect(0, 0, 128, 48); x.fillStyle = "#1d4f9c"; x.font = "700 17px Arial"; x.textAlign = "center"; x.fillText("Promotor", 64, 20); x.fillText("Deportivo", 64, 40);
+  const tx = new THREE.CanvasTexture(cv); tx.colorSpace = THREE.SRGBColorSpace;
+  const rot = new THREE.Mesh(new THREE.PlaneGeometry(0.45, 0.17), new THREE.MeshBasicMaterial({ map: tx })); rot.position.set(...en(U0 + 0.6, 0.07, 2.3)); rot.rotation.y = ang; grupo.add(rot);
+  const ext = new THREE.Mesh(new THREE.CylinderGeometry(0.08, 0.08, 0.5, 10), rojo); ext.position.set(...en(U0 + 1.3, 0.12, 1.1)); grupo.add(ext);
+  // rack de sentadillas: cuatro parales negros, travesaño rojo arriba, barra con discos
+  const uR = U0 + 2.6, vR = 2.0;
+  for (const du of [-0.6, 0.6]) for (const dv of [-0.5, 0.5]) caja(0.07, 2.2, 0.07, negro, uR + du, vR + dv, 1.1);
+  caja(1.3, 0.12, 0.12, rojo, uR, vR - 0.5, 2.2); caja(1.3, 0.06, 0.06, negro, uR, vR + 0.5, 2.2);
+  for (const du of [-0.6, 0.6]) caja(0.1, 0.06, 1.2, negro, uR + du, vR, 0.04);
+  caja(1.8, 0.04, 0.04, m(0xb9bec2, { metalness: 0.7 }), uR, vR - 0.4, 1.35);
+  for (const du of [-0.8, 0.8]) { const d = new THREE.Mesh(new THREE.CylinderGeometry(0.22, 0.22, 0.05, 16), negro); d.rotation.z = Math.PI / 2; d.rotation.y = ang; d.position.set(...en(uR + du, vR - 0.4, 1.35)); grupo.add(d); }
+  // bicicletas de spinning dentro de la jaula
+  [[U0 + 1.9, 0xd0262e], [U0 + 3.0, 0x1d1f22], [U0 + 3.7, 0x1d1f22]].forEach(([u, c]) => {
+    const mc = m(c, { metalness: 0.3 });
+    caja(0.08, 0.06, 1.0, mc, u, 0.4, 0.05, Math.PI / 2);
+    const tubo = caja(0.07, 0.9, 0.07, mc, u, 0.4, 0.5); tubo.rotation.z = 0.25;
+    caja(0.12, 0.05, 0.25, negro, u - 0.15, 0.4, 0.98, Math.PI / 2);
+    caja(0.35, 0.04, 0.05, negro, u + 0.3, 0.4, 1.05, Math.PI / 2);
+    const vol_ = new THREE.Mesh(new THREE.CylinderGeometry(0.22, 0.22, 0.06, 14), negro); vol_.rotation.z = Math.PI / 2; vol_.rotation.y = ang + Math.PI / 2; vol_.position.set(...en(u + 0.25, 0.4, 0.35)); grupo.add(vol_);
+  });
+  // barra entre columna y pared con dos sacos de boxeo
+  const uB = uc + 1.6;
+  caja(3.0, 0.07, 0.07, m(0xb9bec2, { metalness: 0.6 }), uB, 1.8, 2.5, Math.PI / 2);
+  for (const dv of [1.0, 2.6]) {
+    caja(0.02, 0.4, 0.02, negro, uB, dv, 2.3);
+    const saco = new THREE.Mesh(new THREE.CylinderGeometry(0.18, 0.18, 0.9, 12), negro); saco.position.set(...en(uB, dv, 1.65)); saco.castShadow = !liviano; grupo.add(saco);
+  }
+  // banca de pesas
+  caja(0.3, 0.08, 1.1, negro, uc - 0.6, 2.4, 0.5); caja(0.06, 0.45, 0.06, m(0x9a9fa4, { metalness: 0.5 }), uc - 0.6, 2.0, 0.25); caja(0.06, 0.45, 0.06, m(0x9a9fa4, { metalness: 0.5 }), uc - 0.6, 2.8, 0.25);
+  // condensadora junto a la pared al fondo
+  caja(0.8, 0.6, 0.35, m(0xd7d8d4), U1 - 0.7, 0.3, 0.3);
+}
+
 // Parasoles curvos de lámina blanca frente a la fachada (edificio 13): paneles altos que se arquean hacia afuera
 function parasoles(grupo, vol, alto, frente, cuantos = 3) {
   const f = frente ? fachadaMirando(vol.contorno, frente) : fachadaSur(vol.contorno), dx = (f.b[0] - f.a[0]) / f.largo, dz = (f.b[1] - f.a[1]) / f.largo;
@@ -1587,7 +1642,7 @@ for (const e of datos.campus.edificios) {
         x.font = "600 46px 'Source Sans 3', Arial, sans-serif"; x.fillText("SEDE DEL CARIBE", 256, 262);
         const tex = new THREE.CanvasTexture(cv); tex.colorSpace = THREE.SRGBColorSpace;
         const panel = new THREE.Mesh(new THREE.PlaneGeometry(4.6, 2.9), new THREE.MeshBasicMaterial({ map: tex }));
-        const t = 0.12;   // cerca de la esquina, como en la foto
+        const t = estilo.rotulo_t ?? 0.12;   // cerca de la esquina, como en la foto
         panel.position.set(f.a[0] + (f.b[0] - f.a[0]) * t + f.nx * 0.1, 1.35, f.a[1] + (f.b[1] - f.a[1]) * t + f.nz * 0.08);
         panel.rotation.y = ang; grupo.add(panel);
       }
@@ -1657,6 +1712,7 @@ for (const e of datos.campus.edificios) {
     if (estilo.mural_mosaico) muralMosaico(grupo, e.volumenes[0], e.alto, estilo.mural_mosaico.frente);
     if (estilo.puerta_biblioteca) puertaBiblioteca(grupo, e.volumenes, estilo.puerta_biblioteca);
     if (estilo.soda) soda(grupo, e.volumenes[0], e.alto, estilo.soda);
+    if (estilo.pesas) gimnasioPesas(grupo, e.volumenes[0], e.alto, estilo.rotulo, estilo.pesas);
     if (estilo.docencia) docencia(grupo, e.volumenes[0], e.alto, estilo.docencia, estilo.alero ?? 1.4);
     if (estilo.fachada_26) fachada26(grupo, e.volumenes[0], e.alto, Math.max(e.pisos, 1), estilo.fachada_26);
     if (estilo.oeste_26) oeste26(grupo, e.volumenes[0], e.alto, Math.max(e.pisos, 1));
@@ -3143,7 +3199,7 @@ if (datos.campus.parqueo) {
     const tex = new THREE.CanvasTexture(cv); tex.colorSpace = THREE.SRGBColorSpace;
     const rotulo = new THREE.Mesh(new THREE.BoxGeometry(2.0, 0.5, 0.04), [gris, gris, gris, gris, new THREE.MeshBasicMaterial({ map: tex }), gris]);
     rotulo.position.set(0, Y + 1.65, -0.16); g.add(rotulo);
-    g.position.set(p[0], 0, p[1]); g.rotation.y = giro; registrar(g, null);
+    g.position.set(p[0], 0, p[1]); g.rotation.y = giro; g.userData.sobrePasillo = true; registrar(g, null);
   }
   // parqueo de motos (foto, junto al pasillo 7 frente a Docencia): motos de frente al pasillo sobre el asfalto, rayas
   // amarillas, el rótulo azul en su poste, un hito naranja y la marca azul del espacio accesible. x a lo largo del
@@ -3491,6 +3547,8 @@ if (datos.campus.parqueo) {
     }
   };
   for (const g of lineales) for (const f of g.userData.franjas || []) nivelarFranja(f, g.userData.ancho || 2, g.userData.rasanteRecta);
+  // lo que va sobre el piso de un pasillo (Punto Verde) toma la altura del terreno ya emparejado bajo el pasillo
+  for (const e of enteros) if (e.o.userData.sobrePasillo) e.h = alturaEn(e.o.position.x, e.o.position.z);
   // 3. subir
   for (const e of enteros) e.o.position.add(local(e.o.parent.matrixWorld, e.h));
   for (const o of aDoblar) doblar(o);
