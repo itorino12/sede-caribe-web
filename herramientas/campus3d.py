@@ -102,7 +102,9 @@ EDIFICIOS = [
     # Soda (fotos): columnas de concreto a la vista, celosías celestes, techo verde agua a cuatro aguas; está en
     # un bajo, con un talud de zacate alrededor
     {"id": 3, "rect": (745, 1826, 90, 70, -39), "pisos": 1,
-     "estilo": {"techo": "#7fae9f", "ventanas": "celeste", "alero": 1.6, "hundido": 1.6}},
+     # (fotos, nov. 2026) entrada donde llega el pasillo 10 (cara noroeste) y puerta hacia el comedor (cara noreste)
+     "estilo": {"techo": "#7fae9f", "ventanas": "celeste", "alero": 1.6, "hundido": 1.6,
+                "soda": {"entrada": [-0.63, -0.78], "p_entrada": [-122.6, 76.6], "puerta": [0.78, -0.63]}}},
     # Coordinación de Docencia (fotos): hexágono con corredor perimetral de columnas azules y alero celeste,
     # techo verde agua en pirámide con una linternilla de ventanas arriba
     # (anotaciones) más atrás de lo que marca el croquis, lejos del pasillo 27, con su propio pasillo techado
@@ -589,7 +591,17 @@ def lugares_nuevos(calles, quebrada, lejos_carretera, y_ruta32):
         p26[clave] = p26[clave][k26:]
     if p26["alturas"]:
         p26["alturas"] = p26["alturas"][k26:]
-    pasillo([marco(2, -100, 47), marco(2, 15, 47), marco(2, 32, 51), marco(2, 104, 51)], 36)
+    # (fotos, nov. 2026) llega hasta la puerta de la soda
+    pasillo([marco(2, -100, 47), marco(2, 15, 47), marco(2, 32, 51), marco(2, 104, 51), marco(2, 111, 51)], 36)
+    # (fotos y anotaciones) entre este pasillo y el edificio 2: el busto frente a los baños y mesas de concreto en el
+    # zacate, a 3,3 m de la pared (franja entre las columnas del corredor y el pasillo)
+    A2, d2, n2 = (-161.61, 38.27), (0.629, 0.777), (0.777, -0.629)
+    franja = lambda u: [round(A2[0] + d2[0] * u + n2[0] * 3.3, 2), round(A2[1] + d2[1] * u + n2[1] * 3.3, 2)]
+    elem.append({"tipo": "busto", "id": None, "p": franja(7.0), "giro": round(math.atan2(n2[0], n2[1]), 3)})
+    elem.append({"tipo": "pollitos", "id": None, "puntos": [franja(u) for u in (11.0, 22.0, 28.5)], "giro": round(math.atan2(-d2[1], d2[0]), 3)})
+    a_px_ = lambda x, z: (int(round(x / ESCALA + ORIGEN[0])), int(round(z / ESCALA + ORIGEN[1])))
+    for u in (7.0, 11.0, 22.0, 28.5):
+        cv2.circle(despejar, a_px_(*franja(u)), int(2.0 / ESCALA), 1, -1)
     union7 = junto_calle([(1080, 1392)], 15, calles)
     pasillo([marco(7, -74, 6), marco(7, -90, 2), (1118, 1374)] + union7)
     # (anotaciones) el pasillo del lado de la piscina termina antes de la esquina sur del 7
@@ -925,7 +937,9 @@ def lugares_nuevos(calles, quebrada, lejos_carretera, y_ruta32):
     elem.append({"tipo": "arbol_grande", "id": None, "p": a_metros(*marco(9, -36, -50)), "escala": 1.7})
     # soda (fotos): comedor abierto al costado, con techo a dos aguas sobre columnas azules, y un tanque de agua
     # azul sobre una torre de tubo
-    caja(None, "comedor", marco(3, 78, 0), -39, 10.0, 16.0, alto=3.2)
+    # (fotos y anotaciones, nov. 2026) el comedor llega hasta la pared de la soda: la franja entre los dos (pared a
+    # 8,24 m del centro) va techada, con mesas
+    caja(None, "comedor", marco(3, 78, 0), -39, 10.0, 16.0, alto=3.2, pared=8.24)
     elem.append({"tipo": "tanque", "id": None, "p": a_metros(*marco(3, 20, 56))})
 
     # --- portón: el acceso este desde la ruta 32, junto a la entrada principal, está cerrado

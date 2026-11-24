@@ -1283,6 +1283,96 @@ function oeste26(grupo, vol, alto, pisos) {
   for (const u of [L * 0.3, L * 0.85]) { const pl = new THREE.Mesh(new THREE.CylinderGeometry(0.1, 0.1, 1.1, 10), posteL); pl.position.set(...en(u, 2.2, 0.55)); grupo.add(pl); }
 }
 
+// Soda (fotos, nov. 2026). Entrada en la cara noroeste, donde llega el pasillo techado: vano abierto con la hoja
+// de metal celeste abierta, adentro el piso claro, la refrigeradora roja y la vitrina; encima el rótulo «SODA UCR
+// CARIBE» en letras doradas sobre la pared blanca y la guirnalda de «FELIZ NAVIDAD»; a la derecha los menús
+// pegados, el rótulo de no fumar y el verde de SALIDA; a la izquierda un estante de metal oxidado. En la cara
+// noreste, hacia el comedor, la puerta de metal celeste con su reja en medio de la pared
+function soda(grupo, vol, alto, { entrada = [-0.63, -0.78], p_entrada = null, puerta = [0.78, -0.63] } = {}) {
+  const c = vol.contorno;
+  const caraEn = (frente, punto) => {
+    const f = fachadaMirando(c, frente), ang = Math.atan2(f.nx, f.nz), T = [f.nz, -f.nx];
+    let m = [(f.a[0] + f.b[0]) / 2, (f.a[1] + f.b[1]) / 2];
+    if (punto) {   // el punto de la cara más cercano al dado
+      const k = (punto[0] - m[0]) * T[0] + (punto[1] - m[1]) * T[1];
+      m = [m[0] + T[0] * k, m[1] + T[1] * k];
+    }
+    const en = (u, v, y) => [m[0] + T[0] * u + f.nx * v, y, m[1] + T[1] * u + f.nz * v];
+    const pieza = (w, h, d, mat, u, v, y, giro = 0) => {
+      const p = new THREE.Mesh(new THREE.BoxGeometry(w, h, d), mat); p.position.set(...en(u, v, y)); p.rotation.y = ang + giro;
+      p.castShadow = !liviano; p.receiveShadow = true; grupo.add(p); return p;
+    };
+    return { en, pieza, ang };
+  };
+  const plano = (K, w, h, u, v, y, dibujar, ancho = 512) => {
+    const cv = document.createElement("canvas"); cv.width = ancho; cv.height = Math.max(16, Math.round((ancho * h) / w));
+    dibujar(cv.getContext("2d"), cv.width, cv.height);
+    const tex = new THREE.CanvasTexture(cv); tex.colorSpace = THREE.SRGBColorSpace;
+    const m = new THREE.Mesh(new THREE.PlaneGeometry(w, h), new THREE.MeshBasicMaterial({ map: tex, transparent: true }));
+    m.position.set(...K.en(u, v, y)); m.rotation.y = K.ang; grupo.add(m); return m;
+  };
+  const mat = (color, extra = {}) => new THREE.MeshStandardMaterial({ color, roughness: 0.7, ...extra });
+  const blancoS = mat(0xf2f1ec), celesteM = mat(0x9cc3dd, { roughness: 0.5, metalness: 0.3 });
+
+  // --- entrada
+  const E = caraEn(entrada, p_entrada), W = 2.1, H = 2.35;
+  E.pieza(W + 1.2, alto - 0.05, 0.1, blancoS, 0, 0.04, (alto - 0.05) / 2);                     // paño blanco de la fachada
+  E.pieza(W, H, 0.06, mat(0xe9e4d6, { roughness: 0.9 }), 0, 0.06, H / 2);                       // fondo del local, iluminado
+  E.pieza(W, 0.02, 1.0, mat(0xd7d2c4), 0, -0.4, 0.02);                                          // piso de adentro
+  E.pieza(0.55, 1.9, 0.12, mat(0xb3262c, { roughness: 0.4 }), -0.55, 0.1, 0.95);                // refrigeradora roja
+  E.pieza(0.45, 1.3, 0.04, mat(0xe8e6de), -0.55, 0.17, 1.0);                                    // su puerta con afiches
+  E.pieza(0.8, 0.9, 0.12, mat(0xc6cbcf, { metalness: 0.4 }), 0.55, 0.1, 0.75);                  // vitrina
+  E.pieza(0.75, 0.5, 0.06, mat(0xdfe7ea, { roughness: 0.1, metalness: 0.2, transparent: true, opacity: 0.6 }), 0.55, 0.12, 1.45);
+  for (const u of [-W / 2 - 0.04, W / 2 + 0.04]) E.pieza(0.08, H, 0.14, mat(0x8fb3cb), u, 0.1, H / 2);   // marco
+  const hoja = E.pieza(0.95, H - 0.1, 0.05, celesteM, -W / 2 - 0.05, 0.6, H / 2, -1.25);        // hoja abierta hacia afuera
+  hoja.position.set(...E.en(-W / 2 + 0.1, 0.48, H / 2));
+  plano(E, W + 0.9, 0.5, 0, 0.11, H + 0.35, (x, w, h) => {
+    x.fillStyle = "#f6f4ee"; x.fillRect(0, 0, w, h);
+    x.fillStyle = "#c9a23a"; x.textAlign = "center";
+    x.font = `700 ${h * 0.3}px Arial, sans-serif`; x.fillText("JUST WEIGHT PLACE", w / 2, h * 0.36);
+    x.font = `700 ${h * 0.4}px Arial, sans-serif`; x.fillText("SODA UCR CARIBE", w / 2, h * 0.86);
+  });
+  // guirnalda: «FELIZ NAVIDAD» en letras rojas y verdes y ramas verdes con lazos rojos a los lados
+  plano(E, W + 1.1, 0.42, 0, 0.16, H + 0.82, (x, w, h) => {
+    x.textAlign = "center"; x.font = `900 ${h * 0.8}px Georgia, serif`;
+    [..."FELIZ NAVIDAD"].forEach((ch, k, arr) => { x.fillStyle = k % 2 ? "#2f7a3a" : "#c0262d"; x.fillText(ch, (w * (k + 0.5)) / arr.length, h * 0.82); });
+  });
+  const rama = mat(0x2f5f32, { roughness: 0.95 });
+  for (const u of [-W / 2 - 0.3, W / 2 + 0.3]) {
+    E.pieza(0.18, H + 0.6, 0.12, rama, u, 0.16, (H + 0.6) / 2 + 0.2);
+    for (let k = 0; k < 4; k++) E.pieza(0.12, 0.12, 0.05, mat(0xc0262d), u, 0.24, 0.6 + k * 0.6);
+  }
+  // menús y avisos a la derecha, no fumar y salida
+  plano(E, 0.8, 1.1, W / 2 + 0.85, 0.1, 1.45, (x, w, h) => {
+    x.fillStyle = "#f2f2ea"; x.fillRect(0, 0, w, h);
+    x.fillStyle = "#6aa84f"; x.fillRect(w * 0.08, h * 0.05, w * 0.84, h * 0.06);
+    for (let k = 0; k < 3; k++) { x.fillStyle = "#e6c45a"; x.fillRect(w * 0.15, h * (0.18 + k * 0.27), w * 0.7, h * 0.2); }
+  }, 128);
+  plano(E, 0.4, 0.55, W / 2 + 1.55, 0.1, 1.45, (x, w, h) => {
+    x.fillStyle = "#fff"; x.fillRect(0, 0, w, h); x.fillStyle = "#c62828"; x.fillRect(0, 0, w, h * 0.18);
+    x.strokeStyle = "#c62828"; x.lineWidth = w * 0.06; x.beginPath(); x.arc(w / 2, h * 0.55, w * 0.32, 0, 7); x.stroke();
+    x.beginPath(); x.moveTo(w * 0.27, h * 0.38); x.lineTo(w * 0.73, h * 0.72); x.stroke();
+  }, 64);
+  plano(E, 0.55, 0.3, W / 2 + 1.0, 1.3, 2.45, (x, w, h) => {
+    x.fillStyle = "#1f6b3a"; x.fillRect(0, 0, w, h); x.fillStyle = "#e8c32c"; x.font = `700 ${h * 0.55}px Arial, sans-serif`;
+    x.textAlign = "center"; x.fillText("SALIDA →", w / 2, h * 0.7);
+  }, 128);
+  // estante de metal oxidado a la izquierda, con cajas encima
+  const oxido = mat(0x6b4a33, { roughness: 0.6, metalness: 0.4 });
+  for (const du of [-0.6, 0.6]) for (const dv of [0.45, 1.15]) E.pieza(0.04, 1.6, 0.04, oxido, -W / 2 - 1.3 + du, dv, 0.8);
+  for (const y of [0.25, 0.75, 1.25, 1.6]) E.pieza(1.25, 0.03, 0.75, oxido, -W / 2 - 1.3, 0.8, y);
+  E.pieza(0.8, 0.25, 0.5, mat(0x3f68c0), -W / 2 - 1.3, 0.8, 1.75);
+  E.pieza(0.7, 0.12, 0.45, mat(0xf0f0ec), -W / 2 - 1.3, 0.8, 1.94);
+
+  // --- puerta hacia el comedor: metal celeste con reja, en medio de la pared
+  const P = caraEn(puerta, null);
+  P.pieza(1.1, 2.2, 0.08, celesteM, -0.8, 0.05, 1.1);
+  for (let k = 0; k < 6; k++) P.pieza(0.03, 1.9, 0.04, mat(0x6f93ad), -1.25 + k * 0.18, 0.1, 1.1);
+  P.pieza(1.6, 1.7, 0.06, mat(0xb9d2e2, { roughness: 0.5 }), 1.1, 0.05, 1.45);                  // reja celeste de la ventana
+  for (let k = 0; k < 8; k++) P.pieza(0.025, 1.6, 0.03, mat(0x7e9fb5), 0.35 + k * 0.21, 0.09, 1.45);
+  P.pieza(0.5, alto - 0.1, 0.25, mat(0xa6a39c, { roughness: 1 }), 0.15, 0.12, (alto - 0.1) / 2); // pilar de concreto
+}
+
 // Parasoles curvos de lámina blanca frente a la fachada (edificio 13): paneles altos que se arquean hacia afuera
 function parasoles(grupo, vol, alto, frente, cuantos = 3) {
   const f = frente ? fachadaMirando(vol.contorno, frente) : fachadaSur(vol.contorno), dx = (f.b[0] - f.a[0]) / f.largo, dz = (f.b[1] - f.a[1]) / f.largo;
@@ -1563,6 +1653,7 @@ for (const e of datos.campus.edificios) {
     if (estilo.balcones) e.volumenes.forEach((vol) => balcones(grupo, vol, e.alto, Math.max(e.pisos, 1), estilo.balcones.frente, !!estilo.balcones.unir_galeria));
     if (estilo.mural_mosaico) muralMosaico(grupo, e.volumenes[0], e.alto, estilo.mural_mosaico.frente);
     if (estilo.puerta_biblioteca) puertaBiblioteca(grupo, e.volumenes, estilo.puerta_biblioteca);
+    if (estilo.soda) soda(grupo, e.volumenes[0], e.alto, estilo.soda);
     if (estilo.docencia) docencia(grupo, e.volumenes[0], e.alto, estilo.docencia, estilo.alero ?? 1.4);
     if (estilo.fachada_26) fachada26(grupo, e.volumenes[0], e.alto, Math.max(e.pisos, 1), estilo.fachada_26);
     if (estilo.oeste_26) oeste26(grupo, e.volumenes[0], e.alto, Math.max(e.pisos, 1));
@@ -2644,15 +2735,112 @@ if (datos.campus.parqueo) {
   }
 
   // comedor abierto junto a la soda: losa, columnas azules, techo a dos aguas y mesas
-  function comedor({ p, giro, largo, ancho, alto }) {
-    const g = new THREE.Group(), techos = [], columnas = [], mesasC = [];
-    const losa = new THREE.Mesh(new THREE.BoxGeometry(largo, 0.25, ancho), concretoClaro); losa.position.y = 0.12; g.add(losa);
-    for (let i = 0; i <= 4; i++) for (const lado of [-1, 1]) columnas.push([lado * (largo / 2 - 0.2), alto / 2, -ancho / 2 + (ancho * i) / 4, 0.18, alto, 0.18]);
+  // comedor de la soda (fotos, nov. 2026). Nave abierta con techo a dos aguas de lámina gris sobre columnas y cerchas
+  // azules y, del lado de la soda, una franja techada con un alero blanco que sale de la pared de la soda (x < -largo/2,
+  // hasta «pared»). En la franja, mesas azules con sillas verdes pegadas a la pared; en la nave, un murete de concreto
+  // con remate azul, más mesas azules con sillas verdes y unas plegables blancas con sillas negras. Entre las dos
+  // cubiertas, los bajantes blancos en Y sobre una rejilla; en la punta norte, un toldo en arco de policarbonato con
+  // la fila de basureros, una caja roja de refrescos y un abanico de pie
+  function comedor({ p, giro, largo, ancho, alto, pared = largo / 2 }) {
+    const g = new THREE.Group(), techos = [], columnas = [];
+    const X0 = -pared + 0.15, X1 = largo / 2;
+    const caja_ = (w, h, d, m, x, y, z, ry = 0) => { const c = new THREE.Mesh(new THREE.BoxGeometry(w, h, d), m); c.position.set(x, y, z); c.rotation.y = ry; g.add(c); return c; };
+    caja_(X1 - X0 + 0.4, 0.25, ancho + 1, concretoClaro, (X0 + X1) / 2, 0.12, 0);              // losa hasta la pared de la soda
+    for (let i = 0; i <= 4; i++) for (const x of [-largo / 2 + 0.2, largo / 2 - 0.2]) columnas.push([x, alto / 2, -ancho / 2 + (ancho * i) / 4, 0.2, alto, 0.2]);
     tramoTecho(techos, [0, -ancho / 2 - 0.6], [0, ancho / 2 + 0.6], alto - 2.75, alto - 2.75, largo + 0.4);
-    for (let i = 0; i < 4; i++) for (const lado of [-1, 1]) mesasC.push([lado * 2.2, 0.75, -ancho / 2 + 2 + i * 3.6, 1.8, 0.06, 0.8]);
-    g.add(cajas(mate(0xb9bdc0, { metalness: 0.3 }), techos), cajas(azulColumna, columnas), cajas(blanco, mesasC));
+    g.add(cajas(mate(0xa9aeb2, { metalness: 0.35 }), techos), cajas(azulColumna, columnas));
+    // franja techada junto a la soda: lámina gris que baja de la pared, con cielo blanco y canoa blanca
+    const ancF = -largo / 2 - X0 + 0.3, xF = (X0 - largo / 2) / 2, caida = Math.atan2(0.45, ancF);
+    const lam = caja_(ancF + 0.4, 0.08, ancho + 0.8, mate(0xb6babd, { metalness: 0.3 }), xF, alto + 0.35, 0); lam.rotation.z = caida;
+    const cielo = caja_(ancF + 0.3, 0.04, ancho + 0.7, mate(0xf1f1ee), xF, alto + 0.24, 0); cielo.rotation.z = caida;
+    caja_(0.3, 0.3, ancho + 0.8, mate(0xf4f4f1), -largo / 2 + 0.05, alto + 0.05, 0);              // canoa
+    // bajantes en Y, en la columna del medio, sobre una rejilla verde
+    const blancoT = mate(0xf4f4f1, { roughness: 0.5 });
+    const tubo = (x0, y0, z0, x1, y1, z1) => {
+      const a = new THREE.Vector3(x0, y0, z0), b = new THREE.Vector3(x1, y1, z1), t = new THREE.Mesh(new THREE.CylinderGeometry(0.08, 0.08, a.distanceTo(b), 8), blancoT);
+      t.position.copy(a).add(b).multiplyScalar(0.5); t.quaternion.setFromUnitVectors(new THREE.Vector3(0, 1, 0), b.clone().sub(a).normalize()); g.add(t);
+    };
+    const xB = -largo / 2 - 0.35;
+    tubo(xB, alto, -0.9, xB, 1.2, 0); tubo(xB, alto, 0.9, xB, 1.2, 0); tubo(xB, 1.2, 0, xB, 0.3, 0.1);
+    caja_(0.9, 0.04, 0.9, mate(0x3f7d4a), xB, 0.27, 0.1);
+    // murete de la nave, del lado de la franja, con remate azul (con paso en los dos extremos)
+    const gris = mate(0xa4a29b, { roughness: 1 }), azulR = mate(0x5f88a8, { roughness: 0.6 });
+    caja_(0.25, 0.95, ancho - 6, gris, -largo / 2 + 0.6, 0.72, 0.5); caja_(0.35, 0.08, ancho - 6, azulR, -largo / 2 + 0.6, 1.24, 0.5);
+    caja_(1.8, 0.95, 0.25, gris, -largo / 2 + 1.5, 0.72, -ancho / 2 + 3.5, 0.5);
+    // mesa azul con sillas verdes pegadas al marco gris (cuatro puestos)
+    const azulM = mate(0x2f6fd6, { roughness: 0.2, metalness: 0.1 }), verde = mate(0x2fbf55, { roughness: 0.5 }), grisM = mate(0x6c7176, { metalness: 0.5 });
+    const mesaAzul = (x, z, ry = 0) => {
+      const m = new THREE.Group();
+      const t = new THREE.Mesh(new THREE.BoxGeometry(0.8, 0.05, 1.2), azulM); t.position.y = 0.76; m.add(t);
+      const base = new THREE.Mesh(new THREE.BoxGeometry(1.5, 0.05, 0.08), grisM); base.position.y = 0.3; m.add(base);
+      for (const sx of [-0.62, 0.62]) for (const sz of [-0.32, 0.32]) {
+        const as = new THREE.Mesh(new THREE.BoxGeometry(0.42, 0.05, 0.42), verde); as.position.set(sx, 0.46, sz); m.add(as);
+        const re = new THREE.Mesh(new THREE.BoxGeometry(0.05, 0.42, 0.4), verde); re.position.set(sx + Math.sign(sx) * 0.2, 0.72, sz); m.add(re);
+        const pa = new THREE.Mesh(new THREE.BoxGeometry(0.04, 0.42, 0.04), grisM); pa.position.set(sx, 0.23, sz); m.add(pa);
+      }
+      const pie = new THREE.Mesh(new THREE.BoxGeometry(0.06, 0.74, 0.06), grisM); pie.position.y = 0.39; m.add(pie);
+      m.position.set(x, 0.25, z); m.rotation.y = ry; g.add(m);
+    };
+    for (let k = 0; k < 4; k++) mesaAzul(xF - 0.1, -ancho / 2 + 2.5 + k * 3.4, Math.PI / 2);     // en la franja, junto a la pared
+    for (const x of [-1.6, 1.8]) for (let k = 0; k < 3; k++) mesaAzul(x, -ancho / 2 + 6 + k * 3.4);
+    // plegables blancas con sillas negras, en la punta norte
+    const blancaP = mate(0xeeeeea), negra = mate(0x26292c, { roughness: 0.5 });
+    for (const [x, z] of [[-1.2, -ancho / 2 + 2.2], [2.2, -ancho / 2 + 2.6]]) {
+      caja_(1.8, 0.05, 0.75, blancaP, x, 1.0, z);
+      for (const dx of [-0.75, 0.75]) for (const dz of [-0.33, 0.33]) caja_(0.03, 0.74, 0.03, grisM, x + dx, 0.62, z + dz);
+      for (const dx of [-0.5, 0.5]) for (const s of [-1, 1]) {
+        caja_(0.42, 0.04, 0.42, negra, x + dx, 0.7, z + s * 0.65); caja_(0.42, 0.45, 0.04, negra, x + dx, 0.95, z + s * 0.86);
+      }
+    }
+    // toldo en arco de policarbonato con costillas azules, en la punta norte de la franja
+    const zA = -ancho / 2 - 0.2, largoA = 3.2, R = Math.max(1.6, ancF / 2 + 0.3);
+    const geoA = new THREE.CylinderGeometry(R, R, largoA, 18, 1, true, Math.PI / 2, Math.PI); geoA.rotateX(Math.PI / 2);   // medio tubo con la cara curva arriba, a lo largo de z
+    const arco = new THREE.Mesh(geoA, new THREE.MeshStandardMaterial({ color: 0xe8ece4, roughness: 0.4, transparent: true, opacity: 0.75, side: THREE.DoubleSide }));
+    arco.position.set(xF, alto - 0.4, zA - largoA / 2); arco.scale.y = 0.5; g.add(arco);
+    for (let k = 0; k <= 3; k++) {
+      const c = new THREE.Mesh(new THREE.TorusGeometry(R, 0.04, 5, 18, Math.PI), azulColumna);
+      c.position.set(xF, alto - 0.4, zA - (largoA * k) / 3); c.scale.set(1, 0.5, 1); g.add(c);
+    }
+    for (const x of [xF - R, xF + R]) caja_(0.12, alto - 0.4, 0.12, azulColumna, x, (alto - 0.4) / 2, zA - largoA);
+    caja_(2 * R + 0.4, 0.25, largoA, concretoClaro, xF, 0.12, zA - largoA / 2);   // piso bajo el toldo
+    [0x2f62c4, 0x2a2d30, 0x2a2d30].forEach((col, k) => caja_(0.5, 0.85, 0.5, mate(col, { roughness: 0.5 }), xF - R + 0.4, 0.68, zA - 0.6 - k * 0.6));
+    caja_(0.06, 1.0, 1.9, grisM, xF - R + 0.12, 0.75, zA - 1.2);
+    caja_(0.55, 0.55, 0.4, mate(0xc8202a, { roughness: 0.6 }), xF - R + 0.45, 0.53, zA - 2.4);
+    const abanico = new THREE.Mesh(new THREE.CylinderGeometry(0.35, 0.35, 0.1, 16), mate(0x2c2f33)); abanico.rotation.x = Math.PI / 2; abanico.position.set(-largo / 2 + 1.0, 1.7, -0.8); g.add(abanico);
+    caja_(0.04, 1.5, 0.04, mate(0x2c2f33), -largo / 2 + 1.0, 0.95, -0.8);
+    g.traverse((o) => { if (o.isMesh && !o.isInstancedMesh) { o.castShadow = !liviano; o.receiveShadow = true; } });
     g.position.set(p[0], 0, p[1]); g.rotation.y = -giro;
     registrar(g, null);
+  }
+  // mesas de concreto entre el pasillo de la soda y el edificio 2 (foto): mesa redonda y bancas curvas a los lados,
+  // del mismo concreto gris azulado; caben en la franja de zacate (x a lo largo de la franja)
+  function pollitos({ puntos, giro = 0 }) {
+    const g = new THREE.Group(), conc = mate(0x9aa7ad, { roughness: 0.95 });
+    for (const [x, z] of puntos) {
+      const m = new THREE.Group();
+      const pata = new THREE.Mesh(new THREE.CylinderGeometry(0.16, 0.24, 0.72, 10), conc); pata.position.y = 0.36; m.add(pata);
+      const tab = new THREE.Mesh(new THREE.CylinderGeometry(0.62, 0.62, 0.09, 18), conc); tab.position.y = 0.76; m.add(tab);
+      for (const s of [-1, 1]) {
+        const b = new THREE.Mesh(new THREE.TorusGeometry(1.05, 0.16, 4, 10, 1.4), conc); b.rotation.x = Math.PI / 2; b.rotation.z = (s > 0 ? 0 : Math.PI) - 0.7;
+        b.position.y = 0.44; b.scale.z = 0.3; m.add(b);
+        for (const a of [-0.45, 0.45]) { const p = new THREE.Mesh(new THREE.BoxGeometry(0.18, 0.42, 0.25), conc); p.position.set(s * Math.cos(a) * 1.05, 0.21, Math.sin(a) * 1.05); m.add(p); }
+      }
+      m.position.set(x, 0, z); m.rotation.y = giro; m.traverse((o) => { o.castShadow = !liviano; }); g.add(m);
+    }
+    registrar(g, null);
+  }
+  // busto (foto): cabeza y hombros oscuros sobre un pedestal de concreto con la placa negra al frente
+  function busto({ p, giro = 0 }) {
+    const g = new THREE.Group(), conc = mate(0xb3b3ad, { roughness: 1 }), bronce = mate(0x3c3a37, { roughness: 0.45, metalness: 0.5 });
+    const ped = new THREE.Mesh(new THREE.BoxGeometry(0.8, 1.25, 0.6), conc); ped.position.y = 0.62; g.add(ped);
+    const tapa = new THREE.Mesh(new THREE.BoxGeometry(0.9, 0.08, 0.7), conc); tapa.position.y = 1.29; g.add(tapa);
+    const placa = new THREE.Mesh(new THREE.BoxGeometry(0.62, 0.75, 0.03), mate(0x1f2224, { roughness: 0.3 })); placa.position.set(0, 0.75, 0.31); g.add(placa);
+    for (let k = 0; k < 7; k++) { const l = new THREE.Mesh(new THREE.BoxGeometry(0.4 - (k % 3) * 0.06, 0.02, 0.01), mate(0xcfd2d4)); l.position.set(0, 1.02 - k * 0.07, 0.33); g.add(l); }
+    const hombros = new THREE.Mesh(new THREE.SphereGeometry(0.34, 12, 8, 0, Math.PI * 2, 0, Math.PI / 2), bronce); hombros.scale.set(1.15, 0.8, 0.6); hombros.position.y = 1.33; g.add(hombros);
+    const cuello = new THREE.Mesh(new THREE.CylinderGeometry(0.08, 0.09, 0.14, 8), bronce); cuello.position.y = 1.62; g.add(cuello);
+    const cabeza = new THREE.Mesh(new THREE.SphereGeometry(0.15, 14, 10), bronce); cabeza.scale.set(0.9, 1.15, 1); cabeza.position.y = 1.8; g.add(cabeza);
+    g.traverse((o) => { if (o.isMesh) { o.castShadow = !liviano; o.receiveShadow = true; } });
+    g.position.set(p[0], 0, p[1]); g.rotation.y = giro; registrar(g, null);
   }
   // tanque de agua azul sobre una torre de tubo verde
   function tanque({ p }) {
@@ -2957,7 +3145,7 @@ if (datos.campus.parqueo) {
   for (const el of datos.campus.elementos || []) {
     const hacer = { muro, pasillo, caseta, parqueo, bancas, escalera, rampa, descanso, mesas, explanada, alcantarilla, jardin, pluma, comedor, tanque,
       acera, cebra, porton_peatonal: portonPeatonal, puente_peatonal: puentePeatonal, arbol_grande: arbolGrande,
-      ruedas_tren: ruedasTren, congos, carport, pasarela, bicicletas, rampa_doble: rampaDoble, punto_verde: puntoVerde, motos }[el.tipo];
+      ruedas_tren: ruedasTren, congos, carport, pasarela, bicicletas, rampa_doble: rampaDoble, punto_verde: puntoVerde, motos, pollitos, busto }[el.tipo];
     if (hacer) hacer(el);
     else if (el.tipo === "porton") {   // acceso cerrado con portón (sin faroles)
       const g = portonVerde(false, el.hoja || 4.2); g.position.set(el.p[0], 0, el.p[1]); g.rotation.y = el.giro; escena.add(g);
