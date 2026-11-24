@@ -326,8 +326,12 @@ LLANOS = [
     # del final del parqueo baja a él
     # (el borde junto al parqueo pasa justo por la punta de arriba de la escalera, de través)
     # (anotaciones) desde la escalera, el pasillo hasta la soda y detrás de la soda y el comedor
-    {"pol": [(-128.25, 54.84), (-114.0, 58.0), (-104.0, 54.0), (-87.0, 65.0), (-91.0, 82.0),
-             (-100.0, 98.0), (-114.0, 106.0), (-130.0, 96.0), (-123.04, 76.37), (-135.63, 60.82)], "nivel": 3.0, "suave": 1.5},
+    # (anotaciones, nov. 2026) más hondo (1,8 m bajo el parqueo, la altura de la escalera) y desde la orilla del asfalto:
+    # todo el zacate entre el parqueo, el comedor y el pasillo 10 está en el bajo. Junto a la escalera la orilla pasa
+    # por el pie de la escalera, para que el descanso de concreto quede a nivel del parqueo
+    {"pol": [(-130.08, 55.04), (-131.47, 52.69), (-119.89, 43.31), (-108.7, 42.5), (-100.5, 37.0), (-96.0, 46.0),
+             (-87.0, 65.0), (-91.0, 82.0), (-100.0, 98.0), (-114.0, 106.0), (-130.0, 96.0), (-123.04, 76.37), (-136.26, 60.04)],
+     "nivel": 1.6, "suave": 1.5},
 ]
 # (anotaciones) al este del puente de residencias la quebrada va poco honda entre las dos mallas: sin zanja
 CAUCE_SOMERO = [{"x": (112.0, 178.0), "hondo": 1.1, "rampa": 9.0}]
@@ -540,6 +544,14 @@ def suavizar(puntos, vueltas=2):
     return list(zip(np.interp(t, d, p[:, 0]), np.interp(t, d, p[:, 1])))
 
 
+def techado34_(u, v, px=False):
+    """Punto en el marco del parqueo techado 34 (metros desde su centro): u a lo largo hacia la soda, v hacia la isla."""
+    cx_, cz_ = a_metros(*marco(2, -32.8, 81))
+    c_, s_ = math.cos(math.radians(51)), math.sin(math.radians(51))
+    x_, z_ = cx_ + c_ * u + s_ * v, cz_ + s_ * u - c_ * v
+    return (x_ / ESCALA + ORIGEN[0], z_ / ESCALA + ORIGEN[1]) if px else (x_, z_)
+
+
 def lugares_nuevos(calles, quebrada, lejos_carretera, y_ruta32):
     """Elementos sin edificio (pasillos techados, casetas, parqueos, etc.) y las máscaras para pintarlos
     en el suelo y para que no les caigan árboles encima. Todo sale en metros para la maqueta."""
@@ -623,10 +635,10 @@ def lugares_nuevos(calles, quebrada, lejos_carretera, y_ruta32):
     # corta que baja hacia la soda con una baranda azul en U en medio, y un camino de lastre que llega a la punta del
     # techito. El techito es un pasillo propio que va a la soda; el pasillo 10 llega en curva y se le une de lado. Del
     # lado del parqueo, el pasillo 10 lleva un muro bajo de piedra bola con lastre (el talud del parqueo)
-    elem.append({"tipo": "losa", "id": None, "p": a_metros(*marco(2, 14, 74)), "giro": round(math.radians(51), 3), "largo": 2.0, "ancho": 3.2, "color": "#a8a59d"})
-    elem.append({"tipo": "escalera", "id": None, "p": a_metros(*marco(2, 21, 74)), "giro": round(math.radians(51 + 180), 3),   # baja hacia la soda
-                 "largo": 1.6, "ancho": 2.4, "alto": 0.6, "techado": False, "pasamanos": "u"})
-    elem.append({"tipo": "losa", "id": None, "p": a_metros(*marco(2, 30, 74)), "giro": round(math.radians(51), 3), "largo": 2.6, "ancho": 1.8, "color": "#9a8f80"})
+    elem.append({"tipo": "losa", "id": None, "p": a_metros(*marco(2, 10.6, 74)), "giro": round(math.radians(51), 3), "largo": 3.7, "ancho": 3.2, "color": "#a8a59d"})
+    elem.append({"tipo": "escalera", "id": None, "p": a_metros(*marco(2, 24.4, 74)), "giro": round(math.radians(51 + 180), 3),   # baja hacia la soda
+                 "largo": 3.2, "ancho": 2.4, "alto": 1.3, "techado": False, "pasamanos": "u"})
+    elem.append({"tipo": "losa", "id": None, "p": a_metros(*marco(2, 33.6, 74)), "giro": round(math.radians(51), 3), "largo": 1.4, "ancho": 1.8, "color": "#9a8f80"})
     pasillo([marco(2, 34, 74), marco(2, 112, 74)], cortar_en_calle=False)   # el techito, hasta la entrada de la soda
     elem.append({"tipo": "muro_piedra", "id": None, "puntos": [a_metros(*marco(2, u, 66.5)) for u in (-60, -30, 0, 12)]})
     union7 = junto_calle([(1080, 1392)], 15, calles)
@@ -711,9 +723,9 @@ def lugares_nuevos(calles, quebrada, lejos_carretera, y_ruta32):
     parqueo(34, marco(2, -32.8, 81), 17.5, 9.5, 51, [(-2.25, 5.0)], techado=4, techado_desde=0, postes=False, espacio=4.0)
     # (anotaciones) los carros sin techo, pegados (sin separación) a la punta del techado que da a la soda, en fila hacia la isla y de
     # frente al comedor
-    # (anotaciones) sin el primer espacio, que ahora queda bajo el techado
-    p_sin_ = marco(2, -26.8, 100)
-    parqueo(None, (p_sin_[0] + 4.041, p_sin_[1] + -3.272), 14.5, 6.0, -39, [(0.0, 5.0)], postes="lejos")   # sin el poste junto al pasillo
+    # (anotaciones, nov. 2026) solo tres espacios, de frente a la escalera de la soda y a unos 4 m de la punta del techado
+    # (en el marco del techado: u a lo largo, desde su centro, hacia la soda; v hacia la isla)
+    parqueo(None, techado34_(5.5, 10.0, px=True), 9.5, 6.0, -39, [(0.0, 5.0)], postes="lejos")   # sin el poste junto al pasillo
     esquinas_ = rect_contorno(c25[0], c25[1], 11.9 / ESCALA + 8, 6.0 / ESCALA + 8, -39) + rect_contorno(c34[0], c34[1], 25.0 / ESCALA + 4, 9.5 / ESCALA + 4, 51)
     esquinas_ += [p_ for p_ in zip(*np.nonzero(calles[1570:1625, 640:830])[::-1])]   # borde de la calle, al norte
     esquinas_ = [(x + 640, y + 1570) if i_ >= 8 else (x, y) for i_, (x, y) in enumerate(esquinas_)]
@@ -1294,9 +1306,21 @@ def main(pdf, sat=None):
     cv2.circle(picnic, PICNIC["centro"], PICNIC["radio"], 255, -1)
     pintar(cv2.GaussianBlur(picnic, (0, 0), 6), (166, 208, 120))
     # dentro de la U todo está asfaltado (fotos), también el camino a la pista; cordón de concreto claro
-    # (anotaciones) el asfalto del parqueo sigue al lado de la fila de espacios, hasta la escalera de la soda
-    cv2.fillPoly(extra["calles_extra"], [np.array([(x / ESCALA + ORIGEN[0], z / ESCALA + ORIGEN[1]) for x, z in
-                 [(-141.5, 49.5), (-128.0, 36.0), (-124.0, 33.0), (-119.0, 38.0), (-122.0, 42.0), (-137.0, 54.0)]], np.int32)], 255)
+    # (anotaciones, nov. 2026) frente a la soda: se quita el cuadro de asfalto suelto junto a la isla y lo que pasaba de la
+    # escalera; el asfalto llega parejo hasta una línea a la altura de la punta del techado (marco del techado 34)
+    a_px_ = lambda pts: [np.array([techado34_(u, v, px=True) for u, v in pts], np.int32)]
+    quitar_ = np.zeros_like(calles)
+    cv2.fillPoly(quitar_, [np.array([(x / ESCALA + ORIGEN[0], z / ESCALA + ORIGEN[1]) for x, z in
+                 [(-133.0, 31.0), (-118.0, 28.0), (-115.0, 42.0), (-127.0, 44.0)]], np.int32)], 255)
+    cv2.fillPoly(quitar_, a_px_([(8.75, -4.75), (16.0, -4.75), (16.0, 24.0), (8.75, 24.0)]), 255)
+    llenar_ = np.zeros_like(calles)
+    cv2.fillPoly(llenar_, a_px_([(-3.0, -4.75), (8.75, -4.75), (8.75, 15.0), (-3.0, 15.0)]), 255)
+    quitar_[llenar_ > 0] = 0
+    for m_ in (calles, acceso, extra["calles_extra"], extra["asfalto"]):
+        m_[quitar_ > 0] = 0
+    extra["rayas"][cv2.resize(quitar_, (extra["rayas"].shape[1], extra["rayas"].shape[0]), interpolation=cv2.INTER_NEAREST) > 0] = 0
+    extra["calles_extra"][llenar_ > 0] = 255
+    extra["asfalto"][llenar_ > 0] = 0   # sin cordón entre los espacios nuevos y el resto
     pintar(cv2.bitwise_or(cv2.bitwise_or(calles, acceso), extra["calles_extra"]), (84, 88, 94), borde=(214, 212, 204))
     pintar(extra["lastre"], (176, 160, 128))
     pintar(extra["plaza"], (200, 198, 190), borde=(170, 168, 160))
