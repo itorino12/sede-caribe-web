@@ -633,7 +633,7 @@ def main():
                  {"p": p, "m": next(m for m in c["modalidades"] if m["id"] == p["modalidad"])})
                 for m in c["modalidades"] for p in m["proyectos"] if not p.get("enlace")]
     paginas += [(f"investigacion/{g['id']}.html", "programa-investigacion.html", g["nombre"], g["resumen"], {"g": g}) for g in c["programas_inv"]]
-    paginas += [(f"investigacion/proyectos/{p['id']}.html", "proyecto-investigacion.html", p["nombre"], f"{p['codigo']}: proyecto de investigación de la Sede del Caribe, a cargo de {p['responsable']}.",
+    paginas += [(f"investigacion/proyectos/{p['id']}.html", "proyecto-investigacion.html", p["nombre_oficial"], f"{p['codigo']}: proyecto de investigación de la Sede del Caribe, a cargo de {p['responsable']}.",
                  {"p": p, "g": g}) for g in c["programas_inv"] for p in g["proyectos"]]
 
     indice, congo = [], []

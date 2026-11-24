@@ -2,7 +2,7 @@
 {% from "_macros.html" import encabezado, contacto with context %}
 {% block contenido %}
 {% set coord = unidad.get("investigacion") %}
-{{ encabezado(p.nombre, [("Investigación", "unidades/investigacion.html"), (g.nombre, "investigacion/" ~ g.id ~ ".html")], raiz, p.nombre_oficial) }}
+{{ encabezado(p.nombre_oficial, [("Investigación", "unidades/investigacion.html"), (g.nombre, "investigacion/" ~ g.id ~ ".html")], raiz, p.codigo) }}
 <div class="ancho pagina pagina--con-ficha">
   <div>
     <div class="prosa">
@@ -16,6 +16,7 @@
       {% if p.metodo %}<h2>Cómo se hace</h2><p>{{ p.metodo }}</p>{% endif %}
       {% if p.beneficia %}<h2>A quién beneficia</h2><p>{{ p.beneficia }}</p>{% endif %}
       {% if p.aporte %}<h2>Qué aporta a la Sede y a la UCR</h2><p>{{ p.aporte }}</p>{% endif %}
+      {% if p.ods %}<h2>Objetivos de Desarrollo Sostenible</h2><p>El proyecto se relaciona con: {{ p.ods|join(", ") }}.</p>{% endif %}
       {% endif %}
       {% if g.id == "en-inscripcion" %}<p>Este proyecto está en proceso de inscripción ante la Vicerrectoría de Investigación. Cuando se apruebe se ampliará esta descripción.</p>{% endif %}
     </div>
