@@ -1122,7 +1122,7 @@ function docencia(grupo, vol, alto, { puerta = [0.5, 0.87], ventanilla = [1, 0],
   P.pieza(0.4, 0.55, 0.02, cartel(0.4, 0.55, (x, w, h) => { x.fillStyle = "#f2f0e6"; x.fillRect(0, 0, w, h); x.fillStyle = "#e8c32c"; x.fillRect(0, 0, w, h * 0.25); x.fillStyle = "#555"; for (let k = 0; k < 8; k++) x.fillRect(w * 0.1, h * (0.35 + k * 0.07), w * (0.5 + (k % 3) * 0.12), h * 0.025); }, 128),
     P.L / 2 - 0.7, 0.03, 1.7);
   // guía táctil desde el pasillo hasta la puerta, atravesando el corredor
-  P.pieza(0.36, 0.02, alero + 0.4, amarillo, 0, (alero + 0.4) / 2, 0.17);
+  P.pieza(0.36, 0.02, alero - 0.15, amarillo, 0, (alero - 0.15) / 2, 0.17);   // solo sobre el corredor
   // --- cara de la ventanilla
   const V = caraDe(ventanilla), uV = 0.9, anchoV = 3.0;
   ventanaReja(V, uV, anchoV, 0.95, alto * 0.42);
@@ -1166,8 +1166,7 @@ function docencia(grupo, vol, alto, { puerta = [0.5, 0.87], ventanilla = [1, 0],
   if (cCas) {
     const K = caraDe(casilleros), gris = new THREE.MeshStandardMaterial({ color: 0x5d6166, roughness: 0.5 });
     const beige = new THREE.MeshStandardMaterial({ color: 0xc9c2ad, roughness: 0.6, metalness: 0.2 });
-    // bajante y banca (las condensadoras apiladas se quitaron, anotaciones)
-    K.pieza(0.12, alto, 0.12, new THREE.MeshStandardMaterial({ color: 0xf4f4f0, roughness: 0.6 }), -K.L / 2 + 1.75, 0.12, alto / 2);
+    // banca (las condensadoras apiladas y el bajante se quitaron, anotaciones)
     const banca = (u, v) => {
       const b = new THREE.Group();
       for (let k = 0; k < 3; k++) { const t = new THREE.Mesh(new THREE.BoxGeometry(1.2, 0.03, 0.11), new THREE.MeshStandardMaterial({ color: 0x3a2c26, roughness: 0.6 })); t.position.set(0, 0.45, -0.15 + k * 0.14); b.add(t); }
@@ -2224,7 +2223,7 @@ if (datos.campus.parqueo) {
   // pasillo techado (fotos): losa de concreto con guía táctil amarilla, columnas y cerchas azules, techo a dos
   // aguas de lámina verde agua y baranda azul del lado del zacate. Sin techo, es un sendero; si sube, va sobre
   // un muro celeste (las rampas a la explanada)
-  function pasillo({ id, puntos, ancho, techo = true, en_calle = [], alturas = [] }) {
+  function pasillo({ id, puntos, ancho, techo = true, en_calle = [], alturas = [], baranda = true }) {
     const g = new THREE.Group(), pisos = [], guias = [], techos = [], columnas = [], barandas = [], muros = [];
     // sigue el terreno tramo a tramo (ver «asentar»); las franjas son los tramos de piso fuera de la calle
     const franjas = [];
@@ -2239,7 +2238,7 @@ if (datos.campus.parqueo) {
       pisos.push([cx, ym + 0.06, cz, ancho, 0.12, L, ang, -pend]);
       guias.push([cx, ym + 0.125, cz, 0.36, 0.02, L, ang, -pend]);
       if (ym > 0.25) for (const lado of [-1, 1]) muros.push([cx + nx * lado * (ancho / 2 - 0.1), ym / 2, cz + nz * lado * (ancho / 2 - 0.1), 0.2, ym, L, ang]);
-      const lados = techo ? [1] : [-1, 1];
+      const lados = !baranda ? [] : techo ? [1] : [-1, 1];
       for (const lado of lados) barandas.push([cx + nx * lado * (ancho / 2 - 0.08), ym + 0.95, cz + nz * lado * (ancho / 2 - 0.08), 0.06, 0.06, L, ang, -pend]);
       if (techo) tramoTecho(techos, [ax, az], [bx, bz], y(i), y(i + 1), ancho);
     }
@@ -2436,10 +2435,11 @@ if (datos.campus.parqueo) {
       }
       // pila de acero en la punta de afuera (-x), con su galón y la enredadera
       const xS = -largo / 2 - 0.3;
+      bloque(1.3, 0.18, ancho + 0.3, ceramica, -largo / 2 - 0.65, 0.09, (zf - ancho / 2 - 0.3) / 2);   // (anotaciones) piso bajo la pila
       bloque(0.55, 0.06, 1.0, alu, xS, 0.92, -0.2); bloque(0.45, 0.2, 0.45, alu, xS, 0.8, 0.05);
       for (const dz of [-0.6, 0.25]) { const m = bloque(0.04, 0.55, 0.04, mate(0x7a7f84), xS + 0.05, 0.68, dz); m.rotation.z = 0.6; }
       bloque(0.04, 0.3, 0.04, alu, xS + 0.2, 1.1, 0.05);
-      bloque(0.2, 0.3, 0.2, mate(0xf4f4f0, { roughness: 0.4 }), xS, 0.15, 0.55);
+      bloque(0.2, 0.3, 0.2, mate(0xf4f4f0, { roughness: 0.4 }), xS, 0.33, 0.55);
       for (let k = 0; k < 5; k++) { const h = new THREE.Mesh(new THREE.IcosahedronGeometry(0.26, 0), mate(0x3f8a3a, { flatShading: true })); h.position.set(xS - 0.05, 0.25 + (k % 3) * 0.25, -1.0 - (k % 2) * 0.35 - Math.floor(k / 3) * 0.3); g.add(h); }
     } else if (uso === "banos_mural") {   // baño del pabellón 7: dos aguas, alero celeste, celosías y mural
       bloque(largo, alto, ancho, mate(0xdfeaf4));

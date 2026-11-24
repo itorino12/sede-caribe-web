@@ -549,7 +549,7 @@ def lugares_nuevos(calles, quebrada, lejos_carretera, y_ruta32):
     elem = []
     M = lambda pts: [a_metros(float(x), float(y)) for x, y in pts]
 
-    def pasillo(pts, id_=None, ancho=2.6, techo=True, cruces=(), subida=0.0, cima=None, limpiar=None, cortar_en_calle=True):
+    def pasillo(pts, id_=None, ancho=2.6, techo=True, cruces=(), subida=0.0, cima=None, limpiar=None, cortar_en_calle=True, baranda=True):
         pts = suavizar(pts)
         largo_ = np.concatenate([[0], np.cumsum(np.hypot(*np.diff(np.array(pts), axis=0).T))])
         # sube parejo hasta el punto «cima» (o hasta el final) y de ahí sigue plano
@@ -558,7 +558,7 @@ def lugares_nuevos(calles, quebrada, lejos_carretera, y_ruta32):
         cv2.polylines(despejar if limpiar is None else limpiar, [np.array(pts, np.int32)], False, 1, 34)
         en_calle = [bool(calles[int(y), int(x)]) and cortar_en_calle for x, y in pts]   # donde cruza una calle no lleva losa, columnas ni techo
         elem.append({"tipo": "pasillo", "id": id_, "puntos": M(pts), "ancho": ancho, "techo": techo, "en_calle": en_calle, "alturas": alturas,
-                     "cruces": [M([c])[0] for c in cruces]})
+                     "cruces": [M([c])[0] for c in cruces], **({} if baranda else {"baranda": False})})
         return pts
 
     def caja(id_, tipo, p, giro, largo, ancho, limpiar=None, **extra):
@@ -692,7 +692,8 @@ def lugares_nuevos(calles, quebrada, lejos_carretera, y_ruta32):
     cv2.fillPoly(despejar, [np.array(rect_contorno(684, 1426, 6.0 / ESCALA + 56, 4.5 / ESCALA + 56, -20), np.int32)], 1)   # donde estaba
     # pasillo techado corto que une la puerta de Docencia con el pasillo 27 (anotaciones)
     # (anotaciones) llega hasta el piso del corredor de Docencia, sin el pedazo de zacate que quedaba en medio
-    pasillo([(705, 1577), (690.5, 1523)])
+    # (anotaciones) termina en la orilla del corredor (no encima) y sin baranda
+    pasillo([(705, 1577), (692.9, 1526.5)], baranda=False)
     # baño del pabellón 7 (fotos y anotaciones): casita aparte con techo a dos aguas, alero celeste y un mural,
     # pasando el extremo oeste del 7, junto al pasillo techado que llega del camino de la entrada
     # (anotaciones) 2,5 m más al sur: el techo quedaba encima del pasillo que llega del camino de la entrada
@@ -921,7 +922,7 @@ def lugares_nuevos(calles, quebrada, lejos_carretera, y_ruta32):
     elem.append({"tipo": "bicicletas", "id": None, "p": [135.6, -98.6], "largo": 6.4, "ancho": 2.8, "n": 5})
     # (fotos y anotaciones, nov. 2026) Punto Verde UCR en el piso del pasillo techado de Docencia, a la izquierda al
     # llegar a la puerta, con los basureros de frente al centro del pasillo (antes flotaba fuera del pasillo)
-    elem.append({"tipo": "punto_verde", "id": None, "p": [-127.82, 9.82], "giro": 1.925})
+    elem.append({"tipo": "punto_verde", "id": None, "p": [-126.21, 12.16], "giro": 1.925})   # (anotaciones) dentro del pasillo, más adelante
     # (fotos y anotaciones) parqueo de motos en el asfalto, pegado al pasillo 7 frente a Docencia, de frente al pasillo
     # (fotos, nov. 2026) entre el corredor de Docencia y el baño, el pasillo de cerámica va con el baño (banos_crema)
     elem.append({"tipo": "motos", "id": None, "p": [-140.6, 28.5], "giro": 0.316, "largo": 8.0, "n": 4})
