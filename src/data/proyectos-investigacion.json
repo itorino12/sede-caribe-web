@@ -4,7 +4,7 @@
    "id": "agroindustria",
    "nombre": "Industria y Agroindustria",
    "resumen": "Programa de Investigaciones para el Desarrollo Sostenible de la Industria y Agroindustria de la Región Huetar Caribe",
-   "codigo": "Pry01-721-2021",
+   "codigo": "530-C1-907",
    "responsable": "José Alberto Castillo Benavides",
    "descripcion": "El programa de investigaciones para el desarrollo sostenible de la industria y agroindustria de la Región Huetar Caribe de Costa Rica busca desarrollar proyectos que dinamicen las actividades económicas y sociales de la región así como realizar tranferencia de tecnología a emprendimientos, pequeñas y medianas empresas de la mano con los Objetivos de Desarrolo Sostenible de la ONU."
   },
@@ -12,7 +12,7 @@
    "id": "empresariales",
    "nombre": "Ciencias Empresariales, Económicas y Sociales",
    "resumen": "Programa de Investigaciones en Ciencias Empresariales, Económicas y Sociales",
-   "codigo": "Pry01-1365-2021",
+   "codigo": "530-C1-908",
    "responsable": "Walter Anderson Rivera",
    "descripcion": "El programa de investigaciones En ciencias Empresariales Económicas y Sociales de la Sede del Caribe se constituye en un espacio en el cual los docentes e investigadores de la Sede del Caribe y de otras Unidades asociadas, desarrollen investigaciones de calidad y pertinencia Social en los ejes temáticos de Ciencias Empresariales, Económicas y Sociales. El programa nace con el propósito de dar sustento teórico y aplicado derivado de sus investigaciones a las actividades sustantivas de Docencia y Acción Social. Las investigaciones que se desarrollen en el espacio de este programa y en las variadas áreas temáticas deberán de generar resultados básicos o aplicados, que tengan alguna incidencia e impacto en la Sociedad Nacional , Internacional y preferiblemente en la Región Caribe de nuestro país. Los resultados de estas investigaciones servirán de insumo a la Docencia en las Carrera de Dirección de Empresas y Contaduría Pública que tienen promociones activas desde el año1998 en el que se inició la primer promoción de la Carrera de Dirección de Empresas. En el seno de este programa se desarrollan Proyectos de y actividades en los ejes definidos de Ciencias Empresariales, Económicas y Sociales en temas como: La empresariedad, la innovación, Desarrollo Regional, Economía, Empleo, micro y macro, Pymes, la participación de género en el desarrollo empresarial, Historia económica Regional, Investigaciones propias de las carreras de Dirección de Empresas y Contaduría Pública, Ciencias Sociales, Estudios Regionales y otros temas que integren la relación entre los procesos de Investigación y construcción del conocimiento y el impacto social en la solución de problemas regionales, para el mejoramiento de la calidad de vida de nuestros habitantes."
   },
@@ -35,8 +35,8 @@
  ],
  "proyectos": [
   {
-   "id": "pry01-156-2026",
-   "codigo": "Pry01-156-2026",
+   "id": "530-c6-454",
+   "codigo": "530-C6-454",
    "programa": "agroindustria",
    "responsable": "César Augusto Bernal Samaniego",
    "colaboradores": [
@@ -68,8 +68,8 @@
    ]
   },
   {
-   "id": "pry01-1613-2026",
-   "codigo": "Pry01-1613-2026",
+   "id": "530-c6-269",
+   "codigo": "530-C6-269",
    "programa": "agroindustria",
    "responsable": "Emily Lorena Vargas Rodríguez",
    "colaboradores": [
@@ -100,8 +100,8 @@
    ]
   },
   {
-   "id": "pry01-1225-2025",
-   "codigo": "Pry01-1225-2025",
+   "id": "530-c6-082",
+   "codigo": "530-C6-082",
    "programa": "agroindustria",
    "responsable": "Carlos Enrique Rojas Sánchez",
    "colaboradores": [],
@@ -128,8 +128,8 @@
    ]
   },
   {
-   "id": "pry01-1064-2026",
-   "codigo": "Pry01-1064-2026",
+   "id": "530-c5-255",
+   "codigo": "530-C5-255",
    "programa": "agroindustria",
    "responsable": "César Augusto Bernal Samaniego",
    "colaboradores": [
@@ -163,8 +163,8 @@
    ]
   },
   {
-   "id": "pry01-1137-2023",
-   "codigo": "Pry01-1137-2023",
+   "id": "530-c4-213",
+   "codigo": "530-C4-213",
    "programa": "agroindustria",
    "responsable": "Olman Araya Mejías",
    "colaboradores": [
@@ -195,8 +195,8 @@
    ]
   },
   {
-   "id": "pry01-1038-2023",
-   "codigo": "Pry01-1038-2023",
+   "id": "530-c4-190",
+   "codigo": "530-C4-190",
    "programa": "agroindustria",
    "responsable": "Olman Araya Mejías",
    "colaboradores": [
@@ -226,8 +226,8 @@
    ]
   },
   {
-   "id": "pry01-1535-2024",
-   "codigo": "Pry01-1535-2024",
+   "id": "530-c4-189",
+   "codigo": "530-C4-189",
    "programa": "agroindustria",
    "responsable": "Carlos Enrique Rojas Sánchez",
    "colaboradores": [
@@ -263,8 +263,8 @@
    ]
   },
   {
-   "id": "pry01-804-2025",
-   "codigo": "Pry01-804-2025",
+   "id": "530-c5-147",
+   "codigo": "530-C5-147",
    "programa": "agroindustria",
    "responsable": "Eddy Gabriel Jirón García",
    "colaboradores": [
@@ -295,8 +295,8 @@
    ]
   },
   {
-   "id": "pry01-1068-2025",
-   "codigo": "Pry01-1068-2025",
+   "id": "530-c5-223",
+   "codigo": "530-C5-223",
    "programa": "empresariales",
    "responsable": "Diunia Rivera Chavarría",
    "colaboradores": [
@@ -324,8 +324,8 @@
    "ods": []
   },
   {
-   "id": "pry01-176-2024",
-   "codigo": "Pry01-176-2024",
+   "id": "530-c4-145",
+   "codigo": "530-C4-145",
    "programa": "empresariales",
    "responsable": "Alejandra Tenorio Madrigal",
    "colaboradores": [
@@ -359,8 +359,8 @@
    ]
   },
   {
-   "id": "pry01-192-2024",
-   "codigo": "Pry01-192-2024",
+   "id": "530-c4-146-26",
+   "codigo": "530-C4-146-26",
    "programa": "empresariales",
    "responsable": "Bladimiro Argueta Corella",
    "colaboradores": [
@@ -404,8 +404,8 @@
    ]
   },
   {
-   "id": "pry01-237-2027",
-   "codigo": "Pry01-237-2027",
+   "id": "530-c6-369",
+   "codigo": "530-C6-369",
    "programa": "sin-programa",
    "responsable": "Itorino Espinoza Torres",
    "colaboradores": [
@@ -435,8 +435,8 @@
    ]
   },
   {
-   "id": "pry01-303-2025",
-   "codigo": "Pry01-303-2025",
+   "id": "530-c6-159",
+   "codigo": "530-C6-159",
    "programa": "sin-programa",
    "responsable": "Marco Barquero Arroyo",
    "colaboradores": [],
