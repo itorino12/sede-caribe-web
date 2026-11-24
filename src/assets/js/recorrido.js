@@ -1374,19 +1374,40 @@ function soda(grupo, vol, alto, { entrada = [-0.63, -0.78], p_entrada = null, pu
   P.pieza(0.5, alto - 0.1, 0.25, mat(0xa6a39c, { roughness: 1 }), 0.15, 0.12, (alto - 0.1) / 2); // pilar de concreto
 }
 
+const HONDO_PESAS = 3.6;   // lo que se mete el gimnasio de pesas dentro del edificio
+// contorno con una muesca rectangular en la esquina f.a de la fachada «frente», de largo t1·L y hondo HONDO_PESAS
+function muescaPesas(c, frente, t1) {
+  const f = fachadaSur(c, frente), i = c.indexOf(f.a), j = c.indexOf(f.b);
+  const ux = (f.b[0] - f.a[0]) / f.largo, uz = (f.b[1] - f.a[1]) / f.largo, L1 = f.largo * t1, D = HONDO_PESAS;
+  const a = f.a, p = (u, v) => [a[0] + ux * u - f.nx * v, a[1] + uz * u - f.nz * v];
+  const nuevos = [p(0, D), p(L1, D), p(L1, 0)];
+  const sal = [];
+  for (let k = 0; k < c.length; k++) {
+    if (k === i) {   // la esquina se cambia por los tres puntos de la muesca (en el sentido del contorno)
+      if ((i + 1) % c.length === j) sal.push(...nuevos); else sal.push(...nuevos.reverse());
+    } else sal.push(c[k]);
+  }
+  return sal;
+}
 // Gimnasio de pesas bajo el corredor del gimnasio (fotos, nov. 2026): en la punta, entre la pared y las columnas,
 // piso de concreto, jaulas de malla ciclón con marcos azules contra la pared, un rack de sentadillas negro con el
 // travesaño rojo, bicicletas de spinning rojas y negras, una barra con dos sacos de boxeo colgando, una banca, la
 // puerta gris del promotor deportivo con su rótulo y un extintor. t0..t1: tramo de la fachada (fracción de su largo)
 function gimnasioPesas(grupo, vol, alto, frente, [t0, t1]) {
   const f = fachadaSur(vol.contorno, frente), dx = (f.b[0] - f.a[0]) / f.largo, dz = (f.b[1] - f.a[1]) / f.largo, ang = Math.atan2(f.nx, f.nz);
-  const en = (u, v, y) => [f.a[0] + dx * u + f.nx * v, y, f.a[1] + dz * u + f.nz * v];   // u: metros a lo largo, v: hacia afuera
+  const D = HONDO_PESAS;   // todo va dentro de la muesca: v se mide desde la pared del fondo
+  const en = (u, v, y) => [f.a[0] + dx * u + f.nx * (v - D), y, f.a[1] + dz * u + f.nz * (v - D)];   // u: metros a lo largo, v: desde el fondo
   const m = (c, x = {}) => new THREE.MeshStandardMaterial({ color: c, roughness: 0.6, ...x });
   const caja = (w, h, d, mat, u, v, y, giro = 0) => { const b = new THREE.Mesh(new THREE.BoxGeometry(w, h, d), mat); b.position.set(...en(u, v, y)); b.rotation.y = ang + giro; b.castShadow = !liviano; b.receiveShadow = true; grupo.add(b); return b; };
   const U0 = f.largo * t0 + 0.6, U1 = f.largo * t1, L = U1 - U0, uc = (U0 + U1) / 2;
   const azul = m(0x4a8fc8, { metalness: 0.3 }), negro = m(0x1d1f22, { metalness: 0.4 }), rojo = m(0xd0262e, { metalness: 0.3 });
   const malla = new THREE.MeshStandardMaterial({ color: 0x8fa6b8, roughness: 0.8, transparent: true, opacity: 0.35, side: THREE.DoubleSide, depthWrite: false });
-  caja(L, 0.08, 3.2, m(0xa9a8a2, { roughness: 0.95 }), uc, 1.6, 0.04);                              // piso de concreto
+  const U1m = f.largo * t1;
+  caja(U1m, 0.08, D + 3.2, m(0xa9a8a2, { roughness: 0.95 }), U1m / 2, (D + 3.2) / 2, 0.04);          // piso de concreto, adentro y hasta las columnas
+  const hA = alto * 0.62, concreto = m(0xa9aaa6, { roughness: 0.95 });
+  caja(U1m, alto - hA, 0.35, concreto, U1m / 2, D + 0.17, (alto + hA) / 2);                           // viga de concreto sobre la abertura
+  caja(U1m, 0.15, D, m(0x3a3f44, { roughness: 0.9 }), U1m / 2, D / 2, hA);                             // cielo oscuro adentro
+  caja(0.5, hA, 0.5, concreto, U1m * 0.55, D + 0.25, hA / 2);                                           // columna de concreto en medio de la abertura
   // jaulas de malla con marcos azules, a 0,8 m de la pared, dos tramos con un paso entre ellos
   for (const [a, b] of [[U0 + 1.6, uc - 0.4], [uc + 0.6, U1 - 0.2]]) {
     caja(b - a, 2.6, 0.02, malla, (a + b) / 2, 0.8, 1.3);
@@ -1615,7 +1636,9 @@ for (const e of datos.campus.edificios) {
   } else {
     const pisos = Math.max(e.pisos, 1), altoPiso = e.alto / pisos;
     for (const vol of e.volumenes) {
-      if (!estilo.entrada) grupo.add(prisma(vol.contorno, vol.alto, vol.desde, mat.pared));   // la parada de la entrada es abierta
+      // con `pesas` la pared lleva una muesca en la esquina: el gimnasio de pesas queda dentro de la estructura
+      const muro = estilo.pesas ? muescaPesas(vol.contorno, estilo.rotulo, estilo.pesas[1]) : vol.contorno;
+      if (!estilo.entrada) grupo.add(prisma(muro, vol.alto, vol.desde, mat.pared));   // la parada de la entrada es abierta
       if (vol.linterna) {   // ventanas corridas de la linternilla
         grupo.add(prisma(vol.contorno, vol.alto * 0.55, vol.desde + vol.alto * 0.25, celosia, 0.05));
         continue;
@@ -1625,7 +1648,7 @@ for (const e of datos.campus.edificios) {
       // ventanas: celosías grises (edificios nuevos) o ventanales de vidrio (biblioteca)
       const ventanal = estilo.ventanas === "vidrio" || estilo.ventanas === "vidrio_verde";
       const cristal = estilo.ventanas === "vidrio_verde" ? vidrioVerde : vidrio;
-      if (estilo.franja) grupo.add(prisma(vol.contorno, 0.6, altoPiso * 0.27, new THREE.MeshStandardMaterial({ color: estilo.franja, roughness: 0.8 }), 0.06));
+      if (estilo.franja) grupo.add(prisma(muro, 0.6, altoPiso * 0.27, new THREE.MeshStandardMaterial({ color: estilo.franja, roughness: 0.8 }), 0.06));
       if (estilo.porton) {   // portón de lámina oscura en la fachada que mira a la calle (o la que diga porton_frente)
         const f = fachadaSur(vol.contorno, estilo.porton_frente), ang = Math.atan2(-(f.b[1] - f.a[1]), f.b[0] - f.a[0]);
         const p = new THREE.Mesh(new THREE.BoxGeometry(f.largo * 0.45, altoPiso * 0.78, 0.12), new THREE.MeshStandardMaterial({ color: estilo.porton, roughness: 0.6 }));
@@ -1662,7 +1685,7 @@ for (const e of datos.campus.edificios) {
         }
       }
       const banda = estilo.ventanas === "celeste" ? celeste : celosia;
-      if (!estilo.entrada && estilo.ventanas !== "ninguna") for (let p = 0; p < pisos; p++) grupo.add(prisma(vol.contorno, altoPiso * (ventanal ? 0.4 : 0.3), altoPiso * p + altoPiso * (ventanal ? 0.4 : 0.36), ventanal ? cristal : banda, 0.05));
+      if (!estilo.entrada && estilo.ventanas !== "ninguna") for (let p = 0; p < pisos; p++) grupo.add(prisma(muro, altoPiso * (ventanal ? 0.4 : 0.3), altoPiso * p + altoPiso * (ventanal ? 0.4 : 0.36), ventanal ? cristal : banda, 0.05));
     }
     if (estilo.banos) {   // los baños en el extremo del edificio: azulejo claro, bloques de ventilación y rótulo
       const b = estilo.banos;
