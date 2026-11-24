@@ -560,6 +560,9 @@ def main():
     if DIST.exists():
         shutil.rmtree(DIST)
     shutil.copytree(SRC / "assets", DIST / "assets", ignore=shutil.ignore_patterns("fotos"))  # las fotos originales solo se publican convertidas a WebP
+    for f in sorted((SRC / "raiz").glob("*")):   # archivos que deben quedar en la raíz del sitio (p. ej. verificación de Google Search Console)
+        if f.is_file():
+            shutil.copy2(f, DIST / f.name)
     c = preparar(sitio, crudos)
 
     huella = hashlib.sha1()
