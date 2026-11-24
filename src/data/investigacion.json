@@ -12,39 +12,55 @@
     },
     {
      "tipo": "tarjetas",
-     "id": "vigentes",
-     "atajo": "Proyectos vigentes",
-     "titulo": "Proyectos vigentes",
-     "intro": "Proyectos de investigación inscritos en la Sede del Caribe con vigencia al 24 de noviembre de 2026.",
+     "id": "vigentes-agroindustria",
+     "atajo": "Agroindustria",
+     "titulo": "Proyectos vigentes: Programa de Industria y Agroindustria de la Región Huetar Caribe",
+     "intro": "Proyectos de investigación inscritos en la Sede del Caribe con vigencia al 24 de noviembre de 2026, según la Coordinación de Investigación.",
      "items": [
       {
        "titulo": "Desarrollo de un formulado de biomasa microalgal a partir de una emulsión Pickering empleando nanocelulosa de rastrojo de piña como encapsulador de compuestos con actividad bioestimulante",
-       "texto": "Pry01-156-2026 · Vigencia: 1 ene. 2026 – 31 dic. 2028 · Responsable: Eddy Gabriel Jirón García"
+       "texto": "Pry01-156-2026 · Vigencia: 1 ene. 2026 – 31 dic. 2028 · Responsable: César Augusto Bernal Samaniego"
       },
       {
        "titulo": "Evaluación de materiales porosos avanzados (MOFs/POPs) en la remoción de fármacos en medio acuoso",
-       "texto": "Pry01-1613-2026 · Vigencia: 1 ene. 2026 – 31 dic. 2028 · Participan: Emily Lorena Vargas Rodríguez y Carlos Enrique Rojas Sánchez"
+       "texto": "Pry01-1613-2026 · Vigencia: 1 ene. 2026 – 31 dic. 2028 · Responsable: Emily Lorena Vargas Rodríguez"
       },
       {
        "titulo": "Evaluación de cladóceros como bioindicadores de la toxicidad total de efluentes de plantas de tratamiento de aguas residuales en la región Huetar Caribe",
-       "texto": "Pry01-1225-2025 · Vigencia: 1 ene. 2026 – 31 dic. 2027"
+       "texto": "Pry01-1225-2025 · Vigencia: 1 ene. 2026 – 31 dic. 2027 · Responsable: Carlos Enrique Rojas Sánchez"
       },
       {
        "titulo": "Potencial uso de hidrogeles dosificados con extractos de microalgas aplicados a la germinación",
-       "texto": "Pry01-1064-2026 · Vigencia: 1 ago. 2025 – 1 ago. 2027"
+       "texto": "Pry01-1064-2026 · Vigencia: 1 ago. 2025 – 1 ago. 2027 · Responsable: César Augusto Bernal Samaniego"
       },
       {
        "titulo": "Cálculo de la eficiencia energética y energía fotovoltaica en el bombeo de las ASADAS con pozo de la provincia de Limón",
-       "texto": "Pry01-1137-2023 · Vigencia: 1 ene. 2024 – 31 dic. 2026"
+       "texto": "Pry01-1137-2023 · Vigencia: 1 ene. 2024 – 31 dic. 2026 · Responsable: Olman Araya Mejías"
       },
       {
        "titulo": "Evaluación energética y huella de carbono de la Sede del Caribe",
-       "texto": "Pry01-1038-2023 · Vigencia: 1 ene. 2024 – 31 dic. 2026"
-      },
+       "texto": "Pry01-1038-2023 · Vigencia: 1 ene. 2024 – 31 dic. 2026 · Responsable: Olman Araya Mejías"
+      }
+     ]
+    },
+    {
+     "tipo": "tarjetas",
+     "id": "vigentes-empresariales",
+     "atajo": "Ciencias Empresariales",
+     "titulo": "Proyectos vigentes: Programa de Ciencias Empresariales, Económicas y Sociales",
+     "items": [
       {
        "titulo": "Espacios de fortalecimiento y transferencia de conocimiento para el desarrollo social, empresarial y económico de los habitantes en la Región Caribe de Costa Rica",
-       "texto": "Pry01-1068-2025 · Vigencia: 2 ene. 2025 – 31 dic. 2026"
-      },
+       "texto": "Pry01-1068-2025 · Vigencia: 2 ene. 2025 – 31 dic. 2026 · Responsable: Diunia Rivera Chavarría"
+      }
+     ]
+    },
+    {
+     "tipo": "tarjetas",
+     "id": "vigentes-sin-programa",
+     "atajo": "Sin programa",
+     "titulo": "Proyectos vigentes sin programa",
+     "items": [
       {
        "titulo": "Estudio del Procesamiento de Lenguaje Natural (PLN) en la gestión académica y administrativa de la Sede del Caribe de la Universidad de Costa Rica, para diagnosticar su influencia en la interpretación de la información institucional y en los procesos de toma de decisiones universitarias",
        "texto": "Pry01-237-2027 · Vigencia: 1 abr. 2026 – 1 abr. 2028 · Responsable: Itorino Espinoza Torres"
