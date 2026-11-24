@@ -1122,7 +1122,7 @@ function docencia(grupo, vol, alto, { puerta = [0.5, 0.87], ventanilla = [1, 0],
   P.pieza(0.4, 0.55, 0.02, cartel(0.4, 0.55, (x, w, h) => { x.fillStyle = "#f2f0e6"; x.fillRect(0, 0, w, h); x.fillStyle = "#e8c32c"; x.fillRect(0, 0, w, h * 0.25); x.fillStyle = "#555"; for (let k = 0; k < 8; k++) x.fillRect(w * 0.1, h * (0.35 + k * 0.07), w * (0.5 + (k % 3) * 0.12), h * 0.025); }, 128),
     P.L / 2 - 0.7, 0.03, 1.7);
   // guía táctil desde el pasillo hasta la puerta, atravesando el corredor
-  P.pieza(0.36, 0.02, alero - 0.15, amarillo, 0, (alero - 0.15) / 2, 0.17);   // solo sobre el corredor
+  P.pieza(0.36, 0.014, alero - 0.15, amarillo, 0, (alero - 0.15) / 2, 0.075);   // solo sobre el corredor
   // --- cara de la ventanilla
   const V = caraDe(ventanilla), uV = 0.9, anchoV = 3.0;
   ventanaReja(V, uV, anchoV, 0.95, alto * 0.42);
@@ -1234,8 +1234,8 @@ function docencia(grupo, vol, alto, { puerta = [0.5, 0.87], ventanilla = [1, 0],
   const g = desplazar(c, alero - 0.75);
   for (let i = 0; i < g.length; i++) {
     const a = g[i], b = g[(i + 1) % g.length], L = Math.hypot(b[0] - a[0], b[1] - a[1]);
-    const t = new THREE.Mesh(new THREE.BoxGeometry(0.3, 0.02, L + 0.3), amarillo);
-    t.position.set((a[0] + b[0]) / 2, 0.17, (a[1] + b[1]) / 2); t.rotation.y = Math.atan2(b[0] - a[0], b[1] - a[1]); t.receiveShadow = true; grupo.add(t);
+    const t = new THREE.Mesh(new THREE.BoxGeometry(0.3, 0.014, L + 0.3), amarillo);
+    t.position.set((a[0] + b[0]) / 2, 0.075, (a[1] + b[1]) / 2); t.rotation.y = Math.atan2(b[0] - a[0], b[1] - a[1]); t.receiveShadow = true; grupo.add(t);
   }
 }
 
@@ -1635,7 +1635,7 @@ for (const e of datos.campus.edificios) {
     }
     if (estilo.columnas) for (const vol of e.volumenes) {   // corredor perimetral bajo el alero, con columnas delgadas
       const c = desplazar(vol.contorno, alero - 0.45), mat = new THREE.MeshStandardMaterial({ color: estilo.columnas, roughness: 0.6 });
-      const piso = prisma(desplazar(vol.contorno, alero - 0.2), 0.15, 0, new THREE.MeshStandardMaterial({ color: estilo.piso_corredor || 0xb4614e, roughness: 0.9 }));
+      const piso = prisma(desplazar(vol.contorno, alero - 0.2), estilo.piso_corredor ? 0.07 : 0.15, 0, new THREE.MeshStandardMaterial({ color: estilo.piso_corredor || 0xb4614e, roughness: 0.9 }));
       piso.castShadow = false; grupo.add(piso);
       for (let i = 0; i < c.length; i++) {
         const a = c[i], b = c[(i + 1) % c.length], L = Math.hypot(b[0] - a[0], b[1] - a[1]), n = Math.max(1, Math.round(L / 4.5));
@@ -2223,12 +2223,12 @@ if (datos.campus.parqueo) {
   // pasillo techado (fotos): losa de concreto con guía táctil amarilla, columnas y cerchas azules, techo a dos
   // aguas de lámina verde agua y baranda azul del lado del zacate. Sin techo, es un sendero; si sube, va sobre
   // un muro celeste (las rampas a la explanada)
-  function pasillo({ id, puntos, ancho, techo = true, en_calle = [], alturas = [], baranda = true }) {
+  function pasillo({ id, puntos, ancho, techo = true, en_calle = [], alturas = [], baranda = true, rasante_recta = false }) {
     const g = new THREE.Group(), pisos = [], guias = [], techos = [], columnas = [], barandas = [], muros = [];
     // sigue el terreno tramo a tramo (ver «asentar»); las franjas son los tramos de piso fuera de la calle
     const franjas = [];
     puntos.forEach((p, i) => { if (en_calle[i]) franjas.push([]); else (franjas.at(-1) || franjas[franjas.push([]) - 1]).push(p); });
-    Object.assign(g.userData, { lineal: true, franjas: franjas.filter((f) => f.length > 1), ancho });
+    Object.assign(g.userData, { lineal: true, franjas: franjas.filter((f) => f.length > 1), ancho, rasanteRecta: rasante_recta });   // rasante_recta: id del lugar al que llega a nivel
     const y = (i) => alturas[i] || 0;
     for (let i = 0; i < puntos.length - 1; i++) {
       if (en_calle[i] || en_calle[i + 1]) continue;
@@ -3460,11 +3460,20 @@ if (datos.campus.parqueo) {
   for (const e of enteros) for (const q of e.estribos || []) aplanar(q, e.h, 4);
   // 2b. bajo aceras y pisos de pasillo el terreno toma la rasante del camino: la altura del terreno en sus puntos,
   // suavizada; así no asoma el zacate sobre el camino ni una losa se clava en una zanja
-  const nivelarFranja = (pts, ancho) => {
+  const nivelarFranja = (pts, ancho, recta = false) => {
     const r = relieve;
     if (!r || pts.length < 2) return;
     let y = pts.map(([x, z]) => alturaEn(x, z));
-    for (let pasada = 0; pasada < 3; pasada++) y = y.map((v, i) => (i === 0 || i === y.length - 1 ? v : (y[i - 1] + 2 * v + y[i + 1]) / 4));
+    if (recta) {   // rampa pareja de punta a punta: llega justo al nivel del piso donde termina (Docencia)
+      const finos = [pts[0]];   // puntos cada medio metro, para que el tramo llano del final quede llano
+      for (let i = 1; i < pts.length; i++) { const [ax, az] = pts[i - 1], [bx, bz] = pts[i], n = Math.max(1, Math.ceil(Math.hypot(bx - ax, bz - az) / 0.5));
+        for (let k = 1; k <= n; k++) finos.push([ax + ((bx - ax) * k) / n, az + ((bz - az) * k) / n]); }
+      pts = finos;
+      const L = [0]; for (let i = 1; i < pts.length; i++) L.push(L[i - 1] + Math.hypot(pts[i][0] - pts[i - 1][0], pts[i][1] - pts[i - 1][1]));
+      const fin = enteros.find((q) => q.o.userData.id === recta);   // el lugar donde llega (su nivel de piso)
+      // el piso del pasillo (0,12 sobre la rasante, que va 0,03 abajo) queda al ras del corredor (≈ 0,1 sobre el nivel); llano los últimos 2 m
+      const a = y[0], b = fin ? fin.h + 0.01 : y.at(-1), Lr = Math.max(1, L.at(-1) - 2); y = L.map((d) => a + (b - a) * Math.min(1, d / Lr));
+    } else for (let pasada = 0; pasada < 3; pasada++) y = y.map((v, i) => (i === 0 || i === y.length - 1 ? v : (y[i - 1] + 2 * v + y[i + 1]) / 4));
     const nucleo = ancho / 2 + 0.9, borde = nucleo + 2.5;
     for (let k = 0; k < pts.length - 1; k++) {
       const [ax, az] = pts[k], [bx, bz] = pts[k + 1], ex = bx - ax, ez = bz - az, L2 = ex * ex + ez * ez || 1;
@@ -3481,7 +3490,7 @@ if (datos.campus.parqueo) {
       }
     }
   };
-  for (const g of lineales) for (const f of g.userData.franjas || []) nivelarFranja(f, g.userData.ancho || 2);
+  for (const g of lineales) for (const f of g.userData.franjas || []) nivelarFranja(f, g.userData.ancho || 2, g.userData.rasanteRecta);
   // 3. subir
   for (const e of enteros) e.o.position.add(local(e.o.parent.matrixWorld, e.h));
   for (const o of aDoblar) doblar(o);

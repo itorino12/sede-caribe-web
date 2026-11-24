@@ -549,7 +549,7 @@ def lugares_nuevos(calles, quebrada, lejos_carretera, y_ruta32):
     elem = []
     M = lambda pts: [a_metros(float(x), float(y)) for x, y in pts]
 
-    def pasillo(pts, id_=None, ancho=2.6, techo=True, cruces=(), subida=0.0, cima=None, limpiar=None, cortar_en_calle=True, baranda=True):
+    def pasillo(pts, id_=None, ancho=2.6, techo=True, cruces=(), subida=0.0, cima=None, limpiar=None, cortar_en_calle=True, baranda=True, rasante_recta=False):
         pts = suavizar(pts)
         largo_ = np.concatenate([[0], np.cumsum(np.hypot(*np.diff(np.array(pts), axis=0).T))])
         # sube parejo hasta el punto «cima» (o hasta el final) y de ahí sigue plano
@@ -558,7 +558,7 @@ def lugares_nuevos(calles, quebrada, lejos_carretera, y_ruta32):
         cv2.polylines(despejar if limpiar is None else limpiar, [np.array(pts, np.int32)], False, 1, 34)
         en_calle = [bool(calles[int(y), int(x)]) and cortar_en_calle for x, y in pts]   # donde cruza una calle no lleva losa, columnas ni techo
         elem.append({"tipo": "pasillo", "id": id_, "puntos": M(pts), "ancho": ancho, "techo": techo, "en_calle": en_calle, "alturas": alturas,
-                     "cruces": [M([c])[0] for c in cruces], **({} if baranda else {"baranda": False})})
+                     "cruces": [M([c])[0] for c in cruces], **({} if baranda else {"baranda": False}), **({"rasante_recta": rasante_recta} if rasante_recta else {})})
         return pts
 
     def caja(id_, tipo, p, giro, largo, ancho, limpiar=None, **extra):
@@ -693,7 +693,7 @@ def lugares_nuevos(calles, quebrada, lejos_carretera, y_ruta32):
     # pasillo techado corto que une la puerta de Docencia con el pasillo 27 (anotaciones)
     # (anotaciones) llega hasta el piso del corredor de Docencia, sin el pedazo de zacate que quedaba en medio
     # (anotaciones) llega al corredor al mismo nivel, sin hueco ni encimarse, y sin baranda
-    pasillo([(705, 1577), (691.8, 1524.3)], baranda=False)   # entra medio metro bajo el piso del corredor: empatan sin hueco
+    pasillo([(705, 1577), (698.6, 1536.0), (691.8, 1524.3)], baranda=False, rasante_recta=4)   # el último tramo, de frente a la puerta (la guía empata)   # entra medio metro bajo el piso del corredor: empatan sin hueco
     # baño del pabellón 7 (fotos y anotaciones): casita aparte con techo a dos aguas, alero celeste y un mural,
     # pasando el extremo oeste del 7, junto al pasillo techado que llega del camino de la entrada
     # (anotaciones) 2,5 m más al sur: el techo quedaba encima del pasillo que llega del camino de la entrada
