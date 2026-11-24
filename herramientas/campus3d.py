@@ -692,8 +692,8 @@ def lugares_nuevos(calles, quebrada, lejos_carretera, y_ruta32):
     cv2.fillPoly(despejar, [np.array(rect_contorno(684, 1426, 6.0 / ESCALA + 56, 4.5 / ESCALA + 56, -20), np.int32)], 1)   # donde estaba
     # pasillo techado corto que une la puerta de Docencia con el pasillo 27 (anotaciones)
     # (anotaciones) llega hasta el piso del corredor de Docencia, sin el pedazo de zacate que quedaba en medio
-    # (anotaciones) termina en la orilla del corredor (no encima) y sin baranda
-    pasillo([(705, 1577), (692.9, 1526.5)], baranda=False)
+    # (anotaciones) llega al corredor al mismo nivel, sin hueco ni encimarse, y sin baranda
+    pasillo([(705, 1577), (691.8, 1524.3)], baranda=False)   # entra medio metro bajo el piso del corredor: empatan sin hueco
     # baño del pabellón 7 (fotos y anotaciones): casita aparte con techo a dos aguas, alero celeste y un mural,
     # pasando el extremo oeste del 7, junto al pasillo techado que llega del camino de la entrada
     # (anotaciones) 2,5 m más al sur: el techo quedaba encima del pasillo que llega del camino de la entrada
