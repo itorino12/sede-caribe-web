@@ -2460,22 +2460,22 @@ if (datos.campus.parqueo) {
 
   // parqueo asfaltado (asfalto y rayas en la textura): topes amarillos, alumbrado verde y, si lleva, carport
   // de lámina verde a una agua sobre columnas azules con base amarilla. Sin carros.
-  function parqueo({ id, centro: [cx, cz], largo, ancho, giro, filas, techado, techado_desde = 0, postes = true }) {
+  function parqueo({ id, centro: [cx, cz], largo, ancho, giro, filas, techado, techado_desde = 0, postes = true, espacio: E = 2.6 }) {
     const g = new THREE.Group();
     const tope = mate(0xe6b800, { roughness: 0.7 }), verdePoste = mate(0x2f6b45, { roughness: 0.6 });
     for (const { z: zv, fondo, n } of filas) {
       const z = -zv, lado = Math.sign(z) || 1;   // la fila mide z hacia la izquierda del giro; en la maqueta es -z
       for (let i = 0; i < n; i++) {
-        const t = new THREE.Mesh(new THREE.BoxGeometry(1.6, 0.15, 0.25), tope); t.position.set((-n / 2 + i + 0.5) * 2.6, 0.08, z + lado * (fondo / 2 - 0.6)); g.add(t);
+        const t = new THREE.Mesh(new THREE.BoxGeometry(1.6, 0.15, 0.25), tope); t.position.set((-n / 2 + i + 0.5) * E, 0.08, z + lado * (fondo / 2 - 0.6)); g.add(t);
       }
       if (techado) {
-        const k = Math.min(techado, n - techado_desde), x0 = (-n / 2 + techado_desde) * 2.6, L = k * 2.6;
+        const k = Math.min(techado, n - techado_desde), x0 = (-n / 2 + techado_desde) * E, L = k * E;
         const t = new THREE.Mesh(new THREE.BoxGeometry(L + 0.6, 0.08, fondo + 1), mate(0x4e8a62, { roughness: 0.55, metalness: 0.25 }));
         t.position.set(x0 + L / 2, 2.75, z); t.rotation.x = lado * 0.07; g.add(t);
         const losa = new THREE.Mesh(new THREE.BoxGeometry(L, 0.18, fondo), concretoClaro); losa.position.set(x0 + L / 2, 0.09, z); g.add(losa);
         for (let i = 0; i <= k; i++) for (const dz of [-1, 1]) {
-          const c = new THREE.Mesh(new THREE.BoxGeometry(0.16, 2.7, 0.16), azulColumna); c.position.set(x0 + i * 2.6, 1.35, z + dz * (fondo / 2)); g.add(c);
-          const b = new THREE.Mesh(new THREE.BoxGeometry(0.3, 0.5, 0.3), tope); b.position.set(x0 + i * 2.6, 0.25, z + dz * (fondo / 2)); g.add(b);
+          const c = new THREE.Mesh(new THREE.BoxGeometry(0.16, 2.7, 0.16), azulColumna); c.position.set(x0 + i * E, 1.35, z + dz * (fondo / 2)); g.add(c);
+          const b = new THREE.Mesh(new THREE.BoxGeometry(0.3, 0.5, 0.3), tope); b.position.set(x0 + i * E, 0.25, z + dz * (fondo / 2)); g.add(b);
         }
       }
     }

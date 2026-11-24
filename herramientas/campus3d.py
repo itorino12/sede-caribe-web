@@ -565,7 +565,7 @@ def lugares_nuevos(calles, quebrada, lejos_carretera, y_ruta32):
         cv2.fillPoly(despejar if limpiar is None else limpiar, [np.array(rect_contorno(p[0], p[1], largo / ESCALA + 56, ancho / ESCALA + 56, giro), np.int32)], 1)
         elem.append({"tipo": tipo, "id": id_, "p": a_metros(*p), "giro": round(math.radians(giro), 3), "largo": largo, "ancho": ancho, **extra})
 
-    def parqueo(id_, centro, largo, ancho, giro, filas, conexion=None, techado=False, techado_desde=0, postes=True):
+    def parqueo(id_, centro, largo, ancho, giro, filas, conexion=None, techado=False, techado_desde=0, postes=True, espacio=2.6):
         """Parqueo asfaltado (largo x ancho en metros); filas = [(z del centro de la fila, fondo)] en metros,
         z medido hacia la izquierda del giro (como v en marco)."""
         cx, cy = centro
@@ -576,15 +576,16 @@ def lugares_nuevos(calles, quebrada, lejos_carretera, y_ruta32):
         doble = lambda a, b: cv2.line(rayas, tuple(int(k * 2) for k in pt(*a)), tuple(int(k * 2) for k in pt(*b)), 255, 2)
         espacios = []
         for z, fondo in filas:
-            n = int((largo - 1.5) // 2.6)
-            u0 = -n * 2.6 / 2
+            n = int((largo - 1.5) // espacio)
+            u0 = -n * espacio / 2
             for i in range(n + 1):
-                doble((u0 + i * 2.6, z - fondo / 2), (u0 + i * 2.6, z + fondo / 2))
+                doble((u0 + i * espacio, z - fondo / 2), (u0 + i * espacio, z + fondo / 2))
             espacios.append({"z": z, "fondo": fondo, "n": n})
         if conexion:   # entrada de asfalto desde la calle
             cv2.line(asfalto, tuple(int(k) for k in conexion[0]), tuple(int(k) for k in conexion[1]), 255, 22)
         elem.append({"tipo": "parqueo", "id": id_, "centro": a_metros(cx, cy), "largo": largo, "ancho": ancho,
-                     "giro": round(math.radians(giro), 3), "filas": espacios, "techado": techado, "techado_desde": techado_desde, "postes": postes})
+                     "giro": round(math.radians(giro), 3), "filas": espacios, "techado": techado, "techado_desde": techado_desde, "postes": postes,
+                     **({"espacio": espacio} if espacio != 2.6 else {})})
 
     # --- pasillos techados (anotaciones): de la entrada bajan por el lado sureste de la calle (26), cruzan la
     # quebrada junto a la calle y siguen hacia el edificio administrativo (27) hasta la punta de la calle, donde
@@ -706,10 +707,13 @@ def lugares_nuevos(calles, quebrada, lejos_carretera, y_ruta32):
     c34 = marco(2, -42, 81)
     # (anotaciones, nov. 2026) aquí solo los espacios del techado; los demás van aparte, más hacia la isla y de frente
     # al comedor. La explanada de asfalto sigue con el largo de antes (c34)
-    parqueo(34, marco(2, -62.8, 81), 14.5, 9.5, 51, [(-2.25, 5.0)], techado=4, techado_desde=1, postes=False)
+    # (anotaciones, nov. 2026) el techado son cuatro espacios amplios (4 m), corrido hacia la soda hasta la escalera
+    parqueo(34, marco(2, -32.8, 81), 17.5, 9.5, 51, [(-2.25, 5.0)], techado=4, techado_desde=0, postes=False, espacio=4.0)
     # (anotaciones) los carros sin techo, pegados (sin separación) a la punta del techado que da a la soda, en fila hacia la isla y de
     # frente al comedor
-    parqueo(None, marco(2, -26.8, 100), 17.1, 6.0, -39, [(0.0, 5.0)], postes="lejos")   # sin el poste junto al pasillo
+    # (anotaciones) sin el primer espacio, que ahora queda bajo el techado
+    p_sin_ = marco(2, -26.8, 100)
+    parqueo(None, (p_sin_[0] + 4.041, p_sin_[1] + -3.272), 14.5, 6.0, -39, [(0.0, 5.0)], postes="lejos")   # sin el poste junto al pasillo
     esquinas_ = rect_contorno(c25[0], c25[1], 11.9 / ESCALA + 8, 6.0 / ESCALA + 8, -39) + rect_contorno(c34[0], c34[1], 25.0 / ESCALA + 4, 9.5 / ESCALA + 4, 51)
     esquinas_ += [p_ for p_ in zip(*np.nonzero(calles[1570:1625, 640:830])[::-1])]   # borde de la calle, al norte
     esquinas_ = [(x + 640, y + 1570) if i_ >= 8 else (x, y) for i_, (x, y) in enumerate(esquinas_)]
@@ -1290,12 +1294,9 @@ def main(pdf, sat=None):
     cv2.circle(picnic, PICNIC["centro"], PICNIC["radio"], 255, -1)
     pintar(cv2.GaussianBlur(picnic, (0, 0), 6), (166, 208, 120))
     # dentro de la U todo está asfaltado (fotos), también el camino a la pista; cordón de concreto claro
-    # (anotaciones) el asfalto del parqueo frente a la soda termina en la última fila de espacios: el pedazo que
-    # seguía hacia la escalera del comedor es zacate
-    for m_ in (calles, acceso, extra["calles_extra"], extra["asfalto"]):
-        cv2.fillPoly(m_, [np.array([(x / ESCALA + ORIGEN[0], z / ESCALA + ORIGEN[1]) for x, z in
-                                    [(-140.6, 49.2), (-126.4, 40.2), (-121.5, 43.5), (-123.0, 52.0), (-130.0, 56.5),
-                                     (-137.0, 55.5)]], np.int32)], 0)
+    # (anotaciones) el asfalto del parqueo sigue al lado de la fila de espacios, hasta la escalera de la soda
+    cv2.fillPoly(extra["calles_extra"], [np.array([(x / ESCALA + ORIGEN[0], z / ESCALA + ORIGEN[1]) for x, z in
+                 [(-141.5, 49.5), (-128.0, 36.0), (-124.0, 33.0), (-119.0, 38.0), (-122.0, 42.0), (-137.0, 54.0)]], np.int32)], 255)
     pintar(cv2.bitwise_or(cv2.bitwise_or(calles, acceso), extra["calles_extra"]), (84, 88, 94), borde=(214, 212, 204))
     pintar(extra["lastre"], (176, 160, 128))
     pintar(extra["plaza"], (200, 198, 190), borde=(170, 168, 160))
