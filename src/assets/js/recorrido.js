@@ -2488,14 +2488,19 @@ if (datos.campus.parqueo) {
   }
 
   // escalera de concreto con pasamanos gris; la larga entre el 1 y el 2 va techada
-  function escalera({ p, giro, largo, ancho, alto, techado }) {
+  function escalera({ p, giro, largo, ancho, alto, techado, pasamanos }) {
     const g = new THREE.Group(), h = alto * EXAGERAR, n = Math.max(3, Math.round(h / 0.17));
     for (let i = 0; i < n; i++) {
       const paso = new THREE.Mesh(new THREE.BoxGeometry(largo / n + 0.02, (h * (i + 1)) / n, ancho), concretoClaro);
       paso.position.set(-largo / 2 + (largo / n) * (i + 0.5), (h * (i + 1)) / n / 2, 0); g.add(paso);
     }
     const tubo = mate(0xaab0b5, { roughness: 0.5, metalness: 0.4 }), pend = Math.atan2(h, largo);
-    for (const lado of [-1, 1]) {
+    if (pasamanos === "u") {   // (foto) una sola baranda azul en U, en medio, desde arriba de la escalera
+      const azulB = mate(0x8fb8dc, { roughness: 0.5, metalness: 0.3 });
+      for (const dz of [-0.05, 0.05]) for (const x of [largo / 2 - 0.15, largo / 2 - 0.15 - 0.45]) { const c = new THREE.Mesh(new THREE.CylinderGeometry(0.04, 0.04, 1.0, 8), azulB); c.position.set(x, h + 0.5, dz); g.add(c); }
+      const arco = new THREE.Mesh(new THREE.TorusGeometry(0.225, 0.04, 6, 12, Math.PI), azulB); arco.position.set(largo / 2 - 0.375, h + 1.0, 0); g.add(arco);
+      const trav = new THREE.Mesh(new THREE.CylinderGeometry(0.03, 0.03, 0.45, 6), azulB); trav.rotation.z = Math.PI / 2; trav.position.set(largo / 2 - 0.375, h + 0.55, 0); g.add(trav);
+    } else for (const lado of [-1, 1]) {
       const pm = new THREE.Mesh(new THREE.CylinderGeometry(0.04, 0.04, Math.hypot(largo, h), 6), tubo);
       pm.rotation.z = Math.PI / 2 - pend; pm.position.set(0, h / 2 + 0.9, lado * (ancho / 2 - 0.1)); g.add(pm);
       for (const t of [-0.45, 0, 0.45]) { const poste = new THREE.Mesh(new THREE.CylinderGeometry(0.035, 0.035, 0.9, 6), tubo); poste.position.set(t * largo, h * (0.5 + t) + 0.45, lado * (ancho / 2 - 0.1)); g.add(poste); }
@@ -2542,6 +2547,27 @@ if (datos.campus.parqueo) {
     registrar(g, null);
   }
 
+  // losa plana a ras del suelo (descanso de concreto lavado, camino de lastre): sigue el terreno
+  function losa({ p, giro, largo, ancho, color }) {
+    const g = new THREE.Group(), m = new THREE.Mesh(new THREE.BoxGeometry(largo, 0.1, ancho), mate(new THREE.Color(color).getHex(), { roughness: 1 }));
+    m.position.y = 0.05; g.add(m); g.position.set(p[0], 0, p[1]); g.rotation.y = -giro; registrar(g, null);
+  }
+  // muro bajo de piedra bola con lastre al pie (fotos, junto al pasillo de la soda): sigue el terreno tramo a tramo
+  function muroPiedra({ puntos }) {
+    const g = new THREE.Group(), piedras = [], lastre = [];
+    for (let i = 0; i < puntos.length - 1; i++) {
+      const [ax, az] = puntos[i], [bx, bz] = puntos[i + 1], L = Math.hypot(bx - ax, bz - az), ang = Math.atan2(bx - ax, bz - az);
+      const nx = Math.cos(ang), nz = -Math.sin(ang);
+      piedras.push([(ax + bx) / 2, 0.3, (az + bz) / 2, 0.45, 0.6, L + 0.1, ang]);
+      lastre.push([(ax + bx) / 2 - nx * 0.7, 0.04, (az + bz) / 2 - nz * 0.7, 1.0, 0.08, L + 0.1, ang]);
+    }
+    const tex = texturaDibujada(128, 32, (x, w, h) => { x.fillStyle = "#8d877c"; x.fillRect(0, 0, w, h);
+      for (let k = 0; k < 70; k++) { x.fillStyle = ["#a59f94", "#77716a", "#b8b1a4", "#6b665f"][k % 4]; x.beginPath(); x.ellipse((k * 37) % w, (k * 13) % h, 5, 3.5, 0, 0, 7); x.fill(); } });
+    tex.wrapS = THREE.RepeatWrapping; tex.repeat.set(4, 1);
+    g.add(cajas(new THREE.MeshStandardMaterial({ map: tex, roughness: 1 }), piedras), cajas(mate(0x9a8f80, { roughness: 1 }), lastre));
+    Object.assign(g.userData, { lineal: true, franjas: [] });
+    registrar(g, null);
+  }
   // mesas redondas de concreto con bancas curvas, como las de todo el campus (fotos)
   function mesas({ puntos }) {
     const g = new THREE.Group(), azulMesa = mate(0x8fb4cf, { roughness: 0.9 });
@@ -3249,7 +3275,7 @@ if (datos.campus.parqueo) {
   for (const el of datos.campus.elementos || []) {
     const hacer = { muro, pasillo, caseta, parqueo, bancas, escalera, rampa, descanso, mesas, explanada, alcantarilla, jardin, pluma, comedor, tanque,
       acera, cebra, porton_peatonal: portonPeatonal, puente_peatonal: puentePeatonal, arbol_grande: arbolGrande,
-      ruedas_tren: ruedasTren, congos, carport, pasarela, bicicletas, rampa_doble: rampaDoble, punto_verde: puntoVerde, motos, pollitos, busto, entrada_registro: entradaRegistro }[el.tipo];
+      ruedas_tren: ruedasTren, congos, carport, pasarela, bicicletas, rampa_doble: rampaDoble, punto_verde: puntoVerde, motos, pollitos, busto, entrada_registro: entradaRegistro, losa, muro_piedra: muroPiedra }[el.tipo];
     if (hacer) hacer(el);
     else if (el.tipo === "porton") {   // acceso cerrado con portón (sin faroles)
       const g = portonVerde(false, el.hoja || 4.2); g.position.set(el.p[0], 0, el.p[1]); g.rotation.y = el.giro; escena.add(g);
