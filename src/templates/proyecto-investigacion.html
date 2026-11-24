@@ -18,7 +18,10 @@
       {% if p.aporte %}<h2>Qué aporta a la Sede y a la UCR</h2><p>{{ p.aporte }}</p>{% endif %}
       {% if p.ods %}<h2>Objetivos de Desarrollo Sostenible</h2><p>El proyecto se relaciona con: {{ p.ods|join(", ") }}.</p>{% endif %}
       {% endif %}
-      {% if g.id == "en-inscripcion" %}<p>Este proyecto está en proceso de inscripción ante la Vicerrectoría de Investigación. Cuando se apruebe se ampliará esta descripción.</p>{% endif %}
+      {% if g.id == "en-inscripcion" %}
+      <h2>Qué se propone hacer, cómo y a quién beneficia</h2>
+      <p>El objetivo de arriba sale del título de la propuesta, que está en proceso de inscripción ante la Vicerrectoría de Investigación. Los objetivos específicos, la metodología, los beneficiarios y el aporte a la Sede y a la UCR se publicarán aquí cuando se apruebe y se cuente con su ficha.</p>
+      {% endif %}
     </div>
   </div>
   <div class="columna-ficha">

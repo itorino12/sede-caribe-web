@@ -474,7 +474,9 @@
    "texto": [
     "Propuesta que analiza especies crípticas de Anolis, un género de lagartijas, presentes en Costa Rica mediante un enfoque de taxonomía integrativa."
    ],
-   "nombre_oficial": "Análisis de especies crípticas de Anolis presentes en Costa Rica a través de un enfoque de taxonomía integrativa"
+   "nombre_oficial": "Análisis de especies crípticas de Anolis presentes en Costa Rica a través de un enfoque de taxonomía integrativa",
+   "objetivo": "Analizar las especies crípticas de Anolis presentes en Costa Rica con un enfoque de taxonomía integrativa.",
+   "donde": "Costa Rica"
   },
   {
    "id": "pry01-641-2027",
@@ -488,7 +490,9 @@
    "texto": [
     "Propuesta que analiza las implicaciones socioeconómicas y ambientales de la gentrificación en el Caribe Sur de Talamanca, a partir de las percepciones y las proyecciones del desarrollo turístico en las comunidades de Cahuita, Puerto Viejo y Manzanillo."
    ],
-   "nombre_oficial": "Implicaciones socioeconómicas y ambientales de la gentrificación en el Caribe Sur de Talamanca: análisis de percepciones y proyecciones del desarrollo turístico en las comunidades de Cahuita, Puerto Viejo y Manzanillo"
+   "nombre_oficial": "Implicaciones socioeconómicas y ambientales de la gentrificación en el Caribe Sur de Talamanca: análisis de percepciones y proyecciones del desarrollo turístico en las comunidades de Cahuita, Puerto Viejo y Manzanillo",
+   "objetivo": "Analizar las implicaciones socioeconómicas y ambientales de la gentrificación en el Caribe Sur de Talamanca, a partir de las percepciones y las proyecciones del desarrollo turístico en Cahuita, Puerto Viejo y Manzanillo.",
+   "donde": "Cahuita, Puerto Viejo y Manzanillo (Talamanca)"
   },
   {
    "id": "pry01-304-2027",
@@ -502,7 +506,9 @@
    "texto": [
     "Propuesta sobre desarrollo local mediante estrategias de gobernanza de bienes de uso colectivo. Combina teoría con estudios de caso en comunidades que ofrecen servicios turísticos en Costa Rica y México."
    ],
-   "nombre_oficial": "Desarrollo local mediante estrategias de gobernanza de bienes de uso colectivo. Teoría y estudios de caso en comunidades que ofrecen servicios turísticos en Costa Rica y México"
+   "nombre_oficial": "Desarrollo local mediante estrategias de gobernanza de bienes de uso colectivo. Teoría y estudios de caso en comunidades que ofrecen servicios turísticos en Costa Rica y México",
+   "objetivo": "Estudiar el desarrollo local mediante estrategias de gobernanza de bienes de uso colectivo, con teoría y estudios de caso en comunidades que ofrecen servicios turísticos en Costa Rica y México.",
+   "donde": "Costa Rica y México"
   },
   {
    "id": "pry01-1243-2027",
@@ -516,7 +522,8 @@
    "texto": [
     "Propuesta para desarrollar un biorreactor abierto tipo raceway que produzca biomasa microalgal, con posible aplicación como materia prima para bioinsumos con función estimulante."
    ],
-   "nombre_oficial": "Desarrollo de un biorreactor abierto tipo raceway para la producción de biomasa microalgal con posible aplicación como materia prima para bioinsumos con función estimulante"
+   "nombre_oficial": "Desarrollo de un biorreactor abierto tipo raceway para la producción de biomasa microalgal con posible aplicación como materia prima para bioinsumos con función estimulante",
+   "objetivo": "Desarrollar un biorreactor abierto tipo raceway para producir biomasa microalgal, con posible aplicación como materia prima de bioinsumos con función estimulante."
   },
   {
    "id": "pry01-1480-2027",
@@ -530,7 +537,9 @@
    "texto": [
     "Propuesta que elabora cartografías de las resistencias y la autonomía de mujeres indígenas sobre el presente y el futuro de sus territorios, en la provincia de Limón y el cantón de Turrialba, desde los territorios, la comunalidad, el cuerpo, la tierra, la memoria y la semilla."
    ],
-   "nombre_oficial": "Territorios, comunalidad, cuerpos, tierra, memoria y semilla: cartografías de resistencias y autonomía de mujeres indígenas sobre el presente y futuro de sus territorios. Provincia de Limón y cantón de Turrialba"
+   "nombre_oficial": "Territorios, comunalidad, cuerpos, tierra, memoria y semilla: cartografías de resistencias y autonomía de mujeres indígenas sobre el presente y futuro de sus territorios. Provincia de Limón y cantón de Turrialba",
+   "objetivo": "Elaborar cartografías de resistencias y autonomía de mujeres indígenas sobre el presente y el futuro de sus territorios, en la provincia de Limón y el cantón de Turrialba.",
+   "donde": "Provincia de Limón y cantón de Turrialba"
   }
  ]
 }
