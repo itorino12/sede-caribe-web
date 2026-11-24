@@ -113,7 +113,7 @@ EDIFICIOS = [
     {"id": 4, "hex": (672, 1490, 36), "pisos": 1,
      "estilo": {"techo": "#6fa596", "fascia": "#a9d4ef", "alero": 2.8, "columnas": "#4a8cc4", "columnas_cuadradas": True,
                 "linterna_hex": True, "ventanas": "ninguna", "piso_corredor": "#c4c3bd",
-                "docencia": {"puerta": [0.5, 0.87], "ventanilla": [1, 0]}}},
+                "docencia": {"puerta": [0.5, 0.87], "ventanilla": [1, 0], "casilleros": [0.5, -0.87]}}},
     # Auditorio (fotos): blanco, franja alta de paneles grises, losa de techo muy volada sobre columnas de
     # acero en V, mural de cerámica hacia la calle y parasoles celestes junto a la puerta lateral
     # (fotos y anotaciones) más atrás que en el croquis: entre la fachada del mural y la calle hay una plaza
@@ -644,10 +644,13 @@ def lugares_nuevos(calles, quebrada, lejos_carretera, y_ruta32):
     # baño de Docencia (24): casita crema de techo verde a una agua, justo detrás de la Coordinación (4)
     # (anotaciones) justo detrás de Docencia, del lado contrario a la calle
     # (anotaciones) se corre junto a la esquina noreste de Docencia, con las puertas hacia el edificio
-    caja(24, "caseta", (703, 1444), 30, 6.0, 4.5, alto=2.8, uso="banos_crema", limpiar=despejar_post)
+    # (anotaciones, nov. 2026) al norte de Docencia, pasando la punta norte, a lo largo de este a oeste y con las
+    # puertas hacia el edificio; la cara noreste queda libre para los casilleros y las sillas
+    caja(24, "caseta", (670, 1427), 0, 6.0, 4.5, alto=2.8, uso="banos_crema", limpiar=despejar_post)
     cv2.fillPoly(despejar, [np.array(rect_contorno(684, 1426, 6.0 / ESCALA + 56, 4.5 / ESCALA + 56, -20), np.int32)], 1)   # donde estaba
     # pasillo techado corto que une la puerta de Docencia con el pasillo 27 (anotaciones)
-    pasillo([(705, 1577), (688, 1531)])
+    # (anotaciones) llega hasta el piso del corredor de Docencia, sin el pedazo de zacate que quedaba en medio
+    pasillo([(705, 1577), (690.5, 1523)])
     # baño del pabellón 7 (fotos y anotaciones): casita aparte con techo a dos aguas, alero celeste y un mural,
     # pasando el extremo oeste del 7, junto al pasillo techado que llega del camino de la entrada
     # (anotaciones) 2,5 m más al sur: el techo quedaba encima del pasillo que llega del camino de la entrada
@@ -714,7 +717,9 @@ def lugares_nuevos(calles, quebrada, lejos_carretera, y_ruta32):
     # (anotaciones) las tres de la orilla de la piscina quedaban en el cauce: van en el zacate, entre la acera y la quebrada
     # (anotaciones) las tres entre el pasillo de las aulas y los baños de la piscina se corrieron 3 m al este
     # (anotaciones) las tres de la orilla, junto al toldo de los vestidores, donde la acera ya no pasa
-    nuevas = nuevas[:1] + [[48.7, -65.5], [48.7, -60.0], [48.7, -54.5]] + [[82.6, -16.8], [87.2, -17.3], [73.2, -17.6]]
+    # (anotaciones, nov. 2026) las tres entre el pasillo y los baños de la piscina, al oeste y al norte, fuera de las
+    # máquinas de ejercicio que van pegadas a la pared
+    nuevas = nuevas[:1] + [[46.3, -68.5], [46.3, -63.0], [46.3, -57.5]] + [[82.6, -16.8], [87.2, -17.3], [73.2, -17.6]]
     # (anotaciones) tres más en el zacate al oeste de la Biblioteca: dos junto a la cerca y una cerca de la entrada
     nuevas += [[74.1, -118.2], [67.4, -118.5], [75.0, -91.6]]
     for x, z in nuevas[1:4]:
