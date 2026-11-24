@@ -617,10 +617,7 @@ def lugares_nuevos(calles, quebrada, lejos_carretera, y_ruta32):
     a_px_ = lambda x, z: (int(round(x / ESCALA + ORIGEN[0])), int(round(z / ESCALA + ORIGEN[1])))
     for u in (8.0, 19.0, 25.0, 31.5, 38.0):
         cv2.circle(despejar, a_px_(*franja(u)), int(2.4 / ESCALA), 1, -1)
-    # (anotaciones) acera del pasillo, poco antes de la soda, al comedor (al toldo en arco de su punta norte)
-    fin10 = a_metros(*p10[-1])
-    elem.append({"tipo": "acera", "id": None, "ancho": 1.8, "puntos": [
-        [round(fin10[0] - d2[0] * 2.6 + n2[0] * 1.3, 2), round(fin10[1] - d2[1] * 2.6 + n2[1] * 1.3, 2)], [-110.86, 64.49]]})
+    # (anotaciones) la acera del pasillo al toldo del comedor se quitó: no existe
     # (fotos de la Sede, nov. 2026) desde el parqueo: un descanso de concreto lavado a nivel del parqueo, una escalera
     # corta que baja hacia la soda con una baranda azul en U en medio, y un camino de lastre que llega a la punta del
     # techito. El techito es un pasillo propio que va a la soda; el pasillo 10 llega en curva y se le une de lado. Del
@@ -1293,6 +1290,12 @@ def main(pdf, sat=None):
     cv2.circle(picnic, PICNIC["centro"], PICNIC["radio"], 255, -1)
     pintar(cv2.GaussianBlur(picnic, (0, 0), 6), (166, 208, 120))
     # dentro de la U todo está asfaltado (fotos), también el camino a la pista; cordón de concreto claro
+    # (anotaciones) el asfalto del parqueo frente a la soda termina en la última fila de espacios: el pedazo que
+    # seguía hacia la escalera del comedor es zacate
+    for m_ in (calles, acceso, extra["calles_extra"], extra["asfalto"]):
+        cv2.fillPoly(m_, [np.array([(x / ESCALA + ORIGEN[0], z / ESCALA + ORIGEN[1]) for x, z in
+                                    [(-140.6, 49.2), (-126.4, 40.2), (-121.5, 43.5), (-123.0, 52.0), (-130.0, 56.5),
+                                     (-137.0, 55.5)]], np.int32)], 0)
     pintar(cv2.bitwise_or(cv2.bitwise_or(calles, acceso), extra["calles_extra"]), (84, 88, 94), borde=(214, 212, 204))
     pintar(extra["lastre"], (176, 160, 128))
     pintar(extra["plaza"], (200, 198, 190), borde=(170, 168, 160))
