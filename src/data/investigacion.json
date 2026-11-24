@@ -14,8 +14,8 @@
      "tipo": "tarjetas",
      "id": "vigentes-agroindustria",
      "atajo": "Agroindustria",
-     "titulo": "Proyectos vigentes: Programa de Industria y Agroindustria de la Región Huetar Caribe",
-     "intro": "Proyectos de investigación inscritos en la Sede del Caribe con vigencia al 24 de noviembre de 2026, según la Coordinación de Investigación.",
+     "titulo": "Proyectos vigentes: Programa de Industria y Agroindustria de la Región Huetar Caribe (Pry01-721-2021)",
+     "intro": "Proyectos de investigación inscritos en la Sede del Caribe, vigentes en 2026 según la Coordinación de Investigación (24 de noviembre de 2026). El programa está a cargo de José Alberto Castillo Benavides.",
      "items": [
       {
        "titulo": "Desarrollo de un formulado de biomasa microalgal a partir de una emulsión Pickering empleando nanocelulosa de rastrojo de piña como encapsulador de compuestos con actividad bioestimulante",
@@ -40,6 +40,14 @@
       {
        "titulo": "Evaluación energética y huella de carbono de la Sede del Caribe",
        "texto": "Pry01-1038-2023 · Vigencia: 1 ene. 2024 – 31 dic. 2026 · Responsable: Olman Araya Mejías"
+      },
+      {
+       "titulo": "Desarrollo de bioadsorbentes para la remoción de sustancias farmacéuticas en medio acuoso implementando principios de economía circular en residuos biomásicos",
+       "texto": "Pry01-1535-2024 · Vigencia: 2026 · Responsable: Carlos Enrique Rojas Sánchez"
+      },
+      {
+       "titulo": "Aprovechamiento de la lignina de residuos agroindustriales de la provincia de Limón como potencial fuente de compuestos polifenólicos",
+       "texto": "Pry01-804-2025 · Vigencia: 2026 · Responsable: Eddy Gabriel Jirón García"
       }
      ]
     },
@@ -47,13 +55,22 @@
      "tipo": "tarjetas",
      "id": "vigentes-empresariales",
      "atajo": "Ciencias Empresariales",
-     "titulo": "Proyectos vigentes: Programa de Ciencias Empresariales, Económicas y Sociales",
+     "titulo": "Proyectos vigentes: Programa de Ciencias Empresariales, Económicas y Sociales (Pry01-1365-2021)",
      "items": [
       {
        "titulo": "Espacios de fortalecimiento y transferencia de conocimiento para el desarrollo social, empresarial y económico de los habitantes en la Región Caribe de Costa Rica",
        "texto": "Pry01-1068-2025 · Vigencia: 2 ene. 2025 – 31 dic. 2026 · Responsable: Diunia Rivera Chavarría"
+      },
+      {
+       "titulo": "Análisis de las regiones del Caribe Central y Sur de la provincia de Limón como destinos atractivos para el turismo femenino: construcción socioeconómica de la zona, basado en las percepciones de seguridad de la turista que visita el Caribe de Costa Rica y mujeres emprendedoras del turismo con apoyo del ObturCaribe",
+       "texto": "Pry01-176-2024 · Vigencia: 2026 · Responsable: Alejandra Tenorio Madrigal"
+      },
+      {
+       "titulo": "Observatorio de Turismo Sostenible del Caribe de Costa Rica (ObturCaribe): seguimiento y fortalecimiento de la actividad turística en el caribe costarricense",
+       "texto": "Pry01-192-2024 · Vigencia: 2026 · Responsable: Bladimiro Argueta Corella"
       }
-     ]
+     ],
+     "intro": "El programa está a cargo de Walter Anderson Rivera."
     },
     {
      "tipo": "tarjetas",
