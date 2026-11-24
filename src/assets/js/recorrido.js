@@ -2829,6 +2829,57 @@ if (datos.campus.parqueo) {
     }
     registrar(g, null);
   }
+  // entrada a Registro, Becas y demás (foto, nov. 2026): paso abierto bajo el edificio 2 con cielo blanco y la franja
+  // verde encima; adentro, la sala de espera (sillas negras en fila, pizarra de avisos) y al fondo el zacate. Del
+  // pasillo 10 llega una acera con guía amarilla bajo un techito plano de lámina sobre postes azules, con baranda a la
+  // izquierda; a la derecha, un muñeco de nieve y una lengua de suegra. x a lo largo de la pared; hacia afuera, -z
+  function entradaRegistro({ p, giro, largo }) {
+    const g = new THREE.Group(), azulP = mate(0x4f86b8, { roughness: 0.5 }), grisB = mate(0x6c7176, { metalness: 0.5 });
+    const caja_ = (w, h, d, m, x, y, o) => { const c = new THREE.Mesh(new THREE.BoxGeometry(w, h, d), m); c.position.set(x, y, -o); g.add(c); return c; };
+    const cv = document.createElement("canvas"); cv.width = 512; cv.height = 340;
+    const x = cv.getContext("2d"), W = 512, H = 340, f = [196, 120, 316, 236];   // abertura del fondo
+    x.fillStyle = "#f3f3f0"; x.fillRect(0, 0, W, H * 0.5);                                   // cielo
+    x.fillStyle = "#b9b8b2"; x.fillRect(0, H * 0.5, W, H * 0.5);                             // piso
+    x.fillStyle = "#e9e7e0"; x.beginPath(); x.moveTo(0, 0); x.lineTo(f[0], f[1]); x.lineTo(f[0], f[3]); x.lineTo(0, H); x.fill();   // pared izquierda
+    x.fillStyle = "#9d9b95"; x.beginPath(); x.moveTo(W, 0); x.lineTo(f[2], f[1]); x.lineTo(f[2], f[3]); x.lineTo(W, H); x.fill();   // concreto derecha
+    x.fillStyle = "#f7f7f4"; x.beginPath(); x.moveTo(0, 0); x.lineTo(W, 0); x.lineTo(f[2], f[1]); x.lineTo(f[0], f[1]); x.fill();
+    x.fillStyle = "#8a8983"; x.beginPath(); x.moveTo(0, H); x.lineTo(W, H); x.lineTo(f[2], f[3]); x.lineTo(f[0], f[3]); x.fill();
+    const fondo = x.createLinearGradient(0, f[1], 0, f[3]); fondo.addColorStop(0, "#9fd27a"); fondo.addColorStop(1, "#4f8f3a");
+    x.fillStyle = fondo; x.fillRect(f[0], f[1], f[2] - f[0], f[3] - f[1]);
+    x.fillStyle = "#2f6b2f"; for (let k = 0; k < 5; k++) { x.beginPath(); x.arc(f[0] + 20 + k * 24, f[3] - 30 - (k % 2) * 14, 16, 0, 7); x.fill(); }
+    x.fillStyle = "#1e2124"; for (let k = 0; k < 6; k++) x.fillRect(f[0] + 8 + k * 19, f[3] - 22, 15, 20);   // sillas en fila
+    for (let k = 0; k < 4; k++) x.fillRect(250 + k * 16, f[3] - 6, 13, 18);
+    x.fillStyle = "#fff"; x.fillRect(40, 140, 100, 70); x.strokeStyle = "#5a4a3a"; x.lineWidth = 4; x.strokeRect(40, 140, 100, 70);   // pizarra
+    x.fillStyle = "#3a6fb5"; x.fillRect(50, 150, 30, 20); x.fillStyle = "#6c3a8f"; x.fillRect(100, 160, 30, 30);
+    x.fillStyle = "#1e2124"; for (let k = 0; k < 3; k++) x.fillRect(10 + k * 34, 230, 26, 40);                   // sillas de oficina
+    x.fillStyle = "#cfd8dc"; for (let k = 0; k < 4; k++) x.fillRect(80 + k * 100, 22 + k * 6, 16, 6);           // luces del cielo
+    const tex = new THREE.CanvasTexture(cv); tex.colorSpace = THREE.SRGBColorSpace;
+    const paso = new THREE.Mesh(new THREE.PlaneGeometry(4.4, 2.9), new THREE.MeshBasicMaterial({ map: tex }));
+    paso.position.set(0, 1.45, -0.07); paso.rotation.y = Math.PI; g.add(paso);
+    // acera con guía desde el corredor del edificio hasta el pasillo
+    const o0 = 2.5, o1 = largo, oc = (o0 + o1) / 2, L = o1 - o0;
+    caja_(3.0, 0.12, L, concretoClaro, 0, 0.06, oc); caja_(0.36, 0.02, L + 2.6, amarilloGuia, 0, 0.13, oc - 1.3);
+    // techito plano de lámina sobre postes azules, con vigas azules
+    caja_(3.6, 0.06, L + 0.6, mate(0xc4c8cb, { metalness: 0.35 }), 0, 3.05, oc);
+    for (const xx of [-1.65, 1.65]) { caja_(0.1, 0.16, L + 0.6, azulP, xx, 2.95, oc); for (const o of [o0 + 0.3, o1 - 0.2]) caja_(0.16, 2.95, 0.16, azulP, xx, 1.47, o); }
+    for (const o of [o0 + 0.3, oc, o1 - 0.2]) caja_(3.4, 0.12, 0.1, azulP, 0, 2.88, o);
+    // baranda gris a la izquierda (vista al entrar)
+    caja_(0.05, 0.05, L, grisB, 1.45, 0.95, oc); caja_(0.05, 0.05, L, grisB, 1.45, 0.6, oc);
+    for (let k = 0; k <= 3; k++) caja_(0.05, 0.95, 0.05, grisB, 1.45, 0.47, o0 + (L * k) / 3);
+    // muñeco de nieve recortado y lengua de suegra, a la derecha
+    const nieve = document.createElement("canvas"); nieve.width = 64; nieve.height = 128;
+    const n = nieve.getContext("2d");
+    n.fillStyle = "#fff"; n.beginPath(); n.arc(32, 92, 26, 0, 7); n.arc(32, 46, 18, 0, 7); n.fill();
+    n.fillStyle = "#c62828"; n.fillRect(16, 58, 34, 7); n.fillStyle = "#111"; n.fillRect(20, 6, 24, 22); n.fillRect(14, 26, 36, 4);
+    const tn = new THREE.CanvasTexture(nieve); tn.colorSpace = THREE.SRGBColorSpace;
+    const mn = new THREE.Mesh(new THREE.PlaneGeometry(0.55, 1.1), new THREE.MeshBasicMaterial({ map: tn, transparent: true, side: THREE.DoubleSide }));
+    mn.position.set(-2.0, 0.7, -(o0 + 0.6)); mn.rotation.y = Math.PI; g.add(mn);
+    caja_(0.5, 0.12, 0.5, mate(0x4a3a30), -2.0, 0.06, o0 + 0.6);
+    caja_(0.3, 0.35, 0.3, mate(0xf2f2ee), -2.5, 0.18, o0 + 0.4);
+    for (let k = 0; k < 6; k++) { const h = caja_(0.07, 0.8, 0.02, mate(0x4f7a3a), -2.5, 0.75, o0 + 0.4); h.rotation.set((k % 3 - 1) * 0.25, k, (k % 2 ? 1 : -1) * 0.2); }
+    g.traverse((o) => { if (o.isMesh) { o.castShadow = !liviano; o.receiveShadow = true; } });
+    g.position.set(p[0], 0, p[1]); g.rotation.y = giro; registrar(g, null);
+  }
   // busto (foto): cabeza y hombros oscuros sobre un pedestal de concreto con la placa negra al frente
   function busto({ p, giro = 0 }) {
     const g = new THREE.Group(), conc = mate(0xb3b3ad, { roughness: 1 }), bronce = mate(0x3c3a37, { roughness: 0.45, metalness: 0.5 });
@@ -3145,7 +3196,7 @@ if (datos.campus.parqueo) {
   for (const el of datos.campus.elementos || []) {
     const hacer = { muro, pasillo, caseta, parqueo, bancas, escalera, rampa, descanso, mesas, explanada, alcantarilla, jardin, pluma, comedor, tanque,
       acera, cebra, porton_peatonal: portonPeatonal, puente_peatonal: puentePeatonal, arbol_grande: arbolGrande,
-      ruedas_tren: ruedasTren, congos, carport, pasarela, bicicletas, rampa_doble: rampaDoble, punto_verde: puntoVerde, motos, pollitos, busto }[el.tipo];
+      ruedas_tren: ruedasTren, congos, carport, pasarela, bicicletas, rampa_doble: rampaDoble, punto_verde: puntoVerde, motos, pollitos, busto, entrada_registro: entradaRegistro }[el.tipo];
     if (hacer) hacer(el);
     else if (el.tipo === "porton") {   // acceso cerrado con portón (sin faroles)
       const g = portonVerde(false, el.hoja || 4.2); g.position.set(el.p[0], 0, el.p[1]); g.rotation.y = el.giro; escena.add(g);

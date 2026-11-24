@@ -104,7 +104,7 @@ EDIFICIOS = [
     {"id": 3, "rect": (745, 1826, 90, 70, -39), "pisos": 1,
      # (fotos, nov. 2026) entrada donde llega el pasillo 10 (cara noroeste) y puerta hacia el comedor (cara noreste)
      "estilo": {"techo": "#7fae9f", "ventanas": "celeste", "alero": 1.6, "hundido": 1.6,
-                "soda": {"entrada": [-0.63, -0.78], "p_entrada": [-122.6, 76.6], "puerta": [0.78, -0.63]}}},
+                "soda": {"entrada": [-0.63, -0.78], "p_entrada": [-120.05, 74.9], "puerta": [0.78, -0.63]}}},
     # Coordinación de Docencia (fotos): hexágono con corredor perimetral de columnas azules y alero celeste,
     # techo verde agua en pirámide con una linternilla de ventanas arriba
     # (anotaciones) más atrás de lo que marca el croquis, lejos del pasillo 27, con su propio pasillo techado
@@ -539,14 +539,14 @@ def lugares_nuevos(calles, quebrada, lejos_carretera, y_ruta32):
     elem = []
     M = lambda pts: [a_metros(float(x), float(y)) for x, y in pts]
 
-    def pasillo(pts, id_=None, ancho=2.6, techo=True, cruces=(), subida=0.0, cima=None, limpiar=None):
+    def pasillo(pts, id_=None, ancho=2.6, techo=True, cruces=(), subida=0.0, cima=None, limpiar=None, cortar_en_calle=True):
         pts = suavizar(pts)
         largo_ = np.concatenate([[0], np.cumsum(np.hypot(*np.diff(np.array(pts), axis=0).T))])
         # sube parejo hasta el punto «cima» (o hasta el final) y de ahí sigue plano
         fin_ = largo_[int(np.argmin([math.dist(q, cima) for q in pts]))] if cima else largo_[-1]
         alturas = [round(float(subida * min(1.0, d / fin_)), 2) for d in largo_] if subida else []
         cv2.polylines(despejar if limpiar is None else limpiar, [np.array(pts, np.int32)], False, 1, 34)
-        en_calle = [bool(calles[int(y), int(x)]) for x, y in pts]   # donde cruza una calle no lleva losa, columnas ni techo
+        en_calle = [bool(calles[int(y), int(x)]) and cortar_en_calle for x, y in pts]   # donde cruza una calle no lleva losa, columnas ni techo
         elem.append({"tipo": "pasillo", "id": id_, "puntos": M(pts), "ancho": ancho, "techo": techo, "en_calle": en_calle, "alturas": alturas,
                      "cruces": [M([c])[0] for c in cruces]})
         return pts
@@ -591,17 +591,26 @@ def lugares_nuevos(calles, quebrada, lejos_carretera, y_ruta32):
         p26[clave] = p26[clave][k26:]
     if p26["alturas"]:
         p26["alturas"] = p26["alturas"][k26:]
-    # (fotos, nov. 2026) llega hasta la puerta de la soda
-    pasillo([marco(2, -100, 47), marco(2, 15, 47), marco(2, 32, 51), marco(2, 104, 51), marco(2, 111, 51)], 36)
-    # (fotos y anotaciones) entre este pasillo y el edificio 2: el busto frente a los baños y mesas de concreto en el
-    # zacate, a 3,3 m de la pared (franja entre las columnas del corredor y el pasillo)
-    A2, d2, n2 = (-161.61, 38.27), (0.629, 0.777), (0.777, -0.629)
-    franja = lambda u: [round(A2[0] + d2[0] * u + n2[0] * 3.3, 2), round(A2[1] + d2[1] * u + n2[1] * 3.3, 2)]
-    elem.append({"tipo": "busto", "id": None, "p": franja(7.0), "giro": round(math.atan2(n2[0], n2[1]), 3)})
-    elem.append({"tipo": "pollitos", "id": None, "puntos": [franja(u) for u in (11.0, 22.0, 28.5)], "giro": round(math.atan2(-d2[1], d2[0]), 3)})
+    # (fotos, nov. 2026) llega hasta la puerta de la soda. (anotaciones) corrido 3 m hacia el parqueo (v 47 -> 59),
+    # para que entre él y el edificio 2 quepan el busto, las mesas de concreto y la entrada a Registro; sale de la
+    # unión con el pasillo 7 en diagonal
+    p10 = pasillo([marco(2, -100, 47), marco(2, -86, 59), marco(2, 15, 59), marco(2, 32, 63), marco(2, 104, 63), marco(2, 111, 63)], 36,
+                  cortar_en_calle=False)   # la diagonal del inicio roza el asfalto del parqueo: va completa
+    A2, d2, n2 = (-161.61, 38.27), (0.629, 0.777), (0.777, -0.629)   # esquina noroeste del 2, a lo largo, hacia el pasillo
+    franja = lambda u, v=4.75: [round(A2[0] + d2[0] * u + n2[0] * v, 2), round(A2[1] + d2[1] * u + n2[1] * v, 2)]
+    # (fotos) entrada a Registro, Becas y demás: un paso bajo el edificio 2 cerca de su punta noroeste, con un techito
+    # de lámina sobre postes azules que lo une con este pasillo
+    elem.append({"tipo": "entrada_registro", "id": None, "p": franja(8.0, 0.0), "giro": round(math.atan2(-d2[1], d2[0]), 3), "largo": 6.95})
+    # (anotaciones) el busto y las mesas de concreto, más hacia la soda, en el zacate entre el corredor y el pasillo
+    elem.append({"tipo": "busto", "id": None, "p": franja(19.0), "giro": round(math.atan2(n2[0], n2[1]), 3)})
+    elem.append({"tipo": "pollitos", "id": None, "puntos": [franja(u) for u in (25.0, 31.5, 38.0)], "giro": round(math.atan2(-d2[1], d2[0]), 3)})
     a_px_ = lambda x, z: (int(round(x / ESCALA + ORIGEN[0])), int(round(z / ESCALA + ORIGEN[1])))
-    for u in (7.0, 11.0, 22.0, 28.5):
-        cv2.circle(despejar, a_px_(*franja(u)), int(2.0 / ESCALA), 1, -1)
+    for u in (8.0, 19.0, 25.0, 31.5, 38.0):
+        cv2.circle(despejar, a_px_(*franja(u)), int(2.4 / ESCALA), 1, -1)
+    # (anotaciones) acera del pasillo, poco antes de la soda, al comedor (al toldo en arco de su punta norte)
+    fin10 = a_metros(*p10[-1])
+    elem.append({"tipo": "acera", "id": None, "ancho": 1.8, "puntos": [
+        [round(fin10[0] - d2[0] * 2.6 + n2[0] * 1.3, 2), round(fin10[1] - d2[1] * 2.6 + n2[1] * 1.3, 2)], [-110.86, 64.49]]})
     union7 = junto_calle([(1080, 1392)], 15, calles)
     pasillo([marco(7, -74, 6), marco(7, -90, 2), (1118, 1374)] + union7)
     # (anotaciones) el pasillo del lado de la piscina termina antes de la esquina sur del 7
@@ -675,7 +684,8 @@ def lugares_nuevos(calles, quebrada, lejos_carretera, y_ruta32):
     # (carport verde) y el resto del patio con rayas
     c25 = (CENTRO_P25[0] / ESCALA + ORIGEN[0], CENTRO_P25[1] / ESCALA + ORIGEN[1])
     parqueo(25, c25, 11.9, 6.0, -39, [(0.0, 5.0)])
-    c34 = marco(2, -42, 63)
+    # (anotaciones) 4,5 m más hacia la isla de zacate, para dejar lugar al pasillo 10 corrido
+    c34 = marco(2, -42, 81)
     parqueo(34, c34, 25.0, 9.5, 51, [(-2.25, 5.0)], techado=4, techado_desde=1)   # (mapa) techo de 4 espacios, no en la punta
     esquinas_ = rect_contorno(c25[0], c25[1], 11.9 / ESCALA + 8, 6.0 / ESCALA + 8, -39) + rect_contorno(c34[0], c34[1], 25.0 / ESCALA + 4, 9.5 / ESCALA + 4, 51)
     esquinas_ += [p_ for p_ in zip(*np.nonzero(calles[1570:1625, 640:830])[::-1])]   # borde de la calle, al norte
