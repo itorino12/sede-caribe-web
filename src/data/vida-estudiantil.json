@@ -86,7 +86,7 @@
       "id": "odontologia",
       "nombre": "Consultorio odontológico",
       "categoria": "Salud y bienestar",
-      "resumen": "Atención odontológica para el estudiantado.",
+      "resumen": "Atención odontológica para estudiantes con beca 4 o 5.",
       "extension": "2511-7339",
       "edificio": "Pabellón 1",
       "unidad": "consultorio-odontologico",
@@ -1019,7 +1019,7 @@
         {
           "tipo": "fechas",
           "titulo": "Beneficio complementario de odontología",
-          "intro": "Optometría, odontología, préstamo de libros y de dinero se piden como beneficio complementario de la beca.",
+          "intro": "El periodo para solicitar la cita en línea lo fija la OBAS en el Calendario Estudiantil de cada ciclo.",
           "categorias": [
             "Becas"
           ],
@@ -1032,7 +1032,7 @@
         },
         {
           "tipo": "aviso",
-          "texto": "El horario de atención no está publicado. Llame al 2511-7339 antes de ir."
+          "texto": "Horario de atención: lunes a viernes, de 8:00 a. m. a 5:00 p. m. Teléfono y WhatsApp: 2511-7339."
         }
       ]
     },
