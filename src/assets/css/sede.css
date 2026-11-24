@@ -456,6 +456,7 @@ main:focus { outline: none; }
 .encabezado--foto .ancho { position: relative; }
 .encabezado--foto h1, .encabezado--foto .bajada, .encabezado--foto a { color: #fff; text-shadow: 0 1px 10px rgba(0,0,0,.45); }
 .encabezado h1 { max-width: 22ch; margin-bottom: .25em; }
+.encabezado h1.largo { font-size: clamp(1.6rem, 3vw, 2.2rem); max-width: 46ch; line-height: 1.15; }
 .bajada { font-size: var(--t-md); color: var(--tinta-2); max-width: 62ch; margin: 0; line-height: 1.5; }
 .migas ol { list-style: none; display: flex; flex-wrap: wrap; gap: 6px; padding: 0; margin: 0 0 16px; font-size: var(--t-sm); }
 .migas li + li::before { content: "/"; margin-right: 6px; color: var(--tinta-2); }

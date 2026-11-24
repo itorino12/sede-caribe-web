@@ -12,108 +12,34 @@
     },
     {
      "tipo": "tarjetas",
-     "id": "vigentes-agroindustria",
-     "atajo": "Agroindustria",
-     "titulo": "Proyectos vigentes: Programa de Industria y Agroindustria de la Región Huetar Caribe (Pry01-721-2021)",
-     "intro": "Proyectos de investigación inscritos en la Sede del Caribe, vigentes en 2026 según la Coordinación de Investigación (24 de noviembre de 2026). El programa está a cargo de José Alberto Castillo Benavides.",
+     "id": "proyectos",
+     "atajo": "Proyectos",
+     "titulo": "Proyectos de investigación de la Sede",
+     "intro": "Listado entregado por la Coordinación de Investigación el 24 de noviembre de 2026. Cada proyecto tiene su página con código, responsable y descripción.",
      "items": [
       {
-       "titulo": "Desarrollo de un formulado de biomasa microalgal a partir de una emulsión Pickering empleando nanocelulosa de rastrojo de piña como encapsulador de compuestos con actividad bioestimulante",
-       "texto": "Pry01-156-2026 · Vigencia: 1 ene. 2026 – 31 dic. 2028 · Responsable: César Augusto Bernal Samaniego"
+       "titulo": "Industria y Agroindustria",
+       "texto": "8 proyectos",
+       "interno": "investigacion/agroindustria.html",
+       "enlace_texto": "Ver los proyectos"
       },
       {
-       "titulo": "Evaluación de materiales porosos avanzados (MOFs/POPs) en la remoción de fármacos en medio acuoso",
-       "texto": "Pry01-1613-2026 · Vigencia: 1 ene. 2026 – 31 dic. 2028 · Responsable: Emily Lorena Vargas Rodríguez"
+       "titulo": "Ciencias Empresariales, Económicas y Sociales",
+       "texto": "3 proyectos",
+       "interno": "investigacion/empresariales.html",
+       "enlace_texto": "Ver los proyectos"
       },
       {
-       "titulo": "Evaluación de cladóceros como bioindicadores de la toxicidad total de efluentes de plantas de tratamiento de aguas residuales en la región Huetar Caribe",
-       "texto": "Pry01-1225-2025 · Vigencia: 1 ene. 2026 – 31 dic. 2027 · Responsable: Carlos Enrique Rojas Sánchez"
+       "titulo": "Sin programa",
+       "texto": "2 proyectos",
+       "interno": "investigacion/sin-programa.html",
+       "enlace_texto": "Ver los proyectos"
       },
       {
-       "titulo": "Potencial uso de hidrogeles dosificados con extractos de microalgas aplicados a la germinación",
-       "texto": "Pry01-1064-2026 · Vigencia: 1 ago. 2025 – 1 ago. 2027 · Responsable: César Augusto Bernal Samaniego"
-      },
-      {
-       "titulo": "Cálculo de la eficiencia energética y energía fotovoltaica en el bombeo de las ASADAS con pozo de la provincia de Limón",
-       "texto": "Pry01-1137-2023 · Vigencia: 1 ene. 2024 – 31 dic. 2026 · Responsable: Olman Araya Mejías"
-      },
-      {
-       "titulo": "Evaluación energética y huella de carbono de la Sede del Caribe",
-       "texto": "Pry01-1038-2023 · Vigencia: 1 ene. 2024 – 31 dic. 2026 · Responsable: Olman Araya Mejías"
-      },
-      {
-       "titulo": "Desarrollo de bioadsorbentes para la remoción de sustancias farmacéuticas en medio acuoso implementando principios de economía circular en residuos biomásicos",
-       "texto": "Pry01-1535-2024 · Vigencia: 2026 · Responsable: Carlos Enrique Rojas Sánchez"
-      },
-      {
-       "titulo": "Aprovechamiento de la lignina de residuos agroindustriales de la provincia de Limón como potencial fuente de compuestos polifenólicos",
-       "texto": "Pry01-804-2025 · Vigencia: 2026 · Responsable: Eddy Gabriel Jirón García"
-      }
-     ]
-    },
-    {
-     "tipo": "tarjetas",
-     "id": "vigentes-empresariales",
-     "atajo": "Ciencias Empresariales",
-     "titulo": "Proyectos vigentes: Programa de Ciencias Empresariales, Económicas y Sociales (Pry01-1365-2021)",
-     "items": [
-      {
-       "titulo": "Espacios de fortalecimiento y transferencia de conocimiento para el desarrollo social, empresarial y económico de los habitantes en la Región Caribe de Costa Rica",
-       "texto": "Pry01-1068-2025 · Vigencia: 2 ene. 2025 – 31 dic. 2026 · Responsable: Diunia Rivera Chavarría"
-      },
-      {
-       "titulo": "Análisis de las regiones del Caribe Central y Sur de la provincia de Limón como destinos atractivos para el turismo femenino: construcción socioeconómica de la zona, basado en las percepciones de seguridad de la turista que visita el Caribe de Costa Rica y mujeres emprendedoras del turismo con apoyo del ObturCaribe",
-       "texto": "Pry01-176-2024 · Vigencia: 2026 · Responsable: Alejandra Tenorio Madrigal"
-      },
-      {
-       "titulo": "Observatorio de Turismo Sostenible del Caribe de Costa Rica (ObturCaribe): seguimiento y fortalecimiento de la actividad turística en el caribe costarricense",
-       "texto": "Pry01-192-2024 · Vigencia: 2026 · Responsable: Bladimiro Argueta Corella"
-      }
-     ],
-     "intro": "El programa está a cargo de Walter Anderson Rivera."
-    },
-    {
-     "tipo": "tarjetas",
-     "id": "vigentes-sin-programa",
-     "atajo": "Sin programa",
-     "titulo": "Proyectos vigentes sin programa",
-     "items": [
-      {
-       "titulo": "Estudio del Procesamiento de Lenguaje Natural (PLN) en la gestión académica y administrativa de la Sede del Caribe de la Universidad de Costa Rica, para diagnosticar su influencia en la interpretación de la información institucional y en los procesos de toma de decisiones universitarias",
-       "texto": "Pry01-237-2027 · Vigencia: 1 abr. 2026 – 1 abr. 2028 · Responsable: Itorino Espinoza Torres"
-      },
-      {
-       "titulo": "Uso de refugios naturales y artificiales por anfibios presentes en la Sede del Caribe, UCR",
-       "texto": "Pry01-303-2025 · Vigencia: 1 ene. 2026 – 31 jul. 2027 · Responsable: Marco Barquero Arroyo"
-      }
-     ]
-    },
-    {
-     "tipo": "tarjetas",
-     "id": "en-inscripcion",
-     "atajo": "En inscripción",
-     "titulo": "Proyectos en proceso de inscripción",
-     "intro": "Propuestas que la Vicerrectoría de Investigación todavía está inscribiendo.",
-     "items": [
-      {
-       "titulo": "Análisis de especies crípticas de Anolis presentes en Costa Rica a través de un enfoque de taxonomía integrativa",
-       "texto": "Pry01-633-2027 · Responsable: Dr. Marco Barquero Arroyo"
-      },
-      {
-       "titulo": "Implicaciones socioeconómicas y ambientales de la gentrificación en el Caribe Sur de Talamanca: análisis de percepciones y proyecciones del desarrollo turístico en las comunidades de Cahuita, Puerto Viejo y Manzanillo",
-       "texto": "Pry01-641-2027 · Responsable: Mgtra. Alejandra Tenorio Madrigal"
-      },
-      {
-       "titulo": "Desarrollo local mediante estrategias de gobernanza de bienes de uso colectivo. Teoría y estudios de caso en comunidades que ofrecen servicios turísticos en Costa Rica y México",
-       "texto": "Pry01-304-2027 · Responsable: M.Sc. Julio Brenes Arroyo"
-      },
-      {
-       "titulo": "Desarrollo de un biorreactor abierto tipo raceway para la producción de biomasa microalgal con posible aplicación como materia prima para bioinsumos con función estimulante",
-       "texto": "Pry01-1243-2027 · Responsable: M.Sc. Eddy Jirón García"
-      },
-      {
-       "titulo": "Territorios, comunalidad, cuerpos, tierra, memoria y semilla: cartografías de resistencias y autonomía de mujeres indígenas sobre el presente y futuro de sus territorios. Provincia de Limón y cantón de Turrialba",
-       "texto": "Pry01-1480-2027 · Responsable: Licda. Kattia Acuña"
+       "titulo": "En proceso de inscripción",
+       "texto": "5 proyectos",
+       "interno": "investigacion/en-inscripcion.html",
+       "enlace_texto": "Ver los proyectos"
       }
      ]
     },

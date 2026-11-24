@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% from "_macros.html" import encabezado, contacto with context %}
+{% block contenido %}
+{% set coord = unidad.get("investigacion") %}
+{{ encabezado(p.nombre, [("Investigación", "unidades/investigacion.html"), (g.nombre, "investigacion/" ~ g.id ~ ".html")], raiz, p.codigo) }}
+<div class="ancho pagina pagina--con-ficha">
+  <div>
+    <div class="prosa">
+      {% if p.descripcion %}<h2>De qué trata</h2><p>{{ p.descripcion }}</p>
+      {% else %}<p>Este proyecto está en proceso de inscripción ante la Vicerrectoría de Investigación. Cuando se apruebe, aquí se publicará su descripción.</p>{% endif %}
+    </div>
+  </div>
+  <div class="columna-ficha">
+    <aside class="ficha" aria-label="Datos del proyecto">
+      <h2 class="ficha__titulo">El proyecto en datos</h2>
+      <dl>
+        <dt>Código</dt><dd>{{ p.codigo }}</dd>
+        <dt>{% if g.codigo %}Programa{% else %}Clasificación{% endif %}</dt><dd><a href="{{ raiz }}investigacion/{{ g.id }}.html">{{ g.nombre }}</a></dd>
+        <dt>Estado</dt><dd>{% if g.id == "en-inscripcion" %}En proceso de inscripción{% else %}Vigente en 2026{% endif %}</dd>
+        {% if p.vigencia and p.vigencia != "2026" %}<dt>Vigencia</dt><dd>{{ p.vigencia }}</dd>{% endif %}
+        <dt>Responsable</dt><dd>{{ p.responsable }}</dd>
+        {% if p.colaboradores %}<dt>Colaboran</dt><dd>{{ p.colaboradores|join(", ") }}</dd>{% endif %}
+      </dl>
+      <a class="ficha__enlace" href="{{ raiz }}investigacion/{{ g.id }}.html">Otros proyectos: {{ g.nombre }}</a>
+    </aside>
+    {% if coord %}{{ contacto(coord, raiz) }}{% endif %}
+  </div>
+</div>
+{% endblock %}

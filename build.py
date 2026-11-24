@@ -406,6 +406,14 @@ def preparar(sitio, d):
         m["menu"] = (m["nombre"], f"accion-social/{m['id']}.html",
                      [(p["nombre"], p.get("enlace") or f"accion-social/proyectos/{p['id']}.html") for p in m["proyectos"]])
 
+    # Investigación: programas y proyectos (src/data/proyectos-investigacion.json, solo en el repositorio).
+    inv = json.loads((SRC / "data" / "proyectos-investigacion.json").read_text(encoding="utf-8"))
+    programas_inv = []
+    for pr in inv["programas"]:
+        pr = {**pr, "proyectos": [p for p in inv["proyectos"] if p["programa"] == pr["id"]]}
+        pr["menu"] = (pr["nombre"], f"investigacion/{pr['id']}.html", [(p["nombre"], f"investigacion/proyectos/{p['id']}.html") for p in pr["proyectos"]], "Proyectos")
+        programas_inv.append(pr)
+
     grupos_dir = {}
     for f in d["directorio"]:
         grupos_dir.setdefault(f["unidad"], []).append(f)
@@ -474,7 +482,7 @@ def preparar(sitio, d):
 
     return {"semana": semana, "fotos": fotos, "avisos": avisos, "noticias": noticias, "eventos": eventos, "recientes": recientes, "agenda": agenda,
             "carreras": carreras, "unidades": unidades, "aulas": aulas, "vida": vida, "horarios": horarios, "horarios_ciclos": horarios_ciclos, "unidad": {u["id"]: u for u in unidades},
-            "directorio": grupos_dir, "enlaces": enlaces, "hitos": d["hitos"], "cifras": d["cifras"], "modalidades": modalidades,
+            "directorio": grupos_dir, "enlaces": enlaces, "hitos": d["hitos"], "cifras": d["cifras"], "modalidades": modalidades, "programas_inv": programas_inv,
             "categorias": sorted({n["categoria"] for n in noticias if n.get("categoria")}),
             "areas": list(dict.fromkeys(c["area"] for c in carreras)),
             "orientador": json.loads((SRC / "data" / "orientador.json").read_text(encoding="utf-8"))}
@@ -624,6 +632,9 @@ def main():
     paginas += [(f"accion-social/proyectos/{p['id']}.html", "proyecto.html", p["nombre"], p["resumen"],
                  {"p": p, "m": next(m for m in c["modalidades"] if m["id"] == p["modalidad"])})
                 for m in c["modalidades"] for p in m["proyectos"] if not p.get("enlace")]
+    paginas += [(f"investigacion/{g['id']}.html", "programa-investigacion.html", g["nombre"], g["resumen"], {"g": g}) for g in c["programas_inv"]]
+    paginas += [(f"investigacion/proyectos/{p['id']}.html", "proyecto-investigacion.html", p["nombre"], f"{p['codigo']}: proyecto de investigación de la Sede del Caribe, a cargo de {p['responsable']}.",
+                 {"p": p, "g": g}) for g in c["programas_inv"] for p in g["proyectos"]]
 
     indice, congo = [], []
     for salida, plantilla, titulo, desc, extra in paginas:

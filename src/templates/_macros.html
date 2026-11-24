@@ -93,7 +93,7 @@
     {% if migas %}
     <nav class="migas" aria-label="Ruta"><ol><li><a href="{{ raiz }}index.html">Inicio</a></li>{% for t, u in migas %}<li><a href="{{ raiz }}{{ u }}">{{ t }}</a></li>{% endfor %}</ol></nav>
     {% endif %}
-    <h1>{{ titulo }}</h1>
+    <h1{% if titulo|length > 80 %} class="largo"{% endif %}>{{ titulo }}</h1>
     {% if bajada %}<p class="bajada">{{ bajada }}</p>{% endif %}
   </div>
 </header>

@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+{% from "_macros.html" import encabezado, contacto with context %}
+{% block contenido %}
+{% set coord = unidad.get("investigacion") %}
+{{ encabezado(g.nombre, [("Investigación", "unidades/investigacion.html")], raiz, g.resumen) }}
+<div class="ancho pagina pagina--con-ficha">
+  <div>
+    {% if g.descripcion %}<div class="prosa"><p>{{ g.descripcion }}</p></div>{% endif %}
+    <h2 class="proyectos__titulo" id="proyectos">Proyectos <span>({{ g.proyectos|length }})</span></h2>
+    {% if g.id == "en-inscripcion" %}<p>Todavía no tienen fechas de vigencia: la Vicerrectoría de Investigación está terminando su inscripción.</p>{% else %}<p>Vigentes en 2026 según la Coordinación de Investigación (24 de noviembre de 2026).</p>{% endif %}
+    <ul class="proyectos">
+      {% for p in g.proyectos %}
+      <li class="proyecto-tarjeta">
+        <div class="proyecto-tarjeta__texto">
+          <p class="proyecto-tarjeta__codigo">{{ p.codigo }}</p>
+          <h3><a href="{{ raiz }}investigacion/proyectos/{{ p.id }}.html">{{ p.nombre }}</a></h3>
+          <p>Responsable: {{ p.responsable }}</p>
+          {% if p.vigencia %}<p class="proyecto-tarjeta__lugar">Vigencia: {{ p.vigencia }}</p>{% endif %}
+        </div>
+      </li>
+      {% endfor %}
+    </ul>
+  </div>
+  <div class="columna-ficha">
+    {% if g.codigo %}
+    <aside class="ficha" aria-label="Datos del programa">
+      <h2 class="ficha__titulo">El programa en datos</h2>
+      <dl><dt>Código</dt><dd>{{ g.codigo }}</dd><dt>Responsable</dt><dd>{{ g.responsable }}</dd></dl>
+    </aside>
+    {% endif %}
+    <nav class="ficha" aria-label="Programas de investigación">
+      <h2 class="ficha__titulo">Investigación</h2>
+      <ul class="ficha__lista">
+        {% for x in programas_inv %}<li><a href="{{ raiz }}investigacion/{{ x.id }}.html"{% if x.id == g.id %} aria-current="page"{% endif %}>{{ x.nombre }}</a></li>{% endfor %}
+      </ul>
+    </nav>
+    {% if coord %}{{ contacto(coord, raiz) }}{% endif %}
+  </div>
+</div>
+{% endblock %}
