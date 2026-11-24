@@ -114,6 +114,7 @@ EDIFICIOS = [
     # ventanilla de atención, avisos, dispensador de agua, mueble de madera y banca (ver docencia() en recorrido.js)
     {"id": 4, "hex": (672, 1490, 36), "pisos": 1,
      "estilo": {"techo": "#6fa596", "fascia": "#a9d4ef", "alero": 2.8, "columnas": "#4a8cc4", "columnas_cuadradas": True,
+                "sin_columnas": [[-125.24, -10.3]],   # (anotaciones) la que quedaba frente a la banca de la cara noreste
                 "linterna_hex": True, "ventanas": "ninguna", "piso_corredor": "#c4c3bd",
                 "docencia": {"puerta": [0.5, 0.87], "ventanilla": [1, 0], "casilleros": [0.5, -0.87]}}},
     # Auditorio (fotos): blanco, franja alta de paneles grises, losa de techo muy volada sobre columnas de

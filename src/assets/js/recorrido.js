@@ -1180,6 +1180,8 @@ function docencia(grupo, vol, alto, { puerta = [0.5, 0.87], ventanilla = [1, 0],
       b.position.set(...K.en(u, v, 0)); b.rotation.y = K.ang; b.traverse((o) => { o.castShadow = !liviano; }); grupo.add(b);
     };
     banca(-K.L / 2 + 2.1, 0.4);   // (anotaciones) un poco más hacia la esquina de la ventanilla
+    condensadora(K, -K.L / 2 + 0.75, 0.35);   // (anotaciones) un aire en cada punta de la cara
+    condensadora(K, K.L / 2 + 0.3, 0.45);
     // mecedora: concha gris de malla sobre dos patines curvos, con cojín verde
     const mecedora = (u, v, giro) => {
       const m = new THREE.Group();
@@ -1639,7 +1641,9 @@ for (const e of datos.campus.edificios) {
       for (let i = 0; i < c.length; i++) {
         const a = c[i], b = c[(i + 1) % c.length], L = Math.hypot(b[0] - a[0], b[1] - a[1]), n = Math.max(1, Math.round(L / 4.5));
         for (let k = 0; k < n; k++) {
-          const t = k / n, col = new THREE.Mesh(estilo.columnas_cuadradas ? new THREE.BoxGeometry(0.2, e.alto - 0.7, 0.2) : new THREE.CylinderGeometry(0.11, 0.11, e.alto - 0.7, 8), mat);
+          const t = k / n, px = a[0] + (b[0] - a[0]) * t, pz = a[1] + (b[1] - a[1]) * t;
+          if ((estilo.sin_columnas || []).some(([qx, qz]) => Math.hypot(px - qx, pz - qz) < 1.2)) continue;   // (anotaciones) quitadas
+          const col = new THREE.Mesh(estilo.columnas_cuadradas ? new THREE.BoxGeometry(0.2, e.alto - 0.7, 0.2) : new THREE.CylinderGeometry(0.11, 0.11, e.alto - 0.7, 8), mat);
           col.position.set(a[0] + (b[0] - a[0]) * t, (e.alto - 0.7) / 2, a[1] + (b[1] - a[1]) * t); col.castShadow = !liviano; grupo.add(col);
         }
       }
@@ -2397,8 +2401,11 @@ if (datos.campus.parqueo) {
       const zf = ancho / 2, zD = 6.5;   // frente del baño y pared de Docencia (cara noroeste)
       const ceramica = mate(0xeef0ef, { roughness: 0.12, metalness: 0.15 }), alu = mate(0xbfc4c8, { roughness: 0.35, metalness: 0.6 });
       const esmerilado = new THREE.MeshStandardMaterial({ color: 0xdfe6ea, roughness: 0.25, metalness: 0.1, transparent: true, opacity: 0.9 });
-      bloque(largo + 0.6, 0.18, zD - zf, ceramica, 0, 0.09, (zf + zD) / 2);                       // piso del pasillo
-      for (let k = 1; k < 6; k++) bloque(largo + 0.6, 0.005, 0.02, mate(0xc9ccca), 0, 0.185, zf + ((zD - zf) * k) / 6);   // juntas
+      // (anotaciones) el piso sigue más allá de las puntas del baño hasta empatar con el corredor de Docencia
+      const anchoPiso = largo + 4.4;
+      g.userData.nivelDe = 4;   // a la altura de Docencia: si no, al emparejar su huella el zacate tapa el corredor de Docencia
+      bloque(anchoPiso, 0.18, zD - zf + 0.2, ceramica, 0, 0.09, (zf + zD) / 2 - 0.1);                       // piso del pasillo
+      for (let k = 1; k < 6; k++) bloque(anchoPiso, 0.005, 0.02, mate(0xc9ccca), 0, 0.185, zf + ((zD - zf) * k) / 6);   // juntas
       bloque(largo + 0.6, 0.08, zD - zf - 1.2, mate(0x9fd8c0, { roughness: 0.6 }), 0, alto + 0.35, zf + (zD - zf - 1.2) / 2);   // techo verde menta
       bloque(largo + 0.6, 0.06, zD - zf - 1.2, mate(0xf2f3f1, { roughness: 0.2, metalness: 0.2 }), 0, alto + 0.27, zf + (zD - zf - 1.2) / 2);
       // puertas corredizas de vidrio esmerilado, una abierta
