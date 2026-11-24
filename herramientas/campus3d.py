@@ -644,9 +644,10 @@ def lugares_nuevos(calles, quebrada, lejos_carretera, y_ruta32):
     # baño de Docencia (24): casita crema de techo verde a una agua, justo detrás de la Coordinación (4)
     # (anotaciones) justo detrás de Docencia, del lado contrario a la calle
     # (anotaciones) se corre junto a la esquina noreste de Docencia, con las puertas hacia el edificio
-    # (anotaciones, nov. 2026) al norte de Docencia, pasando la punta norte, a lo largo de este a oeste y con las
-    # puertas hacia el edificio; la cara noreste queda libre para los casilleros y las sillas
-    caja(24, "caseta", (670, 1427), 0, 6.0, 4.5, alto=2.8, uso="banos_crema", limpiar=despejar_post)
+    # (anotaciones, nov. 2026) al norte de Docencia; la cara noreste queda libre para los casilleros y las sillas
+    # (anotaciones) frente a la cara noroeste, centrado en ella y paralelo (no en la punta entre dos caras), con las
+    # puertas hacia el edificio y una acera que lo une al corredor
+    caja(24, "caseta", (643.4, 1440.5), -30, 6.0, 4.5, alto=2.8, uso="banos_crema", limpiar=despejar_post)
     cv2.fillPoly(despejar, [np.array(rect_contorno(684, 1426, 6.0 / ESCALA + 56, 4.5 / ESCALA + 56, -20), np.int32)], 1)   # donde estaba
     # pasillo techado corto que une la puerta de Docencia con el pasillo 27 (anotaciones)
     # (anotaciones) llega hasta el piso del corredor de Docencia, sin el pedazo de zacate que quedaba en medio
@@ -875,6 +876,8 @@ def lugares_nuevos(calles, quebrada, lejos_carretera, y_ruta32):
     # llegar a la puerta, con los basureros de frente al centro del pasillo (antes flotaba fuera del pasillo)
     elem.append({"tipo": "punto_verde", "id": None, "p": [-127.82, 9.82], "giro": 1.925})
     # (fotos y anotaciones) parqueo de motos en el asfalto, pegado al pasillo 7 frente a Docencia, de frente al pasillo
+    # acera entre el corredor de Docencia (cara noroeste) y las puertas del baño, a todo lo largo del baño
+    elem.append({"tipo": "acera", "id": None, "ancho": 1.8, "puntos": [[-134.98, -13.65], [-140.18, -10.65]]})
     elem.append({"tipo": "motos", "id": None, "p": [-140.6, 28.5], "giro": 0.316, "largo": 8.0, "n": 4})
     # (anotaciones y fotos) rampa para personas con discapacidad entre 25 y 26, pegada a la cara norte de 26: sube
     # del suelo al oeste, da la vuelta en un descanso y llega al segundo piso de 26 junto a la pasarela

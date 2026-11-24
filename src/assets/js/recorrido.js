@@ -1041,6 +1041,7 @@ function maquinaEjercicio(tipo) {
 // la guía táctil amarilla sigue hasta la puerta. El Punto Verde va aparte, en el piso del pasillo (puntoVerde()). En la cara de la ventanilla, el ventanal grande de reja con la ventanilla de atención, la pizarra
 // de avisos, el dispensador de agua, el mueble de madera bajo la ventana, la banca negra de metal, las
 // condensadoras y una maceta. El corredor perimetral es de concreto con la guía amarilla cerca de la orilla.
+const GIRO_MECEDORA = 1.0;
 function docencia(grupo, vol, alto, { puerta = [0.5, 0.87], ventanilla = [1, 0], casilleros = null } = {}, alero = 2.8) {
   const c = vol.contorno;
   const reja = new THREE.MeshStandardMaterial({ color: 0x24282c, roughness: 0.6, metalness: 0.3 });
@@ -1165,11 +1166,7 @@ function docencia(grupo, vol, alto, { puerta = [0.5, 0.87], ventanilla = [1, 0],
   if (cCas) {
     const K = caraDe(casilleros), gris = new THREE.MeshStandardMaterial({ color: 0x5d6166, roughness: 0.5 });
     const beige = new THREE.MeshStandardMaterial({ color: 0xc9c2ad, roughness: 0.6, metalness: 0.2 });
-    // condensadoras apiladas, bajante y banca
-    for (const y of [0, 0.62]) {
-      K.pieza(0.85, 0.58, 0.32, new THREE.MeshStandardMaterial({ color: 0xebebe6, roughness: 0.6 }), -K.L / 2 + 1.0, 0.3, 0.33 + y);
-      K.pieza(0.45, 0.45, 0.02, new THREE.MeshStandardMaterial({ color: 0x55595c }), -K.L / 2 + 0.85, 0.47, 0.33 + y);
-    }
+    // bajante y banca (las condensadoras apiladas se quitaron, anotaciones)
     K.pieza(0.12, alto, 0.12, new THREE.MeshStandardMaterial({ color: 0xf4f4f0, roughness: 0.6 }), -K.L / 2 + 1.75, 0.12, alto / 2);
     const banca = (u, v) => {
       const b = new THREE.Group();
@@ -1182,7 +1179,7 @@ function docencia(grupo, vol, alto, { puerta = [0.5, 0.87], ventanilla = [1, 0],
       }
       b.position.set(...K.en(u, v, 0)); b.rotation.y = K.ang; b.traverse((o) => { o.castShadow = !liviano; }); grupo.add(b);
     };
-    banca(-K.L / 2 + 2.7, 0.4);
+    banca(-K.L / 2 + 2.1, 0.4);   // (anotaciones) un poco más hacia la esquina de la ventanilla
     // mecedora: concha gris de malla sobre dos patines curvos, con cojín verde
     const mecedora = (u, v, giro) => {
       const m = new THREE.Group();
@@ -1205,14 +1202,15 @@ function docencia(grupo, vol, alto, { puerta = [0.5, 0.87], ventanilla = [1, 0],
       x.fillStyle = "#2f6fb5"; x.beginPath(); x.arc(w * 0.7, h * 0.78, w * 0.13, 0, 7); x.fill();
     }, 128), -0.2 + 0.6, 0.14, alto * 0.38 + alto * 0.22);
     const madera = new THREE.MeshStandardMaterial({ color: 0xb08a5e, roughness: 0.7 });
-    const mesita = new THREE.Mesh(new THREE.CylinderGeometry(0.3, 0.3, 0.03, 18), madera); mesita.position.set(...K.en(0.35, 0.4, 0.6)); grupo.add(mesita);
-    for (let k = 0; k < 3; k++) { const a = (k * Math.PI * 2) / 3, p = new THREE.Mesh(new THREE.CylinderGeometry(0.015, 0.015, 0.6, 6), negro); p.position.set(...K.en(0.35 + Math.cos(a) * 0.2, 0.4 + Math.sin(a) * 0.2, 0.3)); grupo.add(p); }
-    K.pieza(0.14, 0.15, 0.14, new THREE.MeshStandardMaterial({ color: 0xf2f2ee }), 0.45, 0.45, 0.69);
-    const mata = new THREE.Mesh(new THREE.IcosahedronGeometry(0.14, 0), new THREE.MeshStandardMaterial({ color: 0x3f7a3a, flatShading: true })); mata.position.set(...K.en(0.45, 0.45, 0.85)); grupo.add(mata);
-    K.pieza(0.18, 0.22, 0.02, new THREE.MeshStandardMaterial({ color: 0xd8b24a }), 0.22, 0.42, 0.72, 0.3);
-    mecedora(-0.6, 0.75, 0.3);
+    const uM = -1.15;   // (anotaciones) primero la mesita y luego la mecedora
+    const mesita = new THREE.Mesh(new THREE.CylinderGeometry(0.3, 0.3, 0.03, 18), madera); mesita.position.set(...K.en(uM, 0.4, 0.6)); grupo.add(mesita);
+    for (let k = 0; k < 3; k++) { const a = (k * Math.PI * 2) / 3, p = new THREE.Mesh(new THREE.CylinderGeometry(0.015, 0.015, 0.6, 6), negro); p.position.set(...K.en(uM + Math.cos(a) * 0.2, 0.4 + Math.sin(a) * 0.2, 0.3)); grupo.add(p); }
+    K.pieza(0.14, 0.15, 0.14, new THREE.MeshStandardMaterial({ color: 0xf2f2ee }), uM + 0.1, 0.45, 0.69);
+    const mata = new THREE.Mesh(new THREE.IcosahedronGeometry(0.14, 0), new THREE.MeshStandardMaterial({ color: 0x3f7a3a, flatShading: true })); mata.position.set(...K.en(uM + 0.1, 0.45, 0.85)); grupo.add(mata);
+    K.pieza(0.18, 0.22, 0.02, new THREE.MeshStandardMaterial({ color: 0xd8b24a }), uM - 0.13, 0.42, 0.72, 0.3);
+    mecedora(-0.1, 0.8, GIRO_MECEDORA);   // volteada hacia la entrada (la esquina de la ventanilla y la puerta)
     // casilleros: dos columnas de cuerpos de tres puertas, con candados
-    const uC = 2.3;
+    const uC = 2.85;   // (anotaciones) casilleros y maceta más hacia la punta norte
     for (const du of [-0.45, 0.45]) {
       K.pieza(0.88, 1.95, 0.5, beige, uC + du, 0.27, 1.0);
       for (let k = 0; k < 3; k++) {
@@ -1220,10 +1218,9 @@ function docencia(grupo, vol, alto, { puerta = [0.5, 0.87], ventanilla = [1, 0],
         for (const dd of [-0.2, 0.2]) K.pieza(0.05, 0.08, 0.04, new THREE.MeshStandardMaterial({ color: 0xb9963c, metalness: 0.5 }), uC + du + dd, 0.54, 0.62 + k * 0.62);
       }
     }
-    mecedora(uC - 1.35, 0.7, -0.2);
-    K.pieza(0.4, 0.38, 0.4, new THREE.MeshStandardMaterial({ color: 0xb4532f, roughness: 0.8 }), uC + 1.3, 0.35, 0.3);
+    K.pieza(0.4, 0.38, 0.4, new THREE.MeshStandardMaterial({ color: 0xb4532f, roughness: 0.8 }), uC + 1.25, 0.35, 0.3);
     for (let k = 0; k < 6; k++) {
-      const h = new THREE.Mesh(new THREE.BoxGeometry(0.06, 0.9, 0.02), new THREE.MeshStandardMaterial({ color: 0x3f8a3a })); h.position.set(...K.en(uC + 1.3, 0.35, 0.85));
+      const h = new THREE.Mesh(new THREE.BoxGeometry(0.06, 0.9, 0.02), new THREE.MeshStandardMaterial({ color: 0x3f8a3a })); h.position.set(...K.en(uC + 1.25, 0.35, 0.85));
       h.rotation.set((k % 3 - 1) * 0.4, K.ang + k, (k % 2 ? 1 : -1) * 0.35); grupo.add(h);
     }
     // baranda azul en la orilla del corredor
@@ -1443,9 +1440,10 @@ for (const e of datos.campus.edificios) {
     // (fotos y anotaciones, nov. 2026) máquinas de ejercicio al aire libre en el zacate, a lo largo de la pared de
     // afuera de los baños, desde el cuarto de máquinas hacia el norte: de cerca a lejos, el press de pecho de dos
     // asientos, el péndulo, la caminadora aérea y la rueda con el asiento de piernas
-    [["press", 9.6], ["pendulo", 7.0], ["caminadora", 4.6], ["rueda", 1.8]].forEach(([tipo, t]) => {
+    // (anotaciones) en línea con las tres mesas (x = 46,3), siguiendo hacia el sur
+    [["press", -44.6], ["pendulo", -47.3], ["caminadora", -49.9], ["rueda", -52.6]].forEach(([tipo, t]) => {
       const m = maquinaEjercicio(tipo);
-      m.position.set(...oeste.en(sentido * t, D + FONDO / 2 + 1.25, 0)); m.rotation.y = oeste.ang; grupo.add(m);
+      m.position.set(46.3, 0, t); m.rotation.y = oeste.ang; grupo.add(m);
     });
     // parqueo de bicicletas y motos: adoquín rojizo pegado a la calle, en la cara que mira a la biblioteca (norte)
     const norte = ladoHacia(-1);
