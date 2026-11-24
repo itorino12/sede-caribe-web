@@ -50,7 +50,22 @@
     "Este proyecto desarrolla un producto bioestimulante para plantas a partir de biomasa de microalgas. Los compuestos que ayudan al crecimiento vegetal, como fitohormonas, aminoácidos y antioxidantes, se encapsulan en una emulsión Pickering, un tipo de emulsión estabilizada con partículas sólidas y no con detergentes convencionales, que los protege y los libera de forma controlada.",
     "Las partículas que estabilizan la emulsión son nanocelulosa sacada del rastrojo de piña, un residuo agroindustrial muy abundante en las zonas productoras. Así, el proyecto convierte un desecho agrícola en un material útil para la propia agricultura."
    ],
-   "nombre_oficial": "Desarrollo de un formulado de biomasa microalgal a partir de una emulsión Pickering empleando nanocelulosa de rastrojo de piña como encapsulador de compuestos con actividad bioestimulante"
+   "nombre_oficial": "Desarrollo de un formulado de biomasa microalgal a partir de una emulsión Pickering empleando nanocelulosa de rastrojo de piña como encapsulador de compuestos con actividad bioestimulante",
+   "objetivo": "Desarrollar un formulado bioestimulante a base de biomasa de microalgas, encapsulada en una emulsión Pickering estabilizada con nanocelulosa de rastrojo de piña.",
+   "objetivos": [
+    "Estudiar las condiciones para hidrolizar la biomasa de microalgas.",
+    "Establecer cómo encapsularla dentro de la emulsión Pickering de nanocelulosa.",
+    "Caracterizar la emulsión al microscopio y por sus propiedades de flujo (reología).",
+    "Evaluar en el laboratorio de la Sede los protocolos para medir la actividad bioestimulante en semillas de germinación rápida."
+   ],
+   "metodo": "Primero se obtienen hidrolizados de microalgas por métodos físicos, químicos y enzimáticos y se mide su contenido de proteína. Los dos mejores se encapsulan en la emulsión, que luego se caracteriza y se prueba sobre semillas.",
+   "beneficia": "Pymes del sector agropecuario y forestal y gobiernos locales. El proyecto aprovecha residuos agroindustriales de la zona para producir insumos agrícolas que ayudan a reducir la contaminación de suelos y aguas por exceso de agroquímicos.",
+   "aporte": "Fortalece en la Sede los métodos de aprovechamiento de residuos agroindustriales bajo el concepto de economía circular y da continuidad a su investigación para mejorar la productividad agrícola con menos químicos en la provincia.",
+   "donde": "Limón (Sede del Caribe) y San Pedro de Montes de Oca",
+   "ods": [
+    "Hambre cero",
+    "Alianza para lograr los objetivos"
+   ]
   },
   {
    "id": "pry01-1613-2026",
@@ -67,7 +82,22 @@
     "El proyecto sintetiza, con métodos sencillos, materiales porosos avanzados llamados MOFs y POPs y evalúa si sirven para retirar contaminantes emergentes, como los fármacos, de las aguas.",
     "Además de medir qué tan bien atrapan estas sustancias, analiza la toxicidad de los materiales antes y después del proceso y comprueba si pueden reutilizarse en varios ciclos, siguiendo los principios de la química verde."
    ],
-   "nombre_oficial": "Evaluación de materiales porosos avanzados (MOFs/POPs) en la remoción de fármacos en medio acuoso"
+   "nombre_oficial": "Evaluación de materiales porosos avanzados (MOFs/POPs) en la remoción de fármacos en medio acuoso",
+   "objetivo": "Evaluar qué tan bien adsorben contaminantes del agua los materiales porosos MOFs y POPs, y también su ecotoxicidad y su posibilidad de regenerarse para reutilizarse.",
+   "objetivos": [
+    "Desarrollar métodos de síntesis de MOFs y POPs con las propiedades adecuadas para atrapar contaminantes en agua.",
+    "Explorar su eficiencia con varios fármacos emergentes e identificar cómo interactúan con ellos.",
+    "Determinar cuánto cambia la toxicidad de las aguas tratadas con estos materiales.",
+    "Analizar si pueden regenerarse y reutilizarse en varios ciclos de adsorción y desorción (al menos cuatro)."
+   ],
+   "metodo": "Se sintetizan los materiales con rutas sencillas y de bajo impacto ambiental, variando monómeros, solventes, temperaturas y tiempos, y se les agregan funcionalizaciones para estudiar su efecto. Después se prueban en adsorción de fármacos, se mide su ecotoxicidad y se repiten los ciclos de uso.",
+   "beneficia": "Población en zonas con riesgo ambiental y gobiernos locales. El proyecto permite estudiar sistemas que reduzcan el impacto de contaminantes en el ambiente y refuercen la gestión y el tratamiento de aguas.",
+   "aporte": "Aporta conocimiento científico nuevo sobre materiales avanzados para tratar aguas y consolida a la UCR como referente nacional en la remoción de contaminantes emergentes.",
+   "donde": "Limón y Cahuita (Talamanca)",
+   "ods": [
+    "Agua limpia y saneamiento",
+    "Vida Submarina"
+   ]
   },
   {
    "id": "pry01-1225-2025",
@@ -82,7 +112,20 @@
     "El proyecto evalúa especies de cladóceros, pequeños crustáceos de agua dulce, como indicadores biológicos de la toxicidad total de lo que sale de las plantas de tratamiento de aguas residuales de la región Huetar Caribe.",
     "Sus resultados se comparan con los parámetros físico-químicos que obliga a medir el Reglamento de vertido y reuso de aguas residuales, para valorar si la prueba con cladóceros podría sumarse como un parámetro ecotoxicológico complementario en la normativa."
    ],
-   "nombre_oficial": "Evaluación de cladóceros como bioindicadores de la toxicidad total de efluentes de plantas de tratamiento de aguas residuales en la región Huetar Caribe"
+   "nombre_oficial": "Evaluación de cladóceros como bioindicadores de la toxicidad total de efluentes de plantas de tratamiento de aguas residuales en la región Huetar Caribe",
+   "objetivo": "Evaluar si especies seleccionadas de cladóceros sirven como bioindicadores de la toxicidad total de los efluentes de plantas de tratamiento, como complemento de los parámetros físico-químicos obligatorios del decreto 33601-MINAE-S.",
+   "objetivos": [
+    "Implementar el cultivo de las especies de cladóceros seleccionadas en el Laboratorio de Ingeniería Química de la Sede.",
+    "Determinar la toxicidad total de los efluentes de plantas de tratamiento de aguas para cada especie."
+   ],
+   "metodo": "Se eligen las especies a partir de una revisión bibliográfica, según su disponibilidad y su sensibilidad reportada. Luego se cultivan en el laboratorio y se exponen a los efluentes para medir su respuesta.",
+   "beneficia": "Población en zonas con riesgo ambiental y gobiernos locales. La evaluación ecotoxicológica mejora las decisiones sobre qué hacer con los efluentes y sobre nuevas tecnologías que reduzcan su efecto tóxico, y protege los ecosistemas acuáticos.",
+   "aporte": "Fortalece las relaciones interinstitucionales y promueve la protección de los ecosistemas acuáticos y una mejor gestión de las aguas residuales.",
+   "donde": "Limón y Cahuita (Talamanca)",
+   "ods": [
+    "Agua limpia y saneamiento",
+    "Vida Submarina"
+   ]
   },
   {
    "id": "pry01-1064-2026",
@@ -100,7 +143,24 @@
     "El proyecto prueba hidrogeles, materiales que retienen mucha agua, cargados con extractos de microalgas como alternativa sostenible para mejorar la germinación de semillas.",
     "Los extractos aportan nutrientes, aminoácidos, vitaminas y antioxidantes que estimulan el crecimiento. Con el hidrogel se liberan poco a poco, mientras el sustrato conserva la humedad, y se busca que la raíz se desarrolle con más fuerza."
    ],
-   "nombre_oficial": "Potencial uso de hidrogeles dosificados con extractos de microalgas aplicados a la germinación"
+   "nombre_oficial": "Potencial uso de hidrogeles dosificados con extractos de microalgas aplicados a la germinación",
+   "objetivo": "Evaluar el efecto de hidrogeles dosificados con extractos de microalgas sobre la germinación de semillas, para saber si son una alternativa viable y sostenible que mejore el desarrollo inicial de los cultivos.",
+   "objetivos": [
+    "Analizar cómo la concentración de calcio cambia el grado de entrecruzamiento del hidrogel.",
+    "Caracterizar las propiedades físicas y químicas del hidrogel con distintas dosis de cloruro de calcio.",
+    "Generar al menos un hidrolizado a partir de biomasa de microalgas.",
+    "Evaluar cómo se incorpora el hidrolizado al hidrogel.",
+    "Evaluar la germinación con al menos tres dosis de hidrogeles con hidrolizado."
+   ],
+   "metodo": "Se extrae alginato de sodio de algas para armar el hidrogel y se prepara el hidrolizado de microalgas. Después se incorpora el hidrolizado al hidrogel y se prueba con distintas dosis sobre semillas.",
+   "beneficia": "Pymes del sector agropecuario y áreas de conservación ambiental. Se aprovechan residuos agroindustriales de la zona para producir insumos agrícolas más amigables con el ambiente, con menos contaminación de suelo y aguas por químicos.",
+   "aporte": "Fortalece los métodos de aprovechamiento de residuos agroindustriales con economía circular y mantiene a la Sede en la investigación que busca reducir los químicos en la agricultura de Limón.",
+   "donde": "Limón (Sede del Caribe)",
+   "ods": [
+    "Hambre cero",
+    "Producción y Consumo Responsables",
+    "Alianza para lograr los objetivos"
+   ]
   },
   {
    "id": "pry01-1137-2023",
@@ -117,7 +177,22 @@
    "texto": [
     "El proyecto calcula qué tan eficiente es, en términos de energía, el bombeo de agua potable en las ASADAS que se abastecen de pozos en la provincia de Limón, y estudia el uso de energía fotovoltaica para hacerlo."
    ],
-   "nombre_oficial": "Cálculo de la eficiencia energética y energía fotovoltaica en el bombeo de las ASADAS con pozo de la provincia de Limón"
+   "nombre_oficial": "Cálculo de la eficiencia energética y energía fotovoltaica en el bombeo de las ASADAS con pozo de la provincia de Limón",
+   "objetivo": "Cuantificar la eficiencia energética y la producción fotovoltaica en el bombeo de agua de las ASADAS con pozo, a partir del análisis de señales, para mejorar su consumo de energía.",
+   "objetivos": [
+    "Establecer una muestra significativa de ASADAS de la región Huetar Caribe para estudiar la eficiencia energética en la producción de agua potable.",
+    "Calcular la eficiencia energética de sus sistemas de bombeo.",
+    "Calcular la producción fotovoltaica con el programa PVGIS."
+   ],
+   "metodo": "Se mide el funcionamiento y el consumo de una muestra de ASADAS con bombeo, se entrevista a personal del AyA y de las ASADAS y se reúne su historial energético y de bombeo. Con esos datos se calcula la eficiencia de cada sistema y se estima cuánta energía solar podría aportar.",
+   "beneficia": "Toda la población abastecida por las 69 ASADAS con pozo de la provincia de Limón. Su ahorro energético puede traducirse en menores gastos de producción de agua y en la facturación.",
+   "aporte": "Busca que la UCR sea referente en investigación sobre nuevos patrones de consumo y generación en el recurso hídrico, con ASADAS de pozo alimentadas con energías renovables.",
+   "donde": "Cantones de Limón, Pococí, Siquirres y Talamanca",
+   "ods": [
+    "Agua limpia y saneamiento",
+    "Energía asequible y no contaminante",
+    "Acción por el clima"
+   ]
   },
   {
    "id": "pry01-1038-2023",
@@ -134,7 +209,21 @@
    "texto": [
     "El proyecto evalúa el consumo de energía y la huella de carbono de la Sede del Caribe. Sus resultados apoyan la eficiencia energética y el plan de mitigación de carbono de la Universidad de Costa Rica en la Sede."
    ],
-   "nombre_oficial": "Evaluación energética y huella de carbono de la Sede del Caribe"
+   "nombre_oficial": "Evaluación energética y huella de carbono de la Sede del Caribe",
+   "objetivo": "Evaluar el consumo de energía de la Sede del Caribe para cuantificar su huella de carbono.",
+   "objetivos": [
+    "Establecer un año base energético para medir los ahorros de los años siguientes.",
+    "Identificar y sistematizar las fuentes de emisiones de gases de efecto invernadero.",
+    "Desarrollar e implementar medidas de eficiencia energética para reducir la huella de carbono de la Sede."
+   ],
+   "metodo": "Se usa la norma europea UNE-EN 16247: se hace un inventario de los equipos que consumen energía en la Sede, se estiman sus horas de uso y se calculan los consumos y las emisiones, para luego planificar las medidas.",
+   "beneficia": "La comunidad universitaria de la Sede y quienes usan sus instalaciones. Estudiantes, funcionarios y docentes participan en un proceso que ayuda a mitigar el cambio climático.",
+   "aporte": "Mejora el consumo energético de la Sede, su imagen local y nacional y su participación en la meta nacional de carbono neutro.",
+   "donde": "Limón (Sede del Caribe)",
+   "ods": [
+    "Energía asequible y no contaminante",
+    "Acción por el clima"
+   ]
   },
   {
    "id": "pry01-1535-2024",
@@ -151,7 +240,27 @@
     "El proyecto busca rutas para retirar fármacos de las aguas a partir de residuos de biomasa que genera la agroindustria costarricense, bajo el principio de economía circular.",
     "Avanza en cuatro etapas: elegir los residuos con más potencial y mejorarlos, probarlos con contaminantes modelo, evaluar la toxicidad aguda del agua tratada y, al final, ensayar las mejores tecnologías con aguas residuales reales."
    ],
-   "nombre_oficial": "Desarrollo de bioadsorbentes para la remoción de sustancias farmacéuticas en medio acuoso implementando principios de economía circular en residuos biomásicos"
+   "nombre_oficial": "Desarrollo de bioadsorbentes para la remoción de sustancias farmacéuticas en medio acuoso implementando principios de economía circular en residuos biomásicos",
+   "objetivo": "Desarrollar bioadsorbentes para retirar sustancias farmacéuticas del agua, a partir de residuos de biomasa y con principios de economía circular.",
+   "objetivos": [
+    "Definir rutas de valorización de residuos biomásicos para producir bioadsorbentes (al menos tres bioadsorbentes de dos residuos).",
+    "Evaluar los bioadsorbentes en la remoción de un fármaco modelo.",
+    "Determinar la toxicidad aguda de las aguas tratadas con ellos.",
+    "Determinar la toxicidad aguda de aguas residuales reales tratadas con los bioadsorbentes elegidos."
+   ],
+   "metodo": "Una revisión bibliográfica y la consulta a expertos permiten armar una matriz de selección con la que se eligen al menos dos residuos. Con ellos se producen los bioadsorbentes, se prueban con un contaminante modelo, se mide la toxicidad del agua tratada y al final se ensayan con aguas residuales reales.",
+   "beneficia": "La población del país en general, productores agrícolas, y entidades públicas como el AyA y los ministerios de Salud y de Ambiente. Ofrece opciones de tratamiento para residuos y aguas residuales, pues en Costa Rica solo cerca del 1 % de las fincas trata sus aguas.",
+   "aporte": "La UCR participa activamente en alternativas para dos problemas ambientales del país: la mala gestión de los residuos agrícolas y la contaminación del agua con fármacos.",
+   "donde": "Limón, Montes de Oca y Palmares",
+   "ods": [
+    "Salud y Bienestar",
+    "Agua limpia y saneamiento",
+    "Industria, innovación e infraestructura",
+    "Ciudades y comunidades sostenibles",
+    "Producción y Consumo Responsables",
+    "Vida Submarina",
+    "Vida de Ecosistemas Terrestres"
+   ]
   },
   {
    "id": "pry01-804-2025",
@@ -168,7 +277,22 @@
     "Al producir nanocelulosa de residuos agroindustriales, la lignina, el segundo polímero más abundante de esos residuos, suele desecharse. Este proyecto la aprovecha para obtener polifenoles.",
     "Trabaja con dos residuos que ya se procesaron en la Sede y compara los polifenoles obtenidos con los de lignina extraída por un método convencional, según su capacidad de frenar el crecimiento de bacterias. Aporta a la economía circular y a la agricultura."
    ],
-   "nombre_oficial": "Aprovechamiento de la lignina de residuos agroindustriales de la provincia de Limón como potencial fuente de compuestos polifenólicos"
+   "nombre_oficial": "Aprovechamiento de la lignina de residuos agroindustriales de la provincia de Limón como potencial fuente de compuestos polifenólicos",
+   "objetivo": "Desarrollar metodologías para aprovechar la lignina de residuos agroindustriales de Limón como fuente de compuestos polifenólicos.",
+   "objetivos": [
+    "Extraer lignina de los subproductos del método de nanocelulosa de la Sede y de un método convencional.",
+    "Caracterizar los residuos de la extracción con espectroscopía infrarroja, fluorescencia y medición de lignina residual.",
+    "Evaluar el contenido de polifenoles del extracto purificado de lignina obtenido por los dos métodos.",
+    "Determinar la actividad de dos extractos polifenólicos puros para frenar el crecimiento de un patógeno."
+   ],
+   "metodo": "Se evalúan residuos de la zona (raquis de banano, rastrojo de piña, raquis de palma africana y bagazo de caña), todos ya trabajados en la Sede para obtener nanocelulosa, y se elige cuáles sirven para extraer lignina. De ella se aíslan los polifenoles y se prueba su efecto sobre bacterias.",
+   "beneficia": "El sector agroindustrial de la provincia de Limón. El aprovechamiento de residuos da productos de uso agrícola, condiciones de cultivo más amigables con el ambiente y menos contaminación de suelo y agua.",
+   "aporte": "Fortalece en la Sede la economía circular, desarrolla métodos para aislar polifenoles de una lignina que antes se desechaba y da continuidad a su investigación para mejorar la productividad agrícola con menos químicos.",
+   "donde": "Limón y San Pedro de Montes de Oca",
+   "ods": [
+    "Hambre cero",
+    "Alianza para lograr los objetivos"
+   ]
   },
   {
    "id": "pry01-1068-2025",
@@ -186,7 +310,18 @@
     "Este proyecto forma parte del Programa de Investigaciones en Ciencias Empresariales, Económicas y Sociales de la Sede. Promueve la investigación y difunde los resultados de los proyectos del programa y de otras investigaciones de la UCR sobre el tema.",
     "Lo hace con conferencias, talleres y foros que transfieren conocimiento útil para el desarrollo empresarial, económico y social de la población de la región Caribe."
    ],
-   "nombre_oficial": "Espacios de fortalecimiento y transferencia de conocimiento para el desarrollo social, empresarial y económico de los habitantes en la Región Caribe de Costa Rica"
+   "nombre_oficial": "Espacios de fortalecimiento y transferencia de conocimiento para el desarrollo social, empresarial y económico de los habitantes en la Región Caribe de Costa Rica",
+   "objetivo": "Propiciar espacios de transferencia de conocimiento, difusión de resultados de investigación y colaboración entre la comunidad, las instituciones académicas y el sector empresarial, para contribuir al desarrollo empresarial, económico y social de la región Caribe.",
+   "objetivos": [
+    "Hacer una investigación exploratoria en los centros, institutos y unidades de investigación de la UCR para identificar proyectos que contribuyan al desarrollo social, empresarial y económico de la región.",
+    "Identificar sectores con interés o necesidades de investigación y conectarlos con las unidades de la UCR para iniciar nuevas iniciativas.",
+    "Realizar al menos ocho actividades al año, como conferencias, talleres, foros y capacitaciones."
+   ],
+   "metodo": "Un enfoque mixto, que combina métodos cuantitativos y cualitativos, para recopilar información, identificar oportunidades y organizar las actividades de transferencia.",
+   "beneficia": "La comunidad local y empresarial, pequeños emprendedores, docentes, investigadores y estudiantes. Los espacios permiten acceder a información y capacitación que pueden mejorar prácticas empresariales y el bienestar social y económico.",
+   "aporte": "Fortalece la imagen de la Sede y su credibilidad ante la comunidad caribeña, y abre la puerta a nuevos proyectos de investigación, tesis, proyectos de graduación y TCU.",
+   "donde": "Cantones de Limón, Matina, Guácimo, Siquirres y Talamanca",
+   "ods": []
   },
   {
    "id": "pry01-176-2024",
@@ -204,7 +339,24 @@
     "El proyecto parte de una pregunta: si la realidad social del Caribe corresponde con el estigma de zona violenta e insegura que pesa sobre Limón. Para responderla, recoge las percepciones de las mujeres turistas que visitan el Caribe Central y Sur.",
     "También estudia cómo se han construido las mujeres emprendedoras del turismo y de actividades afines en la región, y qué acciones y recursos existen para hacer de los destinos lugares confiables. Busca dar a quienes toman decisiones y al sector turístico insumos para políticas y acciones de turismo seguro."
    ],
-   "nombre_oficial": "Análisis de las regiones del Caribe Central y Sur de la provincia de Limón como destinos atractivos para el turismo femenino: construcción socioeconómica de la zona, basado en las percepciones de seguridad de la turista que visita el Caribe de Costa Rica y mujeres emprendedoras del turismo con apoyo del ObturCaribe"
+   "nombre_oficial": "Análisis de las regiones del Caribe Central y Sur de la provincia de Limón como destinos atractivos para el turismo femenino: construcción socioeconómica de la zona, basado en las percepciones de seguridad de la turista que visita el Caribe de Costa Rica y mujeres emprendedoras del turismo con apoyo del ObturCaribe",
+   "objetivo": "Analizar el Caribe Central y Sur de Limón como destino atractivo para el turismo femenino, a partir de las percepciones de seguridad de las turistas y de la construcción socioeconómica de las mujeres emprendedoras del turismo.",
+   "objetivos": [
+    "Crear un informe estadístico e histórico de los incidentes violentos en las regiones turísticas del país en los últimos veinte años.",
+    "Determinar las percepciones del Caribe como destino seguro para la mujer visitante.",
+    "Conocer la vivencia y la construcción socioeconómica del espacio turístico mediante el emprendedurismo femenino.",
+    "Investigar las acciones públicas y privadas para ofrecer a Costa Rica y al Caribe como destinos seguros para el turismo femenino.",
+    "Elaborar un informe técnico con los principales resultados."
+   ],
+   "metodo": "Una investigación aplicada de tipo mixto. Incluye una revisión de fuentes judiciales y de prensa para armar una base de datos de delitos en zonas turísticas, y luego encuestas y trabajo conjunto con las poblaciones del estudio.",
+   "beneficia": "Quienes toman decisiones y representan al sector turístico, la comunidad del Caribe, y estudiantes y docentes de Turismo. La devolución de resultados permite ejecutar acciones concretas sobre seguridad y fortalecer la información científica de la zona.",
+   "aporte": "Aborda un tema de género que preocupa a la comunidad caribeña y a las autoridades. Se apoya en diez años de trabajo del Observatorio de Turismo con las comunidades, lo que genera confianza.",
+   "donde": "Cantones de Limón, Matina y Talamanca",
+   "ods": [
+    "Igualdad de género",
+    "Trabajo decente y crecimiento económico",
+    "Industria, innovación e infraestructura"
+   ]
   },
   {
    "id": "pry01-192-2024",
@@ -224,7 +376,32 @@
     "El proyecto sostiene el Observatorio de Turismo Sostenible del Caribe de Costa Rica (ObturCaribe), una investigación cooperativa con actores e instituciones clave de la región Huetar Caribe para fortalecer el desarrollo de la actividad turística.",
     "Recopila, sistematiza y actualiza información sobre el turismo, renueva la agenda temática del observatorio según los planes y leyes vigentes y extiende la investigación a zonas no abordadas antes, como el Caribe Norte."
    ],
-   "nombre_oficial": "Observatorio de Turismo Sostenible del Caribe de Costa Rica (ObturCaribe): seguimiento y fortalecimiento de la actividad turística en el caribe costarricense"
+   "nombre_oficial": "Observatorio de Turismo Sostenible del Caribe de Costa Rica (ObturCaribe): seguimiento y fortalecimiento de la actividad turística en el caribe costarricense",
+   "objetivo": "Seguir y fortalecer la actividad turística del Caribe costarricense mediante la recopilación, sistematización, actualización, producción y mantenimiento de información vigente sobre el turismo y sus temas transversales.",
+   "objetivos": [
+    "Mantener y actualizar indicadores clave de la actividad turística en el Caribe.",
+    "Fortalecer las alianzas con actores estratégicos de la región Huetar Caribe.",
+    "Examinar y actualizar la agenda temática a la luz de los planes de las instituciones aliadas.",
+    "Iniciar investigación en zonas no abordadas antes, como el Caribe Norte.",
+    "Robustecer el sistema de información del Observatorio con índices e indicadores.",
+    "Difundir la información sobre el Caribe y su cultura a sectores nacionales e internacionales y a la comunidad limonense."
+   ],
+   "metodo": "El observatorio funciona como un espacio de reflexión e interacción entre actores estratégicos vinculados con el turismo de la región, que intercambian perspectivas para sustentar iniciativas y políticas públicas hacia metas comunes.",
+   "beneficia": "Quienes toman decisiones públicas y privadas, empresarios turísticos del Caribe, estudiantes, docentes e investigadores. De forma indirecta, la población local, nacional e internacional. Ofrecen cifras actualizadas, un espacio de interacción entre actores y datos para exigir acciones acordes con la sostenibilidad de la región.",
+   "aporte": "Da proyección nacional y local a la Universidad: apoya la articulación entre actores públicos y privados del turismo en el Caribe y ayuda a formular políticas públicas.",
+   "donde": "Cantones de Limón, Matina, Pococí, Siquirres y Talamanca",
+   "ods": [
+    "Fin de la pobreza",
+    "Educación de calidad",
+    "Agua limpia y saneamiento",
+    "Trabajo decente y crecimiento económico",
+    "Industria, innovación e infraestructura",
+    "Reducción de las desigualdades",
+    "Ciudades y comunidades sostenibles",
+    "Producción y Consumo Responsables",
+    "Vida Submarina",
+    "Vida de Ecosistemas Terrestres"
+   ]
   },
   {
    "id": "pry01-237-2027",
@@ -242,7 +419,20 @@
     "En las sedes regionales, la atención de consultas normativas y la lectura de la retroalimentación académica dependen sobre todo de trabajo manual, lo que limita el aprovechamiento de la información y las decisiones basadas en evidencia.",
     "El proyecto usa técnicas de procesamiento de lenguaje natural, con prototipos funcionales como instrumentos de análisis, para estudiar cómo cambian la eficiencia operativa, la interpretación de la información académica y la toma de decisiones. No busca un producto tecnológico final, sino entender ese efecto en dos ámbitos: las consultas estudiantiles y el análisis de la retroalimentación."
    ],
-   "nombre_oficial": "Estudio del Procesamiento de Lenguaje Natural (PLN) en la gestión académica y administrativa de la Sede del Caribe de la Universidad de Costa Rica, para diagnosticar su influencia en la interpretación de la información institucional y en los procesos de toma de decisiones universitarias"
+   "nombre_oficial": "Estudio del Procesamiento de Lenguaje Natural (PLN) en la gestión académica y administrativa de la Sede del Caribe de la Universidad de Costa Rica, para diagnosticar su influencia en la interpretación de la información institucional y en los procesos de toma de decisiones universitarias",
+   "objetivo": "Analizar el efecto del procesamiento de lenguaje natural, mediante un modelo comparativo, para determinar sus beneficios en la gestión académica y administrativa de la Sede.",
+   "objetivos": [
+    "Caracterizar la información textual institucional de los procesos de la Sede: tipos de consultas, fuentes y patrones de uso de la normativa.",
+    "Analizar con estas técnicas la retroalimentación cualitativa de la evaluación docente, e identificar tendencias y categorías de percepción estudiantil.",
+    "Evaluar cómo el análisis automatizado de texto influye en la interpretación de la información y en las decisiones académicas y administrativas."
+   ],
+   "metodo": "Un estudio de caso aplicado, con enfoque de investigación-acción, que toma la Sede como caso. El lenguaje natural se usa como apoyo al análisis cualitativo y no como producto final.",
+   "beneficia": "Estudiantes, docentes y usuarios de los servicios académicos de la Sede, unas 1700 personas. Mejora el acceso a la información institucional y a la normativa, reduce la incertidumbre en los trámites y los tiempos de espera, y hace que las opiniones estudiantiles se consideren en la mejora académica.",
+   "aporte": "Genera conocimiento aplicado sobre el uso de estas técnicas en la gestión universitaria y documenta un modelo de análisis de texto que otras unidades pueden usar.",
+   "donde": "Limón (Sede del Caribe)",
+   "ods": [
+    "Industria, innovación e infraestructura"
+   ]
   },
   {
    "id": "pry01-303-2025",
@@ -257,7 +447,20 @@
     "Los anfibios enfrentan un grave riesgo de extinción en todo el mundo. Una forma de ayudarlos es darles sitios donde reproducirse. El proyecto evalúa si los refugios sirven para eso, comparando refugios naturales con artificiales puestos en el bosque de la Sede del Caribe.",
     "Los resultados dirán qué tan útiles son los refugios para conservar anfibios y servirán para preparar material informativo para la comunidad universitaria y el público."
    ],
-   "nombre_oficial": "Uso de refugios naturales y artificiales por anfibios presentes en la Sede del Caribe, UCR"
+   "nombre_oficial": "Uso de refugios naturales y artificiales por anfibios presentes en la Sede del Caribe, UCR",
+   "objetivo": "Comparar el uso, la ocupación y las características morfológicas de los anfibios hallados en refugios naturales y artificiales del bosque de la Sede, para evaluar su eficacia como sitios de reproducción y como herramienta de conservación.",
+   "objetivos": [
+    "Identificar las especies y contar los adultos y renacuajos que usan refugios artificiales y naturales.",
+    "Medir las características morfológicas de los individuos encontrados.",
+    "Producir material informativo sobre los anfibios de la Sede para acercar a la comunidad universitaria y al público a su conocimiento."
+   ],
+   "metodo": "El estudio se hace en el Jardín Etnobotánico del Caribe, unas 12 ha de bosque secundario de más de 40 años dentro del campus. Allí se colocan refugios, con 10 estaciones, y se revisan para registrar las especies que los ocupan.",
+   "beneficia": "La comunidad científica, la comunidad universitaria y las comunidades cercanas a la Sede. Cuentan con un área mejor estudiada para investigación y esparcimiento, y para aprender sobre especies silvestres y conservación.",
+   "aporte": "Genera conocimiento sobre las especies de un área boscosa de la Universidad, permite publicar en revistas nacionales y proyecta una imagen positiva de la UCR ante las comunidades.",
+   "donde": "Limón (Jardín Etnobotánico del Caribe, Sede del Caribe)",
+   "ods": [
+    "Vida de Ecosistemas Terrestres"
+   ]
   },
   {
    "id": "pry01-633-2027",

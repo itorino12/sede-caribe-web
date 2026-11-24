@@ -8,6 +8,15 @@
     <div class="prosa">
       <h2>De qué trata</h2>
       {% for par in p.texto %}<p>{{ par }}</p>{% endfor %}
+      {% if p.objetivo %}
+      <h2>Objetivo</h2>
+      <p>{{ p.objetivo }}</p>
+      {% if p.objetivos %}<h2>Qué se propone hacer</h2>
+      <ul>{% for o in p.objetivos %}<li>{{ o }}</li>{% endfor %}</ul>{% endif %}
+      {% if p.metodo %}<h2>Cómo se hace</h2><p>{{ p.metodo }}</p>{% endif %}
+      {% if p.beneficia %}<h2>A quién beneficia</h2><p>{{ p.beneficia }}</p>{% endif %}
+      {% if p.aporte %}<h2>Qué aporta a la Sede y a la UCR</h2><p>{{ p.aporte }}</p>{% endif %}
+      {% endif %}
       {% if g.id == "en-inscripcion" %}<p>Este proyecto está en proceso de inscripción ante la Vicerrectoría de Investigación. Cuando se apruebe se ampliará esta descripción.</p>{% endif %}
     </div>
   </div>
@@ -19,6 +28,7 @@
         <dt>{% if g.codigo %}Programa{% else %}Clasificación{% endif %}</dt><dd><a href="{{ raiz }}investigacion/{{ g.id }}.html">{{ g.nombre }}</a></dd>
         <dt>Estado</dt><dd>{% if g.id == "en-inscripcion" %}En proceso de inscripción{% else %}Vigente en 2026{% endif %}</dd>
         {% if p.vigencia and p.vigencia != "2026" %}<dt>Vigencia</dt><dd>{{ p.vigencia }}</dd>{% endif %}
+        {% if p.donde %}<dt>Dónde</dt><dd>{{ p.donde }}</dd>{% endif %}
         <dt>Responsable</dt><dd>{{ p.responsable }}</dd>
         {% if p.colaboradores %}<dt>Colaboran</dt><dd>{{ p.colaboradores|join(", ") }}</dd>{% endif %}
       </dl>
