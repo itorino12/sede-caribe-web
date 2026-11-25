@@ -3557,6 +3557,35 @@ if (datos.campus.parqueo) {
   function portonPeatonal({ p, giro, ancho = 1.4 }) {
     const g = portonVerde(false, ancho / 2); g.position.set(p[0], 0, p[1]); g.rotation.y = giro; escena.add(g);
   }
+  // (anotaciones, nov. 2026) muro blanco curvo en la vuelta de la cerca, con «UCR» en azul hacia la calle
+  function muroUcr({ centro: [cx, cz], radio, alto }) {
+    const g = new THREE.Group(), blancoM = mate(0xeeece6, { roughness: 0.85 }), n = 8;
+    for (let i = 0; i < n; i++) {   // de la cerca (norte del centro) hacia la calle que baja (este del centro)
+      const t0 = -Math.PI / 2 + (Math.PI / 2) * (i / n), t1 = -Math.PI / 2 + (Math.PI / 2) * ((i + 1) / n), tm = (t0 + t1) / 2;
+      const L = 2 * radio * Math.sin((t1 - t0) / 2) + 0.06;
+      const m = new THREE.Mesh(new THREE.BoxGeometry(L, alto, 0.35), blancoM);
+      m.position.set(Math.cos(tm) * radio, alto / 2, Math.sin(tm) * radio); m.rotation.y = -tm - Math.PI / 2; g.add(m);
+      const tapa = new THREE.Mesh(new THREE.BoxGeometry(L, 0.1, 0.45), mate(0xd6d4cc)); tapa.position.set(m.position.x, alto + 0.05, m.position.z); tapa.rotation.y = m.rotation.y; g.add(tapa);
+    }
+    const cv = document.createElement("canvas"); cv.width = 256; cv.height = 128; const x = cv.getContext("2d");
+    x.fillStyle = "#005da4"; x.textAlign = "center"; x.font = "700 96px 'Source Sans 3', Arial, sans-serif"; x.fillText("UCR", 128, 100);
+    const tx = new THREE.CanvasTexture(cv); tx.colorSpace = THREE.SRGBColorSpace;
+    const tm = -Math.PI / 4, letras = new THREE.Mesh(new THREE.PlaneGeometry(1.8, 0.9), new THREE.MeshBasicMaterial({ map: tx, transparent: true }));
+    letras.position.set(Math.cos(tm) * (radio + 0.19), alto * 0.6, Math.sin(tm) * (radio + 0.19)); letras.rotation.y = Math.PI / 2 - tm; g.add(letras);
+    g.traverse((o) => { if (o.isMesh) { o.castShadow = !liviano; o.receiveShadow = true; } });
+    g.position.set(cx, 0, cz); registrar(g, null);
+  }
+  // portón gris de dos hojas de barrotes, cerrado, de «a» (el muro) a «b»
+  function portonGris({ a, b }) {
+    const g = new THREE.Group(), gris = mate(0x8a9096, { metalness: 0.5, roughness: 0.45 });
+    const L = Math.hypot(b[0] - a[0], b[1] - a[1]), H = 2.2;
+    const pz = (w, h, d, x, y) => { const m = new THREE.Mesh(new THREE.BoxGeometry(w, h, d), gris); m.position.set(x, y, 0); m.castShadow = !liviano; g.add(m); };
+    for (const x of [0.1, L - 0.1]) pz(0.2, H + 0.3, 0.2, x, (H + 0.3) / 2);          // postes
+    for (const y of [0.15, H * 0.5, H]) pz(L - 0.2, 0.07, 0.06, L / 2, y);              // travesaños
+    pz(0.08, H, 0.08, L / 2, H / 2 + 0.05);                                             // junta de las dos hojas
+    for (let k = 1; k < Math.round(L / 0.14); k++) pz(0.03, H - 0.1, 0.03, (L * k) / Math.round(L / 0.14), H / 2 + 0.1);
+    g.position.set(a[0], 0, a[1]); g.rotation.y = Math.atan2(-(b[1] - a[1]), b[0] - a[0]); registrar(g, null);
+  }
   // pared de concreto (anotaciones): la que sostiene un portón; larga en x antes de girar
   function muro({ p, giro = 0, largo, alto, grueso }) {
     const m = new THREE.Mesh(new THREE.BoxGeometry(largo, alto, grueso), mate(0xe9e7e0, { roughness: 0.9 }));
@@ -3565,7 +3594,7 @@ if (datos.campus.parqueo) {
     registrar(g, null);
   }
   for (const el of datos.campus.elementos || []) {
-    const hacer = { muro, pasillo, caseta, parqueo, bancas, escalera, rampa, descanso, mesas, explanada, alcantarilla, jardin, pluma, comedor, tanque,
+    const hacer = { muro, pasillo, caseta, parqueo, bancas, escalera, rampa, descanso, mesas, explanada, alcantarilla, jardin, pluma, comedor, tanque, muro_ucr: muroUcr, porton_gris: portonGris,
       acera, cebra, porton_peatonal: portonPeatonal, puente_peatonal: puentePeatonal, arbol_grande: arbolGrande,
       ruedas_tren: ruedasTren, congos, carport, pasarela, bicicletas, rampa_doble: rampaDoble, punto_verde: puntoVerde, motos, pollitos, busto, entrada_registro: entradaRegistro, losa, muro_piedra: muroPiedra }[el.tipo];
     if (hacer) hacer(el);

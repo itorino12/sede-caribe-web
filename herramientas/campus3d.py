@@ -938,7 +938,7 @@ def lugares_nuevos(calles, quebrada, lejos_carretera, y_ruta32):
         cv2.fillPoly(calles_extra, [np.array([a_px(x, z) for x, z in pol_], np.int32)], 255)
     # (anotaciones, nov. 2026) frente a la parada techada (13) la calle era una tira angosta: se ensancha hacia el
     # zacate del rótulo, de punta a punta de la parada
-    frente13_ = [(-51.0, -97.0), (-24.0, -98.5), (-24.3, -103.0), (-50.6, -101.6)]
+    frente13_ = [(-51.0, -97.0), (-24.0, -98.5), (-17.5, -100.6), (-16.4, -103.2), (-24.3, -103.1), (-50.6, -101.6)]   # (anotaciones) sin escalón en la orilla del zacate
     cv2.fillPoly(calles_extra, [np.array([a_px(x, z) for x, z in frente13_], np.int32)], 255)
     cv2.fillPoly(despejar_post, [np.array([a_px(x, z) for x, z in frente13_], np.int32)], 1)
     # (anotaciones, nov. 2026) la calle que sale del portón del carril sigue derecho hacia el frente de la parada,
@@ -952,6 +952,13 @@ def lugares_nuevos(calles, quebrada, lejos_carretera, y_ruta32):
     blanco21_ = [(-33.0, -83.0), (-36.3, -78.6), (-37.2, -74.5), (-36.6, -70.5), (-32.2, -70.5), (-31.9, -79.0)]
     cv2.fillPoly(claro_plaza, [np.array([a_px(x, z) for x, z in blanco21_], np.int32)], 255)
     cv2.fillPoly(despejar_post, [np.array([a_px(x, z) for x, z in blanco21_], np.int32)], 1)
+    # (anotaciones, nov. 2026) la punta de la isla de zacate entre la carretera y la calle interna, frente al portón
+    # gris, no termina en escuadra: se redondea con asfalto (es parte de la calle)
+    esquina_ = np.zeros_like(calles_extra)
+    cv2.rectangle(esquina_, a_px(-59.5, -107.5), a_px(-54.0, -103.0), 255, -1)
+    cv2.circle(esquina_, a_px(-59.5, -107.0), int(3.5 / ESCALA), 0, -1)
+    cv2.rectangle(esquina_, a_px(-66.0, -110.5), a_px(-59.5, -103.0), 0, -1)
+    calles_extra |= esquina_
     # (anotaciones) la calle interna que sale al oeste de la calle de la Biblioteca no terminaba en nada: sigue hasta la ruta 32
     cv2.fillPoly(calles_extra, [np.array([a_px(x, z) for x, z in [(-97.4, -107.0), (-88.5, -107.0), (-88.5, -101.0), (-97.4, -101.0)]], np.int32)], 255)
     cv2.line(despejar, a_px(110.5, -16.6), a_px(158.6, -12.5), 1, int(12 / ESCALA))
@@ -1658,8 +1665,11 @@ def main(pdf, sat=None):
     # como referencia el último tramo de `cerca` (la franja de zacate): no se puede agregar antes.
     fin_cerca = min((t[k] for t in cerca for k in (0, -1)), key=lambda q: math.dist(q, (-101.25, -102.5)))
     if math.dist(fin_cerca, (-101.25, -102.5)) < 6:
-        cerca.append([fin_cerca, (-99.2, Z_CERCA_CALLE), (X_PARED_PORTON - 2.75, Z_CERCA_CALLE)])
-        elementos.append({"tipo": "muro", "id": None, "p": [X_PARED_PORTON, Z_CERCA_CALLE], "giro": 0, "largo": 5.5, "alto": 2.4, "grueso": 0.5})
+        # (anotaciones, nov. 2026) la malla sigue de frente hasta la curva; en la vuelta va el muro blanco curvo con
+        # «UCR» y de él sale un portón gris, cerrado, atravesado en la calle interna
+        cerca.append([fin_cerca, (-99.2, Z_CERCA_CALLE), (-58.3, Z_CERCA_CALLE)])
+        elementos.append({"tipo": "muro_ucr", "id": None, "centro": [-58.3, Z_CERCA_CALLE + 2.8], "radio": 2.8, "alto": 2.4})
+        elementos.append({"tipo": "porton_gris", "id": None, "a": [-58.3, Z_CERCA_CALLE - 0.3], "b": [-58.3, -103.7]})
     # (anotaciones) mallas de la zona de residencias, iguales a la perimetral. Las dos que bordean la quebrada
     # arrancan pegadas a la baranda este del puente (36); la del norte sube luego hasta la cerca de la ruta 32 y la
     # del sur cierra con la que baja hasta la cerca del sur. Otra rodea las residencias por el norte, llega a un
