@@ -28,6 +28,7 @@ import markdown
 import nh3
 from jinja2 import Environment, FileSystemLoader, select_autoescape
 
+from congo_catalogos import catalogos as catalogos_congo
 from horarios_sitio import armar as armar_horarios
 
 CICLOS_HORARIO = ["iic-2026", "iiic-2026"]  # guías de Registro, la más vieja primero; la primera va en horarios.html
@@ -666,6 +667,8 @@ def main():
     (DIST / "assets/js/indice.js").write_text("window.INDICE=" + json.dumps(indice, ensure_ascii=False) + ";", encoding="utf-8")
     # el congo lee las páginas completas de aquí; el índice del buscador las recorta a 4000 caracteres
     (DIST / "congo").mkdir(exist_ok=True)
+    # catálogos armados desde los datos (lista de carreras, plan de estudios y cursos, unidades…): ver congo_catalogos.py
+    congo += catalogos_congo(c, fecha_larga)
     (DIST / "congo/paginas.json").write_text(json.dumps(congo, ensure_ascii=False), encoding="utf-8")
     (DIST / "agenda.ics").write_text(ics(c["eventos"], sitio), encoding="utf-8")
     (DIST / "noticias.xml").write_text(rss(c["noticias"], sitio), encoding="utf-8")

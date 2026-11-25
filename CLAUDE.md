@@ -48,6 +48,7 @@ Sitio estático (Python + Jinja2). El contenido sale de Google Drive; la vista p
 - `src/assets/js/congo.js`: el congo y su rama (portada y panel); `src/assets/js/asistente.js`: el chat. Su contrato (`POST api/asistente`, texto por partes) no se cambia.
 - Servidor CONGO 2.0: `servidor/congo/` (FastAPI, RAG, Gemini). Ver README, sección «Asistente».
   - Capas: `proveedores/` (IA), `documentos/` (extracción, fragmentos, registro), `busqueda/` (embeddings, Chroma), `servicios/` (recuperación, prompts, citas, chat), `rutas/` (API).
+- Qué sabe el congo del sitio: `paginas.json` (páginas por encabezado) más los catálogos de `congo_catalogos.py` (listas y planes de estudio armados desde `src/data/`). Si se agrega un tipo de dato nuevo al sitio, agregarlo allí y comprobar con `python3 herramientas/auditar_congo.py` (después de compilar). La recuperación del sitio es por presupuesto de texto, no por número de fragmentos (`recuperacion.py`).
 - Probar sin gastar: `bash herramientas/probar_congo.sh` (pytest, con proveedor y embeddings de prueba). Las pruebas `--completa` del sitio incluyen el chat.
 
 ## Drive = sitio

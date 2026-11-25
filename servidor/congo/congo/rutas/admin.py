@@ -49,5 +49,8 @@ class Calibracion(BaseModel):
 @rutas.post("/calibrar", summary="Similitudes sin umbral de varias preguntas, para fijar CONGO_UMBRAL")
 async def calibrar(request: Request, c: Calibracion):
     rec = request.app.state.s.recuperacion
-    salida = await run_in_threadpool(lambda: [dict(pregunta=p[:300], **rec.diagnostico(p[:300])) for p in c.preguntas])
+    # «contexto»: el texto que el chat le daría al modelo (mismo cupo que el chat), para comprobar que una lista llegue completa
+    salida = await run_in_threadpool(lambda: [dict(pregunta=p[:300], **rec.diagnostico(p[:300]),
+                                                   contexto=[h.fragmento["texto"] for h in rec.buscar(p[:300], 6)])
+                                              for p in c.preguntas])
     return {"success": True, "umbral": rec.umbral, "resultados": salida}

@@ -13,7 +13,13 @@ from ..documentos.registro import normal, raiz, terminos
 
 K_RRF = 60
 POR_VECTOR = 40
-CUPO_SITIO = 2  # fragmentos institucionales que siempre entran, si pasan el umbral
+CUPO_SITIO = 2  # fragmentos institucionales que siempre entran y no le restan lugar a los reglamentos
+# El sitio no se limita por número de fragmentos sino por texto: una lista (las carreras, las oficinas) puede
+# necesitar varios trozos, y los trozos vecinos de la página que responde se traen aunque su similitud sea baja.
+PRESUPUESTO_SITIO = 5000   # caracteres de páginas del sitio que entran en el contexto
+PRESUPUESTO_LISTA = 9000   # lo mismo cuando la pregunta pide una lista o un total
+MAX_SITIO = 16             # fragmentos del sitio como máximo (el presupuesto de caracteres suele cortar antes)
+PIDE_LISTA = re.compile(r"\b(cuales|cuantas|cuantos|todas|todos|lista|listado|ofrece|ofrecen|existen|hay|tipos|opciones)\b")
 
 
 @dataclass
@@ -73,20 +79,52 @@ class Recuperacion:
         if categoria:
             filas = [f for f in filas if f["categoria"] == categoria]
         filas.sort(key=lambda f: -puntaje[f["fid"]])
-        # cupo del sitio: los mejores fragmentos institucionales que pasaron el umbral entran aunque los reglamentos
-        # sumen más puntaje; así el modelo ve la página que responde y no solo artículos de reglamentos
-        sitio = [f for f in filas if f["categoria"] == "institucional"][:CUPO_SITIO] if categoria is None else []
-        resto = [f for f in filas if f not in sitio]
+        # el sitio entra por presupuesto de texto aunque los reglamentos sumen más puntaje; así el modelo ve la página
+        # completa que responde y no solo artículos de reglamentos
+        sitio = self._del_sitio(consulta, filas, puntaje, similitud) if categoria is None else []
+        en_sitio = {f["fid"] for f in sitio}
+        resto = [f for f in filas if f["fid"] not in en_sitio]
         salida, cuenta = [], {}
+        tope = cuantos + max(0, len(sitio) - CUPO_SITIO)
         for fila in sitio + resto:
-            if cuenta.get(fila["doc_id"], 0) >= self.por_documento:
+            limite = MAX_SITIO if fila["fid"] in en_sitio else self.por_documento
+            if cuenta.get(fila["doc_id"], 0) >= limite:
                 continue
             cuenta[fila["doc_id"]] = cuenta.get(fila["doc_id"], 0) + 1
             salida.append(Hallazgo(fila, round(similitud[fila["fid"]], 4), round(puntaje[fila["fid"]], 5)))
-            if len(salida) == cuantos:
+            if len(salida) == tope:
                 break
-        salida.sort(key=lambda h: -h.puntaje)
+        salida.sort(key=lambda h: -h.puntaje)  # orden estable: los vecinos traídos van justo después de su hallazgo
         return salida
+
+    def _del_sitio(self, consulta, filas, puntaje, similitud):
+        """Fragmentos del sitio para la respuesta: los mejores por puntaje hasta el presupuesto y, de las dos páginas
+        que mejor responden, los trozos vecinos (por cercanía) mientras quede presupuesto."""
+        lista = bool(PIDE_LISTA.search(normal(consulta)))
+        presupuesto = PRESUPUESTO_LISTA if lista else PRESUPUESTO_SITIO
+        sitio, gastado = [], 0
+        for f in (f for f in filas if f["categoria"] == "institucional"):
+            if len(sitio) >= MAX_SITIO:
+                break
+            if sitio and gastado + len(f["texto"]) > presupuesto:
+                continue
+            sitio.append(f)
+            gastado += len(f["texto"])
+        elegidos = {f["fid"] for f in sitio}
+        for doc_id in list(dict.fromkeys(f["doc_id"] for f in sitio))[:2]:
+            semillas = [f for f in sitio if f["doc_id"] == doc_id]
+            vecinos = [v for v in self.registro.del_documento(doc_id) if v["fid"] not in elegidos]
+            vecinos.sort(key=lambda v: (min(abs(v["n"] - s["n"]) for s in semillas), v["n"]))
+            for v in vecinos:
+                if len(sitio) >= MAX_SITIO or gastado + len(v["texto"]) > presupuesto:
+                    break
+                semilla = max(semillas, key=lambda s: -abs(v["n"] - s["n"]))
+                puntaje[v["fid"]] = puntaje[semilla["fid"]] * 0.999   # la página ya respondió: hereda su peso
+                similitud[v["fid"]] = similitud[semilla["fid"]]
+                sitio.append(v)
+                elegidos.add(v["fid"])
+                gastado += len(v["texto"])
+        return sitio
 
     def diagnostico(self, consulta, cuantos=8):
         """Para calibrar el umbral: los mejores fragmentos por significado y por palabras, sin umbral ni filtros."""

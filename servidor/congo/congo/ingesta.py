@@ -44,6 +44,40 @@ def _sin_ext(nombre):
     return re.sub(r"\.[A-Za-z0-9]{2,5}$", "", nombre.strip()).lower()
 
 
+UNIR_MENOR = 300   # un bloque más corto que esto se junta con sus vecinos
+UNIR_HASTA = 1000  # tamaño máximo de lo que se junta (el fragmentador parte a los 1100)
+
+
+def unir_cortos(bloques, titulo):
+    """Junta bloques cortos consecutivos de una misma página en uno solo, con su encabezado delante de cada parte.
+
+    Una página hecha de fichas (las 13 carreras, 24 unidades…) queda en 1 o 2 fragmentos que contienen la lista
+    completa y no en una docena de trozos de una línea que la búsqueda no puede reunir."""
+    salida, grupo = [], []
+
+    def tamano(bs):
+        return sum(len(b.texto) + len(b.seccion or "") + 3 for b in bs)
+
+    def cerrar():
+        if len(grupo) == 1:
+            salida.append(grupo[0])
+        elif grupo:
+            salida.append(Bloque("\n".join(f"{b.seccion}: {b.texto}" if b.seccion and b.seccion != titulo else b.texto
+                                           for b in grupo), seccion=titulo))
+        grupo.clear()
+
+    for b in bloques:
+        if len(b.texto) >= UNIR_MENOR:
+            cerrar()
+            salida.append(b)
+            continue
+        if grupo and tamano(grupo) + len(b.texto) + len(b.seccion or "") + 3 > UNIR_HASTA:
+            cerrar()
+        grupo.append(b)
+    cerrar()
+    return salida
+
+
 class Sincronizador:
     def __init__(self, repo, config):
         self.repo, self.config = repo, config
@@ -65,7 +99,9 @@ class Sincronizador:
         entradas = json.loads(texto[texto.index("=") + 1:].rstrip().rstrip(";"))
         # páginas completas, partidas por encabezado (build.py); el índice del buscador las corta a 4000 caracteres
         completas = ruta.parents[2] / "congo" / "paginas.json"
-        paginas = {p["u"]: p for p in json.loads(completas.read_text(encoding="utf-8"))} if completas.exists() else {}
+        lista = json.loads(completas.read_text(encoding="utf-8")) if completas.exists() else []
+        paginas = {p["u"]: p for p in lista if not p.get("id")}
+        catalogos = [p for p in lista if p.get("id")]  # armados por build.py desde los datos (congo_catalogos.py)
         grupos = {}
         for e in entradas:
             u, t, x = e.get("u", ""), e.get("t", ""), e.get("x", "")
@@ -85,10 +121,15 @@ class Sincronizador:
         for u, p in paginas.items():
             if u == "index.html" or not p.get("t"):
                 continue
-            # un bloque por encabezado: el fragmento queda con su tema («Contacto», «Requisitos»…) y no mezcla otros
-            bloques = [Bloque(s["x"], seccion=s["h"] or p["t"]) for s in p.get("s", []) if s.get("x")]
+            # un bloque por encabezado: el fragmento queda con su tema («Contacto», «Requisitos»…); los bloques muy
+            # cortos y seguidos se juntan (unir_cortos) para que una lista de fichas no quede en trozos de una línea
+            bloques = unir_cortos([Bloque(s["x"], seccion=s["h"] or p["t"]) for s in p.get("s", []) if s.get("x")], p["t"])
             if bloques:
                 documentos.append(((f"sitio-{slug(u.removesuffix('.html'))}", p["t"], u, "general"), bloques))
+        for p in catalogos:
+            bloques = unir_cortos([Bloque(s["x"], seccion=s["h"]) for s in p.get("s", []) if s.get("x")], p["t"])
+            if bloques:
+                documentos.append(((f"sitio-{slug(p['id'])}", p["t"], p["enlace"], "catalogo"), bloques))
         informe, vistos = {"nuevos": 0, "actualizados": 0, "sin_cambios": 0, "retirados": 0}, set()
         for (doc_id, nombre, url, sub), bloques in documentos:
             vistos.add(doc_id)

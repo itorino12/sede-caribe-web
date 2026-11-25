@@ -201,6 +201,15 @@ class Registro:
         por_id = {f["fid"]: dict(f) for f in filas}
         return [por_id[i] for i in fids if i in por_id]
 
+    def del_documento(self, doc_id):
+        """Todos los fragmentos de un documento vigente, en su orden (para traer los vecinos de un hallazgo)."""
+        with self.candado:
+            filas = self.db.execute(
+                """SELECT f.*, d.nombre, d.categoria, d.subcategoria, d.fuente, d.version, d.vigencia,
+                   d.fecha_publicacion, d.fecha_actualizacion FROM fragmentos f JOIN documentos d ON d.id = f.doc_id
+                   WHERE f.doc_id = ? AND d.vigencia = 'vigente' ORDER BY f.n""", (doc_id,)).fetchall()
+        return [dict(f) for f in filas]
+
     def buscar_texto(self, consulta, cuantos=20, categoria=None):
         """Búsqueda por palabras (BM25). Devuelve fids, del más al menos relevante."""
         ts = terminos(consulta)

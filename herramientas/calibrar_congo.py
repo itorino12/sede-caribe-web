@@ -5,12 +5,18 @@
 
 Para cada pregunta muestra la mejor similitud que logra el documento esperado y la mejor de todo el índice.
 Al final sugiere un umbral entre lo que el congo no debería contestar (preguntas «-») y lo que sí.
+
+Prueba de listas (regresión): una tercera columna «contiene: A; B; @carreras» exige que el texto que el chat le da al
+modelo nombre todos esos elementos. «@carreras» se reemplaza por los nombres de src/data/carreras.json, así que una
+carrera nueva pasa a exigirse sola. Si falta alguno, la herramienta termina con error (código 1).
 La clave de administración se lee de /etc/sede-web/sede.env (por eso sudo); también sirve CONGO_CLAVE_ADMIN.
 """
 import argparse
 import json
 import os
 import statistics
+import sys
+import unicodedata
 import urllib.request
 from pathlib import Path
 
@@ -26,6 +32,22 @@ def clave():
     raise SystemExit("falta CONGO_CLAVE_ADMIN")
 
 
+def sin_tildes(t):
+    return " ".join("".join(c for c in unicodedata.normalize("NFD", t.lower()) if unicodedata.category(c) != "Mn").split())
+
+
+def elementos(texto):
+    """«A; B; @carreras» → ['A', 'B', <nombre de cada carrera publicada>]."""
+    salida = []
+    for x in (x.strip() for x in texto.split(";")):
+        if x == "@carreras":
+            carreras = json.loads((RAIZ / "src/data/carreras.json").read_text(encoding="utf-8"))
+            salida += [c["nombre"] for c in carreras if str(c.get("publicar", "sí")).lower() not in ("no", "false")]
+        elif x:
+            salida.append(x)
+    return salida
+
+
 def main():
     a = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     a.add_argument("--preguntas", default=RAIZ / "herramientas/fuentes/congo-preguntas.txt")
@@ -34,15 +56,23 @@ def main():
     casos = []
     for linea in Path(args.preguntas).read_text(encoding="utf-8").splitlines():
         if linea.strip() and not linea.startswith("#"):
-            p, _, esperado = (x.strip() for x in linea.partition("|"))
-            casos.append((p, esperado))
+            partes = [x.strip() for x in linea.split("|")]
+            exigido = partes[2].removeprefix("contiene:").strip() if len(partes) > 2 else ""
+            casos.append((partes[0], partes[1] if len(partes) > 1 else "", elementos(exigido) if exigido else []))
     pedido = urllib.request.Request(f"{args.url}/api/admin/calibrar", method="POST",
-                                    data=json.dumps({"preguntas": [p for p, _ in casos]}).encode(),
+                                    data=json.dumps({"preguntas": [c[0] for c in casos]}).encode(),
                                     headers={"Content-Type": "application/json", "X-Congo-Clave": clave()})
     datos = json.load(urllib.request.urlopen(pedido, timeout=300))
-    umbral, propias, ajenas, faltan = datos["umbral"], [], [], []
+    umbral, propias, ajenas, faltan, incompletas = datos["umbral"], [], [], [], []
     print(f"Umbral actual: {umbral}\n")
-    for (pregunta, esperado), r in zip(casos, datos["resultados"]):
+    for (pregunta, esperado, exigidos), r in zip(casos, datos["resultados"]):
+        if exigidos:
+            contexto = sin_tildes(" ".join(r.get("contexto", [])))
+            ausentes = [e for e in exigidos if sin_tildes(e) not in contexto]
+            if ausentes:
+                incompletas.append(pregunta)
+            print(f"{'  LISTA INCOMPLETA' if ausentes else '  lista completa  '} {len(exigidos) - len(ausentes)}/{len(exigidos)}  {pregunta}"
+                  + (f"  → faltan: {'; '.join(ausentes)}" if ausentes else ""))
         todos = r["por_significado"] + r["por_palabras"] + r["por_palabras_sitio"]
         mejor = max((x["similitud"] for x in todos), default=-1)
         if esperado == "-":
@@ -66,6 +96,10 @@ def main():
         print(f"Umbral sugerido: {sugerido} (CONGO_UMBRAL en /etc/sede-web/sede.env y reiniciar sede-congo). "
               f"Con ese valor {bajo} de {len(propias)} preguntas propias quedan por debajo: ahí el problema es el contenido "
               "o cómo se encuentra, no el umbral.")
+    if incompletas:
+        print(f"{len(incompletas)} pregunta(s) de lista no llegan completas al modelo: revisar congo_catalogos.py y el presupuesto "
+              "de recuperacion.py.")
+        sys.exit(1)
     if faltan:
         print(f"{len(faltan)} pregunta(s) sin su documento entre los mejores: el problema ahí es el contenido o los nombres, no el umbral.")
 

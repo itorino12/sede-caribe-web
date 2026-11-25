@@ -61,3 +61,42 @@ def test_pagina_con_todos_los_terminos_entra_aunque_el_significado_puntue_bajo(r
     assert [h.fragmento["doc_id"] for h in rec.buscar("¿Cómo solicito una beca?")] == ["sitio-becas"]
     assert rec.buscar("¿Cómo renuevo el pasaporte?") == []  # «pasaporte» no está: no basta un término
     assert rec.buscar("beca") == []  # un solo término no alcanza
+
+
+def _pagina_de_carreras(repo, cuantas=13):
+    from congo.documentos.extractores import Bloque
+    nombres = [f"Carrera número {i}" for i in range(cuantas)]
+    repo.incorporar_bloques({"id": "sitio-carreras", "nombre": "Carreras y planes de estudio", "categoria": "institucional"},
+                            [Bloque(f"{n} (Bachillerato). " + "Se imparte en Limón con su plan de estudios. " * 8, seccion=n)
+                             for n in nombres], "hc")
+    return nombres
+
+
+def test_una_lista_trae_todos_los_elementos_de_la_pagina(repo):
+    """Regresión: «¿qué carreras ofrece?» nombraba 2 porque el cupo del sitio era de 2 fragmentos."""
+    nombres = _pagina_de_carreras(repo)
+    rec = Recuperacion(repo.registro, repo.embebedor, repo.vectores, umbral=-1.0)
+    texto = " ".join(h.fragmento["texto"] for h in rec.buscar("¿Qué carreras ofrece la Sede?"))
+    assert all(n in texto for n in nombres)
+
+
+def test_los_trozos_vecinos_de_la_pagina_que_responde_entran_aunque_su_similitud_sea_baja(repo):
+    nombres = _pagina_de_carreras(repo, 8)
+    # umbral imposible: solo entra por la regla de palabras (todos los términos en un fragmento)
+    rec = Recuperacion(repo.registro, repo.embebedor, repo.vectores, umbral=0.99)
+    h = rec.buscar("carrera número 3 bachillerato")
+    assert len(h) > 2 and any(nombres[3] in x.fragmento["texto"] for x in h)
+    assert len(h) <= 16  # MAX_SITIO
+
+
+def test_la_lista_del_sitio_no_deja_sin_lugar_a_los_reglamentos(repo):
+    from congo.documentos.extractores import Bloque
+    _pagina_de_carreras(repo, 13)
+    for i in range(6):
+        repo.incorporar_bloques({"id": f"reg-{i}", "nombre": f"Reglamento de carreras {i}", "categoria": "normativa"},
+                                [Bloque("Las carreras que ofrece la universidad se rigen por este reglamento. " * 3,
+                                        seccion=f"Artículo {i}")], f"hr{i}")
+    rec = Recuperacion(repo.registro, repo.embebedor, repo.vectores, umbral=-1.0)
+    h = rec.buscar("¿Qué carreras ofrece la Sede?")
+    assert sum(1 for x in h if x.fragmento["categoria"] == "normativa") >= 2
+    assert sum(1 for x in h if x.fragmento["categoria"] == "institucional") >= 8

@@ -1,12 +1,17 @@
 # Preguntas para calibrar el umbral del congo (herramientas/calibrar_congo.py).
 # Formato: pregunta | id del documento que debería responderla (basta el comienzo) | o «-» si la Sede no tiene por qué saberla.
+# Opcional, tercera columna: «contiene: A; B; @carreras» = lo que el texto dado al modelo debe nombrar completo (@carreras = todas las de src/data/carreras.json).
 ¿Cómo solicito una beca? | sitio-unidades-becas
 ¿Quién es el director de la Sede? | sitio-unidades-direccion
 ¿Cuál es el teléfono de Registro? | sitio-unidades-registro
 ¿Dónde queda la biblioteca? | sitio-unidades-biblioteca
 ¿Qué horario tiene la biblioteca? | sitio-unidades-biblioteca
 ¿Cómo ingreso a la universidad? | sitio-admision
-¿Qué carreras hay en la Sede del Caribe? | sitio-carreras
+¿Qué carreras hay en la Sede del Caribe? | sitio-catalogo-carreras | contiene: @carreras
+¿Qué carreras ofrece la Sede del Caribe y cuántos años duran? | sitio-catalogo-carreras | contiene: @carreras
+¿Cuáles son todas las carreras de la Sede? | sitio-catalogo-carreras | contiene: @carreras
+¿Qué cursos se llevan en el primer ciclo de Informática Empresarial? | sitio-catalogo-carrera-informatica-empresarial | contiene: IF-0001; IF-0002; IF-0003
+¿Qué oficinas y servicios tiene la Sede? | sitio-catalogo-unidades
 ¿Qué se estudia en Informática Empresarial? | sitio-carreras-informatica-empresarial
 ¿Quién puede vivir en las residencias? | sitio-unidades-residencias
 ¿Cómo saco cita en el consultorio médico? | sitio-unidades-consultorio-medico
