@@ -659,7 +659,7 @@ function entrada(grupo, e) {
   const aP = L2 + 0.3, aQ = L2 + 7.9;
   // (anotaciones) el portal peatonal va de frente a la acera que baja por afuera de la malla: el paso sigue la acera
   // (anotaciones) corrido por la acera hasta quedar en línea con el portón de la parada, al final de la malla
-  const PP = new THREE.Vector3(-17.94, 0, -91.38), tP = new THREE.Vector2(0.599, -0.801);   // centro y hacia afuera
+  const PP = new THREE.Vector3(-18.93, 0, -89.77), tP = new THREE.Vector2(0.584, -0.812);   // (anotaciones) 2 m más adentro   // centro y hacia afuera
   const portal = new THREE.Group(); portal.position.copy(PP); portal.rotation.y = Math.atan2(tP.x, tP.y); grupo.add(portal);
   const pz_ = (w, h, d, m, x, y, z) => { const o = new THREE.Mesh(new THREE.BoxGeometry(w, h, d), m); o.position.set(x, y, z); o.castShadow = !liviano; o.receiveShadow = true; portal.add(o); return o; };
   const hPo = 3.0, xV0 = -0.65, xV1 = 0.65, xW = 1.95, xE = -1.25, Dp = 1.1;   // x+: lado de la calle
@@ -680,7 +680,7 @@ function entrada(grupo, e) {
   const esq = new THREE.Vector3(xW, 0, -Dp / 2).applyAxisAngle(new THREE.Vector3(0, 1, 0), portal.rotation.y).add(PP);
   const aEsq = (esq.x - cx) * dx + (esq.z - cz) * dz, bEsq = (esq.x - cx) * nx + (esq.z - cz) * nz, Lh = Math.min(4.6, (aEsq - aE0) / 2 + 0.3);
   hojaReja(Lh, 2.4, [aE0 + 0.05, bFin + 0.6], -1.65);   // (anotaciones) bien abiertas, que pasen los carros
-  hojaReja(Lh, 2.4, [aEsq, bEsq], Math.PI + 1.6).position.y = 0.05;
+  hojaReja(Lh, 2.4, [aEsq, bEsq], Math.PI + 0.9)   // (anotaciones) recta, a la orilla de la calle: deja libre la acera.position.y = 0.05;
   { const q = new THREE.Vector3(0.2, 0, -3.4).applyAxisAngle(new THREE.Vector3(0, 1, 0), portal.rotation.y).add(PP);
     bolardo((q.x - cx) * dx + (q.z - cz) * dz, (q.x - cx) * nx + (q.z - cz) * nz); }
 

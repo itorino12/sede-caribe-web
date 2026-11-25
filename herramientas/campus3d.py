@@ -833,7 +833,7 @@ def lugares_nuevos(calles, quebrada, lejos_carretera, y_ruta32):
         franjas = [[round(x + ux_ * d, 2), round(z + uz_ * d, 2)] for d in np.arange(izq + 0.45, der - 0.2, 0.9)]
         elem.append({"tipo": "cebra", "id": None, "franjas": franjas, "giro": round(math.atan2(ux_, uz_), 3), "ancho": ancho})
         return [round(x + ux_ * (izq - 0.6), 2), round(z + uz_ * (izq - 0.6), 2)], [round(x + ux_ * (der + 0.6), 2), round(z + uz_ * (der + 0.6), 2)]
-    oeste_a, oeste_b = cebra_en(-26.0, -84.0)
+    oeste_a, oeste_b = cebra_en(-26.1, -82.0)   # (anotaciones, nov. 2026) 2 m más hacia el campus
     este_a, este_b = cebra_en(-12.5, -76.0)
     # (anotaciones) agujas (plumas) como la de la caseta del guarda, que se levantan para dar paso a los vehículos:
     # frente al 12, a la altura de donde la acera llega al pasillo techado, con el poste del lado del 12; y en la
@@ -862,10 +862,12 @@ def lugares_nuevos(calles, quebrada, lejos_carretera, y_ruta32):
     esq_ = lados_[1]
     def hacia_(q, d):
         L_ = math.dist(esq_, q); return [esq_[0] + (q[0] - esq_[0]) * d / L_, esq_[1] + (q[1] - esq_[1]) * d / L_]
-    p1_, p2_ = hacia_((-13.56, -97.24), 3.5), hacia_(isla_[0], 3.5)
+    p1_, p2_ = hacia_((-13.56, -97.24), 6.5), hacia_(isla_[0], 5.0)   # (anotaciones) curva abierta, no tan cerrada
     curva_ = [[round((1 - t) ** 2 * p1_[0] + 2 * t * (1 - t) * esq_[0] + t * t * p2_[0], 2),
-               round((1 - t) ** 2 * p1_[1] + 2 * t * (1 - t) * esq_[1] + t * t * p2_[1], 2)] for t in np.linspace(0, 1, 9)]
+               round((1 - t) ** 2 * p1_[1] + 2 * t * (1 - t) * esq_[1] + t * t * p2_[1], 2)] for t in np.linspace(0, 1, 13)]
+    fin47_ = [round(p1_[0], 2), round(p1_[1], 2)]
     elem.append({"tipo": "acera", "id": None, "ancho": 1.8, "puntos": curva_ + [isla_[0]]})          # por la isla
+    elem.append({"tipo": "acera", "id": None, "ancho": 1.8, "puntos": [esq_, curva_[6]]})            # del paso de cebra a la curva
     # (anotaciones, nov. 2026) del lado del campus, del portón peatonal de la parada (corrido al oeste con la punta
     # este, ver entrada() en recorrido.js) salen aceras anchas en Y: una a la caseta del guarda y otra por la orilla
     # de la calle, por detrás de la pluma; el paso de cebra llega a esta última
@@ -920,7 +922,7 @@ def lugares_nuevos(calles, quebrada, lejos_carretera, y_ruta32):
     # la cerca desde el portón, pasa a la par del portón peatonal y sigue por la isla hasta el paso de cebra del oeste
     elem.append({"tipo": "acera", "id": None, "ancho": 1.4,
                  "puntos": [[-2.93, -112.75], [-4.82, -109.35], [-7.04, -106.05], [-9.53, -102.9],
-                            [-11.69, -99.52], [-13.56, -97.24], [-21.96, -85.99]]})   # la esquina sigue en curva (arriba)
+                            [-11.69, -99.52], [-13.56, -97.24], fin47_]})   # la esquina sigue en curva (arriba)
     # ruedas de tren (fotos): monumento en el zacate entre el parqueo de la piscina y la calle de la Biblioteca
     # (anotaciones) frente al parqueo, más al este y cerca de la acera
     # (anotaciones) corridas al sur y al oeste, al centro del zacate frente a la piscina
@@ -1083,7 +1085,7 @@ def lugares_nuevos(calles, quebrada, lejos_carretera, y_ruta32):
         fin_ = (bx_ + ux_ * 1.5 / ESCALA, by_ + uy_ * 1.5 / ESCALA)   # el portón ocupa 1,5 m al final de la cerca
         # (anotaciones, nov. 2026) al final de la malla ya no va el portón verde: la malla sigue junto a la acera hasta
         # el portal peatonal blanco, de frente a la acera y en línea con el portón de la parada (entrada() en recorrido.js)
-        cerca_extra.append((-16.94 / ESCALA + ORIGEN[0], -90.63 / ESCALA + ORIGEN[1]))
+        cerca_extra.append((-17.92 / ESCALA + ORIGEN[0], -89.04 / ESCALA + ORIGEN[1]))
         next(e for e in elem if e["tipo"] == "porton")["poste_este"] = postes[1]
 
     # --- paso de la quebrada bajo la calle (28): alcantarilla con cabezales de concreto y paso de cebra
