@@ -605,7 +605,7 @@ function entrada(grupo, e) {
     [["#2a8fd6", "ENVASES"], ["#7b8086", "PAPEL Y CARTÓN"], ["#2a2d30", "ORDINARIOS"]].forEach(([c, t], k) => { x.fillStyle = c; x.fillRect(4 + k * 168, 24, 164, 104); x.fillStyle = "#fff"; x.font = "700 19px Arial, sans-serif"; x.fillText(t, 86 + k * 168, 70); });
     const tx = new THREE.CanvasTexture(cv); tx.colorSpace = THREE.SRGBColorSpace;
     const r_ = new THREE.Mesh(new THREE.PlaneGeometry(1.7, 0.45), new THREE.MeshBasicMaterial({ map: tx })); r_.position.set(0, 1.6, 0.24); pv.add(r_);
-    pv.position.copy(en(aC2 + 0.15, bFin - 1.35, 0.16)); pv.rotation.y = giroD + Math.PI; grupo.add(pv);   // (anotaciones) de lado, mirando al portón
+    pv.position.copy(en(aC2 + 0.15, bFin - 1.35, 0.16)); pv.rotation.y = giroD + Math.PI * 0.75; grupo.add(pv);   // (anotaciones) en diagonal
   }
   // cuarto de espera
   const bA = bFin - 0.05, bB = bFin + 2.6, aEW = aE0 - 0.1;
@@ -655,8 +655,8 @@ function entrada(grupo, e) {
   // campus, una colgada de la pared del cuarto de espera y la otra del portal peatonal blanco de la isla del este
   const aP = L2 + 0.3, aQ = L2 + 7.9;
   // (anotaciones) el portal peatonal va de frente a la acera que baja por afuera de la malla: el paso sigue la acera
-  // y queda al final de la malla (donde estaba el portón verde)
-  const PP = new THREE.Vector3(-13.75, 0, -96.95), tP = new THREE.Vector2(0.599, -0.801);   // centro y hacia afuera
+  // (anotaciones) corrido por la acera hasta quedar en línea con el portón de la parada, al final de la malla
+  const PP = new THREE.Vector3(-17.94, 0, -91.38), tP = new THREE.Vector2(0.599, -0.801);   // centro y hacia afuera
   const portal = new THREE.Group(); portal.position.copy(PP); portal.rotation.y = Math.atan2(tP.x, tP.y); grupo.add(portal);
   const pz_ = (w, h, d, m, x, y, z) => { const o = new THREE.Mesh(new THREE.BoxGeometry(w, h, d), m); o.position.set(x, y, z); o.castShadow = !liviano; o.receiveShadow = true; portal.add(o); return o; };
   const hPo = 3.0, xV0 = -0.65, xV1 = 0.65, xW = 1.95, xE = -1.25, Dp = 1.1;   // x+: lado de la calle
@@ -676,8 +676,8 @@ function entrada(grupo, e) {
   // portón del carril: una hoja en el cuarto de espera y otra en la esquina del portal del lado de la calle
   const esq = new THREE.Vector3(xW, 0, -Dp / 2).applyAxisAngle(new THREE.Vector3(0, 1, 0), portal.rotation.y).add(PP);
   const aEsq = (esq.x - cx) * dx + (esq.z - cz) * dz, bEsq = (esq.x - cx) * nx + (esq.z - cz) * nz, Lh = Math.min(4.6, (aEsq - aE0) / 2 + 0.3);
-  hojaReja(Lh, 2.4, [aE0 + 0.05, bFin + 0.6], -1.15);
-  hojaReja(Lh, 2.4, [aEsq, bEsq], Math.PI + 1.05).position.y = 0.05;
+  hojaReja(Lh, 2.4, [aE0 + 0.05, bFin + 0.6], -1.65);   // (anotaciones) bien abiertas, que pasen los carros
+  hojaReja(Lh, 2.4, [aEsq, bEsq], Math.PI + 1.6).position.y = 0.05;
   { const q = new THREE.Vector3(0.2, 0, -3.4).applyAxisAngle(new THREE.Vector3(0, 1, 0), portal.rotation.y).add(PP);
     bolardo((q.x - cx) * dx + (q.z - cz) * dz, (q.x - cx) * nx + (q.z - cz) * nz); }
 

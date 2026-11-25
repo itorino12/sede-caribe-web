@@ -1068,8 +1068,9 @@ def lugares_nuevos(calles, quebrada, lejos_carretera, y_ruta32):
         d_ = math.hypot(bx_ - ax_, by_ - ay_) or 1
         ux_, uy_ = (bx_ - ax_) / d_, (by_ - ay_) / d_
         fin_ = (bx_ + ux_ * 1.5 / ESCALA, by_ + uy_ * 1.5 / ESCALA)   # el portón ocupa 1,5 m al final de la cerca
-        # (anotaciones, nov. 2026) al final de la malla ya no va el portón verde: ahí está el portal peatonal blanco,
-        # de frente a la acera (entrada() en recorrido.js)
+        # (anotaciones, nov. 2026) al final de la malla ya no va el portón verde: la malla sigue junto a la acera hasta
+        # el portal peatonal blanco, de frente a la acera y en línea con el portón de la parada (entrada() en recorrido.js)
+        cerca_extra.append((-16.94 / ESCALA + ORIGEN[0], -90.63 / ESCALA + ORIGEN[1]))
         next(e for e in elem if e["tipo"] == "porton")["poste_este"] = postes[1]
 
     # --- paso de la quebrada bajo la calle (28): alcantarilla con cabezales de concreto y paso de cebra
