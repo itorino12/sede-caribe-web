@@ -187,7 +187,9 @@ EDIFICIOS = [
      "estilo": {"techo": "#8db38a", "corredor": True, "franja": "#4fa8e8", "rotulo": [-1, 0],
                 # (anotaciones y fotos, nov. 2026) el rótulo una crujía más al norte; en la punta, bajo el corredor, el
                 # gimnasio de pesas (malla azul, rack, bicicletas, sacos de boxeo, banca, puerta del promotor deportivo)
-                "rotulo_t": 0.26, "pesas": [0.0, 0.15]}},
+                "rotulo_t": 0.26, "pesas": [0.0, 0.15],
+                # (fotos) la entrada, en la punta norte de la misma fachada, con el rótulo UCR adentro
+                "entrada_gim": [0.8, 1.0]}},
     # Bodega de Acción Social (foto): casita blanca de techo a dos aguas gris oscuro con alero blanco y portón negro
     {"id": 15, "rect": (1770, 1450, 59, 41, 0), "pisos": 1, "alto": 3.4,
      # (anotaciones) la entrada (el portón) está en la fachada oeste, la que da a la calle que viene del gimnasio
