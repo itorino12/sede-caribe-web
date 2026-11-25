@@ -1421,7 +1421,6 @@ function gimnasioPesas(grupo, vol, alto, frente, [t0, t1]) {
   }
   // puerta gris del promotor deportivo, rótulo y extintor
   const uP = U1 - 0.8;   // (anotaciones) la puerta va en el otro extremo, junto a la pared
-  caja(0.95, 2.1, 0.06, m(0x5d6266), uP, 0.03, 1.05);
   const cv = document.createElement("canvas"); cv.width = 128; cv.height = 48; const x = cv.getContext("2d");
   x.fillStyle = "#fff"; x.fillRect(0, 0, 128, 48); x.fillStyle = "#1d4f9c"; x.font = "700 17px Arial"; x.textAlign = "center"; x.fillText("Promotor", 64, 20); x.fillText("Deportivo", 64, 40);
   const tx = new THREE.CanvasTexture(cv); tx.colorSpace = THREE.SRGBColorSpace;
@@ -1444,7 +1443,7 @@ function gimnasioPesas(grupo, vol, alto, frente, [t0, t1]) {
     const vol_ = new THREE.Mesh(new THREE.CylinderGeometry(0.22, 0.22, 0.06, 14), negro); vol_.rotation.z = Math.PI / 2; vol_.rotation.y = ang + Math.PI / 2; vol_.position.set(...en(u + 0.25, 0.4, 0.35)); grupo.add(vol_);
   });
   // barra entre columna y pared con dos sacos de boxeo
-  const uB = uc + 1.6;
+  const uB = uc + 0.2;   // lejos de la puerta de lado
   caja(3.0, 0.07, 0.07, m(0xb9bec2, { metalness: 0.6 }), uB, 1.8, 2.5, Math.PI / 2);
   for (const dv of [1.0, 2.6]) {
     caja(0.02, 0.4, 0.02, negro, uB, dv, 2.3);
@@ -1452,6 +1451,14 @@ function gimnasioPesas(grupo, vol, alto, frente, [t0, t1]) {
   }
   // banca de pesas
   caja(0.3, 0.08, 1.1, negro, uc - 0.6, 2.4, 0.5); caja(0.06, 0.45, 0.06, m(0x9a9fa4, { metalness: 0.5 }), uc - 0.6, 2.0, 0.25); caja(0.06, 0.45, 0.06, m(0x9a9fa4, { metalness: 0.5 }), uc - 0.6, 2.8, 0.25);
+  // (anotaciones) puerta de metal gris con refuerzo en X en la pared de lado, al fondo de la abertura
+  const ladoU = U1 - 0.06, metal = m(0x4f5458, { metalness: 0.4 });
+  caja(0.06, 2.15, 1.0, metal, ladoU, 1.0, 1.08);
+  caja(0.08, 2.25, 1.1, m(0x8a2a2e), ladoU + 0.01, 1.0, 1.12);   // marco rojo
+  caja(0.07, 2.15, 1.0, metal, ladoU - 0.01, 1.0, 1.08);
+  for (const sg of [-1, 1]) { const d = caja(0.075, 0.05, 1.35, m(0x3e4246), ladoU - 0.02, 1.0, 1.08); d.rotation.x = sg * 1.05; }
+  caja(0.08, 0.04, 1.0, m(0x3e4246), ladoU - 0.02, 1.0, 1.08);
+  caja(0.09, 0.1, 0.08, m(0xb59a3a, { metalness: 0.6 }), ladoU - 0.03, 1.38, 1.05);   // cerradura
   // estañón azul con bolsa negra junto a la malla y afiches en la pared junto a la puerta (foto)
   const est = new THREE.Mesh(new THREE.CylinderGeometry(0.3, 0.28, 0.85, 14), m(0x1f62c4)); est.position.set(...en(uc - 1.2, 1.3, 0.43)); grupo.add(est);
   for (const [du, y, c] of [[-0.9, 1.6, 0xe8d58a], [-0.5, 1.5, 0x6c3a8f], [-0.1, 1.6, 0xf2f2ee]]) caja(0.3, 0.42, 0.02, m(c), uP + du + 1.6, 0.03, y);
@@ -1480,14 +1487,37 @@ function entradaGimnasio(grupo, vol, alto, frente, [t0, t1]) {
   const tx = new THREE.CanvasTexture(cv); tx.colorSpace = THREE.SRGBColorSpace;
   const rot = new THREE.Mesh(new THREE.PlaneGeometry(Math.min(3.2, U1 - uM1 - 0.4), Math.min(3.2, U1 - uM1 - 0.4) * 0.7), new THREE.MeshBasicMaterial({ map: tx }));
   rot.position.set(...en((uM1 + U1) / 2, 0.13, hM * 0.3)); rot.rotation.y = ang; grupo.add(rot);
-  // jaula de malla azul con portón, al fondo la escalera blanca a las graderías
-  for (let k = 0; k < 6; k++) caja(0.4, 0.25, 0.6, blanco, uM0 + 0.4 + k * 0.4, 0.4 + k * 0.0, 0.12 + k * 0.25);
-  caja(uM1 - uM0, hM, 0.02, malla, (uM0 + uM1) / 2, 0.9, hM / 2);
-  for (const y of [0.05, hM * 0.45, hM]) caja(uM1 - uM0, 0.07, 0.07, azul, (uM0 + uM1) / 2, 0.9, y);
-  for (const u of [uM0, uM0 + (uM1 - uM0) * 0.5, uM1]) caja(0.07, hM, 0.07, azul, u, 0.9, hM / 2);
-  for (const u of [uM0, uM1]) caja(0.07, hM, 0.07, azul, u, 0.05, hM / 2), caja(0.07, 0.07, 0.85, azul, u, 0.48, hM);
-  const ext = new THREE.Mesh(new THREE.CylinderGeometry(0.08, 0.08, 0.5, 10), m(0xd0262e)); ext.position.set(...en(uM0 + 0.5, 0.95, 1.1)); grupo.add(ext);
-  caja(0.5, 0.7, 0.4, m(0x1f62c4), uM0 + 1.0, 1.15, 0.35);
+  // (fotos) jaula de malla azul en L: una cara hacia la calle (con el portón de dos hojas) y otra de lado, hacia el
+  // rótulo; en sus dos esquinas de afuera, columnas de concreto. Adentro el piso azul de la cancha y la escalera
+  // blanca a las graderías con baranda amarilla, y arriba de la malla la celosía gris del gimnasio
+  const vF = 2.6, concreto = m(0xa9aaa6, { roughness: 0.95 }), amarillo = m(0xe8b42a);
+  caja(uM1 - uM0, 0.03, vF, m(0x2f6fa8, { roughness: 0.5 }), (uM0 + uM1) / 2, vF / 2, 0.1);
+  for (let k = 0; k < 8; k++) caja(0.9, 0.22, 0.32, blanco, uM0 + 0.7, 0.3 + k * 0.3, 0.11 + k * 0.22);   // escalera
+  caja(0.05, 0.05, 2.6, amarillo, uM0 + 1.2, 1.3, 2.0).rotation.x = -0.6;
+  for (let k = 0; k < 4; k++) caja(uM1 - uM0 - 0.6, 0.05, 0.12, m(0x6f767c), (uM0 + uM1) / 2, 0.1, hM + 0.3 + k * 0.25);
+  const panel = (u0, u1, v0, v1, y0, y1) => {   // un paño de malla con su marco azul (recto en u o en v)
+    const enU = Math.abs(u1 - u0) > Math.abs(v1 - v0), lar = enU ? u1 - u0 : v1 - v0, um = (u0 + u1) / 2, vm = (v0 + v1) / 2, h = y1 - y0, ym = (y0 + y1) / 2;
+    const malla_ = caja(enU ? lar : 0.02, h, enU ? 0.02 : lar, malla, um, vm, ym);
+    for (const y of [y0 + 0.03, y1]) caja(enU ? lar : 0.06, 0.06, enU ? 0.06 : lar, azul, um, vm, y);
+    for (const [uu, vv] of [[u0, v0], [u1, v1]]) caja(0.07, h, 0.07, azul, uu, vv, ym);
+    caja(enU ? lar : 0.05, 0.05, enU ? 0.05 : lar, azul, um, vm, y0 + h * 0.45);
+    return malla_;
+  };
+  const uP = uM0 + (uM1 - uM0) * 0.45, anchoP = 1.9;
+  panel(uM0, uP - anchoP / 2, vF, vF, 0, hM);                                 // cara hacia la calle, a los lados del portón
+  panel(uP + anchoP / 2, uM1, vF, vF, 0, hM);
+  panel(uP - anchoP / 2, uP + anchoP / 2, vF, vF, 2.3, hM);                   // sobre el portón
+  for (const s_ of [-1, 1]) {                                                 // portón de dos hojas, con marco más grueso
+    const u0 = uP + (s_ < 0 ? -anchoP / 2 : 0), u1 = u0 + anchoP / 2;
+    panel(u0, u1, vF + 0.04, vF + 0.04, 0.05, 2.25);
+    caja(0.04, 0.12, 0.08, m(0x2c2f33), uP + s_ * 0.12, vF + 0.1, 1.05);       // pasador
+  }
+  panel(uM1, uM1, 0, vF, 0, hM);                                              // cara de lado, hacia el rótulo
+  for (const u of [uM0, uM1]) caja(0.45, hM + 0.6, 0.45, concreto, u, vF + 0.25, (hM + 0.6) / 2);   // columnas de concreto
+  const ext = new THREE.Mesh(new THREE.CylinderGeometry(0.08, 0.08, 0.5, 10), m(0xd0262e)); ext.position.set(...en(uM1 + 0.45, 0.12, 1.1)); grupo.add(ext);
+  for (const [du, y, c] of [[0.5, 1.6, 0xf2f2ee], [0.95, 1.5, 0xe8d58a]]) caja(0.28, 0.36, 0.02, m(c), uM1 + du, 0.13, y);   // avisos
+  const bas = new THREE.Mesh(new THREE.CylinderGeometry(0.28, 0.26, 0.8, 14), m(0x1f62c4)); bas.position.set(...en(uM1 + 0.6, 0.5, 0.4)); grupo.add(bas);
+  caja(0.35, 0.55, 0.05, m(0xe9e9e4), uM1 - 0.5, 0.06, 1.2);                  // rejilla de ventilación blanca
   // rejilla amarilla del desagüe en la orilla del piso
   const amar = m(0xe8b42a);
   caja(W, 0.03, 0.45, amar, (U0 + U1) / 2, HONDO_PESAS + 3.4, 0.09);
