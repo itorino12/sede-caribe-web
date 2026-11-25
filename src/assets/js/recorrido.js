@@ -549,11 +549,11 @@ function entrada(grupo, e) {
   for (let a = aW0 + 2; a < aE0 - 1; a += 3.2) poner(caja(0.12, 0.2, bN0 - bS0 - 0.6, grisO), a, (bS0 + bN0) / 2, yL - 0.25, false);
   const luz = new THREE.MeshBasicMaterial({ color: 0xffffff });
   for (let a = aW0 + 2.8; a < aE0 - 1.5; a += 4.4) for (const b of [bFin + 1.9, bN0 - 1.6]) poner(caja(0.9, 0.04, 0.9, luz), a, b, yL - 0.16, false);
-  // muros blancos de las puntas con el directorio azul hacia la carretera
-  const dir = new THREE.MeshBasicMaterial({ map: texturaDirectorio() });
-  const aMuroE = aE0 - 2.4, aMuroW = aW0 + 0.25;
-  poner(caja(aE0 - aMuroE, alto, 1.4, blanco), (aE0 + aMuroE) / 2, bFin, alto / 2);
-  poner(new THREE.Mesh(new THREE.PlaneGeometry(0.75, 1.5), dir), (aE0 + aMuroE) / 2, bFin + 0.71, 1.6, false);
+  // muro blanco de la punta oeste. (fotos de nov. 2026) En la punta este, del lado de la calle: dos columnas grises de
+  // concreto con el portón peatonal de barrotes entre ellas (viga oscura y reja fija arriba) y el Punto Verde contra
+  // la columna; luego el cuarto de espera: paredes blancas en L (la de atrás con ventana de barrotes hacia el campus, la
+  // del este ciega), abierto hacia la carretera, con la banca de concreto en L y lucecitas debajo
+  const aMuroW = aW0 + 0.25, aN0 = aE0 - 4.6, aC2 = aN0 - 0.4, aC1 = aC2 - 2.9, aMuroE = aC1 - 0.55;
   poner(caja(0.5, alto, 1.4, blanco), aMuroW, bFin, alto / 2);
   // hojas blancas, tablones grises y bancas
   const a0 = aW0 + 0.5, a1 = aMuroE, paso = 1.15, n = Math.floor((a1 - a0) / paso);
@@ -570,6 +570,75 @@ function entrada(grupo, e) {
     for (const s of [0, 1]) patas.setMatrixAt(i * 2 + s, new THREE.Matrix4().compose(en(a + (s ? 1 : -1) * (paso / 2 - 0.3), bFin + 0.38, 0.21), qG, uno));
   }
   for (const m of [hojas, tablones, asientos, patas]) { m.castShadow = !liviano; m.receiveShadow = true; grupo.add(m); }
+  // columnas grises de concreto (con juntas horizontales, como en la foto) y el portón peatonal
+  const concretoC = new THREE.MeshStandardMaterial({ map: texturaDibujada(64, 256, (x, W, H) => {
+    x.fillStyle = "#9a9c98"; x.fillRect(0, 0, W, H);
+    for (let i = 0; i < 900; i++) { x.fillStyle = i % 2 ? "rgba(60,60,60,0.18)" : "rgba(255,255,255,0.18)"; x.fillRect((i * 37) % W, (i * 71) % H, 1, 1); }
+    x.fillStyle = "#7c7e7a"; for (const y of [64, 128, 192]) x.fillRect(0, y, W, 3);
+  }), roughness: 0.95 });
+  const yCol = yL - 0.15, reja_ = new THREE.MeshStandardMaterial({ color: 0x737a80, metalness: 0.4, roughness: 0.5 });
+  for (const a of [aC1, aC2]) poner(caja(0.75, yCol, 0.75, concretoC), a, bFin, yCol / 2);
+  const g0 = aC1 + 0.375, g1 = aC2 - 0.375, gm = (g0 + g1) / 2, W_ = g1 - g0;
+  poner(caja(W_, 0.42, 0.3, grisO), gm, bFin, yCol - 0.45);                                 // viga oscura
+  poner(caja(W_, 0.06, 0.06, reja_), gm, bFin, 2.35, false);                                // reja fija arriba
+  for (let k = 1; k < 14; k++) poner(caja(0.035, yCol - 0.66 - 2.35, 0.035, reja_), g0 + (W_ * k) / 14, bFin, (yCol - 0.66 + 2.35) / 2, false);
+  const hojaReja = (ancho, alto_, piv, giroH) => {   // hoja de portón de barrotes que gira en «piv» (en a, b)
+    const h = new THREE.Group(), n_ = Math.round(ancho / 0.16);
+    const pz = (w, hh, d, x, y) => { const m = new THREE.Mesh(new THREE.BoxGeometry(w, hh, d), reja_); m.position.set(x, y, 0); m.castShadow = !liviano; h.add(m); };
+    for (const y of [0.12, alto_ - 0.03, alto_ * 0.5]) pz(ancho, 0.06, 0.05, ancho / 2, y);
+    for (const x of [0.03, ancho - 0.03]) pz(0.06, alto_, 0.06, x, alto_ / 2);
+    for (let k = 1; k < n_; k++) pz(0.03, alto_ - 0.1, 0.03, (ancho * k) / n_, alto_ / 2 + 0.05);
+    h.position.copy(en(piv[0], piv[1], 0.16)); h.rotation.y = giroD + giroH; grupo.add(h); return h;
+  };
+  hojaReja(W_ - 0.1, 2.3, [g0 + 0.05, bFin - 0.1], -0.9);                                    // portón peatonal, entreabierto
+  // Punto Verde UCR contra la columna del este, del lado del campus (foto)
+  {
+    const pv = new THREE.Group(), grisPV = new THREE.MeshStandardMaterial({ color: 0x8d9297, metalness: 0.4, roughness: 0.5 });
+    const c_ = (w, h, d, m, x, y, z) => { const o = new THREE.Mesh(new THREE.BoxGeometry(w, h, d), m); o.position.set(x, y, z); pv.add(o); };
+    [[0x1f62c4, -0.55], [0x3a3e42, 0], [0x24272a, 0.55]].forEach(([c, x]) => {
+      c_(0.48, 0.8, 0.44, new THREE.MeshStandardMaterial({ color: c, roughness: 0.55 }), x, 0.6, 0);
+      c_(0.52, 0.08, 0.5, new THREE.MeshStandardMaterial({ color: c === 0x1f62c4 ? 0x2a6fd0 : 0x2c2f33 }), x, 1.04, 0);
+    });
+    c_(1.7, 0.05, 0.5, grisPV, 0, 0.98, 0); c_(0.06, 1.9, 0.06, grisPV, 0.86, 0.95, 0.2); c_(0.5, 0.05, 0.08, grisPV, 0.86, 0.03, 0.05);
+    const cv = document.createElement("canvas"); cv.width = 512; cv.height = 128; const x = cv.getContext("2d");
+    x.fillStyle = "#7cc142"; x.fillRect(0, 0, 512, 22); x.fillStyle = "#fff"; x.font = "700 15px Arial, sans-serif"; x.textAlign = "center"; x.fillText("PUNTO VERDE UCR", 256, 16);
+    [["#2a8fd6", "ENVASES"], ["#7b8086", "PAPEL Y CARTÓN"], ["#2a2d30", "ORDINARIOS"]].forEach(([c, t], k) => { x.fillStyle = c; x.fillRect(4 + k * 168, 24, 164, 104); x.fillStyle = "#fff"; x.font = "700 19px Arial, sans-serif"; x.fillText(t, 86 + k * 168, 70); });
+    const tx = new THREE.CanvasTexture(cv); tx.colorSpace = THREE.SRGBColorSpace;
+    const r_ = new THREE.Mesh(new THREE.PlaneGeometry(1.7, 0.45), new THREE.MeshBasicMaterial({ map: tx })); r_.position.set(0, 1.6, 0.24); pv.add(r_);
+    pv.position.copy(en(aC2 - 0.05, bFin - 0.65, 0.16)); pv.rotation.y = giro + Math.PI; grupo.add(pv);
+  }
+  // cuarto de espera
+  const bA = bFin - 0.05, bB = bFin + 2.6, aEW = aE0 - 0.1;
+  poner(caja(0.2, 2.75, bB - bA, blanco), aEW, (bA + bB) / 2, 0.16 + 1.375);              // pared del este, ciega
+  const v0 = aN0 + 0.35, v1 = aN0 + 2.45, vY0 = 0.95, vY1 = 2.45;                         // ventana de barrotes al campus
+  poner(caja(v0 - aC2 - 0.37, 2.75, 0.2, blanco), (aC2 + 0.37 + v0) / 2, bA, 0.16 + 1.375);
+  poner(caja(aEW - v1, 2.75, 0.2, blanco), (v1 + aEW) / 2, bA, 0.16 + 1.375);
+  poner(caja(v1 - v0, vY0, 0.2, blanco), (v0 + v1) / 2, bA, 0.16 + vY0 / 2);
+  poner(caja(v1 - v0, 2.91 - vY1, 0.2, blanco), (v0 + v1) / 2, bA, vY1 + (2.91 - vY1) / 2);
+  for (let k = 0; k <= 9; k++) poner(caja(0.04, vY1 - vY0, 0.04, reja_), v0 + 0.06 + ((v1 - v0 - 0.12) * k) / 9, bA, (vY0 + vY1) / 2, false);
+  poner(caja(v1 - v0, 0.05, 0.06, reja_), (v0 + v1) / 2, bA, vY1 - 0.15, false);
+  const bancaC = new THREE.MeshStandardMaterial({ color: 0xa3a199, roughness: 0.95 }), foquito = new THREE.MeshBasicMaterial({ color: 0xffe2a0 });
+  // banca en L (el grupo va ×EXAGERAR: 0,46 aquí son unos 0,45 m sobre el piso)
+  poner(caja(aEW - aC2 - 0.5, 0.08, 0.5, bancaC), (aC2 + 0.37 + aEW - 0.1) / 2, bA + 0.35, 0.46);
+  poner(caja(0.5, 0.08, bB - bA - 0.6, bancaC), aEW - 0.35, (bA + 0.6 + bB) / 2, 0.46);
+  poner(caja(aEW - aC2 - 0.5, 0.26, 0.08, blanco), (aC2 + 0.37 + aEW - 0.1) / 2, bA + 0.5, 0.29, false);
+  poner(caja(0.08, 0.26, bB - bA - 0.6, blanco), aEW - 0.5, (bA + 0.6 + bB) / 2, 0.29, false);
+  for (const a of [aN0 + 1.4, aN0 + 3.4]) poner(caja(0.1, 0.05, 0.02, foquito), a, bA + 0.55, 0.32, false);
+  poner(caja(0.02, 0.05, 0.1, foquito), aEW - 0.55, bA + 1.6, 0.32, false);
+  // afiche en la pared del este, por dentro
+  const afiche = new THREE.Mesh(new THREE.PlaneGeometry(0.42, 0.6), new THREE.MeshBasicMaterial({ map: texturaDibujada(42, 60, (x, W, H) => {
+    x.fillStyle = "#f2efe8"; x.fillRect(0, 0, W, H); x.fillStyle = "#7a3a24"; x.fillRect(3, 3, W - 6, H * 0.6); x.fillStyle = "#e9b43a"; x.fillRect(6, 6, W - 12, 6); x.fillStyle = "#3d6f9c"; x.fillRect(3, H * 0.66, W - 6, H * 0.28);
+  }) }));
+  afiche.position.copy(en(aEW - 0.11, bA + 1.4, 1.75)); afiche.rotation.y = giroD - Math.PI / 2; grupo.add(afiche);
+  // luz de piso (bolardo negro) y basurero al pie, del lado del campus
+  const negroB = new THREE.MeshStandardMaterial({ color: 0x23272b, roughness: 0.5, metalness: 0.3 });
+  const bolardo = (a, b) => {
+    const c = new THREE.Mesh(new THREE.CylinderGeometry(0.11, 0.11, 0.95, 12), negroB); c.position.copy(en(a, b, 0.16 + 0.48)); grupo.add(c);
+    const t = new THREE.Mesh(new THREE.CylinderGeometry(0.13, 0.12, 0.1, 12), new THREE.MeshStandardMaterial({ color: 0xd9d4c4, emissive: 0x77705a })); t.position.copy(en(a, b, 1.1)); grupo.add(t);
+    poner(caja(0.35, 0.18, 0.35, new THREE.MeshStandardMaterial({ color: 0xb3b2ad, roughness: 0.9 })), a, b, 0.09, false);
+  };
+  bolardo(aN0 + 1.7, bA - 0.8);
+  poner(caja(0.5, 0.75, 0.42, negroB), aC1 - 0.9, bA - 0.45, 0.16 + 0.38);
   // columnas en V al frente, sobre un cuadro de zacate
   const zacateC = new THREE.MeshLambertMaterial({ color: 0x5f8a3e });
   for (let a = aW0 + 2.2; a < aE0 - 1; a += 5.2) {
@@ -582,23 +651,22 @@ function entrada(grupo, e) {
     }
   }
 
-  // --- portal del carril de entrada: dos pilares de concreto con dintel, de la punta este de la caseta a la isla del este
-  const aP = L2 + 0.3, aQ = L2 + 7.9, altoPortal = 3.5;
-  for (const a of [aP, aQ]) poner(caja(0.8, altoPortal, 0.8, concreto), a, P2 - 0.4, altoPortal / 2);
-  poner(caja(aQ - aP + 0.8, 0.55, 0.8, concreto), (aP + aQ) / 2, P2 - 0.4, altoPortal - 0.27);
-  const barrotes = new THREE.MeshStandardMaterial({ color: 0x4b5054, metalness: 0.4, roughness: 0.5, transparent: true, opacity: 0.85 });
-  const reja = new THREE.InstancedMesh(new THREE.BoxGeometry(0.05, 2.1, 0.06), barrotes, 14);
-  for (let i = 0; i < 14; i++) reja.setMatrixAt(i, new THREE.Matrix4().compose(en(aP + 0.6 + i * 0.24, P2 - 1.3, 1.05), new THREE.Quaternion().setFromAxisAngle(new THREE.Vector3(0, 1, 0), giro), new THREE.Vector3(1, 1, 1)));
-  grupo.add(reja);   // portón corredizo de barrotes, medio abierto
-
-  // --- muro blanco con el rótulo azul y portón peatonal, en la isla al este del carril
-  const muro = caja(3.0, 2.8, 0.35, [blanco, blanco, blanco, blanco, new THREE.MeshStandardMaterial({ map: texturaRotuloAzul(), roughness: 0.6 }), blanco]);
-  poner(muro, aQ + 2.3, P2 + 0.2, 1.4);
-  poner(caja(0.32, 2.5, 0.32, blanco), aQ + 4.2, P2 + 0.2, 1.25);
-  const rejaP = new THREE.InstancedMesh(new THREE.BoxGeometry(0.04, 1.9, 0.04), blanco, 9);
-  for (let i = 0; i < 9; i++) rejaP.setMatrixAt(i, new THREE.Matrix4().compose(en(aQ + 4.45 + i * 0.16, P2 + 0.2, 1.05), new THREE.Quaternion(), new THREE.Vector3(1, 1, 1)));
-  grupo.add(rejaP);
-  poner(caja(1.4, 0.06, 0.05, blanco), aQ + 5.05, P2 + 0.2, 2.0, false);
+  // --- (fotos de nov. 2026) el carril no lleva pórtico: un portón de dos hojas de barrotes grises, abiertas hacia el
+  // campus, una colgada de la pared del cuarto de espera y la otra del portal peatonal blanco de la isla del este
+  const aP = L2 + 0.3, aQ = L2 + 7.9;
+  const aPW = aQ + 0.8, aPE = aQ + 4.4, bPo = P2 + 0.2, hPo = 3.0, aV0 = aPW + 1.75, aV1 = aV0 + 1.3;
+  hojaReja(3.6, 2.4, [aE0 + 0.05, bFin + 0.6], -1.15);
+  const h2 = hojaReja(3.9, 2.4, [aPW - 0.05, bPo - 0.55], Math.PI + 1.05);
+  // --- portal peatonal: bloque blanco hondo con el paso de barrotes y, hacia la carretera, el rótulo azul
+  const rotuloA = new THREE.MeshStandardMaterial({ map: texturaRotuloAzul(), roughness: 0.6 });
+  poner(caja(aV0 - aPW, hPo, 1.1, [blanco, blanco, blanco, blanco, rotuloA, blanco]), (aPW + aV0) / 2, bPo, hPo / 2);
+  poner(caja(aPE - aV1, hPo, 1.1, blanco), (aV1 + aPE) / 2, bPo, hPo / 2);
+  poner(caja(aV1 - aV0, hPo - 2.45, 1.1, blanco), (aV0 + aV1) / 2, bPo, 2.45 + (hPo - 2.45) / 2);
+  poner(caja(aV1 - aV0, 0.1, 0.9, grisO), (aV0 + aV1) / 2, bPo, 2.42, false);                       // sombra del dintel
+  poner(caja(aPE - aPW + 0.3, 0.12, 1.4, blanco), (aPW + aPE) / 2, bPo, hPo + 0.06);               // tapa volada
+  const hp = hojaReja(aV1 - aV0 - 0.05, 2.25, [aV1 - 0.02, bPo - 0.55], Math.PI + 1.25);              // su portón, abierto
+  hp.position.y = 0.05; h2.position.y = 0.05;
+  bolardo(aPE + 1.2, bPo - 3.2);
 
   // --- losa del carril: delgada, inclinada (más alta al este), con cielo de parasoles; columnas inclinadas en V
   const aW = L2 - 4.5, aE = L2 + 15, bS = P2 - 3.2, bN = P2 + 7.2, yW = 3.9, yE = 4.9, pend = Math.atan2(yE - yW, aE - aW);
@@ -3016,8 +3084,11 @@ if (datos.campus.parqueo) {
 
   // pluma de acceso vehicular, roja y blanca
   function pluma({ p, giro, largo }) {
+    // (foto, nov. 2026) gabinete negro con tapa clara y un bolardo amarillo al lado; el brazo, en franjas rojas y blancas
     const g = new THREE.Group(), rojo = mate(0xd23a2c, { roughness: 0.5 });
-    const caja_ = new THREE.Mesh(new THREE.BoxGeometry(0.35, 1.1, 0.35), rojo); caja_.position.y = 0.55; g.add(caja_);
+    const caja_ = new THREE.Mesh(new THREE.BoxGeometry(0.38, 1.1, 0.32), mate(0x24272b, { roughness: 0.5, metalness: 0.3 })); caja_.position.y = 0.55; g.add(caja_);
+    const tapa = new THREE.Mesh(new THREE.BoxGeometry(0.42, 0.06, 0.36), mate(0xc9a98a, { roughness: 0.6 })); tapa.position.y = 1.13; g.add(tapa);
+    const bol = new THREE.Mesh(new THREE.CylinderGeometry(0.06, 0.06, 0.9, 10), mate(0xd9b23a, { roughness: 0.6 })); bol.position.set(0.35, 0.45, -0.25); g.add(bol);
     for (let k = 0; k < 6; k++) { const b = new THREE.Mesh(new THREE.BoxGeometry(0.08, 0.08, largo / 6), k % 2 ? blanco : rojo); b.position.set(0, 0.95, 0.2 + (largo / 6) * (k + 0.5)); g.add(b); }
     g.position.set(p[0], 0, p[1]); g.rotation.y = giro;
     registrar(g, null);
