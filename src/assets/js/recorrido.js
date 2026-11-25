@@ -605,7 +605,7 @@ function entrada(grupo, e) {
     [["#2a8fd6", "ENVASES"], ["#7b8086", "PAPEL Y CARTÓN"], ["#2a2d30", "ORDINARIOS"]].forEach(([c, t], k) => { x.fillStyle = c; x.fillRect(4 + k * 168, 24, 164, 104); x.fillStyle = "#fff"; x.font = "700 19px Arial, sans-serif"; x.fillText(t, 86 + k * 168, 70); });
     const tx = new THREE.CanvasTexture(cv); tx.colorSpace = THREE.SRGBColorSpace;
     const r_ = new THREE.Mesh(new THREE.PlaneGeometry(1.7, 0.45), new THREE.MeshBasicMaterial({ map: tx })); r_.position.set(0, 1.6, 0.24); pv.add(r_);
-    pv.position.copy(en(aC2 + 0.15, bFin - 1.35, 0.16)); pv.rotation.y = giroD + Math.PI * 0.75; grupo.add(pv);   // (anotaciones) en diagonal
+    pv.position.copy(en(aC2 + 0.15, bFin - 1.35, 0.16)); pv.rotation.y = giroD + Math.PI * 0.88; grupo.add(pv);   // (anotaciones) casi de lado, apenas sesgado
   }
   // cuarto de espera
   const bA = bFin - 0.05, bB = bFin + 2.6, aEW = aE0 - 0.1;

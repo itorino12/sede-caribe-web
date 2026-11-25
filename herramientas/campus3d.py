@@ -695,7 +695,7 @@ def lugares_nuevos(calles, quebrada, lejos_carretera, y_ruta32):
                  "puntos": M([marco(5, 70, v) for v in (-40, -14, 12, 38)])})
 
     # --- casetas y baños
-    caja(30, "caseta", CASETA_GUARDA, -3, 3.6, 3.2, alto=2.7, uso="guarda")
+    caja(30, "caseta", CASETA_GUARDA, -25, 3.6, 3.2, alto=2.7, uso="guarda")   # (anotaciones, nov. 2026) más en diagonal
     # pluma roja y blanca junto a la caseta, atravesada en el carril de entrada
     ys_, xs_ = np.nonzero(calles[CASETA_GUARDA[1] - 60:CASETA_GUARDA[1] + 60, CASETA_GUARDA[0] - 60:CASETA_GUARDA[0] + 60])
     k_ = int(np.argmin(np.hypot(xs_ - 60, ys_ - 60)))
@@ -937,6 +937,17 @@ def lugares_nuevos(calles, quebrada, lejos_carretera, y_ruta32):
     frente13_ = [(-51.0, -97.0), (-24.0, -98.5), (-24.3, -103.0), (-50.6, -101.6)]
     cv2.fillPoly(calles_extra, [np.array([a_px(x, z) for x, z in frente13_], np.int32)], 255)
     cv2.fillPoly(despejar_post, [np.array([a_px(x, z) for x, z in frente13_], np.int32)], 1)
+    # (anotaciones, nov. 2026) la calle que sale del portón del carril sigue derecho hacia el frente de la parada,
+    # pegada a su punta este: se recorta la punta de la isla de zacate que la dejaba de 2 m
+    c13_ = (-37.75, -92.25); d13_ = (0.998, -0.052); n13_ = (-0.052, -0.998)
+    ab13_ = lambda a, b: (c13_[0] + d13_[0] * a + n13_[0] * b, c13_[1] + d13_[1] * a + n13_[1] * b)
+    paso13_ = [ab13_(11.5, -1.0), ab13_(18.6, -1.0), ab13_(19.6, 6.5), ab13_(11.5, 6.5)]
+    cv2.fillPoly(calles_extra, [np.array([a_px(x, z) for x, z in paso13_], np.int32)], 255)
+    cv2.fillPoly(despejar_post, [np.array([a_px(x, z) for x, z in paso13_], np.int32)], 1)
+    # (anotaciones, nov. 2026) suelo blanco (concreto) entre la caseta del guarda y la acera de la orilla de la calle
+    blanco21_ = [(-31.8, -83.2), (-36.3, -78.6), (-37.2, -74.5), (-36.6, -70.5), (-32.2, -70.5), (-31.9, -79.0)]
+    cv2.fillPoly(claro_plaza, [np.array([a_px(x, z) for x, z in blanco21_], np.int32)], 255)
+    cv2.fillPoly(despejar_post, [np.array([a_px(x, z) for x, z in blanco21_], np.int32)], 1)
     # (anotaciones) la calle interna que sale al oeste de la calle de la Biblioteca no terminaba en nada: sigue hasta la ruta 32
     cv2.fillPoly(calles_extra, [np.array([a_px(x, z) for x, z in [(-97.4, -107.0), (-88.5, -107.0), (-88.5, -101.0), (-97.4, -101.0)]], np.int32)], 255)
     cv2.line(despejar, a_px(110.5, -16.6), a_px(158.6, -12.5), 1, int(12 / ESCALA))
