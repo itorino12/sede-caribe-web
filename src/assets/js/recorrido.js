@@ -1417,28 +1417,29 @@ function gimnasioPesas(grupo, vol, alto, frente, [t0, t1]) {
   const malla = new THREE.MeshStandardMaterial({ color: 0x8fa6b8, roughness: 0.8, transparent: true, opacity: 0.35, side: THREE.DoubleSide, depthWrite: false });
   abertura(grupo, f, alto, 0, U1);
   // jaula: de la pared de lado (U1) a uJ, y del fondo a vJ; cara de frente con portón de dos hojas
-  const uJ = U1 - 3.2, vJ = 2.3, hJ = 2.6;
+  const uJ = U1 - 3.2, vJ = 1.5, hJ = 2.6;   // (anotaciones) menos honda
   const panel = (u0, u1, v0, v1, y0, y1) => {
     const enU = Math.abs(u1 - u0) > Math.abs(v1 - v0), lar = enU ? u1 - u0 : v1 - v0, um = (u0 + u1) / 2, vm = (v0 + v1) / 2, h = y1 - y0, ym = (y0 + y1) / 2;
     caja(enU ? lar : 0.02, h, enU ? 0.02 : lar, malla, um, vm, ym);
     for (const y of [y0 + 0.03, y0 + h * 0.5, y1]) caja(enU ? lar : 0.06, 0.06, enU ? 0.06 : lar, azul, um, vm, y);
     for (const [uu, vv] of [[u0, v0], [u1, v1]]) caja(0.07, h, 0.07, azul, uu, vv, ym);
   };
-  const uPj = uJ + 1.6, aP = 1.6;
-  panel(uJ, uPj - aP / 2, vJ, vJ, 0, hJ); panel(uPj + aP / 2, U1 - 0.05, vJ, vJ, 0, hJ);
-  for (const s_ of [-1, 1]) { const u0 = uPj + (s_ < 0 ? -aP / 2 : 0); panel(u0, u0 + aP / 2, vJ + 0.04, vJ + 0.04, 0.05, 2.2); caja(0.04, 0.12, 0.08, m(0x2c2f33), uPj + s_ * 0.1, vJ + 0.1, 1.05); }
-  panel(uPj - aP / 2, uPj + aP / 2, vJ, vJ, 2.25, hJ);
-  panel(uJ, uJ, 0, vJ, 0, hJ);
+  // (anotaciones) la cara a la calle es de malla corrida; el portón de dos hojas va en la cara de lado, hacia residencias
+  panel(uJ, U1 - 0.05, vJ, vJ, 0, hJ);
+  const vPj = vJ / 2, aP = Math.min(1.3, vJ - 0.2);
+  panel(uJ, uJ, 0, vPj - aP / 2, 0, hJ); panel(uJ, uJ, vPj + aP / 2, vJ, 0, hJ);
+  for (const s_ of [-1, 1]) { const v0 = vPj + (s_ < 0 ? -aP / 2 : 0); panel(uJ - 0.04, uJ - 0.04, v0, v0 + aP / 2, 0.05, 2.2); caja(0.08, 0.12, 0.04, m(0x2c2f33), uJ - 0.1, vPj + s_ * 0.1, 1.05); }
+  panel(uJ, uJ, vPj - aP / 2, vPj + aP / 2, 2.25, hJ);
   // adentro: tres bicicletas de spinning (una roja) y la condensadora
   [[uJ + 0.7, 0xd0262e], [uJ + 1.6, 0x1d1f22], [uJ + 2.5, 0x1d1f22]].forEach(([u, c]) => {
     const mc = m(c, { metalness: 0.3 });
-    caja(0.08, 0.06, 1.0, mc, u, 1.0, 0.05, Math.PI / 2);
-    const tubo = caja(0.07, 0.9, 0.07, mc, u, 1.0, 0.5); tubo.rotation.z = 0.25;
-    caja(0.12, 0.05, 0.25, negro, u - 0.15, 1.0, 0.98, Math.PI / 2);
-    caja(0.35, 0.04, 0.05, negro, u + 0.3, 1.0, 1.05, Math.PI / 2);
-    const vol_ = new THREE.Mesh(new THREE.CylinderGeometry(0.22, 0.22, 0.06, 14), negro); vol_.rotation.z = Math.PI / 2; vol_.rotation.y = ang + Math.PI / 2; vol_.position.set(...en(u + 0.25, 1.0, 0.35)); grupo.add(vol_);
+    caja(0.08, 0.06, 1.0, mc, u, 0.75, 0.05, Math.PI / 2);
+    const tubo = caja(0.07, 0.9, 0.07, mc, u, 0.75, 0.5); tubo.rotation.z = 0.25;
+    caja(0.12, 0.05, 0.25, negro, u - 0.15, 0.75, 0.98, Math.PI / 2);
+    caja(0.35, 0.04, 0.05, negro, u + 0.3, 0.75, 1.05, Math.PI / 2);
+    const vol_ = new THREE.Mesh(new THREE.CylinderGeometry(0.22, 0.22, 0.06, 14), negro); vol_.rotation.z = Math.PI / 2; vol_.rotation.y = ang + Math.PI / 2; vol_.position.set(...en(u + 0.25, 0.75, 0.35)); grupo.add(vol_);
   });
-  caja(0.8, 0.6, 0.35, m(0xd7d8d4), U1 - 0.6, 0.25, 0.3);
+  caja(0.6, 0.6, 0.35, m(0xd7d8d4), U1 - 0.45, 0.25, 0.3);
   // puerta gris del promotor deportivo en el fondo, junto a la jaula: refuerzo en X, marco rojo, rótulo, extintor y afiches
   const uP = uJ - 0.8, metal = m(0x4f5458, { metalness: 0.4 });
   caja(1.1, 2.25, 0.06, m(0x8a2a2e), uP, 0.02, 1.12);
@@ -1496,7 +1497,7 @@ function entradaGimnasio(grupo, vol, alto, frente, [t0, t1]) {
   // rótulo; en sus dos esquinas de afuera, columnas de concreto. Adentro el piso azul de la cancha y la escalera
   // blanca a las graderías con baranda amarilla, y arriba de la malla la celosía gris del gimnasio
   const vF = 2.6, concreto = m(0xa9aaa6, { roughness: 0.95 }), amarillo = m(0xe8b42a);
-  caja(uM1 - uM0, 0.03, vF, m(0x2f6fa8, { roughness: 0.5 }), (uM0 + uM1) / 2, vF / 2, 0.1);
+  caja(uM1 - U0, 0.03, vF, m(0x2f6fa8, { roughness: 0.5 }), (U0 + uM1) / 2, vF / 2, 0.1);
   for (let k = 0; k < 8; k++) caja(0.9, 0.22, 0.32, blanco, uM0 + 0.7, 0.3 + k * 0.3, 0.11 + k * 0.22);   // escalera
   caja(0.05, 0.05, 2.6, amarillo, uM0 + 1.2, 1.3, 2.0).rotation.x = -0.6;
   for (let k = 0; k < 4; k++) caja(uM1 - uM0 - 0.6, 0.05, 0.12, m(0x6f767c), (uM0 + uM1) / 2, 0.1, hM + 0.3 + k * 0.25);
@@ -1509,7 +1510,7 @@ function entradaGimnasio(grupo, vol, alto, frente, [t0, t1]) {
     return malla_;
   };
   const uP = uM0 + (uM1 - uM0) * 0.45, anchoP = 1.9;
-  panel(uM0, uP - anchoP / 2, vF, vF, 0, hM);                                 // cara hacia la calle, a los lados del portón
+  panel(U0 + 0.05, uP - anchoP / 2, vF, vF, 0, hM);                         // (anotaciones) hasta la pared                                 // cara hacia la calle, a los lados del portón
   panel(uP + anchoP / 2, uM1, vF, vF, 0, hM);
   panel(uP - anchoP / 2, uP + anchoP / 2, vF, vF, 2.3, hM);                   // sobre el portón
   for (const s_ of [-1, 1]) {                                                 // portón de dos hojas, con marco más grueso
@@ -1518,7 +1519,7 @@ function entradaGimnasio(grupo, vol, alto, frente, [t0, t1]) {
     caja(0.04, 0.12, 0.08, m(0x2c2f33), uP + s_ * 0.12, vF + 0.1, 1.05);       // pasador
   }
   panel(uM1, uM1, 0, vF, 0, hM);                                              // cara de lado, hacia el rótulo
-  panel(uM0, uM0, 0, vF, 0, hM);                                              // (anotaciones) y del otro lado, hacia la fachada
+  panel(U0 + 0.05, U0 + 0.05, 0, vF, 0, hM);                                  // cierra contra la pared
   for (const u of [uM0, uM1]) caja(0.45, hM + 0.6, 0.45, concreto, u, vF + 0.25, (hM + 0.6) / 2);   // columnas de concreto
   const ext = new THREE.Mesh(new THREE.CylinderGeometry(0.08, 0.08, 0.5, 10), m(0xd0262e)); ext.position.set(...en(uM1 - 0.9, 0.12, 1.1)); grupo.add(ext);
   const bas = new THREE.Mesh(new THREE.CylinderGeometry(0.28, 0.26, 0.8, 14), m(0x1f62c4)); bas.position.set(...en(uM1 - 0.5, 0.5, 0.4)); grupo.add(bas);   // adentro de la jaula
