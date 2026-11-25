@@ -189,7 +189,10 @@ EDIFICIOS = [
                 # gimnasio de pesas (malla azul, rack, bicicletas, sacos de boxeo, banca, puerta del promotor deportivo)
                 "rotulo_t": 0.26, "pesas": [0.0, 0.15],
                 # (fotos) la entrada, en la punta norte de la misma fachada, con el rótulo UCR adentro
-                "entrada_gim": [0.8, 1.0]}},
+                "entrada_gim": [0.8, 1.0],
+                # (anotaciones, nov. 2026) entre la entrada y las pesas, bajo el corredor: una bodeguita contra la
+                # pared y otro rótulo UCR igual al de la entrada; en el zacate de enfrente, máquinas de ejercicio azules
+                "bodega_gim": [0.43, 0.55], "rotulos_t": [0.375], "maquinas_gim": [0.2, 0.4, 6.5]}},
     # Bodega de Acción Social (foto): casita blanca de techo a dos aguas gris oscuro con alero blanco y portón negro
     {"id": 15, "rect": (1770, 1450, 59, 41, 0), "pisos": 1, "alto": 3.4,
      # (anotaciones) la entrada (el portón) está en la fachada oeste, la que da a la calle que viene del gimnasio

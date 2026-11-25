@@ -987,10 +987,10 @@ function fachada26(grupo, vol, alto, pisos, { frente = [0, 1], paso_x: pasoX = n
 
 // Máquinas de ejercicio al aire libre (foto junto a los baños de la piscina): tubos azules con piezas amarillas,
 // cada una sobre su base de concreto. El frente (donde se sube la persona) mira a +z local
-function maquinaEjercicio(tipo) {
+function maquinaEjercicio(tipo, soloAzul = false) {   // soloAzul: asientos y brazos en otro azul, sin amarillo
   const g = new THREE.Group();
   const azul = new THREE.MeshStandardMaterial({ color: 0x2f5fb0, roughness: 0.45, metalness: 0.3 });
-  const amarillo = new THREE.MeshStandardMaterial({ color: 0xe8c04a, roughness: 0.6 });
+  const amarillo = new THREE.MeshStandardMaterial({ color: soloAzul ? 0x4f8fd8 : 0xe8c04a, roughness: 0.6 });
   const concreto = new THREE.MeshStandardMaterial({ color: 0x9d9a92, roughness: 0.95 });
   const tubo = (x0, y0, z0, x1, y1, z1, r, m = azul) => {   // tubo recto de un punto a otro
     const a = new THREE.Vector3(x0, y0, z0), b = new THREE.Vector3(x1, y1, z1), L = a.distanceTo(b);
@@ -1539,6 +1539,42 @@ function entradaGimnasio(grupo, vol, alto, frente, [t0, t1]) {
   caja(W, 0.03, 0.45, amar, (U0 + U1) / 2, HONDO_PESAS + 3.4, 0.09);
 }
 
+// marco de una fachada: u a lo largo desde f.a (en metros), v hacia afuera; una caja girada con la fachada
+function marcoFachada(grupo, contorno, frente) {
+  const f = fachadaSur(contorno, frente), dx = (f.b[0] - f.a[0]) / f.largo, dz = (f.b[1] - f.a[1]) / f.largo, ang = Math.atan2(f.nx, f.nz);
+  const en = (u, v, y) => [f.a[0] + dx * u + f.nx * v, y, f.a[1] + dz * u + f.nz * v];
+  const caja = (w, h, d, mat, u, v, y) => { const b = new THREE.Mesh(new THREE.BoxGeometry(w, h, d), mat); b.position.set(...en(u, v, y)); b.rotation.y = ang; b.castShadow = !liviano; b.receiveShadow = true; grupo.add(b); return b; };
+  return { f, en, caja, ang };
+}
+// (anotaciones, nov. 2026) bodeguita bajo el corredor del gimnasio, contra la pared, como las bodegas de ese sector:
+// bloque de concreto blanco con zócalo gris y la franja celeste de la pared, techito de losa, puerta de metal gris
+// con su cerradura y una rejilla de ventilación arriba. [t0, t1]: tramo de la fachada (fracción del largo)
+function bodegaGimnasio(grupo, vol, frente, [t0, t1]) {
+  const { f, caja } = marcoFachada(grupo, vol.contorno, frente), U0 = f.largo * t0, U1 = f.largo * t1, W = U1 - U0, uc = (U0 + U1) / 2;
+  const m = (c, x = {}) => new THREE.MeshStandardMaterial({ color: c, roughness: 0.85, ...x });
+  const H = 2.1, D = 2.4;                                      // alto sin exagerar (el grupo va ×EXAGERAR)
+  caja(W, H, D, m(0xeeece6), uc, D / 2, H / 2);              // cuerpo
+  caja(W + 0.02, 0.5, D + 0.02, m(0xa8b0b8), uc, D / 2, 0.25);    // zócalo gris
+  caja(W + 0.03, 0.3, D + 0.03, m(0x4fa8e8), uc, D / 2, 0.78);    // franja celeste como la pared
+  caja(W + 0.3, 0.1, D + 0.3, m(0xbfc0bb), uc, D / 2, H + 0.05);  // losa del techito
+  const uP = uc + W * 0.18, gris = m(0x8f969c, { metalness: 0.4, roughness: 0.5 });
+  caja(1.0, 1.5, 0.06, gris, uP, D + 0.03, 0.75 + 0.02);            // puerta de metal
+  caja(1.12, 0.06, 0.07, m(0x5f666c), uP, D + 0.04, 1.55);         // dintel
+  for (let k = 0; k < 4; k++) caja(0.92, 0.02, 0.07, m(0x7c838a), uP, D + 0.05, 0.25 + k * 0.38);   // refuerzos
+  caja(0.05, 0.1, 0.05, m(0x2a2d30), uP + 0.38, D + 0.08, 0.75);   // cerradura
+  caja(0.7, 0.25, 0.05, m(0x6f767c), uc - W * 0.25, D + 0.03, 1.75);   // rejilla de ventilación
+  for (let k = 0; k < 4; k++) caja(0.66, 0.02, 0.06, m(0x3a3f44), uc - W * 0.25, D + 0.04, 1.66 + k * 0.06);
+}
+// (foto y anotaciones, nov. 2026) máquinas de ejercicio al aire libre en el zacate frente al gimnasio, en fila a lo
+// largo de la pared como en la foto, todas azules. [t0, t1, v]: tramo de la fachada y distancia a la pared
+function maquinasGimnasio(grupo, vol, frente, [t0, t1, v]) {
+  const { f, en, ang } = marcoFachada(grupo, vol.contorno, frente), tipos = ["press", "pendulo", "caminadora", "rueda"];
+  tipos.forEach((tipo, k) => {
+    const mq = maquinaEjercicio(tipo, true), u = f.largo * (t0 + ((t1 - t0) * (k + 0.5)) / tipos.length);
+    mq.position.set(...en(u, v, 0)); mq.rotation.y = ang; mq.scale.y = 1 / EXAGERAR; grupo.add(mq);   // a escala real
+  });
+}
+
 // Parasoles curvos de lámina blanca frente a la fachada (edificio 13): paneles altos que se arquean hacia afuera
 function parasoles(grupo, vol, alto, frente, cuantos = 3) {
   const f = frente ? fachadaMirando(vol.contorno, frente) : fachadaSur(vol.contorno), dx = (f.b[0] - f.a[0]) / f.largo, dz = (f.b[1] - f.a[1]) / f.largo;
@@ -1743,18 +1779,20 @@ for (const e of datos.campus.edificios) {
         const p = new THREE.Mesh(new THREE.BoxGeometry(f.largo * 0.45, altoPiso * 0.78, 0.12), new THREE.MeshStandardMaterial({ color: estilo.porton, roughness: 0.6 }));
         p.position.set((f.a[0] + f.b[0]) / 2 + f.nx * 0.08, altoPiso * 0.39, (f.a[1] + f.b[1]) / 2 + f.nz * 0.08); p.rotation.y = ang; grupo.add(p);
       }
-      if (estilo.rotulo && !estilo.entrada_gim) {   // panel blanco con «UCR / Sede del Caribe» en celeste, bajo el corredor
+      // panel blanco con «UCR / Sede del Caribe» en celeste, bajo el corredor (con `rotulos_t`, otros iguales)
+      for (const t of estilo.rotulo ? [...(estilo.entrada_gim ? [] : [estilo.rotulo_t ?? 0.12]), ...(estilo.rotulos_t || [])] : []) {
         const f = fachadaSur(vol.contorno, estilo.rotulo), ang = Math.atan2(f.nx, f.nz);
         const cv = document.createElement("canvas"); cv.width = 512; cv.height = 320;
         const x = cv.getContext("2d"); x.fillStyle = "#ffffff"; x.fillRect(0, 0, 512, 320);
-        x.strokeStyle = "#005da4"; x.lineWidth = 14; x.strokeRect(7, 7, 498, 306);
-        x.fillStyle = "#005da4"; x.textAlign = "center";
+        // con la entrada del gimnasio, igual al rótulo de adentro de la jaula: sin borde y en celeste
+        const comoEntrada = !!estilo.entrada_gim, azulR = comoEntrada ? "#3d8fd0" : "#005da4";
+        if (comoEntrada) { x.fillStyle = "#f7f7f4"; x.fillRect(0, 0, 512, 320); } else { x.strokeStyle = azulR; x.lineWidth = 14; x.strokeRect(7, 7, 498, 306); }
+        x.fillStyle = azulR; x.textAlign = "center";
         x.font = "600 120px 'Source Sans 3', Arial, sans-serif"; x.fillText("UCR", 256, 170);
         x.fillRect(150, 192, 212, 6);
         x.font = "600 46px 'Source Sans 3', Arial, sans-serif"; x.fillText("SEDE DEL CARIBE", 256, 262);
         const tex = new THREE.CanvasTexture(cv); tex.colorSpace = THREE.SRGBColorSpace;
         const panel = new THREE.Mesh(new THREE.PlaneGeometry(4.6, 2.9), new THREE.MeshBasicMaterial({ map: tex }));
-        const t = estilo.rotulo_t ?? 0.12;   // cerca de la esquina, como en la foto
         panel.position.set(f.a[0] + (f.b[0] - f.a[0]) * t + f.nx * 0.1, 1.35, f.a[1] + (f.b[1] - f.a[1]) * t + f.nz * 0.08);
         panel.rotation.y = ang; grupo.add(panel);
       }
@@ -1826,6 +1864,8 @@ for (const e of datos.campus.edificios) {
     if (estilo.soda) soda(grupo, e.volumenes[0], e.alto, estilo.soda);
     if (estilo.pesas) gimnasioPesas(grupo, e.volumenes[0], e.alto, estilo.rotulo, estilo.pesas);
     if (estilo.entrada_gim) entradaGimnasio(grupo, e.volumenes[0], e.alto, estilo.rotulo, estilo.entrada_gim);
+    if (estilo.bodega_gim) bodegaGimnasio(grupo, e.volumenes[0], estilo.rotulo, estilo.bodega_gim);
+    if (estilo.maquinas_gim) maquinasGimnasio(grupo, e.volumenes[0], estilo.rotulo, estilo.maquinas_gim);
     if (estilo.docencia) docencia(grupo, e.volumenes[0], e.alto, estilo.docencia, estilo.alero ?? 1.4);
     if (estilo.fachada_26) fachada26(grupo, e.volumenes[0], e.alto, Math.max(e.pisos, 1), estilo.fachada_26);
     if (estilo.oeste_26) oeste26(grupo, e.volumenes[0], e.alto, Math.max(e.pisos, 1));
