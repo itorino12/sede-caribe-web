@@ -1440,20 +1440,22 @@ function gimnasioPesas(grupo, vol, alto, frente, [t0, t1]) {
     const vol_ = new THREE.Mesh(new THREE.CylinderGeometry(0.22, 0.22, 0.06, 14), negro); vol_.rotation.z = Math.PI / 2; vol_.rotation.y = ang + Math.PI / 2; vol_.position.set(...en(u + 0.25, 0.75, 0.35)); grupo.add(vol_);
   });
   caja(0.6, 0.6, 0.35, m(0xd7d8d4), U1 - 0.45, 0.25, 0.3);
-  // puerta gris del promotor deportivo en el fondo, junto a la jaula: refuerzo en X, marco rojo, rótulo, extintor y afiches
-  const uP = uJ - 0.8, metal = m(0x4f5458, { metalness: 0.4 });
-  caja(1.1, 2.25, 0.06, m(0x8a2a2e), uP, 0.02, 1.12);
-  caja(0.95, 2.15, 0.06, metal, uP, 0.05, 1.08);
-  for (const sg of [-1, 1]) { const d = caja(1.3, 0.05, 0.03, m(0x3e4246), uP, 0.09, 1.08); d.rotation.z = sg * 1.1; }
-  caja(0.1, 0.08, 0.05, m(0xb59a3a, { metalness: 0.6 }), uP + 0.35, 0.1, 1.0);
+  // (anotaciones) puerta gris del promotor deportivo en la pared de lado donde arranca la malla, delante de la jaula y
+  // aparte de ella: refuerzo en X, marco rojo, rótulo encima, extintor y afiches al lado
+  const uW = U1 - 0.04, vD = vJ + 1.0, metal = m(0x4f5458, { metalness: 0.4 });
+  caja(0.06, 2.25, 1.1, m(0x8a2a2e), uW, vD, 1.12);
+  caja(0.06, 2.15, 0.95, metal, uW - 0.03, vD, 1.08);
+  for (const sg of [-1, 1]) { const d = caja(0.03, 0.05, 1.3, m(0x3e4246), uW - 0.07, vD, 1.08); d.rotation.x = sg * 1.1; }
+  caja(0.05, 0.08, 0.1, m(0xb59a3a, { metalness: 0.6 }), uW - 0.08, vD - 0.35, 1.0);
   const cv = document.createElement("canvas"); cv.width = 128; cv.height = 48; const x = cv.getContext("2d");
   x.fillStyle = "#fff"; x.fillRect(0, 0, 128, 48); x.fillStyle = "#1d4f9c"; x.font = "700 17px Arial"; x.textAlign = "center"; x.fillText("Promotor", 64, 20); x.fillText("Deportivo", 64, 40);
   const tx = new THREE.CanvasTexture(cv); tx.colorSpace = THREE.SRGBColorSpace;
-  const rot = new THREE.Mesh(new THREE.PlaneGeometry(0.45, 0.17), new THREE.MeshBasicMaterial({ map: tx })); rot.position.set(...en(uP, 0.07, 2.4)); rot.rotation.y = ang; grupo.add(rot);
-  const ext = new THREE.Mesh(new THREE.CylinderGeometry(0.08, 0.08, 0.5, 10), rojo); ext.position.set(...en(uJ - 0.15, 0.12, 1.1)); grupo.add(ext);
-  for (const [du, y, c] of [[-1.0, 1.6, 0xe8d58a], [-1.4, 1.45, 0x6c3a8f], [-1.8, 1.6, 0xf2f2ee], [-1.4, 1.95, 0x7ab8e0]]) caja(0.3, 0.42, 0.02, m(c), uP + du, 0.03, y);
+  const rot = new THREE.Mesh(new THREE.PlaneGeometry(0.45, 0.17), new THREE.MeshBasicMaterial({ map: tx })); rot.position.set(...en(uW - 0.05, vD, 2.4)); rot.rotation.y = ang - Math.PI / 2; grupo.add(rot);
+  const ext = new THREE.Mesh(new THREE.CylinderGeometry(0.08, 0.08, 0.5, 10), rojo); ext.position.set(...en(uW - 0.12, vD + 0.85, 1.1)); grupo.add(ext);
+  for (const [dv, y, c] of [[1.3, 1.6, 0xe8d58a], [1.7, 1.45, 0x6c3a8f], [2.05, 1.6, 0xf2f2ee]]) caja(0.02, 0.42, 0.3, m(c), uW - 0.03, vD - 0.2 + dv - 1.0 + 0.9, y);
+  const uP = uJ - 0.8;   // referencia para la banca
   // afuera: rack de sentadillas frente al portón (travesaño rojo, barra con discos)
-  const uR = uJ + 1.0, vR = vJ + 1.5;
+  const uR = uJ + 0.3, vR = vJ + 2.2;   // hacia el frente, sin tapar la puerta ni el portón
   for (const du of [-0.55, 0.55]) for (const dv of [-0.45, 0.45]) caja(0.07, 2.2, 0.07, negro, uR + du, vR + dv, 1.1);
   caja(1.2, 0.12, 0.12, rojo, uR, vR - 0.45, 2.2); caja(1.2, 0.06, 0.06, negro, uR, vR + 0.45, 2.2);
   for (const du of [-0.55, 0.55]) caja(0.1, 0.06, 1.2, negro, uR + du, vR, 0.04);
