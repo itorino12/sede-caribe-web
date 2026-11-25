@@ -1500,8 +1500,16 @@ function entradaGimnasio(grupo, vol, alto, frente, [t0, t1]) {
   // blanca a las graderías con baranda amarilla, y arriba de la malla la celosía gris del gimnasio
   const vF = 2.6, concreto = m(0xa9aaa6, { roughness: 0.95 }), amarillo = m(0xe8b42a);
   caja(uM1 - U0, 0.03, vF, m(0x2f6fa8, { roughness: 0.5 }), (U0 + uM1) / 2, vF / 2, 0.1);
-  for (let k = 0; k < 8; k++) caja(0.9, 0.22, 0.32, blanco, uM0 + 0.7, 0.3 + k * 0.3, 0.11 + k * 0.22);   // escalera
-  caja(0.05, 0.05, 2.6, amarillo, uM0 + 1.2, 1.3, 2.0).rotation.x = -0.6;
+  // (anotaciones) la escalera va pegada a la pared de la derecha (la que cierra la jaula contra la fachada), con
+  // la baranda amarilla del lado abierto
+  const uE = U0 + 0.1 + 0.45;
+  for (let k = 0; k < 8; k++) caja(0.9, 0.22, 0.32, blanco, uE, 0.3 + k * 0.3, 0.11 + k * 0.22);   // escalera
+  {                                                                                    // baranda del lado abierto
+    const a_ = new THREE.Vector3(...en(uE + 0.47, 0.3, 0.22 + 0.9)), b_ = new THREE.Vector3(...en(uE + 0.47, 0.3 + 7 * 0.3, 0.22 + 7 * 0.22 + 0.9));
+    const bar = new THREE.Mesh(new THREE.BoxGeometry(0.05, 0.05, a_.distanceTo(b_) + 0.3), amarillo);
+    bar.position.copy(a_).add(b_).multiplyScalar(0.5); bar.lookAt(b_); grupo.add(bar);
+  }
+  for (const k of [0, 3.5, 7]) caja(0.04, 0.9, 0.04, amarillo, uE + 0.47, 0.3 + k * 0.3, 0.22 + k * 0.22 + 0.45);
   for (let k = 0; k < 4; k++) caja(uM1 - uM0 - 0.6, 0.05, 0.12, m(0x6f767c), (uM0 + uM1) / 2, 0.1, hM + 0.3 + k * 0.25);
   const panel = (u0, u1, v0, v1, y0, y1) => {   // un paño de malla con su marco azul (recto en u o en v)
     const enU = Math.abs(u1 - u0) > Math.abs(v1 - v0), lar = enU ? u1 - u0 : v1 - v0, um = (u0 + u1) / 2, vm = (v0 + v1) / 2, h = y1 - y0, ym = (y0 + y1) / 2;
