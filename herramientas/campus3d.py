@@ -1667,9 +1667,10 @@ def main(pdf, sat=None):
     if math.dist(fin_cerca, (-101.25, -102.5)) < 6:
         # (anotaciones, nov. 2026) la malla sigue de frente hasta la curva; en la vuelta va el muro blanco curvo con
         # «UCR» y de él sale un portón gris, cerrado, atravesado en la calle interna
-        cerca.append([fin_cerca, (-99.2, Z_CERCA_CALLE), (-58.3, Z_CERCA_CALLE)])
-        elementos.append({"tipo": "muro_ucr", "id": None, "centro": [-58.3, Z_CERCA_CALLE + 2.8], "radio": 2.8, "alto": 2.4})
-        elementos.append({"tipo": "porton_gris", "id": None, "a": [-58.3, Z_CERCA_CALLE - 0.3], "b": [-58.3, -103.7]})
+        # (anotaciones) muro recto de lado (de norte a sur) al final de la malla, con «UCR» hacia la calle que baja, y
+        # el portón gris abierto, pegado a su cara
+        cerca.append([fin_cerca, (-99.2, Z_CERCA_CALLE), (-58.0, Z_CERCA_CALLE)])
+        elementos.append({"tipo": "muro_ucr", "id": None, "a": [-57.8, Z_CERCA_CALLE - 0.2], "b": [-57.8, Z_CERCA_CALLE + 3.0], "alto": 2.4})
     # (anotaciones) mallas de la zona de residencias, iguales a la perimetral. Las dos que bordean la quebrada
     # arrancan pegadas a la baranda este del puente (36); la del norte sube luego hasta la cerca de la ruta 32 y la
     # del sur cierra con la que baja hasta la cerca del sur. Otra rodea las residencias por el norte, llega a un
