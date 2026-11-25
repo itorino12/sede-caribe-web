@@ -536,7 +536,10 @@ function entrada(grupo, e) {
     }
   });
   adoquin.wrapS = adoquin.wrapT = THREE.RepeatWrapping;
-  const bS0 = -P2 - 2.6, bN0 = P2 + 3.3, aW0 = -L2 - 0.4, aE0 = L2 + 0.1, bFin = -P2 + 0.6;
+  // (anotaciones, nov. 2026) la punta este quedaba en media calle: la parada termina 4,7 m antes (todo lo de esa
+  // punta se corre con ella) y la calle del portón pasa libre a su lado
+  const ACORTE = 4.7;
+  const bS0 = -P2 - 2.6, bN0 = P2 + 3.3, aW0 = -L2 - 0.4, aE0 = L2 + 0.1 - ACORTE, bFin = -P2 + 0.6;
   const piso = caja(aE0 - aW0, 0.16, bN0 - bS0, new THREE.MeshStandardMaterial({ map: adoquin, roughness: 0.95 }));
   adoquin.repeat.set((aE0 - aW0) / 2.4, (bN0 - bS0) / 2.4);
   poner(piso, (aW0 + aE0) / 2, (bS0 + bN0) / 2, 0.08, false);
@@ -590,7 +593,7 @@ function entrada(grupo, e) {
     for (let k = 1; k < n_; k++) pz(0.03, alto_ - 0.1, 0.03, (ancho * k) / n_, alto_ / 2 + 0.05);
     h.position.copy(en(piv[0], piv[1], 0.16)); h.rotation.y = giroD + giroH; grupo.add(h); return h;
   };
-  hojaReja(W_ - 0.1, 2.3, [g0 + 0.05, bFin - 0.1], -0.9);                                    // portón peatonal, entreabierto
+  hojaReja(W_ - 0.1, 2.3, [g0 + 0.05, bFin - 0.1], -Math.PI / 2);                            // portón peatonal, abierto del todo
   // Punto Verde UCR contra la columna del este, del lado del campus (foto)
   {
     const pv = new THREE.Group(), grisPV = new THREE.MeshStandardMaterial({ color: 0x8d9297, metalness: 0.4, roughness: 0.5 });
@@ -605,7 +608,7 @@ function entrada(grupo, e) {
     [["#2a8fd6", "ENVASES"], ["#7b8086", "PAPEL Y CARTÓN"], ["#2a2d30", "ORDINARIOS"]].forEach(([c, t], k) => { x.fillStyle = c; x.fillRect(4 + k * 168, 24, 164, 104); x.fillStyle = "#fff"; x.font = "700 19px Arial, sans-serif"; x.fillText(t, 86 + k * 168, 70); });
     const tx = new THREE.CanvasTexture(cv); tx.colorSpace = THREE.SRGBColorSpace;
     const r_ = new THREE.Mesh(new THREE.PlaneGeometry(1.7, 0.45), new THREE.MeshBasicMaterial({ map: tx })); r_.position.set(0, 1.6, 0.24); pv.add(r_);
-    pv.position.copy(en(aC2 + 0.15, bFin - 1.35, 0.16)); pv.rotation.y = giroD + Math.PI * 0.88; grupo.add(pv);   // (anotaciones) casi de lado, apenas sesgado
+    pv.position.copy(en(aC2 + 0.15, bFin - 1.35, 0.16)); pv.rotation.y = giroD + Math.PI / 2; grupo.add(pv);   // (anotaciones) de lado: la fila de basureros va hacia el campus
   }
   // cuarto de espera
   const bA = bFin - 0.05, bB = bFin + 2.6, aEW = aE0 - 0.1;

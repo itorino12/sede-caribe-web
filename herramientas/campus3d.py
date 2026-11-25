@@ -866,11 +866,13 @@ def lugares_nuevos(calles, quebrada, lejos_carretera, y_ruta32):
     curva_ = [[round((1 - t) ** 2 * p1_[0] + 2 * t * (1 - t) * esq_[0] + t * t * p2_[0], 2),
                round((1 - t) ** 2 * p1_[1] + 2 * t * (1 - t) * esq_[1] + t * t * p2_[1], 2)] for t in np.linspace(0, 1, 9)]
     elem.append({"tipo": "acera", "id": None, "ancho": 1.8, "puntos": curva_ + [isla_[0]]})          # por la isla
-    elem.append({"tipo": "acera", "id": None, "ancho": 1.8, "puntos": [lados_[0], [lados_[0][0], -88.4]]})   # hasta el 13
-    # (anotaciones, nov. 2026) del lado del campus, del portón peatonal de la parada salen aceras anchas en Y: una a
-    # la caseta del guarda y otra por la orilla de la calle, por detrás de la pluma
-    elem.append({"tipo": "acera", "id": None, "ancho": 2.6, "puntos": [[lados_[0][0], -85.9], [-32.6, -82.0], [-35.2, -79.6], [-37.6, -78.0]]})
-    elem.append({"tipo": "acera", "id": None, "ancho": 2.2, "puntos": [[lados_[0][0] - 0.6, -85.6], [-31.6, -82.4], [-32.6, -79.2], [-33.2, -75.0], [-33.4, -71.5]]})
+    # (anotaciones, nov. 2026) del lado del campus, del portón peatonal de la parada (corrido al oeste con la punta
+    # este, ver entrada() en recorrido.js) salen aceras anchas en Y: una a la caseta del guarda y otra por la orilla
+    # de la calle, por detrás de la pluma; el paso de cebra llega a esta última
+    pie13_ = [-36.4, -87.0]
+    elem.append({"tipo": "acera", "id": None, "ancho": 2.6, "puntos": [pie13_, [-36.9, -82.0], [-37.4, -78.4]]})
+    elem.append({"tipo": "acera", "id": None, "ancho": 2.2, "puntos": [pie13_, [-33.6, -84.2], [-32.6, -79.2], [-33.2, -75.0], [-33.4, -71.5]]})
+    elem.append({"tipo": "acera", "id": None, "ancho": 1.8, "puntos": [lados_[0], [-33.4, -84.4]]})
     # (anotaciones) acera desde la calle del puente hasta la esquina sur del 7, donde llega el pasillo de las aulas.
     # Pasa pegada a la malla de la piscina (a unos 2,4 m), de modo que los vestidores, el toldo y las mesas quedan
     # detrás de ella, del lado de la quebrada (ver vestidores en recorrido.js)
@@ -941,11 +943,11 @@ def lugares_nuevos(calles, quebrada, lejos_carretera, y_ruta32):
     # pegada a su punta este: se recorta la punta de la isla de zacate que la dejaba de 2 m
     c13_ = (-37.75, -92.25); d13_ = (0.998, -0.052); n13_ = (-0.052, -0.998)
     ab13_ = lambda a, b: (c13_[0] + d13_[0] * a + n13_[0] * b, c13_[1] + d13_[1] * a + n13_[1] * b)
-    paso13_ = [ab13_(11.5, -1.0), ab13_(18.6, -1.0), ab13_(19.6, 6.5), ab13_(11.5, 6.5)]
+    paso13_ = [ab13_(7.2, -6.5), ab13_(13.5, -6.5), ab13_(18.6, -1.0), ab13_(19.6, 6.5), ab13_(7.2, 6.5)]
     cv2.fillPoly(calles_extra, [np.array([a_px(x, z) for x, z in paso13_], np.int32)], 255)
     cv2.fillPoly(despejar_post, [np.array([a_px(x, z) for x, z in paso13_], np.int32)], 1)
     # (anotaciones, nov. 2026) suelo blanco (concreto) entre la caseta del guarda y la acera de la orilla de la calle
-    blanco21_ = [(-31.8, -83.2), (-36.3, -78.6), (-37.2, -74.5), (-36.6, -70.5), (-32.2, -70.5), (-31.9, -79.0)]
+    blanco21_ = [(-33.0, -83.0), (-36.3, -78.6), (-37.2, -74.5), (-36.6, -70.5), (-32.2, -70.5), (-31.9, -79.0)]
     cv2.fillPoly(claro_plaza, [np.array([a_px(x, z) for x, z in blanco21_], np.int32)], 255)
     cv2.fillPoly(despejar_post, [np.array([a_px(x, z) for x, z in blanco21_], np.int32)], 1)
     # (anotaciones) la calle interna que sale al oeste de la calle de la Biblioteca no terminaba en nada: sigue hasta la ruta 32
