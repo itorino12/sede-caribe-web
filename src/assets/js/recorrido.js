@@ -2621,7 +2621,7 @@ if (datos.campus.parqueo) {
 
   // parqueo asfaltado (asfalto y rayas en la textura): topes amarillos, alumbrado verde y, si lleva, carport
   // de lámina verde a una agua sobre columnas azules con base amarilla. Sin carros.
-  function parqueo({ id, centro: [cx, cz], largo, ancho, giro, filas, techado, techado_desde = 0, postes = true, espacio: E = 2.6 }) {
+  function parqueo({ id, centro: [cx, cz], largo, ancho, giro, filas, techado, techado_desde = 0, postes = true, espacio: E = 2.6, talud }) {
     const g = new THREE.Group();
     const tope = mate(0xe6b800, { roughness: 0.7 }), verdePoste = mate(0x2f6b45, { roughness: 0.6 });
     for (const { z: zv, fondo, n } of filas) {
@@ -2645,11 +2645,12 @@ if (datos.campus.parqueo) {
       const lampara = new THREE.Mesh(new THREE.BoxGeometry(0.5, 0.12, 0.9), new THREE.MeshBasicMaterial({ color: 0xfff3c4 })); lampara.position.set(x, 7.4, -ancho / 2 + 1.1); g.add(lampara);
     }
     g.position.set(cx, 0, cz); g.rotation.y = -giro;
+    if (talud) g.userData.talud = talud;   // talud corto: junto a un bajo (la soda), que no lo rellene
     registrar(g, id, new THREE.Vector3(cx, 3, cz), { pared: verdePoste, techo: tope });
   }
 
   // escalera de concreto con pasamanos gris; la larga entre el 1 y el 2 va techada
-  function escalera({ p, giro, largo, ancho, alto, techado, pasamanos }) {
+  function escalera({ p, giro, largo, ancho, alto, techado, pasamanos, arriba_en: arribaEn, abajo_en: abajoEn }) {
     const g = new THREE.Group(), h = alto * EXAGERAR, n = Math.max(3, Math.round(h / 0.17));
     for (let i = 0; i < n; i++) {
       const paso = new THREE.Mesh(new THREE.BoxGeometry(largo / n + 0.02, (h * (i + 1)) / n, ancho), concretoClaro);
@@ -2675,6 +2676,7 @@ if (datos.campus.parqueo) {
       g.add(cajas(azulColumna, columnas));
     }
     g.position.set(p[0], 0, p[1]); g.rotation.y = -giro;
+    if (arribaEn) Object.assign(g.userData, { arribaEn, abajoEn: abajoEn || p, altoEsc: h });   // del suelo en abajoEn al de arribaEn
     registrar(g, null);
   }
 
@@ -3031,20 +3033,22 @@ if (datos.campus.parqueo) {
         caja_(0.42, 0.04, 0.42, negra, x + dx, 0.7, z + s * 0.65); caja_(0.42, 0.45, 0.04, negra, x + dx, 0.95, z + s * 0.86);
       }
     }
-    // toldo en arco de policarbonato con costillas azules, en la punta norte de la franja
-    const zA = -ancho / 2 - 0.2, largoA = 3.2, R = Math.max(1.6, ancF / 2 + 0.3);
-    const geoA = new THREE.CylinderGeometry(R, R, largoA, 18, 1, true, Math.PI / 2, Math.PI); geoA.rotateX(Math.PI / 2);   // medio tubo con la cara curva arriba, a lo largo de z
+    // toldo en arco de policarbonato con costillas azules, en la punta norte: (anotaciones, nov. 2026) desde la franja
+    // junto a la soda hasta la otra esquina del comedor, con el piso debajo
+    const zA = -ancho / 2 - 0.2, largoA = 3.2, R0 = Math.max(1.6, ancF / 2 + 0.3);
+    const xa = xF - R0, xb = largo / 2 + 0.2, xC = (xa + xb) / 2, R = (xb - xa) / 2, sube = 1.0 / R;   // flecha de 1 m
+    const geoA = new THREE.CylinderGeometry(R, R, largoA, 36, 1, true, Math.PI / 2, Math.PI); geoA.rotateX(Math.PI / 2);   // medio tubo con la cara curva arriba, a lo largo de z
     const arco = new THREE.Mesh(geoA, new THREE.MeshStandardMaterial({ color: 0xe8ece4, roughness: 0.4, transparent: true, opacity: 0.75, side: THREE.DoubleSide }));
-    arco.position.set(xF, alto - 0.4, zA - largoA / 2); arco.scale.y = 0.5; g.add(arco);
+    arco.position.set(xC, alto - 0.4, zA - largoA / 2); arco.scale.y = sube; g.add(arco);
     for (let k = 0; k <= 3; k++) {
-      const c = new THREE.Mesh(new THREE.TorusGeometry(R, 0.04, 5, 18, Math.PI), azulColumna);
-      c.position.set(xF, alto - 0.4, zA - (largoA * k) / 3); c.scale.set(1, 0.5, 1); g.add(c);
+      const c = new THREE.Mesh(new THREE.TorusGeometry(R, 0.04, 5, 36, Math.PI), azulColumna);
+      c.position.set(xC, alto - 0.4, zA - (largoA * k) / 3); c.scale.set(1, sube, 1); g.add(c);
     }
-    for (const x of [xF - R, xF + R]) caja_(0.12, alto - 0.4, 0.12, azulColumna, x, (alto - 0.4) / 2, zA - largoA);
-    caja_(2 * R + 0.4, 0.25, largoA, concretoClaro, xF, 0.12, zA - largoA / 2);   // piso bajo el toldo
-    [0x2f62c4, 0x2a2d30, 0x2a2d30].forEach((col, k) => caja_(0.5, 0.85, 0.5, mate(col, { roughness: 0.5 }), xF - R + 0.4, 0.68, zA - 0.6 - k * 0.6));
-    caja_(0.06, 1.0, 1.9, grisM, xF - R + 0.12, 0.75, zA - 1.2);
-    caja_(0.55, 0.55, 0.4, mate(0xc8202a, { roughness: 0.6 }), xF - R + 0.45, 0.53, zA - 2.4);
+    for (const x of [xa, xC, xb]) caja_(0.12, alto - 0.4, 0.12, azulColumna, x, (alto - 0.4) / 2, zA - largoA);
+    caja_(xb - xa + 0.4, 0.25, largoA, concretoClaro, xC, 0.12, zA - largoA / 2);   // piso bajo el toldo
+    [0x2f62c4, 0x2a2d30, 0x2a2d30].forEach((col, k) => caja_(0.5, 0.85, 0.5, mate(col, { roughness: 0.5 }), xa + 0.4, 0.68, zA - 0.6 - k * 0.6));
+    caja_(0.06, 1.0, 1.9, grisM, xa + 0.12, 0.75, zA - 1.2);
+    caja_(0.55, 0.55, 0.4, mate(0xc8202a, { roughness: 0.6 }), xa + 0.45, 0.53, zA - 2.4);
     const abanico = new THREE.Mesh(new THREE.CylinderGeometry(0.35, 0.35, 0.1, 16), mate(0x2c2f33)); abanico.rotation.x = Math.PI / 2; abanico.position.set(-largo / 2 + 1.0, 1.7, -0.8); g.add(abanico);
     caja_(0.04, 1.5, 0.04, mate(0x2c2f33), -largo / 2 + 1.0, 0.95, -0.8);
     g.traverse((o) => { if (o.isMesh && !o.isInstancedMesh) { o.castShadow = !liviano; o.receiveShadow = true; } });
@@ -3654,6 +3658,12 @@ if (datos.campus.parqueo) {
   for (const g of lineales) for (const f of g.userData.franjas || []) nivelarFranja(f, g.userData.ancho || 2, g.userData.rasanteRecta);
   // lo que va sobre el piso de un pasillo (Punto Verde) toma la altura del terreno ya emparejado bajo el pasillo
   for (const e of enteros) if (e.o.userData.sobrePasillo) e.h = alturaEn(e.o.position.x, e.o.position.z);
+  // escalera que baja un talud (con el terreno ya emparejado): arranca en el suelo de abajo y el escalón de arriba queda al ras del piso de arriba
+  // (asfalto); se estira en alto lo justo para empatar los dos niveles
+  for (const e of enteros) if (e.o.userData.arribaEn) {
+    const { arribaEn, abajoEn, altoEsc } = e.o.userData, arriba = alturaEn(...arribaEn), abajo = alturaEn(...abajoEn);
+    e.h = abajo; e.o.scale.y = Math.max(0.3, (arriba - abajo) / altoEsc);
+  }
   // 3. subir
   for (const e of enteros) e.o.position.add(local(e.o.parent.matrixWorld, e.h));
   for (const o of aDoblar) doblar(o);
