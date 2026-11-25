@@ -536,7 +536,7 @@ function entrada(grupo, e) {
     }
   });
   adoquin.wrapS = adoquin.wrapT = THREE.RepeatWrapping;
-  const bS0 = -P2 - 0.6, bN0 = P2 + 3.3, aW0 = -L2 - 0.4, aE0 = L2 + 0.1, bFin = -P2 + 0.6;
+  const bS0 = -P2 - 2.6, bN0 = P2 + 3.3, aW0 = -L2 - 0.4, aE0 = L2 + 0.1, bFin = -P2 + 0.6;
   const piso = caja(aE0 - aW0, 0.16, bN0 - bS0, new THREE.MeshStandardMaterial({ map: adoquin, roughness: 0.95 }));
   adoquin.repeat.set((aE0 - aW0) / 2.4, (bN0 - bS0) / 2.4);
   poner(piso, (aW0 + aE0) / 2, (bS0 + bN0) / 2, 0.08, false);
@@ -605,7 +605,7 @@ function entrada(grupo, e) {
     [["#2a8fd6", "ENVASES"], ["#7b8086", "PAPEL Y CARTÓN"], ["#2a2d30", "ORDINARIOS"]].forEach(([c, t], k) => { x.fillStyle = c; x.fillRect(4 + k * 168, 24, 164, 104); x.fillStyle = "#fff"; x.font = "700 19px Arial, sans-serif"; x.fillText(t, 86 + k * 168, 70); });
     const tx = new THREE.CanvasTexture(cv); tx.colorSpace = THREE.SRGBColorSpace;
     const r_ = new THREE.Mesh(new THREE.PlaneGeometry(1.7, 0.45), new THREE.MeshBasicMaterial({ map: tx })); r_.position.set(0, 1.6, 0.24); pv.add(r_);
-    pv.position.copy(en(aC2 - 0.05, bFin - 0.65, 0.16)); pv.rotation.y = giro + Math.PI; grupo.add(pv);
+    pv.position.copy(en(aC2 + 0.15, bFin - 1.35, 0.16)); pv.rotation.y = giroD + Math.PI; grupo.add(pv);   // (anotaciones) de lado, mirando al portón
   }
   // cuarto de espera
   const bA = bFin - 0.05, bB = bFin + 2.6, aEW = aE0 - 0.1;
@@ -654,37 +654,34 @@ function entrada(grupo, e) {
   // --- (fotos de nov. 2026) el carril no lleva pórtico: un portón de dos hojas de barrotes grises, abiertas hacia el
   // campus, una colgada de la pared del cuarto de espera y la otra del portal peatonal blanco de la isla del este
   const aP = L2 + 0.3, aQ = L2 + 7.9;
-  const aPW = aQ + 0.8, aPE = aQ + 4.4, bPo = P2 + 0.2, hPo = 3.0, aV0 = aPW + 1.75, aV1 = aV0 + 1.3;
-  hojaReja(3.6, 2.4, [aE0 + 0.05, bFin + 0.6], -1.15);
-  const h2 = hojaReja(3.9, 2.4, [aPW - 0.05, bPo - 0.55], Math.PI + 1.05);
-  // --- portal peatonal: bloque blanco hondo con el paso de barrotes y, hacia la carretera, el rótulo azul
+  // (anotaciones) el portal peatonal va de frente a la acera que baja por afuera de la malla: el paso sigue la acera
+  // y queda al final de la malla (donde estaba el portón verde)
+  const PP = new THREE.Vector3(-13.75, 0, -96.95), tP = new THREE.Vector2(0.599, -0.801);   // centro y hacia afuera
+  const portal = new THREE.Group(); portal.position.copy(PP); portal.rotation.y = Math.atan2(tP.x, tP.y); grupo.add(portal);
+  const pz_ = (w, h, d, m, x, y, z) => { const o = new THREE.Mesh(new THREE.BoxGeometry(w, h, d), m); o.position.set(x, y, z); o.castShadow = !liviano; o.receiveShadow = true; portal.add(o); return o; };
+  const hPo = 3.0, xV0 = -0.65, xV1 = 0.65, xW = 1.95, xE = -1.25, Dp = 1.1;   // x+: lado de la calle
   const rotuloA = new THREE.MeshStandardMaterial({ map: texturaRotuloAzul(), roughness: 0.6 });
-  poner(caja(aV0 - aPW, hPo, 1.1, [blanco, blanco, blanco, blanco, rotuloA, blanco]), (aPW + aV0) / 2, bPo, hPo / 2);
-  poner(caja(aPE - aV1, hPo, 1.1, blanco), (aV1 + aPE) / 2, bPo, hPo / 2);
-  poner(caja(aV1 - aV0, hPo - 2.45, 1.1, blanco), (aV0 + aV1) / 2, bPo, 2.45 + (hPo - 2.45) / 2);
-  poner(caja(aV1 - aV0, 0.1, 0.9, grisO), (aV0 + aV1) / 2, bPo, 2.42, false);                       // sombra del dintel
-  poner(caja(aPE - aPW + 0.3, 0.12, 1.4, blanco), (aPW + aPE) / 2, bPo, hPo + 0.06);               // tapa volada
-  const hp = hojaReja(aV1 - aV0 - 0.05, 2.25, [aV1 - 0.02, bPo - 0.55], Math.PI + 1.25);              // su portón, abierto
-  hp.position.y = 0.05; h2.position.y = 0.05;
-  bolardo(aPE + 1.2, bPo - 3.2);
+  pz_(xW - xV1, hPo, Dp, [blanco, blanco, blanco, blanco, rotuloA, blanco], (xV1 + xW) / 2, hPo / 2, 0);
+  pz_(xV0 - xE, hPo, Dp, blanco, (xE + xV0) / 2, hPo / 2, 0);
+  pz_(xV1 - xV0, hPo - 2.45, Dp, blanco, 0, 2.45 + (hPo - 2.45) / 2, 0);
+  pz_(xV1 - xV0, 0.1, Dp - 0.2, grisO, 0, 2.42, 0);                                              // sombra del dintel
+  pz_(xW - xE + 0.3, 0.12, Dp + 0.3, blanco, (xW + xE) / 2, hPo + 0.06, 0);                      // tapa volada
+  {   // su portón de barrotes, abierto hacia adentro
+    const h = new THREE.Group(), n_ = 8, an = xV1 - xV0 - 0.05;
+    const bz = (w, hh, d, x, y) => { const m = new THREE.Mesh(new THREE.BoxGeometry(w, hh, d), reja_); m.position.set(x, y, 0); h.add(m); };
+    for (const y of [0.15, 2.2, 1.1]) bz(an, 0.05, 0.05, an / 2, y);
+    for (let k = 0; k <= n_; k++) bz(0.03, 2.1, 0.03, (an * k) / n_, 1.15);
+    h.position.set(xV0 + 0.02, 0.05, -Dp / 2 - 0.05); h.rotation.y = -1.2; portal.add(h);
+  }
+  // portón del carril: una hoja en el cuarto de espera y otra en la esquina del portal del lado de la calle
+  const esq = new THREE.Vector3(xW, 0, -Dp / 2).applyAxisAngle(new THREE.Vector3(0, 1, 0), portal.rotation.y).add(PP);
+  const aEsq = (esq.x - cx) * dx + (esq.z - cz) * dz, bEsq = (esq.x - cx) * nx + (esq.z - cz) * nz, Lh = Math.min(4.6, (aEsq - aE0) / 2 + 0.3);
+  hojaReja(Lh, 2.4, [aE0 + 0.05, bFin + 0.6], -1.15);
+  hojaReja(Lh, 2.4, [aEsq, bEsq], Math.PI + 1.05).position.y = 0.05;
+  { const q = new THREE.Vector3(0.2, 0, -3.4).applyAxisAngle(new THREE.Vector3(0, 1, 0), portal.rotation.y).add(PP);
+    bolardo((q.x - cx) * dx + (q.z - cz) * dz, (q.x - cx) * nx + (q.z - cz) * nz); }
 
-  // --- losa del carril: delgada, inclinada (más alta al este), con cielo de parasoles; columnas inclinadas en V
-  const aW = L2 - 4.5, aE = L2 + 15, bS = P2 - 3.2, bN = P2 + 7.2, yW = 3.9, yE = 4.9, pend = Math.atan2(yE - yW, aE - aW);
-  const parasol = texturaDibujada(64, 16, (x, W, H) => { x.fillStyle = "#e7e9ea"; x.fillRect(0, 0, W, H); x.fillStyle = "#b9bdc0"; x.fillRect(0, 0, 22, H); x.fillStyle = "#d3d6d8"; x.fillRect(22, 0, 4, H); });
-  parasol.wrapS = parasol.wrapT = THREE.RepeatWrapping; parasol.repeat.set((aE - aW) / 0.32, 1);
-  const cielo = new THREE.MeshStandardMaterial({ map: parasol, roughness: 0.7, emissive: 0x8a8d90, emissiveMap: parasol });
-  const losa = caja(aE - aW, 0.3, bN - bS, [losaBlanca, losaBlanca, blanco, cielo, losaBlanca, losaBlanca]);
-  losa.position.copy(en((aW + aE) / 2, (bS + bN) / 2, (yW + yE) / 2)); losa.rotation.set(0, giroD, 0); losa.rotateZ(pend);
-  losa.castShadow = !liviano; grupo.add(losa);
-  const yLosa = (a) => yW + ((a - aW) / (aE - aW)) * (yE - yW) - 0.15;
-  const columna = (a, b, inclina) => {
-    const h = yLosa(a + Math.sin(inclina) * yLosa(a)) / Math.cos(inclina);
-    const c = new THREE.Mesh(new THREE.CylinderGeometry(0.09, 0.09, h, 8).translate(0, h / 2, 0), acero);
-    c.position.copy(en(a, b, 0)); c.rotation.set(0, giroD, 0); c.rotateZ(-inclina); c.castShadow = !liviano; grupo.add(c);
-  };
-  const bCol = bN - 0.9;
-  for (const [a, abre] of [[aP + 0.6, 0.2], [aP + 7.0, 0.22]]) { columna(a, bCol, abre); columna(a, bCol, -abre * 0.5); }
-  columna(aE - 2.2, bCol, 0.26);
+  // (anotaciones) sobre el carril no hay techo: la losa inclinada y sus columnas se quitaron
 
   // --- rótulo de concreto en la franja de zacate, con la cara hacia la carretera
   const aR = 1.6, bR = 11.7, anchoR = 6.0, altoR = 3.1, baseR = 0.45;
@@ -3276,11 +3273,19 @@ if (datos.campus.parqueo) {
       for (let k = 1; k <= n; k++) puntos.push([ax + ((bx - ax) * k) / n, az + ((bz - az) * k) / n]);
     }
     const losas = [], guias = [];
+    // cada losa se alarga en sus puntas solo lo que pide el quiebre con la vecina (en las puntas sueltas, un cuarto
+    // del ancho): en las curvas de tramos cortos las losas no se montan una sobre otra ni tapan la guía
+    const rumbo = (i) => Math.atan2(puntos[i + 1][0] - puntos[i][0], puntos[i + 1][1] - puntos[i][1]);
+    const quiebre = (i, j) => { let d = Math.abs(rumbo(i) - rumbo(j)) % (2 * Math.PI); if (d > Math.PI) d = 2 * Math.PI - d; return Math.tan(Math.min(d, 2.4) / 2); };
     for (let i = 0; i < puntos.length - 1; i++) {
       const [ax, az] = puntos[i], [bx, bz] = puntos[i + 1];
-      const L = Math.hypot(bx - ax, bz - az) + ancho * 0.5, ang = Math.atan2(bx - ax, bz - az), cx = (ax + bx) / 2, cz = (az + bz) / 2;
-      losas.push([cx, 0.06, cz, ancho, 0.12, L, ang]);
-      guias.push([cx, 0.125, cz, 0.36, 0.02, L, ang]);
+      const L0 = Math.hypot(bx - ax, bz - az), ang = Math.atan2(bx - ax, bz - az), ux = (bx - ax) / L0, uz = (bz - az) / L0;
+      const eA = i > 0 ? quiebre(i - 1, i) : null, eB = i < puntos.length - 2 ? quiebre(i, i + 1) : null;
+      const pA = eA === null ? ancho * 0.25 : (ancho / 2) * eA + 0.04, pB = eB === null ? ancho * 0.25 : (ancho / 2) * eB + 0.04;
+      const gA = eA === null ? 0.1 : 0.18 * eA + 0.02, gB = eB === null ? 0.1 : 0.18 * eB + 0.02;
+      const cx = (ax + bx) / 2, cz = (az + bz) / 2;
+      losas.push([cx + (ux * (pB - pA)) / 2, 0.06, cz + (uz * (pB - pA)) / 2, ancho, 0.12, L0 + pA + pB, ang]);
+      guias.push([cx + (ux * (gB - gA)) / 2, 0.13, cz + (uz * (gB - gA)) / 2, 0.36, 0.02, L0 + gA + gB, ang]);
     }
     const g = new THREE.Group(); g.add(cajas(concretoClaro, losas), cajas(amarilloGuia, guias));
     Object.assign(g.userData, { lineal: true, franjas: [puntos], ancho });

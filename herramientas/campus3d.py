@@ -858,8 +858,19 @@ def lugares_nuevos(calles, quebrada, lejos_carretera, y_ruta32):
                      "giro": round(math.atan2(ux_ * s_p, uz_ * s_p), 3), "largo": round(float(ds[kd] - ds[ki]) + 0.2, 2)})
     lados_ = sorted([oeste_a, oeste_b], key=lambda q: q[0])        # el extremo de más al oeste llega al zacate del guarda
     isla_ = sorted([este_a, este_b], key=lambda q: q[0])
-    elem.append({"tipo": "acera", "id": None, "ancho": 1.8, "puntos": [lados_[1], isla_[0]]})          # por la isla
+    # (anotaciones, nov. 2026) la esquina donde la acera de afuera de la malla dobla hacia la isla va redondeada
+    esq_ = lados_[1]
+    def hacia_(q, d):
+        L_ = math.dist(esq_, q); return [esq_[0] + (q[0] - esq_[0]) * d / L_, esq_[1] + (q[1] - esq_[1]) * d / L_]
+    p1_, p2_ = hacia_((-13.56, -97.24), 3.5), hacia_(isla_[0], 3.5)
+    curva_ = [[round((1 - t) ** 2 * p1_[0] + 2 * t * (1 - t) * esq_[0] + t * t * p2_[0], 2),
+               round((1 - t) ** 2 * p1_[1] + 2 * t * (1 - t) * esq_[1] + t * t * p2_[1], 2)] for t in np.linspace(0, 1, 9)]
+    elem.append({"tipo": "acera", "id": None, "ancho": 1.8, "puntos": curva_ + [isla_[0]]})          # por la isla
     elem.append({"tipo": "acera", "id": None, "ancho": 1.8, "puntos": [lados_[0], [lados_[0][0], -88.4]]})   # hasta el 13
+    # (anotaciones, nov. 2026) del lado del campus, del portón peatonal de la parada salen aceras anchas en Y: una a
+    # la caseta del guarda y otra por la orilla de la calle, por detrás de la pluma
+    elem.append({"tipo": "acera", "id": None, "ancho": 2.6, "puntos": [[lados_[0][0], -85.9], [-32.6, -82.0], [-35.2, -79.6], [-37.6, -78.0]]})
+    elem.append({"tipo": "acera", "id": None, "ancho": 2.2, "puntos": [[lados_[0][0] - 0.6, -85.6], [-31.6, -82.4], [-32.6, -79.2], [-33.2, -75.0], [-33.4, -71.5]]})
     # (anotaciones) acera desde la calle del puente hasta la esquina sur del 7, donde llega el pasillo de las aulas.
     # Pasa pegada a la malla de la piscina (a unos 2,4 m), de modo que los vestidores, el toldo y las mesas quedan
     # detrás de ella, del lado de la quebrada (ver vestidores en recorrido.js)
@@ -907,7 +918,7 @@ def lugares_nuevos(calles, quebrada, lejos_carretera, y_ruta32):
     # la cerca desde el portón, pasa a la par del portón peatonal y sigue por la isla hasta el paso de cebra del oeste
     elem.append({"tipo": "acera", "id": None, "ancho": 1.4,
                  "puntos": [[-2.93, -112.75], [-4.82, -109.35], [-7.04, -106.05], [-9.53, -102.9],
-                            [-11.69, -99.52], [-13.56, -97.24], [-24.06, -83.19]]})
+                            [-11.69, -99.52], [-13.56, -97.24], [-21.96, -85.99]]})   # la esquina sigue en curva (arriba)
     # ruedas de tren (fotos): monumento en el zacate entre el parqueo de la piscina y la calle de la Biblioteca
     # (anotaciones) frente al parqueo, más al este y cerca de la acera
     # (anotaciones) corridas al sur y al oeste, al centro del zacate frente a la piscina
@@ -921,6 +932,11 @@ def lugares_nuevos(calles, quebrada, lejos_carretera, y_ruta32):
                 (b[0] - nx_ * wb / 2, b[1] - nz_ * wb / 2), (a[0] - nx_ * wa / 2, a[1] - nz_ * wa / 2)]
     for pol_ in (tira_((110.5, -16.6), (158.6, -12.5), 6.4, 5.0), [(-2.6, -111.9), (4.12, -115.38), (4.75, -121.8), (-1.6, -121.8)]):
         cv2.fillPoly(calles_extra, [np.array([a_px(x, z) for x, z in pol_], np.int32)], 255)
+    # (anotaciones, nov. 2026) frente a la parada techada (13) la calle era una tira angosta: se ensancha hacia el
+    # zacate del rótulo, de punta a punta de la parada
+    frente13_ = [(-51.0, -97.0), (-24.0, -98.5), (-24.3, -103.0), (-50.6, -101.6)]
+    cv2.fillPoly(calles_extra, [np.array([a_px(x, z) for x, z in frente13_], np.int32)], 255)
+    cv2.fillPoly(despejar_post, [np.array([a_px(x, z) for x, z in frente13_], np.int32)], 1)
     # (anotaciones) la calle interna que sale al oeste de la calle de la Biblioteca no terminaba en nada: sigue hasta la ruta 32
     cv2.fillPoly(calles_extra, [np.array([a_px(x, z) for x, z in [(-97.4, -107.0), (-88.5, -107.0), (-88.5, -101.0), (-97.4, -101.0)]], np.int32)], 255)
     cv2.line(despejar, a_px(110.5, -16.6), a_px(158.6, -12.5), 1, int(12 / ESCALA))
@@ -1052,8 +1068,8 @@ def lugares_nuevos(calles, quebrada, lejos_carretera, y_ruta32):
         d_ = math.hypot(bx_ - ax_, by_ - ay_) or 1
         ux_, uy_ = (bx_ - ax_) / d_, (by_ - ay_) / d_
         fin_ = (bx_ + ux_ * 1.5 / ESCALA, by_ + uy_ * 1.5 / ESCALA)   # el portón ocupa 1,5 m al final de la cerca
-        elem.append({"tipo": "porton_peatonal", "id": None, "p": a_metros((bx_ + fin_[0]) / 2, (by_ + fin_[1]) / 2),
-                     "giro": round(math.atan2(-uy_, ux_), 3), "ancho": 1.4})
+        # (anotaciones, nov. 2026) al final de la malla ya no va el portón verde: ahí está el portal peatonal blanco,
+        # de frente a la acera (entrada() en recorrido.js)
         next(e for e in elem if e["tipo"] == "porton")["poste_este"] = postes[1]
 
     # --- paso de la quebrada bajo la calle (28): alcantarilla con cabezales de concreto y paso de cebra
