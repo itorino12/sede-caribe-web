@@ -2778,14 +2778,14 @@ if (datos.campus.parqueo) {
       for (const dz of [-0.05, 0.05]) for (const x of [largo / 2 - 0.15, largo / 2 - 0.15 - 0.45]) { const c = new THREE.Mesh(new THREE.CylinderGeometry(0.04, 0.04, 1.0, 8), azulB); c.position.set(x, h + 0.5, dz); g.add(c); }
       const arco = new THREE.Mesh(new THREE.TorusGeometry(0.225, 0.04, 6, 12, Math.PI), azulB); arco.position.set(largo / 2 - 0.375, h + 1.0, 0); g.add(arco);
       const trav = new THREE.Mesh(new THREE.CylinderGeometry(0.03, 0.03, 0.45, 6), azulB); trav.rotation.z = Math.PI / 2; trav.position.set(largo / 2 - 0.375, h + 0.55, 0); g.add(trav);
-    } else if (pasamanos === "celeste") {   // (anotaciones) un solo pasamanos celeste, a la orilla del lado -z, que baja al suelo arriba
-      const celeste = mate(0x5fb4e8, { roughness: 0.45, metalness: 0.2 }), z = -(ancho / 2 - 0.1);
-      const pm = new THREE.Mesh(new THREE.CylinderGeometry(0.045, 0.045, Math.hypot(largo, h), 8), celeste);
-      pm.rotation.z = Math.PI / 2 - pend; pm.position.set(0, h / 2 + 0.9, z); g.add(pm);
-      for (const t of [-0.45, -0.15, 0.15, 0.45]) { const poste = new THREE.Mesh(new THREE.CylinderGeometry(0.04, 0.04, 0.9, 6), celeste); poste.position.set(t * largo, h * (0.5 + t) + 0.45, z); g.add(poste); }
-      const curva = new THREE.Mesh(new THREE.TorusGeometry(0.2, 0.045, 6, 10, Math.PI / 2), celeste);   // arriba dobla y baja al piso
-      curva.position.set(largo / 2 - 0.2, h + 0.9 - 0.2, z); g.add(curva);
-      const baja = new THREE.Mesh(new THREE.CylinderGeometry(0.045, 0.045, 0.7, 8), celeste); baja.position.set(largo / 2, h + 0.35, z); g.add(baja);
+    } else if (pasamanos === "celeste") {   // (anotaciones) un solo pasamanos celeste en una orilla: tubo recto a lo largo de la escalera, con un poste en cada punta
+      const celeste = mate(0x5fb4e8, { roughness: 0.45, metalness: 0.2 }), z = -(ancho / 2 - 0.12), x0 = -largo / 2 + 0.12, x1 = largo / 2 - 0.12;
+      const y0 = (h * 1) / n + 0.9, y1 = h + 0.9;   // a 0,9 m sobre el primer y el último escalón
+      const pm = new THREE.Mesh(new THREE.CylinderGeometry(0.045, 0.045, Math.hypot(x1 - x0, y1 - y0) + 0.09, 8), celeste);
+      pm.rotation.z = Math.PI / 2 - Math.atan2(y1 - y0, x1 - x0); pm.position.set((x0 + x1) / 2, (y0 + y1) / 2, z); g.add(pm);
+      for (const [x, yb, yt] of [[x0, h / n, y0], [x1, h, y1]]) {
+        const poste = new THREE.Mesh(new THREE.CylinderGeometry(0.045, 0.045, yt - yb, 8), celeste); poste.position.set(x, (yb + yt) / 2, z); g.add(poste);
+      }
     } else for (const lado of [-1, 1]) {
       const pm = new THREE.Mesh(new THREE.CylinderGeometry(0.04, 0.04, Math.hypot(largo, h), 6), tubo);
       pm.rotation.z = Math.PI / 2 - pend; pm.position.set(0, h / 2 + 0.9, lado * (ancho / 2 - 0.1)); g.add(pm);
@@ -3527,21 +3527,29 @@ if (datos.campus.parqueo) {
     // arriba un descanso que llega hasta la pasarela del segundo piso; los dos con baranda a los lados
     const LL = 1.8;
     caja(LL, 0.15, ancho + 0.1, concreto, xE + LL / 2, y0 - 0.07, Z(vOut));
-    caja(LL, 0.02, 0.3, amarillo, xE + LL / 2, y0 + 0.01, Z(vOut));
     caja(LL, 0.2, ancho + 0.1, concreto, xE + LL / 2, piso - 0.1, Z(vIn));
-    caja(LL, 0.02, 0.3, amarillo, xE + LL / 2, piso + 0.01, Z(vIn));
+    // (anotaciones, nov. 2026) la guía táctil sigue del pie de cada tramo y dobla hacia la entrada de 26
+    for (const [v, y] of [[vOut, y0 + 0.01], [vIn, piso + 0.01]]) {
+      caja(LL / 2 + 0.15, 0.02, 0.3, amarillo, xE + (LL / 2 + 0.15) / 2, y, Z(v));
+      caja(0.3, 0.02, v - 0.05, amarillo, xE + LL / 2, y, Z((v + 0.05) / 2));
+    }
     // (anotaciones, nov. 2026) por ahí se entra y se sale del edificio en los dos pisos: una entrada en la pared de 26
     // frente a cada descanso, y abajo la acera sigue del descanso hasta la puerta (bajo el descanso de arriba)
     const vidrioP = mate(0x1d2a30, { roughness: 0.15, metalness: 0.3 }), marcoP = mate(0x3a3f44, { metalness: 0.5 });
     for (const y of [y0, piso]) {
-      const hP = 2.3 / EXAGERAR, wP = LL - 0.2, xP = xE + LL / 2;
+      const hP = 2.3 / EXAGERAR, wP = 1.2, xP = xE + LL / 2;
       caja(wP, hP, 0.06, vidrioP, xP, y + hP / 2, Z(0.03));
       caja(wP + 0.16, 0.1, 0.12, marcoP, xP, y + hP + 0.05, Z(0.05));
       for (const s of [-1, 0, 1]) caja(0.07, hP, 0.1, marcoP, xP + s * (wP / 2), y + hP / 2, Z(0.05));
     }
     caja(LL, 0.12, vOut - ancho / 2, concreto, xE + LL / 2, y0 - 0.06, Z((vOut - ancho / 2) / 2));   // acera a la puerta de abajo
     for (const [v, y] of [[vOut, y0], [vIn, piso]]) for (const lado of [-1, 1]) {
-      if (lado < 0) continue;   // del lado de la pared queda abierto: ahí está la entrada (abajo, por la acera)
+      if (lado < 0) {   // (anotaciones) del lado de la pared, baranda a los dos lados del paso a la entrada (donde dobla la guía)
+        for (const [xa, xb] of [[xE, xE + LL / 2 - 0.6], [xE + LL / 2 + 0.6, xE + LL]]) {
+          const br = baranda(xb - xa - 0.05); br.position.set((xa + xb) / 2, y, Z(v - (ancho / 2 - 0.05))); g.add(br);
+        }
+        continue;
+      }
       const br = baranda(LL - 0.1); br.position.set(xE + LL / 2, y, Z(v + lado * (ancho / 2 - 0.05))); g.add(br);
     }
     for (const v of [vIn - ancho / 2 + 0.3, vIn + ancho / 2 - 0.2]) {   // columnas bajo el descanso de arriba

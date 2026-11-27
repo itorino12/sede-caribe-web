@@ -334,12 +334,14 @@ LLANOS = [
     # (anotaciones, nov. 2026) la soda y el comedor van en un bajo; la escalera del final del parqueo baja a él
     # (anotaciones, nov. 2026) el asfalto del parqueo frente a la soda (techado, los tres espacios y el descanso de la
     # escalera) va llano, al nivel del parqueo; el bajo empieza a 1 m de su orilla
-    {"pol": [(-148.53, 40.12), (-137.35, 53.92), (-122.01, 41.49), (-129.4, 32.36), (-138.62, 32.1)], "nivel": 3.4, "suave": 2.0},
+    {"pol": [(-148.53, 40.12), (-137.35, 53.92), (-122.01, 41.49), (-129.4, 32.36), (-138.62, 32.1)], "nivel": 3.6, "suave": 2.0},
+    # (anotaciones, nov. 2026) la cuña entre los tres espacios y el parqueo 6 es asfalto, llana como el resto del parqueo
+    {"pol": [(-129.4, 32.36), (-122.01, 41.49), (-109.64, 41.28), (-113.41, 36.61), (-116.5, 27.0), (-127.5, 27.5)], "nivel": 3.6, "suave": 1.0},
     # (anotaciones) desde la escalera, el pasillo hasta la soda y detrás de la soda y el comedor
     # (anotaciones, nov. 2026) 1,8 m bajo el parqueo (la altura de la escalera): todo el zacate entre el parqueo, el
-    # comedor y el pasillo 10, también la cuña entre los tres espacios y el parqueo 6, a 1 m de la orilla del asfalto;
+    # comedor y el pasillo 10, a 1 m de la orilla del asfalto;
     # junto a la escalera la orilla pasa por su pie, para que el descanso de concreto quede a nivel del parqueo
-    {"pol": [(-136.26, 60.04), (-136.44, 54.66), (-120.39, 41.66), (-128.3, 31.4), (-125.0, 30.7), (-120.0, 29.8), (-118.5, 30.0), (-118.35, 32.86), (-112.25, 43.16), (-111.3, 43.8), (-110.7, 43.5), (-99.4, 36.5), (-96.0, 46.0), (-87.0, 65.0), (-91.0, 82.0), (-100.0, 98.0), (-114.0, 106.0), (-130.0, 96.0), (-123.04, 76.37)],
+    {"pol": [(-136.26, 60.04), (-136.44, 54.66), (-120.39, 41.66), (-109.3, 42.4), (-99.6, 35.0), (-96.0, 46.0), (-87.0, 65.0), (-91.0, 82.0), (-100.0, 98.0), (-114.0, 106.0), (-130.0, 96.0), (-123.04, 76.37)],
      "nivel": 1.6, "suave": 0.4},
     # (anotaciones) junto a la escalera el asfalto llega llano hasta el último escalón y el talud cae enseguida, bajo los escalones
     {"pol": [(-134.66, 51.93), (-132.45, 54.65), (-129.89, 52.57), (-132.09, 49.85)],
@@ -1382,6 +1384,8 @@ def main(pdf, sat=None):
     cv2.fillPoly(quitar_, a_px_([(8.75, -4.75), (16.0, -4.75), (16.0, 24.0), (8.75, 24.0)]), 255)
     llenar_ = np.zeros_like(calles)
     cv2.fillPoly(llenar_, a_px_([(-3.0, -4.75), (8.75, -4.75), (8.75, 15.0), (-3.0, 15.0)]), 255)
+    # (anotaciones, nov. 2026) la cuña entre los tres espacios y el parqueo 6 también es asfalto
+    cv2.fillPoly(llenar_, [np.array([(x / ESCALA + ORIGEN[0], z / ESCALA + ORIGEN[1]) for x, z in [(-129.4, 32.36), (-122.01, 41.49), (-109.64, 41.28), (-113.41, 36.61), (-116.5, 27.0), (-127.5, 27.5)]], np.int32)], 255)
     # el rinconcito de zacate entre los tres espacios y la explanada también es asfalto
     cv2.fillPoly(llenar_, [np.array([(x / ESCALA + ORIGEN[0], z / ESCALA + ORIGEN[1]) for x, z in
                  [(-134.5, 30.4), (-128.0, 29.8), (-128.6, 32.6), (-131.5, 35.0)]], np.int32)], 255)
@@ -1391,6 +1395,10 @@ def main(pdf, sat=None):
     extra["rayas"][cv2.resize(quitar_, (extra["rayas"].shape[1], extra["rayas"].shape[0]), interpolation=cv2.INTER_NEAREST) > 0] = 0
     extra["calles_extra"][llenar_ > 0] = 255
     extra["asfalto"][llenar_ > 0] = 255   # una sola mancha: sin cordón entre los espacios nuevos y el resto
+    # en todo el parqueo frente a la soda el asfalto suelto y el de la explanada son una sola mancha (sin cordón por dentro)
+    x0_, x1_, z0_, z1_ = [int(round(v)) for v in (-152 / ESCALA + ORIGEN[0], -94 / ESCALA + ORIGEN[0], 18 / ESCALA + ORIGEN[1], 62 / ESCALA + ORIGEN[1])]
+    zona_ = extra["asfalto"][z0_:z1_, x0_:x1_]
+    zona_[(extra["calles_extra"][z0_:z1_, x0_:x1_] > 0) | (calles[z0_:z1_, x0_:x1_] > 0) | (acceso[z0_:z1_, x0_:x1_] > 0)] = 255
     pintar(cv2.bitwise_or(cv2.bitwise_or(calles, acceso), extra["calles_extra"]), (84, 88, 94), borde=(214, 212, 204))
     pintar(extra["lastre"], (176, 160, 128))
     pintar(extra["plaza"], (200, 198, 190), borde=(170, 168, 160))
