@@ -334,18 +334,19 @@ LLANOS = [
     # (anotaciones, nov. 2026) la soda y el comedor van en un bajo; la escalera del final del parqueo baja a él
     # (anotaciones, nov. 2026) el asfalto del parqueo frente a la soda (techado, los tres espacios y el descanso de la
     # escalera) va llano, al nivel del parqueo; el bajo empieza a 1 m de su orilla
-    {"pol": [(-148.53, 40.12), (-138.43, 55.37), (-133.38, 51.28), (-122.01, 41.49), (-129.4, 32.36), (-138.62, 32.1)], "nivel": 3.6, "suave": 2.0},
+    {"pol": [(-148.53, 40.12), (-138.43, 55.37), (-132.86, 51.89), (-121.49, 42.10), (-129.4, 32.36), (-138.62, 32.1)], "nivel": 3.6, "suave": 0.8},   # (anotaciones) llano hasta la orilla del asfalto, al nivel del arranque de la escalera
     # (anotaciones, nov. 2026) la cuña entre los tres espacios y el parqueo 6 es asfalto, llana como el resto del parqueo
     {"pol": [(-129.4, 32.36), (-122.01, 41.49), (-109.64, 41.28), (-113.41, 36.61), (-116.5, 27.0), (-127.5, 27.5)], "nivel": 3.6, "suave": 1.0},
     # (anotaciones) desde la escalera, el pasillo hasta la soda y detrás de la soda y el comedor
     # (anotaciones, nov. 2026) 1,8 m bajo el parqueo (la altura de la escalera): todo el zacate entre el parqueo, el
     # comedor y el pasillo 10, a 1 m de la orilla del asfalto;
     # junto a la escalera la orilla pasa por su pie, para que el descanso de concreto quede a nivel del parqueo
-    {"pol": [(-136.26, 60.04), (-137.8, 56.15), (-132.75, 52.06), (-120.39, 41.66), (-109.3, 42.4), (-99.6, 35.0), (-96.0, 46.0), (-87.0, 65.0), (-91.0, 82.0), (-100.0, 98.0), (-114.0, 106.0), (-130.0, 96.0), (-123.04, 76.37)],
+    {"pol": [(-136.26, 60.04), (-137.2, 56.8), (-132.16, 52.74), (-119.80, 42.34), (-109.3, 42.4), (-99.6, 35.0), (-96.0, 46.0), (-87.0, 65.0), (-91.0, 82.0), (-100.0, 98.0), (-114.0, 106.0), (-130.0, 96.0), (-123.04, 76.37)],
      "nivel": 1.6, "suave": 0.4},
     # (anotaciones) junto a la escalera el asfalto llega llano hasta el último escalón y el talud cae enseguida, bajo los escalones
-    {"pol": [(-134.66, 51.93), (-132.45, 54.65), (-129.89, 52.57), (-132.09, 49.85)],
-     "nivel": 3.6, "rampa": [(-133.37, 50.89), 3.6, (-132.75, 51.67), 1.6], "suave": 0.6},
+    # (anotaciones, nov. 2026) solo del ancho de la escalera: a los lados el asfalto sigue llano al nivel del arranque
+    {"pol": [(-134.76, 51.17), (-132.30, 54.20), (-130.36, 52.63), (-132.82, 49.60)],
+     "nivel": 3.6, "rampa": [(-133.37, 50.89), 3.6, (-132.75, 51.67), 1.6], "suave": 0.15},
 ]
 # (anotaciones) al este del puente de residencias la quebrada va poco honda entre las dos mallas: sin zanja
 CAUCE_SOMERO = [{"x": (112.0, 178.0), "hondo": 1.1, "rampa": 9.0}]
@@ -990,7 +991,7 @@ def lugares_nuevos(calles, quebrada, lejos_carretera, y_ruta32):
     elem.append({"tipo": "bicicletas", "id": None, "p": [135.6, -98.6], "largo": 6.4, "ancho": 2.8, "n": 5})
     # (fotos y anotaciones, nov. 2026) Punto Verde UCR en el piso del pasillo techado de Docencia, a la izquierda al
     # llegar a la puerta, con los basureros de frente al centro del pasillo (antes flotaba fuera del pasillo)
-    elem.append({"tipo": "punto_verde", "id": None, "p": [-125.57, 12.45], "giro": 1.725})   # (anotaciones) dentro del pasillo, más adelante
+    elem.append({"tipo": "punto_verde", "id": None, "p": [-125.57, 12.45], "giro": 1.752})   # (anotaciones) recto, paralelo a la guía amarilla del pasillo   # (anotaciones) dentro del pasillo, más adelante
     # (fotos y anotaciones) parqueo de motos en el asfalto, pegado al pasillo 7 frente a Docencia, de frente al pasillo
     # (fotos, nov. 2026) entre el corredor de Docencia y el baño, el pasillo de cerámica va con el baño (banos_crema)
     elem.append({"tipo": "motos", "id": None, "p": [-140.6, 28.5], "giro": 0.316, "largo": 8.0, "n": 4})

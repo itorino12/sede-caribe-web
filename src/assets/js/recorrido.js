@@ -2796,14 +2796,18 @@ if (datos.campus.parqueo) {
       for (const dz of [-0.05, 0.05]) for (const x of [largo / 2 - 0.15, largo / 2 - 0.15 - 0.45]) { const c = new THREE.Mesh(new THREE.CylinderGeometry(0.04, 0.04, 1.0, 8), azulB); c.position.set(x, h + 0.5, dz); g.add(c); }
       const arco = new THREE.Mesh(new THREE.TorusGeometry(0.225, 0.04, 6, 12, Math.PI), azulB); arco.position.set(largo / 2 - 0.375, h + 1.0, 0); g.add(arco);
       const trav = new THREE.Mesh(new THREE.CylinderGeometry(0.03, 0.03, 0.45, 6), azulB); trav.rotation.z = Math.PI / 2; trav.position.set(largo / 2 - 0.375, h + 0.55, 0); g.add(trav);
-    } else if (pasamanos === "celeste") {   // (anotaciones) un solo pasamanos celeste en una orilla: tubo recto a lo largo de la escalera, con un poste en cada punta
-      const celeste = mate(0x5fb4e8, { roughness: 0.45, metalness: 0.2 }), z = -(ancho / 2 - 0.12), x0 = -largo / 2 + 0.12, x1 = largo / 2 - 0.12;
-      const y0 = (h * 1) / n + 0.9, y1 = h + 0.9;   // a 0,9 m sobre el primer y el último escalón
-      const pm = new THREE.Mesh(new THREE.CylinderGeometry(0.045, 0.045, Math.hypot(x1 - x0, y1 - y0) + 0.09, 8), celeste);
-      pm.rotation.z = Math.PI / 2 - Math.atan2(y1 - y0, x1 - x0); pm.position.set((x0 + x1) / 2, (y0 + y1) / 2, z); g.add(pm);
-      for (const [x, yb, yt] of [[x0, h / n, y0], [x1, h, y1]]) {
-        const poste = new THREE.Mesh(new THREE.CylinderGeometry(0.045, 0.045, yt - yb, 8), celeste); poste.position.set(x, (yb + yt) / 2, z); g.add(poste);
-      }
+    } else if (pasamanos === "celeste") {   // (anotaciones) baranda celeste en una orilla: poste al pie, tubo que sube con la escalera y, arriba, un tramo recto y otro poste
+      // (la escalera se estira en alto al asentarla: el tubo se arma por sus vértices, sin girarlo, para que no se tuerza)
+      const celeste = mate(0x5fb4e8, { roughness: 0.45, metalness: 0.2 }), z = -(ancho / 2 - 0.1), x0 = -largo / 2 + 0.15, x1 = largo / 2 - 0.1, x2 = largo / 2 + 0.35;
+      const y0 = h / n + 0.9, y1 = h + 0.9;
+      const camino = new THREE.CurvePath();
+      camino.add(new THREE.LineCurve3(new THREE.Vector3(x0, h / n, z), new THREE.Vector3(x0, y0, z)));
+      camino.add(new THREE.LineCurve3(new THREE.Vector3(x0, y0, z), new THREE.Vector3(x1, y1, z)));
+      camino.add(new THREE.LineCurve3(new THREE.Vector3(x1, y1, z), new THREE.Vector3(x2, y1, z)));
+      camino.add(new THREE.LineCurve3(new THREE.Vector3(x2, y1, z), new THREE.Vector3(x2, h, z)));
+      g.add(new THREE.Mesh(new THREE.TubeGeometry(camino, 48, 0.045, 8, false), celeste));
+      const medio = new THREE.Mesh(new THREE.TubeGeometry(new THREE.LineCurve3(new THREE.Vector3((x0 + x1) / 2, (h / n + h) / 2, z), new THREE.Vector3((x0 + x1) / 2, (y0 + y1) / 2, z)), 1, 0.04, 8), celeste);
+      g.add(medio);   // poste del medio
     } else for (const lado of [-1, 1]) {
       const pm = new THREE.Mesh(new THREE.CylinderGeometry(0.04, 0.04, Math.hypot(largo, h), 6), tubo);
       pm.rotation.z = Math.PI / 2 - pend; pm.position.set(0, h / 2 + 0.9, lado * (ancho / 2 - 0.1)); g.add(pm);
