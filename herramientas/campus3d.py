@@ -650,7 +650,7 @@ def lugares_nuevos(calles, quebrada, lejos_carretera, y_ruta32):
     # techito. El techito es un pasillo propio que va a la soda; el pasillo 10 llega en curva y se le une de lado. Del
     # lado del parqueo, el pasillo 10 lleva un muro bajo de piedra bola con lastre (el talud del parqueo)
     elem.append({"tipo": "escalera", "id": None, "p": a_metros(*marco(2, 9.6, 82)), "giro": round(math.radians(51 + 180), 3),   # baja hacia la soda
-                 "largo": 3.2, "ancho": 2.4, "alto": 1.3, "techado": False,   # (anotaciones) barandas a los dos lados, sin la U del medio
+                 "largo": 3.2, "ancho": 2.4, "alto": 1.3, "techado": False, "pasamanos": "celeste",   # (anotaciones) un solo pasamanos celeste, del lado del pasillo 10
                 
                  "arriba_en": a_metros(*marco(2, 0.2, 82)), "abajo_en": a_metros(*marco(2, 15.8, 82))})   # orilla del asfalto y pie del talud
     elem.append({"tipo": "losa", "id": None, "p": a_metros(*marco(2, 18.0, 82)), "giro": round(math.radians(51), 3), "largo": 1.0, "ancho": 1.8, "color": "#9a8f80"})
@@ -1129,6 +1129,19 @@ def lugares_nuevos(calles, quebrada, lejos_carretera, y_ruta32):
     cv2.circle(despejar_post, PLANTA["centro"], int(12 / ESCALA), 1, -1)
     # (anotaciones) sin el árbol frente al ala de baños del auditorio (22)
     cv2.circle(despejar_post, (int(-50.78 / ESCALA + ORIGEN[0]), int(-24.39 / ESCALA + ORIGEN[1])), int(1.5 / ESCALA), 1, -1)
+    # (anotaciones, nov. 2026) aceras que se tocan punta con punta van seguidas, como una sola (sin la unión rara de
+    # anchos distintos y losas cortadas, p. ej. la de la calle con el tramo norte del pasillo 26)
+    unidas_ = True
+    while unidas_:
+        unidas_ = False
+        aceras_ = [e for e in elem if e["tipo"] == "acera" and len(e["puntos"]) >= 2 and set(e) <= {"tipo", "id", "puntos", "ancho"}]
+        for a_ in aceras_:
+            b_ = next((b for b in aceras_ if b is not a_ and math.dist(a_["puntos"][-1], b["puntos"][0]) < 0.05), None)
+            if b_:
+                a_["puntos"] = a_["puntos"] + b_["puntos"][1:]
+                a_["ancho"] = min(a_.get("ancho", 1.8), b_.get("ancho", 1.8))
+                elem.remove(b_); unidas_ = True
+                break
     return elem, {"despejar_post": despejar_post, "calles_extra": calles_extra, "asfalto": asfalto, "rayas": rayas, "lastre": lastre, "claro": claro, "despejar": despejar, "cerca": cerca_extra,
                   "plaza": claro_plaza}
 

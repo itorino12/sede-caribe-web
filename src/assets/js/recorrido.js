@@ -2778,6 +2778,14 @@ if (datos.campus.parqueo) {
       for (const dz of [-0.05, 0.05]) for (const x of [largo / 2 - 0.15, largo / 2 - 0.15 - 0.45]) { const c = new THREE.Mesh(new THREE.CylinderGeometry(0.04, 0.04, 1.0, 8), azulB); c.position.set(x, h + 0.5, dz); g.add(c); }
       const arco = new THREE.Mesh(new THREE.TorusGeometry(0.225, 0.04, 6, 12, Math.PI), azulB); arco.position.set(largo / 2 - 0.375, h + 1.0, 0); g.add(arco);
       const trav = new THREE.Mesh(new THREE.CylinderGeometry(0.03, 0.03, 0.45, 6), azulB); trav.rotation.z = Math.PI / 2; trav.position.set(largo / 2 - 0.375, h + 0.55, 0); g.add(trav);
+    } else if (pasamanos === "celeste") {   // (anotaciones) un solo pasamanos celeste, a la orilla del lado -z, que baja al suelo arriba
+      const celeste = mate(0x5fb4e8, { roughness: 0.45, metalness: 0.2 }), z = -(ancho / 2 - 0.1);
+      const pm = new THREE.Mesh(new THREE.CylinderGeometry(0.045, 0.045, Math.hypot(largo, h), 8), celeste);
+      pm.rotation.z = Math.PI / 2 - pend; pm.position.set(0, h / 2 + 0.9, z); g.add(pm);
+      for (const t of [-0.45, -0.15, 0.15, 0.45]) { const poste = new THREE.Mesh(new THREE.CylinderGeometry(0.04, 0.04, 0.9, 6), celeste); poste.position.set(t * largo, h * (0.5 + t) + 0.45, z); g.add(poste); }
+      const curva = new THREE.Mesh(new THREE.TorusGeometry(0.2, 0.045, 6, 10, Math.PI / 2), celeste);   // arriba dobla y baja al piso
+      curva.position.set(largo / 2 - 0.2, h + 0.9 - 0.2, z); g.add(curva);
+      const baja = new THREE.Mesh(new THREE.CylinderGeometry(0.045, 0.045, 0.7, 8), celeste); baja.position.set(largo / 2, h + 0.35, z); g.add(baja);
     } else for (const lado of [-1, 1]) {
       const pm = new THREE.Mesh(new THREE.CylinderGeometry(0.04, 0.04, Math.hypot(largo, h), 6), tubo);
       pm.rotation.z = Math.PI / 2 - pend; pm.position.set(0, h / 2 + 0.9, lado * (ancho / 2 - 0.1)); g.add(pm);
@@ -3522,8 +3530,18 @@ if (datos.campus.parqueo) {
     caja(LL, 0.02, 0.3, amarillo, xE + LL / 2, y0 + 0.01, Z(vOut));
     caja(LL, 0.2, ancho + 0.1, concreto, xE + LL / 2, piso - 0.1, Z(vIn));
     caja(LL, 0.02, 0.3, amarillo, xE + LL / 2, piso + 0.01, Z(vIn));
+    // (anotaciones, nov. 2026) por ahí se entra y se sale del edificio en los dos pisos: una entrada en la pared de 26
+    // frente a cada descanso, y abajo la acera sigue del descanso hasta la puerta (bajo el descanso de arriba)
+    const vidrioP = mate(0x1d2a30, { roughness: 0.15, metalness: 0.3 }), marcoP = mate(0x3a3f44, { metalness: 0.5 });
+    for (const y of [y0, piso]) {
+      const hP = 2.3 / EXAGERAR, wP = LL - 0.2, xP = xE + LL / 2;
+      caja(wP, hP, 0.06, vidrioP, xP, y + hP / 2, Z(0.03));
+      caja(wP + 0.16, 0.1, 0.12, marcoP, xP, y + hP + 0.05, Z(0.05));
+      for (const s of [-1, 0, 1]) caja(0.07, hP, 0.1, marcoP, xP + s * (wP / 2), y + hP / 2, Z(0.05));
+    }
+    caja(LL, 0.12, vOut - ancho / 2, concreto, xE + LL / 2, y0 - 0.06, Z((vOut - ancho / 2) / 2));   // acera a la puerta de abajo
     for (const [v, y] of [[vOut, y0], [vIn, piso]]) for (const lado of [-1, 1]) {
-      if (y === piso && lado < 0) continue;   // del lado de la pared, arriba, se entra al edificio por la pasarela
+      if (lado < 0) continue;   // del lado de la pared queda abierto: ahí está la entrada (abajo, por la acera)
       const br = baranda(LL - 0.1); br.position.set(xE + LL / 2, y, Z(v + lado * (ancho / 2 - 0.05))); g.add(br);
     }
     for (const v of [vIn - ancho / 2 + 0.3, vIn + ancho / 2 - 0.2]) {   // columnas bajo el descanso de arriba
