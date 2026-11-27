@@ -487,6 +487,24 @@ function telaCaida(largo, alto) {   // bandera casi sin viento: cae desde el ast
   g.computeVertexNormals();
   return g;
 }
+// Banderas al viento: la tela se arma con más divisiones y cada cuadro se dobla con ondas que corren del asta a la
+// punta; las ráfagas la levantan y la sueltan (ver ondearBanderas)
+const banderas = [];
+function telaViento(largo, alto, fase) {
+  const g = new THREE.PlaneGeometry(largo, alto, 18, 5).translate(largo / 2, -alto / 2, 0);
+  const b = { geo: g, base: Float32Array.from(g.attributes.position.array), largo, fase };
+  banderas.push(b); moverTela(b, 0); return g;
+}
+function moverTela({ geo, base, largo, fase }, s) {
+  const p = geo.attributes.position, rafaga = 0.6 + 0.4 * Math.sin(s * 0.35 + fase) * Math.sin(s * 0.13 + fase * 2);
+  for (let i = 0; i < p.count; i++) {
+    const x = base[i * 3], y = base[i * 3 + 1], u = x / largo;
+    const onda = Math.sin(u * 6.5 - s * 5.2 + fase) * 0.16 + Math.sin(u * 11 - s * 7.9 + fase) * 0.05;
+    const cae = (1 - rafaga) * u * largo * 0.9;   // sin viento cae hacia el asta; con ráfaga se estira
+    p.setXYZ(i, x * (1 - (1 - rafaga) * 0.25), y - cae + Math.sin(u * 4 - s * 3 + fase) * 0.04 * u, onda * u * (0.5 + rafaga));
+  }
+  p.needsUpdate = true; geo.computeVertexNormals();
+}
 function palmaJoven(alto) {   // palma ornamental joven: tronco delgado y penacho de hojas arqueadas
   const g = new THREE.Group();
   const tronco = new THREE.Mesh(new THREE.CylinderGeometry(0.06, 0.1, alto, 6), new THREE.MeshLambertMaterial({ color: 0x9a9479 }));
@@ -706,7 +724,7 @@ function entrada(grupo, e) {
     palo.position.set(p.x, 5, p.z); palo.castShadow = !liviano; grupo.add(palo);
     const remate = new THREE.Mesh(new THREE.SphereGeometry(0.09, 6, 4), acero); remate.position.set(p.x, 10.05, p.z); grupo.add(remate);
     if (!telas[i]) continue;
-    const tela = new THREE.Mesh(telaCaida(1.5, 0.95), telas[i]);
+    const tela = new THREE.Mesh(telaViento(1.5, 0.95, i * 1.7), telas[i]); tela.userData.noFundir = true; tela.frustumCulled = false;
     tela.position.set(p.x, 9.75, p.z); tela.rotation.y = vuela; tela.castShadow = !liviano; grupo.add(tela);
   }
   // reflectores sobre pedestales, al frente del rótulo
@@ -4202,6 +4220,22 @@ function animarCongos(ahora) {
   return true;
 }
 
+// banderas: solo si se ven y la cámara está a menos de ~220 m, nunca con «reducir movimiento»
+const esferaBanderas = new THREE.Sphere(new THREE.Vector3(), 8);
+function ondearBanderas(ahora) {
+  if (!banderas.length || sinMovimiento || document.hidden || (PORTADA && !enPantalla)) return false;
+  if (!esferaBanderas.radius || !banderas[0].centro) {
+    escena.traverse((o) => { if (o.isMesh && o.geometry === banderas[0].geo) banderas[0].centro = o.getWorldPosition(new THREE.Vector3()); });
+    if (!banderas[0].centro) return false;
+  }
+  esferaBanderas.center.copy(banderas[0].centro);
+  vista.setFromProjectionMatrix(mvp.multiplyMatrices(camara.projectionMatrix, camara.matrixWorldInverse));
+  if (!vista.intersectsSphere(esferaBanderas) || camara.position.distanceTo(banderas[0].centro) > 220) return false;
+  const s = ahora / 1000;
+  for (const b of banderas) moverTela(b, s);
+  return true;
+}
+
 // ---------- congos: un toque suena el aullido (solo la parte de los congos); dos toques seguidos abren los videos
 let aullido = null, ultimoToqueCongos = 0;
 const visorVideo = document.querySelector(".visor-video");
@@ -4314,9 +4348,9 @@ function dibujar(ahora) {
   moverMarcas();   // en el mismo fotograma que el dibujo: los números no se atrasan respecto a la escena
   if (seguir) camaraEnMovimiento(); else camaraQuieta();
   brujula.style.transform = `rotate(${THREE.MathUtils.radToDeg(controles.getAzimuthalAngle())}deg)`;
-  const congosEnMovimiento = animarCongos(ahora);
+  const congosEnMovimiento = animarCongos(ahora), banderasEnMovimiento = ondearBanderas(ahora);
   if (seguir && (!PORTADA || (enPantalla && !document.hidden))) pedirDibujo();
-  else if (congosEnMovimiento) setTimeout(pedirDibujo, 40);   // los congos se mueven a ~25 cuadros por segundo
+  else if (congosEnMovimiento || banderasEnMovimiento) setTimeout(pedirDibujo, 40);   // congos y banderas a ~25 cuadros por segundo
 }
 new ResizeObserver(pedirDibujo).observe(lienzo);
 if (PORTADA && raiz.closest(".portada__foto")?.dataset.giro) rendirse("llegó tarde");
