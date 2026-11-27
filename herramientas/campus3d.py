@@ -334,18 +334,18 @@ LLANOS = [
     # (anotaciones, nov. 2026) la soda y el comedor van en un bajo; la escalera del final del parqueo baja a él
     # (anotaciones, nov. 2026) el asfalto del parqueo frente a la soda (techado, los tres espacios y el descanso de la
     # escalera) va llano, al nivel del parqueo; el bajo empieza a 1 m de su orilla
-    {"pol": [(-148.53, 40.12), (-137.35, 53.92), (-122.01, 41.49), (-129.4, 32.36), (-138.62, 32.1)], "nivel": 3.6, "suave": 2.0},
+    {"pol": [(-148.53, 40.12), (-138.43, 55.37), (-133.38, 51.28), (-122.01, 41.49), (-129.4, 32.36), (-138.62, 32.1)], "nivel": 3.6, "suave": 2.0},
     # (anotaciones, nov. 2026) la cuña entre los tres espacios y el parqueo 6 es asfalto, llana como el resto del parqueo
     {"pol": [(-129.4, 32.36), (-122.01, 41.49), (-109.64, 41.28), (-113.41, 36.61), (-116.5, 27.0), (-127.5, 27.5)], "nivel": 3.6, "suave": 1.0},
     # (anotaciones) desde la escalera, el pasillo hasta la soda y detrás de la soda y el comedor
     # (anotaciones, nov. 2026) 1,8 m bajo el parqueo (la altura de la escalera): todo el zacate entre el parqueo, el
     # comedor y el pasillo 10, a 1 m de la orilla del asfalto;
     # junto a la escalera la orilla pasa por su pie, para que el descanso de concreto quede a nivel del parqueo
-    {"pol": [(-136.26, 60.04), (-136.44, 54.66), (-120.39, 41.66), (-109.3, 42.4), (-99.6, 35.0), (-96.0, 46.0), (-87.0, 65.0), (-91.0, 82.0), (-100.0, 98.0), (-114.0, 106.0), (-130.0, 96.0), (-123.04, 76.37)],
+    {"pol": [(-136.26, 60.04), (-137.8, 56.15), (-132.75, 52.06), (-120.39, 41.66), (-109.3, 42.4), (-99.6, 35.0), (-96.0, 46.0), (-87.0, 65.0), (-91.0, 82.0), (-100.0, 98.0), (-114.0, 106.0), (-130.0, 96.0), (-123.04, 76.37)],
      "nivel": 1.6, "suave": 0.4},
     # (anotaciones) junto a la escalera el asfalto llega llano hasta el último escalón y el talud cae enseguida, bajo los escalones
     {"pol": [(-134.66, 51.93), (-132.45, 54.65), (-129.89, 52.57), (-132.09, 49.85)],
-     "nivel": 3.4, "rampa": [(-133.37, 50.89), 3.4, (-132.75, 51.67), 1.6], "suave": 0.6},
+     "nivel": 3.6, "rampa": [(-133.37, 50.89), 3.6, (-132.75, 51.67), 1.6], "suave": 0.6},
 ]
 # (anotaciones) al este del puente de residencias la quebrada va poco honda entre las dos mallas: sin zanja
 CAUCE_SOMERO = [{"x": (112.0, 178.0), "hondo": 1.1, "rampa": 9.0}]

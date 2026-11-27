@@ -3511,7 +3511,8 @@ if (datos.campus.parqueo) {
     const caja = (w, h, d, mat, x, y, z, rz = 0) => { const m = new THREE.Mesh(new THREE.BoxGeometry(w, h, d), mat); m.position.set(x, y, z); m.rotation.z = rz; g.add(m); return m; };
     // tramo inclinado a lo largo de x, de (xa, ya) a (xb, yb), a distancia v de la pared
     const tramo = (v, xa, ya, xb, yb) => {
-      const L = Math.hypot(xb - xa, yb - ya), rz = Math.atan2(yb - ya, xb - xa), xm = (xa + xb) / 2, ym = (ya + yb) / 2;
+      // (anotaciones) el giro va siempre de x menor a x mayor: con el tramo que baja hacia el este la baranda quedaba de cabeza, colgando bajo la losa
+      const L = Math.hypot(xb - xa, yb - ya), rz = xb >= xa ? Math.atan2(yb - ya, xb - xa) : Math.atan2(ya - yb, xa - xb), xm = (xa + xb) / 2, ym = (ya + yb) / 2;
       caja(L, 0.18, ancho, concreto, xm, ym - 0.09, Z(v), rz);
       caja(L, 0.02, 0.3, amarillo, xm, ym + 0.01, Z(v), rz);                               // guía táctil
       caja(L, 0.25, 0.14, gris, xm, ym - 0.3, Z(v + ancho / 2 - 0.1), rz);                   // viga de acero
