@@ -3,7 +3,7 @@
 // detalle de cada fila divide el día en tramos (almuerzo, contacto, consulta, preparación) y de ahí salen
 // las Observaciones. Las reglas están en declaracion-reglas.js; el PDF, en declaracion-pdf.js; la lectura de
 // un PDF subido, en declaracion-subir.js. El borrador se guarda solo en este navegador.
-import { DIAS, NOMBRE_DIA, JORNADAS, revisar, minutos, hora, normalHora, horas, fecha, textoFecha, textoJornada, escribirObservacion, claseOtra } from "./declaracion-reglas.js";
+import { DIAS, NOMBRE_DIA, JORNADAS, revisar, minutos, hora, horaCompleta, normalHora, horas, fecha, textoFecha, textoJornada, escribirObservacion, claseOtra } from "./declaracion-reglas.js";
 
 const raiz = document.getElementById("dj").dataset.raiz || "";
 const CLAVE = "dj-borrador-v1";
@@ -226,7 +226,7 @@ function dibujarRevision() {
   const r = ultimo = revisar(paraRevisar());
   const caja = $("#dj-revision");
   if (!r.horas.length) { caja.innerHTML = '<p class="dj-vacio">Llene al menos una fila para ver la revisión.</p>'; return; }
-  const filasHoras = r.horas.map((h) => `<tr class="${h.ok ? "" : "dj-mal"}"><th scope="row">${esc(h.fila)}</th><td>${esc(h.jornada || "—")}</td><td>${h.calculadas ? horas(h.calculadas) : "—"}</td><td>${h.esperadas != null ? horas(h.esperadas) : "—"}</td><td>${h.ok ? "Bien" : "No coincide"}</td></tr>`).join("");
+  const filasHoras = r.horas.map((h) => `<tr class="${h.ok ? "" : "dj-mal"}"><th scope="row">${esc(h.fila)}</th><td>${esc(h.jornada || "—")}</td><td>${h.almuerzo ? `${horas(h.almuerzo[0])} (${horas(h.almuerzo[1])} con almuerzo)` : h.calculadas ? horas(h.calculadas) : "—"}</td><td>${h.esperadas != null ? horas(h.esperadas) : "—"}</td><td>${!h.ok ? "No coincide" : h.almuerzo ? "Revise el almuerzo" : "Bien"}</td></tr>`).join("");
   const t = r.totales;
   const firmas = r.firmas
     ? `<p><strong>Firmas:</strong> ${[["declarante", "persona declarante"], ["superior", "superior jerárquico"], ["jefatura", "visto bueno de la jefatura"]].map(([k, n]) => `${n}: ${r.firmas[k] === true ? "se ve firmada" : r.firmas[k] === false ? "<strong>no se ve la firma</strong>" : "no se pudo revisar"}`).join(" · ")}.</p>`
@@ -285,7 +285,8 @@ marco.addEventListener("change", (e) => {
   }
   const f = estado.filas.find((x) => x.id === el.dataset.f);
   if (f && el.dataset.d) { // normaliza la hora al salir: «8» → «08:00»
-    const v = normalHora(el.value);
+    const m = minutos(el.value);
+    const v = m == null ? normalHora(el.value) : hora(horaCompleta(m));
     f.dias[el.dataset.d][el.dataset.x] = v;
     el.value = v;
     cambio({ detalle: detalleAbierto === f.id });
@@ -339,7 +340,7 @@ detalle.addEventListener("change", (e) => {
     const m = minutos(el.value);
     if (m == null) { el.setAttribute("aria-invalid", "true"); return; }
     el.removeAttribute("aria-invalid");
-    f.tramos[d][+i][campo] = m;
+    f.tramos[d][+i][campo] = horaCompleta(m);
   }
   sincronizarTabla(f, d);
   refrescarCeldas(f);
@@ -393,6 +394,13 @@ $("#dj-pdf").addEventListener("click", async (e) => {
   b.textContent = "Generando…";
   try {
     const r = ultimo || revisar(paraRevisar());
+    if (!observaciones().length) { aviso("El campo Observaciones es obligatorio: complételo antes de generar el PDF."); return; }
+    const faltan = [["nombre", "el nombre"], ["identificacion", "la identificación"]].filter(([k]) => !String(estado.persona[k] || "").trim());
+    if (faltan.length) {
+      aviso(`Antes de generar el PDF escriba en el encabezado ${faltan.map((x) => x[1]).join(" y ")}.`);
+      document.querySelector(`[data-p="${faltan[0][0]}"]`)?.focus();
+      return;
+    }
     const { generarPDF } = await import("./declaracion-pdf.js");
     const bytes = await generarPDF({ ...paraRevisar(), persona: estado.persona, formulario: estado }, raiz);
     const nombre = `declaracion-jurada-${(estado.persona.nombre || "borrador").trim().toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g, "").replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "") || "borrador"}.pdf`;

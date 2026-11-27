@@ -2,7 +2,7 @@
 // Uso: node herramientas/probar_declaracion.mjs
 import fs from "fs";
 import { fileURLToPath } from "url";
-import { revisar, leerObservacion, escribirObservacion, minutos, fraccion, horaEstandar } from "../src/assets/js/declaracion-reglas.js";
+import { revisar, leerObservacion, escribirObservacion, minutos, fraccion, horaEstandar, horas, horaCompleta, leerPersona } from "../src/assets/js/declaracion-reglas.js";
 
 const raiz = fileURLToPath(new URL("..", import.meta.url));
 const ejemplo = JSON.parse(fs.readFileSync(raiz + "herramientas/fuentes/declaracion/ejemplo-orh.json", "utf8"));
@@ -59,8 +59,25 @@ ok(reglas(r).includes("B4") && r.nivel === "mal", "B4 por horario distinto", reg
 // B3: tramo que cruza el almuerzo sin Observación
 d = copia(); d.observaciones = d.observaciones.filter((l) => !l.startsWith("Coordinación de Carrera"));
 r = revisar(d);
-ok(reglas(r).includes("B3"), "B3 sin Observación del almuerzo", reglas(r).join(","));
+ok(!reglas(r).includes("B3") && r.verificar.some((v) => v.texto.startsWith("Alerta de almuerzo")), "almuerzo: alerta, no error", reglas(r).join(","));
 ok(!reglas(r).includes("B1"), "con el almuerzo descontado la fila sigue sumando 15 h");
+
+// horas completas y sumas como reloj
+ok(horaCompleta(1010) === 1020 && horaCompleta(990) === 990, "16:50 sube a 17:00 y 16:30 se respeta");
+ok(horas(1170) === "19:30" && horas(2400) === "40", "sumas en horas y minutos", horas(1170));
+d = copia(); d.filas[3].dias.J.a = "19:50";
+r = revisar(d);
+ok(!reglas(r).includes("B1") && !reglas(r).includes("B4") && r.errores.some((e) => e.donde === "Horas completas"), "19:50 suma como 20:00 y se avisa", reglas(r).join(","));
+
+// encabezado de un PDF subido
+const per = leerPersona("Nombre de la persona funcionaria: Persona de Prueba Identificación: 1-0000-0000 Teléfono 0000-0000\nUnidad Académica o Administrativa: Sede del Caribe Correo electrónico: prueba@ucr.ac.cr");
+ok(per.nombre === "Persona de Prueba" && per.identificacion === "1-0000-0000" && per.telefono === "0000-0000" && per.unidad === "Sede del Caribe" && per.correo === "prueba@ucr.ac.cr", "encabezado leído", JSON.stringify(per));
+ok(Object.keys(leerPersona("Nombre de la persona funcionaria: Identificación: Teléfono")).length === 0, "encabezado vacío no inventa datos");
+
+// B4: Observaciones obligatorias
+d = copia(); d.observaciones = [];
+r = revisar(d);
+ok(r.errores.some((e) => e.regla === "B4" && e.gravedad === "grave" && /obligatorio/.test(e.texto)), "Observaciones vacías es error grave");
 
 // B1: una hora de más
 d = copia(); d.filas[3].dias.J.a = "21:00"; d.observaciones[3] = "ED204 Educación Continua Sede del Caribe: K 15 a 20, J 15 a 21";

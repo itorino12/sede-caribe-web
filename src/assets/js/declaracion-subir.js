@@ -6,6 +6,8 @@
 //     texto: sin leer la imagen no hay manera de sacarla.
 //  Las firmas se revisan aquí mismo, buscando trazos en la zona de cada firma antes de taparla.
 
+import { leerPersona } from "./declaracion-reglas.js";
+
 const PT = { ancho: 792, alto: 612 };
 // Zonas del formulario de la ORH en fracciones de la página (medidas del original), por si el archivo no trae texto.
 const ZONA = { persona: [0.235, 0.307], firmas: [0.785, 1], cajasFirma: [[0.07, 0.33], [0.37, 0.63], [0.66, 0.92]], firmaY: [0.792, 0.872] };
@@ -47,7 +49,7 @@ async function leer(archivo) {
   if (archivo.size > 25 * 1024 * 1024) throw new Error("el archivo pasa de 25 MB");
   estado("Leyendo el archivo…");
   const esPdf = archivo.type === "application/pdf" || /\.pdf$/i.test(archivo.name);
-  let lienzo, textos = [], notaPaginas = "";
+  let lienzo, textos = [], campos = [], notaPaginas = "";
   if (esPdf) {
     const lib = await pdfjs();
     const doc = await lib.getDocument({ data: new Uint8Array(await archivo.arrayBuffer()), isEvalSupported: false }).promise;
@@ -81,7 +83,12 @@ async function leer(archivo) {
       const alto = Math.hypot(it.transform[2], it.transform[3]) * ESCALA;
       return { t: it.str, x, y: y - alto, y2: y, x2: x + it.width * ESCALA };
     });
-    return preparar(lienzo, textos, firmas, archivo.name, notaPaginas);
+    // datos escritos en casillas del formulario (no vienen en el texto de la página)
+    campos = (await pagina.getAnnotations()).filter((a) => a.subtype === "Widget" && typeof a.fieldValue === "string" && a.fieldValue.trim()).map((a) => {
+      const [x1, y1, x2, y2] = vp.convertToViewportRectangle(a.rect);
+      return { t: a.fieldValue, x: Math.min(x1, x2), y: Math.min(y1, y2), y2: Math.max(y1, y2), x2: Math.max(x1, x2) };
+    });
+    return preparar(lienzo, textos, firmas, archivo.name, notaPaginas, campos);
   }
   if (!/^image\/(jpeg|png)$/.test(archivo.type)) throw new Error("use un PDF, JPG o PNG");
   const img = await createImageBitmap(archivo);
@@ -109,13 +116,25 @@ function medirFirmas(lienzo, zonas) {
   return { declarante: r[0], superior: r[1], jefatura: r[2] };
 }
 
-function preparar(lienzo, textos, firmas, nombre, nota) {
+// Texto en orden de lectura, renglón por renglón.
+function enRenglones(items, tolerancia) {
+  const renglones = [];
+  for (const t of [...items].sort((a, b) => a.y2 - b.y2 || a.x - b.x)) {
+    const r = renglones.find((x) => Math.abs(x.y - t.y2) < tolerancia);
+    if (r) r.p.push(t); else renglones.push({ y: t.y2, p: [t] });
+  }
+  return renglones.map((r) => r.p.sort((a, b) => a.x - b.x).map((t) => t.t).join(" ").replace(/\s+/g, " ").trim()).join("\n");
+}
+
+function preparar(lienzo, textos, firmas, nombre, nota, campos = []) {
   const W = lienzo.width, H = lienzo.height;
   const buscar = (re) => textos.find((t) => re.test(t.t));
   // franja de datos personales: de «Nombre de la persona…» a «A continuación declaro…»
   const nom = buscar(/^\s*Nombre/), cont = buscar(/continuaci[oó]n/);
   let p0 = ZONA.persona[0] * H, p1 = ZONA.persona[1] * H;
   if (nom && cont && cont.y > nom.y) { p0 = nom.y - 0.012 * H; p1 = cont.y - 0.004 * H; }
+  // los datos de la franja se quedan aquí, para no perderlos al generar el PDF nuevo
+  const persona = leerPersona(enRenglones(textos.concat(campos).filter((t) => t.y2 > p0 && t.y < p1), 0.012 * H));
   // firmas: desde el final de las Observaciones hasta abajo
   const obsEt = buscar(/Observaciones/);
   let f0 = ZONA.firmas[0] * H;
@@ -136,7 +155,7 @@ function preparar(lienzo, textos, firmas, nombre, nota) {
     if (r) r.p.push(t); else renglones.push({ y: t.y, p: [t] });
   }
   const texto = renglones.map((r) => r.p.sort((a, b) => a.x - b.x).map((t) => t.t).join(" ").replace(/\s+/g, " ").trim()).join("\n");
-  pendiente = { imagen: lienzo.toDataURL("image/jpeg", 0.85), texto, firmas, nombre };
+  pendiente = { imagen: lienzo.toDataURL("image/jpeg", 0.85), texto, firmas, nombre, persona };
   $("#dj-vista").src = pendiente.imagen;
   $("#dj-envio").hidden = false;
   $("#dj-leer").disabled = !$("#dj-acepto").checked;
@@ -173,7 +192,9 @@ async function enviar() {
     return Object.entries(f.dias || {}).filter(([, v]) => !v.de || !v.a).map(([k]) => `${f.seccion === "ucr" ? "UCR" : "otras"} fila ${n}, ${nombres[k]}`);
   });
   if (huecos.length) notas.unshift({ regla: "Lectura", texto: `La IA dejó incompletas estas celdas: ${huecos.join("; ")}. Lo más probable es que no las haya leído bien: compárelas con su PDF y corríjalas antes de creer los errores que dependen de ellas.` });
-  ctx.cargarLeido(d, { firmas: pendiente.firmas, archivo: pendiente.nombre, notas });
+  const per = pendiente.persona;
+  if (!per.nombre || !per.identificacion) notas.unshift({ regla: "Encabezado", texto: "No se pudieron leer del archivo todos sus datos personales: complételos en el encabezado antes de generar el PDF." });
+  ctx.cargarLeido({ ...d, persona: per, unidad: per.unidad || d.unidad }, { firmas: pendiente.firmas, archivo: pendiente.nombre, notas });
   estado(`Se leyó «${pendiente.nombre}». Revise los valores en el formulario: la IA puede equivocarse al leer.`);
   limpiarEnvio();
 }

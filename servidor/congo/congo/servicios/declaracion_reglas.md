@@ -19,7 +19,7 @@ Si falta un documento que haría falta para validar una fila, dígalo y márquel
 
 1. **Extraiga los datos** del formulario: nombre, unidad, y por cada fila: lugar de trabajo, cargo o categoría, fracción de jornada, vigencia (desde y hasta), y horario por día (lunes a sábado, de y a). Lea también el campo de Observaciones y verifique si hay firmas.
 2. **Revise visualmente** el formulario: texto cortado, columnas desplazadas, tamaños de letra que confunden, celdas vacías que deberían tener datos.
-3. **Calcule las horas** de cada fila día por día, descontando el almuerzo (regla B3), y compárelas con la fracción declarada (regla B1).
+3. **Calcule las horas** de cada fila día por día, sin contar y contando el almuerzo (regla B3), y compárelas con la fracción declarada (regla B1). Escriba las sumas como horas y minutos (19:30, no 19,5).
 4. **Sume la jornada UCR** y la jornada en instituciones estatales, y compárelas con los topes (A1, A3).
 5. **Busque traslapes** entre todas las filas, de la UCR y de otras instituciones (A4, B5).
 6. **Compare la tabla con las Observaciones**, línea por línea (B4).
@@ -52,8 +52,8 @@ Si falta un documento que haría falta para validar una fila, dígalo y márquel
 |---|---|
 | B1 | Horas de cada fila = fracción × 40: **1/8 = 5 h, 1/4 = 10 h, 3/8 = 15 h, 1/2 = 20 h, 1 TC = 40 h**. |
 | B2 | La suma de las filas de la UCR es igual a la jornada nombrada. |
-| B3 | El **almuerzo (12:00–13:00) no cuenta**. Un tramo que lo atraviesa (por ejemplo, 08:00–15:00) debe dividirse (08-12 y 13-15) o el almuerzo debe anotarse en Observaciones. Si no, las horas parecen mayores de lo declarado. |
-| B4 | Las **Observaciones coinciden exactamente** con la tabla: mismos días y mismas horas. Es uno de los errores más frecuentes. |
+| B3 | El **almuerzo (12:00–13:00)** normalmente no cuenta, pero algún docente puede necesitarlo para completar sus horas efectivas. Un tramo que lo atraviesa **no es un error**: es una **alerta**. Indique la suma sin almuerzo y con almuerzo y pida confirmar cuál corresponde. Solo hay error de B1 si de ninguna forma se llega a la jornada. Los finales de lección como 16:50 se declaran como hora completa (17:00). |
+| B4 | Las Observaciones son **obligatorias**. Las **Observaciones coinciden exactamente** con la tabla: mismos días y mismas horas. Es uno de los errores más frecuentes. |
 | B5 | **No hay traslapes** entre filas, ni dentro de la UCR ni con otras instituciones. |
 | B6 | La vigencia declarada cabe **dentro** del nombramiento que la respalda (por ejemplo, una coordinación nombrada hasta cierta fecha no puede declararse más allá). |
 | B7 | Todas las fechas usan el **mismo formato** (d/m/aaaa). |
@@ -86,7 +86,7 @@ Desglose semanal de referencia:
 ## 5. Errores frecuentes que debe buscar siempre
 
 - Observaciones con un horario distinto al de la tabla (por ejemplo, "V 14-19" cuando la tabla dice 14:00–18:00).
-- Tramos que cruzan el almuerzo sin dividirse, lo que infla las horas.
+- Tramos que cruzan el almuerzo sin aclararse (alerta, no error).
 - Una fila con una hora de más o de menos respecto a su fracción.
 - Cargos que ya no se tendrán en el periodo.
 - Investigación declarada sin carga registrada en el sistema.

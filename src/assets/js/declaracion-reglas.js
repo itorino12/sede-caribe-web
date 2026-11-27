@@ -56,9 +56,15 @@ export function normalHora(txt) {
   return m == null ? String(txt ?? "").trim() : hora(m);
 }
 
+// Sumas de horas como se leen en un reloj: 40 → «40», 19 horas y media → «19:30»
 export function horas(min) {
-  const h = Math.round(min / 6) / 10;
-  return String(h).replace(".", ",");
+  const m = Math.round(Math.abs(min)), r = m % 60;
+  return `${min < 0 ? "-" : ""}${Math.floor(m / 60)}${r ? ":" + String(r).padStart(2, "0") : ""}`;
+}
+
+// Un final de lección (16:50) se declara como hora completa (17:00): del minuto 50 en adelante sube a la hora.
+export function horaCompleta(min) {
+  return min != null && min % 60 >= 50 ? min + 60 - (min % 60) : min;
 }
 
 export function fraccion(txt) {
@@ -105,6 +111,21 @@ function unir(tramos) {
 
 const suma = (t) => t.reduce((s, x) => s + (x[1] - x[0]), 0);
 const sinTildes = (t) => String(t ?? "").normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase();
+
+// ---------- datos de la persona (encabezado de un PDF subido; nunca salen del dispositivo) ----------
+
+export function leerPersona(texto) {
+  const campos = [["nombre", /Nombre\s+de\s+la\s+persona\s+funcionaria\s*:?/i], ["identificacion", /Identificaci[oó]n\s*:?/i],
+    ["telefono", /Tel[eé]fono\s*:?/i], ["unidad", /Unidad\s+Acad[eé]mica\s+o\s+Administrativa\s*:?/i], ["correo", /Correo\s+electr[oó]nico\s*:?/i]];
+  const t = String(texto ?? "").replace(/\s+/g, " ");
+  const halladas = campos.map(([k, re]) => { const m = t.match(re); return m && { k, ini: m.index, fin: m.index + m[0].length }; }).filter(Boolean).sort((a, b) => a.ini - b.ini);
+  const per = {};
+  halladas.forEach((h, i) => {
+    const v = t.slice(h.fin, halladas[i + 1]?.ini ?? t.length).replace(/_{2,}/g, " ").trim();
+    if (v) per[h.k] = v.slice(0, 120);
+  });
+  return per;
+}
 
 // ---------- Observaciones ----------
 
@@ -240,7 +261,9 @@ export function revisar(decl) {
         // 12 horas sin a.m./p.m.: «1:00 a 5:00» es de 13:00 a 17:00; «8:00 a 2:00», de 08:00 a 14:00
         if (de != null && a != null && a <= de && a < 12 * 60 && a + 12 * 60 > de) { a += 12 * 60; doce = true; }
         if (de != null && a != null && de >= 60 && de < 7 * 60 && a <= 12 * 60 && a > de) { de += 12 * 60; a += 12 * 60; doce = true; }
-        if (x.de || x.a) dias[d] = { de, a, deTxt: x.de || "", aTxt: x.a || "", doce };
+        const incompleta = [de, a].some((v) => v !== horaCompleta(v));
+        de = horaCompleta(de); a = horaCompleta(a);
+        if (x.de || x.a) dias[d] = { de, a, deTxt: x.de || "", aTxt: x.a || "", doce, incompleta };
       }
       const vacia = !f.lugar && !f.cargo && !f.jornada && !f.desde && !f.hasta && !Object.keys(dias).length;
       if (vacia) continue;
@@ -280,6 +303,17 @@ export function revisar(decl) {
   }
   if (raras.length) err("B11", "menor", "Horas", `Hay horas fuera del formato del formulario; se leyeron igual, pero un revisor puede objetarlas: ${raras.slice(0, 6).join("; ")}${raras.length > 6 ? `; y ${raras.length - 6} más` : ""}.`, "Escriba todas las horas como HH:MM en 24 horas, con dos cifras y sin segundos ni a.m./p.m. (por ejemplo 08:00, 13:00, 17:30).");
 
+  // 1c. horas que deben declararse completas (se suman ya completadas, para que todo calce)
+  const cortas = [];
+  for (const f of filas) for (const d of Object.keys(f.dias)) {
+    const x = f.dias[d];
+    if (x.incompleta) cortas.push(`${f.seccion === "ucr" ? "UCR" : "otras"} fila ${f.n}, ${NOMBRE_DIA[d]}: «${x.deTxt}» a «${x.aTxt}» → ${hora(x.de)} a ${hora(x.a)}`);
+  }
+  for (const l of decl.observaciones || []) {
+    if (leerObservacion(l).tramos.some((t) => t.de !== horaCompleta(t.de) || t.a !== horaCompleta(t.a))) cortas.push(`Observaciones: «${String(l).slice(0, 60)}»`);
+  }
+  if (cortas.length) err("B11", "menor", "Horas completas", `Hay horas como 16:50 que deben declararse completas (17:00): ${cortas.slice(0, 6).join("; ")}${cortas.length > 6 ? `; y ${cortas.length - 6} más` : ""}. La suma se hizo con la hora completa.`, "Escriba la hora completa en la tabla y en las Observaciones.");
+
   // 2. fechas (B6, B7)
   const formatos = new Set();
   for (const f of filas) {
@@ -301,6 +335,7 @@ export function revisar(decl) {
   // 3. Observaciones: se leen y se asignan a la fila cuyo horario las contiene (B4)
   const obs = (decl.observaciones || []).map((l) => String(l).trim()).filter(Boolean).map(leerObservacion);
   for (const o of obs) {
+    o.tramos = o.tramos.map((t) => ({ ...t, de: horaCompleta(t.de), a: horaCompleta(t.a) }));
     o.fila = null;
     if (!o.tramos.length) { o.sinHorario = true; continue; }
     let mejor = null;
@@ -335,6 +370,13 @@ export function revisar(decl) {
     for (const o of mias) for (const t of o.tramos) (porDiaObs[t.dia] ||= []).push(t);
     f.efectivas = 0;
     f.crudas = 0;
+    let almuerzoDentro = 0; // minutos de 12:00–13:00 declarados de corrido (pueden contarse o no)
+    const diasAlmuerzo = [];
+    const corrido = (d, de, a) => {
+      const m = Math.min(a, ALMUERZO[1]) - Math.max(de, ALMUERZO[0]);
+      // solo si hay trabajo antes y después: un tramo que empieza o termina en el almuerzo no es ambiguo
+      if (de < ALMUERZO[0] && a > ALMUERZO[1] && m > 0) { almuerzoDentro += m; diasAlmuerzo.push(NOMBRE_DIA[d]); }
+    };
     for (const d of DIAS) {
       const x = f.dias[d];
       const tObs = porDiaObs[d];
@@ -345,17 +387,18 @@ export function revisar(decl) {
           f.tramos[d] = u;
           const ini = u[0][0], fin = u[u.length - 1][1];
           if (ini !== x.de || fin !== x.a) err("B4", "grave", `${donde}, ${NOMBRE_DIA[d]}`, `La tabla dice ${hora(x.de)}–${hora(x.a)}, pero las Observaciones dicen ${u.map((y) => `${hora(y[0])}–${hora(y[1])}`).join(" y ")}.`, "Deje los mismos horarios en la tabla y en las Observaciones.");
-          if (u.length === 1 && solapan(u[0], ALMUERZO)) err("B3", "grave", `${donde}, ${NOMBRE_DIA[d]}`, `Las Observaciones declaran ${hora(u[0][0])}–${hora(u[0][1])} de corrido, sin descontar el almuerzo (12:00–13:00).`, `Divida el tramo (${horaCorta(u[0][0])} a 12 y 13 a ${horaCorta(u[0][1])}) o explique el almuerzo en Observaciones.`);
+          for (const y of u) corrido(d, y[0], y[1]);
         } else {
           let t = [[x.de, x.a]];
           if (x.de < ALMUERZO[0] && x.a > ALMUERZO[1]) {
             t = [[x.de, ALMUERZO[0]], [ALMUERZO[1], x.a]];
-            err("B3", "grave", `${donde}, ${NOMBRE_DIA[d]}`, `El tramo ${hora(x.de)}–${hora(x.a)} atraviesa el almuerzo y ninguna Observación lo divide: se lee como ${horas(x.a - x.de)} h en vez de ${horas(suma(t))} h.`, `Agregue en Observaciones «${d} ${horaCorta(x.de)} a 12 y 13 a ${horaCorta(x.a)}» o divida el horario.`);
+            corrido(d, x.de, x.a);
           } else if (x.de < ALMUERZO[1] && x.a > ALMUERZO[0] && (x.de > ALMUERZO[0] || x.a < ALMUERZO[1])) {
             ver("B3", `${donde}, ${NOMBRE_DIA[d]}: el tramo ${hora(x.de)}–${hora(x.a)} toca la hora de almuerzo; confirme que no es tiempo de almuerzo.`);
           }
           f.tramos[d] = t;
         }
+        // sin Observación el tramo ya quedó partido; con Observación de corrido, la suma incluye el almuerzo
         f.efectivas += suma(f.tramos[d]);
       } else if (tObs) {
         const u = unir(tObs.map((t) => [t.de, t.a]));
@@ -368,6 +411,22 @@ export function revisar(decl) {
       for (const t of fuera.slice(0, 3)) if (f.dias[t.dia]) err("B4", "grave", `${donde}, ${NOMBRE_DIA[t.dia]}`, `Observaciones: ${hora(t.de)}–${hora(t.a)} se sale del horario de la tabla (${hora(f.dias[t.dia].de)}–${hora(f.dias[t.dia].a)}).`, "Ajuste la tabla o la Observación para que coincidan.");
     }
     f.esperadas = f.frac != null ? Math.round(f.frac * 40 * 60) : null;
+    // dos sumas: sin contar el almuerzo declarado de corrido y contándolo
+    const enTramos = DIAS.reduce((n, d) => n + (f.tramos[d] || []).reduce((m, [de, a]) => m + (de < ALMUERZO[0] && a > ALMUERZO[1] ? ALMUERZO[1] - ALMUERZO[0] : 0), 0), 0);
+    f.sinAlmuerzo = f.efectivas - enTramos;
+    f.conAlmuerzo = f.sinAlmuerzo + almuerzoDentro;
+    f.efectivas = f.sinAlmuerzo;
+    if (almuerzoDentro) {
+      const e = f.esperadas;
+      const cabe = e != null && e >= f.sinAlmuerzo && e <= f.conAlmuerzo;
+      if (cabe) f.efectivas = e;
+      else f.efectivas = e != null && e > f.conAlmuerzo ? f.conAlmuerzo : f.sinAlmuerzo;
+      const lectura = e == null ? "" : e === f.conAlmuerzo ? ` La fila solo cuadra con ${horas(e)} h si el almuerzo se cuenta como trabajado; sin contarlo, faltan horas.`
+        : e === f.sinAlmuerzo ? ` La fila cuadra con ${horas(e)} h solo si el almuerzo NO se cuenta; contándolo, sobran horas.`
+        : cabe ? ` Para llegar a ${horas(e)} h debe contar como trabajada solo una parte de esos almuerzos: indíquelo en Observaciones.`
+        : ` De ninguna de las dos formas da las ${horas(e)} h de la jornada.`;
+      ver("B3", `Alerta de almuerzo, ${donde} (${[...new Set(diasAlmuerzo)].join(", ")}): sin contar el almuerzo son ${horas(f.sinAlmuerzo)} h; contándolo, ${horas(f.conAlmuerzo)} h.${lectura} Confirme cuál es su caso antes de firmar.`);
+    }
     if (f.esperadas != null && f.efectivas && f.efectivas !== f.esperadas) {
       const dif = f.efectivas - f.esperadas;
       err("B1", "grave", donde, `Declara ${f.jornada} (${horas(f.esperadas)} h), pero el horario suma ${horas(f.efectivas)} h: ${dif > 0 ? "sobran" : "faltan"} ${horas(Math.abs(dif))} h.`, `Ajuste el horario para que sume ${horas(f.esperadas)} h, o corrija la jornada si el nombramiento es otro.`);
@@ -480,13 +539,14 @@ export function revisar(decl) {
   }
 
   // 9. Observaciones que la tabla necesita y no tiene
-  if (!(decl.observaciones || []).some((l) => String(l).trim())) ver("B4", "No hay Observaciones. Si algún tramo atraviesa el almuerzo o es un curso, deben explicarse ahí.");
+  if (!(decl.observaciones || []).some((l) => String(l).trim())) err("B4", "grave", "Observaciones", "El campo Observaciones es obligatorio y está vacío.", "Escriba una línea por fila con el detalle de días y horas.");
   for (const f of filas) if (!f.obs?.length && f.tipo === "curso") err("C1", "grave", nombreFila(f), "El curso no tiene línea en Observaciones con el desglose de contacto, consulta y preparación.", "Agregue el desglose en el detalle de la fila.");
 
   // veredicto
+  const conAlerta = verificar.some((v) => v.texto.startsWith("Alerta de almuerzo"));
   const graves = errores.filter((e) => e.gravedad === "grave").length;
-  const veredicto = graves ? "No se debe firmar así" : errores.length ? "Se puede firmar con correcciones menores" : "Se puede firmar";
-  const nivel = graves ? "mal" : errores.length ? "regular" : "bien";
+  const veredicto = graves ? "No se debe firmar así" : errores.length ? "Se puede firmar con correcciones menores" : conAlerta ? "Revise la alerta de almuerzo antes de firmar" : "Se puede firmar";
+  const nivel = graves ? "mal" : errores.length || conAlerta ? "regular" : "bien";
   const orden = { grave: 0, menor: 1 };
   errores.sort((a, b) => orden[a.gravedad] - orden[b.gravedad]);
   if (!errores.some((e) => e.regla === "B1") && filas.every((f) => f.esperadas != null)) bien.push("Cada fila suma las horas de su fracción (B1).");
@@ -494,6 +554,7 @@ export function revisar(decl) {
   const horasTabla = filas.map((f) => ({
     fila: nombreFila(f), seccion: f.seccion, clase: f.clase, jornada: f.jornada,
     calculadas: f.efectivas, esperadas: f.esperadas, ok: f.esperadas != null && f.efectivas === f.esperadas, docente: f.docente || null,
+    almuerzo: f.conAlmuerzo > f.sinAlmuerzo ? [f.sinAlmuerzo, f.conAlmuerzo] : null,
   }));
   // sin duplicados en «verificar»
   const vistos = new Set();

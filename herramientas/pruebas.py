@@ -593,6 +593,7 @@ def declaracion(nav, base):
             f.locator(f'[data-d="{d}"][data-x="a"]').fill(a)
             f.locator(f'[data-d="{d}"][data-x="a"]').dispatch_event("change")
     p.fill('[data-p="nombre"]', "Persona de Prueba")
+    p.fill('[data-p="identificacion"]', "1-0000-0000")
     fila(0, "Sede del Caribe (Limón)", "Interino 2", "1/2", {"K": ("8", "15"), "M": ("8", "17"), "J": ("8", "15")})
     fila(1, "Sede del Caribe (Limón)", "Coordinación de Consejo de Carrera", "1/8", {"V": ("8", "14")})
     fila(2, "Sede del Caribe (Limón)", "Coordinación de Carrera", "3/8", {"L": ("8", "17"), "M": ("17", "21"), "V": ("14", "17")})
