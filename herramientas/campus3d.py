@@ -344,9 +344,8 @@ LLANOS = [
     {"pol": [(-136.26, 60.04), (-137.2, 56.8), (-132.16, 52.74), (-119.80, 42.34), (-109.3, 42.4), (-99.6, 35.0), (-96.0, 46.0), (-87.0, 65.0), (-91.0, 82.0), (-100.0, 98.0), (-114.0, 106.0), (-130.0, 96.0), (-123.04, 76.37)],
      "nivel": 1.6, "suave": 0.4},
     # (anotaciones) junto a la escalera el asfalto llega llano hasta el último escalón y el talud cae enseguida, bajo los escalones
-    # (anotaciones, nov. 2026) solo del ancho de la escalera: a los lados el asfalto sigue llano al nivel del arranque
-    {"pol": [(-134.76, 51.17), (-132.30, 54.20), (-130.36, 52.63), (-132.82, 49.60)],
-     "nivel": 3.6, "rampa": [(-133.37, 50.89), 3.6, (-132.75, 51.67), 1.6], "suave": 0.15},
+    # (anotaciones, nov. 2026) sin rampa bajo la escalera: en celular la malla gruesa hacía un hueco en el asfalto a su lado
+
 ]
 # (anotaciones) al este del puente de residencias la quebrada va poco honda entre las dos mallas: sin zanja
 CAUCE_SOMERO = [{"x": (112.0, 178.0), "hondo": 1.1, "rampa": 9.0}]

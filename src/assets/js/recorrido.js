@@ -88,12 +88,42 @@ function alturaEn(x, z) {
 const textura = new THREE.TextureLoader().load(raiz.dataset.suelo, pedirDibujo);
 textura.colorSpace = THREE.SRGBColorSpace;
 textura.anisotropy = 4;
+// zonas [x0, z0, x1, z1] donde en celular el suelo va con la malla fina (ver sueloGeo)
+const PARCHES_FINOS = [[-142, 42, -124, 60]];   // escalera de la soda: el asfalto del parqueo junto al bajo
 const sueloGeo = (() => {
   const paso = relieve ? relieve.paso * (liviano ? 2 : 1) : t.ancho;
   const g = new THREE.PlaneGeometry(t.ancho, t.largo, Math.max(1, Math.round(t.ancho / paso)), Math.max(1, Math.round(t.largo / paso)));
   g.rotateX(-Math.PI / 2);
   g.translate(t.x + t.ancho / 2, 0, t.z + t.largo / 2);
-  return g;
+  // En celular la malla gruesa (4 m) no puede seguir un talud corto junto a un piso llano: entre el asfalto de arriba y
+  // el pasillo de abajo hundía el asfalto o tapaba el pasillo. En esas zonas se cambia por una malla fina (2 m)
+  const zonas = relieve && liviano ? PARCHES_FINOS : [];
+  if (!zonas.length) return g;
+  const P = g.attributes.position, idx = g.index.array, quedan = [];
+  const dentro = (x, z) => zonas.some(([x0, z0, x1, z1]) => x > x0 && x < x1 && z > z0 && z < z1);
+  for (let i = 0; i < idx.length; i += 3) {
+    const cx = (P.getX(idx[i]) + P.getX(idx[i + 1]) + P.getX(idx[i + 2])) / 3, cz = (P.getZ(idx[i]) + P.getZ(idx[i + 1]) + P.getZ(idx[i + 2])) / 3;
+    if (!dentro(cx, cz)) quedan.push(idx[i], idx[i + 1], idx[i + 2]);
+  }
+  const pos = Array.from(P.array), uv = Array.from(g.attributes.uv.array), gp = paso, fp = relieve.paso;
+  for (let [x0, z0, x1, z1] of zonas) {   // la zona se ajusta a la malla gruesa, así los bordes empatan
+    x0 = t.x + Math.floor((x0 - t.x) / gp) * gp; z0 = t.z + Math.floor((z0 - t.z) / gp) * gp;
+    x1 = t.x + Math.ceil((x1 - t.x) / gp) * gp; z1 = t.z + Math.ceil((z1 - t.z) / gp) * gp;
+    const nx = Math.round((x1 - x0) / fp), nz = Math.round((z1 - z0) / fp), base = pos.length / 3;
+    for (let j = 0; j <= nz; j++) for (let i = 0; i <= nx; i++) {
+      const x = x0 + i * fp, z = z0 + j * fp;
+      pos.push(x, 0, z); uv.push((x - t.x) / t.ancho, 1 - (z - t.z) / t.largo);
+    }
+    for (let j = 0; j < nz; j++) for (let i = 0; i < nx; i++) {
+      const a = base + j * (nx + 1) + i, b = a + 1, c = a + nx + 1, d = c + 1;
+      quedan.push(a, c, b, b, c, d);
+    }
+  }
+  const h = new THREE.BufferGeometry();
+  h.setAttribute("position", new THREE.Float32BufferAttribute(pos, 3));
+  h.setAttribute("uv", new THREE.Float32BufferAttribute(uv, 2));
+  h.setIndex(quedan);
+  return h;
 })();
 function levantarSuelo() {   // se llama de nuevo cuando «asentar» empareja el terreno
   const pos = sueloGeo.attributes.position, r = relieve;
