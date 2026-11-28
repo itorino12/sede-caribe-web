@@ -109,7 +109,9 @@ function levantarSuelo() {   // se llama de nuevo cuando «asentar» empareja el
       for (let j = j0 - cerca; j <= j0 + cerca; j++) for (let k = i0 - cerca; k <= i0 + cerca; k++) {
         if (j < 0 || k < 0 || j >= r.nz || k >= r.nx) continue;
         const c = j * r.nx + k;
-        if (r.bajo[c] && r.h[c] < h) h = r.h[c];
+        // solo diferencias chicas (el zacate que se asoma): si el camino va al pie de un talud (la escalera de la
+        // soda), bajar el vértice de arriba hundía el asfalto del parqueo
+        if (r.bajo[c] && r.h[c] < h && h - r.h[c] < 1.0) h = r.h[c];
       }
     }
     pos.setY(i, h);
